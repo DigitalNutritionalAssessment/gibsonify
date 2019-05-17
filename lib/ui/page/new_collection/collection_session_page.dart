@@ -12,7 +12,7 @@ import 'package:flutter_uikit/ui/page/new_collection/collection_page_common_widg
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_uikit/ui/widgets/custom_time_picker.dart';
 
-import 'package:flutter_uikit/model/consumption_data.dart';
+import 'package:flutter_uikit/model/food_item.dart';
 import 'package:flutter_uikit/logic/viewmodel/consumption_data_notifier_model.dart';
 
 
@@ -48,7 +48,7 @@ class NewCollectionPage extends StatefulWidget {
 }
 
 class DynamicList extends State<NewCollectionPage> {
-  List<ConsumptionData> dataList = [];
+  List<FoodItem> dataList = [];
 
   @override
   Widget build (BuildContext ctx) {
@@ -78,7 +78,7 @@ class DynamicList extends State<NewCollectionPage> {
                     elevation: 4.0,
                     splashColor: Colors.blueGrey,
                     onPressed: () {
-                      dataList.add(ConsumptionData());
+                      dataList.add(FoodItem());
                       setState(() {});
                       // Perform some action
                     },
@@ -96,8 +96,8 @@ class DynamicList extends State<NewCollectionPage> {
 
 class FoodItemCard extends StatefulWidget {
 
-  final ConsumptionData initialItemData;
-  final ValueChanged<ConsumptionData> onChanged;
+  final FoodItem initialItemData;
+  final ValueChanged<FoodItem> onChanged;
 
   const FoodItemCard({Key key, @required this.onChanged, this.initialItemData}): super(key: key);
 
@@ -109,14 +109,14 @@ class _FoodItemCardState extends State<FoodItemCard> {
 
   static const double edge_inset = 9.0;
 
-  ConsumptionData itemData;
+  FoodItem itemData;
 
   TextEditingController foodNameController = TextEditingController();
 
   @override void initState() {
 
     // Initialise itemData if there is initial data
-    if (widget.initialItemData == null) itemData = ConsumptionData();
+    if (widget.initialItemData == null) itemData = FoodItem();
     else itemData = widget.initialItemData;
 
     // Initialise foodNameController and set state to be itemData.foodName if available

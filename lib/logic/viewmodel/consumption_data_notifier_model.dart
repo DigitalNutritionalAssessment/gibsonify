@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_uikit/model/consumption_data.dart';
+import 'package:flutter_uikit/model/food_item.dart';
 
 
 class ConsumptionDataProvider with ChangeNotifier {
-  List<ConsumptionData> _dataList;
+  List<FoodItem> _dataList;
 
-  List<ConsumptionData> get dataList => _dataList;
+  List<FoodItem> get dataList => _dataList;
 
-  set dataList(List<ConsumptionData> value) {
+  set dataList(List<FoodItem> value) {
     _dataList = dataList;
     notifyListeners();
   }

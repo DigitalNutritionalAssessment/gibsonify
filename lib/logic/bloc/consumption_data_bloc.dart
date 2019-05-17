@@ -1,13 +1,13 @@
 import 'dart:async';
-import 'package:flutter_uikit/model/consumption_data.dart';
+import 'package:flutter_uikit/model/food_item.dart';
 
 class ConsumptionDataListBloc{
 
-  List<ConsumptionData> _consumptionDataList;
+  List<FoodItem> _consumptionDataList;
 
   // Stream to handle consumptionDataList
-  final StreamController<List<ConsumptionData>> _consumptionDataListController = StreamController<List<ConsumptionData>>();
-  Stream<List<ConsumptionData>> get outConsumptionDataList => _consumptionDataListController.stream;
+  final StreamController<List<FoodItem>> _consumptionDataListController = StreamController<List<FoodItem>>();
+  Stream<List<FoodItem>> get outConsumptionDataList => _consumptionDataListController.stream;
 
 //  // Stream to handle data in
 //  StreamController<ConsumptionData> _consumptionDataController = StreamController<ConsumptionData>();
@@ -21,7 +21,7 @@ class ConsumptionDataListBloc{
     _consumptionDataList = [];
   }
 
-  void updateConsumptionDataItem(ConsumptionData item, int index){
+  void updateConsumptionDataItem(FoodItem item, int index){
 
     if (index == _consumptionDataList.length){
       _consumptionDataList.add(item);

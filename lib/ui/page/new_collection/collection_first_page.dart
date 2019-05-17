@@ -1,66 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_uikit/utils/uidata.dart';
+
 import 'package:flutter_uikit/ui/widgets/custom_time_picker.dart';
 import 'package:flutter_uikit/ui/widgets/collection_question.dart';
 
 import 'package:flutter_uikit/ui/page/new_collection/collection_page_common_widgets.dart';
-import 'package:flutter_uikit/model/consumption_data.dart';
-
-// Inherited widget for managing a ConsumptionData Item
-class ConsumptionDataInheritedWidget extends InheritedWidget {
-  const ConsumptionDataInheritedWidget({
-    Key key,
-    this.itemData,
-    Widget child}) : super(key: key, child: child);
-
-  final ConsumptionData itemData;
-
-  @override
-  bool updateShouldNotify(ConsumptionDataInheritedWidget old) {
-    print('In updateShouldNotify');
-    return itemData != old.itemData;
-  }
-
-  static ConsumptionDataInheritedWidget of(BuildContext context) {
-    // You could also just directly return the name here
-    // as there's only one field
-    return context.inheritFromWidgetOfExactType(ConsumptionDataInheritedWidget);
-  }
-}
-
-// Stateful widget for managing a consumption data item
-class ConsumptionDataItem extends StatefulWidget {
-
-  final ConsumptionData inputItemData;
-
-  const ConsumptionDataItem({
-    @required this.inputItemData,
-  });
-
-  @override
-  _ConsumptionDataItemState createState() => new _ConsumptionDataItemState();
-}
-
-// State for managing a consumption data item
-class _ConsumptionDataItemState extends State<ConsumptionDataItem> {
-
-  ConsumptionData itemData;
-
-  @override
-  void initState() {
-    super.initState();
-    if (widget.inputItemData == null) itemData = ConsumptionData(timeOfDay: DateTime.now());
-    else itemData = widget.inputItemData;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return new ConsumptionDataInheritedWidget(
-        itemData: itemData,
-        child: const FoodItemCard(),
-    );
-  }
-}
+import 'package:flutter_uikit/model/food_item.dart';
 
 class CollectionFirstPage extends StatefulWidget {
   @override
@@ -69,7 +13,7 @@ class CollectionFirstPage extends StatefulWidget {
 
 class _CollectionFirstPageState extends State<CollectionFirstPage> {
 
-  List<ConsumptionData> dataList = [];
+  List<FoodItem> dataList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +25,7 @@ class _CollectionFirstPageState extends State<CollectionFirstPage> {
               child: new ListView.builder(
                 itemCount: dataList?.length ?? 0,
                 itemBuilder: (BuildContext ctx, int index) {
-                  return new ConsumptionDataItem(inputItemData: dataList[index]);
+                  return new FoodItemDataWidget(inputItemData: dataList[index]);
                 },
               ),
             ),
@@ -96,7 +40,7 @@ class _CollectionFirstPageState extends State<CollectionFirstPage> {
                     elevation: 4.0,
                     splashColor: Colors.blueGrey,
                     onPressed: () {
-                      dataList.add(ConsumptionData());
+                      dataList.add(FoodItem());
                       setState(() {});
                       // Perform some action
                     },
@@ -110,6 +54,40 @@ class _CollectionFirstPageState extends State<CollectionFirstPage> {
   }
 }
 
+// Stateful widget for managing a consumption data item
+class FoodItemDataWidget extends StatefulWidget {
+
+  final FoodItem inputItemData;
+
+  const FoodItemDataWidget({
+    @required this.inputItemData,
+  });
+
+  @override
+  _FoodItemDataWidgetState createState() => new _FoodItemDataWidgetState();
+}
+
+// State for managing a consumption data item
+class _FoodItemDataWidgetState extends State<FoodItemDataWidget> {
+
+  FoodItem itemData;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.inputItemData == null) itemData = FoodItem(timeOfDay: DateTime.now());
+    else itemData = widget.inputItemData;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return new FoodItemInheritedWidget(
+      itemData: itemData,
+      child: const FoodItemCard(),
+    );
+  }
+}
+
 
 class FoodItemCard extends StatelessWidget {
   const FoodItemCard();
@@ -119,7 +97,7 @@ class FoodItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final inheritedWidget = ConsumptionDataInheritedWidget.of(context);
+    final inheritedWidget = FoodItemInheritedWidget.of(context);
     
     return Card(
       elevation: 2.0,

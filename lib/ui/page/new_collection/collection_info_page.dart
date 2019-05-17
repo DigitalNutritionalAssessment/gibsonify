@@ -4,7 +4,7 @@ import 'package:rxdart/rxdart.dart';
 
 
 import 'package:flutter_uikit/ui/page/new_collection/collection_page_common_widgets.dart';
-import 'package:flutter_uikit/model/consumption_data.dart';
+import 'package:flutter_uikit/model/food_item.dart';
 
 // Inherited widget for managing a name
 class ConsumptionDataInheritedWidget extends InheritedWidget {
@@ -13,7 +13,7 @@ class ConsumptionDataInheritedWidget extends InheritedWidget {
     this.itemData,
     Widget child}) : super(key: key, child: child);
 
-  final ConsumptionData itemData;
+  final FoodItem itemData;
 
   @override
   bool updateShouldNotify(ConsumptionDataInheritedWidget old) {
@@ -36,12 +36,12 @@ class CollectionInfoPage extends StatefulWidget {
 
 // State for managing fetching name data over HTTP
 class _CollectionInfoPageState extends State<CollectionInfoPage> {
-  ConsumptionData itemData;
+  FoodItem itemData;
 
   @override
   void initState() {
     super.initState();
-    itemData = ConsumptionData(timeOfDay: DateTime.now());
+    itemData = FoodItem(timeOfDay: DateTime.now());
   }
 
   @override

@@ -8,10 +8,16 @@
   <component name="ChangeListManager">
     <list default="true" id="713afcde-9000-40c3-8940-760a1ff8dbdc" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/logic/bloc/consumption_data_bloc.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/logic/bloc/consumption_data_bloc.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/logic/viewmodel/consumption_data_notifier_model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/logic/viewmodel/consumption_data_notifier_model.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/logic/viewmodel/menu_view_model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/logic/viewmodel/menu_view_model.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/model/consumption_data.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/model/consumption_data.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/myapp.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/myapp.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/ui/page/home_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/page/home_page.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/ui/page/new_collection/collection_first_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/page/new_collection/collection_first_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/page/new_collection/collection_info_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/page/new_collection/collection_info_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/page/new_collection/collection_main_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/page/new_collection/collection_main_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/page/new_collection/collection_session_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/page/new_collection/collection_session_page.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/ui/widgets/about_tile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/widgets/about_tile.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/utils/uidata.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/utils/uidata.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
@@ -63,11 +69,32 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="collection_first_page.dart" pinned="false" current-in-tab="true">
+      <file leaf-file-name="collection_first_page.dart" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/ui/page/new_collection/collection_first_page.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="131">
-              <caret line="134" column="18" selection-start-line="134" selection-start-column="18" selection-end-line="134" selection-end-column="18" />
+            <state relative-caret-position="187">
+              <caret line="11" column="1" lean-forward="true" selection-start-line="11" selection-start-column="1" selection-end-line="11" selection-end-column="1" />
+              <folding>
+                <element signature="e#0#39#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="food_item.dart" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/model/food_item.dart">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="391">
+              <caret line="44" column="1" lean-forward="true" selection-start-line="23" selection-end-line="44" selection-end-column="1" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="consumption_data.dart" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/lib/model/consumption_data.dart">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="335">
+              <caret line="45" column="39" selection-start-line="45" selection-start-column="39" selection-end-line="45" selection-end-column="39" />
               <folding>
                 <element signature="e#0#39#0" expanded="true" />
               </folding>
@@ -97,7 +124,6 @@
         <option value="$PROJECT_DIR$/lib/ui/page/new_collection/new_collection_session_page.dart" />
         <option value="$PROJECT_DIR$/lib/logic/bloc/consumption_data_bloc.dart" />
         <option value="$PROJECT_DIR$/lib/ui/page/timeline/timeline_one_page.dart" />
-        <option value="$PROJECT_DIR$/lib/model/consumption_data.dart" />
         <option value="$PROJECT_DIR$/pubspec.yaml" />
         <option value="$PROJECT_DIR$/lib/logic/viewmodel/consumption_data_notifier_model.dart" />
         <option value="$PROJECT_DIR$/lib/ui/widgets/custom_time_picker.dart" />
@@ -108,11 +134,13 @@
         <option value="$PROJECT_DIR$/lib/ui/page/new_collection/collection_info_page.dart" />
         <option value="$PROJECT_DIR$/lib/myapp.dart" />
         <option value="$PROJECT_DIR$/lib/ui/widgets/collection_question.dart" />
+        <option value="$PROJECT_DIR$/lib/ui/page/new_collection/collection_main_page.dart" />
         <option value="$PROJECT_DIR$/lib/ui/page/new_collection/collection_first_page.dart" />
+        <option value="$PROJECT_DIR$/lib/model/consumption_data.dart" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="10" />
     <option name="y" value="20" />
     <option name="width" value="1346" />
@@ -140,20 +168,6 @@
               <item name="Flutter-UI-Kit" type="cbb8eebc:String" user="Flutter-UI-Kit" />
               <item name="lib" type="cbb8eebc:String" user="lib" />
               <item name="logic" type="cbb8eebc:String" user="logic" />
-            </path>
-            <path>
-              <item name="Root" type="cbb8eebc:String" user="Root" />
-              <item name="Flutter-UI-Kit" type="cbb8eebc:String" user="Flutter-UI-Kit" />
-              <item name="lib" type="cbb8eebc:String" user="lib" />
-              <item name="logic" type="cbb8eebc:String" user="logic" />
-              <item name="bloc" type="cbb8eebc:String" user="bloc" />
-            </path>
-            <path>
-              <item name="Root" type="cbb8eebc:String" user="Root" />
-              <item name="Flutter-UI-Kit" type="cbb8eebc:String" user="Flutter-UI-Kit" />
-              <item name="lib" type="cbb8eebc:String" user="lib" />
-              <item name="logic" type="cbb8eebc:String" user="logic" />
-              <item name="viewmodel" type="cbb8eebc:String" user="viewmodel" />
             </path>
             <path>
               <item name="Root" type="cbb8eebc:String" user="Root" />
@@ -311,14 +325,14 @@
       <window_info anchor="right" id="Capture Analysis" order="3" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.50075644" side_tool="true" weight="0.4003295" />
       <window_info anchor="bottom" id="Flutter Performance" order="7" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Dart Analysis" order="7" visible="true" weight="0.32882273" />
+      <window_info anchor="bottom" id="Dart Analysis" order="7" visible="true" weight="0.32882273" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49924356" weight="0.24627875" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Terminal" order="7" weight="0.32882273" />
       <window_info anchor="right" id="Flutter Outline" order="3" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25358167" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25358167" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Theme Preview" order="3" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
@@ -656,13 +670,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/model/consumption_data.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="19" column="1" lean-forward="true" selection-start-line="19" selection-start-column="1" selection-end-line="19" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lib/logic/viewmodel/consumption_data_notifier_model.dart">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
@@ -757,10 +764,44 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://D:/Software/Coding/flutter_windows_v1.5.4-hotfix.2-stable/flutter/packages/flutter/lib/material.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="30" selection-start-column="22" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/ui/page/new_collection/collection_main_page.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/lib/ui/page/new_collection/collection_first_page.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="131">
-          <caret line="134" column="18" selection-start-line="134" selection-start-column="18" selection-end-line="134" selection-end-column="18" />
+        <state relative-caret-position="187">
+          <caret line="11" column="1" lean-forward="true" selection-start-line="11" selection-start-column="1" selection-end-line="11" selection-end-column="1" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/model/food_item.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="44" column="1" lean-forward="true" selection-start-line="23" selection-end-line="44" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/model/consumption_data.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="335">
+          <caret line="45" column="39" selection-start-line="45" selection-start-column="39" selection-end-line="45" selection-end-column="39" />
           <folding>
             <element signature="e#0#39#0" expanded="true" />
           </folding>
