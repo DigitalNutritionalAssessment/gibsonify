@@ -21,7 +21,9 @@ import 'package:flutter_uikit/utils/uidata.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:flutter_uikit/ui/page/new_collection/collection_session_page.dart';
-import 'package:flutter_uikit/ui/page/new_collection/collection_info_page.dart';
+//import 'package:flutter_uikit/ui/page/new_collection/collection_info_page.dart';
+import 'package:flutter_uikit/ui/page/new_collection/collection_first_page.dart';
+
 
 
 class MyApp extends StatelessWidget {
@@ -50,7 +52,7 @@ class MyApp extends StatelessWidget {
         UIData.homeRoute: (BuildContext context) => HomePage(),
 
         UIData.newCollectionSessionRoute: (BuildContext context) => NewCollectionPage(),
-        UIData.CollectionInfoRoute: (BuildContext context) => CollectionInfoPage(),
+        UIData.CollectionInfoRoute: (BuildContext context) => CollectionFirstPage(),
 
         UIData.profileOneRoute: (BuildContext context) => ProfileOnePage(),
         UIData.profileTwoRoute: (BuildContext context) => ProfileTwoPage(),
