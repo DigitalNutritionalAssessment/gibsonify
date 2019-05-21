@@ -1,0 +1,136 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_uikit/ui/widgets/about_tile.dart';
+import 'package:flutter_uikit/utils/uidata.dart';
+
+
+
+Widget appBar({@required title, @required bottomBarTitle}) => AppBar(
+  backgroundColor: Colors.black,
+  elevation: 2.0,
+  title: Text(title),
+  bottom: bottomBar(title: bottomBarTitle),
+);
+
+Widget bottomBar({@required title}) => PreferredSize(
+  preferredSize: Size(double.infinity, 50.0),
+  child: Container(
+    color: Colors.black,
+    child: Align(
+      alignment: Alignment.bottomCenter,
+      child: Container(
+        height: 50,
+        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        color: Colors.white,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text(
+              title,
+              style: TextStyle(
+                  color: Colors.black, fontWeight: FontWeight.w700),
+            )
+          ],
+        ),
+      ),
+    ),
+  ),
+);
+
+
+class CollectionCommonDrawer extends StatelessWidget {
+
+  final goToPageStateInfo;
+  final goToPageStateFirstPage;
+  final goToPageStateSecondPage;
+  final goToPageStateThirdPage;
+  final goToPageStateFourthPage;
+
+  const CollectionCommonDrawer({
+    this.goToPageStateInfo,
+    this.goToPageStateFirstPage,
+    this.goToPageStateSecondPage,
+    this.goToPageStateThirdPage,
+    this.goToPageStateFourthPage,
+});
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: <Widget>[
+          UserAccountsDrawerHeader(
+            accountName: Text(
+              "Choon Kiat Lee",
+            ),
+            accountEmail: Text(
+              "choonkiat.lee@gmail.com",
+            ),
+            currentAccountPicture: new CircleAvatar(
+              backgroundImage: new AssetImage(UIData.pkImage),
+            ),
+          ),
+          new ListTile(
+            title: Text(
+              "Interviewee Info",
+              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18.0),
+            ),
+            leading: Icon(
+              Icons.person,
+              color: Colors.blue,
+            ),
+            onTap: () => {goToPageStateInfo(), Navigator.pop(context)},
+          ),
+          new ListTile(
+            title: Text(
+              "First Pass",
+              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18.0),
+            ),
+            leading: Icon(
+              Icons.filter_1,
+              color: Colors.green,
+            ),
+            onTap: () => {goToPageStateFirstPage(), Navigator.pop(context)},
+          ),
+          new ListTile(
+            title: Text(
+              "Second Pass",
+              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18.0),
+            ),
+            leading: Icon(
+              Icons.filter_2,
+              color: Colors.red,
+            ),
+            onTap: () => {goToPageStateSecondPage(), Navigator.pop(context)},
+          ),
+          new ListTile(
+            title: Text(
+              "Third Pass",
+              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18.0),
+            ),
+            leading: Icon(
+              Icons.filter_3,
+              color: Colors.cyan,
+            ),
+            onTap: () => {goToPageStateThirdPage(), Navigator.pop(context)},
+          ),
+          Divider(),
+          new ListTile(
+            title: Text(
+              "Fourth Pass",
+              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18.0),
+            ),
+            leading: Icon(
+              Icons.filter_4,
+              color: Colors.brown,
+            ),
+            onTap: () => {goToPageStateFourthPage(), Navigator.pop(context)},
+          ),
+          Divider(),
+          MyAboutTile()
+        ],
+      ),
+    );
+  }
+}

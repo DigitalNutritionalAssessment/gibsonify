@@ -20,11 +20,8 @@ import 'package:flutter_uikit/utils/translations.dart';
 import 'package:flutter_uikit/utils/uidata.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'package:flutter_uikit/ui/page/new_collection/collection_session_page.dart';
-//import 'package:flutter_uikit/ui/page/new_collection/collection_info_page.dart';
-import 'package:flutter_uikit/ui/page/new_collection/collection_first_page.dart';
-
-
+import 'package:flutter_uikit/ui/page/collection/collection_state_machine.dart';
+import 'package:flutter_uikit/ui/page/collection_viewer/collection_viewer.dart';
 
 class MyApp extends StatelessWidget {
   final materialApp = MaterialApp(
@@ -51,8 +48,9 @@ class MyApp extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         UIData.homeRoute: (BuildContext context) => HomePage(),
 
-        UIData.newCollectionSessionRoute: (BuildContext context) => NewCollectionPage(),
-        UIData.CollectionInfoRoute: (BuildContext context) => CollectionFirstPage(),
+        UIData.newCollectionSessionRoute: (BuildContext context) => CollectionStateMachine(),
+
+        UIData.ViewDataRoute: (BuildContext context) => CollectionViewer(),
 
         UIData.profileOneRoute: (BuildContext context) => ProfileOnePage(),
         UIData.profileTwoRoute: (BuildContext context) => ProfileTwoPage(),
@@ -65,8 +63,7 @@ class MyApp extends StatelessWidget {
             ShoppingDetailsPage(),
         UIData.shoppingThreeRoute: (BuildContext context) =>
             ProductDetailPage(),
-        UIData.loginOneRoute: (BuildContext context) => LoginPage(),
-        UIData.loginTwoRoute: (BuildContext context) => LoginTwoPage(),
+        UIData.loginRoute: (BuildContext context) => LoginTwoPage(),
         UIData.paymentOneRoute: (BuildContext context) => CreditCardPage(),
         UIData.paymentTwoRoute: (BuildContext context) => PaymentSuccessPage(),
         UIData.dashboardOneRoute: (BuildContext context) => DashboardOnePage(),

@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 
 
 class FoodItem {
-  DateTime timeOfDay;
+  TimeOfDaySelection timeOfDay;
   String foodName;
+  SourceOfFoodSelection foodSource;
   String foodDescription;
-  String formWhenEaten;
+  FormWhenEatenSelection formWhenEaten;
   String measurementMethod;
   double measurement;
   String measurementUnits;
@@ -20,7 +21,73 @@ class FoodItem {
       this.measurementUnits
       }
   );
+
+  Map<String, dynamic> toJson() =>
+      {
+        'foodName': foodName,
+        'timeOfDay': timeOfDay?.index,
+        'foodDescription':foodDescription,
+        'formWhenEaten':formWhenEaten?.index,
+        'foodSource': foodSource?.index,
+      };
+
+
+  FoodItem.fromJson(Map<String, dynamic> json)
+      : foodName = json['foodName'],
+        timeOfDay = TimeOfDaySelection.values[json['timeOfDay']],
+        foodDescription = json['foodDescription'],
+        formWhenEaten = FormWhenEatenSelection.values[json['formWhenEaten']],
+        foodSource = SourceOfFoodSelection.values[json['foodSource']];
 }
+
+class FoodItemsList {
+  final List<FoodItem> listOfFoods;
+
+  FoodItemsList({
+    this.listOfFoods,
+  });
+
+  factory FoodItemsList.fromJson(List<dynamic> json){
+    List<FoodItem> a = [];
+    for (var i in json){
+      a.add(FoodItem.fromJson(i));
+      print(FoodItem.fromJson(i));
+    }
+
+    return new FoodItemsList(
+        listOfFoods :json.map((i)=>FoodItem.fromJson(i)).toList(),
+    );
+  }
+}
+
+enum TimeOfDaySelection{
+  MORNING,
+  AFTERNOON,
+  EVENING,
+  NIGHT,
+}
+
+enum SourceOfFoodSelection{
+  HOMEMADE,
+  PURCHASED,
+  GIFT,
+  FARM,
+  LEFTOVER,
+  WILDFOOD,
+  FOODAID,
+  OTHER,
+  NA,
+}
+
+enum FormWhenEatenSelection{
+  RAW,
+  BOILED,
+  BOILED_RETAINED_WATER,
+  BOILED_REMOVED_WATER,
+  STEAMED,
+  ROAST_WITH_OIL,
+}
+
 
 // Inherited widget for managing a ConsumptionData Item
 class FoodItemInheritedWidget extends InheritedWidget {
@@ -43,3 +110,4 @@ class FoodItemInheritedWidget extends InheritedWidget {
     return context.inheritFromWidgetOfExactType(FoodItemInheritedWidget);
   }
 }
+

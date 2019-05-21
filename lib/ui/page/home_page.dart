@@ -78,14 +78,18 @@ class HomePage extends StatelessWidget {
           ),
           title: Row(
             children: <Widget>[
-              FlutterLogo(
-                colors: Colors.yellow,
-                textColor: Colors.white,
+//              FlutterLogo(
+//                colors: Colors.yellow,
+//                textColor: Colors.white,
+//              ),
+              Image.asset(
+                  UIData.logoImage,
+                  width: 130,
               ),
-              SizedBox(
-                width: 10.0,
-              ),
-              Text(UIData.appName)
+//              SizedBox(
+//                width: 10.0,
+//              ),
+//              Text(UIData.appName)
             ],
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
@@ -147,8 +151,8 @@ class HomePage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ProfileTile(
-                  title: "Pawan Kumar",
-                  subtitle: "mtechviral@gmail.com",
+                  title: "Choon Kiat Lee",
+                  subtitle: "choonkiat.lee@gmail.com",
                   textColor: Colors.white,
                 ),
               )

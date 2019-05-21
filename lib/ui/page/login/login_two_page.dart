@@ -22,9 +22,13 @@ class LoginTwoPage extends StatelessWidget {
   loginHeader() => Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          FlutterLogo(
-            colors: Colors.green,
-            size: 80.0,
+//          FlutterLogo(
+//            colors: Colors.green,
+//            size: 80.0,
+//          ),
+          Image.asset(
+              UIData.iconImage,
+              height: 80.0,
           ),
           SizedBox(
             height: 30.0,
@@ -37,7 +41,7 @@ class LoginTwoPage extends StatelessWidget {
             height: 5.0,
           ),
           Text(
-            "Sign in to continue",
+            "Choon Kiat",
             style: TextStyle(color: Colors.grey),
           ),
         ],
@@ -53,8 +57,8 @@ class LoginTwoPage extends StatelessWidget {
               child: TextField(
                 maxLines: 1,
                 decoration: InputDecoration(
-                  hintText: "Enter your username",
-                  labelText: "Username",
+                  hintText: "Enter your name",
+                  labelText: "name",
                 ),
               ),
             ),
@@ -64,8 +68,8 @@ class LoginTwoPage extends StatelessWidget {
                 maxLines: 1,
                 obscureText: true,
                 decoration: InputDecoration(
-                  hintText: "Enter your password",
-                  labelText: "Password",
+                  hintText: "Email",
+                  labelText: "email",
                 ),
               ),
             ),

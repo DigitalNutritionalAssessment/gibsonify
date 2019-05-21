@@ -8,22 +8,22 @@ class UIData {
   static const String homeRoute = "/home";
 
   static const String testRoute = "/New Test";
+
   static const String newCollectionSessionRoute = "/New Collection";
-  static const String CollectionInfoRoute = "/Collection Info";
+  static const String ViewDataRoute = "/View Data";
 
   static const String profileOneRoute = "/View Profile";
   static const String profileTwoRoute = "/Profile 2";
   static const String notFoundRoute = "/No Search Result";
   static const String timelineOneRoute = "/Feed";
   static const String timelineTwoRoute = "/Tweets";
-  static const String settingsOneRoute = "/Device Settings";
+  static const String settingsOneRoute = "/Settings";
   static const String shoppingOneRoute = "/Shopping List";
   static const String shoppingTwoRoute = "/Shopping Details";
   static const String shoppingThreeRoute = "/Product Details";
   static const String paymentOneRoute = "/Credit Card";
   static const String paymentTwoRoute = "/Payment Success";
-  static const String loginOneRoute = "/Login With OTP";
-  static const String loginTwoRoute = "/Login 2";
+  static const String loginRoute = "/Login";
   static const String dashboardOneRoute = "/Dashboard 1";
   static const String dashboardTwoRoute = "/Dashboard 2";
 
@@ -40,7 +40,9 @@ class UIData {
 
   //images
   static const String imageDir = "assets/images";
-  static const String pkImage = "$imageDir/pk.jpg";
+  static const String logoImage = "$imageDir/logo.png";
+  static const String iconImage = "$imageDir/icon.png";
+  static const String pkImage = "$imageDir/ck.jpg";
   static const String profileImage = "$imageDir/profile.jpg";
   static const String blankImage = "$imageDir/blank.jpg";
   static const String dashboardImage = "$imageDir/dashboard.jpg";
@@ -50,6 +52,7 @@ class UIData {
   static const String shoppingImage = "$imageDir/shopping.jpeg";
   static const String timelineImage = "$imageDir/timeline.jpeg";
   static const String verifyImage = "$imageDir/verification.jpg";
+
 
   //login
   static const String enter_code_label = "Phone Number";
@@ -94,13 +97,22 @@ class UIData {
   }
 
   //Default Text Style
-  static TextStyle smallTextStyle  = TextStyle(
+  static const TextStyle smallTextStyle  = TextStyle(
     fontWeight: FontWeight.normal,
     fontFamily: UIData.ralewayFont,
   );
 
-  static TextStyle smallTextStyle_Bold  = TextStyle(
-    fontWeight: FontWeight.bold,
+  static const TextStyle smallTextStyle_GreyedOut  = TextStyle(
+    fontWeight: FontWeight.normal,
+    color: Colors.grey,
     fontFamily: UIData.ralewayFont,
   );
+
+//  static const TextStyle smallTextStyle_Bold  = TextStyle(
+//    fontWeight: FontWeight.bold,
+//    fontFamily: UIData.ralewayFont,
+//  );
+
+  //Default edge_insets
+  static const double collection_edge_inset = 9.0;
 }

@@ -14,17 +14,17 @@ class MenuViewModel {
           menuColor: Color(0xff050505),
           icon: Icons.person,
           image: UIData.profileImage,
-          items: ["New Collection", "Collection Info"]),
+          items: []),
       Menu(
-          title: "Amend Data",
+          title: "View Data",
           menuColor: Color(0xffc8c4bd),
           icon: Icons.shopping_cart,
           image: UIData.shoppingImage,
           items: [
-            "Shopping List",
-            "Shopping Details",
-            "Product Details",
-            "Shopping 4"
+//            "Shopping List",
+//            "Shopping Details",
+//            "Product Details",
+//            "Shopping 4"
           ]),
       Menu(
           title: "User Feedback",
@@ -33,7 +33,7 @@ class MenuViewModel {
           image: UIData.loginImage,
           items: ["Login With OTP", "Login 2", "Sign Up", "Login 4"]),
       Menu(
-          title: "Add New Food",
+          title: "Add New Recipe",
           menuColor: Color(0xff7f5741),
           icon: Icons.timeline,
           image: UIData.timelineImage,
@@ -49,7 +49,7 @@ class MenuViewModel {
           menuColor: Color(0xff2a8ccf),
           icon: Icons.settings,
           image: UIData.settingsImage,
-          items: ["Device Settings", "Settings 2", "Settings 3", "Settings 4"]),
+          items: []),
       Menu(
           title: "No Item",
           menuColor: Color(0xffe19b6b),
@@ -57,11 +57,11 @@ class MenuViewModel {
           image: UIData.blankImage,
           items: ["No Search Result", "No Internet", "No Item 3", "No Item 4"]),
       Menu(
-          title: "Payment",
+          title: "Login",
           menuColor: Color(0xffddcec2),
           icon: Icons.payment,
           image: UIData.paymentImage,
-          items: ["Credit Card", "Payment Success", "Payment 3", "Payment 4"]),
+          items: []),
     ];
   }
 }

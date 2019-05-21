@@ -21,7 +21,11 @@ dependencies:
   rxdart: ^0.21.0
   flutter_masked_text: ^0.8.0
   flutter_datetime_picker:
-  provider:
+  flutter_picker:
+  path_provider:
+  uuid:
+  sqflite:
+  flutter_typeahead:
   flutter_localizations:
     sdk: flutter
 
@@ -29,6 +33,7 @@ dev_dependencies:
   random_pk:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: "^0.7.0"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
@@ -45,6 +50,7 @@ flutter:
     - assets/images/
     - locale/i18n_en.json
     - locale/i18n_hi.json
+    - assets/database/icrisat.db
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -74,3 +80,10 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.io/custom-fonts/#from-packages
+
+#  # Run this command in order to
+#  # flutter packages pub run flutter_launcher_icons:main -f pubspec.yaml
+#  flutter_icons:
+#    image_path: "assets/icons/icon.png"
+#    android: true
+#    ios: true
