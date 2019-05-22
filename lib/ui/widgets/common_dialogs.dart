@@ -18,13 +18,15 @@ fetchApiResult(BuildContext context, NetworkServiceResponse snapshot) {
   );
 }
 
-showSuccess(BuildContext context, String message, IconData icon) {
+showSuccess(BuildContext context, String message, IconData icon, {Color bgColor, Color iconColor}) {
+  if (bgColor == null) bgColor = Colors.black;
+  if (iconColor == null) iconColor = Colors.green;
   showDialog(
       context: context,
       builder: (context) => Center(
             child: Material(
               borderRadius: BorderRadius.circular(8.0),
-              color: Colors.black,
+              color: bgColor,
               elevation: 5.0,
               child: Padding(
                 padding: const EdgeInsets.all(32.0),
@@ -34,7 +36,7 @@ showSuccess(BuildContext context, String message, IconData icon) {
                   children: <Widget>[
                     Icon(
                       icon,
-                      color: Colors.green,
+                      color: iconColor,
                     ),
                     SizedBox(
                       height: 10.0,

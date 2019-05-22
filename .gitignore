@@ -12,3 +12,5 @@ build/
 key.properties
 
 release_key.jks
+
+*.zip

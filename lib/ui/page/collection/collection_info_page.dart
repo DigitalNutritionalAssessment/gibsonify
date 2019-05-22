@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_uikit/utils/uidata.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 import 'package:flutter_uikit/model/consumption_data.dart';
 import 'package:flutter_uikit/ui/widgets/collection_question.dart';
@@ -33,13 +35,24 @@ class _InfoDataCardState extends State<InfoDataCard> {
   final _formKey = GlobalKey<FormState>();
 
   @override
-  void initState() {
+  void initState(){
     if (widget.initialInterviewData != null) interviewData = widget.initialInterviewData;
     if (widget.enabled != null) enabled = widget.enabled;
 //    if (widget.updatePageState != null)   updatePageState = (interviewData)=> {widget.updatePageState(interviewData)};
-
+    getEnumeratorInfo();
     super.initState();
   }
+
+  void getEnumeratorInfo() async{
+//    SharedPreferences _prefs = await SharedPreferences.getInstance();
+//    interviewData.enumerator.name = _prefs.getString("userName");
+//    interviewData.enumerator.employeeNumber = _prefs.getInt("employeeName");
+      Person enumerator = await Person.getEnumeratorFromSharedPrefs();
+      interviewData.enumerator = enumerator;
+
+  }
+
+
 
   @override
   Widget build(BuildContext context) {

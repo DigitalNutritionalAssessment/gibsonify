@@ -3,6 +3,7 @@ import 'package:flutter_uikit/utils/uidata.dart';
 import 'package:flutter_uikit/utils/form_strings.dart';
 
 import 'package:flutter_uikit/model/consumption_data.dart';
+import 'package:flutter_uikit/model/food_item.dart';
 
 import 'package:flutter_uikit/ui/widgets/collection_question.dart';
 import 'package:flutter_uikit/ui/widgets/custom_time_picker.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_uikit/ui/widgets/custom_time_picker.dart';
 import 'package:flutter_uikit/ui/page/collection/collection_info_page.dart';
 import 'package:flutter_uikit/ui/page/collection/collection_first_page.dart';
 import 'package:flutter_uikit/ui/page/collection/collection_second_page.dart';
+import 'package:flutter_uikit/ui/page/collection/recipes_viewer.dart';
 
 class FinalReportCard extends StatefulWidget {
 
@@ -43,6 +45,14 @@ class _FinalReportCardState extends State<FinalReportCard> {
         enabled: false,
       ),
     ];
+    List<Widget> overallFoodItemCardList = new List<Widget>.generate(
+        widget.consumptionData.listOfFoods.length,
+        (index) => OverallFoodItemCard(
+          foodItem: widget.consumptionData.listOfFoods[index],
+          updateFoodItemState: (item){},
+          enabled: false,
+        )
+    );
     List<Widget> firstPassList = new List<Widget>.generate(
         widget.consumptionData.listOfFoods.length,
             (index) =>
@@ -145,8 +155,9 @@ class _FinalReportCardState extends State<FinalReportCard> {
     return ListView(
       children: [
         ...infoCardList,
-        ...firstPassList,
-        ...secondPassList,
+        ...overallFoodItemCardList,
+//        ...firstPassList,
+//        ...secondPassList,
         ...endInterviewDataCardList,
         ...buttonsList,
 
@@ -154,4 +165,89 @@ class _FinalReportCardState extends State<FinalReportCard> {
     );
   }
 }
+
+
+class OverallFoodItemCard extends StatelessWidget {
+
+  final FoodItem foodItem;
+  final updateFoodItemState;
+  final bool enabled;
+  final Map<String, FoodItem> recipeMap;
+
+  const OverallFoodItemCard({
+    @required this.foodItem,
+    @required this.updateFoodItemState,
+    this.recipeMap,
+    this.enabled,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Card(
+      elevation: 2.0,
+      child: Container(
+//      height: MediaQuery.of(context).size.height,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            AutoCompleteTextField(
+              suggestions: recipeMap?.keys?.toList() ?? [],
+              onSuggestionSelected: (String selected) {
+                foodItem.foodName = selected;
+
+                FoodItem selectedRecipe = recipeMap[selected]?? FoodItem();
+
+                foodItem.recipe = selectedRecipe.recipe;
+                foodItem.ingredientItems = selectedRecipe.ingredientItems;
+                updateFoodItemState(foodItem);
+              },
+              questionText: "Can you name me something that you've eaten?",
+              hintText: null,
+              initialText: foodItem.foodName ?? "",
+              enabled: (enabled ?? true),
+              validate: emptyFieldValidator,
+            ),
+            DialogPicker(
+              questionText: "What time did you eat it?",
+              optionsList: FormStrings.timeOfDaySelection.values.toList(),
+              onConfirm: (List<int> values) {
+                foodItem.timeOfDay = TimeOfDaySelection.values[values[0]];
+                updateFoodItemState(foodItem);
+              },
+              initialSelectedOption: 0,
+            ),
+            DialogPicker(
+              questionText: "Source of Food",
+              optionsList: FormStrings.sourceOfFoodOutcomeSelection.values
+                  .toList(),
+              onConfirm: (List<int> values) {
+                foodItem.foodSource = SourceOfFoodSelection.values[values[0]];
+                updateFoodItemState(foodItem);
+              },
+              enabled: enabled,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(UIData.collection_edge_inset),
+              child: Text(
+                "List of Ingredients in recipe",
+                style: UIData.smallTextStyle_GreyedOut,
+              ),
+            ),
+            RecipeExpansionTile(
+              foodItem: foodItem,
+              updateFoodItemState: ()=>{},
+              enabled: false,
+            ),
+            SizedBox(
+              height: 10.0,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
 

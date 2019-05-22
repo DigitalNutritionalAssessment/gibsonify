@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'dart:convert';
+
 
 import 'package:flutter/material.dart';
 import 'package:flutter_uikit/utils/uidata.dart';
@@ -54,10 +56,9 @@ class _CollectionViewerState extends State<CollectionViewer> {
     body: ListView.builder(
       itemCount: (consumptionDataList?.length ?? 0),
       itemBuilder: (BuildContext ctx, int idx) {
-        print(idx);
           Map<String, dynamic> args = {
             "consumptionData": consumptionDataList[idx],
-            "initialPageState": PageState.THIRD_PASS,
+            "initialPageState": PageState.FOURTH_PASS,
           };
 
           return Dismissible(
@@ -107,6 +108,25 @@ class _CollectionViewerState extends State<CollectionViewer> {
                   Navigator.pushNamed(
                       context, UIData.newCollectionSessionRoute,
                       arguments: args);
+                },
+                onLongPress: (){
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext ctx){
+                        return AlertDialog(
+                            title: new Text("JSON viewer"),
+                            content: SingleChildScrollView(child: new Text(jsonEncode(consumptionDataList[idx]))),
+                            actions: <Widget>[
+                              new FlatButton(
+                                child: new Text("Done"),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              ],
+                        );
+                      }
+                  );
                 },
               ),
             ),

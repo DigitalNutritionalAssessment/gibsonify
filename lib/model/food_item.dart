@@ -5,42 +5,104 @@ class FoodItem {
   TimeOfDaySelection timeOfDay;
   String foodName;
   SourceOfFoodSelection foodSource;
-  String foodDescription;
-  FormWhenEatenSelection formWhenEaten;
-  String measurementMethod;
-  double measurement;
-  String measurementUnits;
+  List<IngredientItem> ingredientItems;
+  Recipe recipe;
 
-  FoodItem(
-      {this.timeOfDay,
-      this.foodName,
-      this.foodDescription,
-      this.formWhenEaten,
-      this.measurementMethod,
-      this.measurement,
-      this.measurementUnits
-      }
-  );
+
+  FoodItem({
+    this.timeOfDay,
+    this.foodName,
+    this.foodSource,
+    this.ingredientItems,
+    this.recipe,
+  }){
+    if (this.ingredientItems == null) this.ingredientItems = [];
+    if (this.recipe == null) this.recipe = Recipe();
+  }
 
   Map<String, dynamic> toJson() =>
       {
         'foodName': foodName,
         'timeOfDay': timeOfDay?.index,
-        'foodDescription':foodDescription,
-        'formWhenEaten':formWhenEaten?.index,
         'foodSource': foodSource?.index,
+        'recipe':recipe,
+        'ingredients':ingredientItems,
       };
 
 
   FoodItem.fromJson(Map<String, dynamic> json)
       : foodName = json['foodName'],
-        timeOfDay = TimeOfDaySelection.values[json['timeOfDay']],
-        foodDescription = json['foodDescription'],
-        formWhenEaten = FormWhenEatenSelection.values[json['formWhenEaten']],
-        foodSource = SourceOfFoodSelection.values[json['foodSource']];
+        timeOfDay = (json['timeOfDay'] != null) ? TimeOfDaySelection.values.elementAt(json['timeOfDay']): null,
+        foodSource = (json['foodSource'] != null) ? SourceOfFoodSelection.values.elementAt(json['foodSource']): null,
+        ingredientItems = IngredientsItemsList.fromJson(json['ingredients'] as List).ingredientItems,
+        recipe = Recipe.fromJson(json['recipe']);
 }
 
+
+class IngredientItem{
+  String foodItemName;
+  String foodGroup;
+  int fctCode;
+  int rCode;
+  FormWhenEatenSelection formWhenEaten;
+  MeasurementUnitSelection measurementUnit;    //MeasurementUnits
+  MeasurementMethodSelection measurementMethod;
+  double measurement;
+
+  IngredientItem({this.foodItemName, this.foodGroup, this.fctCode, this.rCode,
+      this.formWhenEaten, this.measurementUnit, this.measurement, this.measurementMethod});
+
+  Map<String, dynamic> toJson() =>
+      {
+        'foodItemName':foodItemName,
+        'foodGroup':foodGroup,
+        'formWhenEaten':formWhenEaten?.index,
+        'fctCode': fctCode,
+        'rCode': rCode,
+        'measurementUnit':measurementUnit?.index,
+        'measurement':measurement,
+        'measurementMethod':measurementMethod,
+      };
+
+  IngredientItem.fromJson(Map<String, dynamic> json)
+      : foodItemName = json['foodItemName'],
+        foodGroup = json['foodGroup'],
+        formWhenEaten = (json['formWhenEaten'] != null) ? FormWhenEatenSelection.values.elementAt(json['formWhenEaten']): null,
+        fctCode = json['fctCode'],
+        rCode = json['rCode'],
+        measurementUnit = (json['measurementUnit'] != null) ? MeasurementUnitSelection.values.elementAt(json['measurementUnit']): null,
+        measurement = json['measurement'],
+        measurementMethod = (json['measurementMethod'] != null) ? MeasurementMethodSelection.values.elementAt(json['measurementMethod']): null;
+
+}
+
+class Recipe{
+  int id;
+  String description;
+  RecipeType recipeType;
+
+  Recipe({this.id, this.description, this.recipeType});
+
+  Recipe.fromJson(Map<String, dynamic> json){
+    id = json['id'];
+    description = json['description'];
+    recipeType = (json['recipeType'] != null) ? RecipeType.values.elementAt(json['recipeType']) : null;
+  }
+
+  Map<String, dynamic> toJson() =>
+      {
+        'id': id,
+        'description': description,
+        'recipeType': recipeType?.index,
+      };
+
+}
+
+
+/////////////// Helper List classes for JSON encoding / decoding ///////////////
+
 class FoodItemsList {
+
   final List<FoodItem> listOfFoods;
 
   FoodItemsList({
@@ -48,17 +110,29 @@ class FoodItemsList {
   });
 
   factory FoodItemsList.fromJson(List<dynamic> json){
-    List<FoodItem> a = [];
-    for (var i in json){
-      a.add(FoodItem.fromJson(i));
-      print(FoodItem.fromJson(i));
-    }
-
     return new FoodItemsList(
-        listOfFoods :json.map((i)=>FoodItem.fromJson(i)).toList(),
+      listOfFoods :json.map((i)=>FoodItem.fromJson(i)).toList(),
     );
   }
 }
+
+class IngredientsItemsList {
+
+  final List<IngredientItem> ingredientItems;
+
+  IngredientsItemsList({
+    this.ingredientItems,
+  });
+
+  factory IngredientsItemsList.fromJson(List<dynamic> json){
+    return new IngredientsItemsList(
+      ingredientItems :json.map((i)=>IngredientItem.fromJson(i)).toList(),
+    );
+  }
+}
+
+///////////////////////// ENUMS declared here ///////////////////////////////
+
 
 enum TimeOfDaySelection{
   MORNING,
@@ -88,26 +162,21 @@ enum FormWhenEatenSelection{
   ROAST_WITH_OIL,
 }
 
-
-// Inherited widget for managing a ConsumptionData Item
-class FoodItemInheritedWidget extends InheritedWidget {
-  const FoodItemInheritedWidget({
-    Key key,
-    this.itemData,
-    Widget child}) : super(key: key, child: child);
-
-  final FoodItem itemData;
-
-  @override
-  bool updateShouldNotify(FoodItemInheritedWidget old) {
-    print('In updateShouldNotify');
-    return itemData != old.itemData;
-  }
-
-  static FoodItemInheritedWidget of(BuildContext context) {
-    // You could also just directly return the name here
-    // as there's only one field
-    return context.inheritFromWidgetOfExactType(FoodItemInheritedWidget);
-  }
+enum MeasurementMethodSelection{
+  DIRECT_WEIGHT,
+  VOLUME_OF_WATER,
+  VOLUME_OF_FOOD,
+  PLAYDOUGH,
+  NUMBER,
+  PHOTOSIZE,
 }
 
+enum MeasurementUnitSelection{
+  MILLILITRES,
+  GRAMS,
+}
+
+enum RecipeType{
+  STANDARD,
+  MODIFIED
+}

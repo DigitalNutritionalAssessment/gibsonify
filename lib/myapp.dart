@@ -3,7 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_uikit/ui/page/dashboard/dashboard_one.page.dart';
 import 'package:flutter_uikit/ui/page/dashboard/dashboard_two_page.dart';
 import 'package:flutter_uikit/ui/page/home_page.dart';
-import 'package:flutter_uikit/ui/page/login/login_page.dart';
+//import 'package:flutter_uikit/ui/page/login/login_page.dart';
 import 'package:flutter_uikit/ui/page/login/login_two_page.dart';
 import 'package:flutter_uikit/ui/page/notfound/notfound_page.dart';
 import 'package:flutter_uikit/ui/page/payment/credit_card_page.dart';
@@ -63,7 +63,7 @@ class MyApp extends StatelessWidget {
             ShoppingDetailsPage(),
         UIData.shoppingThreeRoute: (BuildContext context) =>
             ProductDetailPage(),
-        UIData.loginRoute: (BuildContext context) => LoginTwoPage(),
+        UIData.loginRoute: (BuildContext context) => LoginPage(),
         UIData.paymentOneRoute: (BuildContext context) => CreditCardPage(),
         UIData.paymentTwoRoute: (BuildContext context) => PaymentSuccessPage(),
         UIData.dashboardOneRoute: (BuildContext context) => DashboardOnePage(),

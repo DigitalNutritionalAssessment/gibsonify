@@ -46,8 +46,8 @@ android {
         targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        setProperty("archivesBaseName", applicationId + "-v" + versionName + "-" + new Date().format('dd_MMM_yyyy'))
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+//        setProperty("archivesBaseName", applicationId + "-v" + versionName + "-" + new Date().format('dd_MMM_yyyy'))
 
     }
     signingConfigs {
@@ -65,7 +65,7 @@ android {
             //     // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.release
             minifyEnabled true
-            useProguard true
+//            useProguard true
 
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

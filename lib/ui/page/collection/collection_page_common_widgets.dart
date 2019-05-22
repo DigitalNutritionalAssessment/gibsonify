@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_uikit/ui/widgets/about_tile.dart';
 import 'package:flutter_uikit/utils/uidata.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
+
+import 'package:flutter_uikit/model/consumption_data.dart';
+
 
 
 Widget appBar({@required title, @required bottomBarTitle}) => AppBar(
@@ -54,83 +59,105 @@ class CollectionCommonDrawer extends StatelessWidget {
 });
 
 
+
+
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          UserAccountsDrawerHeader(
-            accountName: Text(
-              "Choon Kiat Lee",
-            ),
-            accountEmail: Text(
-              "choonkiat.lee@gmail.com",
-            ),
-            currentAccountPicture: new CircleAvatar(
-              backgroundImage: new AssetImage(UIData.pkImage),
-            ),
+    return FutureBuilder(
+      future: Person.getEnumeratorFromSharedPrefs(),
+      builder: (BuildContext ctx, AsyncSnapshot<Person> snapshot){
+        return Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              UserAccountsDrawerHeader(
+                accountName: Text(
+                  snapshot.data?.name ??"Choon Kiat Lee",
+                ),
+                accountEmail: Text(
+                  "Employee Number: " +
+                  snapshot.data?.employeeNumber.toString() ?? "choonkiat.lee@gmail.com",
+                ),
+                currentAccountPicture: new CircleAvatar(
+                  backgroundImage: new AssetImage(UIData.pkImage),
+                ),
+              ),
+              new ListTile(
+                title: Text(
+                  "Interviewee Info",
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18.0),
+                ),
+                leading: Icon(
+                  Icons.person,
+                  color: Colors.blue,
+                ),
+                onTap: () => {goToPageStateInfo(), Navigator.pop(context)},
+              ),
+              new ListTile(
+                title: Text(
+                  "First Pass",
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18.0),
+                ),
+                leading: Icon(
+                  Icons.filter_1,
+                  color: Colors.green,
+                ),
+                onTap: () => {goToPageStateFirstPage(), Navigator.pop(context)},
+              ),
+              new ListTile(
+                title: Text(
+                  "Second Pass",
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18.0),
+                ),
+                leading: Icon(
+                  Icons.filter_2,
+                  color: Colors.red,
+                ),
+                onTap: () => {goToPageStateSecondPage(), Navigator.pop(context)},
+              ),
+              new ListTile(
+                title: Text(
+                  "Third Pass",
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18.0),
+                ),
+                leading: Icon(
+                  Icons.filter_3,
+                  color: Colors.cyan,
+                ),
+                onTap: () => {goToPageStateThirdPage(), Navigator.pop(context)},
+              ),
+              Divider(),
+              new ListTile(
+                title: Text(
+                  "Fourth Pass",
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18.0),
+                ),
+                leading: Icon(
+                  Icons.filter_4,
+                  color: Colors.brown,
+                ),
+                onTap: () => {goToPageStateFourthPage(), Navigator.pop(context)},
+              ),
+              Divider(),
+              (snapshot.data?.name == null)?
+              new ListTile(
+                title: Text(
+                  "Log In",
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18.0),
+                ),
+                leading: Icon(
+                  Icons.filter_4,
+                  color: Colors.brown,
+                ),
+                onTap: () => {goToPageStateFourthPage(), Navigator.pop(context)},
+              )
+              :Container(),
+//              Divider(),
+              MyAboutTile()
+            ],
           ),
-          new ListTile(
-            title: Text(
-              "Interviewee Info",
-              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18.0),
-            ),
-            leading: Icon(
-              Icons.person,
-              color: Colors.blue,
-            ),
-            onTap: () => {goToPageStateInfo(), Navigator.pop(context)},
-          ),
-          new ListTile(
-            title: Text(
-              "First Pass",
-              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18.0),
-            ),
-            leading: Icon(
-              Icons.filter_1,
-              color: Colors.green,
-            ),
-            onTap: () => {goToPageStateFirstPage(), Navigator.pop(context)},
-          ),
-          new ListTile(
-            title: Text(
-              "Second Pass",
-              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18.0),
-            ),
-            leading: Icon(
-              Icons.filter_2,
-              color: Colors.red,
-            ),
-            onTap: () => {goToPageStateSecondPage(), Navigator.pop(context)},
-          ),
-          new ListTile(
-            title: Text(
-              "Third Pass",
-              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18.0),
-            ),
-            leading: Icon(
-              Icons.filter_3,
-              color: Colors.cyan,
-            ),
-            onTap: () => {goToPageStateThirdPage(), Navigator.pop(context)},
-          ),
-          Divider(),
-          new ListTile(
-            title: Text(
-              "Fourth Pass",
-              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18.0),
-            ),
-            leading: Icon(
-              Icons.filter_4,
-              color: Colors.brown,
-            ),
-            onTap: () => {goToPageStateFourthPage(), Navigator.pop(context)},
-          ),
-          Divider(),
-          MyAboutTile()
-        ],
-      ),
+        );
+      },
     );
   }
 }

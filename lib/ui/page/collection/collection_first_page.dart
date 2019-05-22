@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 
+import 'package:flutter_typeahead/flutter_typeahead.dart';
+
 import 'package:flutter_uikit/utils/uidata.dart';
 import 'package:flutter_uikit/utils/form_strings.dart';
 
@@ -14,12 +16,14 @@ import 'package:flutter_uikit/model/food_item.dart';
 class FoodItemList extends StatefulWidget {
 
   final navigatePageState;
-  final initialFoodList;
+  final List<FoodItem> initialFoodList;
   final updatePageState;
+  final Map<String,FoodItem> recipeMap;
 
   const FoodItemList({
     @required this.navigatePageState,
     @required this.updatePageState,
+    @required this.recipeMap,
     this.initialFoodList,
   });
 
@@ -36,6 +40,7 @@ class _FoodItemListState extends State<FoodItemList> {
   @override
   void initState() {
     if (widget.initialFoodList != null) _foodList = widget.initialFoodList;
+    print(widget.recipeMap);
     super.initState();
   }
 
@@ -62,7 +67,8 @@ class _FoodItemListState extends State<FoodItemList> {
                         updateFoodItemState: (foodItem){
                             _foodList[index] = foodItem;
                         },
-                      foodItem: _foodList[index],
+                        foodItem: _foodList[index],
+                        recipeMap: widget.recipeMap,
                     ));
               },
             ),
@@ -113,10 +119,12 @@ class FoodItemCard extends StatelessWidget {
   final FoodItem foodItem;
   final updateFoodItemState;
   final bool enabled;
+  final Map<String, FoodItem> recipeMap;
 
   const FoodItemCard({
     @required this.foodItem,
     @required this.updateFoodItemState,
+    this.recipeMap,
     this.enabled,
   });
 
@@ -129,24 +137,36 @@ class FoodItemCard extends StatelessWidget {
 //      height: MediaQuery.of(context).size.height,
         child: Column(
           children: <Widget>[
-            FormQuestion(
-              questionText: "Can you name me something that you've eaten?",
-              hint: "Input food name here",
-              initialText: foodItem.foodName,
-              validate: emptyFieldValidator,
-              onSaved: (answer)
-              {
-                foodItem.foodName = answer;
+            AutoCompleteTextField(
+              suggestions: recipeMap?.keys?.toList() ?? [],
+              onSuggestionSelected: (String selected) {
+                foodItem.foodName = selected;
+
+                FoodItem selectedRecipe = recipeMap[selected]?? FoodItem();
+
+                foodItem.recipe = selectedRecipe.recipe;
+
+                // Only update the ingredientsItems list if the recipe type is standard!
+                // If the recipe type is modified, then we assume that the recipe
+                // has been previously intentionally modified
+                // and hence
+                if (foodItem.recipe.recipeType == RecipeType.STANDARD ){
+                 foodItem.ingredientItems = selectedRecipe.ingredientItems;
+                }
                 updateFoodItemState(foodItem);
               },
+              questionText: "Can you name me something that you've eaten?",
+              hintText: null,
+              initialText: foodItem.foodName ?? "",
               enabled: (enabled ?? true),
+              validate: emptyFieldValidator,
             ),
             DialogPicker(
               questionText: "What time did you eat it?",
               optionsList: FormStrings.timeOfDaySelection.values.toList(),
               onConfirm: (List<int> values) {
                 foodItem.timeOfDay = TimeOfDaySelection.values[values[0]];
-              updateFoodItemState(foodItem);
+                updateFoodItemState(foodItem);
               },
               initialSelectedOption: 0,
             ),

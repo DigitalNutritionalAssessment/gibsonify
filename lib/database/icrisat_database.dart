@@ -6,6 +6,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 import 'package:flutter_uikit/model/consumption_data.dart';
+import 'package:flutter_uikit/model/food_item.dart';
 
 
 class IcrisatDB{
@@ -81,4 +82,49 @@ class IcrisatDB{
 
     return Map<String,int>.fromIterables( descrList, idList);
   }
+
+  Future<Map<String,FoodItem>> getRecipeInformation() async {
+    // Query the table for all items.
+    final List<Map<String, dynamic>> maps = await db.query( 'recipes' );
+
+    Map<String, FoodItem> outputMap = new Map<String, FoodItem>();
+
+    for (Map<String,dynamic> row in maps)
+    {
+      String recipeName = row['recipe_descr'];
+
+      // If there is already a recipe with the same name, append it to the
+      // ingredientItems List
+      if (outputMap.containsKey(recipeName)){
+        outputMap[recipeName].ingredientItems.add(getIngredientFromDBMap(row));
+      }
+      else{
+        outputMap[recipeName] = FoodItem(
+          foodName: recipeName,
+          recipe: Recipe(
+            id: row['recipe_code'],
+            description: recipeName,
+            recipeType: (row['recipeType'] != null)? RecipeType.values.elementAt(row['recipeType']) :null,
+          ),
+          ingredientItems: [getIngredientFromDBMap(row)],
+        );
+      }
+    }
+
+    return outputMap;
+
+
+
+  }
+
+  IngredientItem getIngredientFromDBMap(Map<String,dynamic> map){
+    return IngredientItem(
+      foodItemName: map['ingr_descr'],
+      fctCode: map['ingr_code'],
+      measurementUnit: (map['ingr_fraction_type']!=null) ? MeasurementUnitSelection.values.elementAt(map['ingr_fraction_type']-1):null,
+      measurement: map['ingr_fraction'],
+    );
+  }
+
+
 }

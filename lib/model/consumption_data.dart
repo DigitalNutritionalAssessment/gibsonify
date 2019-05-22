@@ -3,7 +3,11 @@ import 'package:path/path.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_uikit/model/food_item.dart';
+import 'package:flutter_uikit/model/recipes.dart';
 import 'package:uuid/uuid.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 import 'package:flutter_uikit/model/consumption_data_db.dart';
 
@@ -43,17 +47,6 @@ class ConsumptionData {
     }else return null;
 
   }
-//
-//  ConsumptionData.fromFileName(String filename){
-//    String baseName = basename(filename);
-//    print(baseName);
-//    List<String> tokens = baseName.split("_");
-//    if (tokens == 3){
-//      id = tokens[0];
-//    }
-//    else id=null;
-//  }
-
 
   void save(){
     print("Saving...");
@@ -69,6 +62,7 @@ class ConsumptionData {
     this.interviewData = consumptionData.interviewData;
     this.listOfFoods = consumptionData.listOfFoods;
     this.filename = localItemStorage.fileName;
+
     return this;
   }
 
@@ -96,7 +90,7 @@ class Person{
   String name;
   String telephone;
   String id;
-  String employeeNumber;
+  int employeeNumber;
 
   Person({
     this.name,
@@ -119,29 +113,24 @@ class Person{
         telephone = json['telephone'],
         employeeNumber = json['employeeNumber'];
 
-}
+  static Future<Person> getEnumeratorFromSharedPrefs() async {
 
-enum DayCode{
-  NORMAL,
-  SICK,
-  FASTING,
-  FESTIVAL,
-  PARTIES,
-  VISITORS,
-  OTHERS,
-}
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    Person enumerator =  Person();
+    enumerator.name = _prefs.getString("userName");
+    enumerator.employeeNumber = _prefs.getInt("employeeNumber");
 
-enum InterviewOutcomeSelection{
-  COMPLETED,
-  INCOMPLETE,
-  ABSENT,
-  REFUSED,
-  COULD_NOT_LOCATE,
+    print(enumerator.employeeNumber.toString());
+
+    return enumerator;
+  }
+
 }
 
 class InterviewData{
   String householdIdentification;
   Person respondent;
+  Person enumerator;
   DateTime sensitizationVisitDate;
   DayCode dayCode;
   DateTime interviewStart;
@@ -152,12 +141,13 @@ class InterviewData{
   InterviewOutcomeSelection interviewOutcome;
   String incompleteInterviewReason;
 
-  InterviewData({this.householdIdentification, this.respondent,
+  InterviewData({this.householdIdentification, this.respondent, this.enumerator,
       this.sensitizationVisitDate, this.dayCode, this.interviewStart,
       this.interviewEnd, this.secondInterview, this.secondInterviewDate,
       this.secondInterviewReason,
       this.interviewOutcome, this.incompleteInterviewReason}) {
     if (this.respondent == null) this.respondent = Person();
+    if (this.enumerator == null) this.enumerator = Person();
   }
 
 
@@ -165,8 +155,9 @@ class InterviewData{
       {
         'householdIdentification': householdIdentification,
         'respondent': respondent,
+        'enumerator': enumerator,
         'sensitizationVisitDate': sensitizationVisitDate.toString(),
-        'dayCode': dayCode?.index,
+//        'dayCode': dayCode?.index,
         'interviewStart': interviewStart.toString(),
         'interviewEnd':interviewEnd.toString(),
         'interviewOutcome':interviewOutcome?.index,
@@ -176,11 +167,12 @@ class InterviewData{
   InterviewData.fromJson(Map<String, dynamic> json)
       : householdIdentification = json['householdIdentification'],
         respondent = Person.fromJson(json['respondent']),
+        enumerator = Person.fromJson(json['enumerator']),
         sensitizationVisitDate = DateTime.tryParse(json['sensitizationVisitDate']),
-//        dayCode = DayCode.values[json['dayCode']],
+////        dayCode = DayCode.values[json['dayCode']],
         interviewStart = DateTime.tryParse(json['interviewStart']),
         interviewEnd = DateTime.tryParse(json['interviewEnd']),
-        interviewOutcome = InterviewOutcomeSelection.values[json['interviewOutcome']],
+        interviewOutcome = (json['interviewOutcome'] != null) ? InterviewOutcomeSelection.values.elementAt(json['interviewOutcome']):null,
         incompleteInterviewReason = json['incompleteInterviewReason']??null;
 }
 
@@ -206,4 +198,24 @@ class ConsumptionDataInheritedWidget extends InheritedWidget {
     // as there's only one field
     return context.inheritFromWidgetOfExactType(ConsumptionDataInheritedWidget);
   }
+}
+
+///////////////////////// ENUMS declared here ///////////////////////////////
+
+enum DayCode{
+  NORMAL,
+  SICK,
+  FASTING,
+  FESTIVAL,
+  PARTIES,
+  VISITORS,
+  OTHERS,
+}
+
+enum InterviewOutcomeSelection{
+  COMPLETED,
+  INCOMPLETE,
+  ABSENT,
+  REFUSED,
+  COULD_NOT_LOCATE,
 }

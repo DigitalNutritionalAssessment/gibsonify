@@ -42,7 +42,6 @@ class LocalItemStorage{
       // Read the file
       String contents = await file.readAsString();
       Map consumptionDataMap = jsonDecode(contents);
-      print(consumptionDataMap);
       return new ConsumptionData.fromJson(consumptionDataMap);
     } catch (e) {
       // If encountering an error, return 0

@@ -35,7 +35,6 @@ class _FoodItemList2State extends State<FoodItemList2> {
 
   Future getFctMap() async{
     var tmpMap = await IcrisatDB().mapDescriptionToFCTCode();
-    print(tmpMap);
     setState(() {
       _fctMap = tmpMap;
     });
@@ -150,29 +149,29 @@ class SecondPassFoodItemCard extends StatelessWidget{
               },
               enabled: enabled,
             ),
-            AutoCompleteTextField(
-              suggestions: fctMap?.keys?.toList() ?? [],
-              onSuggestionSelected: (String selected){
-                foodItem.foodDescription = selected;
-                updateFoodItemState(foodItem);
-              },
-              questionText:"Food Ingredients: ",
-              hintText: "Food Ingredient",
-              initialText: foodItem.foodDescription ?? "",
-              enabled: enabled,
-              validate: emptyFieldValidator,
-            ),
-//            FormQuestion(
-//              questionText: "What ingredients were in your food?",
-//              hint: "",
-//              initialText: foodItem.foodDescription ?? null,
-//              validate: emptyFieldValidator,
-//              onSaved: (answer){
-//                foodItem.foodDescription = answer;
+//            AutoCompleteTextField(
+//              suggestions: fctMap?.keys?.toList() ?? [],
+//              onSuggestionSelected: (String selected){
+//                foodItem.ingredientItems[0].foodItemName = selected;
 //                updateFoodItemState(foodItem);
 //              },
+//              questionText:"Food Ingredients: ",
+//              hintText: "Food Ingredient",
+//              initialText: foodItem.ingredientItems[0].foodItemName ?? "",
 //              enabled: enabled,
+//              validate: emptyFieldValidator,
 //            ),
+////            FormQuestion(
+////              questionText: "What ingredients were in your food?",
+////              hint: "",
+////              initialText: foodItem.foodDescription ?? null,
+////              validate: emptyFieldValidator,
+////              onSaved: (answer){
+////                foodItem.foodDescription = answer;
+////                updateFoodItemState(foodItem);
+////              },
+////              enabled: enabled,
+////            ),
 
             DialogPicker(
                 questionText: "Source of Food",
@@ -184,16 +183,16 @@ class SecondPassFoodItemCard extends StatelessWidget{
                 },
                 enabled: enabled,
             ),
-            DialogPicker(
-                questionText: "Form When Eaten",
-                optionsList: FormStrings.formWhenEatenSelection.values
-                    .toList(),
-                onConfirm: (List<int> values) {
-                  foodItem.formWhenEaten = FormWhenEatenSelection.values[values[0]];
-                  updateFoodItemState(foodItem);
-                },
-                enabled: enabled,
-            ),
+//            DialogPicker(
+//                questionText: "Form When Eaten",
+//                optionsList: FormStrings.formWhenEatenSelection.values
+//                    .toList(),
+//                onConfirm: (List<int> values) {
+//                  foodItem.ingredientItems[0].formWhenEaten = FormWhenEatenSelection.values[values[0]];
+//                  updateFoodItemState(foodItem);
+//                },
+//                enabled: enabled,
+//            ),
             SizedBox(
               height: 10.0,
             ),

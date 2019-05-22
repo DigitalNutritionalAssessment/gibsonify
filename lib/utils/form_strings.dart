@@ -41,6 +41,11 @@ class FormStrings{
     FormWhenEatenSelection.ROAST_WITH_OIL:          "Roasted with Oil",
   };
 
+  static const Map<MeasurementUnitSelection,String> measurementUnitSelection = {
+    MeasurementUnitSelection.GRAMS:          "grams",
+    MeasurementUnitSelection.MILLILITRES:    "ml",
+  };
+
 }
 
 String emptyFieldValidator(String answer){
