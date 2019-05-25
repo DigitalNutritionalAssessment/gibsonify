@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter_uikit/ui/widgets/common_scaffold.dart';
 import 'package:flutter_uikit/ui/widgets/common_switch.dart';
 import 'package:flutter_uikit/utils/uidata.dart';
@@ -6,6 +10,7 @@ import 'package:flutter_uikit/utils/uidata.dart';
 import 'package:flutter_uikit/ui/widgets/common_dialogs.dart';
 
 import 'package:flutter_uikit/model/consumption_data_db.dart';
+import 'package:flutter_uikit/model/consumption_data.dart';
 
 
 class SettingsOnePage extends StatelessWidget {
@@ -57,7 +62,8 @@ class SettingsOnePage extends StatelessWidget {
                       ),
                       title: Text("Sync Data"),
                       trailing: Icon(Icons.arrow_right),
-                    )
+                      onTap: () => syncData(parentContext),
+                    ),
                   ],
                 ),
               ),
@@ -203,6 +209,55 @@ class SettingsOnePage extends StatelessWidget {
         );
       }
     );
+  }
+
+  Future<http.Response> sendConsumptionDataJson(String json) async {
+    final response = await http.post(
+      UIData.send_consumption_data_api_url,
+      headers: {"Content-Type": "application/json"},
+      body: json,
+    );
+    print(response);
+    return response;
+  }
+
+  Future sendAllConsumptionData(BuildContext ctx) async{
+    LocalItemStorage localItemStorage = LocalItemStorage();
+    // Read all data from the db
+    List<String> filenames = await localItemStorage.listAllFiles();
+
+    bool success = true;
+    for (var filename in filenames){
+      if (!filename.contains(".txt")) continue;
+      String contents = await File(filename).readAsString();
+      print(contents);
+      try{
+        final response = await http.post(
+          UIData.send_consumption_data_api_url,
+          body: contents,
+        );
+        if (response.statusCode != 200){
+          success=false;
+          showSuccess(ctx,
+              "An error occured while sending the data!\n"
+                + ((UIData.isInDebugMode)?"Error message: Response status code: (" + response.statusCode.toString() + ")":""),
+              Icons.cancel,
+              iconColor: Colors.red);
+        }
+      }catch (e){
+        success=false;
+        showSuccess(ctx,
+            "An error occured while sending the data!\n" + ((UIData.isInDebugMode)?"Error message: (" + e.toString() + ")" : ""),
+            Icons.cancel,
+            iconColor: Colors.red);
+      }
+    }
+
+    if (success) showSuccess(ctx,"Successfully Synced Data", Icons.sync);
+  }
+  
+  void syncData(BuildContext ctx){
+    sendAllConsumptionData(ctx);
   }
 
   @override

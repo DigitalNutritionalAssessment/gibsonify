@@ -90,7 +90,7 @@ class _FinalReportCardState extends State<FinalReportCard> {
                   widget.updatePageState(widget.consumptionData);
                 },
                 questionText: "Interview End Time",
-                pickDateTime: true,
+                timePickerType: TimePickerType.DATETIME,
               ),
               DialogPicker(
                 questionText: "Final Outcome of Interview",

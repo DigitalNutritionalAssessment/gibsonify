@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_uikit/utils/uidata.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:flutter/services.dart';
 
 
 import 'package:flutter_uikit/model/consumption_data.dart';
@@ -49,6 +50,7 @@ class _InfoDataCardState extends State<InfoDataCard> {
 //    interviewData.enumerator.employeeNumber = _prefs.getInt("employeeName");
       Person enumerator = await Person.getEnumeratorFromSharedPrefs();
       interviewData.enumerator = enumerator;
+      interviewData.location = await InterviewData.getLocationFromSharedPrefs();
 
   }
 
@@ -59,6 +61,7 @@ class _InfoDataCardState extends State<InfoDataCard> {
 
     final FocusNode _hhFocusNode = FocusNode();
     final FocusNode _respNameFocusNode = FocusNode();
+    final FocusNode _respID = FocusNode();
     final FocusNode _respTelNo = FocusNode();
 
     return SingleChildScrollView(
@@ -99,8 +102,23 @@ class _InfoDataCardState extends State<InfoDataCard> {
                         widget.updatePageState(interviewData);
                         },
                       focusNode: _respNameFocusNode,
+                      nextFocusNode: _respID,
+                      enabled: enabled,
+                    ),
+                    FormQuestion(
+                      questionText: "Respondent ID",
+                      hint:"",
+                      validate: emptyFieldValidator,
+                      initialText: interviewData?.respondent?.id?.toString() ?? null,
+                      onSaved: (answer) {
+                        interviewData.respondent.id = int.tryParse(answer);
+                        widget.updatePageState(interviewData);
+                      },
+                      focusNode: _respID,
                       nextFocusNode: _respTelNo,
                       enabled: enabled,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [WhitelistingTextInputFormatter.digitsOnly]
                     ),
                     FormQuestion(
                       questionText: "Respondent Telephone Number",
@@ -113,6 +131,16 @@ class _InfoDataCardState extends State<InfoDataCard> {
                         },
                       focusNode: _respTelNo,
                       enabled: enabled,
+                      keyboardType: TextInputType.number,
+                    ),
+                    TimePicker(
+                      initialTime: interviewData?.respondent?.birthDate ?? null,
+                      onChanged: (time) {
+                        interviewData.respondent.birthDate = time;
+                        widget.updatePageState(interviewData);
+                      },
+                      questionText: "Respondent Birthdate",
+                      timePickerType: TimePickerType.DATE,
                     ),
                     TimePicker(
                       initialTime: interviewData?.interviewStart ?? null,
@@ -121,7 +149,7 @@ class _InfoDataCardState extends State<InfoDataCard> {
                         widget.updatePageState(interviewData);
                         },
                       questionText: "Interview Start Time",
-                      pickDateTime: true,
+                      timePickerType: TimePickerType.DATETIME,
                     ),
                   ],
                 )

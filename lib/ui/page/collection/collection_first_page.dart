@@ -150,7 +150,8 @@ class FoodItemCard extends StatelessWidget {
                 // If the recipe type is modified, then we assume that the recipe
                 // has been previously intentionally modified
                 // and hence
-                if (foodItem.recipe.recipeType == RecipeType.STANDARD ){
+                print(foodItem.recipe.recipeType);
+                if ((foodItem.recipe.recipeType??RecipeType.STANDARD) == RecipeType.STANDARD ){
                  foodItem.ingredientItems = selectedRecipe.ingredientItems;
                 }
                 updateFoodItemState(foodItem);

@@ -89,14 +89,16 @@ class ConsumptionData {
 class Person{
   String name;
   String telephone;
-  String id;
+  int id;
   int employeeNumber;
+  DateTime birthDate;
 
   Person({
     this.name,
     this.telephone,
     this.id,
     this.employeeNumber,
+    this.birthDate,
   });
 
   Map<String, dynamic> toJson() =>
@@ -105,13 +107,16 @@ class Person{
         'name': name,
         'telephone': telephone,
         'employeeNumber': employeeNumber,
+        'birthDate':birthDate?.toString(),
       };
 
   Person.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         name = json['name'],
         telephone = json['telephone'],
-        employeeNumber = json['employeeNumber'];
+        employeeNumber = json['employeeNumber'],
+        birthDate = DateTime.tryParse(json['birthDate']??"");
+
 
   static Future<Person> getEnumeratorFromSharedPrefs() async {
 
@@ -119,8 +124,6 @@ class Person{
     Person enumerator =  Person();
     enumerator.name = _prefs.getString("userName");
     enumerator.employeeNumber = _prefs.getInt("employeeNumber");
-
-    print(enumerator.employeeNumber.toString());
 
     return enumerator;
   }
@@ -140,12 +143,13 @@ class InterviewData{
   String secondInterviewReason;
   InterviewOutcomeSelection interviewOutcome;
   String incompleteInterviewReason;
+  String location;
 
   InterviewData({this.householdIdentification, this.respondent, this.enumerator,
       this.sensitizationVisitDate, this.dayCode, this.interviewStart,
       this.interviewEnd, this.secondInterview, this.secondInterviewDate,
       this.secondInterviewReason,
-      this.interviewOutcome, this.incompleteInterviewReason}) {
+      this.interviewOutcome, this.incompleteInterviewReason, this.location}) {
     if (this.respondent == null) this.respondent = Person();
     if (this.enumerator == null) this.enumerator = Person();
   }
@@ -162,18 +166,28 @@ class InterviewData{
         'interviewEnd':interviewEnd.toString(),
         'interviewOutcome':interviewOutcome?.index,
         'incompleteInterviewReason': incompleteInterviewReason,
+        'location':location,
       };
 
   InterviewData.fromJson(Map<String, dynamic> json)
       : householdIdentification = json['householdIdentification'],
         respondent = Person.fromJson(json['respondent']),
         enumerator = Person.fromJson(json['enumerator']),
-        sensitizationVisitDate = DateTime.tryParse(json['sensitizationVisitDate']),
+        sensitizationVisitDate = DateTime.tryParse(json['sensitizationVisitDate']??""),
 ////        dayCode = DayCode.values[json['dayCode']],
-        interviewStart = DateTime.tryParse(json['interviewStart']),
-        interviewEnd = DateTime.tryParse(json['interviewEnd']),
+        interviewStart = DateTime.tryParse(json['interviewStart']??""),
+        interviewEnd = DateTime.tryParse(json['interviewEnd']??""),
         interviewOutcome = (json['interviewOutcome'] != null) ? InterviewOutcomeSelection.values.elementAt(json['interviewOutcome']):null,
-        incompleteInterviewReason = json['incompleteInterviewReason']??null;
+        incompleteInterviewReason = json['incompleteInterviewReason']??null,
+        location = json['location'];
+
+  static Future<String> getLocationFromSharedPrefs() async {
+
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    
+    return _prefs.get("location");
+  }
+  
 }
 
 

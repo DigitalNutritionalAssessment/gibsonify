@@ -257,11 +257,11 @@ class _RecipeExpansionTileState extends State<RecipeExpansionTile> {
                     ),
                     FormQuestion(
                       questionText: "grams/ml",
-                      initialText: ingredientItem.measurement?.toStringAsPrecision(2)??"",
+                      initialText: ((ingredientItem.measurement?? 0) * 100).toStringAsPrecision(2)??"", // Convert 100s of grams to grams
                       hint: "",
                       validate: emptyFieldValidator,
                       onSaved: (answer) {
-                        ingredientItem.measurement = double.tryParse(answer);
+                        ingredientItem.measurement = (0.001 * (double.tryParse(answer)??0));
                         print(ingredientItem.measurement.toString());
                         print(answer);
 //                    updateIngredientState(ingredientItem);

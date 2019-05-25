@@ -2,19 +2,26 @@ import 'package:flutter_uikit/utils/uidata.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
+enum TimePickerType{
+  DATE,
+  TIME,
+  DATETIME,
+}
+
+
 class TimePicker extends StatefulWidget{
 
   final ValueChanged<DateTime> onChanged;
   final DateTime initialTime;
   final String questionText;
-  final bool pickDateTime;
+  final TimePickerType timePickerType;
 
   const TimePicker({
     Key key,
     @required this.onChanged,
     this.initialTime,
     this.questionText,
-    this.pickDateTime,
+    this.timePickerType,
 
   }): super(key:key);
 
@@ -25,16 +32,19 @@ class TimePicker extends StatefulWidget{
 class TimePickerState extends State<TimePicker>{
 
   DateTime _pickedTime = DateTime.now();
-  bool pickDateTime = false;
-  static Function datePickerFactory;
+  TimePickerType timePickerType = TimePickerType.TIME; // Default to time
+  Function datePickerFactory;
 
   @override
   void initState() {
     if (widget.initialTime != null) _pickedTime = widget.initialTime;
-    if (widget.pickDateTime != null) pickDateTime = widget.pickDateTime;
+    if (widget.timePickerType != null) timePickerType = widget.timePickerType;
 
-    if (pickDateTime) datePickerFactory = DatePicker.showDateTimePicker;
+    if (timePickerType == TimePickerType.DATETIME) datePickerFactory = DatePicker.showDateTimePicker;
+    else if (timePickerType == TimePickerType.DATE) datePickerFactory = DatePicker.showDatePicker;
     else datePickerFactory = DatePicker.showTimePicker;
+
+    print(timePickerType.toString());
 
     // use this to initialise the form state
     widget.onChanged(_pickedTime);
@@ -75,7 +85,7 @@ class TimePickerState extends State<TimePicker>{
           SizedBox(
             width: double.infinity,
             child: Text(
-              convertDateTimeToString(_pickedTime, pickDateTime),
+              convertDateTimeToString(_pickedTime, timePickerType),
               textAlign: TextAlign.left,
               style: UIData.smallTextStyle,
             ),
@@ -85,15 +95,19 @@ class TimePickerState extends State<TimePicker>{
     );
   }
 
-  String convertDateTimeToString(DateTime _datetime, bool pickDateTime){
+  String convertDateTimeToString(DateTime _datetime, TimePickerType timePickerType){
     if (_datetime == null) return '';
     else {
       String outputString = "";
-      if (pickDateTime){
+      if (timePickerType == TimePickerType.DATE || timePickerType == TimePickerType.DATETIME){
         outputString +=  "${_datetime?.day.toString() ?? '' } / ${_datetime?.month.toString() ?? '' } / ${_datetime?.year.toString() ?? ''}";
       }
-      outputString += "\t";
-      outputString += "${_datetime?.hour.toString() ?? ''} : ${_datetime?.minute.toString() ?? ''}";
+      if (timePickerType == TimePickerType.TIME || timePickerType == TimePickerType.DATETIME) {
+        outputString += "\t";
+        outputString +=
+        "${_datetime?.hour.toString() ?? ''} : ${_datetime?.minute.toString() ??
+            ''}";
+      }
       return outputString;
     }
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_uikit/utils/uidata.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -6,8 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_uikit/model/consumption_data.dart';
 
 import 'package:flutter_uikit/ui/widgets/common_dialogs.dart';
-
-
 
 class LoginPage extends StatefulWidget {
   @override
@@ -17,11 +16,13 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
 
   Person user = Person();
+  String location = "";
 
   SharedPreferences _prefs;
 
   final TextEditingController _userNameTextController = TextEditingController();
   final TextEditingController _employeeNumberTextController = TextEditingController();
+  final TextEditingController _currentLocationTextController = TextEditingController();
 
   @override
   void initState() {
@@ -35,10 +36,12 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       user.name = _prefs.getString("userName");
       user.employeeNumber = _prefs.getInt("employeeNumber");
+      location = _prefs.getString("location");
     });
 
     _userNameTextController.text = user.name ?? "";
     _employeeNumberTextController.text = user.employeeNumber?.toString()??"";
+    _currentLocationTextController.text = location ?? "";
   }
 
   @override
@@ -111,6 +114,18 @@ class _LoginPageState extends State<LoginPage> {
             ),
             keyboardType: TextInputType.number,
             controller: _employeeNumberTextController,
+            inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 30.0),
+          child: TextField(
+            maxLines: 1,
+            decoration: InputDecoration(
+              hintText: "Current Location",
+              labelText: "Current Location",
+            ),
+            controller: _currentLocationTextController,
           ),
         ),
         SizedBox(
@@ -128,8 +143,9 @@ class _LoginPageState extends State<LoginPage> {
             ),
             color: Colors.green,
             onPressed: () {
-              _prefs.setInt("employeeNumber", int.tryParse(_employeeNumberTextController.text)??"" );
+              _prefs.setInt("employeeNumber", int.tryParse(_employeeNumberTextController.text) );
               _prefs.setString("userName", _userNameTextController.text??"");
+              _prefs.setString("location", _currentLocationTextController.text??"");
 
               setState(() {
                 getEnumeratorInfo();
@@ -174,6 +190,7 @@ class _LoginPageState extends State<LoginPage> {
               onPressed: () {
                 _prefs.setInt("employeeNumber",null);
                 _prefs.setString("userName","");
+                _prefs.setString("location","");
 
                 setState(() {
                   getEnumeratorInfo();

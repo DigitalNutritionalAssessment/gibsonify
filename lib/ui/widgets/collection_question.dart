@@ -4,6 +4,8 @@ import 'package:flutter_picker/flutter_picker.dart';
 
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 
+import 'package:flutter/services.dart';
+
 
 
 class Question extends StatefulWidget {
@@ -101,6 +103,9 @@ class FormQuestion extends StatelessWidget {
 
   final bool enabled;
 
+  final TextInputType keyboardType;
+  final  List<TextInputFormatter> inputFormatters;
+
   const FormQuestion({
     Key key,
     @required this.questionText,
@@ -111,6 +116,8 @@ class FormQuestion extends StatelessWidget {
     this.validate,
     this.onSaved,
     this.enabled,
+    this.keyboardType,
+    this.inputFormatters,
   }):super(key:key);
 
   Widget build(BuildContext context) {
@@ -136,14 +143,16 @@ class FormQuestion extends StatelessWidget {
           _fieldFocusChange(context, focusNode, nextFocusNode);
           onSaved(term);
         },
+        keyboardType: keyboardType,
         enabled: enabled ?? true,
+        inputFormatters: inputFormatters,
       ),
     );
   }
 
   _fieldFocusChange(BuildContext context, FocusNode currentFocus,FocusNode nextFocus) {
     currentFocus.unfocus();
-    FocusScope.of(context).requestFocus(nextFocus);
+    if (nextFocus != null) FocusScope.of(context).requestFocus(nextFocus);
   }
 
 }

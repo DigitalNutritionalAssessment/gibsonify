@@ -115,4 +115,13 @@ class UIData {
 
   //Default edge_insets
   static const double collection_edge_inset = 9.0;
+
+  //Default API URL
+  static const String send_consumption_data_api_url = "https://agnosco.serveo.net/processjson";
+
+  static bool get isInDebugMode {
+    bool inDebugMode = false;
+    assert(inDebugMode = true);
+    return inDebugMode;
+  }
 }
