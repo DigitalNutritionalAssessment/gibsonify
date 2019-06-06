@@ -3,150 +3,138 @@ import 'package:flutter_uikit/utils/uidata.dart';
 
 import 'package:flutter_uikit/utils/form_strings.dart';
 import 'package:flutter_uikit/ui/widgets/collection_question.dart';
+
+
+import 'package:flutter_uikit/ui/page/collection/collection_page_common_widgets.dart';
+
+
 import 'package:flutter_uikit/model/food_item.dart';
 
+import 'package:flutter_uikit/ui/page/collection/recipes_items.dart';
+import 'package:flutter_uikit/database/icrisat_database.dart';
 
-class RecipeCard extends StatefulWidget {
 
-  final Recipe recipe;
-  final List<IngredientItem> ingredientItems;
-  final updateFoodItemState;
-  final Map<String,int> fctMap;
-  final bool enabled;
-
-  const RecipeCard({
-    @required this.recipe,
-    @required this.updateFoodItemState,
-    @required this.ingredientItems,
-    this.fctMap,
-    this.enabled,
-  });
+class RecipeEditingCard extends StatefulWidget {
 
   @override
-  _RecipeCardState createState() => _RecipeCardState();
+  _RecipeEditingCardState createState() => _RecipeEditingCardState();
 }
 
-class _RecipeCardState extends State<RecipeCard> {
+class _RecipeEditingCardState extends State<RecipeEditingCard> {
 
-  List<IngredientItem> _ingredientItems = [];
+  FoodItem foodItem;
+  Map<String,int> _fctMap;
+  Map<String,int> _rCodeMap;
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
 
   @override
-  void initState() {
-    if (widget.ingredientItems != null) _ingredientItems = widget.ingredientItems;
+  void initState(){
+    foodItem = FoodItem();
+    getRecipeDataAndFctMap();
     super.initState();
   }
 
 
-  @override
-  Widget build(BuildContext context) {
-    return Theme(
-      data: ThemeData(fontFamily: UIData.ralewayFont),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              "Recipe: " + (widget.recipe.description??""),
-              style: TextStyle(color: Colors.grey.shade700),
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-                itemCount: (_ingredientItems?.length ?? 0),
-                itemBuilder: (BuildContext ctx, int idx){
-                  return Dismissible(
-                    key: ObjectKey(_ingredientItems[idx]),
-                    onDismissed: (direction){
-                      setState(() {
-                        _ingredientItems.removeAt(idx);
-                        widget.updateFoodItemState(_ingredientItems);
-                      });
-                    },
-                    child: IngredientCard(
-                      updateIngredientItemState: (ingredientItem){
-                        _ingredientItems[idx] = ingredientItem;
-                      },
-                      ingredientItem: _ingredientItems[idx],
-                      fctMap: widget.fctMap,
-                    ),
-                  );
-                }
-            ),
-          ),
-        ],
-      ),
-    );
+  Future getRecipeDataAndFctMap() async{
+    var tmpFctMap = await IcrisatDB().mapDescriptionToFCTCode();
+    var tmpRCodeMap = await IcrisatDB().mapFoodDescriptionToRCode();
+    setState(() {
+      _fctMap = tmpFctMap;
+      _rCodeMap = tmpRCodeMap;
+    });
   }
-}
 
-class IngredientCard extends StatefulWidget {
-
-  final IngredientItem ingredientItem;
-  final updateIngredientItemState;
-  final Map<String,int> fctMap;
-  final bool enabled;
-
-  const IngredientCard({
-    @required this.ingredientItem,
-    @required this.updateIngredientItemState,
-    this.fctMap,
-    this.enabled,
-  });
-
-  @override
-  _IngredientCardState createState() => _IngredientCardState();
-}
-
-class _IngredientCardState extends State<IngredientCard> {
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 2.0,
-      color: Colors.white,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          AutoCompleteTextField(
-            suggestions: widget.fctMap?.keys?.toList() ?? [],
-            onSuggestionSelected: (String selected) {
-              widget.ingredientItem.foodItemName = selected;
-              widget.updateIngredientItemState(widget.ingredientItem);
-            },
-            questionText: "Food Item Description",
-            hintText: null,
-            initialText: widget.ingredientItem.foodItemName ?? "",
-            enabled: widget.enabled,
-            validate: emptyFieldValidator,
+    return new Scaffold(
+      appBar: appBar(title: "Add New Recipe",
+          bottomBarTitle: ""),
+      body: Column(
+      children: <Widget>[
+        Expanded(
+          child: Card(
+          elevation: 2.0,
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: <Widget>[
+                FormQuestion(
+                    questionText: "Recipe Name",
+                    hint: "Recipe Name",
+                    initialText: "",
+                    validate: emptyFieldValidator,
+                    onSaved: (answer) {
+                      foodItem.recipe.description = answer;
+                    }
+                ),
+                Expanded(
+                  child: RecipeExpansionTile(
+                    foodItem: foodItem,
+                    updateFoodItemState: (food) => {foodItem = food},
+                    fctMap: _fctMap,
+                    rCodeMap: _rCodeMap,
+                    listInsteadOfExpansionTile: true,
+                    modifyLocked: false,
+                    initiallyExpanded: false,
+                  ),
+                ),
+              ],
+            ),
           ),
-          AutoCompleteTextField(
-            suggestions: widget.fctMap?.keys?.toList() ?? [],
-            onSuggestionSelected: (String selected) {
-              widget.ingredientItem.foodGroup = selected;
-              widget.updateIngredientItemState(widget.ingredientItem);
-            },
-            questionText: "Food Group",
-            hintText: null,
-            initialText: widget.ingredientItem.foodGroup ?? "",
-            enabled: widget.enabled,
-            validate: emptyFieldValidator,
           ),
-          DialogPicker(
-            questionText: "Form When Eaten",
-            optionsList: FormStrings.formWhenEatenSelection.values
-                .toList(),
-            onConfirm: (List<int> values) {
-              widget.ingredientItem.formWhenEaten =
-              FormWhenEatenSelection.values[values[0]];
-              widget.updateIngredientItemState(widget.ingredientItem);
-            },
-            enabled: widget.enabled,
+        ),
+        new FittedBox(
+          fit: BoxFit.contain,
+          child: ButtonBar(
+            alignment: MainAxisAlignment.center,
+            children: <Widget>[
+              RaisedButton(
+                child: const Text('Add new data'),
+                color: Theme.of(context).accentColor,
+                elevation: 4.0,
+                splashColor: Colors.blueGrey,
+                onPressed: () async {
+                  // To do: Implement Saving
+
+                  // Collect the Food Description
+                  final form = _formKey.currentState;
+                  if (form.validate()) {
+                    form.save();
+                  }
+
+                  foodItem.recipe.id = await IcrisatDB().getNextModifiedRecipeID();
+                  foodItem.recipe.recipeType = RecipeType.MODIFIED;
+                  IcrisatDB().updateRecipes(foodItem);
+                  Navigator.popAndPushNamed(context, UIData.newCollectionSessionRoute);
+
+                },
+              ),
+              RaisedButton(
+                child: const Text('Save Recipe'),
+                color: Theme.of(context).accentColor,
+                elevation: 4.0,
+                splashColor: Colors.blueGrey,
+                onPressed: () async {
+                  // To do: Implement Saving
+
+                  // Collect the Food Description
+                  final form = _formKey.currentState;
+                  if (form.validate()) {
+                    form.save();
+                  }
+
+                  foodItem.recipe.id = await IcrisatDB().getNextModifiedRecipeID();
+                  print(foodItem.recipe.id);
+                  foodItem.recipe.recipeType =RecipeType.MODIFIED;
+                  IcrisatDB().updateRecipes(foodItem);
+                  Navigator.popAndPushNamed(context, UIData.homeRoute);
+                },
+              ),
+            ],
           ),
-          SizedBox(
-            height: 10.0,
-          ),
+        ),
         ],
       ),
     );

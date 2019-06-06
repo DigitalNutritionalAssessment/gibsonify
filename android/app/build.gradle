@@ -47,6 +47,7 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
 //        setProperty("archivesBaseName", applicationId + "-v" + versionName + "-" + new Date().format('dd_MMM_yyyy'))
 
     }

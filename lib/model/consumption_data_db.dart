@@ -60,7 +60,7 @@ class LocalItemStorage{
     final dir = await _localPath;
 
     for (var file in Directory(dir).listSync()) {
-      if (file is File && file.path.contains(".txt")){
+      if (file is File && file.path.contains(".json")){
         await file.delete();
       }
     }

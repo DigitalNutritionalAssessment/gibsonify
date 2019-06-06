@@ -56,10 +56,32 @@ class _CollectionViewerState extends State<CollectionViewer> {
     body: ListView.builder(
       itemCount: (consumptionDataList?.length ?? 0),
       itemBuilder: (BuildContext ctx, int idx) {
-          Map<String, dynamic> args = {
+          Map<String, dynamic> openFinalReportArgs = {
             "consumptionData": consumptionDataList[idx],
             "initialPageState": PageState.FOURTH_PASS,
           };
+          Map<String, dynamic> openInterviewArgs = {
+            "consumptionData": consumptionDataList[idx],
+            "initialPageState": PageState.INTERVIEW,
+          };
+
+          BoxDecoration listTileDecoration;
+          String statusString;
+
+          if (consumptionDataList[idx].interviewData.interviewStart != null){
+            if (consumptionDataList[idx].interviewData.interviewOutcome == InterviewOutcomeSelection.COMPLETED){
+              listTileDecoration = BoxDecoration (color: Colors.greenAccent);
+              statusString = "Completed!";
+            }
+            else {
+              listTileDecoration = BoxDecoration(color: Colors.orangeAccent);
+              statusString = "Inverview Incomplete";
+            }
+          }
+          else {
+            listTileDecoration = BoxDecoration (color: Colors.white);
+            statusString = "Sensitisation Visit Complete";
+          }
 
           return Dismissible(
             key: ObjectKey(consumptionDataList[idx] ?? null),
@@ -72,62 +94,89 @@ class _CollectionViewerState extends State<CollectionViewer> {
             },
             child: Card(
               elevation: 2.0,
-              child: ListTile(
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      "Name: " +
-                          consumptionDataList[idx]?.interviewData
-                              ?.respondent
-                              ?.name ?? "",
-                      style: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.w700),
-                    ),
+              child: Container(
+                decoration: listTileDecoration,
+                child: ListTile(
+                  title: Column(
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            "Name: " +
+                                consumptionDataList[idx]?.interviewData
+                                    ?.respondent
+                                    ?.name ?? "",
+                            style: TextStyle(
+                                color: Colors.black, fontWeight: FontWeight.w700),
+                          ),
 
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        consumptionDataList[idx]?.interviewData
-                            ?.interviewStart
-                            ?.day?.toString()
-                            + "/"
-                            + consumptionDataList[idx]?.interviewData
-                            ?.interviewStart?.month?.toString(),
-
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w700,
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              (consumptionDataList[idx]?.interviewData
+                                  ?.sensitizationVisitDate
+                                  ?.day?.toString()??"")
+                                  + "/"
+                                  + (consumptionDataList[idx]?.interviewData
+                                  ?.sensitizationVisitDate?.month?.toString() ?? ""),
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height:3,
+                      ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Status: " + (statusString ?? ""),
+                          style: UIData.smallTextStyle,
+//                        TextStyle(
+//                            color: Colors.black, fontWeight: FontWeight.w700),
                         ),
                       ),
-                    ),
-                  ],
+                    ]
+                  ),
+                  onTap: () {
+//                    Navigator.pop(context);
+
+                    // If there is no
+                    if (consumptionDataList[idx].interviewData.interviewStart != null){
+                      Navigator.pushNamed(
+                          context, UIData.newCollectionSessionRoute,
+                          arguments: openFinalReportArgs);
+                    }
+                    else{
+                      Navigator.pushNamed(
+                          context, UIData.newCollectionSessionRoute,
+                          arguments: openInterviewArgs);
+                    }
+                  },
+                  onLongPress: (){
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext ctx){
+                          return AlertDialog(
+                              title: new Text("JSON viewer"),
+                              content: SingleChildScrollView(child: new Text(jsonEncode(consumptionDataList[idx]))),
+                              actions: <Widget>[
+                                new FlatButton(
+                                  child: new Text("Done"),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                                ],
+                          );
+                        }
+                    );
+                  },
                 ),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.pushNamed(
-                      context, UIData.newCollectionSessionRoute,
-                      arguments: args);
-                },
-                onLongPress: (){
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext ctx){
-                        return AlertDialog(
-                            title: new Text("JSON viewer"),
-                            content: SingleChildScrollView(child: new Text(jsonEncode(consumptionDataList[idx]))),
-                            actions: <Widget>[
-                              new FlatButton(
-                                child: new Text("Done"),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                              ],
-                        );
-                      }
-                  );
-                },
               ),
             ),
           );

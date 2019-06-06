@@ -7,6 +7,10 @@ import 'package:flutter_uikit/ui/widgets/about_tile.dart';
 import 'package:flutter_uikit/ui/widgets/profile_tile.dart';
 import 'package:flutter_uikit/utils/uidata.dart';
 
+import 'package:flutter_uikit/model/consumption_data.dart';
+
+
+
 class HomePage extends StatelessWidget {
   final _scaffoldState = GlobalKey<ScaffoldState>();
   Size deviceSize;
@@ -121,6 +125,7 @@ class HomePage extends StatelessWidget {
       );
 
   Widget bodySliverList() {
+
     MenuBloc menuBloc = MenuBloc();
     return StreamBuilder<List<Menu>>(
         stream: menuBloc.menuItems,
@@ -351,10 +356,13 @@ class HomePage extends StatelessWidget {
         ),
       );
 
+
+
   @override
   Widget build(BuildContext context) {
+    
     _context = context;
-    deviceSize = MediaQuery.of(context).size;
+    // deviceSize = MediaQuery.of(context).size;
     return defaultTargetPlatform == TargetPlatform.iOS
         ? homeIOS(context)
         : homeScaffold(context);

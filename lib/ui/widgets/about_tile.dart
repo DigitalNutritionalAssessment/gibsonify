@@ -5,12 +5,8 @@ class MyAboutTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AboutListTile(
-      applicationIcon: FlutterLogo(
-        colors: Colors.yellow,
-      ),
-      icon: FlutterLogo(
-        colors: Colors.yellow,
-      ),
+      applicationIcon: IconButton(icon: Image.asset(UIData.iconImage), onPressed: ()=>{},padding:EdgeInsets.fromLTRB(0, 8.0, 8.0, 8.0)),
+      icon: IconButton(icon: Image.asset(UIData.iconImage), onPressed: ()=>{},padding:EdgeInsets.fromLTRB(0, 8.0, 8.0, 8.0)),
       aboutBoxChildren: <Widget>[
         SizedBox(
           height: 10.0,
@@ -19,7 +15,7 @@ class MyAboutTile extends StatelessWidget {
           "Developed By Choon Kiat Lee",
         ),
         Text(
-          "Using: Flutter-UI-Kit",
+          "Based on: Flutter-UI-Kit",
         ),
       ],
       applicationName: UIData.appName,

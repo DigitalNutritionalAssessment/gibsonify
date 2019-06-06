@@ -9,16 +9,25 @@ import 'package:flutter_uikit/model/food_item.dart';
 
 import 'package:flutter_uikit/database/icrisat_database.dart';
 
+import 'package:flutter_uikit/ui/page/collection/recipes_items.dart';
+
 class FoodItemList2 extends StatefulWidget {
 
   final navigatePageState;
   final updatePageState;
   final initialFoodList;
+  final Map<String,FoodItem> recipeMap;
+  final Map<String,int> fctMap;
+  final Map<String,int> rCodeMap;
+
 
   const FoodItemList2({
     @required this.navigatePageState,
     @required this.updatePageState,
+    this.recipeMap,
     this.initialFoodList,
+    this.fctMap,
+    this.rCodeMap,
   });
 
   @override
@@ -30,20 +39,17 @@ class _FoodItemList2State extends State<FoodItemList2> {
   List<FoodItem> _foodList = List<FoodItem>();
 
   Map<String,int> _fctMap = {};
+  Map<String,FoodItem> _recipeMap = {};
+  Map<String,int> _rCodeMap = {};
 
   final _formKey = GlobalKey<FormState>();
-
-  Future getFctMap() async{
-    var tmpMap = await IcrisatDB().mapDescriptionToFCTCode();
-    setState(() {
-      _fctMap = tmpMap;
-    });
-  }
 
   @override
   void initState() {
     if (widget.initialFoodList != null) _foodList = widget.initialFoodList;
-    getFctMap();
+    if (widget.fctMap != null) _fctMap = widget.fctMap;
+    if (widget.rCodeMap != null) _rCodeMap = widget.rCodeMap;
+    if (widget.recipeMap != null) _recipeMap = widget.recipeMap;
     super.initState();
   }
 
@@ -70,7 +76,9 @@ class _FoodItemList2State extends State<FoodItemList2> {
                   _foodList[index] = foodItem;
                 },
                 foodItem: _foodList[index],
+                recipeMap: _recipeMap,
                 fctMap: _fctMap,
+                rCodeMap: _rCodeMap,
               ),
             );
             }),
@@ -121,57 +129,50 @@ class SecondPassFoodItemCard extends StatelessWidget{
   final FoodItem foodItem;
   final updateFoodItemState;
   final Map<String,int> fctMap;
+  final Map<String,int> rCodeMap;
+  final Map<String, FoodItem> recipeMap;
   final bool enabled;
 
   const SecondPassFoodItemCard({
     @required this.foodItem,
     @required this.updateFoodItemState,
+    this.recipeMap,
     this.fctMap,
+    this.rCodeMap,
     this.enabled,
   });
 
   @override
   Widget build(BuildContext context) {
-
     return Card(
       elevation: 2.0,
       child: Container(
         child: Column(
           children: <Widget>[
-            FormQuestion(
-              questionText: "Food Name",
-              hint: "",
-              initialText: foodItem.foodName,
-              validate: emptyFieldValidator,
-              onSaved: (answer) {
-                foodItem.foodName = answer;
+            AutoCompleteTextField(
+              suggestions: recipeMap?.keys?.toList() ?? [],
+              onSuggestionSelected: (String selected) {
+                foodItem.foodName = selected;
+
+                FoodItem selectedRecipe = recipeMap[selected]?? FoodItem();
+
+                foodItem.recipe = selectedRecipe.recipe;
+
+                // Only update the ingredientsItems list if the recipe type is standard!
+                // If the recipe type is modified, then we assume that the recipe
+                // has been previously intentionally modified
+                // and hence
+                if ((foodItem.recipe.recipeType??RecipeType.STANDARD) == RecipeType.STANDARD ){
+                  foodItem.ingredientItems = selectedRecipe.ingredientItems;
+                }
                 updateFoodItemState(foodItem);
               },
-              enabled: enabled,
+              questionText: "Can you name me something that you've eaten?",
+              hintText: null,
+              initialText: foodItem.foodName ?? "",
+              enabled: (enabled ?? true),
+              validate: emptyFieldValidator,
             ),
-//            AutoCompleteTextField(
-//              suggestions: fctMap?.keys?.toList() ?? [],
-//              onSuggestionSelected: (String selected){
-//                foodItem.ingredientItems[0].foodItemName = selected;
-//                updateFoodItemState(foodItem);
-//              },
-//              questionText:"Food Ingredients: ",
-//              hintText: "Food Ingredient",
-//              initialText: foodItem.ingredientItems[0].foodItemName ?? "",
-//              enabled: enabled,
-//              validate: emptyFieldValidator,
-//            ),
-////            FormQuestion(
-////              questionText: "What ingredients were in your food?",
-////              hint: "",
-////              initialText: foodItem.foodDescription ?? null,
-////              validate: emptyFieldValidator,
-////              onSaved: (answer){
-////                foodItem.foodDescription = answer;
-////                updateFoodItemState(foodItem);
-////              },
-////              enabled: enabled,
-////            ),
 
             DialogPicker(
                 questionText: "Source of Food",
@@ -183,6 +184,15 @@ class SecondPassFoodItemCard extends StatelessWidget{
                 },
                 enabled: enabled,
             ),
+            RecipeExpansionTile(
+                foodItem: foodItem,
+                updateFoodItemState: updateFoodItemState,
+                fctMap: fctMap,
+                initiallyExpanded: true,
+                rCodeMap: rCodeMap,
+            ),
+
+
 //            DialogPicker(
 //                questionText: "Form When Eaten",
 //                optionsList: FormStrings.formWhenEatenSelection.values

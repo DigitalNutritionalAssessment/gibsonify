@@ -42,9 +42,40 @@ class FormStrings{
   };
 
   static const Map<MeasurementUnitSelection,String> measurementUnitSelection = {
-    MeasurementUnitSelection.GRAMS:          "grams",
     MeasurementUnitSelection.MILLILITRES:    "ml",
+    MeasurementUnitSelection.GRAMS:          "Grams Fraction",
+    MeasurementUnitSelection.SMALL_SPOON:    "Small Spoon",
+    MeasurementUnitSelection.BIG_SPOON:      "Big Spoon",
+    MeasurementUnitSelection.STANDARD_CUP:   "Standard Cup",
+    MeasurementUnitSelection.SMALL:          "Small",
+    MeasurementUnitSelection.MEDIUM:         "Medium",
+    MeasurementUnitSelection.LARGE:          "Large",
   };
+
+  static const Map<RecipeType,String> recipeTypeSelection = {
+    RecipeType.STANDARD:          "Standard",
+    RecipeType.MODIFIED:          "Modified Standard",
+  };
+
+  static const Map<DayCode,String> dayCodeSelection = {
+    DayCode.NORMAL:    "Normal",
+    DayCode.SICK:      "Sick",
+    DayCode.FASTING:   "Fasting",
+    DayCode.FESTIVAL:  "Festival/religious day",
+    DayCode.PARTIES:   "Parties/functions day",
+    DayCode.VISITORS:  "Visitors (relatives)",
+    DayCode.OTHERS:    "Others",
+  };
+
+  static const Map<MeasurementMethodSelection,String> measurementMethodSelection = {
+    MeasurementMethodSelection.DIRECT_WEIGHT:          "Direct Weight",
+    MeasurementMethodSelection.VOLUME_OF_WATER:        "Volume of Water",
+    MeasurementMethodSelection.VOLUME_OF_FOOD:         "Volume of Food",
+    MeasurementMethodSelection.PLAYDOUGH:              "Play Dough",
+    MeasurementMethodSelection.NUMBER:                 "Number",
+    MeasurementMethodSelection.PHOTOSIZE:              "Size (Picture)",
+  };
+
 
 }
 

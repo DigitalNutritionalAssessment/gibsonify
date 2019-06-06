@@ -150,7 +150,7 @@ class _LoginPageState extends State<LoginPage> {
               setState(() {
                 getEnumeratorInfo();
               });
-
+              Navigator.of(context).pushReplacementNamed(UIData.homeRoute);
               showSuccess(context, "User Data Saved!", Icons.save_alt);
 
             },
@@ -164,7 +164,9 @@ class _LoginPageState extends State<LoginPage> {
             "LOG OUT",
             style: TextStyle(color: Colors.grey),
           ),
-          onPressed: () => showLogoutDialog(context),
+          onPressed: () {
+            showLogoutDialog(context);
+          }
         ),
       ],
     ),
@@ -195,7 +197,7 @@ class _LoginPageState extends State<LoginPage> {
                 setState(() {
                   getEnumeratorInfo();
                 });
-
+                // Navigator.of(parentContext).popUntil(ModalRoute.withName("/"));
                 Navigator.of(parentContext).pop();
               },
             )

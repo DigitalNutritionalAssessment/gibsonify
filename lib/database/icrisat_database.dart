@@ -6,6 +6,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 import 'package:flutter_uikit/model/consumption_data.dart';
+import 'package:flutter_uikit/utils/form_strings.dart';
 import 'package:flutter_uikit/model/food_item.dart';
 
 
@@ -99,12 +100,13 @@ class IcrisatDB{
         outputMap[recipeName].ingredientItems.add(getIngredientFromDBMap(row));
       }
       else{
+
         outputMap[recipeName] = FoodItem(
           foodName: recipeName,
           recipe: Recipe(
-            id: row['recipe_code'],
+            id: row['recipe_code'].toString(),
             description: recipeName,
-            recipeType: (row['recipeType'] != null)? RecipeType.values.elementAt(row['recipeType']) :null,
+            recipeType: (row['recipe_type'] != null)? RecipeType.values.elementAt((row['recipe_type']??1)-1) :null,
           ),
           ingredientItems: [getIngredientFromDBMap(row)],
         );
@@ -112,18 +114,113 @@ class IcrisatDB{
     }
 
     return outputMap;
+  }
 
+  Future<String> getNextModifiedRecipeID() async {
+    
+    // Get the current last id
+    final List<Map<String, dynamic>> maps = await db.query( 'recipes' ,
+                                      columns: ['recipe_code'],
+                                      where: 'recipe_type = ?',
+                                      whereArgs: [RecipeType.MODIFIED.index+1]
+    );
 
+    print(RecipeType.MODIFIED.index+1);
 
+    List<String> recipeCodeList;
+    try{
+      recipeCodeList = List.generate(maps.length, (i) => maps[i]['recipe_code'].split('-').last);
+    } on NoSuchMethodError{     // No such method error is thrown when the type is wrong
+      recipeCodeList = List.generate(maps.length, (i) => maps[i]['recipe_code'].toString().split('-').last);
+    }
+
+    print(recipeCodeList);
+    recipeCodeList.sort();
+
+    // Create the next recipe ID
+    String lastRecipeID = recipeCodeList.last;
+
+//    String lastRecipeNumber = lastRecipeID.split('-').last;
+//    List<String> splitIDs = previousReportId.split('_');
+
+//    if (splitIDs.length < 2){         // I.e. if there is no current user id
+//
+//      splitIDs.insert(0, enumerator.employeeNumber?.toString() ?? "");
+//    }
+
+    Person enumerator = await Person.getEnumeratorFromSharedPrefs();
+
+    lastRecipeID = (enumerator.employeeNumber?.toString()??"") + "-"+((int.tryParse(lastRecipeID)??0) + 1).toString();
+
+    return lastRecipeID;
+  }
+
+  Future updateRecipes(FoodItem foodItem) async{
+    
+    // Delete all recipe items with the corresponding recipe ID
+    await deleteRecipe(foodItem);
+    
+    // Insert recipe Item
+    Map<String,dynamic> recipeItem = {
+      'recipe_code' : foodItem.recipe.id,
+      'recipe_descr' : foodItem.recipe.description,
+      'recipe_type' : foodItem.recipe.recipeType.index + 1,
+      'recipe_type_descr' : FormStrings.recipeTypeSelection[foodItem.recipe.recipeType],
+    };
+
+    Batch batch = db.batch();
+    for (IngredientItem ingredientItem in foodItem.ingredientItems){
+      var ingredientItemMap =getDBMapFromIngredient(ingredientItem);
+      ingredientItemMap.addAll(recipeItem);
+      batch.insert('recipes', ingredientItemMap);
+    }
+    await batch.commit(noResult: true);
+  }
+
+  Future deleteRecipe(FoodItem foodItem) async{
+    // Delete all recipe items with the corresponding recipe ID
+    await db.delete('recipes', where: 'recipe_code = ?', whereArgs: [foodItem.recipe.id]);
+
+  }
+  
+  Map<String, dynamic> getDBMapFromIngredient(IngredientItem ingredientItem){
+    return {
+      'ingr_descr' :ingredientItem.foodItemName,
+      'ingr_code' : ingredientItem.fctCode,
+      'ingr_fraction_type' : ingredientItem.measurementUnit.index + 1,
+      'ingr_fraction_type_descr' : FormStrings.measurementUnitSelection[ingredientItem.measurementUnit],
+      'ingr_fraction' :ingredientItem.measurement.toString(),
+      'r_code' :ingredientItem.rCode.toString(),
+      'r_descr' :ingredientItem.rDescription,
+    };
   }
 
   IngredientItem getIngredientFromDBMap(Map<String,dynamic> map){
+
     return IngredientItem(
       foodItemName: map['ingr_descr'],
-      fctCode: map['ingr_code'],
+      fctCode: (map['ingr_code']?.toInt()), //(double.tryParse(map['ingr_code']??"")?.toInt()) ?? 
       measurementUnit: (map['ingr_fraction_type']!=null) ? MeasurementUnitSelection.values.elementAt(map['ingr_fraction_type']-1):null,
-      measurement: map['ingr_fraction'],
+      measurement: (map['ingr_fraction'].runtimeType != double) ? double.tryParse(map['ingr_fraction']) : map['ingr_fraction'],
+//      rCode: int.tryParse(map['r_code']),
+//      measurement: map['ingr_fraction'],
+      rCode:(map['r_code'].runtimeType != int) ? int.tryParse(map['r_code']) : map['r_code'],
+      rDescription: map['r_descr']
     );
+  }
+
+  Future<Map<String,int>> mapFoodDescriptionToRCode() async {
+    // Query the table for all items.
+    final List<Map<String, dynamic>> maps = await db.query(
+        'RetentionFactors',
+        columns: ['R_Code','R_Descr']
+    );
+
+    //Very Hacky, but this works for what we need ><
+    List<int> idList = List.generate(maps.length, (i) => maps[i]['R_Code']);
+    List<String> descrList = List.generate(maps.length, (i) => maps[i]['R_Descr']);
+
+    return Map<String,int>.fromIterables( descrList, idList);
   }
 
 

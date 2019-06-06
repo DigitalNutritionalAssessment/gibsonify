@@ -27,6 +27,7 @@ dependencies:
   sqflite:
   flutter_typeahead:
   shared_preferences:
+  location:
   flutter_localizations:
     sdk: flutter
 

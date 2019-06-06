@@ -8,10 +8,13 @@ import 'package:flutter_uikit/model/food_item.dart';
 import 'package:flutter_uikit/ui/widgets/collection_question.dart';
 import 'package:flutter_uikit/ui/widgets/custom_time_picker.dart';
 
-import 'package:flutter_uikit/ui/page/collection/collection_info_page.dart';
+import 'package:flutter_uikit/ui/page/collection/collection_sensitisation_page.dart';
 import 'package:flutter_uikit/ui/page/collection/collection_first_page.dart';
 import 'package:flutter_uikit/ui/page/collection/collection_second_page.dart';
-import 'package:flutter_uikit/ui/page/collection/recipes_viewer.dart';
+import 'package:flutter_uikit/ui/page/collection/recipes_items.dart';
+
+import 'package:flutter_uikit/database/icrisat_database.dart';
+
 
 class FinalReportCard extends StatefulWidget {
 
@@ -38,8 +41,9 @@ class _FinalReportCardState extends State<FinalReportCard> {
   @override
   Widget build(BuildContext context) {
     List<Widget> infoCardList = [
-      InfoDataCard(
-        navigatePageState: () {},
+      SensitisationVisitDataCard(
+        navigatePageStateForward: () {},
+        navigatePageStateSubmit: () {},
         updatePageState: (interviewData) => {},
         initialInterviewData: widget.consumptionData.interviewData,
         enabled: false,
@@ -138,13 +142,14 @@ class _FinalReportCardState extends State<FinalReportCard> {
                   .accentColor,
               elevation: 4.0,
               splashColor: Colors.blueGrey,
-              onPressed: () {
+              onPressed: () async {
                 final form = _formKey.currentState;
                 if (form.validate()) {
                    _formKey.currentState.save();
                    widget.updatePageState(widget.consumptionData);
                    widget.navigatePageStateSubmit();
                    widget.consumptionData.save();
+                   print(await IcrisatDB().getNextModifiedRecipeID());
                 }
               },
             ),
@@ -215,7 +220,8 @@ class OverallFoodItemCard extends StatelessWidget {
                 foodItem.timeOfDay = TimeOfDaySelection.values[values[0]];
                 updateFoodItemState(foodItem);
               },
-              initialSelectedOption: 0,
+              initialSelectedOption: foodItem?.timeOfDay?.index ?? 0,
+              enabled: enabled,
             ),
             DialogPicker(
               questionText: "Source of Food",
@@ -238,6 +244,7 @@ class OverallFoodItemCard extends StatelessWidget {
               foodItem: foodItem,
               updateFoodItemState: ()=>{},
               enabled: false,
+              initiallyExpanded: false,
             ),
             SizedBox(
               height: 10.0,

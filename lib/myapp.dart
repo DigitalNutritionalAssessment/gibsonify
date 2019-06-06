@@ -22,9 +22,17 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:flutter_uikit/ui/page/collection/collection_state_machine.dart';
 import 'package:flutter_uikit/ui/page/collection_viewer/collection_viewer.dart';
+import 'package:flutter_uikit/ui/page/collection/recipe_editor.dart';
+import 'package:flutter_uikit/ui/page/recipe_viewer/recipe_viewer.dart';
+
+import 'package:flutter_uikit/model/consumption_data.dart';
+
+
+
 
 class MyApp extends StatelessWidget {
-  final materialApp = MaterialApp(
+
+  Widget materialApp (Person enumerator) => MaterialApp(
       title: UIData.appName,
       theme: ThemeData(
           primaryColor: Colors.black,
@@ -32,7 +40,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.amber),
       debugShowCheckedModeBanner: false,
       showPerformanceOverlay: false,
-      home: HomePage(),
+      home: ((enumerator?.employeeNumber??null) != null)? HomePage():LoginPage(),
       localizationsDelegates: [
         const TranslationsDelegate(),
         GlobalMaterialLocalizations.delegate,
@@ -49,8 +57,10 @@ class MyApp extends StatelessWidget {
         UIData.homeRoute: (BuildContext context) => HomePage(),
 
         UIData.newCollectionSessionRoute: (BuildContext context) => CollectionStateMachine(),
-
         UIData.ViewDataRoute: (BuildContext context) => CollectionViewer(),
+
+        UIData.NewRecipeRoute: (BuildContext context) => RecipeEditingCard(),
+        UIData.ViewRecipeRoute: (BuildContext context) => RecipeViewer(),
 
         UIData.profileOneRoute: (BuildContext context) => ProfileOnePage(),
         UIData.profileTwoRoute: (BuildContext context) => ProfileTwoPage(),
@@ -78,8 +88,21 @@ class MyApp extends StatelessWidget {
                 iconColor: Colors.green,
               )));
 
+  void redirectToLoginScreen(BuildContext context) async {
+    Person enumerator = await Person.getEnumeratorFromSharedPrefs();
+    print(enumerator.employeeNumber);
+    if (enumerator.employeeNumber == null){
+      Navigator.pushReplacementNamed(context, UIData.loginRoute);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return materialApp;
+    return FutureBuilder<Person>(
+      future: Person.getEnumeratorFromSharedPrefs(),
+      builder: (BuildContext context, AsyncSnapshot<Person> snapshot){
+        return materialApp(snapshot.data);
+      },
+    );
   }
 }

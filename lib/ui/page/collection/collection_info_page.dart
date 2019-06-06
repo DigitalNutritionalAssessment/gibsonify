@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_uikit/utils/uidata.dart';
+import 'package:location/location.dart';
+
 
 import 'package:flutter/services.dart';
 
@@ -10,15 +12,19 @@ import 'package:flutter_uikit/ui/widgets/custom_time_picker.dart';
 
 import 'package:flutter_uikit/utils/form_strings.dart';
 
+
+
 class InfoDataCard extends StatefulWidget {
 
   final InterviewData initialInterviewData;
-  final navigatePageState;
+  final VoidCallback navigatePageStateForward;
+  final VoidCallback navigatePageStateBackward;
   final ValueChanged<InterviewData> updatePageState;
   final bool enabled;
 
   const InfoDataCard ({
-    @required this.navigatePageState,
+    @required this.navigatePageStateForward,
+    @required this.navigatePageStateBackward,
     @required this.updatePageState,
     this.initialInterviewData,
     this.enabled,
@@ -39,22 +45,37 @@ class _InfoDataCardState extends State<InfoDataCard> {
   void initState(){
     if (widget.initialInterviewData != null) interviewData = widget.initialInterviewData;
     if (widget.enabled != null) enabled = widget.enabled;
-//    if (widget.updatePageState != null)   updatePageState = (interviewData)=> {widget.updatePageState(interviewData)};
-    getEnumeratorInfo();
+
+    // Get Location Data if there is no current lat AND log data.
+    if (interviewData.location.latitude == null && interviewData.location.longitude == null) {
+      getLocData();
+    }
+
     super.initState();
   }
 
-  void getEnumeratorInfo() async{
-//    SharedPreferences _prefs = await SharedPreferences.getInstance();
-//    interviewData.enumerator.name = _prefs.getString("userName");
-//    interviewData.enumerator.employeeNumber = _prefs.getInt("employeeName");
-      Person enumerator = await Person.getEnumeratorFromSharedPrefs();
-      interviewData.enumerator = enumerator;
-      interviewData.location = await InterviewData.getLocationFromSharedPrefs();
+  Future getLocData() async{
+    LocationData  currentLocation;
+
+    var location = new Location();
+
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      currentLocation = await location.getLocation();
+    } on PlatformException catch (e) {
+      if (e.code == 'PERMISSION_DENIED') {
+        print('Permission denied');
+      }
+      currentLocation = null;
+    }
+    interviewData.location.latitude = currentLocation.latitude;
+    interviewData.location.longitude = currentLocation.longitude;
+    interviewData.location.accuracy = currentLocation.accuracy;
+
+    print(interviewData.location.latitude);
+    print(interviewData.location.longitude);
 
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -68,91 +89,48 @@ class _InfoDataCardState extends State<InfoDataCard> {
       child: Column(
         children: <Widget>[
           Card(
-          elevation: 2.0,
-          child: Container(
-            child: Form(
-                key: _formKey,
-                child: Column(
-                  children: <Widget>[
-                    FormQuestion(
-                      questionText: "Household Identification",
-                      hint:"(10 characters)",
-                      validate: (answer) {
-                        if (answer.length > 10){
-                          return "10 characters only!";
-                        }
-                        return emptyFieldValidator(answer);
-                      },
-                      initialText: interviewData.householdIdentification ?? null,
-                      onSaved: (answer) {
-                        interviewData.householdIdentification = answer;
-                        widget.updatePageState(interviewData);
+            elevation: 2.0,
+            child: Container(
+              child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: <Widget>[
+                      TimePicker(
+                        initialTime: interviewData?.recallDate ?? null,
+                        onChanged: (time) {
+                          interviewData.recallDate = time;
+                          widget.updatePageState(interviewData);
                         },
-                      focusNode: _hhFocusNode,
-                      nextFocusNode: _respNameFocusNode,
-                      enabled: enabled,
-                    ),
-                    FormQuestion(
-                      questionText: "Respondent Name",
-                      hint:"",
-                      validate: emptyFieldValidator,
-                      initialText: interviewData?.respondent?.name ?? null,
-                      onSaved: (answer) {
-                        interviewData.respondent.name = answer;
-                        widget.updatePageState(interviewData);
+                        questionText: "Recall Date",
+                        timePickerType: TimePickerType.DATE,
+                      ),
+                      DialogPicker(
+                        questionText: "Recall Day Code (What kind of day was it?)",
+                        optionsList: FormStrings.dayCodeSelection.values.toList(),
+                        onConfirm: (List<int> values) {
+                          interviewData.dayCode = DayCode.values[values[0]];
+                          widget.updatePageState(interviewData);
                         },
-                      focusNode: _respNameFocusNode,
-                      nextFocusNode: _respID,
-                      enabled: enabled,
-                    ),
-                    FormQuestion(
-                      questionText: "Respondent ID",
-                      hint:"",
-                      validate: emptyFieldValidator,
-                      initialText: interviewData?.respondent?.id?.toString() ?? null,
-                      onSaved: (answer) {
-                        interviewData.respondent.id = int.tryParse(answer);
-                        widget.updatePageState(interviewData);
-                      },
-                      focusNode: _respID,
-                      nextFocusNode: _respTelNo,
-                      enabled: enabled,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [WhitelistingTextInputFormatter.digitsOnly]
-                    ),
-                    FormQuestion(
-                      questionText: "Respondent Telephone Number",
-                      hint:"",
-                      initialText:interviewData?.respondent?.telephone ?? null,
-                      validate: emptyFieldValidator,
-                      onSaved: (answer) {
-                        interviewData.respondent.telephone = answer;
-                        widget.updatePageState(interviewData);
+                        initialSelectedOption: 0,
+                      ),
+                      TimePicker(
+                        initialTime: interviewData?.interviewStart ?? null,
+                        onChanged: (time) {
+                          interviewData.interviewStart = time;
+                          widget.updatePageState(interviewData);
                         },
-                      focusNode: _respTelNo,
-                      enabled: enabled,
-                      keyboardType: TextInputType.number,
-                    ),
-                    TimePicker(
-                      initialTime: interviewData?.respondent?.birthDate ?? null,
-                      onChanged: (time) {
-                        interviewData.respondent.birthDate = time;
-                        widget.updatePageState(interviewData);
-                      },
-                      questionText: "Respondent Birthdate",
-                      timePickerType: TimePickerType.DATE,
-                    ),
-                    TimePicker(
-                      initialTime: interviewData?.interviewStart ?? null,
-                      onChanged: (time) {
-                        interviewData.interviewStart = time;
-                        widget.updatePageState(interviewData);
-                        },
-                      questionText: "Interview Start Time",
-                      timePickerType: TimePickerType.DATETIME,
-                    ),
-                  ],
-                )
+                        questionText: "Interview Start Time",
+                        timePickerType: TimePickerType.DATETIME,
+                      ),
+                      FormQuestion(
+                        questionText: "Current Location Coordinates",
+                        hint: "${interviewData.location.locationName}: (${interviewData.location.latitude},${interviewData.location.longitude})",
+                        initialText: "${interviewData.location.locationName}: (${interviewData.location.latitude},${interviewData.location.longitude})",
+                        enabled: false,
+                      )
+
+                    ],
+                  )
               ),
             ),
           ),
@@ -161,22 +139,40 @@ class _InfoDataCardState extends State<InfoDataCard> {
         ],
       ),
     );
-    }
+  }
 
   Widget buttons(){
-    return RaisedButton(
-      child: const Text('Go to First Pass'),
-      color: Theme.of(context).accentColor,
-      elevation: 4.0,
-      splashColor: Colors.blueGrey,
-      onPressed: () {
-        final form = _formKey.currentState;
-        if (form.validate()) {
-          form.save();
-          widget.navigatePageState();
-          widget.updatePageState(interviewData);
-        }
-      },
+    return new FittedBox(
+      fit: BoxFit.contain,
+      child: ButtonBar(
+        alignment: MainAxisAlignment.center,
+        children: <Widget>[
+          RaisedButton(
+            child: const Text('View Interview Info'),
+            color: Theme.of(context).accentColor,
+            elevation: 4.0,
+            splashColor: Colors.blueGrey,
+            onPressed: () {
+              widget.updatePageState(interviewData);
+              widget.navigatePageStateBackward();
+            },
+          ),
+          RaisedButton(
+            child: const Text('Go To First Pass'),
+            color: Theme.of(context).accentColor,
+            elevation: 4.0,
+            splashColor: Colors.blueGrey,
+            onPressed: () {
+              final form = _formKey.currentState;
+              if (form.validate()) {
+                form.save();
+                widget.updatePageState(interviewData);
+                widget.navigatePageStateForward();
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 }

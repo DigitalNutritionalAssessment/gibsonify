@@ -201,7 +201,7 @@ class _DialogPickerState extends State<DialogPicker> {
 
     var onPressed;
 
-    //if enabled, set the buttons to be disabled by setting onPress to be null!
+    //if not enabled, set the buttons to be disabled by setting onPress to be null!
     if (enabled){
       onPressed = () => showPicker(context);
     }
@@ -266,7 +266,7 @@ class AutoCompleteTextField extends StatefulWidget {
   final String initialText;
   final ValueChanged<String> validate;
   final bool enabled;
-
+  final Function(BuildContext context) noItemsFoundBuilder;
 
   const AutoCompleteTextField({
     @required this.suggestions,
@@ -276,6 +276,7 @@ class AutoCompleteTextField extends StatefulWidget {
     this.hintText,
     this.enabled,
     this.initialText,
+    this.noItemsFoundBuilder
   });
 
   @override
@@ -340,6 +341,7 @@ class _AutoCompleteTextFieldState extends State<AutoCompleteTextField> {
                 widget.onSuggestionSelected(suggestion);
               },
               validator: widget.validate ?? ()=>null,
+              noItemsFoundBuilder: widget.noItemsFoundBuilder,
             ),
           ],
         ),

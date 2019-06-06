@@ -5,12 +5,16 @@ import 'dart:io';
 
 import 'package:flutter_uikit/ui/widgets/common_scaffold.dart';
 import 'package:flutter_uikit/ui/widgets/common_switch.dart';
+import 'package:flutter_uikit/ui/widgets/about_tile.dart';
 import 'package:flutter_uikit/utils/uidata.dart';
+import 'package:flutter_uikit/utils/form_strings.dart';
 
 import 'package:flutter_uikit/ui/widgets/common_dialogs.dart';
 
 import 'package:flutter_uikit/model/consumption_data_db.dart';
 import 'package:flutter_uikit/model/consumption_data.dart';
+
+import 'package:flutter_uikit/ui/widgets/collection_question.dart';
 
 
 class SettingsOnePage extends StatelessWidget {
@@ -47,23 +51,22 @@ class SettingsOnePage extends StatelessWidget {
                           parentContext, UIData.loginRoute,);
                       },
                     ),
-                    ListTile(
-                      leading: Icon(
-                        Icons.sync,
-                        color: Colors.red,
-                      ),
-                      title: Text("Sync Database"),
-                      trailing: Icon(Icons.arrow_right),
-                    ),
-                    ListTile(
-                      leading: Icon(
-                        Icons.get_app,
-                        color: Colors.blue,
-                      ),
-                      title: Text("Sync Data"),
-                      trailing: Icon(Icons.arrow_right),
-                      onTap: () => syncData(parentContext),
-                    ),
+                    // ListTile(
+                    //   leading: Icon(
+                    //     Icons.person,
+                    //     color: Colors.grey,
+                    //   ),
+                    //   title: Text("About"),
+                    //   trailing: Icon(Icons.arrow_right),
+                    //   onTap: (){
+                    //     // Navigator.pop(parentContext);
+                    //     // Navigator.pushNamed(
+                    //     //   parentContext, UIData.loginRoute,);
+                        
+                    //   },
+                    // ),
+                    MyAboutTile(),
+                    
                   ],
                 ),
               ),
@@ -100,9 +103,10 @@ class SettingsOnePage extends StatelessWidget {
                           color: Colors.amber,
                         ),
                         title: Text("Add More Data"),
-                        trailing: CommonSwitch(
-                          defValue: true,
-                        ),
+                        trailing: Icon(Icons.arrow_right),
+                        // CommonSwitch(
+                        //   defValue: true,
+                        // ),
                       onTap: (){
                         Navigator.pop(parentContext);
                         Navigator.pushNamed(
@@ -115,9 +119,10 @@ class SettingsOnePage extends StatelessWidget {
                         color: Colors.blue,
                       ),
                       title: Text("Delete all Data Files! Careful..."),
-                      trailing: CommonSwitch(
-                        defValue: false,
-                      ),
+                      trailing: Icon(Icons.arrow_right),
+                      // CommonSwitch(
+                      //   defValue: false,
+                      // ),
                       onTap: (){
                         _showDeleteDialog(parentContext: parentContext);
                       },
@@ -126,63 +131,112 @@ class SettingsOnePage extends StatelessWidget {
                 ),
               ),
 
-//              //3
-//              Padding(
-//                padding: const EdgeInsets.all(16.0),
-//                child: Text(
-//                  "Sound",
-//                  style: TextStyle(color: Colors.grey.shade700),
-//                ),
-//              ),
-//              Card(
-//                color: Colors.white,
-//                elevation: 2.0,
-//                child: Column(
-//                  children: <Widget>[
-//                    ListTile(
-//                      leading: Icon(
-//                        Icons.do_not_disturb_off,
-//                        color: Colors.orange,
-//                      ),
-//                      title: Text("Silent Mode"),
-//                      trailing: CommonSwitch(
-//                        defValue: false,
-//                      ),
-//                    ),
-//                    ListTile(
-//                      leading: Icon(
-//                        Icons.vibration,
-//                        color: Colors.purple,
-//                      ),
-//                      title: Text("Vibrate Mode"),
-//                      trailing: CommonSwitch(
-//                        defValue: true,
-//                      ),
-//                    ),
-//                    ListTile(
-//                      leading: Icon(
-//                        Icons.volume_up,
-//                        color: Colors.green,
-//                      ),
-//                      title: Text("Sound Volume"),
-//                      trailing: Icon(Icons.arrow_right),
-//                    ),
-//                    ListTile(
-//                      leading: Icon(
-//                        Icons.phonelink_ring,
-//                        color: Colors.grey,
-//                      ),
-//                      title: Text("Ringtone"),
-//                      trailing: Icon(Icons.arrow_right),
-//                    )
-//                  ],
-//                ),
-//              ),
+             //3
+             Padding(
+               padding: const EdgeInsets.all(16.0),
+               child: Text(
+                 "Sync",
+                 style: TextStyle(color: Colors.grey.shade700),
+               ),
+             ),
+             Card(
+               color: Colors.white,
+               elevation: 2.0,
+               child: Column(
+                 children: <Widget>[
+                   ListTile(
+                      leading: Icon(
+                        Icons.sync,
+                        color: Colors.red,
+                      ),
+                      title: Text("Switch Recipe Database"),
+                      trailing: Icon(Icons.arrow_right),
+                    ),
+                    ListTile(
+                      leading: Icon(
+                        Icons.get_app,
+                        color: Colors.blue,
+                      ),
+                      title: Text("Sync Data"),
+                      trailing: Icon(Icons.arrow_right),
+                      onTap: () => syncData(parentContext),
+                    ),
+                 ],
+               ),
+             ),
+
+              //4
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  "Developer Options",
+                  style: TextStyle(color: Colors.grey.shade700),
+                ),
+              ),
+              Card(
+                color: Colors.white,
+                elevation: 2.0,
+                child: Column(
+                  children: <Widget>[
+                    ListTile(
+                      leading: Icon(
+                        Icons.edit,
+                        color: Colors.red,
+                      ),
+                      title: Text("Modify data sync base url"),
+                      trailing: Icon(Icons.arrow_right),
+                      onTap: () => _showModifyBaseURLDialog(parentContext),
+                    ),
+                  ],
+                ),
+              ),
+
             ],
           ),
         ),
       );
 
+  void _showModifyBaseURLDialog(BuildContext parentContext){
+
+    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+    showDialog(
+        context: parentContext,
+        builder: (BuildContext ctx){
+          return AlertDialog(
+            title: new Text("Input new base url"),
+            content: Form(
+              key: _formKey,
+              child: FormQuestion(
+                questionText: "Input new base url",
+                hint: "",
+                initialText: UIData.api_base_url??"",
+                onSaved: (answer) => UIData.api_base_url = answer,
+                validate: emptyFieldValidator,
+              ),
+            ),
+            actions: <Widget>[
+              new FlatButton(
+                child: new Text("Cancel"),
+                onPressed: () {
+                  Navigator.of(parentContext).pop();
+                },
+              ),
+              new FlatButton(
+                child: new Text("Update Base URL"),
+                onPressed: () {
+                  final form = _formKey.currentState;
+                  if (form.validate()) {
+                    form.save();
+                    Navigator.of(parentContext).pop();
+                  }
+                },
+              ),
+            ],
+          );
+        }
+    );
+  }
 
   void _showDeleteDialog({BuildContext parentContext}){
     showDialog(
@@ -213,7 +267,7 @@ class SettingsOnePage extends StatelessWidget {
 
   Future<http.Response> sendConsumptionDataJson(String json) async {
     final response = await http.post(
-      UIData.send_consumption_data_api_url,
+      UIData.api_base_url + UIData.send_consumption_data_api_path,
       headers: {"Content-Type": "application/json"},
       body: json,
     );
@@ -228,12 +282,12 @@ class SettingsOnePage extends StatelessWidget {
 
     bool success = true;
     for (var filename in filenames){
-      if (!filename.contains(".txt")) continue;
+      if (!filename.contains(".json")) continue;
       String contents = await File(filename).readAsString();
       print(contents);
       try{
         final response = await http.post(
-          UIData.send_consumption_data_api_url,
+          UIData.api_base_url + UIData.send_consumption_data_api_path,
           body: contents,
         );
         if (response.statusCode != 200){

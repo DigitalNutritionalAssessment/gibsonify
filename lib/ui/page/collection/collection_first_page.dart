@@ -150,10 +150,11 @@ class FoodItemCard extends StatelessWidget {
                 // If the recipe type is modified, then we assume that the recipe
                 // has been previously intentionally modified
                 // and hence
-                print(foodItem.recipe.recipeType);
-                if ((foodItem.recipe.recipeType??RecipeType.STANDARD) == RecipeType.STANDARD ){
-                 foodItem.ingredientItems = selectedRecipe.ingredientItems;
-                }
+                // print(foodItem.recipe.recipeType);
+                // if ((foodItem.recipe.recipeType??RecipeType.STANDARD) == RecipeType.STANDARD ){
+                //  foodItem.ingredientItems = selectedRecipe.ingredientItems;
+                // }
+                foodItem.ingredientItems = selectedRecipe.ingredientItems;
                 updateFoodItemState(foodItem);
               },
               questionText: "Can you name me something that you've eaten?",
@@ -161,6 +162,12 @@ class FoodItemCard extends StatelessWidget {
               initialText: foodItem.foodName ?? "",
               enabled: (enabled ?? true),
               validate: emptyFieldValidator,
+              noItemsFoundBuilder: (BuildContext ctx){
+                return FlatButton(
+                  child: Text("No Recipes Found! Click to create a new recipe"),
+                  onPressed: () => Navigator.pushNamed(ctx, UIData.NewRecipeRoute),
+                );
+              },
             ),
             DialogPicker(
               questionText: "What time did you eat it?",
@@ -169,7 +176,7 @@ class FoodItemCard extends StatelessWidget {
                 foodItem.timeOfDay = TimeOfDaySelection.values[values[0]];
                 updateFoodItemState(foodItem);
               },
-              initialSelectedOption: 0,
+              initialSelectedOption: foodItem?.timeOfDay?.index ?? 0,
             ),
             SizedBox(
               height: 10.0,

@@ -11,6 +11,9 @@ class UIData {
 
   static const String newCollectionSessionRoute = "/New Collection";
   static const String ViewDataRoute = "/View Data";
+  static const String NewRecipeRoute = "/Add New Recipe";
+  static const String ViewRecipeRoute = "/View Recipes";
+
 
   static const String profileOneRoute = "/View Profile";
   static const String profileTwoRoute = "/Profile 2";
@@ -41,7 +44,7 @@ class UIData {
   //images
   static const String imageDir = "assets/images";
   static const String logoImage = "$imageDir/logo.png";
-  static const String iconImage = "$imageDir/icon.png";
+  static const String iconImage = "$imageDir/logo_circle.png";
   static const String pkImage = "$imageDir/ck.jpg";
   static const String profileImage = "$imageDir/profile.jpg";
   static const String blankImage = "$imageDir/blank.jpg";
@@ -108,6 +111,13 @@ class UIData {
     fontFamily: UIData.ralewayFont,
   );
 
+  static const TextStyle titleTextStyle  = TextStyle(
+    fontWeight: FontWeight.bold,
+    fontFamily: UIData.ralewayFont,
+    decoration: TextDecoration.underline,
+    fontSize: 18.0,
+  );
+
 //  static const TextStyle smallTextStyle_Bold  = TextStyle(
 //    fontWeight: FontWeight.bold,
 //    fontFamily: UIData.ralewayFont,
@@ -117,7 +127,8 @@ class UIData {
   static const double collection_edge_inset = 9.0;
 
   //Default API URL
-  static const String send_consumption_data_api_url = "https://agnosco.serveo.net/processjson";
+  static String api_base_url = "https://deleo.serveo.net";
+  static const String send_consumption_data_api_path = "/processjson";
 
   static bool get isInDebugMode {
     bool inDebugMode = false;

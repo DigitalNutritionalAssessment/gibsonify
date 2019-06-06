@@ -9,12 +9,27 @@ import 'package:flutter_uikit/model/consumption_data.dart';
 
 
 
-Widget appBar({@required title, @required bottomBarTitle}) => AppBar(
-  backgroundColor: Colors.black,
-  elevation: 2.0,
-  title: Text(title),
-  bottom: bottomBar(title: bottomBarTitle),
-);
+Widget appBar({@required title, @required bottomBarTitle, tabs}){
+
+  Widget bottom_bar;
+
+  if (bottomBarTitle != "" && tabs != null){
+    print("Cannot set both bottomBar and tabs!");
+  }
+  else if (bottomBarTitle != ""){
+    bottom_bar = bottomBar(title: bottomBarTitle);
+  }
+  else if (tabs != null){
+    bottom_bar = TabBar(tabs:tabs);
+  }
+
+  return AppBar(
+    backgroundColor: Colors.black,
+    elevation: 2.0,
+    title: Text(title),
+    bottom: bottom_bar,
+  );
+}
 
 Widget bottomBar({@required title}) => PreferredSize(
   preferredSize: Size(double.infinity, 50.0),
@@ -44,13 +59,15 @@ Widget bottomBar({@required title}) => PreferredSize(
 
 class CollectionCommonDrawer extends StatelessWidget {
 
-  final goToPageStateInfo;
-  final goToPageStateFirstPage;
-  final goToPageStateSecondPage;
-  final goToPageStateThirdPage;
-  final goToPageStateFourthPage;
+  final VoidCallback goToPageStateSensitisation;
+  final VoidCallback goToPageStateInfo;
+  final VoidCallback goToPageStateFirstPage;
+  final VoidCallback goToPageStateSecondPage;
+  final VoidCallback goToPageStateThirdPage;
+  final VoidCallback goToPageStateFourthPage;
 
   const CollectionCommonDrawer({
+    this.goToPageStateSensitisation,
     this.goToPageStateInfo,
     this.goToPageStateFirstPage,
     this.goToPageStateSecondPage,
@@ -82,6 +99,18 @@ class CollectionCommonDrawer extends StatelessWidget {
                   backgroundImage: new AssetImage(UIData.pkImage),
                 ),
               ),
+              new ListTile(
+                title: Text(
+                  "Sensitisation",
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18.0),
+                ),
+                leading: Icon(
+                  Icons.person,
+                  color: Colors.blue,
+                ),
+                onTap: () => {goToPageStateSensitisation(), Navigator.pop(context)},
+              ),
+              Divider(),
               new ListTile(
                 title: Text(
                   "Interviewee Info",

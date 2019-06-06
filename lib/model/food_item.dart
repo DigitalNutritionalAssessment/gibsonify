@@ -23,8 +23,8 @@ class FoodItem {
   Map<String, dynamic> toJson() =>
       {
         'foodName': foodName,
-        'timeOfDay': timeOfDay?.index,
-        'foodSource': foodSource?.index,
+        'timeOfDay': (timeOfDay?.index != null) ? timeOfDay.index + 1 : null,
+        'foodSource': (foodSource?.index != null) ? foodSource.index + 1 : null,
         'recipe':recipe,
         'ingredients':ingredientItems,
       };
@@ -32,8 +32,8 @@ class FoodItem {
 
   FoodItem.fromJson(Map<String, dynamic> json)
       : foodName = json['foodName'],
-        timeOfDay = (json['timeOfDay'] != null) ? TimeOfDaySelection.values.elementAt(json['timeOfDay']): null,
-        foodSource = (json['foodSource'] != null) ? SourceOfFoodSelection.values.elementAt(json['foodSource']): null,
+        timeOfDay = (json['timeOfDay'] != null) ? TimeOfDaySelection.values.elementAt(json['timeOfDay']-1): null,
+        foodSource = (json['foodSource'] != null) ? SourceOfFoodSelection.values.elementAt(json['foodSource']-1): null,
         ingredientItems = IngredientsItemsList.fromJson(json['ingredients'] as List).ingredientItems,
         recipe = Recipe.fromJson(json['recipe']);
 }
@@ -41,7 +41,7 @@ class FoodItem {
 
 class IngredientItem{
   String foodItemName;
-  String foodGroup;
+  String rDescription;
   int fctCode;
   int rCode;
   FormWhenEatenSelection formWhenEaten;
@@ -49,35 +49,34 @@ class IngredientItem{
   MeasurementMethodSelection measurementMethod;
   double measurement;
 
-  IngredientItem({this.foodItemName, this.foodGroup, this.fctCode, this.rCode,
+  IngredientItem({this.foodItemName, this.rDescription, this.fctCode, this.rCode,
       this.formWhenEaten, this.measurementUnit, this.measurement, this.measurementMethod});
 
   Map<String, dynamic> toJson() =>
       {
         'foodItemName':foodItemName,
-        'foodGroup':foodGroup,
-        'formWhenEaten':formWhenEaten?.index,
+        'rDescription':rDescription,
+        'formWhenEaten':(formWhenEaten?.index != null) ? formWhenEaten.index + 1 : null,
         'fctCode': fctCode,
         'rCode': rCode,
-        'measurementUnit':measurementUnit?.index,
+        'measurementUnit':(measurementUnit?.index != null) ? measurementUnit?.index + 1 : null,
         'measurement':measurement,
-        'measurementMethod':measurementMethod,
+        'measurementMethod':(measurementMethod?.index != null) ? measurementMethod?.index + 1 : null,
       };
 
   IngredientItem.fromJson(Map<String, dynamic> json)
       : foodItemName = json['foodItemName'],
-        foodGroup = json['foodGroup'],
+        rDescription = json['rDescription'],
         formWhenEaten = (json['formWhenEaten'] != null) ? FormWhenEatenSelection.values.elementAt(json['formWhenEaten']): null,
         fctCode = json['fctCode'],
         rCode = json['rCode'],
-        measurementUnit = (json['measurementUnit'] != null) ? MeasurementUnitSelection.values.elementAt(json['measurementUnit']): null,
+        measurementUnit = (json['measurementUnit'] != null) ? MeasurementUnitSelection.values.elementAt(json['measurementUnit']-1): null,
         measurement = json['measurement'],
-        measurementMethod = (json['measurementMethod'] != null) ? MeasurementMethodSelection.values.elementAt(json['measurementMethod']): null;
-
+        measurementMethod = (json['measurementMethod'] != null) ? MeasurementMethodSelection.values.elementAt(json['measurementMethod']-1): null;
 }
 
 class Recipe{
-  int id;
+  String id;
   String description;
   RecipeType recipeType;
 
@@ -174,6 +173,12 @@ enum MeasurementMethodSelection{
 enum MeasurementUnitSelection{
   MILLILITRES,
   GRAMS,
+  SMALL_SPOON,
+  BIG_SPOON,
+  STANDARD_CUP,
+  SMALL,
+  MEDIUM,
+  LARGE,
 }
 
 enum RecipeType{
