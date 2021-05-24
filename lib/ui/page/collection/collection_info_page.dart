@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_uikit/utils/uidata.dart';
+//import 'package:flutter_uikit/utils/uidata.dart';
 import 'package:location/location.dart';
 
 
@@ -80,9 +80,13 @@ class _InfoDataCardState extends State<InfoDataCard> {
   @override
   Widget build(BuildContext context) {
 
+    // ignore: unused_local_variable
     final FocusNode _hhFocusNode = FocusNode();
+    // ignore: unused_local_variable
     final FocusNode _respNameFocusNode = FocusNode();
+    // ignore: unused_local_variable
     final FocusNode _respID = FocusNode();
+    // ignore: unused_local_variable
     final FocusNode _respTelNo = FocusNode();
 
     return SingleChildScrollView(
@@ -147,21 +151,21 @@ class _InfoDataCardState extends State<InfoDataCard> {
       child: ButtonBar(
         alignment: MainAxisAlignment.center,
         children: <Widget>[
-          RaisedButton(
+          ElevatedButton(
             child: const Text('View Interview Info'),
-            color: Theme.of(context).accentColor,
-            elevation: 4.0,
-            splashColor: Colors.blueGrey,
+            //color: Theme.of(context).accentColor,
+            //elevation: 4.0,
+            //splashColor: Colors.blueGrey,
             onPressed: () {
               widget.updatePageState(interviewData);
               widget.navigatePageStateBackward();
             },
           ),
-          RaisedButton(
+          ElevatedButton(
             child: const Text('Go To First Pass'),
-            color: Theme.of(context).accentColor,
-            elevation: 4.0,
-            splashColor: Colors.blueGrey,
+            //color: Theme.of(context).accentColor,
+            //elevation: 4.0,
+            //splashColor: Colors.blueGrey,
             onPressed: () {
               final form = _formKey.currentState;
               if (form.validate()) {

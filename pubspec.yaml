@@ -9,6 +9,10 @@ description: A new Flutter project.
 # Read more about versioning at semver.org.
 version: 1.0.1+2
 
+# Attempt to fix the issue by adding the envioronemnt line
+environment:
+  sdk: '>=2.10.0 <3.0.0'
+
 dependencies:
   flutter:
     sdk: flutter

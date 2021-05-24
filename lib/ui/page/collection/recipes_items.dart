@@ -39,6 +39,7 @@ class RecipeItemList extends StatefulWidget {
 
 class _RecipeItemListState extends State<RecipeItemList> {
 
+  // ignore: deprecated_member_use
   List<FoodItem> _foodList = new List<FoodItem>();
 
   @override
@@ -79,20 +80,20 @@ class _RecipeItemListState extends State<RecipeItemList> {
           child: ButtonBar(
             alignment: MainAxisAlignment.center,
             children: <Widget>[
-              RaisedButton(
+              ElevatedButton(
                 child: const Text('Go back to Second Pass'),
-                color: Theme.of(context).accentColor,
-                elevation: 4.0,
-                splashColor: Colors.blueGrey,
+                //color: Theme.of(context).accentColor,
+                //elevation: 4.0,
+                //splashColor: Colors.blueGrey,
                 onPressed: () {
                   widget.navigatePageStateBack();
                 },
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: const Text('Go to Fourth Pass'),
-                color: Theme.of(context).accentColor,
-                elevation: 4.0,
-                splashColor: Colors.blueGrey,
+                //color: Theme.of(context).accentColor,
+                //elevation: 4.0,
+                //splashColor: Colors.blueGrey,
                 onPressed: () {
                     widget.navigatePageStateForward();
                 },
@@ -247,6 +248,7 @@ class _RecipeExpansionTileState extends State<RecipeExpansionTile> {
         }
         else addIngredientItemIntoRecipe();
       },
+    // ignore: unnecessary_statements
     )): null ;
     return output;
   }
@@ -447,7 +449,7 @@ class _RecipeExpansionTileState extends State<RecipeExpansionTile> {
               ),
             ),
             actions: <Widget>[
-              new FlatButton(
+              new TextButton( //FlatButton
                 child: new Text("Cancel"),
                 onPressed: () {
                   Navigator.of(context, rootNavigator: true).pop();
@@ -455,7 +457,7 @@ class _RecipeExpansionTileState extends State<RecipeExpansionTile> {
                 },
               ),
               //Provide an update button only if enabled is true
-              (enabled??true) ? new FlatButton(
+              (enabled??true) ? new TextButton( //FlatButton
                 child: new Text("Update"),
                 onPressed: () {
                   Navigator.of(context, rootNavigator: true).pop();

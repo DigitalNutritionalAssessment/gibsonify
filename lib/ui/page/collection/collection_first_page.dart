@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 
-import 'package:flutter_typeahead/flutter_typeahead.dart';
+//import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 import 'package:flutter_uikit/utils/uidata.dart';
 import 'package:flutter_uikit/utils/form_strings.dart';
@@ -33,7 +33,9 @@ class FoodItemList extends StatefulWidget {
 
 class _FoodItemListState extends State<FoodItemList> {
 
+  // ignore: deprecated_member_use
   List<FoodItem> _foodList = List<FoodItem>();
+  //List<FoodItem> _foodList = List<FoodItem>();
   ValueChanged<List<FoodItem>> updatePageState;
   final _formKey = GlobalKey<FormState>();
 
@@ -78,22 +80,22 @@ class _FoodItemListState extends State<FoodItemList> {
             child: ButtonBar(
               alignment: MainAxisAlignment.center,
               children: <Widget>[
-                RaisedButton(
+                ElevatedButton( //RaisedButton
                   child: const Text('Add new Food'),
-                  color: Theme.of(context).accentColor,
-                  elevation: 4.0,
-                  splashColor: Colors.blueGrey,
+                  //color: Theme.of(context).accentColor,
+                  //elevation: 4.0,
+                  //splashColor: Colors.blueGrey,
                   onPressed: () {
                     setState(() {
                       _foodList.add(FoodItem());
                     });
                   },
                 ),
-                RaisedButton(
+                ElevatedButton( //RaisedButton
                   child: const Text('Go to Second Pass'),
-                  color: Theme.of(context).accentColor,
-                  elevation: 4.0,
-                  splashColor: Colors.blueGrey,
+                  //color: Theme.of(context).accentColor,
+                  //elevation: 4.0,
+                  //splashColor: Colors.blueGrey,
                   onPressed: () {
 
                     final form = _formKey.currentState;
@@ -163,7 +165,7 @@ class FoodItemCard extends StatelessWidget {
               enabled: (enabled ?? true),
               validate: emptyFieldValidator,
               noItemsFoundBuilder: (BuildContext ctx){
-                return FlatButton(
+                return TextButton( //FlatButton
                   child: Text("No Recipes Found! Click to create a new recipe"),
                   onPressed: () => Navigator.pushNamed(ctx, UIData.NewRecipeRoute),
                 );

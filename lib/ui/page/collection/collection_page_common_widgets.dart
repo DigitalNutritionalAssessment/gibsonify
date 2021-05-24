@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_uikit/ui/widgets/about_tile.dart';
 import 'package:flutter_uikit/utils/uidata.dart';
 
-import 'package:shared_preferences/shared_preferences.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
 
 
 import 'package:flutter_uikit/model/consumption_data.dart';
@@ -11,6 +11,7 @@ import 'package:flutter_uikit/model/consumption_data.dart';
 
 Widget appBar({@required title, @required bottomBarTitle, tabs}){
 
+  // ignore: non_constant_identifier_names
   Widget bottom_bar;
 
   if (bottomBarTitle != "" && tabs != null){

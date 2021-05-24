@@ -114,7 +114,8 @@ class _LoginPageState extends State<LoginPage> {
             ),
             keyboardType: TextInputType.number,
             controller: _employeeNumberTextController,
-            inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+            // ignore: deprecated_member_use
+            inputFormatters: [WhitelistingTextInputFormatter.digitsOnly], //from [WhitelistingTextInputFormatter.digitsOnly]
           ),
         ),
         Container(
@@ -134,14 +135,14 @@ class _LoginPageState extends State<LoginPage> {
         Container(
           padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 30.0),
           width: double.infinity,
-          child: RaisedButton(
-            padding: EdgeInsets.all(12.0),
-            shape: StadiumBorder(),
+          child: ElevatedButton(
+            //padding: EdgeInsets.all(12.0),
+          //  shape: StadiumBorder(),
             child: Text(
               "UPDATE USER INFO" ,
               style: TextStyle(color: Colors.white),
             ),
-            color: Colors.green,
+            //color: Colors.green,
             onPressed: () {
               _prefs.setInt("employeeNumber", int.tryParse(_employeeNumberTextController.text) );
               _prefs.setString("userName", _userNameTextController.text??"");
@@ -159,7 +160,7 @@ class _LoginPageState extends State<LoginPage> {
         SizedBox(
           height: 5.0,
         ),
-        FlatButton(
+        TextButton( //FlatButton
           child: Text(
             "LOG OUT",
             style: TextStyle(color: Colors.grey),
@@ -181,13 +182,13 @@ class _LoginPageState extends State<LoginPage> {
           title: Text("LOG OUT"),
           content: Text("Are you sure you want to log out? This cannot be undone!"),
           actions: <Widget>[
-            new FlatButton(
+            new TextButton(
               child: new Text("Cancel"),
               onPressed: () {
                 Navigator.of(parentContext).pop();
               },
             ),
-            new FlatButton(
+            new TextButton(
               child: new Text("Log Out"),
               onPressed: () {
                 _prefs.setInt("employeeNumber",null);

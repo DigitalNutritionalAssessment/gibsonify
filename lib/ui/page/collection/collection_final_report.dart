@@ -57,6 +57,7 @@ class _FinalReportCardState extends State<FinalReportCard> {
           enabled: false,
         )
     );
+    // ignore: unused_local_variable
     List<Widget> firstPassList = new List<Widget>.generate(
         widget.consumptionData.listOfFoods.length,
             (index) =>
@@ -68,6 +69,7 @@ class _FinalReportCardState extends State<FinalReportCard> {
               enabled: false,
             )
     );
+    // ignore: unused_local_variable
     List<Widget> secondPassList = new List<Widget>.generate(
         widget.consumptionData.listOfFoods.length,
             (index) =>
@@ -124,24 +126,24 @@ class _FinalReportCardState extends State<FinalReportCard> {
         child: ButtonBar(
           alignment: MainAxisAlignment.center,
           children: <Widget>[
-            RaisedButton(
+            ElevatedButton( //RaisdedButton
               child: const Text('Back To Edit'),
-              color: Theme
-                  .of(context)
-                  .accentColor,
-              elevation: 4.0,
-              splashColor: Colors.blueGrey,
+              //color: Theme
+                //  .of(context)
+                //  .accentColor,
+              // elevation: 4.0,
+              //splashColor: Colors.blueGrey,
               onPressed: () {
                 widget.navigatePageStateBackToInfo();
               },
             ),
-            RaisedButton(
+            ElevatedButton( //RaisedButton
               child: const Text('Submit'),
-              color: Theme
-                  .of(context)
-                  .accentColor,
-              elevation: 4.0,
-              splashColor: Colors.blueGrey,
+              //color: Theme
+                //  .of(context)
+                  //.accentColor,
+              //elevation: 4.0,
+              //splashColor: Colors.blueGrey,
               onPressed: () async {
                 final form = _formKey.currentState;
                 if (form.validate()) {

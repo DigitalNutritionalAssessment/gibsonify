@@ -9,7 +9,7 @@ fetchApiResult(BuildContext context, NetworkServiceResponse snapshot) {
           title: Text(UIData.error),
           content: Text(snapshot.message),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text(UIData.ok),
               onPressed: () => Navigator.pop(context),
             )

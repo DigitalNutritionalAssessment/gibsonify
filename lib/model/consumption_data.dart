@@ -3,7 +3,7 @@ import 'package:path/path.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_uikit/model/food_item.dart';
-import 'package:flutter_uikit/model/recipes.dart';
+//import 'package:flutter_uikit/model/recipes.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,7 +31,8 @@ class ConsumptionData {
     var uuid = Uuid();
     if (this.id == null) this.id = uuid.v1();
     if (this.interviewData == null) this.interviewData = InterviewData();
-    if (this.listOfFoods == null) this.listOfFoods = List<FoodItem>();
+    // ignore: deprecated_member_use
+    if (this.listOfFoods == null) this.listOfFoods = List<FoodItem>(); //quickfix of list
   }
 
   static String generateFileName(ConsumptionData consumptionData){
@@ -251,7 +252,7 @@ class ConsumptionDataInheritedWidget extends InheritedWidget {
   static ConsumptionDataInheritedWidget of(BuildContext context) {
     // You could also just directly return the name here
     // as there's only one field
-    return context.inheritFromWidgetOfExactType(ConsumptionDataInheritedWidget);
+    return context.dependOnInheritedWidgetOfExactType(aspect: ConsumptionDataInheritedWidget); //changed to depend On, added aspect
   }
 }
 

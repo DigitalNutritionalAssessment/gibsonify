@@ -165,7 +165,7 @@ class _CollectionViewerState extends State<CollectionViewer> {
                               title: new Text("JSON viewer"),
                               content: SingleChildScrollView(child: new Text(jsonEncode(consumptionDataList[idx]))),
                               actions: <Widget>[
-                                new FlatButton(
+                                new TextButton( //change from flatbutton to TextButton
                                   child: new Text("Done"),
                                   onPressed: () {
                                     Navigator.of(context).pop();

@@ -124,7 +124,7 @@ class FormQuestion extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(UIData.collection_edge_inset),
       child: TextFormField(
-        textInputAction: TextInputAction.done,
+        autovalidateMode: AutovalidateMode.always, textInputAction: TextInputAction.done,
         focusNode: focusNode,
         initialValue: initialText,
         decoration: InputDecoration(
@@ -135,8 +135,8 @@ class FormQuestion extends StatelessWidget {
           prefixStyle: UIData.smallTextStyle_GreyedOut,
           hintStyle: UIData.smallTextStyle_GreyedOut,
         ),
-        style: UIData.smallTextStyle,
-        autovalidate: true,
+        style: UIData.smallTextStyle,//migrated from below
+        //autovalidate: true,
         validator: validate,
         onSaved: onSaved,
         onFieldSubmitted: (term) {
@@ -213,9 +213,9 @@ class _DialogPickerState extends State<DialogPicker> {
       padding: const EdgeInsets.all(UIData.collection_edge_inset),
       child: Column(
         children: <Widget>[
-          FlatButton(
-            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            padding: const EdgeInsets.all(0),
+          TextButton(
+            //materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            //padding: const EdgeInsets.all(0),
             onPressed: onPressed,
             child: SizedBox(
               width: double.infinity,

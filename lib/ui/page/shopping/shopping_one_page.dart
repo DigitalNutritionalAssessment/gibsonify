@@ -3,6 +3,7 @@ import 'package:flutter_uikit/logic/bloc/product_bloc.dart';
 import 'package:flutter_uikit/model/product.dart';
 import 'package:flutter_uikit/ui/widgets/common_scaffold.dart';
 
+// ignore: must_be_immutable
 class ShoppingOnePage extends StatelessWidget {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   BuildContext _context;
@@ -113,6 +114,7 @@ class ShoppingOnePage extends StatelessWidget {
   }
 
   void showSnackBar() {
+    // ignore: deprecated_member_use
     scaffoldKey.currentState.showSnackBar(SnackBar(
       content: Text(
         "Added to cart.",

@@ -27,7 +27,7 @@ class LoginBackground extends StatelessWidget {
                         height: deviceSize.height / 8,
                         width: deviceSize.width / 2,
                         child: FlutterLogo(
-                          colors: Colors.yellow,
+                          //colors: Colors.yellow,
                         )),
                   )
                 : new Container(
