@@ -5,7 +5,6 @@ import 'package:flutter_uikit/myapp.dart';
 import 'package:flutter_uikit/database/icrisat_database.dart';
 
 void main() {
-
   // initialise the DB
   IcrisatDB().initDB();
 
