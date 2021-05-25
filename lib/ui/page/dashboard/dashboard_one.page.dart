@@ -6,6 +6,7 @@ import 'package:flutter_uikit/ui/widgets/profile_tile.dart';
 import 'package:flutter_uikit/utils/uidata.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+// ignore: must_be_immutable
 class DashboardOnePage extends StatelessWidget {
   Size deviceSize;
   Widget appBarColumn(BuildContext context) => SafeArea(

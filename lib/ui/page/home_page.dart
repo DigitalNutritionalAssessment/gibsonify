@@ -7,10 +7,11 @@ import 'package:flutter_uikit/ui/widgets/about_tile.dart';
 import 'package:flutter_uikit/ui/widgets/profile_tile.dart';
 import 'package:flutter_uikit/utils/uidata.dart';
 
-import 'package:flutter_uikit/model/consumption_data.dart';
+//import 'package:flutter_uikit/model/consumption_data.dart';
 
 
 
+// ignore: must_be_immutable
 class HomePage extends StatelessWidget {
   final _scaffoldState = GlobalKey<ScaffoldState>();
   Size deviceSize;
@@ -312,6 +313,7 @@ class HomePage extends StatelessWidget {
     MenuBloc menuBloc = MenuBloc();
     return StreamBuilder<List<Menu>>(
         stream: menuBloc.menuItems,
+        // ignore: deprecated_member_use
         initialData: List(),
         builder: (context, snapshot) {
           return snapshot.hasData
@@ -343,7 +345,7 @@ class HomePage extends StatelessWidget {
                         backgroundColor: CupertinoColors.black,
                         child: FlutterLogo(
                           size: 15.0,
-                          colors: Colors.yellow,
+                          //colors: Colors.yellow,
                         ),
                       ),
                     )

@@ -28,7 +28,9 @@ class LoginPageState extends State<LoginPage> {
       );
 
   showValidationError(LoginValidationType type) {
+    // ignore: deprecated_member_use
     scaffoldState.currentState.showSnackBar(SnackBar(
+      //ScaffoldMessenger.showSnackBar(SnackBar(
       content: Text(type == LoginValidationType.phone
           ? UIData.enter_valid_number
           : UIData.enter_valid_otp),

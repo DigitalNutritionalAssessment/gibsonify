@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_uikit/utils/uidata.dart';
+//import 'package:flutter_uikit/utils/uidata.dart';
 import 'package:flutter_uikit/utils/form_strings.dart';
 
 import 'package:flutter_uikit/ui/widgets/collection_question.dart';
 
 import 'package:flutter_uikit/model/food_item.dart';
 
-import 'package:flutter_uikit/database/icrisat_database.dart';
+//import 'package:flutter_uikit/database/icrisat_database.dart';
 
 import 'package:flutter_uikit/ui/page/collection/recipes_items.dart';
 
@@ -36,6 +36,7 @@ class FoodItemList2 extends StatefulWidget {
 
 class _FoodItemList2State extends State<FoodItemList2> {
 
+  // ignore: deprecated_member_use
   List<FoodItem> _foodList = List<FoodItem>();
 
   Map<String,int> _fctMap = {};
@@ -89,11 +90,11 @@ class _FoodItemList2State extends State<FoodItemList2> {
           child: ButtonBar(
             alignment: MainAxisAlignment.center,
             children: <Widget>[
-              RaisedButton(
+              ElevatedButton(
                 child: const Text('Add new Food'),
-                color: Theme.of(context).accentColor,
-                elevation: 4.0,
-                splashColor: Colors.blueGrey,
+                //color: Theme.of(context).accentColor,
+                //elevation: 4.0,
+                //splashColor: Colors.blueGrey,
                 onPressed: () {
                   setState(() {
                     _foodList.add(FoodItem());
@@ -101,11 +102,11 @@ class _FoodItemList2State extends State<FoodItemList2> {
                   widget.updatePageState(_foodList);
                 },
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: const Text('Go to Third Pass'),
-                color: Theme.of(context).accentColor,
-                elevation: 4.0,
-                splashColor: Colors.blueGrey,
+                //color: Theme.of(context).accentColor,
+                //elevation: 4.0,
+                //splashColor: Colors.blueGrey,
                 onPressed: () {
                   final form = _formKey.currentState;
                   if (form.validate()) {

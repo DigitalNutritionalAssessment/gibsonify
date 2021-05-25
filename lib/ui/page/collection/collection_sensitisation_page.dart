@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_uikit/utils/uidata.dart';
+//import 'package:flutter_uikit/utils/uidata.dart';
 
 import 'package:flutter/services.dart';
 
@@ -127,6 +127,7 @@ class _SensitisationVisitDataCardState extends State<SensitisationVisitDataCard>
                       nextFocusNode: _respTelNo,
                       enabled: enabled,
                       keyboardType: TextInputType.number,
+                      // ignore: deprecated_member_use
                       inputFormatters: [WhitelistingTextInputFormatter.digitsOnly]
                     ),
                     FormQuestion(
@@ -187,21 +188,21 @@ class _SensitisationVisitDataCardState extends State<SensitisationVisitDataCard>
       child: ButtonBar(
         alignment: MainAxisAlignment.center,
         children: <Widget>[
-          RaisedButton(
+          ElevatedButton(
             child: const Text('Start Interview'),
-            color: Theme.of(context).accentColor,
-            elevation: 4.0,
-            splashColor: Colors.blueGrey,
+            //color: Theme.of(context).accentColor,
+            //elevation: 4.0,
+            //splashColor: Colors.blueGrey,
             onPressed: () {
               widget.updatePageState(interviewData);
               widget.navigatePageStateForward();
             },
           ),
-          RaisedButton(
+          ElevatedButton(
             child: const Text('Save Sensitisation Info'),
-            color: Theme.of(context).accentColor,
-            elevation: 4.0,
-            splashColor: Colors.blueGrey,
+            //color: Theme.of(context).accentColor,
+            //elevation: 4.0,
+            //splashColor: Colors.blueGrey,
             onPressed: () {
               final form = _formKey.currentState;
               if (form.validate()) {
