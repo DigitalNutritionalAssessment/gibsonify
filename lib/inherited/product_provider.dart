@@ -8,7 +8,7 @@ class ProductProvider extends InheritedWidget {
   ProductProvider({this.productBloc, this.child}) : super(child: child);
 
   static ProductProvider of(BuildContext context) =>
-      context.inheritFromWidgetOfExactType(ProductProvider);
+      context.dependOnInheritedWidgetOfExactType(aspect: ProductProvider); //changed from inheritFrom ... 
 
   @override
   bool updateShouldNotify(ProductProvider oldWidget) =>

@@ -16,10 +16,10 @@ class PaymentSuccessPageState extends State<PaymentSuccessPage> {
   bool isDataAvailable = true;
   Widget bodyData() => Center(
         child: isDataAvailable
-            ? RaisedButton(
-                shape: StadiumBorder(),
+            ? ElevatedButton(
+                //shape: StadiumBorder(),
                 onPressed: () => showSuccessDialog(),
-                color: Colors.amber,
+                //color: Colors.amber,
                 child: Text("Process Payment"),
               )
             : CircularProgressIndicator(),

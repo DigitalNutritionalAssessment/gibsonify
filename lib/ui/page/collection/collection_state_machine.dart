@@ -99,6 +99,7 @@ class _CollectionStateMachineState extends State<CollectionStateMachine> {
   @override
   Widget build(BuildContext context) {
 
+    // ignore: non_constant_identifier_names
     Map<PageState, dynamic> PageStateWidgetMap = {
       PageState.SENSITISATION: SensitisationVisitDataCard(
         navigatePageStateForward: (){switchToNewPageState(PageState.INTERVIEW);},

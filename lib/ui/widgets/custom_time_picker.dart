@@ -59,9 +59,9 @@ class TimePickerState extends State<TimePicker>{
       padding: const EdgeInsets.all(UIData.collection_edge_inset),
       child: Column(
         children: <Widget>[
-          FlatButton(
-            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            padding: const EdgeInsets.all(0),
+          TextButton(
+            //materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            //padding: const EdgeInsets.all(0),
             onPressed: () {
               datePickerFactory(context,
                   showTitleActions: true,

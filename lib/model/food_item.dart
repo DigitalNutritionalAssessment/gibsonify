@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+//import 'package:flutter/material.dart';
 
 
 class FoodItem {
@@ -59,8 +59,10 @@ class IngredientItem{
         'formWhenEaten':(formWhenEaten?.index != null) ? formWhenEaten.index + 1 : null,
         'fctCode': fctCode,
         'rCode': rCode,
+        // ignore: null_aware_before_operator
         'measurementUnit':(measurementUnit?.index != null) ? measurementUnit?.index + 1 : null,
         'measurement':measurement,
+        // ignore: null_aware_before_operator
         'measurementMethod':(measurementMethod?.index != null) ? measurementMethod?.index + 1 : null,
       };
 

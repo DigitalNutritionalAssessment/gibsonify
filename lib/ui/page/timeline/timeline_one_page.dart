@@ -26,6 +26,7 @@ class TimelineOnePage extends StatelessWidget {
                   post.personName,
                   style: Theme.of(context)
                       .textTheme
+                      // ignore: deprecated_member_use
                       .body1
                       .apply(fontWeightDelta: 700),
                 ),

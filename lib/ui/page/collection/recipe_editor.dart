@@ -90,11 +90,11 @@ class _RecipeEditingCardState extends State<RecipeEditingCard> {
           child: ButtonBar(
             alignment: MainAxisAlignment.center,
             children: <Widget>[
-              RaisedButton(
+              ElevatedButton(
                 child: const Text('Add new data'),
-                color: Theme.of(context).accentColor,
-                elevation: 4.0,
-                splashColor: Colors.blueGrey,
+                //color: Theme.of(context).accentColor,
+                //elevation: 4.0,
+                //splashColor: Colors.blueGrey,
                 onPressed: () async {
                   // To do: Implement Saving
 
@@ -111,11 +111,11 @@ class _RecipeEditingCardState extends State<RecipeEditingCard> {
 
                 },
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: const Text('Save Recipe'),
-                color: Theme.of(context).accentColor,
-                elevation: 4.0,
-                splashColor: Colors.blueGrey,
+                //color: Theme.of(context).accentColor,
+                //elevation: 4.0,
+                //splashColor: Colors.blueGrey,
                 onPressed: () async {
                   // To do: Implement Saving
 

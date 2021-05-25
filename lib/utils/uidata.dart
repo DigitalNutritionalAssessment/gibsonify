@@ -127,6 +127,7 @@ class UIData {
   static const double collection_edge_inset = 9.0;
 
   //Default API URL
+  // ignore: non_constant_identifier_names
   static String api_base_url = "https://deleo.serveo.net";
   static const String send_consumption_data_api_path = "/processjson";
 

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
+//import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_uikit/ui/widgets/common_scaffold.dart';
-import 'package:flutter_uikit/ui/widgets/common_switch.dart';
+//import 'package:flutter_uikit/ui/widgets/common_switch.dart';
 import 'package:flutter_uikit/ui/widgets/about_tile.dart';
 import 'package:flutter_uikit/utils/uidata.dart';
 import 'package:flutter_uikit/utils/form_strings.dart';
@@ -12,7 +12,7 @@ import 'package:flutter_uikit/utils/form_strings.dart';
 import 'package:flutter_uikit/ui/widgets/common_dialogs.dart';
 
 import 'package:flutter_uikit/model/consumption_data_db.dart';
-import 'package:flutter_uikit/model/consumption_data.dart';
+//import 'package:flutter_uikit/model/consumption_data.dart';
 
 import 'package:flutter_uikit/ui/widgets/collection_question.dart';
 
@@ -216,13 +216,13 @@ class SettingsOnePage extends StatelessWidget {
               ),
             ),
             actions: <Widget>[
-              new FlatButton(
+              new TextButton(
                 child: new Text("Cancel"),
                 onPressed: () {
                   Navigator.of(parentContext).pop();
                 },
               ),
-              new FlatButton(
+              new TextButton(
                 child: new Text("Update Base URL"),
                 onPressed: () {
                   final form = _formKey.currentState;
@@ -246,13 +246,13 @@ class SettingsOnePage extends StatelessWidget {
           title: new Text("Delete all items"),
           content: new Text("This will delete all collection data text files on your device permanently. Have you backed it up first?"),
           actions: <Widget>[
-            new FlatButton(
+            new TextButton(
               child: new Text("Cancel"),
               onPressed: () {
                 Navigator.of(parentContext).pop();
               },
             ),
-            new FlatButton(
+            new TextButton(
               child: new Text("Delete All"),
               onPressed: () {
                 LocalItemStorage().deleteAllConsumptionDataFiles();

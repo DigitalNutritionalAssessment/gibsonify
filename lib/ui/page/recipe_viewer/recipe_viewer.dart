@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_uikit/utils/uidata.dart';
 
-import 'package:flutter_uikit/utils/form_strings.dart';
-import 'package:flutter_uikit/ui/widgets/collection_question.dart';
+//import 'package:flutter_uikit/utils/form_strings.dart';
+//import 'package:flutter_uikit/ui/widgets/collection_question.dart';
 
 
 import 'package:flutter_uikit/ui/page/collection/collection_page_common_widgets.dart';
@@ -29,7 +29,7 @@ class _RecipeViewerState extends State<RecipeViewer> {
   List <FoodItem> modifiedRecipeList = [];
   List <FoodItem> recentlyChangedRecipeList = [];
 
-  List<FoodItem> _foodList = new List<FoodItem>();
+  //List<FoodItem> _foodList = new List<FoodItem>();
 
   @override
   void initState(){
@@ -131,20 +131,20 @@ class _RecipeViewerState extends State<RecipeViewer> {
           child: ButtonBar(
             alignment: MainAxisAlignment.center,
             children: <Widget>[
-              RaisedButton(
+              ElevatedButton(
                 child: const Text('Add New Recipe'),
-                color: Theme.of(context).accentColor,
-                elevation: 4.0,
-                splashColor: Colors.blueGrey,
+                //color: Theme.of(context).accentColor,
+                //elevation: 4.0,
+                //splashColor: Colors.blueGrey,
                 onPressed: () async {
                   Navigator.popAndPushNamed(context, UIData.NewRecipeRoute);
                 },
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: const Text('View Changes'),
-                color: Theme.of(context).accentColor,
-                elevation: 4.0,
-                splashColor: Colors.blueGrey,
+                //color: Theme.of(context).accentColor,
+                //elevation: 4.0,
+                //splashColor: Colors.blueGrey,
                 onPressed: () async {
                   DefaultTabController.of(parentContext).animateTo(2);
                 },

@@ -89,7 +89,7 @@ class _LoginCardState extends State<LoginCard>
                                 text: Translations.of(context).text("login")),
                       ),
                       snapshot.data == true
-                          ? new FlatButton(
+                          ? new TextButton( //change to text button
                               child: Text(
                                   Translations.of(context).text("resend_otp")),
                               onPressed: () =>
@@ -117,7 +117,7 @@ class _LoginCardState extends State<LoginCard>
 
   @override
   initState() {
-    // TODO: implement initState
+    // T0DO: implement initState
     super.initState();
     loginBloc = new LoginBloc();
     apiStreamSubscription = apiSubscription(loginBloc.apiResult, context);

@@ -5,6 +5,7 @@ import 'package:flutter_uikit/ui/widgets/profile_tile.dart';
 import 'package:flutter_uikit/utils/uidata.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+// ignore: must_be_immutable
 class CreditCardPage extends StatelessWidget {
   BuildContext _context;
   CreditCardBloc cardBloc;
@@ -89,6 +90,7 @@ class CreditCardPage extends StatelessWidget {
                 builder: (context, snapshot) {
                   snapshot.data.length > 0
                       ? ccMask.updateText(snapshot.data)
+                      // ignore: unnecessary_statements
                       : null;
                   return Text(
                     snapshot.data.length > 0
@@ -106,6 +108,7 @@ class CreditCardPage extends StatelessWidget {
                     builder: (context, snapshot) {
                       snapshot.data.length > 0
                           ? expMask.updateText(snapshot.data)
+                          // ignore: unnecessary_statements
                           : null;
                       return ProfileTile(
                         textColor: Colors.white,
@@ -214,7 +217,7 @@ class CreditCardPage extends StatelessWidget {
     _context = context;
     cardBloc = CreditCardBloc();
     return Scaffold(
-      resizeToAvoidBottomPadding: true,
+      resizeToAvoidBottomInset: true, //from resizeToAvoidBottomPadding
       appBar: AppBar(
         centerTitle: false,
         title: Text("Credit Card"),
