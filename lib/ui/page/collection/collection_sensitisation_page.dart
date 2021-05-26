@@ -141,25 +141,29 @@ class _SensitisationVisitDataCardState
                             WhitelistingTextInputFormatter.digitsOnly
                           ]),
                       FormQuestion(
-                        questionText: "Respondent Telephone Number",
-                        hint: "(+91)",
-                        initialText:
-                            interviewData?.respondent?.telephone ?? null,
-                        validate: (answer) {
-                          if (answer.length != 10) {
-                            return "Please enter a valid phone number";
-                            //Indian phone numbers are in the form of (+91) then ten digits
-                          }
-                          return emptyFieldValidator(answer);
-                        },
-                        onSaved: (answer) {
-                          interviewData.respondent.telephone = answer;
-                          widget.updatePageState(interviewData);
-                        },
-                        focusNode: _respTelNo,
-                        enabled: enabled,
-                        keyboardType: TextInputType.number,
-                      ),
+                          //in future can be modified to give phone input widget
+                          questionText: "Respondent Telephone Number",
+                          hint: "",
+                          initialText:
+                              interviewData?.respondent?.telephone ?? null,
+                          validate: (answer) {
+                            if (answer.length != 10) {
+                              return "Please enter a valid phone number";
+                              //Indian phone numbers are in the form of (+91) then ten digits
+                            }
+                            return emptyFieldValidator(answer);
+                          },
+                          onSaved: (answer) {
+                            interviewData.respondent.telephone = answer;
+                            widget.updatePageState(interviewData);
+                          },
+                          focusNode: _respTelNo,
+                          enabled: enabled,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            // ignore: deprecated_member_use
+                            WhitelistingTextInputFormatter.digitsOnly
+                          ]),
                       TimePicker(
                         initialTime:
                             interviewData?.respondent?.birthDate ?? null,
