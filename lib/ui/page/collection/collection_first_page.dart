@@ -119,11 +119,11 @@ class _FoodItemListState extends State<FoodItemList> {
                   //splashColor: Colors.blueGrey,
                   onPressed: () {
                     final form = _formKey.currentState;
-                    if (form.validate()) {
+                    //if (form.validate()) {
                       form.save();
                       widget.updatePageState(_foodList);
                       widget.navigatePageStateForward();
-                    }
+                    //}
                   },
                 ),
                 ElevatedButton(
