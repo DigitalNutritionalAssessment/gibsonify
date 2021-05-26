@@ -115,13 +115,14 @@ class _CollectionStateMachineState extends State<CollectionStateMachine> {
           initialInterviewData: consumptionData.interviewData,
         ),
       PageState.FIRST_PASS: FoodItemList(
-        navigatePageState: (){ switchToNewPageState(PageState.SECOND_PASS);},
+        navigatePageStateForward: (){ switchToNewPageState(PageState.SECOND_PASS);},
         updatePageState: (foodItemsList){ consumptionData.listOfFoods = foodItemsList;},
         initialFoodList: consumptionData.listOfFoods,
         recipeMap: recipeMap,
       ),
       PageState.SECOND_PASS: FoodItemList2(
-        navigatePageState: (){ switchToNewPageState(PageState.THIRD_PASS);},
+        navigatePageStateForward: (){ switchToNewPageState(PageState.THIRD_PASS);},
+        navigatePageStateBack: (){ switchToNewPageState(PageState.FIRST_PASS);},
         updatePageState: (foodItemsList){ consumptionData.listOfFoods = foodItemsList;},
         initialFoodList: consumptionData.listOfFoods,
         recipeMap: recipeMap,

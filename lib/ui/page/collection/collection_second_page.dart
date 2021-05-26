@@ -12,22 +12,25 @@ import 'package:flutter_uikit/model/food_item.dart';
 import 'package:flutter_uikit/ui/page/collection/recipes_items.dart';
 
 class FoodItemList2 extends StatefulWidget {
-
-  final navigatePageState;
+  //final navigatePageState;
+  final navigatePageStateForward;
+  final navigatePageStateBack;
   final updatePageState;
   final initialFoodList;
-  final Map<String,FoodItem> recipeMap;
-  final Map<String,int> fctMap;
-  final Map<String,int> rCodeMap;
-
+  final Map<String, FoodItem> recipeMap;
+  final Map<String, int> fctMap;
+  final Map<String, int> rCodeMap;
 
   const FoodItemList2({
-    @required this.navigatePageState,
+    //@required this.navigatePageState,
+    @required this.navigatePageStateForward,
+    @required this.navigatePageStateBack,
     @required this.updatePageState,
     this.recipeMap,
     this.initialFoodList,
     this.fctMap,
     this.rCodeMap,
+    //this.rCodeMap, Null Function() navigatePageStateBack, Null Function() navigatePageStateForward,
   });
 
   @override
@@ -35,13 +38,12 @@ class FoodItemList2 extends StatefulWidget {
 }
 
 class _FoodItemList2State extends State<FoodItemList2> {
-
   // ignore: deprecated_member_use
   List<FoodItem> _foodList = List<FoodItem>();
 
-  Map<String,int> _fctMap = {};
-  Map<String,FoodItem> _recipeMap = {};
-  Map<String,int> _rCodeMap = {};
+  Map<String, int> _fctMap = {};
+  Map<String, FoodItem> _recipeMap = {};
+  Map<String, int> _rCodeMap = {};
 
   final _formKey = GlobalKey<FormState>();
 
@@ -62,27 +64,27 @@ class _FoodItemList2State extends State<FoodItemList2> {
           child: Form(
             key: _formKey,
             child: new ListView.builder(
-            itemCount: _foodList.length ?? 0,
-            itemBuilder: (BuildContext ctx, int index) {
-            return Dismissible(
-              key: ObjectKey(_foodList[index]),
-              onDismissed: (direction){
-                setState(() {
-                  _foodList.removeAt(index);
-                  widget.updatePageState(_foodList);
-                });
-              },
-              child: SecondPassFoodItemCard(
-                updateFoodItemState: (foodItem){
-                  _foodList[index] = foodItem;
-                },
-                foodItem: _foodList[index],
-                recipeMap: _recipeMap,
-                fctMap: _fctMap,
-                rCodeMap: _rCodeMap,
-              ),
-            );
-            }),
+                itemCount: _foodList.length ?? 0,
+                itemBuilder: (BuildContext ctx, int index) {
+                  return Dismissible(
+                    key: ObjectKey(_foodList[index]),
+                    onDismissed: (direction) {
+                      setState(() {
+                        _foodList.removeAt(index);
+                        widget.updatePageState(_foodList);
+                      });
+                    },
+                    child: SecondPassFoodItemCard(
+                      updateFoodItemState: (foodItem) {
+                        _foodList[index] = foodItem;
+                      },
+                      foodItem: _foodList[index],
+                      recipeMap: _recipeMap,
+                      fctMap: _fctMap,
+                      rCodeMap: _rCodeMap,
+                    ),
+                  );
+                }),
           ),
         ),
         new FittedBox(
@@ -90,6 +92,20 @@ class _FoodItemList2State extends State<FoodItemList2> {
           child: ButtonBar(
             alignment: MainAxisAlignment.center,
             children: <Widget>[
+              ElevatedButton(
+                child: const Text('Go to First Pass'),
+                //color: Theme.of(context).accentColor,
+                //elevation: 4.0,
+                //splashColor: Colors.blueGrey,
+                onPressed: () {
+                  final form = _formKey.currentState;
+                  if (form.validate()) {
+                    form.save();
+                    widget.updatePageState(_foodList);
+                    widget.navigatePageStateBack();
+                  }
+                },
+              ),
               ElevatedButton(
                 child: const Text('Add new Food'),
                 //color: Theme.of(context).accentColor,
@@ -112,7 +128,7 @@ class _FoodItemList2State extends State<FoodItemList2> {
                   if (form.validate()) {
                     form.save();
                     widget.updatePageState(_foodList);
-                    widget.navigatePageState();
+                    widget.navigatePageStateForward();
                   }
                 },
               ),
@@ -124,13 +140,11 @@ class _FoodItemList2State extends State<FoodItemList2> {
   }
 }
 
-
-class SecondPassFoodItemCard extends StatelessWidget{
-
+class SecondPassFoodItemCard extends StatelessWidget {
   final FoodItem foodItem;
   final updateFoodItemState;
-  final Map<String,int> fctMap;
-  final Map<String,int> rCodeMap;
+  final Map<String, int> fctMap;
+  final Map<String, int> rCodeMap;
   final Map<String, FoodItem> recipeMap;
   final bool enabled;
 
@@ -155,7 +169,7 @@ class SecondPassFoodItemCard extends StatelessWidget{
               onSuggestionSelected: (String selected) {
                 foodItem.foodName = selected;
 
-                FoodItem selectedRecipe = recipeMap[selected]?? FoodItem();
+                FoodItem selectedRecipe = recipeMap[selected] ?? FoodItem();
 
                 foodItem.recipe = selectedRecipe.recipe;
 
@@ -163,7 +177,8 @@ class SecondPassFoodItemCard extends StatelessWidget{
                 // If the recipe type is modified, then we assume that the recipe
                 // has been previously intentionally modified
                 // and hence
-                if ((foodItem.recipe.recipeType??RecipeType.STANDARD) == RecipeType.STANDARD ){
+                if ((foodItem.recipe.recipeType ?? RecipeType.STANDARD) ==
+                    RecipeType.STANDARD) {
                   foodItem.ingredientItems = selectedRecipe.ingredientItems;
                 }
                 updateFoodItemState(foodItem);
@@ -176,23 +191,22 @@ class SecondPassFoodItemCard extends StatelessWidget{
             ),
 
             DialogPicker(
-                questionText: "Source of Food",
-                optionsList: FormStrings.sourceOfFoodOutcomeSelection.values
-                    .toList(),
-                onConfirm: (List<int> values) {
-                  foodItem.foodSource = SourceOfFoodSelection.values[values[0]];
-                  updateFoodItemState(foodItem);
-                },
-                enabled: enabled,
+              questionText: "Source of Food",
+              optionsList:
+                  FormStrings.sourceOfFoodOutcomeSelection.values.toList(),
+              onConfirm: (List<int> values) {
+                foodItem.foodSource = SourceOfFoodSelection.values[values[0]];
+                updateFoodItemState(foodItem);
+              },
+              enabled: enabled,
             ),
             RecipeExpansionTile(
-                foodItem: foodItem,
-                updateFoodItemState: updateFoodItemState,
-                fctMap: fctMap,
-                initiallyExpanded: true,
-                rCodeMap: rCodeMap,
+              foodItem: foodItem,
+              updateFoodItemState: updateFoodItemState,
+              fctMap: fctMap,
+              initiallyExpanded: true,
+              rCodeMap: rCodeMap,
             ),
-
 
 //            DialogPicker(
 //                questionText: "Form When Eaten",

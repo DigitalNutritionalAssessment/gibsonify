@@ -6,22 +6,18 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_uikit/utils/uidata.dart';
 import 'package:flutter_uikit/utils/form_strings.dart';
 
-
 import 'package:flutter_uikit/ui/widgets/collection_question.dart';
 
 import 'package:flutter_uikit/model/food_item.dart';
 
-
-
 class FoodItemList extends StatefulWidget {
-
-  final navigatePageState;
+  final navigatePageStateForward;
   final List<FoodItem> initialFoodList;
   final updatePageState;
-  final Map<String,FoodItem> recipeMap;
+  final Map<String, FoodItem> recipeMap;
 
   const FoodItemList({
-    @required this.navigatePageState,
+    @required this.navigatePageStateForward,
     @required this.updatePageState,
     @required this.recipeMap,
     this.initialFoodList,
@@ -32,7 +28,6 @@ class FoodItemList extends StatefulWidget {
 }
 
 class _FoodItemListState extends State<FoodItemList> {
-
   // ignore: deprecated_member_use
   List<FoodItem> _foodList = List<FoodItem>();
   //List<FoodItem> _foodList = List<FoodItem>();
@@ -48,9 +43,8 @@ class _FoodItemListState extends State<FoodItemList> {
 
   @override
   Widget build(BuildContext context) {
-
     return Form(
-      key:_formKey,
+      key: _formKey,
       child: new Column(
         children: <Widget>[
           new Expanded(
@@ -59,18 +53,18 @@ class _FoodItemListState extends State<FoodItemList> {
               itemBuilder: (BuildContext ctx, int index) {
                 return Dismissible(
                     key: ObjectKey(_foodList[index]),
-                    onDismissed: (direction){
+                    onDismissed: (direction) {
                       setState(() {
                         _foodList.removeAt(index);
                         widget.updatePageState(_foodList);
                       });
                     },
                     child: FoodItemCard(
-                        updateFoodItemState: (foodItem){
-                            _foodList[index] = foodItem;
-                        },
-                        foodItem: _foodList[index],
-                        recipeMap: widget.recipeMap,
+                      updateFoodItemState: (foodItem) {
+                        _foodList[index] = foodItem;
+                      },
+                      foodItem: _foodList[index],
+                      recipeMap: widget.recipeMap,
                     ));
               },
             ),
@@ -80,30 +74,68 @@ class _FoodItemListState extends State<FoodItemList> {
             child: ButtonBar(
               alignment: MainAxisAlignment.center,
               children: <Widget>[
-                ElevatedButton( //RaisedButton
+                ElevatedButton(
+                  //RaisedButton
                   child: const Text('Add new Food'),
+                  style: ElevatedButton.styleFrom(
+                      primary: Theme.of(context).accentColor,
+                      elevation: 4,
+                      onSurface: Colors.blueGrey),
                   //color: Theme.of(context).accentColor,
                   //elevation: 4.0,
                   //splashColor: Colors.blueGrey,
                   onPressed: () {
                     setState(() {
                       _foodList.add(FoodItem());
+                      print(_foodList);
                     });
                   },
                 ),
-                ElevatedButton( //RaisedButton
-                  child: const Text('Go to Second Pass'),
+                ElevatedButton(
+                  //RaisedButton
+                  child: const Text('Remove new Food'),
+                  style: ElevatedButton.styleFrom(
+                      primary: Theme.of(context).accentColor,                      
+                      elevation: 4,
+                      onSurface: Colors.blueGrey),
                   //color: Theme.of(context).accentColor,
                   //elevation: 4.0,
                   //splashColor: Colors.blueGrey,
                   onPressed: () {
-
+                    setState(() {
+                      _foodList.remove(FoodItem());
+                    });
+                  },
+                ),
+                ElevatedButton(
+                  //RaisedButton
+                  child: const Text('Go to Second Pass'),
+                  style: ElevatedButton.styleFrom(
+                      primary: Theme.of(context).accentColor,
+                      elevation: 4,
+                      onSurface: Colors.blueGrey),
+                  //color: Theme.of(context).accentColor,
+                  //elevation: 4.0,
+                  //splashColor: Colors.blueGrey,
+                  onPressed: () {
                     final form = _formKey.currentState;
                     if (form.validate()) {
                       form.save();
                       widget.updatePageState(_foodList);
-                      widget.navigatePageState();
+                      widget.navigatePageStateForward();
                     }
+                  },
+                ),
+                ElevatedButton(
+                  //RaisedButton
+                  child: const Text("What's going on"),
+                  style: ElevatedButton.styleFrom(
+                      primary: Colors.red,
+                      elevation: 4,
+                      onSurface: Colors.blueGrey),
+                  onPressed: () {                    
+                      print(_foodList);
+                    
                   },
                 ),
               ],
@@ -115,9 +147,7 @@ class _FoodItemListState extends State<FoodItemList> {
   }
 }
 
-
 class FoodItemCard extends StatelessWidget {
-
   final FoodItem foodItem;
   final updateFoodItemState;
   final bool enabled;
@@ -132,7 +162,6 @@ class FoodItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Card(
       elevation: 2.0,
       child: Container(
@@ -144,7 +173,7 @@ class FoodItemCard extends StatelessWidget {
               onSuggestionSelected: (String selected) {
                 foodItem.foodName = selected;
 
-                FoodItem selectedRecipe = recipeMap[selected]?? FoodItem();
+                FoodItem selectedRecipe = recipeMap[selected] ?? FoodItem();
 
                 foodItem.recipe = selectedRecipe.recipe;
 
@@ -164,10 +193,12 @@ class FoodItemCard extends StatelessWidget {
               initialText: foodItem.foodName ?? "",
               enabled: (enabled ?? true),
               validate: emptyFieldValidator,
-              noItemsFoundBuilder: (BuildContext ctx){
-                return TextButton( //FlatButton
+              noItemsFoundBuilder: (BuildContext ctx) {
+                return TextButton(
+                  //FlatButton
                   child: Text("No Recipes Found! Click to create a new recipe"),
-                  onPressed: () => Navigator.pushNamed(ctx, UIData.NewRecipeRoute),
+                  onPressed: () =>
+                      Navigator.pushNamed(ctx, UIData.NewRecipeRoute),
                 );
               },
             ),
@@ -189,5 +220,3 @@ class FoodItemCard extends StatelessWidget {
     );
   }
 }
-
-
