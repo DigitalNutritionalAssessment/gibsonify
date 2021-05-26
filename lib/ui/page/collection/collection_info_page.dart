@@ -12,7 +12,7 @@ import 'package:flutter_uikit/ui/widgets/custom_time_picker.dart';
 
 import 'package:flutter_uikit/utils/form_strings.dart';
 
-
+//this page is the interview data page
 
 class InfoDataCard extends StatefulWidget {
 

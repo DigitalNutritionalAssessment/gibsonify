@@ -133,6 +133,10 @@ class _RecipeViewerState extends State<RecipeViewer> {
             children: <Widget>[
               ElevatedButton(
                 child: const Text('Add New Recipe'),
+                style: ElevatedButton.styleFrom(
+                  primary: Theme.of(context).accentColor,
+                  elevation: 4.0,
+                ),
                 //color: Theme.of(context).accentColor,
                 //elevation: 4.0,
                 //splashColor: Colors.blueGrey,
@@ -142,6 +146,10 @@ class _RecipeViewerState extends State<RecipeViewer> {
               ),
               ElevatedButton(
                 child: const Text('View Changes'),
+                style: ElevatedButton.styleFrom(
+                  primary: Theme.of(context).accentColor,
+                  elevation: 4.0,
+                ),
                 //color: Theme.of(context).accentColor,
                 //elevation: 4.0,
                 //splashColor: Colors.blueGrey,
