@@ -37,6 +37,7 @@ class LocalOverallDatabase {
     await db.insert(
         'consumption_data_index', consumptionData.toCondensedDBMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
+        print("insert Item");
   }
 
   Future<List<String>> getAllConsumptionDataIds() async {
