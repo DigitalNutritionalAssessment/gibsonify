@@ -198,6 +198,7 @@ class FoodItemCard extends StatelessWidget {
                   child: Text("No Recipes Found! Click to create a new recipe"),
                   onPressed: () =>
                       Navigator.pushNamed(ctx, UIData.NewRecipeRoute),
+                      //Push a named route onto the navigator that most tightly encloses the given context.
                 );
               },
             ),

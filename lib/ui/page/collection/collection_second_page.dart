@@ -15,6 +15,7 @@ class FoodItemList2 extends StatefulWidget {
   //final navigatePageState;
   final navigatePageStateForward;
   final navigatePageStateBack;
+  final navigateHome;
   final updatePageState;
   final initialFoodList;
   final Map<String, FoodItem> recipeMap;
@@ -26,6 +27,7 @@ class FoodItemList2 extends StatefulWidget {
     @required this.navigatePageStateForward,
     @required this.navigatePageStateBack,
     @required this.updatePageState,
+    @required this.navigateHome,
     this.recipeMap,
     this.initialFoodList,
     this.fctMap,
@@ -106,7 +108,7 @@ class _FoodItemList2State extends State<FoodItemList2> {
                   }
                 },
               ),
-              ElevatedButton(
+              /*ElevatedButton(
                 child: const Text('Add new Food'),
                 //color: Theme.of(context).accentColor,
                 //elevation: 4.0,
@@ -116,6 +118,36 @@ class _FoodItemList2State extends State<FoodItemList2> {
                     _foodList.add(FoodItem());
                   });
                   widget.updatePageState(_foodList);
+                },
+              ),*/
+              ElevatedButton(
+                  //RaisedButton
+                  child: const Text('Remove Last Item'),
+                  style: ElevatedButton.styleFrom(
+                      primary: Theme.of(context).accentColor,                      
+                      elevation: 4,
+                      onSurface: Colors.blueGrey),
+                  //color: Theme.of(context).accentColor,
+                  //elevation: 4.0,
+                  //splashColor: Colors.blueGrey,
+                  onPressed: () {
+                    setState(() {
+                      _foodList.removeLast();
+                    });
+                  },
+                ),
+              ElevatedButton(
+                child: const Text('Home Page'),
+                //color: Theme.of(context).accentColor,
+                //elevation: 4.0,
+                //splashColor: Colors.blueGrey,
+                onPressed: () {
+                  final form = _formKey.currentState;
+                  if (form.validate()) {
+                    form.save();
+                    widget.updatePageState(_foodList);
+                    widget.navigateHome();
+                  }
                 },
               ),
               ElevatedButton(
