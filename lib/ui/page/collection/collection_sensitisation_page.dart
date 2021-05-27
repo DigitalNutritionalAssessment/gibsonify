@@ -86,12 +86,12 @@ class _SensitisationVisitDataCardState extends State<SensitisationVisitDataCard>
                     FormQuestion(
                       questionText: "Household Identification",
                       hint:"(10 characters)",
-                      validate: (answer) {
+                      /*validate: (answer) {
                         if (answer.length > 10){
                           return "10 characters only!";
                         }
                         return emptyFieldValidator(answer);
-                      },
+                      },*/
                       initialText: interviewData.householdIdentification ?? null,
                       onSaved: (answer) {
                         interviewData.householdIdentification = answer;
@@ -104,7 +104,7 @@ class _SensitisationVisitDataCardState extends State<SensitisationVisitDataCard>
                     FormQuestion(
                       questionText: "Respondent Name",
                       hint:"",
-                      validate: emptyFieldValidator,
+                      //validate: emptyFieldValidator,
                       initialText: interviewData?.respondent?.name ?? null,
                       onSaved: (answer) {
                         interviewData.respondent.name = answer;
@@ -117,7 +117,7 @@ class _SensitisationVisitDataCardState extends State<SensitisationVisitDataCard>
                     FormQuestion(
                       questionText: "Respondent ID",
                       hint:"",
-                      validate: emptyFieldValidator,
+                      //validate: emptyFieldValidator,
                       initialText: interviewData?.respondent?.id?.toString() ?? null,
                       onSaved: (answer) {
                         interviewData.respondent.id = int.tryParse(answer);
@@ -134,7 +134,7 @@ class _SensitisationVisitDataCardState extends State<SensitisationVisitDataCard>
                       questionText: "Respondent Telephone Number",
                       hint:"",
                       initialText:interviewData?.respondent?.telephone ?? null,
-                      validate: emptyFieldValidator,
+                      //validate: emptyFieldValidator,
                       onSaved: (answer) {
                         interviewData.respondent.telephone = answer;
                         widget.updatePageState(interviewData);

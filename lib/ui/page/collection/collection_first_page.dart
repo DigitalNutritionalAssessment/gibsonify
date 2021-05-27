@@ -28,8 +28,7 @@ class FoodItemList extends StatefulWidget {
 }
 
 class _FoodItemListState extends State<FoodItemList> {
-  // ignore: deprecated_member_use
-  List<FoodItem> _foodList = List<FoodItem>();
+  List<FoodItem> _foodList = [];
   //List<FoodItem> _foodList = List<FoodItem>();
   ValueChanged<List<FoodItem>> updatePageState;
   final _formKey = GlobalKey<FormState>();
@@ -93,7 +92,7 @@ class _FoodItemListState extends State<FoodItemList> {
                 ),
                 ElevatedButton(
                   //RaisedButton
-                  child: const Text('Remove new Food'),
+                  child: const Text('Remove Last Item'),
                   style: ElevatedButton.styleFrom(
                       primary: Theme.of(context).accentColor,                      
                       elevation: 4,
@@ -103,7 +102,7 @@ class _FoodItemListState extends State<FoodItemList> {
                   //splashColor: Colors.blueGrey,
                   onPressed: () {
                     setState(() {
-                      _foodList.remove(FoodItem());
+                      _foodList.removeLast();
                     });
                   },
                 ),
