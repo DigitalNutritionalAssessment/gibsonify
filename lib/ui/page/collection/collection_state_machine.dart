@@ -123,7 +123,7 @@ class _CollectionStateMachineState extends State<CollectionStateMachine> {
       PageState.SECOND_PASS: FoodItemList2(
         navigatePageStateForward: (){ switchToNewPageState(PageState.THIRD_PASS);},
         navigatePageStateBack: (){ switchToNewPageState(PageState.FIRST_PASS);},
-        navigateHome: (){switchToNewPageState(PageState.FOURTH_PASS);},
+        navigateHome: (){Navigator.pop(context);},
         updatePageState: (foodItemsList){ consumptionData.listOfFoods = foodItemsList;},
         initialFoodList: consumptionData.listOfFoods,
         recipeMap: recipeMap,
