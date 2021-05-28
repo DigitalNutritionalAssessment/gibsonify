@@ -117,7 +117,7 @@ class _InfoDataCardState extends State<InfoDataCard> {
                     FormQuestion(
                       questionText: "If other, please specify",
                       hint: "Leave blank unless 'Other' chosen above",
-                      //validate so only applies if other is selected above, not working yet
+                      //validate so only applies if other is selected above, not working
                       /* validate: (answer) {
                           if (interviewData.dayCode == DayCode.OTHERS) {
                             return emptyFieldValidator(answer);
@@ -140,11 +140,13 @@ class _InfoDataCardState extends State<InfoDataCard> {
                     ),
                     FormQuestion(
                       questionText: "Current Location Coordinates",
-                      hint:
-                          //make coordinates only display to 2 decimal places
-                          "${interviewData.location.locationName}: (${interviewData.location.latitude.toStringAsFixed(2)},${interviewData.location.longitude.toStringAsFixed(2)})",
-                      initialText:
-                          "${interviewData.location.locationName}: (${interviewData.location.latitude.toStringAsFixed(2)},${interviewData.location.longitude.toStringAsFixed(2)})",
+                      //ternary operator, will display to 2dp if latitude is available, will show null if not
+                      hint: ((interviewData.location.latitude == null)
+                          ? ("${interviewData.location.locationName}: (${interviewData.location.latitude},${interviewData.location.longitude})")
+                          : ("${interviewData.location.locationName}: (${interviewData.location.latitude.toStringAsFixed(2)},${interviewData.location.longitude.toStringAsFixed(2)})")),
+                      initialText: ((interviewData.location.latitude == null)
+                          ? ("${interviewData.location.locationName}: (${interviewData.location.latitude},${interviewData.location.longitude})")
+                          : ("${interviewData.location.locationName}: (${interviewData.location.latitude.toStringAsFixed(2)},${interviewData.location.longitude.toStringAsFixed(2)})")),
                       enabled: false,
                     )
                   ],
