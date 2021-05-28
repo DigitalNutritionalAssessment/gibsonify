@@ -95,7 +95,7 @@ class _FoodItemList2State extends State<FoodItemList2> {
             alignment: MainAxisAlignment.center,
             children: <Widget>[
               ElevatedButton(
-                child: const Text('Go to First Pass'),
+                child: const Text('First Pass'),
                   style: ElevatedButton.styleFrom(
                       primary: Theme.of(context).accentColor,                      
                       elevation: 4,
@@ -120,7 +120,7 @@ class _FoodItemList2State extends State<FoodItemList2> {
                   });
                   widget.updatePageState(_foodList);
                 },
-              ),*/
+              ),
               ElevatedButton(
                   //RaisedButton
                   child: const Text('Remove Last Item'),
@@ -133,7 +133,7 @@ class _FoodItemList2State extends State<FoodItemList2> {
                       _foodList.removeLast();
                     });
                   },
-                ),
+                ),*/
               ElevatedButton(
                 child: const Text('Home Page'),
                   style: ElevatedButton.styleFrom(
@@ -150,7 +150,7 @@ class _FoodItemList2State extends State<FoodItemList2> {
                 },
               ),
               ElevatedButton(
-                child: const Text('Go to Probe List'),
+                child: const Text('Probe List'),
                   style: ElevatedButton.styleFrom(
                       primary: Theme.of(context).accentColor,                      
                       elevation: 4,

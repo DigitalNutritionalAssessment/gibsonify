@@ -83,7 +83,7 @@ class _RecipeItemListState extends State<RecipeItemList> {
             alignment: MainAxisAlignment.center,
             children: <Widget>[
               ElevatedButton(
-                child: const Text('Go back to Second Pass'),
+                child: const Text('Probe List'),
                 //color: Theme.of(context).accentColor,
                 //elevation: 4.0,
                 //splashColor: Colors.blueGrey,
@@ -102,7 +102,7 @@ class _RecipeItemListState extends State<RecipeItemList> {
                 },
               ),
               ElevatedButton(
-                child: const Text('Go to Fourth Pass'),
+                child: const Text('Fourth Pass'),
                 //color: Theme.of(context).accentColor,
                 //elevation: 4.0,
                 //splashColor: Colors.blueGrey,
