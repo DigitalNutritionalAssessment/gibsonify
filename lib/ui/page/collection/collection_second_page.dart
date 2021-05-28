@@ -96,9 +96,10 @@ class _FoodItemList2State extends State<FoodItemList2> {
             children: <Widget>[
               ElevatedButton(
                 child: const Text('Go to First Pass'),
-                //color: Theme.of(context).accentColor,
-                //elevation: 4.0,
-                //splashColor: Colors.blueGrey,
+                  style: ElevatedButton.styleFrom(
+                      primary: Theme.of(context).accentColor,                      
+                      elevation: 4,
+                      onSurface: Colors.blueGrey),
                 onPressed: () {
                   final form = _formKey.currentState;
                   if (form.validate()) {
@@ -127,9 +128,6 @@ class _FoodItemList2State extends State<FoodItemList2> {
                       primary: Theme.of(context).accentColor,                      
                       elevation: 4,
                       onSurface: Colors.blueGrey),
-                  //color: Theme.of(context).accentColor,
-                  //elevation: 4.0,
-                  //splashColor: Colors.blueGrey,
                   onPressed: () {
                     setState(() {
                       _foodList.removeLast();
@@ -138,9 +136,10 @@ class _FoodItemList2State extends State<FoodItemList2> {
                 ),
               ElevatedButton(
                 child: const Text('Home Page'),
-                //color: Theme.of(context).accentColor,
-                //elevation: 4.0,
-                //splashColor: Colors.blueGrey,
+                  style: ElevatedButton.styleFrom(
+                      primary: Colors.tealAccent,                      
+                      elevation: 4,
+                      onSurface: Colors.blueGrey),
                 onPressed: () {
                   final form = _formKey.currentState;
                   if (form.validate()) {
@@ -151,10 +150,11 @@ class _FoodItemList2State extends State<FoodItemList2> {
                 },
               ),
               ElevatedButton(
-                child: const Text('Go to Third Pass'),
-                //color: Theme.of(context).accentColor,
-                //elevation: 4.0,
-                //splashColor: Colors.blueGrey,
+                child: const Text('Go to Probe List'),
+                  style: ElevatedButton.styleFrom(
+                      primary: Theme.of(context).accentColor,                      
+                      elevation: 4,
+                      onSurface: Colors.blueGrey),
                 onPressed: () {
                   final form = _formKey.currentState;
                   if (form.validate()) {

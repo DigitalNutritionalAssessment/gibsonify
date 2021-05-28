@@ -17,6 +17,7 @@ class RecipeItemList extends StatefulWidget {
 
   final VoidCallback navigatePageStateBack;
   final VoidCallback navigatePageStateForward;
+  final VoidCallback navigateHome;
   final ValueChanged<List<FoodItem>> updatePageState;
   final List<FoodItem> initialFoodList;
   final Map<String,int> fctMap;
@@ -27,6 +28,7 @@ class RecipeItemList extends StatefulWidget {
     @required this.navigatePageStateBack,
     @required this.navigatePageStateForward,
     @required this.updatePageState,
+    @required this.navigateHome,
     this.initialFoodList,
     this.fctMap,
     this.rCodeMap,
@@ -87,6 +89,16 @@ class _RecipeItemListState extends State<RecipeItemList> {
                 //splashColor: Colors.blueGrey,
                 onPressed: () {
                   widget.navigatePageStateBack();
+                },
+              ),
+              ElevatedButton(
+                child: const Text('Home Page'),
+                  style: ElevatedButton.styleFrom(
+                      primary: Colors.tealAccent,                      
+                      elevation: 4,
+                      onSurface: Colors.blueGrey),
+                onPressed: () {
+                    widget.navigateHome();
                 },
               ),
               ElevatedButton(

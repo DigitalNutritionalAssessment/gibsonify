@@ -8,7 +8,7 @@ import 'package:flutter_uikit/model/consumption_data.dart';
 import 'package:flutter_uikit/ui/widgets/collection_question.dart';
 import 'package:flutter_uikit/ui/widgets/custom_time_picker.dart';
 
-import 'package:flutter_uikit/utils/form_strings.dart';
+//import 'package:flutter_uikit/utils/form_strings.dart';
 
 class SensitisationVisitDataCard extends StatefulWidget {
 
@@ -40,7 +40,7 @@ class _SensitisationVisitDataCardState extends State<SensitisationVisitDataCard>
   );
   bool enabled = true;
 //  ValueChanged<InterviewData> updatePageState;
-  final _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>(); //used for debugging only //FormState can be used to save, reset, and validate every Form
   VoidCallback saveConsumptionData = () => {};
 
   @override

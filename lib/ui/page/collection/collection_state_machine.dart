@@ -11,6 +11,7 @@ import 'package:flutter_uikit/ui/page/collection/collection_sensitisation_page.d
 import 'package:flutter_uikit/ui/page/collection/collection_info_page.dart';
 import 'package:flutter_uikit/ui/page/collection/collection_first_page.dart';
 import 'package:flutter_uikit/ui/page/collection/collection_second_page.dart';
+import 'package:flutter_uikit/ui/page/collection/collection_probe_list.dart';
 import 'package:flutter_uikit/ui/page/collection/collection_final_report.dart';
 
 import 'package:flutter_uikit/ui/page/collection/recipes_items.dart';
@@ -24,6 +25,7 @@ enum PageState {
   INTERVIEW,
   FIRST_PASS,
   SECOND_PASS,
+  PROBE_LIST,
   THIRD_PASS,
   FOURTH_PASS,
 }
@@ -56,6 +58,7 @@ class _CollectionStateMachineState extends State<CollectionStateMachine> {
     PageState.INTERVIEW: "Interview Information",
     PageState.FIRST_PASS: "First Pass",
     PageState.SECOND_PASS: "Second Pass",
+    PageState.PROBE_LIST: "Probe List",
     PageState.THIRD_PASS: "Third Pass",
     PageState.FOURTH_PASS: "Fourth Pass",
   };
@@ -121,8 +124,18 @@ class _CollectionStateMachineState extends State<CollectionStateMachine> {
         recipeMap: recipeMap,
       ),
       PageState.SECOND_PASS: FoodItemList2(
-        navigatePageStateForward: (){ switchToNewPageState(PageState.THIRD_PASS);},
+        navigatePageStateForward: (){ switchToNewPageState(PageState.PROBE_LIST);},
         navigatePageStateBack: (){ switchToNewPageState(PageState.FIRST_PASS);},
+        navigateHome: (){Navigator.pop(context);},
+        updatePageState: (foodItemsList){ consumptionData.listOfFoods = foodItemsList;},
+        initialFoodList: consumptionData.listOfFoods,
+        recipeMap: recipeMap,
+        rCodeMap: _rCodeMap,
+        fctMap: _fctMap,
+      ),
+      PageState.PROBE_LIST: ProbeList(
+        navigatePageStateForward: (){ switchToNewPageState(PageState.THIRD_PASS);},
+        navigatePageStateBack: (){ switchToNewPageState(PageState.SECOND_PASS);},
         navigateHome: (){Navigator.pop(context);},
         updatePageState: (foodItemsList){ consumptionData.listOfFoods = foodItemsList;},
         initialFoodList: consumptionData.listOfFoods,
@@ -133,6 +146,7 @@ class _CollectionStateMachineState extends State<CollectionStateMachine> {
       PageState.THIRD_PASS: RecipeItemList(
         navigatePageStateBack: (){ switchToNewPageState(PageState.SECOND_PASS);},
         navigatePageStateForward: (){ switchToNewPageState(PageState.FOURTH_PASS);},
+        navigateHome: (){Navigator.pop(context);},
         updatePageState: (foodItemsList){ consumptionData.listOfFoods = foodItemsList;},
         initialFoodList: consumptionData.listOfFoods,
         fctMap: _fctMap,
