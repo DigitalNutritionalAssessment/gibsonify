@@ -39,7 +39,7 @@ class ProbeList extends StatefulWidget {
 }
 
 
-
+//trying of slide to delete
 List<String> listItems = [
   "Hello",
   "World",
@@ -177,6 +177,43 @@ class ProbeList extends StatefulWidget {
     //this.rCodeMap, Null Function() navigatePageStateBack, Null Function() navigatePageStateForward,
   });
 
+  
+  //Alert
+  showAlertDialog(BuildContext context) {
+
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: Text("No, Back to Probe List"),
+      onPressed:  () => Navigator.pop(context),
+    );
+    Widget continueButton = TextButton(
+      child: Text("Yes, Continue to Third Pass"),
+      onPressed:  () {
+        navigatePageStateForward();
+        Navigator.pop(context);
+      },
+    );
+  
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("AlertDialog"),
+      content: Text("Have you checked all the boxes required?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   @override
   _ProbeListState createState() => _ProbeListState();
 }
@@ -256,7 +293,7 @@ class _ProbeListState extends State<ProbeList> {
                   elevation: 4,
                   onSurface: Colors.blueGrey),
               onPressed: () {
-                widget.navigatePageStateForward();
+                widget.showAlertDialog(context);
               },
             ),
           ) // button third
@@ -264,6 +301,10 @@ class _ProbeListState extends State<ProbeList> {
           // Add more buttons here
         ],
       ),
+
+
+
+
 
 /*
 Scaffold(
