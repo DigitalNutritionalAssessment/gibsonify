@@ -197,7 +197,7 @@ class ProbeList extends StatefulWidget {
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("AlertDialog"),
+      title: Text("Reminder"),
       content: Text("Have you checked all the boxes required?"),
       actions: [
         cancelButton,

@@ -10,6 +10,7 @@ import 'package:flutter_uikit/model/food_item.dart';
 //import 'package:flutter_uikit/database/icrisat_database.dart';
 
 import 'package:flutter_uikit/ui/page/collection/recipes_items.dart';
+import 'package:flutter_uikit/ui/decorations.dart';
 
 class FoodItemList2 extends StatefulWidget {
   //final navigatePageState;
@@ -34,6 +35,52 @@ class FoodItemList2 extends StatefulWidget {
     this.rCodeMap,
     //this.rCodeMap, Null Function() navigatePageStateBack, Null Function() navigatePageStateForward,
   });
+
+  //Alert
+  showAlertDialog(BuildContext context) {
+
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: Text("Close"),
+      onPressed:  () => Navigator.pop(context),
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Help"),
+      content: Column(
+      children: <Widget>[
+        new ListTile(
+          title: new Text('This pass is to ensure that more detail of the food will be collected, these include:'),
+        ),
+        new ListTile(
+          leading: new MyBullet(),
+          title: new Text('Description of the food item or dish'),
+        ),
+        new ListTile(
+          leading: new MyBullet(),
+          title: new Text('Form when eaten'),
+        ),
+        new ListTile(
+          leading: new MyBullet(),
+          title: new Text('Recipe number, for standard recipe'),
+        )
+      ],
+      ),
+      
+      actions: [
+        cancelButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 
   @override
   _FoodItemList2State createState() => _FoodItemList2State();
@@ -109,31 +156,6 @@ class _FoodItemList2State extends State<FoodItemList2> {
                   //}
                 },
               ),
-              /*ElevatedButton(
-                child: const Text('Add new Food'),
-                //color: Theme.of(context).accentColor,
-                //elevation: 4.0,
-                //splashColor: Colors.blueGrey,
-                onPressed: () {
-                  setState(() {
-                    _foodList.add(FoodItem());
-                  });
-                  widget.updatePageState(_foodList);
-                },
-              ),
-              ElevatedButton(
-                  //RaisedButton
-                  child: const Text('Remove Last Item'),
-                  style: ElevatedButton.styleFrom(
-                      primary: Theme.of(context).accentColor,                      
-                      elevation: 4,
-                      onSurface: Colors.blueGrey),
-                  onPressed: () {
-                    setState(() {
-                      _foodList.removeLast();
-                    });
-                  },
-                ),*/
               ElevatedButton(
                 child: const Text('Home Page'),
                   style: ElevatedButton.styleFrom(
@@ -146,6 +168,21 @@ class _FoodItemList2State extends State<FoodItemList2> {
                     form.save();
                     widget.updatePageState(_foodList);
                     widget.navigateHome();
+                  }
+                },
+              ),
+              ElevatedButton(
+                child: const Text('Help'),
+                  style: ElevatedButton.styleFrom(
+                      primary: Colors.tealAccent,                      
+                      elevation: 4,
+                      onSurface: Colors.blueGrey),
+                onPressed: () {
+                  final form = _formKey.currentState;
+                  if (form.validate()) {
+                    form.save();
+                    widget.updatePageState(_foodList);
+                    widget.showAlertDialog(context);
                   }
                 },
               ),

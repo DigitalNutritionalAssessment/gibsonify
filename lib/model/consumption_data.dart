@@ -142,6 +142,7 @@ class Person{
 }
 
 class InterviewData{
+  String dataTest;
   String householdIdentification;
   Person respondent;
   Person enumerator;
@@ -157,7 +158,7 @@ class InterviewData{
   String incompleteInterviewReason;
   LocData location;
 
-  InterviewData({this.householdIdentification, this.respondent, this.enumerator,
+  InterviewData({this.dataTest,this.householdIdentification, this.respondent, this.enumerator,
       this.sensitizationVisitDate, this.dayCode, this.interviewStart,
       this.interviewEnd, this.secondInterview, this.secondInterviewDate,
       this.secondInterviewReason,
@@ -171,6 +172,7 @@ class InterviewData{
 
   Map<String, dynamic> toJson() =>
       {
+        'dataTest': dataTest,
         'householdIdentification': householdIdentification,
         'respondent': respondent,
         'enumerator': enumerator,
@@ -232,6 +234,21 @@ class LocData{
         locationName = json['locationName'];
 
 }
+
+class NewData{
+  String foodEat;
+
+  NewData({this.foodEat});
+  Map<String, dynamic> toJson() => 
+      {
+        'foodEat': foodEat,
+      };
+
+  NewData.fromJson(Map<String, dynamic> json)
+      : foodEat = json['foodEat'];
+  
+}
+
 
 
 // Inherited widget for managing a ConsumptionData Item

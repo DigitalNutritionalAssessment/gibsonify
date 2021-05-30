@@ -197,11 +197,13 @@ class _RecipeExpansionTileState extends State<RecipeExpansionTile> {
     for (int i =0; i< _foodItem.ingredientItems.length; i++){
       output.add(Dismissible(
         key: Key(uuid.v1().toString()),
-//        Key(
-//          (_foodItem.recipe.id?? "") +
-//          (_foodItem.ingredientItems[i].foodItemName ?? "") +
-//          (_foodItem.ingredientItems[i].measurement??0).toString()
-//        ),
+        /*
+        Key(
+          (_foodItem.recipe.id?? "") +
+          (_foodItem.ingredientItems[i].foodItemName ?? "") +
+          (_foodItem.ingredientItems[i].measurement??0).toString()
+        ),
+        */
         onDismissed: (direction){
           if (modifyLocked){
             showModifyLockedDialog(

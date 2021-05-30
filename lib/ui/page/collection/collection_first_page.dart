@@ -1,35 +1,87 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_uikit/model/consumption_data.dart';
 
 //import 'package:flutter_typeahead/flutter_typeahead.dart';
 
-import 'package:flutter_uikit/utils/uidata.dart';
+//import 'package:flutter_uikit/utils/uidata.dart';
 import 'package:flutter_uikit/utils/form_strings.dart';
 
 import 'package:flutter_uikit/ui/widgets/collection_question.dart';
 
+
 import 'package:flutter_uikit/model/food_item.dart';
+import 'package:flutter_uikit/ui/decorations.dart';
+
+
 
 class FoodItemList extends StatefulWidget {
   final navigatePageStateForward;
   final List<FoodItem> initialFoodList;
   final updatePageState;
   final Map<String, FoodItem> recipeMap;
+  final NewData newData;
 
   const FoodItemList({
     @required this.navigatePageStateForward,
     @required this.updatePageState,
     @required this.recipeMap,
     this.initialFoodList,
+    this.newData,
   });
+//Alert
+  showAlertDialog(BuildContext context) {
 
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: Text("Close"),
+      onPressed:  () => Navigator.pop(context),
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Help"),
+      content: Column(
+      children: <Widget>[
+        new ListTile(
+          title: new Text('This pass is to ensure all the normal food is collected, and follows the requirements below:'),
+        ),
+        new ListTile(
+          leading: new MyBullet(),
+          title: new Text('It is not too vague'),
+        ),
+        new ListTile(
+          leading: new MyBullet(),
+          title: new Text('It cannot involve any cooking methods'),
+        ),
+        new ListTile(
+          leading: new MyBullet(),
+          title: new Text('Condiments should be entered separately'),
+        )
+      ],
+      ),
+      
+      actions: [
+        cancelButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
   @override
   _FoodItemListState createState() => _FoodItemListState();
 }
 
 class _FoodItemListState extends State<FoodItemList> {
-  List<FoodItem> _foodList = [];
-  //List<FoodItem> _foodList = List<FoodItem>();
+  //List<FoodItem> _foodList = [];
+  // ignore: deprecated_member_use
+  List<FoodItem> _foodList = List<FoodItem>();
   ValueChanged<List<FoodItem>> updatePageState;
   final _formKey = GlobalKey<FormState>();
 
@@ -117,12 +169,14 @@ class _FoodItemListState extends State<FoodItemList> {
                 ),
                 ElevatedButton(
                   //RaisedButton
-                  child: const Text("What's going on"),
+                  child: const Text("Help"),
                   style: ElevatedButton.styleFrom(
                       primary: Colors.red,
                       elevation: 4,
                       onSurface: Colors.blueGrey),
-                  onPressed: () {                    
+                  onPressed: () {
+                    widget.updatePageState(_foodList);  
+                      widget.showAlertDialog(context);                  
                       print(_foodList);
                       print(FoodItem());
                     
@@ -158,6 +212,17 @@ class FoodItemCard extends StatelessWidget {
 //      height: MediaQuery.of(context).size.height,
         child: Column(
           children: <Widget>[
+              FormQuestion(
+                      questionText: "What did you eat today?",
+                      hint:"",
+                      onSaved: (answer) {
+                        foodItem.testing = answer;
+                        var widget;
+                        widget.updatePageState(foodItem);
+                        },
+                      enabled: enabled,
+                    ),
+            /*
             AutoCompleteTextField(
               suggestions: recipeMap?.keys?.toList() ?? [],
               onSuggestionSelected: (String selected) {
@@ -179,10 +244,11 @@ class FoodItemCard extends StatelessWidget {
                 updateFoodItemState(foodItem);
               },
               questionText: "Can you name me something that you've eaten?",
-              hintText: null,
+              hintText: "",
               initialText: foodItem.foodName ?? "",
               enabled: (enabled ?? true),
               validate: emptyFieldValidator,
+              
               noItemsFoundBuilder: (BuildContext ctx) {
                 return TextButton(
                   //FlatButton
@@ -192,7 +258,9 @@ class FoodItemCard extends StatelessWidget {
                       //Push a named route onto the navigator that most tightly encloses the given context.
                 );
               },
+              
             ),
+            */
             DialogPicker(
               questionText: "What time did you eat it?",
               optionsList: FormStrings.timeOfDaySelection.values.toList(),
