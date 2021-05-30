@@ -80,13 +80,9 @@ class _FoodItemListState extends State<FoodItemList> {
                       primary: Theme.of(context).accentColor,
                       elevation: 4,
                       onSurface: Colors.blueGrey),
-                  //color: Theme.of(context).accentColor,
-                  //elevation: 4.0,
-                  //splashColor: Colors.blueGrey,
                   onPressed: () {
                     setState(() {
                       _foodList.add(FoodItem());
-                      print(_foodList);
                     });
                   },
                 ),
@@ -97,9 +93,6 @@ class _FoodItemListState extends State<FoodItemList> {
                       primary: Theme.of(context).accentColor,                      
                       elevation: 4,
                       onSurface: Colors.blueGrey),
-                  //color: Theme.of(context).accentColor,
-                  //elevation: 4.0,
-                  //splashColor: Colors.blueGrey,
                   onPressed: () {
                     setState(() {
                       _foodList.removeLast();
@@ -113,16 +106,13 @@ class _FoodItemListState extends State<FoodItemList> {
                       primary: Theme.of(context).accentColor,
                       elevation: 4,
                       onSurface: Colors.blueGrey),
-                  //color: Theme.of(context).accentColor,
-                  //elevation: 4.0,
-                  //splashColor: Colors.blueGrey,
                   onPressed: () {
                     final form = _formKey.currentState;
-                    //if (form.validate()) {
+                    if (form.validate()) {
                       form.save();
                       widget.updatePageState(_foodList);
                       widget.navigatePageStateForward();
-                    //}
+                    }
                   },
                 ),
                 ElevatedButton(
@@ -134,6 +124,7 @@ class _FoodItemListState extends State<FoodItemList> {
                       onSurface: Colors.blueGrey),
                   onPressed: () {                    
                       print(_foodList);
+                      print(FoodItem());
                     
                   },
                 ),

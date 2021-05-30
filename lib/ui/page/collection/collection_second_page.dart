@@ -101,12 +101,12 @@ class _FoodItemList2State extends State<FoodItemList2> {
                       elevation: 4,
                       onSurface: Colors.blueGrey),
                 onPressed: () {
-                  final form = _formKey.currentState;
-                  if (form.validate()) {
-                    form.save();
+                  //final form = _formKey.currentState;
+                  //if (form.validate()) {
+                    //form.save();
                     widget.updatePageState(_foodList);
                     widget.navigatePageStateBack();
-                  }
+                  //}
                 },
               ),
               /*ElevatedButton(
