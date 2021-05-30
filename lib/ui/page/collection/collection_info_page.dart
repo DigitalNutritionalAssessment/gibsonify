@@ -74,6 +74,13 @@ class _InfoDataCardState extends State<InfoDataCard> {
     print(interviewData.location.longitude);
   }
 
+  Future<void> getDayCode(int dayCode) async {
+    //function which rebuilds page when Day Code changed
+    int _code = await dayCode;
+    print('DayCode updated to ${DayCode.values[_code]}');
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     // ignore: unused_local_variable
@@ -111,18 +118,25 @@ class _InfoDataCardState extends State<InfoDataCard> {
                       onConfirm: (List<int> values) {
                         interviewData.dayCode = DayCode.values[values[0]];
                         widget.updatePageState(interviewData);
+                        getDayCode(interviewData.dayCode.index);
                       },
                       initialSelectedOption: 0,
                     ),
                     FormQuestion(
                       questionText: "If other, please specify",
-                      hint: "Leave blank unless 'Other' chosen above",
+                      hint: "",
                       //validate so only applies if other is selected above, not working
-                      /* validate: (answer) {
-                          if (interviewData.dayCode == DayCode.OTHERS) {
-                            return emptyFieldValidator(answer);
+                      validate: (answer) {
+                        if (interviewData.dayCode == DayCode.OTHERS) {
+                          return emptyFieldValidator(answer);
+                        } else {
+                          if (answer.length > 0) {
+                            return 'Field should be blank';
+                          } else {
+                            return null;
                           }
-                        }, */
+                        }
+                      },
                       onSaved: (answer) {
                         interviewData.dayCodeOther = answer;
                         widget.updatePageState(interviewData);
