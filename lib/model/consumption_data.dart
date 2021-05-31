@@ -29,7 +29,9 @@ class ConsumptionData {
     if (this.interviewData == null) this.interviewData = InterviewData();
     // ignore: deprecated_member_use
     if (this.listOfFoods == null)
-      this.listOfFoods = List<FoodItem>(); //quickfix of list
+      //List<FoodItem> listOfFoods = [];
+      this.listOfFoods = <FoodItem>[]; //actual fix of lists
+      //this.listOfFoods = List<FoodItem>(); //quickfix of list
   }
 
   static String generateFileName(ConsumptionData consumptionData) {
