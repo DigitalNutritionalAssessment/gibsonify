@@ -128,22 +128,22 @@ class _FinalReportCardState extends State<FinalReportCard> {
           children: <Widget>[
             ElevatedButton( //RaisdedButton
               child: const Text('Back To Edit'),
-              //color: Theme
-                //  .of(context)
-                //  .accentColor,
-              // elevation: 4.0,
-              //splashColor: Colors.blueGrey,
+              style: ElevatedButton.styleFrom(
+                primary: Theme.of(context).accentColor,
+                elevation: 4.0,
+                onSurface: Colors.blueGrey
+              ),
               onPressed: () {
                 widget.navigatePageStateBackToInfo();
               },
             ),
             ElevatedButton( //RaisedButton
               child: const Text('Submit'),
-              //color: Theme
-                //  .of(context)
-                  //.accentColor,
-              //elevation: 4.0,
-              //splashColor: Colors.blueGrey,
+              style: ElevatedButton.styleFrom(
+                primary: Theme.of(context).accentColor,
+                elevation: 4.0,
+                onSurface: Colors.blueGrey
+              ),
               onPressed: () async {
                 final form = _formKey.currentState;
                 if (form.validate()) {

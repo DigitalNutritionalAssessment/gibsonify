@@ -17,6 +17,7 @@ class RecipeItemList extends StatefulWidget {
 
   final VoidCallback navigatePageStateBack;
   final VoidCallback navigatePageStateForward;
+  final VoidCallback navigateHome;
   final ValueChanged<List<FoodItem>> updatePageState;
   final List<FoodItem> initialFoodList;
   final Map<String,int> fctMap;
@@ -27,6 +28,7 @@ class RecipeItemList extends StatefulWidget {
     @required this.navigatePageStateBack,
     @required this.navigatePageStateForward,
     @required this.updatePageState,
+    @required this.navigateHome,
     this.initialFoodList,
     this.fctMap,
     this.rCodeMap,
@@ -81,7 +83,7 @@ class _RecipeItemListState extends State<RecipeItemList> {
             alignment: MainAxisAlignment.center,
             children: <Widget>[
               ElevatedButton(
-                child: const Text('Go back to Second Pass'),
+                child: const Text('Probe List'),
                 //color: Theme.of(context).accentColor,
                 //elevation: 4.0,
                 //splashColor: Colors.blueGrey,
@@ -90,7 +92,17 @@ class _RecipeItemListState extends State<RecipeItemList> {
                 },
               ),
               ElevatedButton(
-                child: const Text('Go to Fourth Pass'),
+                child: const Text('Home Page'),
+                  style: ElevatedButton.styleFrom(
+                      primary: Colors.tealAccent,                      
+                      elevation: 4,
+                      onSurface: Colors.blueGrey),
+                onPressed: () {
+                    widget.navigateHome();
+                },
+              ),
+              ElevatedButton(
+                child: const Text('Fourth Pass'),
                 //color: Theme.of(context).accentColor,
                 //elevation: 4.0,
                 //splashColor: Colors.blueGrey,
@@ -185,11 +197,13 @@ class _RecipeExpansionTileState extends State<RecipeExpansionTile> {
     for (int i =0; i< _foodItem.ingredientItems.length; i++){
       output.add(Dismissible(
         key: Key(uuid.v1().toString()),
-//        Key(
-//          (_foodItem.recipe.id?? "") +
-//          (_foodItem.ingredientItems[i].foodItemName ?? "") +
-//          (_foodItem.ingredientItems[i].measurement??0).toString()
-//        ),
+        /*
+        Key(
+          (_foodItem.recipe.id?? "") +
+          (_foodItem.ingredientItems[i].foodItemName ?? "") +
+          (_foodItem.ingredientItems[i].measurement??0).toString()
+        ),
+        */
         onDismissed: (direction){
           if (modifyLocked){
             showModifyLockedDialog(

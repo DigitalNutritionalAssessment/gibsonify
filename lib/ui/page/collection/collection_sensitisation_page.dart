@@ -39,7 +39,7 @@ class _SensitisationVisitDataCardState
   );
   bool enabled = true;
 //  ValueChanged<InterviewData> updatePageState;
-  final _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>(); //used for debugging only //FormState can be used to save, reset, and validate every Form
   VoidCallback saveConsumptionData = () => {};
 
   @override

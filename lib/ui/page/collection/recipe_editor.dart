@@ -92,17 +92,21 @@ class _RecipeEditingCardState extends State<RecipeEditingCard> {
             children: <Widget>[
               ElevatedButton(
                 child: const Text('Add new data'),
-                //color: Theme.of(context).accentColor,
-                //elevation: 4.0,
-                //splashColor: Colors.blueGrey,
+                style: ElevatedButton.styleFrom(
+                primary: Theme.of(context).accentColor,
+                elevation: 4.0,
+                //onPrimary: Colors.blueGrey,
+                ),
+
                 onPressed: () async {
                   // To do: Implement Saving
 
                   // Collect the Food Description
                   final form = _formKey.currentState;
-                  if (form.validate()) {
+                  form.save();
+                  /*if (form.validate()) {
                     form.save();
-                  }
+                  }*/
 
                   foodItem.recipe.id = await IcrisatDB().getNextModifiedRecipeID();
                   foodItem.recipe.recipeType = RecipeType.MODIFIED;
@@ -113,17 +117,20 @@ class _RecipeEditingCardState extends State<RecipeEditingCard> {
               ),
               ElevatedButton(
                 child: const Text('Save Recipe'),
-                //color: Theme.of(context).accentColor,
-                //elevation: 4.0,
-                //splashColor: Colors.blueGrey,
+                style: ElevatedButton.styleFrom(
+                primary: Theme.of(context).accentColor,
+                elevation: 4.0,
+                //onPrimary: Colors.blueGrey,
+                ),
                 onPressed: () async {
                   // To do: Implement Saving
 
                   // Collect the Food Description
                   final form = _formKey.currentState;
-                  if (form.validate()) {
+                  form.save();
+                  /*if (form.validate()) {
                     form.save();
-                  }
+                  }*/
 
                   foodItem.recipe.id = await IcrisatDB().getNextModifiedRecipeID();
                   print(foodItem.recipe.id);

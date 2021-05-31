@@ -2,6 +2,7 @@
 
 
 class FoodItem {
+  String testing;
   TimeOfDaySelection timeOfDay;
   String foodName;
   SourceOfFoodSelection foodSource;
@@ -10,6 +11,7 @@ class FoodItem {
 
 
   FoodItem({
+    this.testing,
     this.timeOfDay,
     this.foodName,
     this.foodSource,
@@ -22,6 +24,7 @@ class FoodItem {
 
   Map<String, dynamic> toJson() =>
       {
+        'testing': testing,
         'foodName': foodName,
         'timeOfDay': (timeOfDay?.index != null) ? timeOfDay.index + 1 : null,
         'foodSource': (foodSource?.index != null) ? foodSource.index + 1 : null,
@@ -31,7 +34,8 @@ class FoodItem {
 
 
   FoodItem.fromJson(Map<String, dynamic> json)
-      : foodName = json['foodName'],
+      : testing = json['testing'],
+        foodName = json['foodName'],
         timeOfDay = (json['timeOfDay'] != null) ? TimeOfDaySelection.values.elementAt(json['timeOfDay']-1): null,
         foodSource = (json['foodSource'] != null) ? SourceOfFoodSelection.values.elementAt(json['foodSource']-1): null,
         ingredientItems = IngredientsItemsList.fromJson(json['ingredients'] as List).ingredientItems,
