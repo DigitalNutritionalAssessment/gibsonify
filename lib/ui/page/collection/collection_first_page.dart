@@ -12,6 +12,7 @@ import 'package:flutter_uikit/ui/widgets/collection_question.dart';
 
 import 'package:flutter_uikit/model/food_item.dart';
 import 'package:flutter_uikit/ui/decorations.dart';
+import 'package:flutter_uikit/utils/uidata.dart';
 
 
 
@@ -212,6 +213,7 @@ class FoodItemCard extends StatelessWidget {
 //      height: MediaQuery.of(context).size.height,
         child: Column(
           children: <Widget>[
+            /*
               FormQuestion(
                       questionText: "What did you eat today?",
                       hint:"",
@@ -222,7 +224,8 @@ class FoodItemCard extends StatelessWidget {
                         },
                       enabled: enabled,
                     ),
-            /*
+            */
+            
             AutoCompleteTextField(
               suggestions: recipeMap?.keys?.toList() ?? [],
               onSuggestionSelected: (String selected) {
@@ -249,6 +252,7 @@ class FoodItemCard extends StatelessWidget {
               enabled: (enabled ?? true),
               validate: emptyFieldValidator,
               
+              /*
               noItemsFoundBuilder: (BuildContext ctx) {
                 return TextButton(
                   //FlatButton
@@ -257,10 +261,10 @@ class FoodItemCard extends StatelessWidget {
                       Navigator.pushNamed(ctx, UIData.NewRecipeRoute),
                       //Push a named route onto the navigator that most tightly encloses the given context.
                 );
-              },
+              },*/
               
             ),
-            */
+            
             DialogPicker(
               questionText: "What time did you eat it?",
               optionsList: FormStrings.timeOfDaySelection.values.toList(),
