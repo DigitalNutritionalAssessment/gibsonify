@@ -76,7 +76,8 @@ class _InfoDataCardState extends State<InfoDataCard> {
 
   Future<void> getDayCode(int dayCode) async {
     //function which rebuilds page when Day Code changed
-    int _code = dayCode; //await dayCode;
+    int _code = await dayCode;
+    //ignore error above
     print('DayCode updated to ${DayCode.values[_code]}');
     setState(() {});
   }
