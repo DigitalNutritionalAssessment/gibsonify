@@ -38,36 +38,35 @@ class FoodItemList2 extends StatefulWidget {
 
   //Alert
   showAlertDialog(BuildContext context) {
-
     // set up the buttons
     Widget cancelButton = TextButton(
       child: Text("Close"),
-      onPressed:  () => Navigator.pop(context),
+      onPressed: () => Navigator.pop(context),
     );
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("Help"),
       content: Column(
-      children: <Widget>[
-        new ListTile(
-          title: new Text('This pass is to ensure that more detail of the food will be collected, these include:'),
-        ),
-        new ListTile(
-          leading: new MyBullet(),
-          title: new Text('Description of the food item or dish'),
-        ),
-        new ListTile(
-          leading: new MyBullet(),
-          title: new Text('Form when eaten'),
-        ),
-        new ListTile(
-          leading: new MyBullet(),
-          title: new Text('Recipe number, for standard recipe'),
-        )
-      ],
+        children: <Widget>[
+          new ListTile(
+            title: new Text(
+                'This pass is to ensure that more detail of the food will be collected, these include:'),
+          ),
+          new ListTile(
+            leading: new MyBullet(),
+            title: new Text('Description of the food item or dish'),
+          ),
+          new ListTile(
+            leading: new MyBullet(),
+            title: new Text('Form when eaten'),
+          ),
+          new ListTile(
+            leading: new MyBullet(),
+            title: new Text('Recipe number, for standard recipe'),
+          )
+        ],
       ),
-      
       actions: [
         cancelButton,
       ],
@@ -143,25 +142,25 @@ class _FoodItemList2State extends State<FoodItemList2> {
             children: <Widget>[
               ElevatedButton(
                 child: const Text('First Pass'),
-                  style: ElevatedButton.styleFrom(
-                      primary: Theme.of(context).accentColor,                      
-                      elevation: 4,
-                      onSurface: Colors.blueGrey),
+                style: ElevatedButton.styleFrom(
+                    primary: Theme.of(context).accentColor,
+                    elevation: 4,
+                    onSurface: Colors.blueGrey),
                 onPressed: () {
                   //final form = _formKey.currentState;
                   //if (form.validate()) {
-                    //form.save();
-                    widget.updatePageState(_foodList);
-                    widget.navigatePageStateBack();
+                  //form.save();
+                  widget.updatePageState(_foodList);
+                  widget.navigatePageStateBack();
                   //}
                 },
               ),
               ElevatedButton(
                 child: const Text('Home Page'),
-                  style: ElevatedButton.styleFrom(
-                      primary: Colors.tealAccent,                      
-                      elevation: 4,
-                      onSurface: Colors.blueGrey),
+                style: ElevatedButton.styleFrom(
+                    primary: Colors.tealAccent,
+                    elevation: 4,
+                    onSurface: Colors.blueGrey),
                 onPressed: () {
                   final form = _formKey.currentState;
                   if (form.validate()) {
@@ -173,10 +172,10 @@ class _FoodItemList2State extends State<FoodItemList2> {
               ),
               ElevatedButton(
                 child: const Text('Help'),
-                  style: ElevatedButton.styleFrom(
-                      primary: Colors.tealAccent,                      
-                      elevation: 4,
-                      onSurface: Colors.blueGrey),
+                style: ElevatedButton.styleFrom(
+                    primary: Colors.tealAccent,
+                    elevation: 4,
+                    onSurface: Colors.blueGrey),
                 onPressed: () {
                   final form = _formKey.currentState;
                   if (form.validate()) {
@@ -188,10 +187,10 @@ class _FoodItemList2State extends State<FoodItemList2> {
               ),
               ElevatedButton(
                 child: const Text('Probe List'),
-                  style: ElevatedButton.styleFrom(
-                      primary: Theme.of(context).accentColor,                      
-                      elevation: 4,
-                      onSurface: Colors.blueGrey),
+                style: ElevatedButton.styleFrom(
+                    primary: Theme.of(context).accentColor,
+                    elevation: 4,
+                    onSurface: Colors.blueGrey),
                 onPressed: () {
                   final form = _formKey.currentState;
                   if (form.validate()) {
@@ -226,8 +225,16 @@ class SecondPassFoodItemCard extends StatelessWidget {
     this.enabled,
   });
 
+  Future<void> getSourceCode(int sourceCode) async {
+    //function which rebuilds page when Source Code changed
+    int _code = await sourceCode;
+    //ignore error above
+    print('Source updated to ${SourceOfFoodSelection.values[_code]}');
+  }
+
   @override
   Widget build(BuildContext context) {
+    bool _firstbuild = true;
     return Card(
       elevation: 2.0,
       child: Container(
@@ -266,8 +273,38 @@ class SecondPassFoodItemCard extends StatelessWidget {
               onConfirm: (List<int> values) {
                 foodItem.foodSource = SourceOfFoodSelection.values[values[0]];
                 updateFoodItemState(foodItem);
+                print('Source selected');
+                //following code updates the widget when it is changed and avoids error on first build
+                if (_firstbuild == true) {
+                  _firstbuild = false;
+                  print('First Build');
+                } else {
+                  (context as Element).markNeedsBuild();
+                  print('update widget');
+                }
               },
               enabled: enabled,
+            ),
+            FormQuestion(
+              questionText: "If other, please specify",
+              hint: "",
+              //validate so only applies if other is selected above, not working
+              validate: (answer) {
+                if (foodItem.foodSource == SourceOfFoodSelection.OTHER) {
+                  return emptyFieldValidator(answer);
+                } else {
+                  if (answer.length > 0) {
+                    return 'Field should be blank';
+                  } else {
+                    return null;
+                  }
+                }
+              },
+              onSaved: (answer) {
+                foodItem.foodSourceOther = answer;
+                updateFoodItemState(foodItem);
+              },
+              enabled: true,
             ),
             RecipeExpansionTile(
               foodItem: foodItem,
