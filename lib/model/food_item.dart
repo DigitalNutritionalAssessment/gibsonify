@@ -56,7 +56,6 @@ class IngredientItem {
   MeasurementMethodSelection measurementMethod;
   double measurement;
 
-<<<<<<< HEAD
   IngredientItem(
       {this.foodItemName,
       this.rDescription,
@@ -72,32 +71,15 @@ class IngredientItem {
         'rDescription': rDescription,
         'formWhenEaten':
             (formWhenEaten?.index != null) ? formWhenEaten.index + 1 : null,
-=======
-  IngredientItem({this.foodItemName,
-    this.rDescription,
-    this.fctCode,
-    this.rCode,
-    this.formWhenEaten,
-    this.measurementUnit,
-    this.measurement,
-    this.measurementMethod
-    });
-
-  Map<String, dynamic> toJson() =>
-      {
-        'foodItemName':foodItemName,
-        'rDescription':rDescription,
-        'formWhenEaten':(formWhenEaten?.index != null) ? formWhenEaten.index + 1 : null,
->>>>>>> save_state
         'fctCode': fctCode,
         'rCode': rCode,
-        // ignore: null_aware_before_operator
         'measurementUnit': (measurementUnit?.index != null)
+            // ignore: null_aware_before_operator
             ? measurementUnit?.index + 1
             : null,
         'measurement': measurement,
-        // ignore: null_aware_before_operator
         'measurementMethod': (measurementMethod?.index != null)
+            // ignore: null_aware_before_operator
             ? measurementMethod?.index + 1
             : null,
       };
