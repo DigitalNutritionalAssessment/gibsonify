@@ -77,10 +77,7 @@ class _InfoDataCardState extends State<InfoDataCard> {
   Future<void> getDayCode(int dayCode) async {
     //function which rebuilds page when Day Code changed
     int _code = await dayCode;
-<<<<<<< HEAD
-=======
     //ignore error above
->>>>>>> week3_features
     print('DayCode updated to ${DayCode.values[_code]}');
     setState(() {});
   }
@@ -129,7 +126,7 @@ class _InfoDataCardState extends State<InfoDataCard> {
                     FormQuestion(
                       questionText: "If other, please specify",
                       hint: "",
-                      //validate so only applies if other is selected above, not working
+                      //validate so only applies if other is selected above
                       validate: (answer) {
                         if (interviewData.dayCode == DayCode.OTHERS) {
                           return emptyFieldValidator(answer);
