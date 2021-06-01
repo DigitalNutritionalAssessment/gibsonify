@@ -74,12 +74,12 @@ class _CollectionViewerState extends State<CollectionViewer> {
               statusString = "Completed!";
             }
             else {
-              listTileDecoration = BoxDecoration(color: Colors.orangeAccent);
+              listTileDecoration = BoxDecoration(color: Colors.yellowAccent);
               statusString = "Inverview Incomplete";
             }
           }
           else {
-            listTileDecoration = BoxDecoration (color: Colors.white);
+            listTileDecoration = BoxDecoration (color: Colors.orangeAccent);
             statusString = "Sensitisation Visit Complete";
           }
 

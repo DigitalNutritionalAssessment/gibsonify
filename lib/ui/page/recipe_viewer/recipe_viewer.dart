@@ -29,7 +29,8 @@ class _RecipeViewerState extends State<RecipeViewer> {
   List <FoodItem> modifiedRecipeList = [];
   List <FoodItem> recentlyChangedRecipeList = [];
 
-  //List<FoodItem> _foodList = new List<FoodItem>();
+  //List <FoodItem> _foodList = <FoodItem>[];
+
 
   @override
   void initState(){
@@ -48,8 +49,8 @@ class _RecipeViewerState extends State<RecipeViewer> {
     setState(() {
 
       // Clear the recipe datas
-      standardRecipeList = [];
-      modifiedRecipeList = [];
+      //standardRecipeList = [];
+      //modifiedRecipeList = [];
 
       for (MapEntry<String,FoodItem> entry in _recipeMap?.entries ?? {}){
         if (entry.value.recipe.recipeType == RecipeType.STANDARD)

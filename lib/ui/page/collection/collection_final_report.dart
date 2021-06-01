@@ -62,6 +62,7 @@ class _FinalReportCardState extends State<FinalReportCard> {
         widget.consumptionData.listOfFoods.length,
             (index) =>
             FoodItemCard(
+              listnumber: null,
               updateFoodItemState: (foodItem) {
                 widget.consumptionData.listOfFoods[index] = foodItem;
               },

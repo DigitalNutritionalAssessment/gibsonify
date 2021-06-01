@@ -1,15 +1,11 @@
 import 'dart:async';
 import 'package:path/path.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_uikit/model/food_item.dart';
 //import 'package:flutter_uikit/model/recipes.dart';
 import 'package:uuid/uuid.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:flutter_uikit/model/consumption_data_db.dart';
-
 import 'package:flutter_uikit/database/icrisat_database.dart';
 
 class ConsumptionData {
@@ -27,11 +23,9 @@ class ConsumptionData {
     var uuid = Uuid();
     if (this.id == null) this.id = uuid.v1();
     if (this.interviewData == null) this.interviewData = InterviewData();
-    // ignore: deprecated_member_use
     if (this.listOfFoods == null)
-      //List<FoodItem> listOfFoods = [];
       this.listOfFoods = <FoodItem>[]; //actual fix of lists
-      //this.listOfFoods = List<FoodItem>(); //quickfix of list
+
   }
 
   static String generateFileName(ConsumptionData consumptionData) {

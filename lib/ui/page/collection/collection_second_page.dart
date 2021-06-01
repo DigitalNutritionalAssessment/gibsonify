@@ -227,6 +227,7 @@ class SecondPassFoodItemCard extends StatelessWidget {
 
   Future<void> getSourceCode(int sourceCode) async {
     //function which rebuilds page when Source Code changed
+    // ignore: await_only_futures
     int _code = await sourceCode;
     //ignore error above
     print('Source updated to ${SourceOfFoodSelection.values[_code]}');

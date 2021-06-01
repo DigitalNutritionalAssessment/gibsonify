@@ -28,6 +28,7 @@ enum PageState {
   PROBE_LIST,
   THIRD_PASS,
   FOURTH_PASS,
+  DUMMY,
 }
 
 class CollectionStateMachine extends StatefulWidget {
@@ -61,6 +62,7 @@ class _CollectionStateMachineState extends State<CollectionStateMachine> {
     PageState.PROBE_LIST: "Probe List",
     PageState.THIRD_PASS: "Third Pass",
     PageState.FOURTH_PASS: "Fourth Pass",
+    PageState.DUMMY: "Dummy",
   };
 
   VoidCallback switchToNewPageState(PageState newPageState){
@@ -119,6 +121,9 @@ class _CollectionStateMachineState extends State<CollectionStateMachine> {
         ),
       PageState.FIRST_PASS: FoodItemList(
         navigatePageStateForward: (){ switchToNewPageState(PageState.SECOND_PASS);},
+        navigatePageStateBackward: (){ switchToNewPageState(PageState.INTERVIEW);},
+        navigateDummy: (){ switchToNewPageState(PageState.DUMMY);},
+        navigateHome: (){Navigator.pop(context);},
         updatePageState: (foodItemsList){ consumptionData.listOfFoods = foodItemsList;},
         initialFoodList: consumptionData.listOfFoods,
         recipeMap: recipeMap,

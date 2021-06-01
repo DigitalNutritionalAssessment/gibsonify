@@ -144,7 +144,7 @@ class _SensitisationVisitDataCardState
                           //in future can be modified to give phone input widget
                           questionText: "Respondent Telephone Number",
                           hint: "",
-                          initialText:
+                          initialText:                          
                               interviewData?.respondent?.telephone ?? null,
                           validate: (answer) {
                             if (answer.length != 10) {

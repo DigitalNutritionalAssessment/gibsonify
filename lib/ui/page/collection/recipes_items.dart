@@ -11,17 +11,16 @@ import 'package:flutter_uikit/model/food_item.dart';
 import 'package:flutter_uikit/ui/widgets/collection_question.dart';
 
 import 'package:flutter_uikit/database/icrisat_database.dart';
-
+import 'package:flutter_uikit/ui/decorations.dart';
 
 class RecipeItemList extends StatefulWidget {
-
   final VoidCallback navigatePageStateBack;
   final VoidCallback navigatePageStateForward;
   final VoidCallback navigateHome;
   final ValueChanged<List<FoodItem>> updatePageState;
   final List<FoodItem> initialFoodList;
-  final Map<String,int> fctMap;
-  final Map<String,int> rCodeMap;
+  final Map<String, int> fctMap;
+  final Map<String, int> rCodeMap;
   final bool initiallyExpanded;
 
   const RecipeItemList({
@@ -35,12 +34,102 @@ class RecipeItemList extends StatefulWidget {
     this.initiallyExpanded,
   });
 
+  //Alert
+  showAlertDialog(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: Text("Close"),
+      onPressed: () => Navigator.pop(context),
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Help"),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(20.0))),
+      content: Container(
+        height: 200,
+        width: 300,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              SizedBox(
+                height: 20,
+              ),
+              new Text('This pass replaces Section D and E of the form.'),
+              new ListTile(
+                leading: new MyBullet(),
+                title: new Text(
+                    'Start with the first food item recorded in first pass.'),
+              ),
+              new ListTile(
+                leading: new MyBullet(),
+                title: new Text(
+                    'Ask the mother to bring the plate, cup, bowls, spoons, glasses or any other items used to consume and serve foods'),
+              ),
+              new ListTile(
+                leading: new MyBullet(),
+                title: new Text(
+                    'Refer to the measurement list and choose the best method to use'),
+              ),
+              new ListTile(
+                leading: new MyBullet(),
+                title: new Text(
+                    'Inform the mother and illustrate how you intend to estimate the quantity used'),
+              ),
+              new ListTile(
+                leading: new MyBullet(),
+                title: new Text('You will need 2 plates '),
+              ),
+              new ListTile(
+                leading: new MyBullet(),
+                title: new Text(
+                    'Ask the mother to show you the food exactly as she recalls it in size/ shape, quantity or level when she served it yesterday on plate 1'),
+              ),
+              new ListTile(
+                leading: new MyBullet(),
+                title: new Text(
+                    'Ask if all the food served was consumed or if something was left in the end'),
+              ),
+              new ListTile(
+                leading: new MyBullet(),
+                title: new Text(
+                    'If some was left, ask her to take out what was left (reduce the amount) and put it on plate 2'),
+              ),
+              new ListTile(
+                leading: new MyBullet(),
+                title: new Text(
+                    'Ask if there were other servings, and repeat the procedure if necessary'),
+              ),
+              new ListTile(
+                leading: new MyBullet(),
+                title: new Text(
+                    'Clarify to the respondent that you are referring to the servings during the same sitting or eating episode'),
+              ),
+            ],
+          ),
+        ),
+      ),
+      actions: [
+        cancelButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   @override
   _RecipeItemListState createState() => _RecipeItemListState();
 }
 
 class _RecipeItemListState extends State<RecipeItemList> {
-
   // ignore: deprecated_member_use
   List<FoodItem> _foodList = new List<FoodItem>();
 
@@ -50,20 +139,18 @@ class _RecipeItemListState extends State<RecipeItemList> {
     super.initState();
   }
 
-  List<Widget> _getChildren(){
+  List<Widget> _getChildren() {
     List<Widget> children = [];
     _foodList.asMap().forEach((index, foodItem) {
-      children.add(
-        new RecipeExpansionTile(
-          foodItem: foodItem,
-          updateFoodItemState: (item){
-            _foodList[index] = item;
-            widget.updatePageState(_foodList);
-          },
-          fctMap:widget.fctMap,
-          initiallyExpanded: (widget.initiallyExpanded??true),
-        )
-      );
+      children.add(new RecipeExpansionTile(
+        foodItem: foodItem,
+        updateFoodItemState: (item) {
+          _foodList[index] = item;
+          widget.updatePageState(_foodList);
+        },
+        fctMap: widget.fctMap,
+        initiallyExpanded: (widget.initiallyExpanded ?? true),
+      ));
     });
     return children;
   }
@@ -84,30 +171,43 @@ class _RecipeItemListState extends State<RecipeItemList> {
             children: <Widget>[
               ElevatedButton(
                 child: const Text('Probe List'),
-                //color: Theme.of(context).accentColor,
-                //elevation: 4.0,
-                //splashColor: Colors.blueGrey,
+                style: ElevatedButton.styleFrom(
+                    primary: Theme.of(context).accentColor,
+                    elevation: 4,
+                    onSurface: Colors.blueGrey),
                 onPressed: () {
                   widget.navigatePageStateBack();
                 },
               ),
               ElevatedButton(
                 child: const Text('Home Page'),
-                  style: ElevatedButton.styleFrom(
-                      primary: Colors.tealAccent,                      
-                      elevation: 4,
-                      onSurface: Colors.blueGrey),
+                style: ElevatedButton.styleFrom(
+                    primary: Colors.tealAccent,
+                    elevation: 4,
+                    onSurface: Colors.blueGrey),
                 onPressed: () {
-                    widget.navigateHome();
+                  widget.navigateHome();
+                },
+              ),
+              ElevatedButton(
+                child: const Text('Help'),
+                style: ElevatedButton.styleFrom(
+                    primary: Colors.tealAccent,
+                    elevation: 4,
+                    onSurface: Colors.blueGrey),
+                onPressed: () {
+                  widget.showAlertDialog(context);
+                  widget.updatePageState(_foodList);
                 },
               ),
               ElevatedButton(
                 child: const Text('Fourth Pass'),
-                //color: Theme.of(context).accentColor,
-                //elevation: 4.0,
-                //splashColor: Colors.blueGrey,
+                style: ElevatedButton.styleFrom(
+                    primary: Theme.of(context).accentColor,
+                    elevation: 4,
+                    onSurface: Colors.blueGrey),
                 onPressed: () {
-                    widget.navigatePageStateForward();
+                  widget.navigatePageStateForward();
                 },
               ),
             ],
@@ -118,13 +218,11 @@ class _RecipeItemListState extends State<RecipeItemList> {
   }
 }
 
-
 class RecipeExpansionTile extends StatefulWidget {
-
   final FoodItem foodItem;
   final updateFoodItemState;
-  final Map<String,int> fctMap;
-  final Map<String,int> rCodeMap;
+  final Map<String, int> fctMap;
+  final Map<String, int> rCodeMap;
   final bool enabled;
   final bool initiallyExpanded;
   final bool listInsteadOfExpansionTile;
@@ -141,14 +239,13 @@ class RecipeExpansionTile extends StatefulWidget {
     this.listInsteadOfExpansionTile,
     this.modifyLocked,
     this.newRecipe,
-});
+  });
 
   @override
   _RecipeExpansionTileState createState() => _RecipeExpansionTileState();
 }
 
 class _RecipeExpansionTileState extends State<RecipeExpansionTile> {
-
   PageStorageKey _key;
 
   FoodItem _foodItem;
@@ -162,8 +259,10 @@ class _RecipeExpansionTileState extends State<RecipeExpansionTile> {
     if (widget.foodItem != null) _foodItem = widget.foodItem;
     // if (widget.fctMap != null) _fctMap = widget.fctMap;
     // if (widget.rCodeMap != null) _rCodeMap = widget.rCodeMap;
-    if (widget.modifyLocked != null) modifyLocked = widget.modifyLocked;
-    else modifyLocked = (_foodItem.recipe.recipeType != RecipeType.MODIFIED);
+    if (widget.modifyLocked != null)
+      modifyLocked = widget.modifyLocked;
+    else
+      modifyLocked = (_foodItem.recipe.recipeType != RecipeType.MODIFIED);
 
     super.initState();
   }
@@ -174,27 +273,28 @@ class _RecipeExpansionTileState extends State<RecipeExpansionTile> {
 
     String nextID = await IcrisatDB().getNextModifiedRecipeID();
     _foodItem.recipe.id = nextID;
-    
-   if (!_foodItem.recipe.description.contains("_"))
-    _foodItem.recipe.description = _foodItem.recipe.description + "_" + nextID ;
+
+    if (!_foodItem.recipe.description.contains("_"))
+      _foodItem.recipe.description =
+          _foodItem.recipe.description + "_" + nextID;
 
     widget.updateFoodItemState(_foodItem);
-
   }
 
-  String generateRecipeName(){
+  String generateRecipeName() {
     String name = (_foodItem.recipe.description ?? _foodItem.foodName ?? "");
-    if (_foodItem.recipe.recipeType == RecipeType.MODIFIED) name = name + " (modified)";
-    else if (_foodItem.recipe.recipeType == RecipeType.STANDARD) name = name + " (standard)";
+    if (_foodItem.recipe.recipeType == RecipeType.MODIFIED)
+      name = name + " (modified)";
+    else if (_foodItem.recipe.recipeType == RecipeType.STANDARD)
+      name = name + " (standard)";
     return name;
   }
 
-  List<Widget> getChildren(BuildContext context){
-
+  List<Widget> getChildren(BuildContext context) {
     Uuid uuid = Uuid();
 
     List<Widget> output = [];
-    for (int i =0; i< _foodItem.ingredientItems.length; i++){
+    for (int i = 0; i < _foodItem.ingredientItems.length; i++) {
       output.add(Dismissible(
         key: Key(uuid.v1().toString()),
         /*
@@ -204,98 +304,92 @@ class _RecipeExpansionTileState extends State<RecipeExpansionTile> {
           (_foodItem.ingredientItems[i].measurement??0).toString()
         ),
         */
-        onDismissed: (direction){
-          if (modifyLocked){
+        onDismissed: (direction) {
+          if (modifyLocked) {
             showModifyLockedDialog(
               parentContext: context,
               setModifyLockedBool: markRecipeNonStandard,
               onModifyCallBack: () => setState(() {
-                  _foodItem.ingredientItems.removeAt(i);
-                  widget.updateFoodItemState(_foodItem);
-                }),
+                _foodItem.ingredientItems.removeAt(i);
+                widget.updateFoodItemState(_foodItem);
+              }),
             );
-          }
-          else {
+          } else {
             setState(() {
               _foodItem.ingredientItems.removeAt(i);
               widget.updateFoodItemState(_foodItem);
             });
           }
-          
         },
         child: ListTile(
-          dense:true,
+          dense: true,
           title: Text(
-              _foodItem.ingredientItems[i].foodItemName ?? "",
+            _foodItem.ingredientItems[i].foodItemName ?? "",
           ),
           onTap: () {
-            if (widget.enabled ?? true){
-              if (modifyLocked){
+            if (widget.enabled ?? true) {
+              if (modifyLocked) {
                 showModifyLockedDialog(
                     parentContext: context,
                     setModifyLockedBool: markRecipeNonStandard,
-                    onModifyCallBack: () => updateIngredientItemInRecipe(index: i, enabled: true),
-                    onViewOnlyCallback: () => updateIngredientItemInRecipe(index: i, enabled: false)
-                );
-              }
-              else updateIngredientItemInRecipe(index: i, enabled: true);
-            }
-            else updateIngredientItemInRecipe(index: i, enabled: false);
+                    onModifyCallBack: () =>
+                        updateIngredientItemInRecipe(index: i, enabled: true),
+                    onViewOnlyCallback: () =>
+                        updateIngredientItemInRecipe(index: i, enabled: false));
+              } else
+                updateIngredientItemInRecipe(index: i, enabled: true);
+            } else
+              updateIngredientItemInRecipe(index: i, enabled: false);
           },
-
         ),
       ));
     }
 
     // Add an "Add" button only if widget.enabled is true
-    (widget.enabled??true) ? output.add(ListTile(
-      dense:true,
-      title: Icon(Icons.add_circle_outline),
-      onTap: () {
-
-        if (modifyLocked){
-          showModifyLockedDialog(
-              parentContext: context,
-              setModifyLockedBool: markRecipeNonStandard,
-              onModifyCallBack: addIngredientItemIntoRecipe,
-              );
-        }
-        else addIngredientItemIntoRecipe();
-      },
-    // ignore: unnecessary_statements
-    )): null ;
+    (widget.enabled ?? true)
+        ? output.add(ListTile(
+            dense: true,
+            title: Icon(Icons.add_circle_outline),
+            onTap: () {
+              if (modifyLocked) {
+                showModifyLockedDialog(
+                  parentContext: context,
+                  setModifyLockedBool: markRecipeNonStandard,
+                  onModifyCallBack: addIngredientItemIntoRecipe,
+                );
+              } else
+                addIngredientItemIntoRecipe();
+            },
+          ))
+        // ignore: unnecessary_statements
+        : null;
     return output;
   }
 
-
   @override
   Widget build(BuildContext context) {
-    if (widget.listInsteadOfExpansionTile ?? false){
+    if (widget.listInsteadOfExpansionTile ?? false) {
       return ListView(
         children: getChildren(context),
       );
-    }
-    else{
+    } else {
       return ExpansionTile(
-        key:_key,
+        key: _key,
         title: Text(
           //_foodItem.recipe.description ?? _foodItem.foodName ?? "",
           generateRecipeName(),
-          style: (widget.enabled??true) ? null : UIData.smallTextStyle,
+          style: (widget.enabled ?? true) ? null : UIData.smallTextStyle,
         ),
         children: getChildren(context),
         initiallyExpanded: (widget.initiallyExpanded ?? true),
       );
     }
-
   }
 
-  void updateIngredientItemInRecipe({int index, bool enabled}){
+  void updateIngredientItemInRecipe({int index, bool enabled}) {
     showUpdateRecipeDialog(
       parentContext: context,
-      title: (widget.enabled ?? true)
-          ? "Update Ingredient"
-          : "View Ingredient",
+      title: (widget.enabled ?? true) ? "Update Ingredient" : "View Ingredient",
       // View ingredient only if enabled is false
       updateIngredientState: (ingredient) {
         _foodItem.ingredientItems[index] = ingredient;
@@ -307,18 +401,18 @@ class _RecipeExpansionTileState extends State<RecipeExpansionTile> {
     );
   }
 
-  void addIngredientItemIntoRecipe(){
+  void addIngredientItemIntoRecipe() {
     IngredientItem newIngredient = IngredientItem();
     _foodItem.ingredientItems.add(newIngredient);
     showUpdateRecipeDialog(
         parentContext: context,
         title: "Add New Ingredient To Recipe",
-        updateIngredientState: (ingredient){
-          _foodItem.ingredientItems[_foodItem.ingredientItems.length-1] = ingredient;
+        updateIngredientState: (ingredient) {
+          _foodItem.ingredientItems[_foodItem.ingredientItems.length - 1] =
+              ingredient;
         },
         ingredientItem: newIngredient,
-        enabled: true
-    );
+        enabled: true);
   }
 
   Future<void> showModifyLockedDialog({
@@ -326,47 +420,44 @@ class _RecipeExpansionTileState extends State<RecipeExpansionTile> {
     VoidCallback setModifyLockedBool,
     VoidCallback onModifyCallBack,
     VoidCallback onViewOnlyCallback,
-  }){
+  }) {
     return showDialog<void>(
         context: parentContext,
         builder: (BuildContext context) {
-            return SimpleDialog(
-                title: Text("Are you sure you want to modify the recipe?"),
-                children: <Widget>[
-                    SimpleDialogOption(
-                      child: new Text('Create a new modified recipe!'),
-                      onPressed: (){
-                        setModifyLockedBool();
-                        Navigator.of(context).pop();
-                        onModifyCallBack();
-                      }
-                    ),
-                    (onViewOnlyCallback != null) ? SimpleDialogOption(
+          return SimpleDialog(
+            title: Text("Are you sure you want to modify the recipe?"),
+            children: <Widget>[
+              SimpleDialogOption(
+                  child: new Text('Create a new modified recipe!'),
+                  onPressed: () {
+                    setModifyLockedBool();
+                    Navigator.of(context).pop();
+                    onModifyCallBack();
+                  }),
+              (onViewOnlyCallback != null)
+                  ? SimpleDialogOption(
                       child: new Text('View Ingredient Only'),
-                      onPressed: (){
+                      onPressed: () {
                         Navigator.of(context).pop();
                         onViewOnlyCallback();
-                      }
-                    ): null,
-                    SimpleDialogOption(
-                        child: new Text('Cancel'),
-                        onPressed: (){
-                          Navigator.of(context).pop();
-                        }
-                    ),
-                ]..removeWhere((widget) => widget == null),
-            );
-        }
-    );
+                      })
+                  : null,
+              SimpleDialogOption(
+                  child: new Text('Cancel'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  }),
+            ]..removeWhere((widget) => widget == null),
+          );
+        });
   }
 
-  Future<void> showUpdateRecipeDialog({
-      BuildContext parentContext,
+  Future<void> showUpdateRecipeDialog(
+      {BuildContext parentContext,
       String title,
       ValueChanged<IngredientItem> updateIngredientState,
       IngredientItem ingredientItem,
       bool enabled}) {
-
     final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 //    final GlobalKey _formKey = new GlobalKey<FormState>();
 
@@ -385,7 +476,7 @@ class _RecipeExpansionTileState extends State<RecipeExpansionTile> {
                       suggestions: widget.fctMap?.keys?.toList() ?? [],
                       onSuggestionSelected: (String selected) {
                         ingredientItem.foodItemName = selected;
-                        ingredientItem.fctCode = widget.fctMap[selected]??0;
+                        ingredientItem.fctCode = widget.fctMap[selected] ?? 0;
 //                    FoodItem selectedRecipe = recipeMap[selected]?? FoodItem();
 //                    foodItem.recipe = selectedRecipe.recipe;
 //                    foodItem.ingredientItems = selectedRecipe.ingredientItems;
@@ -395,7 +486,7 @@ class _RecipeExpansionTileState extends State<RecipeExpansionTile> {
                       hintText: null,
                       initialText: ingredientItem.foodItemName ?? "",
                       validate: emptyFieldValidator,
-                      enabled: (enabled??true),
+                      enabled: (enabled ?? true),
                     ),
 //                    DialogPicker(
 //                      questionText: "Form When Eaten",
@@ -412,13 +503,14 @@ class _RecipeExpansionTileState extends State<RecipeExpansionTile> {
                       suggestions: widget.rCodeMap?.keys?.toList() ?? [],
                       onSuggestionSelected: (String selected) {
                         ingredientItem.rDescription = selected;
-                        ingredientItem.rCode = widget.rCodeMap[selected]??0;
+                        ingredientItem.rCode = widget.rCodeMap[selected] ?? 0;
                       },
                       questionText: "Ingredient Description",
                       hintText: null,
-                      initialText: ingredientItem.rDescription ?? "",                          // TO DO! Settle this properly please
-                      validate: emptyFieldValidator,
-                      enabled: (enabled??true),
+                      initialText: ingredientItem.rDescription ??
+                          "", // TO DO! Settle this properly please
+                      //validate: emptyFieldValidator,
+                      enabled: (enabled ?? true),
                     ),
                     DialogPicker(
                       questionText: "Measurement Method",
@@ -426,44 +518,49 @@ class _RecipeExpansionTileState extends State<RecipeExpansionTile> {
                           .toList(),
                       onConfirm: (List<int> values) {
                         ingredientItem.measurementMethod =
-                        MeasurementMethodSelection.values[values[0]];
+                            MeasurementMethodSelection.values[values[0]];
 //                      updateIngredientState(ingredientItem);
                       },
-                      initialSelectedOption: ingredientItem.measurementMethod?.index ?? 0,
-                      enabled: (enabled??true),
+                      initialSelectedOption:
+                          ingredientItem.measurementMethod?.index ?? 0,
+                      enabled: (enabled ?? true),
                     ),
                     FormQuestion(
                       questionText: "Measurement Number",
 //                      initialText: ((ingredientItem.measurementUnit == MeasurementUnitSelection.GRAMS) ? ((ingredientItem.measurement?? 0)*100).round().toString() : (ingredientItem.measurement?? 0).toStringAsPrecision(2)),
-                      initialText: ((ingredientItem.measurement??0) < 10) ? ingredientItem.measurement?.toStringAsPrecision(3) : ingredientItem.measurement?.round().toString(),
+                      initialText: ((ingredientItem.measurement ?? 0) < 10)
+                          ? ingredientItem.measurement?.toStringAsPrecision(3)
+                          : ingredientItem.measurement?.round().toString(),
                       hint: "",
                       validate: emptyFieldValidator,
                       onSaved: (answer) {
-                        ingredientItem.measurement = double.tryParse(answer)??0;
+                        ingredientItem.measurement =
+                            double.tryParse(answer) ?? 0;
 //                        ingredientItem.measurement = ((ingredientItem.measurementUnit == MeasurementUnitSelection.GRAMS) ? ((double.tryParse(answer)??0)/100) : double.tryParse(answer) ?? 0);
 //                    updateIngredientState(ingredientItem);
                       },
-                      enabled: (enabled??true),
+                      enabled: (enabled ?? true),
                     ),
                     DialogPicker(
                       questionText: "Measurement Units",
-                      optionsList: FormStrings.measurementUnitSelection.values
-                          .toList(),
+                      optionsList:
+                          FormStrings.measurementUnitSelection.values.toList(),
                       onConfirm: (List<int> values) {
                         ingredientItem.measurementUnit =
-                        MeasurementUnitSelection.values[values[0]];
+                            MeasurementUnitSelection.values[values[0]];
 //                      updateIngredientState(ingredientItem);
                       },
-                      initialSelectedOption: ingredientItem.measurementUnit?.index ?? 1,
-                      enabled: (enabled??true),
+                      initialSelectedOption:
+                          ingredientItem.measurementUnit?.index ?? 1,
+                      enabled: (enabled ?? true),
                     ),
-
                   ],
                 ),
               ),
             ),
             actions: <Widget>[
-              new TextButton( //FlatButton
+              new TextButton(
+                //FlatButton
                 child: new Text("Cancel"),
                 onPressed: () {
                   Navigator.of(context, rootNavigator: true).pop();
@@ -471,23 +568,22 @@ class _RecipeExpansionTileState extends State<RecipeExpansionTile> {
                 },
               ),
               //Provide an update button only if enabled is true
-              (enabled??true) ? new TextButton( //FlatButton
-                child: new Text("Update"),
-                onPressed: () {
-                  Navigator.of(context, rootNavigator: true).pop();
-                  final form = _formKey.currentState;
-                  if (form.validate()) {
-                    form.save();
-                    updateIngredientState(ingredientItem);
-                  }
-                },
-              ) : null,
+              (enabled ?? true)
+                  ? new TextButton(
+                      //FlatButton
+                      child: new Text("Update"),
+                      onPressed: () {
+                        Navigator.of(context, rootNavigator: true).pop();
+                        final form = _formKey.currentState;
+                        if (form.validate()) {
+                          form.save();
+                          updateIngredientState(ingredientItem);
+                        }
+                      },
+                    )
+                  : null,
             ],
           );
-        }
-    );
+        });
   }
 }
-
-
-
