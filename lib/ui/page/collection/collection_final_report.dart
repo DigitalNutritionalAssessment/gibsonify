@@ -5,6 +5,7 @@ import 'package:flutter_uikit/utils/form_strings.dart';
 import 'package:flutter_uikit/model/consumption_data.dart';
 import 'package:flutter_uikit/model/food_item.dart';
 
+import 'package:flutter_uikit/ui/decorations.dart';
 import 'package:flutter_uikit/ui/widgets/collection_question.dart';
 import 'package:flutter_uikit/ui/widgets/custom_time_picker.dart';
 
@@ -14,6 +15,7 @@ import 'package:flutter_uikit/ui/page/collection/collection_second_page.dart';
 import 'package:flutter_uikit/ui/page/collection/recipes_items.dart';
 
 import 'package:flutter_uikit/database/icrisat_database.dart';
+
 
 
 class FinalReportCard extends StatefulWidget {
@@ -29,6 +31,59 @@ class FinalReportCard extends StatefulWidget {
     @required this.consumptionData,
     @required this.updatePageState,
   });
+
+  //Alert
+  showAlertDialog(BuildContext context) {
+    // set up the buttons
+    Widget continueButton = TextButton(
+      child: Text("Close"),
+      onPressed: () => Navigator.pop(context),
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Help"),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(20.0))),
+      content: Container(
+        height: 200,
+        width: 300,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              SizedBox(
+                height: 20,
+              ),
+              new Text('This pass is to check all of the items'),
+              new ListTile(
+                leading: new MyBullet(),
+                title: new Text(
+                    'Have you checked with the picture chart?'),
+              ),
+              new ListTile(
+                leading: new MyBullet(),
+                title: new Text(
+                    'Have you cross checked all the foods consumed verbally with the participant?'),
+              ),
+              new Text('If you have done so, please press the submit button. If you have not done so, please click the back to edit button'),
+            ],
+          ),
+        ),
+      ),
+      actions: [
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 
   @override
   _FinalReportCardState createState() => _FinalReportCardState();
@@ -136,6 +191,17 @@ class _FinalReportCardState extends State<FinalReportCard> {
               ),
               onPressed: () {
                 widget.navigatePageStateBackToInfo();
+              },
+            ),
+            ElevatedButton( //RaisdedButton
+              child: const Text('Prompt'),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.orange[500],
+                elevation: 4.0,
+                onSurface: Colors.blueGrey
+              ),
+              onPressed: () {
+                widget.showAlertDialog(context);
               },
             ),
             ElevatedButton( //RaisedButton
