@@ -38,8 +38,7 @@ class FoodItemList extends StatefulWidget {
       onPressed: () => Navigator.pop(context),
     );
     Widget confirmButton = TextButton(
-        child: Text("Confirm",
-        style: TextStyle(fontWeight: FontWeight.bold)),
+        child: Text("Confirm", style: TextStyle(fontWeight: FontWeight.bold)),
         onPressed: () {
           Navigator.pop(context);
           var digit = int.parse(myController
@@ -166,6 +165,7 @@ class _FoodItemListState extends State<FoodItemList> {
   List<FoodItem> _foodList = <FoodItem>[];
   ValueChanged<List<FoodItem>> updatePageState;
   final _formKey = GlobalKey<FormState>();
+  bool pressAttention = false;
   //FoodItemList.myController.text;
 
   @override
@@ -228,6 +228,18 @@ class _FoodItemListState extends State<FoodItemList> {
                   },
                 ),
                 ElevatedButton(
+                  child: const Text('Delete Toggle'),
+                  style: ElevatedButton.styleFrom(
+                      primary: pressAttention
+                          ? Theme.of(context).accentColor
+                          : Colors.red,
+                      elevation: 4,
+                      onSurface: Colors.blueGrey),
+                  onPressed: () =>
+                      setState(() => pressAttention = !pressAttention),
+                ),
+                //This toggling button 
+                ElevatedButton(
                     child: const Text('Delete Specific Item'),
                     style: ElevatedButton.styleFrom(
                         primary: Colors.red,
@@ -257,7 +269,7 @@ class _FoodItemListState extends State<FoodItemList> {
                     print(_foodList);
                     print(FoodItem());
                   },
-                  onPressed: (){
+                  onPressed: () {
                     updateState();
                   },
                 ),
@@ -343,21 +355,20 @@ class FoodItemCard extends StatelessWidget {
     return Card(
       elevation: 2.0,
       child: Container(
-      //height: MediaQuery.of(context).size.height,
+        //height: MediaQuery.of(context).size.height,
         child: Column(
           children: <Widget>[
-            Text("Food Item Number " + listnumber.toString()),           
-              FormQuestion(
-                      questionText: "What did you eat today?",
-                      hint:"",
-                      onSaved: (answer) {
-                        foodItem.testing = answer;
-                        var widget;
-                        widget.updatePageState(foodItem);
-                        },
-                      enabled: enabled,
-                    ),
-          
+            Text("Food Item Number " + listnumber.toString()),
+            FormQuestion(
+              questionText: "What did you eat today?",
+              hint: "",
+              onSaved: (answer) {
+                foodItem.testing = answer;
+                var widget;
+                widget.updatePageState(foodItem);
+              },
+              enabled: enabled,
+            ),
             AutoCompleteTextField(
               suggestions: recipeMap?.keys?.toList() ?? [],
               onSuggestionSelected: (String selected) {
@@ -401,7 +412,15 @@ class FoodItemCard extends StatelessWidget {
               },
               initialSelectedOption: foodItem?.timeOfDay?.index ?? 0,
             ),
-
+            ElevatedButton(
+                    child: const Text('Remove Item'),
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.red,
+                        elevation: 4,
+                        onSurface: Colors.blueGrey),
+                    onPressed: () {
+                      //can be toggled to a different colour, but needs to create state. Look at delete toggle for more reference
+                    }),
             SizedBox(
               height: 10.0,
             ),
