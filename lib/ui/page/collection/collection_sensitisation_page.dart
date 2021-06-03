@@ -39,7 +39,8 @@ class _SensitisationVisitDataCardState
   );
   bool enabled = true;
 //  ValueChanged<InterviewData> updatePageState;
-  final _formKey = GlobalKey<FormState>(); //used for debugging only //FormState can be used to save, reset, and validate every Form
+  final _formKey = GlobalKey<
+      FormState>(); //used for debugging only //FormState can be used to save, reset, and validate every Form
   VoidCallback saveConsumptionData = () => {};
 
   @override
@@ -89,6 +90,7 @@ class _SensitisationVisitDataCardState
                             return "10 characters only!";
                           }
                           return emptyFieldValidator(answer);
+                          //ensures form is filled in
                         },
                         initialText:
                             interviewData.householdIdentification ?? null,
@@ -142,9 +144,10 @@ class _SensitisationVisitDataCardState
                           ]),
                       FormQuestion(
                           //in future can be modified to give phone input widget
+                          //could use international_phone_input package
                           questionText: "Respondent Telephone Number",
                           hint: "",
-                          initialText:                          
+                          initialText:
                               interviewData?.respondent?.telephone ?? null,
                           validate: (answer) {
                             if (answer.length != 10) {
@@ -163,6 +166,7 @@ class _SensitisationVisitDataCardState
                           inputFormatters: [
                             // ignore: deprecated_member_use
                             WhitelistingTextInputFormatter.digitsOnly
+                            //ensures only digits allowed
                           ]),
                       TimePicker(
                         initialTime:

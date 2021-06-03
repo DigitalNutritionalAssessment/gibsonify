@@ -11,6 +11,7 @@ import 'package:flutter_uikit/ui/widgets/custom_time_picker.dart';
 import 'package:flutter_uikit/utils/form_strings.dart';
 
 //this page is the interview data page
+//occurs before the first pass happens
 
 class InfoDataCard extends StatefulWidget {
   final InterviewData initialInterviewData;
@@ -29,7 +30,6 @@ class InfoDataCard extends StatefulWidget {
 
   @override
   _InfoDataCardState createState() => _InfoDataCardState();
-
 }
 
 class _InfoDataCardState extends State<InfoDataCard> {
@@ -80,6 +80,7 @@ class _InfoDataCardState extends State<InfoDataCard> {
     // ignore: await_only_futures
     int _code = await dayCode;
     //ignore error above
+    //just to ensure doesn't setState when building for first time
     print('DayCode updated to ${DayCode.values[_code]}');
     setState(() {});
   }
@@ -120,6 +121,8 @@ class _InfoDataCardState extends State<InfoDataCard> {
                       optionsList: FormStrings.dayCodeSelection.values.toList(),
                       onConfirm: (List<int> values) {
                         interviewData.dayCode = DayCode.values[values[0]];
+                        //dayCode is am integer value
+                        //correspond to the day type in an enum class
                         widget.updatePageState(interviewData);
                         getDayCode(interviewData.dayCode.index);
                       },
@@ -128,7 +131,7 @@ class _InfoDataCardState extends State<InfoDataCard> {
                     FormQuestion(
                       questionText: "If other, please specify",
                       hint: "",
-                      //validate so only applies if other is selected above
+                      //validate so only applies empty field check if 'Other' is selected above
                       validate: (answer) {
                         if (interviewData.dayCode == DayCode.OTHERS) {
                           return emptyFieldValidator(answer);
@@ -158,6 +161,9 @@ class _InfoDataCardState extends State<InfoDataCard> {
                     FormQuestion(
                       questionText: "Current Location Coordinates",
                       //ternary operator, will display to 2dp if latitude is available, will show null if not
+                      //get null on first loading the page because Future class used
+                      //this delays the operation of fetching coords until after the page has loaded
+                      //rebuilding page or navigating away and back will display them
                       hint: ((interviewData.location.latitude == null)
                           ? ("${interviewData.location.locationName}: (${interviewData.location.latitude},${interviewData.location.longitude})")
                           : ("${interviewData.location.locationName}: (${interviewData.location.latitude.toStringAsFixed(2)},${interviewData.location.longitude.toStringAsFixed(2)})")),
