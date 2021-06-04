@@ -23,8 +23,8 @@ class HomePage extends StatelessWidget {
         child: Card(
           clipBehavior: Clip.antiAlias,
           elevation: 2.0,
-          child: Stack(
-            fit: StackFit.expand,
+          child: Stack( //stack is to add extra layers on top of each other
+            fit: StackFit.expand, 
             children: <Widget>[
               menuImage(menu),
               menuColor(),
@@ -35,22 +35,25 @@ class HomePage extends StatelessWidget {
       );
 
   //stack 1/3
+  //the six images at the background
   Widget menuImage(Menu menu) => Image.asset(
         menu.image,
         fit: BoxFit.cover,
       );
 
   //stack 2/3
+  //darkens the photos and to give stronger contrast
   Widget menuColor() => new Container(
         decoration: BoxDecoration(boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withOpacity(0.8),
+            color: Colors.black.withOpacity(0.7),
             blurRadius: 5.0,
           ),
         ]),
       );
-
+      
   //stack 3/3
+  //This stack dispays the words on top of the boxes and the photos on the home page
   Widget menuData(Menu menu) => Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -67,6 +70,7 @@ class HomePage extends StatelessWidget {
           )
         ],
       );
+      
 
   //appbar
   Widget appBar() => SliverAppBar(

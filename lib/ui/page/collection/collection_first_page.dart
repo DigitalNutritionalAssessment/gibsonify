@@ -262,14 +262,14 @@ class _FoodItemListState extends State<FoodItemList> {
                       primary: Colors.lightBlue[200],
                       elevation: 4,
                       onSurface: Colors.blueGrey),
-                  onLongPress: () {
+                  onPressed: () {
                     updateState();
                     widget.updatePageState(_foodList);
                     widget.showAlertDialog(context);
                     print(_foodList);
                     print(FoodItem());
                   },
-                  onPressed: () {
+                  onLongPress: () {
                     updateState();
                   },
                 ),
