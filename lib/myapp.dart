@@ -23,6 +23,12 @@ import 'package:flutter_uikit/ui/page/collection/recipe_editor.dart';
 import 'package:flutter_uikit/ui/page/recipe_viewer/recipe_viewer.dart';
 import 'package:flutter_uikit/model/consumption_data.dart';
 
+//The main running of the app
+//Starting by asking the interviewer info, Login
+
+//If want a more secure mean, then can use a fingerprint on Android, or on iOS
+//this is done using local_auth, and does not collect data to the userbase
+
 class MyApp extends StatelessWidget {
   Widget materialApp(Person enumerator) => MaterialApp(
       title: UIData.appName,
@@ -41,8 +47,8 @@ class MyApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
       ],
       supportedLocales: [
-        const Locale("en", "US"),
-        const Locale("hi", "IN"),
+        const Locale("en", "US"), //english US, deals with languages
+        const Locale("hi", "IN"), //hindu India
       ],
       // initialRoute: UIData.notFoundRoute,
 
@@ -79,7 +85,7 @@ class MyApp extends StatelessWidget {
               )));
 
   void redirectToLoginScreen(BuildContext context) async {
-    Person enumerator = await Person.getEnumeratorFromSharedPrefs();
+    Person enumerator = await Person.getEnumeratorFromSharedPrefs(); //this is to collect the enumerator information
     print(enumerator.employeeNumber);
     if (enumerator.employeeNumber == null) {
       Navigator.pushReplacementNamed(context, UIData.loginRoute);

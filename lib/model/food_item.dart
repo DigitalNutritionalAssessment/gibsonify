@@ -1,5 +1,3 @@
-//import 'package:flutter/material.dart';
-
 class FoodItem {
   String testing;
   TimeOfDaySelection timeOfDay;
@@ -162,6 +160,7 @@ enum TimeOfDaySelection {
   AFTERNOON,
   EVENING,
   NIGHT,
+  //LATE, add this in if you want additional choices, and also change the form_Strings.dart file
 }
 
 enum SourceOfFoodSelection {

@@ -4,6 +4,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
+//this file is mainly to do with translations to different languages
+//it was set in myapp that there are two language options available
+//however, there is no button on the app to change it yet so this needs to be done in the future (low priority)
+//also try to translate to other dialects
+
 class Translations {
   Translations(Locale locale) {
     this.locale = locale;
@@ -29,14 +34,14 @@ class Translations {
     return translations;
   }
 
-  get currentLanguage => locale.languageCode;
+  get currentLanguage => locale.languageCode; //change to desired language
 }
 
 class TranslationsDelegate extends LocalizationsDelegate<Translations> {
   const TranslationsDelegate();
 
   @override
-  bool isSupported(Locale locale) => ['en', 'hi'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => ['en', 'hi'].contains(locale.languageCode); //from english to hindu
 
   @override
   Future<Translations> load(Locale locale) => Translations.load(locale);

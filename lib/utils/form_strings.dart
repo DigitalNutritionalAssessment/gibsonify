@@ -1,15 +1,14 @@
 import 'package:flutter_uikit/model/food_item.dart';
 import 'package:flutter_uikit/model/consumption_data.dart';
 
-
-
-
 class FormStrings{
   static const Map<TimeOfDaySelection,String> timeOfDaySelection = {
     TimeOfDaySelection.MORNING:    "Morning (4.00am - 12.00pm)",
     TimeOfDaySelection.AFTERNOON:  "Afternoon (12.01pm - 4.00pm)",
     TimeOfDaySelection.EVENING:    "Evening (4.01pm - 7.00pm)",
     TimeOfDaySelection.NIGHT:      "Night (7.01pm - 3.00am)",
+    //TimeOfDaySelection.LATE:      "Testing", //If adding an additional try, then can add it afterwards, but need to change 
+    //it to the corresponding files, e.g. for this it is food_item.dart
   };
 
   static const Map<InterviewOutcomeSelection, String> interviewOutcomeSelection = {

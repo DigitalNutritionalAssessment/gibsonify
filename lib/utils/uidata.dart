@@ -58,6 +58,7 @@ class UIData {
 
 
   //login
+  //mainly used for commonly used validation, would be good to add to this list
   static const String enter_code_label = "Phone Number";
   static const String enter_code_hint = "10 Digit Phone Number";
   static const String enter_otp_label = "OTP";
