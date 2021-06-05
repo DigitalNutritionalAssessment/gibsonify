@@ -7,8 +7,9 @@ import 'package:flutter/material.dart';
 //This file is created so that the probe list can be changed according to which recipe is used
 //In addition
 
-// MyApp is a StatefulWidget. This allows updating the state of the
-// widget when an item is removed.
+//SwipeToDelete is a feature that can be added so that the probe list, instead of each box being checked
+//It could be deleted after completion, making it a much nicer user interface
+//problem encountered was once deleted, it was unable to generate back, which needs fixing
 
 class SwipeToDelete extends StatefulWidget {
   SwipeToDelete({Key key}) : super(key: key);
