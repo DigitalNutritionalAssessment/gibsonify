@@ -208,6 +208,9 @@ class _CollectionStateMachineState extends State<CollectionStateMachine> {
         navigatePageStateBackToInfo: () {
           switchToNewPageState(PageState.INTERVIEW);
         },
+        navigatePageStateBack: () {
+          switchToNewPageState(PageState.THIRD_PASS);
+        },
         navigatePageStateSubmit: () {
           Navigator.pop(context);
         },

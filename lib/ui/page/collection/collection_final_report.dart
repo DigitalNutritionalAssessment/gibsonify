@@ -20,11 +20,13 @@ class FinalReportCard extends StatefulWidget {
   final ConsumptionData consumptionData;
   final VoidCallback navigatePageStateSubmit;
   final VoidCallback navigatePageStateBackToInfo;
+  final VoidCallback navigatePageStateBack;
   final ValueChanged<ConsumptionData> updatePageState;
 
   const FinalReportCard({
     @required this.navigatePageStateSubmit,
     @required this.navigatePageStateBackToInfo,
+    @required this.navigatePageStateBack,
     @required this.consumptionData,
     @required this.updatePageState,
   });
@@ -175,20 +177,29 @@ class _FinalReportCardState extends State<FinalReportCard> {
       )
     ];
     List<Widget> buttonsList = [
-      new SizedBox(
-        height: 70,
+      new FittedBox(
+        //height: 70,
         child: ButtonBar(
           alignment: MainAxisAlignment.center,
           children: <Widget>[
             ElevatedButton(
-              //RaisdedButton
-              child: const Text('Back To Edit'),
+              child: const Text('Back To First Pass'),
               style: ElevatedButton.styleFrom(
                   primary: Theme.of(context).accentColor,
                   elevation: 4.0,
                   onSurface: Colors.blueGrey),
               onPressed: () {
                 widget.navigatePageStateBackToInfo();
+              },
+            ),
+            ElevatedButton(
+              child: const Text('Third Pass'),
+              style: ElevatedButton.styleFrom(
+                  primary: Theme.of(context).accentColor,
+                  elevation: 4.0,
+                  onSurface: Colors.blueGrey),
+              onPressed: () {
+                widget.navigatePageStateBack();
               },
             ),
             ElevatedButton(
