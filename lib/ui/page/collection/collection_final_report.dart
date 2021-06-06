@@ -183,7 +183,7 @@ class _FinalReportCardState extends State<FinalReportCard> {
           alignment: MainAxisAlignment.center,
           children: <Widget>[
             ElevatedButton(
-              child: const Text('Back To First Pass'),
+              child: const Text('Back To Edit'),
               style: ElevatedButton.styleFrom(
                   primary: Theme.of(context).accentColor,
                   elevation: 4.0,
