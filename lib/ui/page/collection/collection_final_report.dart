@@ -10,8 +10,8 @@ import 'package:flutter_uikit/ui/widgets/collection_question.dart';
 import 'package:flutter_uikit/ui/widgets/custom_time_picker.dart';
 
 import 'package:flutter_uikit/ui/page/collection/collection_sensitisation_page.dart';
-import 'package:flutter_uikit/ui/page/collection/collection_first_page.dart';
-import 'package:flutter_uikit/ui/page/collection/collection_second_page.dart';
+//import 'package:flutter_uikit/ui/page/collection/collection_first_page.dart';
+//import 'package:flutter_uikit/ui/page/collection/collection_second_page.dart';
 import 'package:flutter_uikit/ui/page/collection/recipes_items.dart';
 
 import 'package:flutter_uikit/database/icrisat_database.dart';
@@ -32,6 +32,9 @@ class FinalReportCard extends StatefulWidget {
   });
 
   //Alert
+  //it is intendended that this alert dialog goes directly to the submit
+  //however, this is put to a separate button for now as we do not want this to pop up every time the recipe is modified
+  //also 
   showAlertDialog(BuildContext context) {
     // set up the buttons
     Widget continueButton = TextButton(
@@ -40,6 +43,7 @@ class FinalReportCard extends StatefulWidget {
     );
 
     // set up the AlertDialog
+    //this is the fourth pass prompt
     AlertDialog alert = AlertDialog(
       title: Text("Help"),
       shape: RoundedRectangleBorder(
@@ -110,28 +114,32 @@ class _FinalReportCardState extends State<FinalReportCard> {
               updateFoodItemState: (item) {},
               enabled: false,
             ));
-    // ignore: unused_local_variable
-    List<Widget> firstPassList = new List<Widget>.generate(
-        widget.consumptionData.listOfFoods.length,
-        (index) => FoodItemCard(
-              listnumber: null,
-              updateFoodItemState: (foodItem) {
-                widget.consumptionData.listOfFoods[index] = foodItem;
-              },
-              foodItem: widget.consumptionData.listOfFoods[index],
-              enabled: false,
-            ));
-    // ignore: unused_local_variable
-    List<Widget> secondPassList = new List<Widget>.generate(
-        widget.consumptionData.listOfFoods.length,
-        (index) => SecondPassFoodItemCard(
-              updateFoodItemState: (foodItem) {
-                widget.consumptionData.listOfFoods[index] = foodItem;
-              },
-              foodItem: widget.consumptionData.listOfFoods[index],
-              enabled: false,
-            ));
 
+    // this section shows the individual passes in the fourth pass so it could be easily edited
+    // this is not necessary as the overall Food Item Card should show everything already, 
+    // or at least it will be a drop down 
+            
+    // List<Widget> firstPassList = new List<Widget>.generate(
+    //     widget.consumptionData.listOfFoods.length,
+    //     (index) => FoodItemCard(
+    //           listnumber: null,
+    //           updateFoodItemState: (foodItem) {
+    //             widget.consumptionData.listOfFoods[index] = foodItem;
+    //           },
+    //           foodItem: widget.consumptionData.listOfFoods[index],
+    //           enabled: false,
+    //         ));
+    // List<Widget> secondPassList = new List<Widget>.generate(
+    //     widget.consumptionData.listOfFoods.length,
+    //     (index) => SecondPassFoodItemCard(
+    //           updateFoodItemState: (foodItem) {
+    //             widget.consumptionData.listOfFoods[index] = foodItem;
+    //           },
+    //           foodItem: widget.consumptionData.listOfFoods[index],
+    //           enabled: false,
+    //         ));
+            
+    // extra final questions in the fourth pass
     List<Widget> endInterviewDataCardList = [
       Card(
         elevation: 2.0,
@@ -176,6 +184,7 @@ class _FinalReportCardState extends State<FinalReportCard> {
         ),
       )
     ];
+    //Can have navigation bar and just have the submit button
     List<Widget> buttonsList = [
       new FittedBox(
         //height: 70,

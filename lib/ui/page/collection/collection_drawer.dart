@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_uikit/ui/widgets/about_tile.dart';
 import 'package:flutter_uikit/utils/uidata.dart';
 
+
+//this class is used in timeline 1 and timeline 2
+// also used in common_drawer and common_scaffold
+//however, this is not shown in the app but used to scale in the future
 class CommonDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
