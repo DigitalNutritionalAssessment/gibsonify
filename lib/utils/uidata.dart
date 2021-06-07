@@ -21,11 +21,11 @@ class UIData {
   static const String timelineOneRoute = "/Feed";
   static const String timelineTwoRoute = "/Tweets";
   static const String settingsOneRoute = "/Settings";
-  static const String shoppingOneRoute = "/Shopping List";
-  static const String shoppingTwoRoute = "/Shopping Details";
-  static const String shoppingThreeRoute = "/Product Details";
-  static const String paymentOneRoute = "/Credit Card";
-  static const String paymentTwoRoute = "/Payment Success";
+  // static const String shoppingOneRoute = "/Shopping List";
+  // static const String shoppingTwoRoute = "/Shopping Details";
+  // static const String shoppingThreeRoute = "/Product Details";
+  // static const String paymentOneRoute = "/Credit Card";
+  // static const String paymentTwoRoute = "/Payment Success";
   static const String loginRoute = "/Login";
   static const String dashboardOneRoute = "/Dashboard 1";
   static const String dashboardTwoRoute = "/Dashboard 2";
