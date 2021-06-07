@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+//stands for one time password
+
 class CreateOTPResponse {
   String status;
   CreateOTPResponse({this.status});
