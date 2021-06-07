@@ -257,6 +257,8 @@ class _FinalReportCardState extends State<FinalReportCard> {
   }
 }
 
+// demonstrate all that is needed in each food card
+
 class OverallFoodItemCard extends StatelessWidget {
   final FoodItem foodItem;
   final updateFoodItemState;
