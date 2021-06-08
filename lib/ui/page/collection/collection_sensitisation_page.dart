@@ -137,10 +137,8 @@ class _SensitisationVisitDataCardState
                           nextFocusNode: _respTelNo,
                           enabled: enabled,
                           keyboardType: TextInputType.number,
-                          // ignore: deprecated_member_use
                           inputFormatters: [
-                            // ignore: deprecated_member_use
-                            WhitelistingTextInputFormatter.digitsOnly
+                            FilteringTextInputFormatter.digitsOnly
                           ]),
                       FormQuestion(
                           //in future can be modified to give phone input widget
@@ -164,8 +162,7 @@ class _SensitisationVisitDataCardState
                           enabled: enabled,
                           keyboardType: TextInputType.number,
                           inputFormatters: [
-                            // ignore: deprecated_member_use
-                            WhitelistingTextInputFormatter.digitsOnly
+                            FilteringTextInputFormatter.digitsOnly
                             //ensures only digits allowed
                           ]),
                       TimePicker(
@@ -178,15 +175,17 @@ class _SensitisationVisitDataCardState
                         questionText: "Respondent Birthdate",
                         timePickerType: TimePickerType.DATE,
                       ),
-//                    TimePicker(
-//                      initialTime: interviewData?.interviewStart ?? null,
-//                      onChanged: (time) {
-//                        interviewData.interviewStart = time;
-//                        widget.updatePageState(interviewData);
-//                        },
-//                      questionText: "Interview Start Time",
-//                      timePickerType: TimePickerType.DATETIME,
-//                    ),
+                   TimePicker(
+                     initialTime: interviewData?.interviewStart ?? null,
+                     onChanged: (time) {
+                       interviewData.interviewStart = time;
+                       widget.updatePageState(interviewData);
+                       },
+                     questionText: "Interview Start Time",
+                     timePickerType: TimePickerType.DATETIME, 
+                     //should in theory give time or directly have it installed when clicking start
+                     //currently it is just picking the dates though
+                   ),
                       TimePicker(
                         initialTime:
                             interviewData?.sensitizationVisitDate ?? null,
@@ -217,9 +216,11 @@ class _SensitisationVisitDataCardState
         children: <Widget>[
           ElevatedButton(
             child: const Text('Start Interview'),
-            //color: Theme.of(context).accentColor,
-            //elevation: 4.0,
-            //splashColor: Colors.blueGrey,
+            style: ElevatedButton.styleFrom(
+              primary: Theme.of(context).accentColor,
+              elevation: 4.0,
+              onPrimary: Colors.blueGrey,
+            ),
             onPressed: () {
               widget.updatePageState(interviewData);
               widget.navigatePageStateForward();
@@ -227,9 +228,11 @@ class _SensitisationVisitDataCardState
           ),
           ElevatedButton(
             child: const Text('Save Sensitisation Info'),
-            //color: Theme.of(context).accentColor,
-            //elevation: 4.0,
-            //splashColor: Colors.blueGrey,
+            style: ElevatedButton.styleFrom(
+              primary: Theme.of(context).accentColor,
+              elevation: 4.0,
+              onPrimary: Colors.blueGrey,
+            ),
             onPressed: () {
               final form = _formKey.currentState;
               if (form.validate()) {
@@ -243,20 +246,5 @@ class _SensitisationVisitDataCardState
         ],
       ),
     );
-
-//      RaisedButton(
-//      child: const Text('Go to First Pass'),
-//      color: Theme.of(context).accentColor,
-//      elevation: 4.0,
-//      splashColor: Colors.blueGrey,
-//      onPressed: () {
-//        final form = _formKey.currentState;
-//        if (form.validate()) {
-//          form.save();
-//          widget.navigatePageState();
-//          widget.updatePageState(interviewData);
-//        }
-//      },
-//    );
   }
 }
