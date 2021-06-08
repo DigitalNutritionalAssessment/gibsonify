@@ -1,15 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_uikit/utils/uidata.dart';
 
-//import 'package:flutter_uikit/utils/form_strings.dart';
-//import 'package:flutter_uikit/ui/widgets/collection_question.dart';
-
-
 import 'package:flutter_uikit/ui/page/collection/collection_page_common_widgets.dart';
-
-
 import 'package:flutter_uikit/model/food_item.dart';
-
 import 'package:flutter_uikit/ui/page/collection/recipes_items.dart';
 import 'package:flutter_uikit/database/icrisat_database.dart';
 
@@ -137,10 +130,8 @@ class _RecipeViewerState extends State<RecipeViewer> {
                 style: ElevatedButton.styleFrom(
                   primary: Theme.of(context).accentColor,
                   elevation: 4.0,
+                  onPrimary: Colors.blueGrey,
                 ),
-                //color: Theme.of(context).accentColor,
-                //elevation: 4.0,
-                //splashColor: Colors.blueGrey,
                 onPressed: () async {
                   Navigator.popAndPushNamed(context, UIData.NewRecipeRoute);
                 },
@@ -150,10 +141,8 @@ class _RecipeViewerState extends State<RecipeViewer> {
                 style: ElevatedButton.styleFrom(
                   primary: Theme.of(context).accentColor,
                   elevation: 4.0,
+                  onPrimary: Colors.blueGrey,
                 ),
-                //color: Theme.of(context).accentColor,
-                //elevation: 4.0,
-                //splashColor: Colors.blueGrey,
                 onPressed: () async {
                   DefaultTabController.of(parentContext).animateTo(2);
                 },
