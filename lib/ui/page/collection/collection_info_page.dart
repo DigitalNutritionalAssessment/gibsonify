@@ -193,9 +193,11 @@ class _InfoDataCardState extends State<InfoDataCard> {
         children: <Widget>[
           ElevatedButton(
             child: const Text('View Interview Info'),
-            //color: Theme.of(context).accentColor,
-            //elevation: 4.0,
-            //splashColor: Colors.blueGrey,
+            style: ElevatedButton.styleFrom(
+              primary: Theme.of(context).accentColor,
+              elevation: 4.0,
+              onSurface: Colors.blueGrey,
+            ),
             onPressed: () {
               widget.updatePageState(interviewData);
               widget.navigatePageStateBackward();
@@ -203,9 +205,11 @@ class _InfoDataCardState extends State<InfoDataCard> {
           ),
           ElevatedButton(
             child: const Text('Go To First Pass'),
-            //color: Theme.of(context).accentColor,
-            //elevation: 4.0,
-            //splashColor: Colors.blueGrey,
+            style: ElevatedButton.styleFrom(
+              primary: Theme.of(context).accentColor,
+              elevation: 4.0,
+              onSurface: Colors.blueGrey,
+            ),
             onPressed: () {
               final form = _formKey.currentState;
               if (form.validate()) {
