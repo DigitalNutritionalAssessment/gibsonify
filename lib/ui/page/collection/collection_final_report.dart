@@ -37,15 +37,23 @@ class FinalReportCard extends StatefulWidget {
   //also 
   showAlertDialog(BuildContext context) {
     // set up the buttons
+    Widget cancelButton = TextButton(
+      child: Text("cancel"),
+            onPressed:  () {
+        Navigator.pop(context);
+      },
+    );
     Widget continueButton = TextButton(
-      child: Text("Close"),
-      onPressed: () => Navigator.pop(context),
+      child: Text("Submit"),
+            onPressed:  () {
+        Navigator.pop(context);
+      },
     );
 
     // set up the AlertDialog
     //this is the fourth pass prompt
     AlertDialog alert = AlertDialog(
-      title: Text("Help"),
+      title: Text("4th Pass Prompt"),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(20.0))),
       content: Container(
@@ -76,6 +84,7 @@ class FinalReportCard extends StatefulWidget {
         ),
       ),
       actions: [
+        cancelButton,
         continueButton,
       ],
     );
