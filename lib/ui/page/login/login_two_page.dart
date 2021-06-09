@@ -114,8 +114,8 @@ class _LoginPageState extends State<LoginPage> {
             ),
             keyboardType: TextInputType.number,
             controller: _employeeNumberTextController,
-            // ignore: deprecated_member_use
-            inputFormatters: [WhitelistingTextInputFormatter.digitsOnly], //from [WhitelistingTextInputFormatter.digitsOnly]
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly]
+            //inputFormatters: [WhitelistingTextInputFormatter.digitsOnly], 
           ),
         ),
         Container(
@@ -136,13 +136,15 @@ class _LoginPageState extends State<LoginPage> {
           padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 30.0),
           width: double.infinity,
           child: ElevatedButton(
-            //padding: EdgeInsets.all(12.0),
-          //  shape: StadiumBorder(),
+            style: ElevatedButton.styleFrom(
+              padding: EdgeInsets.all(12.0),
+              shape: StadiumBorder(),
+              primary: Colors.green,
+            ),
             child: Text(
               "UPDATE USER INFO" ,
               style: TextStyle(color: Colors.white),
             ),
-            //color: Colors.green,
             onPressed: () {
               _prefs.setInt("employeeNumber", int.tryParse(_employeeNumberTextController.text) );
               _prefs.setString("userName", _userNameTextController.text??"");
@@ -160,7 +162,7 @@ class _LoginPageState extends State<LoginPage> {
         SizedBox(
           height: 5.0,
         ),
-        TextButton( //FlatButton
+        TextButton( 
           child: Text(
             "LOG OUT",
             style: TextStyle(color: Colors.grey),

@@ -39,7 +39,8 @@ class _SensitisationVisitDataCardState
   );
   bool enabled = true;
 //  ValueChanged<InterviewData> updatePageState;
-  final _formKey = GlobalKey<FormState>(); //used for debugging only //FormState can be used to save, reset, and validate every Form
+  final _formKey = GlobalKey<
+      FormState>(); //used for debugging only //FormState can be used to save, reset, and validate every Form
   VoidCallback saveConsumptionData = () => {};
 
   @override
@@ -89,6 +90,7 @@ class _SensitisationVisitDataCardState
                             return "10 characters only!";
                           }
                           return emptyFieldValidator(answer);
+                          //ensures form is filled in
                         },
                         initialText:
                             interviewData.householdIdentification ?? null,
@@ -135,16 +137,15 @@ class _SensitisationVisitDataCardState
                           nextFocusNode: _respTelNo,
                           enabled: enabled,
                           keyboardType: TextInputType.number,
-                          // ignore: deprecated_member_use
                           inputFormatters: [
-                            // ignore: deprecated_member_use
-                            WhitelistingTextInputFormatter.digitsOnly
+                            FilteringTextInputFormatter.digitsOnly
                           ]),
                       FormQuestion(
                           //in future can be modified to give phone input widget
+                          //could use international_phone_input package
                           questionText: "Respondent Telephone Number",
                           hint: "",
-                          initialText:                          
+                          initialText:
                               interviewData?.respondent?.telephone ?? null,
                           validate: (answer) {
                             if (answer.length != 10) {
@@ -161,8 +162,8 @@ class _SensitisationVisitDataCardState
                           enabled: enabled,
                           keyboardType: TextInputType.number,
                           inputFormatters: [
-                            // ignore: deprecated_member_use
-                            WhitelistingTextInputFormatter.digitsOnly
+                            FilteringTextInputFormatter.digitsOnly
+                            //ensures only digits allowed
                           ]),
                       TimePicker(
                         initialTime:
@@ -174,15 +175,17 @@ class _SensitisationVisitDataCardState
                         questionText: "Respondent Birthdate",
                         timePickerType: TimePickerType.DATE,
                       ),
-//                    TimePicker(
-//                      initialTime: interviewData?.interviewStart ?? null,
-//                      onChanged: (time) {
-//                        interviewData.interviewStart = time;
-//                        widget.updatePageState(interviewData);
-//                        },
-//                      questionText: "Interview Start Time",
-//                      timePickerType: TimePickerType.DATETIME,
-//                    ),
+                   TimePicker(
+                     initialTime: interviewData?.interviewStart ?? null,
+                     onChanged: (time) {
+                       interviewData.interviewStart = time;
+                       widget.updatePageState(interviewData);
+                       },
+                     questionText: "Interview Start Time",
+                     timePickerType: TimePickerType.DATETIME, 
+                     //should in theory give time or directly have it installed when clicking start
+                     //currently it is just picking the dates though
+                   ),
                       TimePicker(
                         initialTime:
                             interviewData?.sensitizationVisitDate ?? null,
@@ -213,9 +216,11 @@ class _SensitisationVisitDataCardState
         children: <Widget>[
           ElevatedButton(
             child: const Text('Start Interview'),
-            //color: Theme.of(context).accentColor,
-            //elevation: 4.0,
-            //splashColor: Colors.blueGrey,
+            style: ElevatedButton.styleFrom(
+              primary: Theme.of(context).accentColor,
+              elevation: 4.0,
+              onPrimary: Colors.blueGrey,
+            ),
             onPressed: () {
               widget.updatePageState(interviewData);
               widget.navigatePageStateForward();
@@ -223,9 +228,11 @@ class _SensitisationVisitDataCardState
           ),
           ElevatedButton(
             child: const Text('Save Sensitisation Info'),
-            //color: Theme.of(context).accentColor,
-            //elevation: 4.0,
-            //splashColor: Colors.blueGrey,
+            style: ElevatedButton.styleFrom(
+              primary: Theme.of(context).accentColor,
+              elevation: 4.0,
+              onPrimary: Colors.blueGrey,
+            ),
             onPressed: () {
               final form = _formKey.currentState;
               if (form.validate()) {
@@ -239,20 +246,5 @@ class _SensitisationVisitDataCardState
         ],
       ),
     );
-
-//      RaisedButton(
-//      child: const Text('Go to First Pass'),
-//      color: Theme.of(context).accentColor,
-//      elevation: 4.0,
-//      splashColor: Colors.blueGrey,
-//      onPressed: () {
-//        final form = _formKey.currentState;
-//        if (form.validate()) {
-//          form.save();
-//          widget.navigatePageState();
-//          widget.updatePageState(interviewData);
-//        }
-//      },
-//    );
   }
 }

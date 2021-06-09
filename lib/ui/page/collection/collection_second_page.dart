@@ -226,7 +226,7 @@ class SecondPassFoodItemCard extends StatelessWidget {
   });
 
   Future<void> getSourceCode(int sourceCode) async {
-    //function which rebuilds page when Source Code changed
+    //function which rebuilds page when Food Source Code changed
     // ignore: await_only_futures
     int _code = await sourceCode;
     //ignore error above
@@ -281,7 +281,7 @@ class SecondPassFoodItemCard extends StatelessWidget {
                   print('First Build');
                 } else {
                   (context as Element).markNeedsBuild();
-                  print('update widget');
+                  print('Widget updated');
                 }
               },
               enabled: enabled,
@@ -289,7 +289,7 @@ class SecondPassFoodItemCard extends StatelessWidget {
             FormQuestion(
               questionText: "If other, please specify",
               hint: "",
-              //validate so only applies if other is selected above, not working
+              //validate so only applies if 'Other' is selected above
               validate: (answer) {
                 if (foodItem.foodSource == SourceOfFoodSelection.OTHER) {
                   return emptyFieldValidator(answer);

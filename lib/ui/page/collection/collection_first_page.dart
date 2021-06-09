@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_uikit/model/consumption_data.dart';
-
-//import 'package:flutter_typeahead/flutter_typeahead.dart';
-
-//import 'package:flutter_uikit/utils/uidata.dart';
 import 'package:flutter_uikit/utils/form_strings.dart';
 import 'package:flutter_uikit/ui/widgets/collection_question.dart';
 import 'package:flutter_uikit/model/food_item.dart';
 import 'package:flutter_uikit/ui/decorations.dart';
 import 'package:flutter_uikit/utils/uidata.dart';
 import 'package:flutter/services.dart';
-//import 'package:flutter_uikit/ui/page/collection/item_number.dart';
 
 class FoodItemList extends StatefulWidget {
   final navigatePageStateForward;
@@ -22,7 +17,8 @@ class FoodItemList extends StatefulWidget {
   final updatePageState;
   final Map<String, FoodItem> recipeMap;
   final NewData newData;
-  final myController = TextEditingController(); //myController includes the number they have put in as input
+  final myController =
+      TextEditingController(); //myController includes the number they have put in as input
 
   FoodItemList({
     @required this.navigatePageStateForward,
@@ -42,13 +38,14 @@ class FoodItemList extends StatefulWidget {
       onPressed: () => Navigator.pop(context),
     );
     Widget confirmButton = TextButton(
-        child: Text("Confirm"),
+        child: Text("Confirm", style: TextStyle(fontWeight: FontWeight.bold)),
         onPressed: () {
           Navigator.pop(context);
-          var digit = int.parse(myController.text); //this returns the value of which pass that needs to be exported
-          print(initialFoodList);
+          var digit = int.parse(myController
+              .text); //this returns the value of which pass that needs to be exported
+          //print(initialFoodList);
           initialFoodList.removeAt(digit - 1);
-          print(initialFoodList);
+          //print(initialFoodList);
           return digit;
           //The code below is to test the type
           /*
@@ -123,7 +120,8 @@ class FoodItemList extends StatefulWidget {
               ),
               new ListTile(
                 leading: new MyBullet(),
-                title: new Text('All the food items consumed in the past 24 hours, along with time.'),
+                title: new Text(
+                    'All the food items consumed in the past 24 hours, along with time.'),
               ),
               new ListTile(
                 leading: new MyBullet(),
@@ -167,6 +165,7 @@ class _FoodItemListState extends State<FoodItemList> {
   List<FoodItem> _foodList = <FoodItem>[];
   ValueChanged<List<FoodItem>> updatePageState;
   final _formKey = GlobalKey<FormState>();
+  bool pressAttention = false;
   //FoodItemList.myController.text;
 
   @override
@@ -175,11 +174,13 @@ class _FoodItemListState extends State<FoodItemList> {
     print(widget.recipeMap);
     super.initState();
   }
+
   Future updateState() async {
     //function which rebuilds page when Day Code changed
     // ignore: await_only_futures
     setState(() {});
   }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -211,7 +212,7 @@ class _FoodItemListState extends State<FoodItemList> {
           ),
           new FittedBox(
             fit: BoxFit.contain,
-            child: ButtonBar(             
+            child: ButtonBar(
               alignment: MainAxisAlignment.center,
               children: <Widget>[
                 ElevatedButton(
@@ -227,29 +228,34 @@ class _FoodItemListState extends State<FoodItemList> {
                   },
                 ),
                 ElevatedButton(
+                  child: const Text('Delete Toggle'),
+                  style: ElevatedButton.styleFrom(
+                      primary: pressAttention
+                          ? Theme.of(context).accentColor
+                          : Colors.red,
+                      elevation: 4,
+                      onSurface: Colors.blueGrey),
+                  onPressed: () =>
+                      setState(() => pressAttention = !pressAttention),
+                ),
+                //This toggling button 
+                ElevatedButton(
                     child: const Text('Delete Specific Item'),
                     style: ElevatedButton.styleFrom(
                         primary: Colors.red,
                         elevation: 4,
                         onSurface: Colors.blueGrey),
-                    onPressed: () {
-                      widget.showNumberDialog(context);
-                      updateState();
-                    }),
-                ElevatedButton(
-                    child: const Text('Delete Last Item'),
-                    style: ElevatedButton.styleFrom(
-                        primary: Colors.red,
-                        elevation: 4,
-                        onSurface: Colors.blueGrey),
-                    onPressed: () {
+                    onLongPress: () {
                       setState(
                         () {
                           _foodList.removeLast();
                         },
                       );
+                    },
+                    onPressed: () {
+                      widget.showNumberDialog(context);
+                      updateState();
                     }),
-                
                 ElevatedButton(
                   child: const Text("Help"),
                   style: ElevatedButton.styleFrom(
@@ -257,10 +263,14 @@ class _FoodItemListState extends State<FoodItemList> {
                       elevation: 4,
                       onSurface: Colors.blueGrey),
                   onPressed: () {
+                    updateState();
                     widget.updatePageState(_foodList);
                     widget.showAlertDialog(context);
                     print(_foodList);
                     print(FoodItem());
+                  },
+                  onLongPress: () {
+                    updateState();
                   },
                 ),
               ],
@@ -268,7 +278,7 @@ class _FoodItemListState extends State<FoodItemList> {
           ),
           new FittedBox(
             fit: BoxFit.contain,
-            child: ButtonBar(             
+            child: ButtonBar(
               alignment: MainAxisAlignment.center,
               children: <Widget>[
                 ElevatedButton(
@@ -286,18 +296,6 @@ class _FoodItemListState extends State<FoodItemList> {
                     }
                   },
                 ),
-                
-                ElevatedButton(
-                  child: const Text('Update Page'),
-                  style: ElevatedButton.styleFrom(
-                      primary: Theme.of(context).accentColor,
-                      elevation: 4,
-                      onSurface: Colors.blueGrey),
-                  onPressed: () {
-                   updateState();
-                  },
-                  ),
-                
                 ElevatedButton(
                   child: const Text('Home Page'),
                   style: ElevatedButton.styleFrom(
@@ -313,7 +311,7 @@ class _FoodItemListState extends State<FoodItemList> {
                     }
                   },
                 ),
-                    ElevatedButton(
+                ElevatedButton(
                   child: const Text('Go to Second Pass'),
                   style: ElevatedButton.styleFrom(
                       primary: Theme.of(context).accentColor,
@@ -357,23 +355,20 @@ class FoodItemCard extends StatelessWidget {
     return Card(
       elevation: 2.0,
       child: Container(
-//      height: MediaQuery.of(context).size.height,
+        //height: MediaQuery.of(context).size.height,
         child: Column(
           children: <Widget>[
             Text("Food Item Number " + listnumber.toString()),
-            /*
-              FormQuestion(
-                      questionText: "What did you eat today?",
-                      hint:"",
-                      onSaved: (answer) {
-                        foodItem.testing = answer;
-                        var widget;
-                        widget.updatePageState(foodItem);
-                        },
-                      enabled: enabled,
-                    ),
-            */
-
+            FormQuestion(
+              questionText: "What did you eat today?",
+              hint: "",
+              onSaved: (answer) {
+                foodItem.testing = answer;
+                var widget;
+                widget.updatePageState(foodItem);
+              },
+              enabled: enabled,
+            ),
             AutoCompleteTextField(
               suggestions: recipeMap?.keys?.toList() ?? [],
               onSuggestionSelected: (String selected) {
@@ -401,7 +396,6 @@ class FoodItemCard extends StatelessWidget {
               validate: emptyFieldValidator,
               noItemsFoundBuilder: (BuildContext ctx) {
                 return TextButton(
-                  //FlatButton
                   child: Text("No Recipes Found! Click to create a new recipe"),
                   onPressed: () =>
                       Navigator.pushNamed(ctx, UIData.NewRecipeRoute),
@@ -418,21 +412,15 @@ class FoodItemCard extends StatelessWidget {
               },
               initialSelectedOption: foodItem?.timeOfDay?.index ?? 0,
             ),
-
-            /*
             ElevatedButton(
-                  //RaisedButton
-                  child: const Text("Remove this Item"),
-                  style: ElevatedButton.styleFrom(
-                      primary: Colors.red,
-                      elevation: 4,
-                      onSurface: Colors.blueGrey),
-                  onPressed: () {
-                    _FoodItemListState._foodList.removeAt(listnumber);
-                  },
-                ),
-                */
-
+                    child: const Text('Remove Item'),
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.red,
+                        elevation: 4,
+                        onSurface: Colors.blueGrey),
+                    onPressed: () {
+                      //can be toggled to a different colour, but needs to create state. Look at delete toggle for more reference
+                    }),
             SizedBox(
               height: 10.0,
             ),

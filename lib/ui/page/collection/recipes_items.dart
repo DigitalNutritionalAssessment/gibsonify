@@ -545,9 +545,14 @@ class _RecipeExpansionTileState extends State<RecipeExpansionTile> {
                       questionText: "Measurement Units",
                       optionsList:
                           FormStrings.measurementUnitSelection.values.toList(),
+                      //in theory this can be changed so given measurement method,
+                      //only allow certain choices for units
+                      //will need to update page state to refresh after method chosen above
                       onConfirm: (List<int> values) {
                         ingredientItem.measurementUnit =
                             MeasurementUnitSelection.values[values[0]];
+                        //just saves index of list, issue if restricting
+                        //choices for optionsList
 //                      updateIngredientState(ingredientItem);
                       },
                       initialSelectedOption:

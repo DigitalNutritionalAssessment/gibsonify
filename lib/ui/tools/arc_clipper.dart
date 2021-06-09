@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+//This is essentially a decoration
+//It is used to create a container with the side clipped like an arc
+//It is not used in this app but it is a useful template to use should it be desirable
+
 class ArcClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {

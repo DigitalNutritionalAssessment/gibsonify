@@ -21,11 +21,11 @@ class UIData {
   static const String timelineOneRoute = "/Feed";
   static const String timelineTwoRoute = "/Tweets";
   static const String settingsOneRoute = "/Settings";
-  static const String shoppingOneRoute = "/Shopping List";
-  static const String shoppingTwoRoute = "/Shopping Details";
-  static const String shoppingThreeRoute = "/Product Details";
-  static const String paymentOneRoute = "/Credit Card";
-  static const String paymentTwoRoute = "/Payment Success";
+  // static const String shoppingOneRoute = "/Shopping List";
+  // static const String shoppingTwoRoute = "/Shopping Details";
+  // static const String shoppingThreeRoute = "/Product Details";
+  // static const String paymentOneRoute = "/Credit Card";
+  // static const String paymentTwoRoute = "/Payment Success";
   static const String loginRoute = "/Login";
   static const String dashboardOneRoute = "/Dashboard 1";
   static const String dashboardTwoRoute = "/Dashboard 2";
@@ -58,6 +58,7 @@ class UIData {
 
 
   //login
+  //mainly used for commonly used validation, would be good to add to this list
   static const String enter_code_label = "Phone Number";
   static const String enter_code_hint = "10 Digit Phone Number";
   static const String enter_otp_label = "OTP";

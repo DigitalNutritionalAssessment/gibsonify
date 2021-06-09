@@ -1,7 +1,5 @@
 import 'dart:async';
-
 import 'package:sqflite/sqflite.dart';
-
 import 'package:flutter_uikit/model/consumption_data.dart';
 
 class LocalOverallDatabase {
@@ -18,7 +16,6 @@ class LocalOverallDatabase {
         return db.execute(
           "CREATE TABLE consumption_data_index(id TEXT PRIMARY KEY, name TEXT)",
         );
-
       },
       // Set the version. This executes the onCreate function and provides a
       // path to perform database upgrades and downgrades.
@@ -30,23 +27,21 @@ class LocalOverallDatabase {
       ConsumptionData consumptionData) async {
     // Get a reference to the database
     final Database db = await database();
-
     // Insert the Dog into the correct table. We will also specify the
     // `conflictAlgorithm` to use in this case. If the same dog is inserted
     // multiple times, it will replace the previous data.
     await db.insert(
         'consumption_data_index', consumptionData.toCondensedDBMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
-        print("insert Item");
+    print("insert Item");
   }
 
   Future<List<String>> getAllConsumptionDataIds() async {
     // Get a reference to the database
     final Database db = await database();
-
     // Query the table for All The Dogs.
-    final List<Map<String, dynamic>> maps = await db.query(
-        'consumption_data_index');
+    final List<Map<String, dynamic>> maps =
+        await db.query('consumption_data_index');
 
     print(maps);
     // Convert the List<Map<String, dynamic> into a List<Dog>.
@@ -55,7 +50,7 @@ class LocalOverallDatabase {
     });
   }
 
-  Future<bool> idExists(String id) async{
+  Future<bool> idExists(String id) async {
     // Get a reference to the database
     final db = await database();
 

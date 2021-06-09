@@ -1,19 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-//import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter_uikit/ui/widgets/common_scaffold.dart';
-//import 'package:flutter_uikit/ui/widgets/common_switch.dart';
 import 'package:flutter_uikit/ui/widgets/about_tile.dart';
 import 'package:flutter_uikit/utils/uidata.dart';
 import 'package:flutter_uikit/utils/form_strings.dart';
-
 import 'package:flutter_uikit/ui/widgets/common_dialogs.dart';
-
 import 'package:flutter_uikit/model/consumption_data_db.dart';
-//import 'package:flutter_uikit/model/consumption_data.dart';
-
 import 'package:flutter_uikit/ui/widgets/collection_question.dart';
 
 
@@ -239,6 +232,7 @@ class SettingsOnePage extends StatelessWidget {
   }
 
   void _showDeleteDialog({BuildContext parentContext}){
+    //show pop up dialog to warn the user when pressed
     showDialog(
       context: parentContext,
       builder: (BuildContext ctx){
@@ -257,6 +251,7 @@ class SettingsOnePage extends StatelessWidget {
               onPressed: () {
                 LocalItemStorage().deleteAllConsumptionDataFiles();
                 Navigator.of(parentContext).pop();
+                //navigator.pop() essentially closes the "tab"
               },
             ),
           ],
@@ -276,6 +271,7 @@ class SettingsOnePage extends StatelessWidget {
   }
 
   Future sendAllConsumptionData(BuildContext ctx) async{
+    //this is to send all the data to the database when wifi is connected and after the sync button has been pressed
     LocalItemStorage localItemStorage = LocalItemStorage();
     // Read all data from the db
     List<String> filenames = await localItemStorage.listAllFiles();

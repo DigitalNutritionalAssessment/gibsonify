@@ -89,7 +89,7 @@ class _LoginCardState extends State<LoginCard>
                                 text: Translations.of(context).text("login")),
                       ),
                       snapshot.data == true
-                          ? new TextButton( //change to text button
+                          ? new TextButton(
                               child: Text(
                                   Translations.of(context).text("resend_otp")),
                               onPressed: () =>

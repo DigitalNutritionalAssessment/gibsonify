@@ -10,29 +10,31 @@ import 'package:flutter_uikit/ui/widgets/collection_question.dart';
 import 'package:flutter_uikit/ui/widgets/custom_time_picker.dart';
 
 import 'package:flutter_uikit/ui/page/collection/collection_sensitisation_page.dart';
-import 'package:flutter_uikit/ui/page/collection/collection_first_page.dart';
-import 'package:flutter_uikit/ui/page/collection/collection_second_page.dart';
+//import 'package:flutter_uikit/ui/page/collection/collection_first_page.dart';
+//import 'package:flutter_uikit/ui/page/collection/collection_second_page.dart';
 import 'package:flutter_uikit/ui/page/collection/recipes_items.dart';
 
 import 'package:flutter_uikit/database/icrisat_database.dart';
 
-
-
 class FinalReportCard extends StatefulWidget {
-
   final ConsumptionData consumptionData;
   final VoidCallback navigatePageStateSubmit;
   final VoidCallback navigatePageStateBackToInfo;
+  final VoidCallback navigatePageStateBack;
   final ValueChanged<ConsumptionData> updatePageState;
 
-  const FinalReportCard ({
+  const FinalReportCard({
     @required this.navigatePageStateSubmit,
     @required this.navigatePageStateBackToInfo,
+    @required this.navigatePageStateBack,
     @required this.consumptionData,
     @required this.updatePageState,
   });
 
   //Alert
+  //it is intendended that this alert dialog goes directly to the submit
+  //however, this is put to a separate button for now as we do not want this to pop up every time the recipe is modified
+  //also 
   showAlertDialog(BuildContext context) {
     // set up the buttons
     Widget continueButton = TextButton(
@@ -41,12 +43,13 @@ class FinalReportCard extends StatefulWidget {
     );
 
     // set up the AlertDialog
+    //this is the fourth pass prompt
     AlertDialog alert = AlertDialog(
       title: Text("Help"),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(20.0))),
       content: Container(
-        height: 200,
+        height: 300,
         width: 300,
         child: SingleChildScrollView(
           child: Column(
@@ -59,14 +62,15 @@ class FinalReportCard extends StatefulWidget {
               new ListTile(
                 leading: new MyBullet(),
                 title: new Text(
-                    'Have you checked with the picture chart?'),
+                    'Have you checked the foods consumed with the picture chart?'),
               ),
               new ListTile(
                 leading: new MyBullet(),
                 title: new Text(
                     'Have you cross checked all the foods consumed verbally with the participant?'),
               ),
-              new Text('If you have done so, please press the submit button. If you have not done so, please click the back to edit button'),
+              new Text(
+                  '\nIf you have done so, please press the submit button. If you have not done so, please click the back to edit button'),
             ],
           ),
         ),
@@ -90,7 +94,6 @@ class FinalReportCard extends StatefulWidget {
 }
 
 class _FinalReportCardState extends State<FinalReportCard> {
-
   final _formKey = new GlobalKey<FormState>();
 
   @override
@@ -107,37 +110,36 @@ class _FinalReportCardState extends State<FinalReportCard> {
     List<Widget> overallFoodItemCardList = new List<Widget>.generate(
         widget.consumptionData.listOfFoods.length,
         (index) => OverallFoodItemCard(
-          foodItem: widget.consumptionData.listOfFoods[index],
-          updateFoodItemState: (item){},
-          enabled: false,
-        )
-    );
-    // ignore: unused_local_variable
-    List<Widget> firstPassList = new List<Widget>.generate(
-        widget.consumptionData.listOfFoods.length,
-            (index) =>
-            FoodItemCard(
-              listnumber: null,
-              updateFoodItemState: (foodItem) {
-                widget.consumptionData.listOfFoods[index] = foodItem;
-              },
               foodItem: widget.consumptionData.listOfFoods[index],
+              updateFoodItemState: (item) {},
               enabled: false,
-            )
-    );
-    // ignore: unused_local_variable
-    List<Widget> secondPassList = new List<Widget>.generate(
-        widget.consumptionData.listOfFoods.length,
-            (index) =>
-            SecondPassFoodItemCard(
-              updateFoodItemState: (foodItem) {
-                widget.consumptionData.listOfFoods[index] = foodItem;
-              },
-              foodItem: widget.consumptionData.listOfFoods[index],
-              enabled: false,
-            )
-    );
+            ));
 
+    // this section shows the individual passes in the fourth pass so it could be easily edited
+    // this is not necessary as the overall Food Item Card should show everything already, 
+    // or at least it will be a drop down 
+            
+    // List<Widget> firstPassList = new List<Widget>.generate(
+    //     widget.consumptionData.listOfFoods.length,
+    //     (index) => FoodItemCard(
+    //           listnumber: null,
+    //           updateFoodItemState: (foodItem) {
+    //             widget.consumptionData.listOfFoods[index] = foodItem;
+    //           },
+    //           foodItem: widget.consumptionData.listOfFoods[index],
+    //           enabled: false,
+    //         ));
+    // List<Widget> secondPassList = new List<Widget>.generate(
+    //     widget.consumptionData.listOfFoods.length,
+    //     (index) => SecondPassFoodItemCard(
+    //           updateFoodItemState: (foodItem) {
+    //             widget.consumptionData.listOfFoods[index] = foodItem;
+    //           },
+    //           foodItem: widget.consumptionData.listOfFoods[index],
+    //           enabled: false,
+    //         ));
+            
+    // extra final questions in the fourth pass
     List<Widget> endInterviewDataCardList = [
       Card(
         elevation: 2.0,
@@ -146,7 +148,8 @@ class _FinalReportCardState extends State<FinalReportCard> {
           child: Column(
             children: <Widget>[
               TimePicker(
-                initialTime: widget.consumptionData.interviewData?.interviewEnd ?? null,
+                initialTime:
+                    widget.consumptionData.interviewData?.interviewEnd ?? null,
                 onChanged: (time) {
                   widget.consumptionData.interviewData.interviewEnd = time;
                   widget.updatePageState(widget.consumptionData);
@@ -156,18 +159,23 @@ class _FinalReportCardState extends State<FinalReportCard> {
               ),
               DialogPicker(
                 questionText: "Final Outcome of Interview",
-                optionsList: FormStrings.interviewOutcomeSelection.values.toList(),
+                optionsList:
+                    FormStrings.interviewOutcomeSelection.values.toList(),
                 onConfirm: (List<int> values) {
-                  widget.consumptionData.interviewData.interviewOutcome = InterviewOutcomeSelection.values[values[0]];
+                  widget.consumptionData.interviewData.interviewOutcome =
+                      InterviewOutcomeSelection.values[values[0]];
                   widget.updatePageState(widget.consumptionData);
                 },
               ),
               FormQuestion(
                 questionText: "Reasons for Incomplete Interview",
-                hint:"",
-                initialText:widget.consumptionData.interviewData?.incompleteInterviewReason ?? null,
+                hint: "",
+                initialText: widget.consumptionData.interviewData
+                        ?.incompleteInterviewReason ??
+                    null,
                 onSaved: (answer) {
-                  widget.consumptionData.interviewData.incompleteInterviewReason = answer;
+                  widget.consumptionData.interviewData
+                      .incompleteInterviewReason = answer;
                   widget.updatePageState(widget.consumptionData);
                 },
               ),
@@ -176,49 +184,59 @@ class _FinalReportCardState extends State<FinalReportCard> {
         ),
       )
     ];
+    //Can have navigation bar and just have the submit button
     List<Widget> buttonsList = [
-      new SizedBox(
-        height: 70,
+      new FittedBox(
+        //height: 70,
         child: ButtonBar(
           alignment: MainAxisAlignment.center,
           children: <Widget>[
-            ElevatedButton( //RaisdedButton
+            ElevatedButton(
               child: const Text('Back To Edit'),
               style: ElevatedButton.styleFrom(
-                primary: Theme.of(context).accentColor,
-                elevation: 4.0,
-                onSurface: Colors.blueGrey
-              ),
+                  primary: Theme.of(context).accentColor,
+                  elevation: 4.0,
+                  onSurface: Colors.blueGrey),
               onPressed: () {
                 widget.navigatePageStateBackToInfo();
               },
             ),
-            ElevatedButton( //RaisdedButton
+            ElevatedButton(
+              child: const Text('Third Pass'),
+              style: ElevatedButton.styleFrom(
+                  primary: Theme.of(context).accentColor,
+                  elevation: 4.0,
+                  onSurface: Colors.blueGrey),
+              onPressed: () {
+                widget.navigatePageStateBack();
+              },
+            ),
+            ElevatedButton(
+              //RaisdedButton
               child: const Text('Prompt'),
               style: ElevatedButton.styleFrom(
-                primary: Colors.orange[500],
-                elevation: 4.0,
-                onSurface: Colors.blueGrey
-              ),
+                  primary: Colors.orange[500],
+                  elevation: 4.0,
+                  onSurface: Colors.blueGrey),
               onPressed: () {
                 widget.showAlertDialog(context);
               },
             ),
-            ElevatedButton( //RaisedButton
+            ElevatedButton(
+              //RaisedButton
               child: const Text('Submit'),
               style: ElevatedButton.styleFrom(
-                primary: Theme.of(context).accentColor,
-                elevation: 4.0,
-                onSurface: Colors.blueGrey
-              ),
+                  primary: Theme.of(context).accentColor,
+                  elevation: 4.0,
+                  onSurface: Colors.blueGrey),
               onPressed: () async {
                 final form = _formKey.currentState;
                 if (form.validate()) {
-                   _formKey.currentState.save();
-                   widget.updatePageState(widget.consumptionData);
-                   widget.navigatePageStateSubmit();
-                   widget.consumptionData.save();
-                   print(await IcrisatDB().getNextModifiedRecipeID());
+                  _formKey.currentState.save();
+                  widget.updatePageState(widget.consumptionData);
+                  widget.navigatePageStateSubmit();
+                  widget.consumptionData.save();
+                  print(await IcrisatDB().getNextModifiedRecipeID());
                 }
               },
             ),
@@ -234,15 +252,14 @@ class _FinalReportCardState extends State<FinalReportCard> {
 //        ...secondPassList,
         ...endInterviewDataCardList,
         ...buttonsList,
-
       ],
     );
   }
 }
 
+// demonstrate all that is needed in each food card
 
 class OverallFoodItemCard extends StatelessWidget {
-
   final FoodItem foodItem;
   final updateFoodItemState;
   final bool enabled;
@@ -257,7 +274,6 @@ class OverallFoodItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Card(
       elevation: 2.0,
       child: Container(
@@ -270,7 +286,7 @@ class OverallFoodItemCard extends StatelessWidget {
               onSuggestionSelected: (String selected) {
                 foodItem.foodName = selected;
 
-                FoodItem selectedRecipe = recipeMap[selected]?? FoodItem();
+                FoodItem selectedRecipe = recipeMap[selected] ?? FoodItem();
 
                 foodItem.recipe = selectedRecipe.recipe;
                 foodItem.ingredientItems = selectedRecipe.ingredientItems;
@@ -294,8 +310,8 @@ class OverallFoodItemCard extends StatelessWidget {
             ),
             DialogPicker(
               questionText: "Source of Food",
-              optionsList: FormStrings.sourceOfFoodOutcomeSelection.values
-                  .toList(),
+              optionsList:
+                  FormStrings.sourceOfFoodOutcomeSelection.values.toList(),
               onConfirm: (List<int> values) {
                 foodItem.foodSource = SourceOfFoodSelection.values[values[0]];
                 updateFoodItemState(foodItem);
@@ -311,7 +327,7 @@ class OverallFoodItemCard extends StatelessWidget {
             ),
             RecipeExpansionTile(
               foodItem: foodItem,
-              updateFoodItemState: ()=>{},
+              updateFoodItemState: () => {},
               enabled: false,
               initiallyExpanded: false,
             ),
@@ -324,6 +340,3 @@ class OverallFoodItemCard extends StatelessWidget {
     );
   }
 }
-
-
-

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_uikit/model/menu.dart';
 import 'package:flutter_uikit/utils/uidata.dart';
 
+//This is to set up the widgets in the home screen
+
 class MenuViewModel {
   List<Menu> menuItems;
 
@@ -20,12 +22,7 @@ class MenuViewModel {
           menuColor: Color(0xffc8c4bd),
           icon: Icons.folder_open,
           image: UIData.blankImage,
-          items: [
-//            "Shopping List",
-//            "Shopping Details",
-//            "Product Details",
-//            "Shopping 4"
-          ]),
+          items: []),
       Menu(
           title: "Add New Recipe",
           menuColor: Color(0xff7f5741),

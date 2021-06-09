@@ -3,6 +3,10 @@ import 'package:flutter_uikit/ui/widgets/common_divider.dart';
 import 'package:flutter_uikit/ui/widgets/common_scaffold.dart';
 import 'package:flutter_uikit/ui/widgets/profile_tile.dart';
 
+
+
+//https://stackoverflow.com/questions/54707731/this-class-inherits-from-a-class-marked-as-immutable-and-therefore-should-be-i
+//check the above length for an explanation
 // ignore: must_be_immutable
 class ProfileOnePage extends StatelessWidget {
   var deviceSize;
