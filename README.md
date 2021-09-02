@@ -3,7 +3,7 @@
 This is a Flutter-based app designed to follow Gibson's 24-hour Methodology for nutritional data collection.
 
 ## Description
-The app follows the structure of the four passes for the [Gibson 24-hour methodology](https://assets.publishing.service.gov.uk/media/57a08bac40f0b64974000cd6/tech08.pdf). It has been designed with prompts to help the enumerator carrying out the survey to make the process as intuitive as possible. Having been designed with offline usage in mind, it uses a local database of the recipes and recent data collected.
+The app follows the structure of the four passes for the [Gibson 24-hour methodology](https://www.gov.uk/research-for-development-outputs/an-interactive-24-hour-recall-for-assessing-the-adequacy-of-iron-and-zinc-intakes-in-developing-countries). It has been designed with prompts to help the enumerator carrying out the survey to make the process as intuitive as possible. Having been designed with offline usage in mind, it uses a local database of the recipes and recent data collected.
 
 ## Installation
 
