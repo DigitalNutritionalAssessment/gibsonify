@@ -65,4 +65,4 @@ Icon*
 *.zip
 
 # Flutter Version Management (fvm) files
-.fvm
+.fvm/flutter_sdk
