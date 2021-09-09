@@ -63,3 +63,6 @@ Icon*
 
 # Other specific folders and files
 *.zip
+
+# Flutter Version Management (fvm) files
+.fvm
