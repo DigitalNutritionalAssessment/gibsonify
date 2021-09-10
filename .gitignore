@@ -54,12 +54,11 @@ Icon*
 # VSCode/VSCodium specific folders
 .vscode/
 
-# TODO, uncomment after veryfing the app is not dependent on .idea (which it shoudln't be)
 # IntelliJ related files and folders
-# *.iml
-# *.ipr
-# *.iws
-# .idea/
+*.iml
+*.ipr
+*.iws
+.idea/
 
 # Other specific folders and files
 *.zip
