@@ -1,6 +1,6 @@
-# Gibsonify App
+# Gibsonify
 
-This is a Flutter-based app designed to follow Gibson's 24-hour Methodology for nutritional data collection.
+Gibsonify is a Flutter-based app designed to follow Gibson's 24-hour Methodology for nutritional data collection.
 
 ## Description
 
