@@ -31,6 +31,9 @@
 .pub/
 /build/
 
+# pubspec.lock should be checked into version control
+# See: https://stackoverflow.com/questions/16136739/in-dart-and-pub-should-i-add-pubspec-lock-to-my-gitignore
+
 # Web related
 lib/generated_plugin_registrant.dart
 
