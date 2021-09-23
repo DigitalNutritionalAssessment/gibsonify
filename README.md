@@ -20,10 +20,10 @@ Probably direct (signed) apk download from GitHub releases, then maybe Google Pl
 
 For development, it is recommended to run the app on an Android emulator using a Flutter SDK. You can run the app using the SDK from the command line, or from an IDE such as VSCode/VSCodium (with the [Flutter extension](https://open-vsx.org/extension/Dart-Code/flutter)) or Android Studio.
 
-It is recommended to use [Flutter Version Management (fvm)](https://fvm.app) with Flutter SDK version 2.5.0. First, install fvm using [official instructions](https://fvm.app/docs/getting_started/installation). Then, after cloning this project and navigating into its directory in terminal, install the required Flutter SDK version
+It is recommended to use [Flutter Version Management (fvm)](https://fvm.app) with Flutter SDK version 2.5.1. First, install fvm using [official instructions](https://fvm.app/docs/getting_started/installation). Then, after cloning this project and navigating into its directory in terminal, install the required Flutter SDK version
 
 ```bash
-fvm install 2.5.0
+fvm install 2.5.1
 ```
 
 After installing, you can optionally disable Flutter and Dart analytics
@@ -41,7 +41,7 @@ fvm flutter doctor
 Finally, configure the correct Flutter version to be used in this project
 
 ```bash
-fvm use 2.5.0
+fvm use 2.5.1
 ```
 
 ### Running
