@@ -10,7 +10,7 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'Gibsonify',
       theme: ThemeData(primarySwatch: Colors.teal),
-      onGenerateRoute: ScreenRouter.route,
+      onGenerateRoute: PageRouter.route,
     );
   }
 }

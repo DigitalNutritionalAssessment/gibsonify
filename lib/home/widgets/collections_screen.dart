@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 
 import 'package:gibsonify/navigation/navigation.dart';
 
-class RecipesScreen extends StatefulWidget {
-  const RecipesScreen({Key? key}) : super(key: key);
+class CollectionsScreen extends StatefulWidget {
+  const CollectionsScreen({Key? key}) : super(key: key);
 
   @override
-  _RecipesScreenState createState() => _RecipesScreenState();
+  _CollectionsScreenState createState() => _CollectionsScreenState();
 }
 
-class _RecipesScreenState extends State<RecipesScreen> {
+class _CollectionsScreenState extends State<CollectionsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text('Recipes')),
-        body: const Center(child: Text('List of Recipes')),
+        appBar: AppBar(title: const Text('Collections')),
+        body: const Center(child: Text('List of Collections')),
         floatingActionButton: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -22,7 +22,7 @@ class _RecipesScreenState extends State<RecipesScreen> {
               FloatingActionButton(
                   child: const Icon(Icons.add),
                   onPressed: () =>
-                      Navigator.pushNamed(context, ScreenRouter.newRecipe))
+                      Navigator.pushNamed(context, PageRouter.collection))
             ]));
   }
 }

@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
 
-import 'package:gibsonify/screens/collections_screen.dart';
-import 'package:gibsonify/screens/recipes_screen.dart';
-import 'package:gibsonify/screens/settings_screen.dart';
+import 'package:gibsonify/home/widgets/widgets.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomePageState extends State<HomePage> {
   int _selectedScreenIndex = 0;
 
-  // TODO:
+  // TODO: add all main screens
   final List<Widget> _screens = [
     const CollectionsScreen(),
     const RecipesScreen(),
