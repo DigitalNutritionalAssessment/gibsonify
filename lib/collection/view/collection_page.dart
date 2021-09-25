@@ -6,9 +6,9 @@ class CollectionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text('New Recipe')),
+        appBar: AppBar(title: const Text('New Collection')),
         body: const Center(
-          child: Text('New Recipe Items'),
+          child: Text('New Collection'),
         ));
   }
 }
