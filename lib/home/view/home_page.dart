@@ -16,7 +16,7 @@ class _HomePageState extends State<HomePage> {
   final List<Widget> _screens = [
     const CollectionsScreen(),
     const RecipesScreen(),
-    // const SyncScreen(),
+    const SyncScreen(),
     const SettingsScreen(),
   ];
 
@@ -37,11 +37,10 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(Icons.menu_book),
             label: 'Recipes',
           ),
-          // TODO: Implement Sync Screen
-          // BottomNavigationBarItem(
-          //   icon: Icon(Icons.sync),
-          //   label: 'Sync',
-          // ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.sync),
+            label: 'Sync',
+          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
             label: 'Settings',
