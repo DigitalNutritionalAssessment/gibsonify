@@ -12,7 +12,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedScreenIndex = 0;
 
-  // TODO: Add sync screen
   final List<Widget> _screens = [
     const CollectionsScreen(),
     const RecipesScreen(),
