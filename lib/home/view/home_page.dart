@@ -12,11 +12,11 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedScreenIndex = 0;
 
-  // TODO: add all main screens
+  // TODO: Add sync screen
   final List<Widget> _screens = [
     const CollectionsScreen(),
     const RecipesScreen(),
-    // SyncScreen(),
+    // const SyncScreen(),
     const SettingsScreen(),
   ];
 
@@ -25,6 +25,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: _screens[_selectedScreenIndex],
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         currentIndex: _selectedScreenIndex,
         onTap: _onScreenSelected,
         items: const <BottomNavigationBarItem>[
@@ -36,16 +37,15 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(Icons.menu_book),
             label: 'Recipes',
           ),
+          // TODO: Implement Sync Screen
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.sync),
+          //   label: 'Sync',
+          // ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
             label: 'Settings',
-          ),
-          // TODO: Find out why upon adding a fourth item it suddenly stops
-          // displaying the BottomNavigationBar
-          // BottomNavigationBarItem(
-          //   icon: Icon(Icons.sync),
-          //   label: 'Yo',
-          // ),
+          )
         ],
       ),
     );
