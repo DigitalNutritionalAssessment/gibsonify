@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ThirdPassScreen extends StatefulWidget {
+import 'package:gibsonify/collection/collection.dart';
+
+class ThirdPassScreen extends StatelessWidget {
   const ThirdPassScreen({Key? key}) : super(key: key);
 
   @override
-  _ThirdPassScreenState createState() => _ThirdPassScreenState();
-}
-
-class _ThirdPassScreenState extends State<ThirdPassScreen> {
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(title: const Text('Third Pass')),
-        body: const Center(child: Text('Third Pass Form Fields')));
+    return BlocBuilder<CollectionBloc, CollectionState>(
+      builder: (context, state) {
+        return Scaffold(
+            appBar: AppBar(title: const Text('Second Pass')),
+            body: Center(
+                child:
+                    Text('Collection id: ' + state.collection.id.toString())));
+      },
+    );
   }
 }
