@@ -7,8 +7,7 @@ part 'collection_event.dart';
 part 'collection_state.dart';
 
 class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
-  static const Collection _collection =
-      Collection(id: 1, title: 'New Collection!', body: 'Collection Body!!!');
+  static const Collection _collection = Collection();
 
   CollectionBloc() : super(const CollectionState(_collection)) {
     // on<CollectionEvent>((event, emit) {

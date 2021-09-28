@@ -11,10 +11,10 @@ class FourthPassScreen extends StatelessWidget {
     return BlocBuilder<CollectionBloc, CollectionState>(
       builder: (context, state) {
         return Scaffold(
-            appBar: AppBar(title: const Text('Second Pass')),
+            appBar: AppBar(title: const Text('Fourth Pass')), // TODO: fix
             body: Center(
-                child:
-                    Text('Collection id: ' + state.collection.id.toString())));
+                child: Text('Interview Date: ' +
+                    (state.collection.interviewDate ?? 'not selected'))));
       },
     );
   }

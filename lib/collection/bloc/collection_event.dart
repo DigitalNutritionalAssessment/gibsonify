@@ -8,7 +8,7 @@ abstract class CollectionEvent extends Equatable {
 }
 
 // TODO: modularize this into more atomic events as
-// CollectionNameUpdated, CollectionFoodAdded, etc.
+// CollectionHouseholdIdUpdated, CollectionFoodAdded, etc.
 class CollectionUpdated extends CollectionEvent {
   final Collection collection;
 
@@ -17,3 +17,12 @@ class CollectionUpdated extends CollectionEvent {
   @override
   List<Object> get props => [collection];
 }
+
+
+// TODO: implement: class CollectionHouseholdIdUpdated extend CollectionEvent {}
+// and then in collection bloc add logic that will check the new id
+// and then add different collection states — probably something like
+// CollectionSucces and CollectionFailure - or maybe even more atomic
+// with CollectionHouseholdIdFailure or so
+// basically have to think about the BLoC API - what should the black box
+// do, what events receive for the form and what states to output

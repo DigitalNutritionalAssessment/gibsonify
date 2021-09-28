@@ -1,21 +1,33 @@
 import 'package:equatable/equatable.dart';
 
+// TODO: look into changing this from Equatable derived
+// class to something else, e.g. Formz derived class
 class Collection extends Equatable {
-  const Collection({required this.id, required this.title, required this.body});
+  const Collection(
+      {this.householdId,
+      this.respondentName,
+      this.respondentTelephoneNumber,
+      this.interviewDate});
 
-  final int id;
-  final String title;
-  final String body;
+  final String? householdId;
+  final String? respondentName;
+  final String? respondentTelephoneNumber;
+  final String? interviewDate;
 
-  Collection copyWith({
-    int? id,
-    String? title,
-    String? body,
-  }) {
+  Collection copyWith(
+      {String? householdId,
+      String? respondentName,
+      String? respondentTelephoneNumber,
+      String? interviewDate}) {
     return Collection(
-        id: id ?? this.id, title: title ?? this.title, body: body ?? this.body);
+        householdId: householdId ?? this.householdId,
+        respondentName: respondentName ?? this.respondentName,
+        respondentTelephoneNumber:
+            respondentTelephoneNumber ?? this.respondentTelephoneNumber,
+        interviewDate: interviewDate ?? this.interviewDate);
   }
 
   @override
-  List<Object> get props => [id, title, body];
+  List<Object?> get props =>
+      [householdId, respondentName, respondentTelephoneNumber];
 }
