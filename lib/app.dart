@@ -10,6 +10,7 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'Gibsonify',
       theme: ThemeData(primarySwatch: Colors.teal),
+      darkTheme: ThemeData.dark(), // TODO: add teal accents
       onGenerateRoute: PageRouter.route,
     );
   }
