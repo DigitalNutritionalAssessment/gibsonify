@@ -8,6 +8,9 @@ class CollectionState extends Equatable {
   List<Object> get props => [collection];
 }
 
+
+// TODO: Investigate creating more states and
+// best practices for doing so
 // class CollectionSuccess extends CollectionState {
 
 //   const CollectionSuccess(collection: this.collection);
