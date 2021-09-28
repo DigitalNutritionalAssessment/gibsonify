@@ -3,15 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:gibsonify/collection/collection.dart';
 
-// TODO: try converting this screen to stateless widget
-class SensitizationScreen extends StatefulWidget {
+class SensitizationScreen extends StatelessWidget {
   const SensitizationScreen({Key? key}) : super(key: key);
 
-  @override
-  _SensitizationScreenState createState() => _SensitizationScreenState();
-}
-
-class _SensitizationScreenState extends State<SensitizationScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CollectionBloc, CollectionState>(

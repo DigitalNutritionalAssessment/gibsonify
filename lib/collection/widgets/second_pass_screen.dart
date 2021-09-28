@@ -3,14 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:gibsonify/collection/collection.dart';
 
-class SecondPassScreen extends StatefulWidget {
+class SecondPassScreen extends StatelessWidget {
   const SecondPassScreen({Key? key}) : super(key: key);
 
-  @override
-  _SecondPassScreenState createState() => _SecondPassScreenState();
-}
-
-class _SecondPassScreenState extends State<SecondPassScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CollectionBloc, CollectionState>(
