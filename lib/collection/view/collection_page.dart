@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:gibsonify/collection/collection.dart';
 
@@ -23,38 +22,35 @@ class _CollectionPageState extends State<CollectionPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => CollectionBloc(),
-      child: Scaffold(
-        body: _screens[_selectedScreenIndex],
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          currentIndex: _selectedScreenIndex,
-          onTap: _onScreenSelected,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.description),
-              label: 'Sensitization',
-            ),
-            BottomNavigationBarItem(
-              // TODO: Change icons to just numbers
-              icon: Icon(Icons.one_k),
-              label: 'First',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.two_k),
-              label: 'Second',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.three_k),
-              label: 'Third',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.four_k),
-              label: 'Fourth',
-            )
-          ],
-        ),
+    return Scaffold(
+      body: _screens[_selectedScreenIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        currentIndex: _selectedScreenIndex,
+        onTap: _onScreenSelected,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.description),
+            label: 'Sensitization',
+          ),
+          BottomNavigationBarItem(
+            // TODO: Change icons to just numbers
+            icon: Icon(Icons.one_k),
+            label: 'First',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.two_k),
+            label: 'Second',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.three_k),
+            label: 'Third',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.four_k),
+            label: 'Fourth',
+          )
+        ],
       ),
     );
   }
