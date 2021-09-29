@@ -82,7 +82,6 @@ class SensitizationScreen extends StatelessWidget {
                         hintText: state.collection.interviewDate ??
                             'Enter Interview Date',
                         border: const OutlineInputBorder())),
-                // TODO: fix bug with only date being one
               ),
             ],
           ),

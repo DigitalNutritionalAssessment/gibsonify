@@ -29,5 +29,5 @@ class Collection extends Equatable {
 
   @override
   List<Object?> get props =>
-      [householdId, respondentName, respondentTelephoneNumber];
+      [householdId, respondentName, respondentTelephoneNumber, interviewDate];
 }
