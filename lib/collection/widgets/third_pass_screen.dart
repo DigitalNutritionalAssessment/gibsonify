@@ -11,11 +11,10 @@ class ThirdPassScreen extends StatelessWidget {
     return BlocBuilder<CollectionBloc, CollectionState>(
       builder: (context, state) {
         return Scaffold(
-            appBar: AppBar(title: const Text('Third Pass')), // TODO: fix!
+            appBar: AppBar(title: const Text('Third Pass')),
             body: Center(
-                child: Text('Respondent Tel. Number: ' +
-                    (state.collection.respondentTelephoneNumber ??
-                        'not selected'))));
+                child: Text('DEMO Respondent Tel. Number: ' +
+                    state.respondentTelNumber.value)));
       },
     );
   }

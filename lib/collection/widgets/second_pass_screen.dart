@@ -13,8 +13,7 @@ class SecondPassScreen extends StatelessWidget {
         return Scaffold(
             appBar: AppBar(title: const Text('Second Pass')),
             body: Center(
-                child: Text('Respondent name: ' +
-                    (state.collection.respondentName ?? 'not selected'))));
+                child: Text('DEMO Respondent name: ' + state.respondentName.value)));
       },
     );
   }

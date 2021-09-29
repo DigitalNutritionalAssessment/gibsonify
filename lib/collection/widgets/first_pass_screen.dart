@@ -13,8 +13,7 @@ class FirstPassScreen extends StatelessWidget {
         return Scaffold(
             appBar: AppBar(title: const Text('First Pass')),
             body: Center(
-                child: Text('Household ID: ' +
-                    (state.collection.householdId ?? 'not selected'))));
+                child: Text('DEMO Household ID: ' + state.householdId.value)));
       },
     );
   }

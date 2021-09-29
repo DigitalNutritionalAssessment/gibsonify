@@ -7,22 +7,46 @@ abstract class CollectionEvent extends Equatable {
   List<Object> get props => [];
 }
 
-// TODO: modularize this into more atomic events as
-// CollectionHouseholdIdUpdated, CollectionFoodAdded, etc.
-class CollectionUpdated extends CollectionEvent {
-  final Collection collection;
+class HouseholdIdChanged extends CollectionEvent {
+  final String householdId;
 
-  const CollectionUpdated(this.collection);
+  const HouseholdIdChanged({required this.householdId});
 
   @override
-  List<Object> get props => [collection];
+  List<Object> get props => [householdId];
 }
 
+class HouseholdIdUnfocused extends CollectionEvent {}
 
-// TODO: implement: class CollectionHouseholdIdUpdated extend CollectionEvent {}
-// and then in collection bloc add logic that will check the new id
-// and then add different collection states — probably something like
-// CollectionSucces and CollectionFailure - or maybe even more atomic
-// with CollectionHouseholdIdFailure or so
-// basically have to think about the BLoC API - what should the black box
-// do, what events receive for the form and what states to output
+class RespondentNameChanged extends CollectionEvent {
+  final String respondentName;
+
+  const RespondentNameChanged({required this.respondentName});
+
+  @override
+  List<Object> get props => [respondentName];
+}
+
+class RespondentNameUnfocused extends CollectionEvent {}
+
+class RespondentTelNumberChanged extends CollectionEvent {
+  final String respondentTelNumber;
+
+  const RespondentTelNumberChanged({required this.respondentTelNumber});
+
+  @override
+  List<Object> get props => [respondentTelNumber];
+}
+
+class RespondentTelNumberUnfocused extends CollectionEvent {}
+
+class InterviewDateChanged extends CollectionEvent {
+  final String interviewDate;
+
+  const InterviewDateChanged({required this.interviewDate});
+
+  @override
+  List<Object> get props => [interviewDate];
+}
+
+class InterviewDateUnfocused extends CollectionEvent {}

@@ -8,150 +8,212 @@ class SensitizationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: move BlocBuilder to standalone widgets
-    // such that only those get rebuilt
+    // TODO: refactor this to a Scrollview or something else
+    // such that I don't nest two Scaffolds
+    return Scaffold(
+      appBar: AppBar(title: const Text('Sensitization')),
+      body: const SensitizationForm(),
+      // TODO: Add floating action button for help prompt (with an '?' Icon)
+    );
+  }
+}
+
+class SensitizationForm extends StatefulWidget {
+  const SensitizationForm({Key? key}) : super(key: key);
+
+  @override
+  State<SensitizationForm> createState() => _SensitizationFormState();
+}
+
+// TODO: Fix form input fields showwing errors while typing
+class _SensitizationFormState extends State<SensitizationForm> {
+  final _householdIdFocusNode = FocusNode();
+  final _respondentNameFocusNode = FocusNode();
+  final _respondentTelNumberFocusNode = FocusNode();
+  final _interviewDateFocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _householdIdFocusNode.addListener(() {
+      if (!_householdIdFocusNode.hasFocus) {
+        context.read<CollectionBloc>().add(HouseholdIdUnfocused());
+      }
+    });
+    _respondentNameFocusNode.addListener(() {
+      if (!_respondentNameFocusNode.hasFocus) {
+        context.read<CollectionBloc>().add(RespondentNameUnfocused());
+      }
+    });
+    _respondentTelNumberFocusNode.addListener(() {
+      if (!_respondentTelNumberFocusNode.hasFocus) {
+        context.read<CollectionBloc>().add(RespondentTelNumberUnfocused());
+      }
+    });
+    _interviewDateFocusNode.addListener(() {
+      if (!_interviewDateFocusNode.hasFocus) {
+        context.read<CollectionBloc>().add(InterviewDateUnfocused());
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _householdIdFocusNode.dispose();
+    _respondentNameFocusNode.dispose();
+    _respondentTelNumberFocusNode.dispose();
+    _interviewDateFocusNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: <Widget>[
+          HouseholdIdInput(focusNode: _householdIdFocusNode),
+          RespondentNameInput(focusNode: _respondentNameFocusNode),
+          RespondentTelNumberInput(focusNode: _respondentTelNumberFocusNode),
+          InterviewDateInput(focusNode: _interviewDateFocusNode)
+        ],
+      ),
+    );
+  }
+}
+
+// TODO: refactor input forms into one reusable widget, and/or move to separate
+// files
+
+class HouseholdIdInput extends StatelessWidget {
+  const HouseholdIdInput({Key? key, required this.focusNode}) : super(key: key);
+
+  final FocusNode focusNode;
+
+  @override
+  Widget build(BuildContext context) {
     return BlocBuilder<CollectionBloc, CollectionState>(
       builder: (context, state) {
-        return Scaffold(
-          appBar: AppBar(title: const Text('Sensitization')),
-          // TODO: refactor into standalone widgets
-          body: Column(
-            children: [
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Center(child: Text('Household ID')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                    onChanged: (householdId) => context
-                        .read<CollectionBloc>()
-                        .add(CollectionUpdated(state.collection
-                            .copyWith(householdId: householdId))),
-                    decoration: InputDecoration(
-                        hintText: state.collection.householdId ??
-                            'Enter Household ID',
-                        border: const OutlineInputBorder())),
-              ),
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Center(child: Text('Respondent Name')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                    onChanged: (respondentName) => context
-                        .read<CollectionBloc>()
-                        .add(CollectionUpdated(state.collection
-                            .copyWith(respondentName: respondentName))),
-                    decoration: InputDecoration(
-                        hintText: state.collection.respondentName ??
-                            'Enter Respondent Name',
-                        border: const OutlineInputBorder())),
-              ),
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Center(child: Text('Respondent Tel. Number')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                    keyboardType: TextInputType.number,
-                    onChanged: (respondentTelephoneNumber) => context
-                        .read<CollectionBloc>()
-                        .add(CollectionUpdated(state.collection.copyWith(
-                            respondentTelephoneNumber:
-                                respondentTelephoneNumber))),
-                    decoration: InputDecoration(
-                        hintText: state.collection.respondentTelephoneNumber ??
-                            'Enter Respondent Tel. Number',
-                        border: const OutlineInputBorder())),
-              ),
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Center(child: Text('Interview Date')),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                    onChanged: (interviewDate) => context
-                        .read<CollectionBloc>()
-                        .add(CollectionUpdated(state.collection
-                            .copyWith(interviewDate: interviewDate))),
-                    decoration: InputDecoration(
-                        hintText: state.collection.interviewDate ??
-                            'Enter Interview Date',
-                        border: const OutlineInputBorder())),
-              ),
-            ],
+        return TextFormField(
+          initialValue: state.householdId.value,
+          focusNode: focusNode,
+          decoration: InputDecoration(
+            icon: const Icon(Icons.house),
+            labelText: 'Household ID',
+            helperText: 'A valid Household ID e.g. IMH13D0303',
+            errorText: state.householdId.invalid
+                ? 'Enter a valid Household ID e.g. IMH13D0303'
+                : null,
           ),
-          // TODO: Add floating action button for help prompt (with an '?' Icon)
+          onChanged: (value) {
+            context
+                .read<CollectionBloc>()
+                .add(HouseholdIdChanged(householdId: value));
+          },
+          textInputAction: TextInputAction.next,
         );
       },
     );
   }
 }
 
-// TODO: Implement a block observer
+class RespondentNameInput extends StatelessWidget {
+  const RespondentNameInput({Key? key, required this.focusNode})
+      : super(key: key);
 
-// // TODO: move to widgets
-// class DatePicker extends StatefulWidget {
-//   const DatePicker({Key? key}) : super(key: key);
+  final FocusNode focusNode;
 
-//   @override
-//   _DatePickerState createState() => _DatePickerState();
-// }
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CollectionBloc, CollectionState>(
+      builder: (context, state) {
+        return TextFormField(
+          initialValue: state.respondentName.value,
+          focusNode: focusNode,
+          decoration: InputDecoration(
+            icon: const Icon(Icons.person),
+            labelText: 'Respondent Name',
+            helperText: 'Full name of respondent e.g. Keira Brown',
+            errorText:
+                state.respondentName.invalid ? 'Enter respondent name' : null,
+          ),
+          onChanged: (value) {
+            context
+                .read<CollectionBloc>()
+                .add(RespondentNameChanged(respondentName: value));
+          },
+          textInputAction: TextInputAction.next,
+        );
+      },
+    );
+  }
+}
 
-// class _DatePickerState extends State<DatePicker> {
-//   final _dateController = TextEditingController();
+class RespondentTelNumberInput extends StatelessWidget {
+  const RespondentTelNumberInput({Key? key, required this.focusNode})
+      : super(key: key);
 
-//   @override
-//   void dispose() {
-//     _dateController.dispose();
-//     super.dispose();
-//   }
+  final FocusNode focusNode;
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return BlocBuilder<CollectionBloc, CollectionState>(
-//       builder: (context, state) {
-//         return TextField(
-//             onSubmitted: (interviewDate) => context.read<CollectionBloc>().add(
-//                 CollectionUpdated(
-//                     state.collection.copyWith(interviewDate: interviewDate))),
-//             controller: _dateController,
-//             decoration: InputDecoration(
-//                 hintText: state.collection.interviewDate ??
-//                     'Choose Interview Start Date',
-//                 border: const OutlineInputBorder()),
-//             onTap: () async {
-//               var date = await showDatePicker(
-//                   context: context,
-//                   initialDate: DateTime.now(),
-//                   firstDate: DateTime(1900),
-//                   lastDate: DateTime(2100));
-//               _dateController.text = date
-//                   .toString()
-//                   .substring(0, 10); // TODO fix exception when cancelling
-//             });
-//       },
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CollectionBloc, CollectionState>(
+      builder: (context, state) {
+        return TextFormField(
+          initialValue: state.respondentTelNumber.value,
+          keyboardType: TextInputType.phone,
+          focusNode: focusNode,
+          decoration: InputDecoration(
+            icon: const Icon(Icons.phone),
+            labelText: 'Respondent Tel. Number',
+            helperText: 'Full tel. number of respondent e.g. +447448238123',
+            errorText: state.respondentTelNumber.invalid
+                ? 'Enter valid tel. number'
+                : null,
+          ),
+          onChanged: (value) {
+            context
+                .read<CollectionBloc>()
+                .add(RespondentTelNumberChanged(respondentTelNumber: value));
+          },
+          textInputAction: TextInputAction.next,
+        );
+      },
+    );
+  }
+}
 
-// TODO: rewrite like this
-// class _HouseholdIdInput extends StatelessWidget {
-//   const _HouseholdIdInput({Key? key}) : super(key: key);
+class InterviewDateInput extends StatelessWidget {
+  const InterviewDateInput({Key? key, required this.focusNode})
+      : super(key: key);
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return BlocBuilder<SubjectBloc, SubjectState>(
-//       builder: (context, state) {
-//         return TextField(
-//           onChanged: (hoseholdId) =>
-//               context.read<CollectionBloc>().add(CollectionUpdated(state)),
-//         );
-//       },
-//     );
-//   }
-// }
+  final FocusNode focusNode;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CollectionBloc, CollectionState>(
+      builder: (context, state) {
+        return TextFormField(
+          initialValue: state.interviewDate.value,
+          keyboardType: TextInputType.datetime,
+          focusNode: focusNode,
+          decoration: InputDecoration(
+            icon: const Icon(Icons.calendar_today),
+            labelText: 'Interview Date',
+            helperText: 'Date at the interview',
+            errorText:
+                state.interviewDate.invalid ? 'Enter a valid date' : null,
+          ),
+          onChanged: (value) {
+            context
+                .read<CollectionBloc>()
+                .add(InterviewDateChanged(interviewDate: value));
+          },
+        );
+      },
+    );
+  }
+}
+// TODO: Add datepicker
+
+// TODO: Add a "First Pass" Button at the bottom of the form
