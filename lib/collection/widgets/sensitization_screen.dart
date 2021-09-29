@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:gibsonify/collection/collection.dart';
+import 'package:gibsonify/navigation/navigation.dart';
 
 class SensitizationScreen extends StatelessWidget {
   const SensitizationScreen({Key? key}) : super(key: key);
@@ -11,10 +12,17 @@ class SensitizationScreen extends StatelessWidget {
     // TODO: refactor this to a Scrollview or something else
     // such that I don't nest two Scaffolds
     return Scaffold(
-      appBar: AppBar(title: const Text('Sensitization')),
-      body: const SensitizationForm(),
-      // TODO: Add floating action button for help prompt (with an '?' Icon)
-    );
+        appBar: AppBar(title: const Text('Sensitization')),
+        body: const SensitizationForm(),
+        floatingActionButton: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              FloatingActionButton(
+                  child: const Icon(Icons.help),
+                  onPressed: () => Navigator.pushNamed(
+                      context, PageRouter.sensitizationHelp))
+            ]));
   }
 }
 
