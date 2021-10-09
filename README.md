@@ -1,6 +1,6 @@
-# Gibsonify App
+# Gibsonify
 
-This is a Flutter-based app designed to follow Gibson's 24-hour Methodology for nutritional data collection.
+Gibsonify is a Flutter-based app designed to follow Gibson's 24-hour Methodology for nutritional data collection.
 
 ## Description
 
@@ -18,14 +18,12 @@ Probably direct (signed) apk download from GitHub releases, then maybe Google Pl
 
 ### Dev Environment Set up
 
-> Warning, this project _cannot_ yet be built with latest Flutter version (2.5.0), use version 2.2.3 or earlier
-
 For development, it is recommended to run the app on an Android emulator using a Flutter SDK. You can run the app using the SDK from the command line, or from an IDE such as VSCode/VSCodium (with the [Flutter extension](https://open-vsx.org/extension/Dart-Code/flutter)) or Android Studio.
 
-Since the latest Flutter version is not yet supported, it is recommended to use [Flutter Version Management (fvm)](https://fvm.app) with Flutter SDK version 2.2.3. First, install fvm using [official instructions](https://fvm.app/docs/getting_started/installation). Then, after cloning this project and navigating into its directory in terminal, install the required Flutter SDK version
+It is recommended to use [Flutter Version Management (fvm)](https://fvm.app) with Flutter SDK version 2.5.1. First, install fvm using [official instructions](https://fvm.app/docs/getting_started/installation). Then, after cloning this project and navigating into its directory in terminal, install the required Flutter SDK version
 
 ```bash
-fvm install 2.2.3
+fvm install 2.5.1
 ```
 
 After installing, you can optionally disable Flutter and Dart analytics
@@ -43,7 +41,7 @@ fvm flutter doctor
 Finally, configure the correct Flutter version to be used in this project
 
 ```bash
-fvm use 2.2.3
+fvm use 2.5.1
 ```
 
 ### Running
@@ -60,9 +58,15 @@ You can run the app in debug mode from Android Studio, from VSCode/VSCodium by p
 fvm flutter run
 ```
 
+### App structure
+
+_TODO add repo structure_
+
 ### Contributing
 
-Pull requests are welcome, for better versioning, make sure to use [Conventional Commits](https://www.conventionalcommits.org/), perhaps with the help of [Commitizen](https://commitizen-tools.github.io/commitizen/). For major changes, please open an issue first to discuss what you would like to change.
+This project follows a conventional branch structure and [Conventional Commits](https://www.conventionalcommits.org/). The stable branch is `main`, which shouldn't be directly commited to. The main development branch, `dev`, is merged into `main` after checks pass, but `dev` also shouldn't be directly commited to. Commits should be made into branches branched out from the `dev` branch, e.g. `feat/my-awesome-feature`.
+
+To contribute, open a pull request from your branch to the `dev` branch. For better versioning, make sure to use Conventional Commits, perhaps with the help of [Commitizen](https://commitizen-tools.github.io/commitizen/). For major changes, please open an issue first to discuss what you would like to change.
 
 Please make sure to update tests as appropriate.
 

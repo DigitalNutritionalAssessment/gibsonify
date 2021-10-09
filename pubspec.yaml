@@ -1,98 +1,24 @@
-name: flutter_uikit
-description: A new Flutter project.
+name: gibsonify
+description: Collect nutritional data using Gibson's method.
+publish_to: 'none'
+version: 1.0.0+1
 
-# The following defines the version and build number for your application.
-# A version number is three numbers separated by dots, like 1.2.43
-# followed by an optional build number separated by a +.
-# Both the version and the builder number may be overridden in flutter
-# build by specifying --build-name and --build-number, respectively.
-# Read more about versioning at semver.org.
-version: 1.0.1+2
-
-# Attempt to fix the issue by adding the envioronemnt line
 environment:
-  sdk: '>=2.10.0 <3.0.0'
-#sdk: '>=2.12.0 <3.0.0' this would make it non-nullable to be enabled but will break the code.
-#This need to be updated constantly to keep up with the latest changes
-
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.2
-  font_awesome_flutter:
-  http: ^0.12.0+1
-  rxdart: ^0.21.0
-  flutter_masked_text: ^0.8.0
-  flutter_datetime_picker:
-  flutter_picker:
-  path_provider:
-  uuid:
-  sqflite:
-  flutter_typeahead:
-  shared_preferences:
-  location:
-  flutter_localizations:
-    sdk: flutter
-  numberpicker: ^2.1.1
+  flutter_bloc: ^7.3.0
+  equatable: ^2.0.3
+  formz: ^0.4.0
 
 dev_dependencies:
-  random_pk:
   flutter_test:
     sdk: flutter
+  bloc_test: ^8.2.0
+  # TODO mocktail: ^0.1.4 or mockito???
+  flutter_lints: ^1.0.0
 
-# For information on the generic Dart part of this file, see the
-# following page: https://www.dartlang.org/tools/pub/pubspec
-
-# The following section is specific to Flutter.
 flutter:
-  # The following line ensures that the Material Icons font is
-  # included with your application, so that you can use the icons in
-  # the material Icons class.
   uses-material-design: true
-
-  # To add assets to your application, add an assets section, like this:
-  assets:
-    - assets/images/
-    - locale/i18n_en.json
-    - locale/i18n_hi.json
-    - assets/database/icrisat.db
-  #  - images/a_dot_ham.jpeg
-
-  # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.io/assets-and-images/#resolution-aware.
-
-  # For details regarding adding assets from package dependencies, see
-  # https://flutter.io/assets-and-images/#from-packages
-
-  # To add custom fonts to your application, add a fonts section here,
-  # in this "flutter" section. Each entry in this list should have a
-  # "family" key with the font family name, and a "fonts" key with a
-  # list giving the asset and other descriptors for the font. For
-  # example:
-  fonts:
-    - family: Quicksand
-      fonts:
-        - asset: assets/fonts/Quicksand-Medium.ttf
-          style: normal
-        - asset: assets/fonts/Quicksand_Bold.otf
-          weight: 700
-
-    - family: Raleway
-      fonts:
-        - asset: assets/fonts/Raleway-Regular.ttf
-          style: normal
-        - asset: assets/fonts/Raleway-Medium.ttf
-  #
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.io/custom-fonts/#from-packages
-
-#  # Run this command in order to
-#  # flutter packages pub run flutter_launcher_icons:main -f pubspec.yaml
-#  flutter_icons:
-#    image_path: "assets/icons/icon.png"
-#    android: true
-#    ios: true
