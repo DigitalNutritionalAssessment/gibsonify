@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
 
-class RecipePage extends StatelessWidget {
+import 'package:gibsonify/recipe/recipe.dart';
+
+class RecipePage extends StatefulWidget {
   const RecipePage({Key? key}) : super(key: key);
+
+  @override
+  _RecipePageState createState() => _RecipePageState();
+}
+
+class _RecipePageState extends State<RecipePage> {
+  final List<Widget> _screens = [
+    const RecipeScreen(),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text('New Recipe')),
-        body: const Center(
-          child: Text('New Recipe Items'),
-        ));
+      body: _screens[0],
+    );
   }
 }
