@@ -50,3 +50,43 @@ class InterviewDateChanged extends CollectionEvent {
 }
 
 class InterviewDateUnfocused extends CollectionEvent {}
+
+class FoodItemAdded extends CollectionEvent {}
+
+// TODO: delete this event
+class FoodItemChanged extends CollectionEvent {
+  final FoodItem foodItem;
+
+  const FoodItemChanged({required this.foodItem});
+
+  @override
+  List<Object> get props => [foodItem];
+}
+
+class FoodItemNameChanged extends CollectionEvent {
+  final String foodItemName;
+  // TODO: delete foodItem and pass only uuid instead
+  final FoodItem foodItem;
+  // TODO: implement
+  // final String foodItemUuid;
+
+  const FoodItemNameChanged(
+      {required this.foodItemName, required this.foodItem});
+
+  @override
+  List<Object> get props => [foodItemName, foodItem];
+}
+
+class FoodItemTimePeriodChanged extends CollectionEvent {
+  final String foodItemTimePeriod; // TODO: change to an enum?
+  // TODO: delete foodItem and pass only uuid instead
+  final FoodItem foodItem;
+  // TODO: implement
+  // final String foodItemUuid;
+
+  const FoodItemTimePeriodChanged(
+      {required this.foodItemTimePeriod, required this.foodItem});
+
+  @override
+  List<Object> get props => [foodItemTimePeriod, foodItem];
+}

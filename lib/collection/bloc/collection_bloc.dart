@@ -17,6 +17,10 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     on<RespondentNameUnfocused>(_onRespondentNameUnfocused);
     on<RespondentTelNumberUnfocused>(_onRespondentTelNumberUnfocused);
     on<InterviewDateUnfocused>(_onInterviewDateUnfocused);
+    on<FoodItemAdded>(_onFoodItemAdded);
+    on<FoodItemChanged>(_onFoodItemChanged); // TODO: delete
+    on<FoodItemNameChanged>(_onFoodItemNameChanged);
+    on<FoodItemTimePeriodChanged>(_onFoodItemTimePeriodChanged);
   }
 
   void _onHouseholdIdChanged(
@@ -128,5 +132,70 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
         interviewDate
       ]),
     ));
+  }
+
+  void _onFoodItemAdded(FoodItemAdded event, Emitter<CollectionState> emit) {
+    final foodItem = FoodItem();
+    List<FoodItem> foodItems = List.from(state.foodItems);
+    foodItems.add(foodItem);
+
+    emit(state.copyWith(foodItems: foodItems));
+  }
+
+  // TODO: del
+  void _onFoodItemChanged(
+      FoodItemChanged event, Emitter<CollectionState> emit) {
+    // final foodItem = event.foodItem;
+    // final foodItemId = event.foodItem.id;
+    List<FoodItem> foodItems = List.from(state.foodItems);
+    // for (final foodItem in foodItems) {
+    //   if (foodItem.id == foodItemId) {
+    //     // TODO: change to user input from the event
+    //     // int insertIndex = foodItem.name = Name.dirty('Banana');
+    //     print('found');
+    //   }
+    // }
+
+    int changedFoodItemIndex = foodItems.indexOf(event.foodItem);
+    FoodItem foodItem =
+        foodItems[changedFoodItemIndex].copyWith(name: Name.dirty('Tomato'));
+    foodItems.removeAt(changedFoodItemIndex);
+    foodItems.insert(changedFoodItemIndex, foodItem);
+
+    print('$changedFoodItemIndex');
+
+    emit(state.copyWith(foodItems: foodItems));
+  }
+
+  void _onFoodItemNameChanged(
+      FoodItemNameChanged event, Emitter<CollectionState> emit) {
+    List<FoodItem> foodItems = List.from(state.foodItems);
+
+    // TODO: change into UUID-based indexing
+    int changedFoodItemIndex = foodItems.indexOf(event.foodItem);
+
+    FoodItem foodItem = foodItems[changedFoodItemIndex]
+        .copyWith(name: Name.dirty(event.foodItemName));
+
+    foodItems.removeAt(changedFoodItemIndex);
+    foodItems.insert(changedFoodItemIndex, foodItem);
+
+    emit(state.copyWith(foodItems: foodItems));
+  }
+
+  void _onFoodItemTimePeriodChanged(
+      FoodItemTimePeriodChanged event, Emitter<CollectionState> emit) {
+    List<FoodItem> foodItems = List.from(state.foodItems);
+
+    // TODO: change into UUID-based indexing
+    int changedFoodItemIndex = foodItems.indexOf(event.foodItem);
+
+    FoodItem foodItem = foodItems[changedFoodItemIndex]
+        .copyWith(timePeriod: TimePeriod.dirty(event.foodItemTimePeriod));
+
+    foodItems.removeAt(changedFoodItemIndex);
+    foodItems.insert(changedFoodItemIndex, foodItem);
+
+    emit(state.copyWith(foodItems: foodItems));
   }
 }
