@@ -1,6 +1,3 @@
-// TODO: page_router add route,
-// and add floating action button to sensitization scree
-
 import 'package:flutter/material.dart';
 
 class FirstPassHelpPage extends StatelessWidget {
