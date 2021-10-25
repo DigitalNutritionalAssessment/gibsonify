@@ -28,6 +28,8 @@ Developing can be done using the Flutter SDK, which can be installed from [here]
 fvm install
 ```
 
+This should automatically install the correct Flutter version via fvm, which you can check by running `fvm doctor`.
+
 After installing, you can optionally disable Flutter and Dart analytics
 
 ```bash
@@ -38,12 +40,6 @@ Afterwards, make sure to correctly set up the Android toolchain, Android studio,
 
 ```bash
 fvm flutter doctor
-```
-
-Finally, configure the correct Flutter version to be used in this project
-
-```bash
-fvm use
 ```
 
 ### Running
