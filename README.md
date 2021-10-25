@@ -20,11 +20,15 @@ Probably direct (signed) apk download from GitHub releases, then maybe Google Pl
 
 For development, it is recommended to run the app on an Android emulator using a Flutter SDK. You can run the app using the SDK from the command line, or from an IDE such as VSCode/VSCodium (with the [Flutter extension](https://open-vsx.org/extension/Dart-Code/flutter)) or Android Studio.
 
-It is recommended to use [Flutter Version Management (fvm)](https://fvm.app) with Flutter SDK version 2.5.1. First, install fvm using [official instructions](https://fvm.app/docs/getting_started/installation). Then, after cloning this project and navigating into its directory in terminal, install the required Flutter SDK version
+Currently, it is attempted to carry out development on the latest Flutter [stable](https://github.com/flutter/flutter/wiki/Flutter-build-release-channels) SDK [release](https://flutter.dev/docs/development/tools/sdk/releases). However, due to the rapid development of Flutter, this might fail in the future, which is why the last tested SDK version is noted in the `fvm_config.json` file within the `.fvm` directory.
+
+Developing can be done using the Flutter SDK, which can be installed from [here](https://flutter.dev/docs/get-started/install), by following all the commands below while omitting `fvm ` from them e.g. running `flutter doctor` instead of `fvm flutter doctor` (and also skipping `fvm install`). If the latest stable Flutter SDK doesn't work, it is recommended to use [Flutter Version Management (fvm)](https://fvm.app) with the Flutter SDK version specified in `fvm_config.json`. First, install fvm using the [official instructions](https://fvm.app/docs/getting_started/installation). Then, after cloning this project and navigating into its directory in terminal, install the required Flutter SDK version
 
 ```bash
-fvm install 2.5.1
+fvm install
 ```
+
+This should automatically install the correct Flutter version via fvm, which you can check by running `fvm doctor`.
 
 After installing, you can optionally disable Flutter and Dart analytics
 
@@ -36,12 +40,6 @@ Afterwards, make sure to correctly set up the Android toolchain, Android studio,
 
 ```bash
 fvm flutter doctor
-```
-
-Finally, configure the correct Flutter version to be used in this project
-
-```bash
-fvm use 2.5.1
 ```
 
 ### Running

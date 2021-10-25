@@ -14,10 +14,14 @@ All notable changes to this project will be documented in this file.
 - *(README)* Update development instructions
 - *(README)* Update development instructions
 - *(README)* Update link to Gibson's method
+- *(changelog)* Update with fvm build and readme changes
 - *(license)* Add copyright year and owner
+- *(readme)* Add note about fvm doctor and delete unnecessary command
+- *(readme)* Update fvm and developement instructions
 - *(readme)* Update to fvm version 2.5.1
 - *(readme)* Update style in title and oneliner
-- *(readme)* Update readme with new name, correct style and typos- *(No Category)* Add changelog
+- *(readme)* Update readme with new name, correct style and typos- *(No Category)* Use git-cliff for changelog generation and update changelog
+- *(No Category)* Add changelog
 - *(No Category)* Move user guide to docs directory
 
 
@@ -38,7 +42,8 @@ All notable changes to this project will be documented in this file.
 
 - *(collection)* Remove equatable as a base class for collection and rename to gibsonsform
 - *(collection)* Change sensitization screen form to formz inputs, add input models and demos
-- *(collection)* Change sensitization, first_pass and second_pass screens to stateless widgets- *(No Category)* Move app from main to separate file
+- *(collection)* Change sensitization, first_pass and second_pass screens to stateless widgets- *(No Category)* Change to feature-driven app architecture using flutter_bloc
+- *(No Category)* Move app from main to separate file
 - *(No Category)* Start a fresh flutter project
 
 
@@ -48,6 +53,7 @@ All notable changes to this project will be documented in this file.
 
 ### Build
 
+- *(fvm)* Bump sdk version to 2.5.3
 - *(gitignore)* Add note about checking pubspec.lock into version control
 - *(gitignore)* Don't check in flutter_export_environment to version control
 - *(gitignore)* Ignore intellij related files and folders
