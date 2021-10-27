@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:dropdown_plus/dropdown_plus.dart';
 import 'package:gibsonify/recipe/recipe.dart';
 
 class RecipeScreen extends StatelessWidget {
@@ -9,9 +9,28 @@ class RecipeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Add a new recipe')),
-      body: const RecipeForm(),
-    );
+        appBar: AppBar(title: const Text('Add a new recipe'), actions: <Widget>[
+          Padding(
+              padding: const EdgeInsets.only(right: 20.0),
+              child: GestureDetector(
+                onTap: () {},
+                child: const Icon(
+                  Icons.save_sharp,
+                  size: 26.0,
+                ),
+              ))
+        ]),
+        body: const RecipeForm(),
+        floatingActionButton: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              FloatingActionButton.extended(
+                  label: const Text("Add Ingredient"),
+                  icon: const Icon(Icons.add),
+                  onPressed: () =>
+                      context.read<RecipeBloc>().add(IngredientAdded()))
+            ]));
   }
 }
 
@@ -63,7 +82,9 @@ class _RecipeFormState extends State<RecipeForm> {
         children: <Widget>[
           RecipeNameInput(focusNode: _recipeNameFocusNode),
           RecipeNumberInput(focusNode: _recipeNumberFocusNode),
-          RecipeVolumeInput(focusNode: _recipeVolumeFocusNode)
+          RecipeVolumeInput(focusNode: _recipeVolumeFocusNode),
+          const Ingredients(),
+          // SaveRecipeButton()
         ],
       ),
     );
@@ -166,3 +187,301 @@ class RecipeVolumeInput extends StatelessWidget {
     );
   }
 }
+
+class Ingredients extends StatefulWidget {
+  // Can go back to stateless?
+  const Ingredients({Key? key}) : super(key: key);
+
+  @override
+  State<Ingredients> createState() => _IngredientState();
+}
+
+class _IngredientState extends State<Ingredients> {
+  List<String> cookingStates = [
+    "Raw",
+    "Boiled",
+    "Boiled in water but retained water",
+    "Boiled in water but removed water",
+    "Steamed",
+    "Roasted with oil",
+    "Roasted without oil",
+    "Fried",
+    "Stir - fried",
+    "Soaking and stir fried",
+    "Boiled and fried",
+    "Boiled and stir-fried",
+    "Steamed and fried",
+    "Roasted and boiled"
+  ];
+  List<String> measurementMethods = [
+    "Direct weight",
+    "Volume of water",
+    "Volume of food",
+    "Play dough",
+    "Number",
+    "Size (photo)"
+  ];
+  List<String> sizes = [
+    "Small Spoon",
+    "Big spoon",
+    "Standard cup",
+    "Small",
+    "Medium",
+    "Large"
+  ];
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<RecipeBloc, RecipeState>(
+      builder: (context, state) {
+        return Expanded(
+            child: ListView.builder(
+                padding: const EdgeInsets.all(2.0),
+                itemCount: state.ingredients.length,
+                itemBuilder: (context, index) {
+                  return Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          TextFormField(
+                            initialValue: state.ingredients[index].name.value,
+                            decoration: InputDecoration(
+                              icon: const Icon(Icons.set_meal_rounded),
+                              labelText: 'Ingredient name',
+                              helperText: 'Ingredient name e.g. Rice',
+                              errorText: state.ingredients[index].name.invalid
+                                  ? 'Enter an ingredient name e.g. Tomato'
+                                  : null,
+                            ),
+                            onChanged: (value) {
+                              context.read<RecipeBloc>().add(
+                                  IngredientNameChanged(
+                                      ingredient: state.ingredients[index],
+                                      ingredientName: value));
+                            },
+                            textInputAction: TextInputAction.next,
+                          ),
+                          TextFormField(
+                            initialValue:
+                                state.ingredients[index].description.value,
+                            decoration: InputDecoration(
+                              icon: const Icon(Icons.description_rounded),
+                              labelText: 'Ingredient description',
+                              helperText:
+                                  'Ingredient description e.g. Big, dry, ripe etc.',
+                              errorText: state
+                                      .ingredients[index].description.invalid
+                                  ? 'Enter an ingredient description e.g. Ripe'
+                                  : null,
+                            ),
+                            onChanged: (value) {
+                              context.read<RecipeBloc>().add(
+                                  IngredientDescriptionChanged(
+                                      ingredient: state.ingredients[index],
+                                      ingredientDescription: value));
+                            },
+                            textInputAction: TextInputAction.next,
+                          ),
+                          DropdownFormField<String>(
+                            onEmptyActionPressed: () async {},
+                            decoration: InputDecoration(
+                              suffixIcon: const Icon(Icons.arrow_drop_down),
+                              icon: const Icon(Icons.food_bank_rounded),
+                              labelText: "Cooking state",
+                              helperText: 'How the ingredient is prepared',
+                              errorText:
+                                  state.ingredients[index].cookingState.invalid
+                                      ? 'Enter a cooking state'
+                                      : null,
+                            ),
+                            onSaved: (dynamic
+                                str) {}, // investigate onSaved vs onChanged
+                            onChanged: (dynamic value) {
+                              context.read<RecipeBloc>().add(
+                                  CookingStateChanged(
+                                      ingredient: state.ingredients[index],
+                                      cookingState: value));
+                            },
+                            validator: (dynamic str) {},
+                            displayItemFn: (dynamic item) => Text(
+                              item ?? '',
+                            ),
+                            findFn: (dynamic str) async => cookingStates,
+                            filterFn: (dynamic item, str) =>
+                                item.toLowerCase().indexOf(str.toLowerCase()) >=
+                                0,
+                            dropdownItemFn: (dynamic item, position, focused,
+                                    dynamic lastSelectedItem, onTap) =>
+                                ListTile(
+                              title: Text(item),
+                              onTap: onTap,
+                            ),
+                          ),
+                          DropdownFormField<String>(
+                            onEmptyActionPressed: () async {},
+                            decoration: InputDecoration(
+                              suffixIcon: const Icon(Icons.arrow_drop_down),
+                              icon: const Icon(Icons.food_bank_rounded),
+                              labelText: "Measurement method",
+                              helperText: 'How the measurement is measured',
+                              errorText: state.ingredients[index]
+                                      .measurementMethod.invalid
+                                  ? 'Enter a measurement method'
+                                  : null,
+                            ),
+                            onSaved: (dynamic
+                                str) {}, // investigate onSaved vs onChanged
+                            onChanged: (dynamic value) {
+                              context.read<RecipeBloc>().add(
+                                  MeasurementMethodChanged(
+                                      ingredient: state.ingredients[index],
+                                      measurementMethod: value));
+                            },
+                            validator: (dynamic str) {},
+                            displayItemFn: (dynamic item) => Text(
+                              item ?? '',
+                            ),
+                            findFn: (dynamic str) async => measurementMethods,
+                            filterFn: (dynamic item, str) =>
+                                item.toLowerCase().indexOf(str.toLowerCase()) >=
+                                0,
+                            dropdownItemFn: (dynamic item, position, focused,
+                                    dynamic lastSelectedItem, onTap) =>
+                                ListTile(
+                              title: Text(item),
+                              onTap: onTap,
+                            ),
+                          ),
+                          TextFormField(
+                            initialValue:
+                                state.ingredients[index].measurement.value,
+                            decoration: InputDecoration(
+                              icon: const Icon(
+                                  Icons.format_list_numbered_rounded),
+                              labelText: 'Measurement volume',
+                              helperText: 'Input measurement volume',
+                              errorText:
+                                  state.ingredients[index].measurement.invalid
+                                      ? 'Enter an ingredient name e.g. Banana'
+                                      : null,
+                            ),
+                            onChanged: (value) {
+                              context.read<RecipeBloc>().add(MeasurementChanged(
+                                  ingredient: state.ingredients[index],
+                                  measurement: value));
+                            },
+                            textInputAction: TextInputAction.next,
+                            keyboardType: TextInputType.number,
+                          ),
+                          TextFormField(
+                            initialValue:
+                                state.ingredients[index].measurementUnit.value,
+                            decoration: InputDecoration(
+                              icon: const Icon(Icons.local_drink_rounded),
+                              labelText: 'Measurement unit',
+                              helperText: 'Grams or milliters',
+                              errorText: state.ingredients[index]
+                                      .measurementUnit.invalid
+                                  ? 'Enter a measurement unit'
+                                  : null,
+                            ),
+                            onChanged: (value) {
+                              context.read<RecipeBloc>().add(
+                                  MeasurementUnitChanged(
+                                      ingredient: state.ingredients[index],
+                                      measurementUnit: value));
+                            },
+                            textInputAction: TextInputAction.next,
+                            keyboardType: TextInputType.number,
+                          ),
+                          DropdownFormField<String>(
+                            onEmptyActionPressed: () async {},
+                            decoration: InputDecoration(
+                              suffixIcon: const Icon(Icons.arrow_drop_down),
+                              icon: const Icon(Icons.local_dining_rounded),
+                              labelText: "Size",
+                              helperText: 'Input size measurement',
+                              errorText: state.ingredients[index]
+                                      .measurementMethod.invalid
+                                  ? 'Enter a size measurement'
+                                  : null,
+                            ),
+                            onSaved: (dynamic
+                                str) {}, // investigate onSaved vs onChanged
+                            onChanged: (dynamic value) {
+                              context.read<RecipeBloc>().add(SizeChanged(
+                                  ingredient: state.ingredients[index],
+                                  size: value));
+                            },
+                            validator: (dynamic str) {},
+                            displayItemFn: (dynamic item) => Text(
+                              item ?? '',
+                            ),
+                            findFn: (dynamic str) async => sizes,
+                            filterFn: (dynamic item, str) =>
+                                item.toLowerCase().indexOf(str.toLowerCase()) >=
+                                0,
+                            dropdownItemFn: (dynamic item, position, focused,
+                                    dynamic lastSelectedItem, onTap) =>
+                                ListTile(
+                              title: Text(item),
+                              onTap: onTap,
+                            ),
+                          ),
+                          TextFormField(
+                            initialValue:
+                                state.ingredients[index].sizeNumber.value,
+                            decoration: InputDecoration(
+                              icon: const Icon(Icons.fastfood),
+                              labelText: 'Size number',
+                              helperText: 'Input size',
+                              errorText:
+                                  state.ingredients[index].sizeNumber.invalid
+                                      ? 'Enter an ingredient name e.g. Banana'
+                                      : null,
+                            ),
+                            onChanged: (value) {
+                              context.read<RecipeBloc>().add(SizeNumberChanged(
+                                  ingredient: state.ingredients[index],
+                                  sizeNumber: value));
+                            },
+                            textInputAction: TextInputAction.next,
+                            keyboardType: TextInputType.number,
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }));
+      },
+    );
+  }
+}
+
+
+// class SaveRecipeButton extends StatelessWidget {
+//   SaveRecipeButton({Key? key}) : super(key: key);
+//   final ButtonStyle style = ElevatedButton.styleFrom(
+//       textStyle: const TextStyle(fontSize: 20),
+//       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)));
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return BlocBuilder<RecipeBloc, RecipeState>(
+//       builder: (context, state) {
+//         return ElevatedButton(
+//           style: style,
+//           onPressed: state.recipeName.value.isNotEmpty &&
+//                   state.recipeNumber.value.isNotEmpty &&
+//                   state.recipeVolume.value.isNotEmpty &&
+//                   !state.recipeName.invalid &&
+//                   !state.recipeNumber.invalid &&
+//                   !state.recipeVolume.invalid
+//               ? () {}
+//               : null,
+//           child: const Text('Save Recipe'),
+//         );
+//       },
+//     );
+//   }
+// }
