@@ -12,17 +12,16 @@ class SensitizationScreen extends StatelessWidget {
     // TODO: refactor this to a Scrollview or something else
     // such that I don't nest two Scaffolds
     return Scaffold(
-        appBar: AppBar(title: const Text('Sensitization')),
-        body: const SensitizationForm(),
-        floatingActionButton: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: <Widget>[
-              FloatingActionButton(
-                  child: const Icon(Icons.help),
-                  onPressed: () => Navigator.pushNamed(
-                      context, PageRouter.sensitizationHelp))
-            ]));
+        appBar: AppBar(
+          title: const Text('Sensitization'),
+          actions: [
+            IconButton(
+                onPressed: () =>
+                    Navigator.pushNamed(context, PageRouter.sensitizationHelp),
+                icon: const Icon(Icons.help))
+          ],
+        ),
+        body: const SensitizationForm());
   }
 }
 
@@ -204,6 +203,7 @@ class InterviewDateInput extends StatelessWidget {
         return TextFormField(
           initialValue: state.interviewDate.value,
           keyboardType: TextInputType.datetime,
+          // TODO: Add datepicker
           focusNode: focusNode,
           decoration: InputDecoration(
             icon: const Icon(Icons.calendar_today),
@@ -222,8 +222,8 @@ class InterviewDateInput extends StatelessWidget {
     );
   }
 }
-// TODO: Add datepicker
 
-// TODO: Add a "First Pass" Button at the bottom of the form
-// or maybe change the help button into a done button and move the help
-// to the top right of the AppBar
+// TODO: Add a "Tick mark" FloatingActionButton to the bottom right of Scaffold
+// that checks if the all the fields are completed
+// (i.e. checks state.sensitizationStatus.isValid) and allows to go to first
+// pass if true
