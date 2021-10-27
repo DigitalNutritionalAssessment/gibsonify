@@ -14,8 +14,10 @@ All notable changes to this project will be documented in this file.
 - *(README)* Update development instructions
 - *(README)* Update development instructions
 - *(README)* Update link to Gibson's method
+- *(changelog)* Update with further readme changes
 - *(changelog)* Update with fvm build and readme changes
 - *(license)* Add copyright year and owner
+- *(readme)* Add development instructions and update authors
 - *(readme)* Add note about fvm doctor and delete unnecessary command
 - *(readme)* Update fvm and developement instructions
 - *(readme)* Update to fvm version 2.5.1
@@ -60,7 +62,8 @@ All notable changes to this project will be documented in this file.
 - *(gitignore)* Don't exclude fvm config
 - *(gitignore)* Ignore fvm files
 - *(pubspec)* Bump flutter_bloc and bloc_test versions
-- *(pubspec)* Update dependencies and remove unnecessary ones- *(No Category)* Remove intellij related files and folders
+- *(pubspec)* Update dependencies and remove unnecessary ones- *(No Category)* Update flutter sdk and fvm version and instructions
+- *(No Category)* Remove intellij related files and folders
 - *(No Category)* Update gitignore and remove files that should not have been checked into version control
 
 
