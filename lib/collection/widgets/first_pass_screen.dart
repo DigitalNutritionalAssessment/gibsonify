@@ -18,7 +18,6 @@ class FirstPassScreen extends StatelessWidget {
                 IconButton(
                     onPressed: () =>
                         Navigator.pushNamed(context, PageRouter.firstPassHelp),
-                    // TODO: change to firstPassHelp
                     icon: const Icon(Icons.help))
               ],
             ),
