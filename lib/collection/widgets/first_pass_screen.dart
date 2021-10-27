@@ -36,7 +36,6 @@ class FirstPassScreen extends StatelessWidget {
                             decoration: InputDecoration(
                               icon: const Icon(Icons.fastfood),
                               labelText: 'Food name',
-                              // state.foodItems[index].name.value.toString(),
                               helperText: 'Food name e.g. Dhal',
                               errorText: state.foodItems[index].name.invalid
                                   ? 'Enter a food name e.g. Banana'
