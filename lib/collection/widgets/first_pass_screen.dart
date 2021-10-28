@@ -49,27 +49,35 @@ class FirstPassScreen extends StatelessWidget {
                             },
                             textInputAction: TextInputAction.next,
                           ),
-                          TextFormField(
-                            initialValue:
-                                state.foodItems[index].timePeriod.value,
+                          DropdownButtonFormField(
                             decoration: InputDecoration(
                               icon: const Icon(Icons.access_time),
                               labelText: 'Time period',
                               helperText:
                                   'Time period of consuming the food e.g. Morning',
-                              // TODO make dropdown and change
-                              errorText: state
-                                      .foodItems[index].timePeriod.invalid
-                                  ? 'Choose Morning, Afternoon, Evening, or Night'
-                                  : null,
+                              errorText:
+                                  state.foodItems[index].timePeriod.invalid
+                                      ? 'Select a time period'
+                                      : null,
                             ),
-                            onChanged: (value) {
-                              context.read<CollectionBloc>().add(
-                                  FoodItemTimePeriodChanged(
+                            items: const [
+                              DropdownMenuItem(
+                                  child: Text('Morning'), value: 'Morning'),
+                              DropdownMenuItem(
+                                  child: Text('Afternoon'), value: 'Afternoon'),
+                              DropdownMenuItem(
+                                  child: Text('Evening'), value: 'Evening'),
+                              DropdownMenuItem(
+                                  child: Text('Night'), value: 'Night'),
+                            ],
+                            onChanged: (String? value) {
+                              context
+                                  .read<CollectionBloc>()
+                                  .add(FoodItemTimePeriodChanged(
                                       foodItem: state.foodItems[index],
-                                      foodItemTimePeriod: value));
+                                      // TODO: Make a better null check
+                                      foodItemTimePeriod: value ?? ''));
                             },
-                            textInputAction: TextInputAction.next,
                           ),
                         ],
                       ),
