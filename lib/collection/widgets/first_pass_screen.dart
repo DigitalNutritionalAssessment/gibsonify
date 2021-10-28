@@ -97,3 +97,5 @@ class FirstPassScreen extends StatelessWidget {
     );
   }
 }
+
+// TODO: Add a way of deleting FoodItems
