@@ -10,6 +10,7 @@ class PageRouter {
   static const recipe = '/recipe';
   static const sensitizationHelp = '/sensitizationhelp';
   static const firstPassHelp = '/firstpasshelp';
+  static const secondPassHelp = '/secondpasshelp';
 
   static Route route(RouteSettings routeSettings) {
     switch (routeSettings.name) {
@@ -23,6 +24,8 @@ class PageRouter {
         return _buildRoute(const SensitizationHelpPage());
       case firstPassHelp:
         return _buildRoute(const FirstPassHelpPage());
+      case secondPassHelp:
+        return _buildRoute(const SecondPassHelpPage());
       default:
         throw Exception('Page does not exist!');
     }
