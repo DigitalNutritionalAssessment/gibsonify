@@ -111,25 +111,6 @@ class SecondPassScreen extends StatelessWidget {
                                     ? 'Select the form'
                                     : null,
                           ),
-
-/*
-    'raw',
-    'boiled',
-    'boiled in water but retained water',
-    'boiled in water but removed water',
-    'steamed',
-    'roasted with oil',
-    'roasted without oil',
-    'fried',
-    'stir-fried',
-    'soaking and stir-fried',
-    'boiled and fried'
-    'boiled and stir-fried',
-    'steamed and fried',
-    'roasted and boiled',
-    'other'
-*/
-
                           items: const [
                             // TODO: research how to handle empty string as
                             // the selected value other than a blank menu item
