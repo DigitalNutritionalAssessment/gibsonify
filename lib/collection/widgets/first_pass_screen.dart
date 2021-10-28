@@ -50,6 +50,7 @@ class FirstPassScreen extends StatelessWidget {
                             textInputAction: TextInputAction.next,
                           ),
                           DropdownButtonFormField(
+                            value: state.foodItems[index].timePeriod.value,
                             decoration: InputDecoration(
                               icon: const Icon(Icons.access_time),
                               labelText: 'Time period',
@@ -69,6 +70,9 @@ class FirstPassScreen extends StatelessWidget {
                                   child: Text('Evening'), value: 'Evening'),
                               DropdownMenuItem(
                                   child: Text('Night'), value: 'Night'),
+                              // TODO: research how to handle empty string as
+                              // the selected value other than a blank menu item
+                              DropdownMenuItem(child: Text(''), value: ''),
                             ],
                             onChanged: (String? value) {
                               context
