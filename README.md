@@ -1,10 +1,12 @@
 # Gibsonify
 
-Gibsonify is a Flutter-based app designed to follow Gibson's 24-hour Methodology for nutritional data collection.
+Gibsonify is a Flutter app designed to follow [Gibson's 24-hour methodology](https://www.gov.uk/research-for-development-outputs/an-interactive-24-hour-recall-for-assessing-the-adequacy-of-iron-and-zinc-intakes-in-developing-countries) for nutritional data collection.
+
+_TODO Add demo gif_
 
 ## Description
 
-The app follows the structure of the four passes for the [Gibson 24-hour methodology](https://www.gov.uk/research-for-development-outputs/an-interactive-24-hour-recall-for-assessing-the-adequacy-of-iron-and-zinc-intakes-in-developing-countries). It has been designed with prompts to help the enumerator carrying out the survey to make the process as intuitive as possible. Having been designed with offline usage in mind, it uses a local database of the recipes and recent data collected.
+The app follows the structure of the four passes of Gibson's methodology. It has been designed with prompts to help the enumerator carrying out the survey to make the process as intuitive as possible. Having been designed with offline usage in mind, it uses a local database of the recipes and recent data collected.
 
 ## Installation
 
@@ -46,7 +48,7 @@ fvm flutter doctor
 
 ### Running
 
-Before running for the first time, fetch all the dependencies
+Before running Gibsonify for the first time, fetch all the dependencies
 
 ```bash
 fvm flutter pub get
@@ -100,6 +102,8 @@ Probably using bloc_test and mockito or mocktail.
 
 Gibsonify is being developed by [Shazril Suhail](https://github.com/sshazril) and [Adam Sroka](https://adamsroka.io), who have taken on the previous work of [Greg Chu](https://github.com/gregchu6), [Juan Rodgers](https://github.com/rodgersjuan), and [Choon Kiat Lee](https://github.com/choonkiatlee).
 
+The development is being supported by the [Centre for Global Equality](https://centreforglobalequality.org) and the [University of Cambridge](https://www.cam.ac.uk).
+
 ## License
 
-[Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
+The source code of this project and all other content is licensed under the [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) license.
