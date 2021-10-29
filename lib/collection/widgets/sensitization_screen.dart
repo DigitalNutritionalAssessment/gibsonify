@@ -9,8 +9,6 @@ class SensitizationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: refactor this to a Scrollview or something else
-    // such that I don't nest two Scaffolds
     return Scaffold(
         appBar: AppBar(
           title: const Text('Sensitization'),
@@ -25,64 +23,19 @@ class SensitizationScreen extends StatelessWidget {
   }
 }
 
-class SensitizationForm extends StatefulWidget {
+class SensitizationForm extends StatelessWidget {
   const SensitizationForm({Key? key}) : super(key: key);
-
-  @override
-  State<SensitizationForm> createState() => _SensitizationFormState();
-}
-
-// TODO: Fix form input fields showwing errors while typing
-class _SensitizationFormState extends State<SensitizationForm> {
-  final _householdIdFocusNode = FocusNode();
-  final _respondentNameFocusNode = FocusNode();
-  final _respondentTelNumberFocusNode = FocusNode();
-  final _interviewDateFocusNode = FocusNode();
-
-  @override
-  void initState() {
-    super.initState();
-    _householdIdFocusNode.addListener(() {
-      if (!_householdIdFocusNode.hasFocus) {
-        context.read<CollectionBloc>().add(HouseholdIdUnfocused());
-      }
-    });
-    _respondentNameFocusNode.addListener(() {
-      if (!_respondentNameFocusNode.hasFocus) {
-        context.read<CollectionBloc>().add(RespondentNameUnfocused());
-      }
-    });
-    _respondentTelNumberFocusNode.addListener(() {
-      if (!_respondentTelNumberFocusNode.hasFocus) {
-        context.read<CollectionBloc>().add(RespondentTelNumberUnfocused());
-      }
-    });
-    _interviewDateFocusNode.addListener(() {
-      if (!_interviewDateFocusNode.hasFocus) {
-        context.read<CollectionBloc>().add(InterviewDateUnfocused());
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _householdIdFocusNode.dispose();
-    _respondentNameFocusNode.dispose();
-    _respondentTelNumberFocusNode.dispose();
-    _interviewDateFocusNode.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
-        children: <Widget>[
-          HouseholdIdInput(focusNode: _householdIdFocusNode),
-          RespondentNameInput(focusNode: _respondentNameFocusNode),
-          RespondentTelNumberInput(focusNode: _respondentTelNumberFocusNode),
-          InterviewDateInput(focusNode: _interviewDateFocusNode)
+        children: const <Widget>[
+          HouseholdIdInput(),
+          RespondentNameInput(),
+          RespondentTelNumberInput(),
+          InterviewDateInput()
         ],
       ),
     );
@@ -93,9 +46,7 @@ class _SensitizationFormState extends State<SensitizationForm> {
 // files
 
 class HouseholdIdInput extends StatelessWidget {
-  const HouseholdIdInput({Key? key, required this.focusNode}) : super(key: key);
-
-  final FocusNode focusNode;
+  const HouseholdIdInput({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +54,6 @@ class HouseholdIdInput extends StatelessWidget {
       builder: (context, state) {
         return TextFormField(
           initialValue: state.householdId.value,
-          focusNode: focusNode,
           decoration: InputDecoration(
             icon: const Icon(Icons.house),
             labelText: 'Household ID',
@@ -125,10 +75,7 @@ class HouseholdIdInput extends StatelessWidget {
 }
 
 class RespondentNameInput extends StatelessWidget {
-  const RespondentNameInput({Key? key, required this.focusNode})
-      : super(key: key);
-
-  final FocusNode focusNode;
+  const RespondentNameInput({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -136,7 +83,6 @@ class RespondentNameInput extends StatelessWidget {
       builder: (context, state) {
         return TextFormField(
           initialValue: state.respondentName.value,
-          focusNode: focusNode,
           decoration: InputDecoration(
             icon: const Icon(Icons.person),
             labelText: 'Respondent Name',
@@ -157,10 +103,7 @@ class RespondentNameInput extends StatelessWidget {
 }
 
 class RespondentTelNumberInput extends StatelessWidget {
-  const RespondentTelNumberInput({Key? key, required this.focusNode})
-      : super(key: key);
-
-  final FocusNode focusNode;
+  const RespondentTelNumberInput({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -169,7 +112,6 @@ class RespondentTelNumberInput extends StatelessWidget {
         return TextFormField(
           initialValue: state.respondentTelNumber.value,
           keyboardType: TextInputType.phone,
-          focusNode: focusNode,
           decoration: InputDecoration(
             icon: const Icon(Icons.phone),
             labelText: 'Respondent Tel. Number',
@@ -191,10 +133,7 @@ class RespondentTelNumberInput extends StatelessWidget {
 }
 
 class InterviewDateInput extends StatelessWidget {
-  const InterviewDateInput({Key? key, required this.focusNode})
-      : super(key: key);
-
-  final FocusNode focusNode;
+  const InterviewDateInput({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -204,7 +143,6 @@ class InterviewDateInput extends StatelessWidget {
           initialValue: state.interviewDate.value,
           keyboardType: TextInputType.datetime,
           // TODO: Add datepicker
-          focusNode: focusNode,
           decoration: InputDecoration(
             icon: const Icon(Icons.calendar_today),
             labelText: 'Interview Date',
@@ -227,3 +165,6 @@ class InterviewDateInput extends StatelessWidget {
 // that checks if the all the fields are completed
 // (i.e. checks state.sensitizationStatus.isValid) and allows to go to first
 // pass if true
+
+// Or perhaps make the bottom navigation bar be a part of the state and only 
+// allow to pass to next one if previous one is complete

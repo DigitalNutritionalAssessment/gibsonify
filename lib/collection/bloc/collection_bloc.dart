@@ -13,10 +13,6 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     on<RespondentNameChanged>(_onRespondentNameChanged);
     on<RespondentTelNumberChanged>(_onRespondentTelNumberChanged);
     on<InterviewDateChanged>(_onInterviewDateChanged);
-    on<HouseholdIdUnfocused>(_onHouseholdIdUnfocused);
-    on<RespondentNameUnfocused>(_onRespondentNameUnfocused);
-    on<RespondentTelNumberUnfocused>(_onRespondentTelNumberUnfocused);
-    on<InterviewDateUnfocused>(_onInterviewDateUnfocused);
     on<FoodItemAdded>(_onFoodItemAdded);
     on<FoodItemNameChanged>(_onFoodItemNameChanged);
     on<FoodItemTimePeriodChanged>(_onFoodItemTimePeriodChanged);
@@ -77,63 +73,6 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
           state.respondentTelNumber,
           interviewDate
         ])));
-  }
-
-  void _onHouseholdIdUnfocused(
-      HouseholdIdUnfocused event, Emitter<CollectionState> emit) {
-    final householdId = HouseholdId.dirty(state.householdId.value);
-    emit(state.copyWith(
-      householdId: householdId,
-      sensitizationStatus: Formz.validate([
-        householdId,
-        state.respondentName,
-        state.respondentTelNumber,
-        state.interviewDate
-      ]),
-    ));
-  }
-
-  void _onRespondentNameUnfocused(
-      RespondentNameUnfocused event, Emitter<CollectionState> emit) {
-    final respondentName = RespondentName.dirty(state.respondentName.value);
-    emit(state.copyWith(
-      respondentName: respondentName,
-      sensitizationStatus: Formz.validate([
-        state.householdId,
-        respondentName,
-        state.respondentTelNumber,
-        state.interviewDate
-      ]),
-    ));
-  }
-
-  void _onRespondentTelNumberUnfocused(
-      RespondentTelNumberUnfocused event, Emitter<CollectionState> emit) {
-    final respondentTelNumber =
-        RespondentTelNumber.dirty(state.respondentTelNumber.value);
-    emit(state.copyWith(
-      respondentTelNumber: respondentTelNumber,
-      sensitizationStatus: Formz.validate([
-        state.householdId,
-        state.respondentName,
-        respondentTelNumber,
-        state.interviewDate
-      ]),
-    ));
-  }
-
-  void _onInterviewDateUnfocused(
-      InterviewDateUnfocused event, Emitter<CollectionState> emit) {
-    final interviewDate = InterviewDate.dirty(state.interviewDate.value);
-    emit(state.copyWith(
-      interviewDate: interviewDate,
-      sensitizationStatus: Formz.validate([
-        state.householdId,
-        state.respondentName,
-        state.respondentTelNumber,
-        interviewDate
-      ]),
-    ));
   }
 
   void _onFoodItemAdded(FoodItemAdded event, Emitter<CollectionState> emit) {

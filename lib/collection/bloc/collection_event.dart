@@ -16,8 +16,6 @@ class HouseholdIdChanged extends CollectionEvent {
   List<Object> get props => [householdId];
 }
 
-class HouseholdIdUnfocused extends CollectionEvent {}
-
 class RespondentNameChanged extends CollectionEvent {
   final String respondentName;
 
@@ -26,8 +24,6 @@ class RespondentNameChanged extends CollectionEvent {
   @override
   List<Object> get props => [respondentName];
 }
-
-class RespondentNameUnfocused extends CollectionEvent {}
 
 class RespondentTelNumberChanged extends CollectionEvent {
   final String respondentTelNumber;
@@ -38,8 +34,6 @@ class RespondentTelNumberChanged extends CollectionEvent {
   List<Object> get props => [respondentTelNumber];
 }
 
-class RespondentTelNumberUnfocused extends CollectionEvent {}
-
 class InterviewDateChanged extends CollectionEvent {
   final String interviewDate;
 
@@ -48,8 +42,6 @@ class InterviewDateChanged extends CollectionEvent {
   @override
   List<Object> get props => [interviewDate];
 }
-
-class InterviewDateUnfocused extends CollectionEvent {}
 
 class FoodItemAdded extends CollectionEvent {}
 
