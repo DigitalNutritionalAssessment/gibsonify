@@ -14,9 +14,11 @@ All notable changes to this project will be documented in this file.
 - *(README)* Update development instructions
 - *(README)* Update development instructions
 - *(README)* Update link to Gibson's method
+- *(changelog)* Update readme
 - *(changelog)* Update with further readme changes
 - *(changelog)* Update with fvm build and readme changes
 - *(license)* Add copyright year and owner
+- *(readme)* Add minor updates
 - *(readme)* Add development instructions and update authors
 - *(readme)* Add note about fvm doctor and delete unnecessary command
 - *(readme)* Update fvm and developement instructions
