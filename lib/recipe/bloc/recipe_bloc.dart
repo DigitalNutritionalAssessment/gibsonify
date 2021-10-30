@@ -13,9 +13,6 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     on<RecipeNameChanged>(_recipeNameChanged);
     on<RecipeNumberChanged>(_recipeNumberChanged);
     on<RecipeVolumeChanged>(_recipeVolumeChanged);
-    on<RecipeNameUnfocused>(_onRecipeNameUnfocused);
-    on<RecipeNumberUnfocused>(_onRecipeNumberUnfocused);
-    on<RecipeVolumeUnfocused>(_onRecipeVolumeUnfocused);
     on<IngredientAdded>(_onIngredientAdded);
     on<IngredientNameChanged>(_onIngredientNameChanged);
     on<IngredientDescriptionChanged>(_onIngredientDescriptionChanged);
@@ -53,42 +50,6 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
   void _recipeVolumeChanged(
       RecipeVolumeChanged event, Emitter<RecipeState> emit) {
     final recipeVolume = RecipeVolume.dirty(event.recipeVolume);
-    emit(state.copyWith(
-        recipeVolume: recipeVolume,
-        recipeStatus: Formz.validate([
-          state.recipeName,
-          state.recipeNumber,
-          recipeVolume,
-        ])));
-  }
-
-  void _onRecipeNameUnfocused(
-      RecipeNameUnfocused event, Emitter<RecipeState> emit) {
-    final recipeName = RecipeName.dirty(state.recipeName.value);
-    emit(state.copyWith(
-        recipeName: recipeName,
-        recipeStatus: Formz.validate([
-          recipeName,
-          state.recipeNumber,
-          state.recipeVolume,
-        ])));
-  }
-
-  void _onRecipeNumberUnfocused(
-      RecipeNumberUnfocused event, Emitter<RecipeState> emit) {
-    final recipeNumber = RecipeNumber.dirty(state.recipeNumber.value);
-    emit(state.copyWith(
-        recipeNumber: recipeNumber,
-        recipeStatus: Formz.validate([
-          state.recipeName,
-          recipeNumber,
-          state.recipeVolume,
-        ])));
-  }
-
-  void _onRecipeVolumeUnfocused(
-      RecipeVolumeUnfocused event, Emitter<RecipeState> emit) {
-    final recipeVolume = RecipeVolume.dirty(state.recipeVolume.value);
     emit(state.copyWith(
         recipeVolume: recipeVolume,
         recipeStatus: Formz.validate([

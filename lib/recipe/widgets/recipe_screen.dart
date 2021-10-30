@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dropdown_plus/dropdown_plus.dart';
 import 'package:gibsonify/recipe/recipe.dart';
+import 'package:gibsonify/navigation/navigation.dart';
 
 class RecipeScreen extends StatelessWidget {
   const RecipeScreen({Key? key}) : super(key: key);
@@ -9,24 +10,23 @@ class RecipeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text('Add a new recipe'), actions: <Widget>[
-          Padding(
-              padding: const EdgeInsets.only(right: 20.0),
-              child: GestureDetector(
-                onTap: () {},
-                child: const Icon(
-                  Icons.save_sharp,
-                  size: 26.0,
-                ),
-              ))
-        ]),
+        appBar: AppBar(
+          title: const Text('Add a new recipe'),
+        ),
         body: const RecipeForm(),
         floatingActionButton: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               FloatingActionButton.extended(
-                  label: const Text("Add Ingredient"),
+                  label: const Text("Save Recipe"),
+                  icon: const Icon(Icons.save_sharp),
+                  onPressed: () {}), // TODO: Implement save button logic
+              const SizedBox(
+                height: 10,
+              ),
+              FloatingActionButton.extended(
+                  label: const Text("New Ingredient"),
                   icon: const Icon(Icons.add),
                   onPressed: () =>
                       context.read<RecipeBloc>().add(IngredientAdded()))
@@ -42,49 +42,16 @@ class RecipeForm extends StatefulWidget {
 }
 
 class _RecipeFormState extends State<RecipeForm> {
-  final _recipeNameFocusNode = FocusNode();
-  final _recipeNumberFocusNode = FocusNode();
-  final _recipeVolumeFocusNode = FocusNode();
-
-  @override
-  void initState() {
-    super.initState();
-    _recipeNameFocusNode.addListener(() {
-      if (!_recipeNameFocusNode.hasFocus) {
-        context.read<RecipeBloc>().add(RecipeNameUnfocused());
-      }
-    });
-    _recipeNumberFocusNode.addListener(() {
-      if (!_recipeNumberFocusNode.hasFocus) {
-        context.read<RecipeBloc>().add(RecipeNumberUnfocused());
-      }
-    });
-    _recipeVolumeFocusNode.addListener(() {
-      if (!_recipeVolumeFocusNode.hasFocus) {
-        context.read<RecipeBloc>().add(RecipeVolumeUnfocused());
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _recipeNameFocusNode.dispose();
-    _recipeNumberFocusNode.dispose();
-    _recipeVolumeFocusNode.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
-        children: <Widget>[
-          RecipeNameInput(focusNode: _recipeNameFocusNode),
-          RecipeNumberInput(focusNode: _recipeNumberFocusNode),
-          RecipeVolumeInput(focusNode: _recipeVolumeFocusNode),
-          const Ingredients(),
-          // SaveRecipeButton()
+        children: const <Widget>[
+          RecipeNameInput(),
+          RecipeNumberInput(),
+          RecipeVolumeInput(),
+          Ingredients(),
         ],
       ),
     );
@@ -92,9 +59,7 @@ class _RecipeFormState extends State<RecipeForm> {
 }
 
 class RecipeNameInput extends StatelessWidget {
-  const RecipeNameInput({Key? key, required this.focusNode}) : super(key: key);
-
-  final FocusNode focusNode;
+  const RecipeNameInput({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +67,6 @@ class RecipeNameInput extends StatelessWidget {
       builder: (context, state) {
         return TextFormField(
           initialValue: state.recipeName.value,
-          focusNode: focusNode,
           decoration: InputDecoration(
             icon: const Icon(Icons.assignment_rounded),
             labelText: 'Recipe Name',
@@ -124,10 +88,7 @@ class RecipeNameInput extends StatelessWidget {
 }
 
 class RecipeNumberInput extends StatelessWidget {
-  const RecipeNumberInput({Key? key, required this.focusNode})
-      : super(key: key);
-
-  final FocusNode focusNode;
+  const RecipeNumberInput({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -135,7 +96,6 @@ class RecipeNumberInput extends StatelessWidget {
       builder: (context, state) {
         return TextFormField(
           initialValue: state.recipeNumber.value,
-          focusNode: focusNode,
           decoration: InputDecoration(
             icon: const Icon(Icons.format_list_numbered),
             labelText: 'Recipe Number',
@@ -157,10 +117,7 @@ class RecipeNumberInput extends StatelessWidget {
 }
 
 class RecipeVolumeInput extends StatelessWidget {
-  const RecipeVolumeInput({Key? key, required this.focusNode})
-      : super(key: key);
-
-  final FocusNode focusNode;
+  const RecipeVolumeInput({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -169,7 +126,6 @@ class RecipeVolumeInput extends StatelessWidget {
         return TextFormField(
           initialValue: state.recipeVolume.value,
           keyboardType: TextInputType.number,
-          focusNode: focusNode,
           decoration: InputDecoration(
             icon: const Icon(Icons.play_for_work_rounded),
             labelText: 'Recipe Volume',
@@ -457,31 +413,3 @@ class _IngredientState extends State<Ingredients> {
     );
   }
 }
-
-
-// class SaveRecipeButton extends StatelessWidget {
-//   SaveRecipeButton({Key? key}) : super(key: key);
-//   final ButtonStyle style = ElevatedButton.styleFrom(
-//       textStyle: const TextStyle(fontSize: 20),
-//       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)));
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return BlocBuilder<RecipeBloc, RecipeState>(
-//       builder: (context, state) {
-//         return ElevatedButton(
-//           style: style,
-//           onPressed: state.recipeName.value.isNotEmpty &&
-//                   state.recipeNumber.value.isNotEmpty &&
-//                   state.recipeVolume.value.isNotEmpty &&
-//                   !state.recipeName.invalid &&
-//                   !state.recipeNumber.invalid &&
-//                   !state.recipeVolume.invalid
-//               ? () {}
-//               : null,
-//           child: const Text('Save Recipe'),
-//         );
-//       },
-//     );
-//   }
-// }

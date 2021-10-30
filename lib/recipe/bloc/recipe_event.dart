@@ -16,8 +16,6 @@ class RecipeNameChanged extends RecipeEvent {
   List<Object> get props => [recipeName];
 }
 
-class RecipeNameUnfocused extends RecipeEvent {}
-
 class RecipeNumberChanged extends RecipeEvent {
   final String recipeNumber;
 
@@ -27,8 +25,6 @@ class RecipeNumberChanged extends RecipeEvent {
   List<Object> get props => [recipeNumber];
 }
 
-class RecipeNumberUnfocused extends RecipeEvent {}
-
 class RecipeVolumeChanged extends RecipeEvent {
   final String recipeVolume;
 
@@ -37,8 +33,6 @@ class RecipeVolumeChanged extends RecipeEvent {
   @override
   List<Object> get props => [recipeVolume];
 }
-
-class RecipeVolumeUnfocused extends RecipeEvent {}
 
 class IngredientAdded extends RecipeEvent {}
 
