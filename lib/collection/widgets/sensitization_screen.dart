@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 import 'package:gibsonify/collection/collection.dart';
 import 'package:gibsonify/navigation/navigation.dart';
@@ -31,10 +32,10 @@ class SensitizationForm extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
-        children: const <Widget>[
-          HouseholdIdInput(),
-          RespondentNameInput(),
-          RespondentTelNumberInput(),
+        children: <Widget>[
+          const HouseholdIdInput(),
+          const RespondentNameInput(),
+          const RespondentTelNumberInput(),
           InterviewDateInput()
         ],
       ),
@@ -133,27 +134,36 @@ class RespondentTelNumberInput extends StatelessWidget {
 }
 
 class InterviewDateInput extends StatelessWidget {
-  const InterviewDateInput({Key? key}) : super(key: key);
+  InterviewDateInput({Key? key}) : super(key: key);
+
+  final dateController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CollectionBloc, CollectionState>(
       builder: (context, state) {
         return TextFormField(
-          initialValue: state.interviewDate.value,
-          keyboardType: TextInputType.datetime,
-          // TODO: Add datepicker
+          readOnly: true,
+          controller: dateController..text = state.interviewDate.value,
           decoration: InputDecoration(
             icon: const Icon(Icons.calendar_today),
             labelText: 'Interview Date',
-            helperText: 'Date at the interview',
+            helperText: 'Date of interview start',
             errorText:
-                state.interviewDate.invalid ? 'Enter a valid date' : null,
+                state.interviewDate.invalid ? 'Choose a valid date' : null,
           ),
-          onChanged: (value) {
+          onTap: () async {
+            var date = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(1900),
+                lastDate: DateTime(2100));
+            var formattedDate =
+                date == null ? '' : DateFormat('yyyy-MM-dd').format(date);
             context
                 .read<CollectionBloc>()
-                .add(InterviewDateChanged(interviewDate: value));
+                .add(InterviewDateChanged(interviewDate: formattedDate));
+            dateController.text = formattedDate;
           },
         );
       },
