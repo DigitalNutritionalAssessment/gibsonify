@@ -15,16 +15,21 @@ All notable changes to this project will be documented in this file.
 - *(README)* Update development instructions
 - *(README)* Update link to Gibson's method
 - *(changelog)* Update readme
+- *(changelog)* Update readme
 - *(changelog)* Update with further readme changes
 - *(changelog)* Update with fvm build and readme changes
 - *(license)* Add copyright year and owner
+- *(readme)* Add unix-like systems note again
+- *(readme)* Update contributors and acknowledgments
+- *(readme)* Add note about assuming a unix-like system
 - *(readme)* Add minor updates
 - *(readme)* Add development instructions and update authors
 - *(readme)* Add note about fvm doctor and delete unnecessary command
 - *(readme)* Update fvm and developement instructions
 - *(readme)* Update to fvm version 2.5.1
 - *(readme)* Update style in title and oneliner
-- *(readme)* Update readme with new name, correct style and typos- *(No Category)* Use git-cliff for changelog generation and update changelog
+- *(readme)* Update readme with new name, correct style and typos- *(No Category)* Move development instructions from readme to a standalone file in docs
+- *(No Category)* Use git-cliff for changelog generation and update changelog
 - *(No Category)* Add changelog
 - *(No Category)* Move user guide to docs directory
 
