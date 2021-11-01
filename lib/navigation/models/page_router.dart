@@ -8,6 +8,7 @@ class PageRouter {
   static const home = '/';
   static const collection = '/collection';
   static const recipe = '/recipe';
+  static const ingredient = '/ingredient';
   static const sensitizationHelp = '/sensitizationhelp';
 
   static Route route(RouteSettings routeSettings) {
@@ -18,6 +19,8 @@ class PageRouter {
         return _buildRoute(const CollectionPage());
       case recipe:
         return _buildRoute(const RecipePage());
+      case ingredient:
+        return _buildRoute(IngredientPage());
       case sensitizationHelp:
         return _buildRoute(const SensitizationHelpPage());
       default:
