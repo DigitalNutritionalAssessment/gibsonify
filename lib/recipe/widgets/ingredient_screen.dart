@@ -5,6 +5,7 @@ import 'package:dropdown_plus/dropdown_plus.dart';
 
 class IngredientForm extends StatelessWidget {
   IngredientForm({Key? key}) : super(key: key);
+
   final List<String> cookingStates = [
     "Raw",
     "Boiled",
@@ -37,6 +38,7 @@ class IngredientForm extends StatelessWidget {
     "Medium",
     "Large"
   ];
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
@@ -45,11 +47,9 @@ class IngredientForm extends StatelessWidget {
           child: Column(
             children: [
               // TODO: change this to which specific recipe's ingredient is being changed
-              //currently changes the adds ingredient to the last recipe in
+              // currently changes the adds ingredient to the last recipe in
               TextFormField(
                 initialValue: state.recipes.last.ingredients.last.name.value,
-                // initialValue: state
-                //     .ingredients[(state.ingredients.length - 1)].name.value,
                 decoration: InputDecoration(
                   icon: const Icon(Icons.set_meal_rounded),
                   labelText: 'Ingredient name',
@@ -69,10 +69,6 @@ class IngredientForm extends StatelessWidget {
               TextFormField(
                 initialValue:
                     state.recipes.last.ingredients.last.description.value,
-                // initialValue: state
-                //     .ingredients[(state.ingredients.length - 1)]
-                //     .description
-                //     .value,
                 decoration: InputDecoration(
                   icon: const Icon(Icons.description_rounded),
                   labelText: 'Ingredient description',

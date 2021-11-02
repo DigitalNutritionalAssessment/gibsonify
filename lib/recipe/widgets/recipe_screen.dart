@@ -21,6 +21,7 @@ class RecipeScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               FloatingActionButton.extended(
+                  heroTag: null,
                   label: const Text("Save Recipe"),
                   icon: const Icon(Icons.save_sharp),
                   onPressed: () {}), // TODO: Implement save button logic
@@ -28,6 +29,7 @@ class RecipeScreen extends StatelessWidget {
                 height: 10,
               ),
               FloatingActionButton.extended(
+                  heroTag: null,
                   label: const Text("New Ingredient"),
                   icon: const Icon(Icons.add),
                   onPressed: () => {
@@ -46,11 +48,6 @@ class RecipeForm extends StatelessWidget {
       : _recipe = recipe,
         super(key: key);
 
-//   @override
-//   State<RecipeForm> createState() => _RecipeFormState();
-// }
-
-// class _RecipeFormState extends State<RecipeForm> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -78,7 +75,6 @@ class RecipeNameInput extends StatelessWidget {
     return BlocBuilder<RecipeBloc, RecipeState>(
       builder: (context, state) {
         return TextFormField(
-          // initialValue: state.recipeName.value,
           initialValue:
               state.recipes[state.recipes.indexOf(_recipe)].recipeName.value,
           decoration: InputDecoration(
@@ -183,21 +179,13 @@ class Ingredients extends StatelessWidget {
       return Expanded(
           child: ListView.builder(
               padding: const EdgeInsets.all(2.0),
-              itemCount: state
-                  .recipes[state.recipes.indexOf(_recipe)].ingredients.length,
+              itemCount: _recipe.ingredients.length,
               itemBuilder: (context, index) {
                 return Card(
                     child: ListTile(
-                        title: Text(state
-                            .recipes[state.recipes.indexOf(_recipe)]
-                            .ingredients[index]
-                            .name
-                            .value),
-                        subtitle: Text(state
-                            .recipes[state.recipes.indexOf(_recipe)]
-                            .ingredients[index]
-                            .description
-                            .value),
+                        title: Text(_recipe.ingredients[index].name.value),
+                        subtitle:
+                            Text(_recipe.ingredients[index].description.value),
                         leading: const Icon(Icons.food_bank),
                         onTap: () => {} // TODO: Implement recipe edit logic
                         ));

@@ -23,6 +23,7 @@ class _RecipesScreenState extends State<RecipesScreen> {
                 return Card(
                     child: ListTile(
                         title: Text(state.recipes[index].recipeName.value),
+                        subtitle: Text(state.recipes[index].recipeVolume.value),
                         trailing: false // TODO: change to recipe status
                             ? const Icon(Icons.done)
                             : const Icon(Icons.rotate_left_rounded),

@@ -13,11 +13,9 @@ class RecipeNameChanged extends RecipeEvent {
   final String recipeName;
   final Recipe recipe;
 
-  // const RecipeNameChanged({required this.recipeName});
   const RecipeNameChanged({required this.recipeName, required this.recipe});
 
   @override
-  // List<Object> get props => [recipeName];
   List<Object> get props => [recipeName, recipe];
 }
 
@@ -25,7 +23,6 @@ class RecipeNumberChanged extends RecipeEvent {
   final String recipeNumber;
   final Recipe recipe;
 
-  // const RecipeNumberChanged({required this.recipeNumber});
   const RecipeNumberChanged({required this.recipeNumber, required this.recipe});
 
   @override
@@ -36,7 +33,6 @@ class RecipeVolumeChanged extends RecipeEvent {
   final String recipeVolume;
   final Recipe recipe;
 
-  // const RecipeVolumeChanged({required this.recipeVolume});
   const RecipeVolumeChanged({required this.recipeVolume, required this.recipe});
 
   @override
