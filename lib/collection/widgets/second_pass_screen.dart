@@ -31,7 +31,7 @@ class SecondPassScreen extends StatelessWidget {
                     child: Column(
                       children: [
                         Text(state.foodItems[index].name.value +
-                            ' consumed in ' +
+                            ' consumed in the ' +
                             state.foodItems[index].timePeriod.value),
                         // TODO: fix RenderFlex overflow
                         DropdownButtonFormField(
@@ -108,7 +108,7 @@ class SecondPassScreen extends StatelessWidget {
                             helperText: 'The preparation method of the food',
                             errorText:
                                 state.foodItems[index].preparationMethod.invalid
-                                    ? 'Select the form'
+                                    ? 'Select the food\'s preparation method'
                                     : null,
                           ),
                           items: const [
