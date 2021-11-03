@@ -87,6 +87,8 @@ class FirstPassScreen extends StatelessWidget {
                             },
                           ),
                           const Divider(),
+                          // TODO: Make a pop-up with a confirmation box
+                          //for deleting an item
                           TextButton(
                               onPressed: () => context
                                   .read<CollectionBloc>()
