@@ -13,6 +13,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     on<RespondentNameChanged>(_onRespondentNameChanged);
     on<RespondentTelNumberChanged>(_onRespondentTelNumberChanged);
     on<InterviewDateChanged>(_onInterviewDateChanged);
+    on<InterviewStartTimeChanged>(_onInterviewStartTimeChanged);
     on<FoodItemAdded>(_onFoodItemAdded);
     on<FoodItemDeleted>(_onFoodItemDeleted);
     on<FoodItemNameChanged>(_onFoodItemNameChanged);
@@ -31,7 +32,8 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
           householdId,
           state.respondentName,
           state.respondentTelNumber,
-          state.interviewDate
+          state.interviewDate,
+          state.interviewStartTime
         ]) // TODO: validate other sensitization fields once added
         ));
   }
@@ -45,7 +47,8 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
           state.householdId,
           respondentName,
           state.respondentTelNumber,
-          state.interviewDate
+          state.interviewDate,
+          state.interviewStartTime
         ])));
   }
 
@@ -59,7 +62,8 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
           state.householdId,
           state.respondentName,
           respondentTelNumber,
-          state.interviewDate
+          state.interviewDate,
+          state.interviewStartTime
         ])));
   }
 
@@ -72,7 +76,23 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
           state.householdId,
           state.respondentName,
           state.respondentTelNumber,
-          interviewDate
+          interviewDate,
+          state.interviewStartTime
+        ])));
+  }
+
+  void _onInterviewStartTimeChanged(
+      InterviewStartTimeChanged event, Emitter<CollectionState> emit) {
+    final interviewStartTime =
+        InterviewStartTime.dirty(event.interviewStartTime);
+    emit(state.copyWith(
+        interviewStartTime: interviewStartTime,
+        sensitizationStatus: Formz.validate([
+          state.householdId,
+          state.respondentName,
+          state.respondentTelNumber,
+          state.interviewDate,
+          interviewStartTime
         ])));
   }
 

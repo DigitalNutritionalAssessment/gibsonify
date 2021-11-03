@@ -36,7 +36,8 @@ class SensitizationForm extends StatelessWidget {
           HouseholdIdInput(),
           RespondentNameInput(),
           RespondentTelNumberInput(),
-          InterviewDateInput()
+          InterviewDateInput(),
+          InterviewStartTimeInput()
         ],
       ),
     );
@@ -168,6 +169,39 @@ class InterviewDateInput extends StatelessWidget {
     );
   }
 }
+
+class InterviewStartTimeInput extends StatelessWidget {
+  const InterviewStartTimeInput({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CollectionBloc, CollectionState>(
+      builder: (context, state) {
+        return TextFormField(
+          readOnly: true,
+          key: Key(state.interviewStartTime.value),
+          initialValue: state.interviewStartTime.value,
+          decoration: InputDecoration(
+            icon: const Icon(Icons.access_time),
+            labelText: 'Interview Start Time',
+            helperText: 'Time at the start of the interview',
+            errorText: state.interviewStartTime.invalid
+                ? 'Choose the start time of the interview'
+                : null,
+          ),
+          onTap: () async {
+            var time = await showTimePicker(
+                context: context, initialTime: TimeOfDay.now());
+            var formattedTime = time?.format(context);
+            context.read<CollectionBloc>().add(InterviewStartTimeChanged(
+                interviewStartTime: formattedTime ?? ''));
+          },
+        );
+      },
+    );
+  }
+}
+
 
 // TODO: Add a "Tick mark" FloatingActionButton to the bottom right of Scaffold
 // that checks if the all the fields are completed

@@ -3,8 +3,9 @@ part of 'collection_bloc.dart';
 class CollectionState extends Equatable {
   final HouseholdId householdId;
   final RespondentName respondentName;
-  final InterviewDate interviewDate;
   final RespondentTelNumber respondentTelNumber;
+  final InterviewDate interviewDate;
+  final InterviewStartTime interviewStartTime;
   // TODO: refactor all of the above
   // fields into a single SensitizationForm class
   final FormzStatus sensitizationStatus;
@@ -17,6 +18,7 @@ class CollectionState extends Equatable {
       this.respondentName = const RespondentName.pure(),
       this.respondentTelNumber = const RespondentTelNumber.pure(),
       this.interviewDate = const InterviewDate.pure(),
+      this.interviewStartTime = const InterviewStartTime.pure(),
       this.sensitizationStatus = FormzStatus.pure,
       // TODO: find a way how to initialize foodItems with one FoodItem inside
       this.foodItems =
@@ -25,14 +27,16 @@ class CollectionState extends Equatable {
   CollectionState copyWith(
       {HouseholdId? householdId,
       RespondentName? respondentName,
-      InterviewDate? interviewDate,
       RespondentTelNumber? respondentTelNumber,
+      InterviewDate? interviewDate,
+      InterviewStartTime? interviewStartTime,
       FormzStatus? sensitizationStatus,
       List<FoodItem>? foodItems}) {
     return CollectionState(
         householdId: householdId ?? this.householdId,
         respondentName: respondentName ?? this.respondentName,
         respondentTelNumber: respondentTelNumber ?? this.respondentTelNumber,
+        interviewStartTime: interviewStartTime ?? this.interviewStartTime,
         interviewDate: interviewDate ?? this.interviewDate,
         sensitizationStatus: sensitizationStatus ?? this.sensitizationStatus,
         foodItems: foodItems ?? this.foodItems);
@@ -45,6 +49,7 @@ class CollectionState extends Equatable {
         sensitizationStatus,
         respondentTelNumber,
         interviewDate,
+        interviewStartTime,
         foodItems
       ];
 }
