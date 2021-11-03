@@ -32,10 +32,10 @@ class SensitizationForm extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
-        children: <Widget>[
-          const HouseholdIdInput(),
-          const RespondentNameInput(),
-          const RespondentTelNumberInput(),
+        children: const <Widget>[
+          HouseholdIdInput(),
+          RespondentNameInput(),
+          RespondentTelNumberInput(),
           InterviewDateInput()
         ],
       ),
@@ -134,9 +134,7 @@ class RespondentTelNumberInput extends StatelessWidget {
 }
 
 class InterviewDateInput extends StatelessWidget {
-  InterviewDateInput({Key? key}) : super(key: key);
-
-  final dateController = TextEditingController();
+  const InterviewDateInput({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -144,7 +142,8 @@ class InterviewDateInput extends StatelessWidget {
       builder: (context, state) {
         return TextFormField(
           readOnly: true,
-          controller: dateController..text = state.interviewDate.value,
+          key: Key(state.interviewDate.value),
+          initialValue: state.interviewDate.value,
           decoration: InputDecoration(
             icon: const Icon(Icons.calendar_today),
             labelText: 'Interview Date',
@@ -163,7 +162,6 @@ class InterviewDateInput extends StatelessWidget {
             context
                 .read<CollectionBloc>()
                 .add(InterviewDateChanged(interviewDate: formattedDate));
-            dateController.text = formattedDate;
           },
         );
       },
