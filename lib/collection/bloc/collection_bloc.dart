@@ -24,6 +24,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     on<FoodItemMeasurementMethodChanged>(_onFoodItemMeasurementMethodChanged);
     on<FoodItemMeasurementValueChanged>(_onFoodItemMeasurementValueChanged);
     on<FoodItemMeasurementUnitChanged>(_onFoodItemMeasurementUnitChanged);
+    on<FoodItemConfirmationChanged>(_onFoodItemConfirmationChanged);
   }
 
   void _onHouseholdIdChanged(
@@ -250,6 +251,25 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
     FoodItem foodItem = foodItems[changedFoodItemIndex].copyWith(
         measurementUnit: MeasurementUnit.dirty(event.foodItemMeasurementUnit));
+
+    foodItems.removeAt(changedFoodItemIndex);
+    foodItems.insert(changedFoodItemIndex, foodItem);
+
+    emit(state.copyWith(foodItems: foodItems));
+  }
+
+  void _onFoodItemConfirmationChanged(
+      FoodItemConfirmationChanged event, Emitter<CollectionState> emit) {
+    // TODO: refactor all of this finding an item and changing
+    // it logic to one reusable function, probably a method of the GibsonsForm
+    // class
+    List<FoodItem> foodItems = List.from(state.foodItems);
+
+    // TODO: change into UUID-based indexing
+    int changedFoodItemIndex = foodItems.indexOf(event.foodItem);
+
+    FoodItem foodItem = foodItems[changedFoodItemIndex]
+        .copyWith(confirmed: event.foodItemConfirmed);
 
     foodItems.removeAt(changedFoodItemIndex);
     foodItems.insert(changedFoodItemIndex, foodItem);

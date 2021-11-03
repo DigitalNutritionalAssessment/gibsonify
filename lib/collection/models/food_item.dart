@@ -13,7 +13,8 @@ class FoodItem extends Equatable {
       this.preparationMethod = const PreparationMethod.pure(),
       this.measurementMethod = const MeasurementMethod.pure(),
       this.measurementValue = const MeasurementValue.pure(),
-      this.measurementUnit = const MeasurementUnit.pure()})
+      this.measurementUnit = const MeasurementUnit.pure(),
+      this.confirmed = false})
       : id = id ?? const Uuid().v4();
 
   final Name name;
@@ -25,6 +26,8 @@ class FoodItem extends Equatable {
   final MeasurementMethod measurementMethod;
   final MeasurementValue measurementValue;
   final MeasurementUnit measurementUnit;
+  // Add Form validation bool field to check if all fields are valid
+  final bool confirmed;
 
   FoodItem copyWith(
       {Name? name,
@@ -35,7 +38,8 @@ class FoodItem extends Equatable {
       PreparationMethod? preparationMethod,
       MeasurementMethod? measurementMethod,
       MeasurementValue? measurementValue,
-      MeasurementUnit? measurementUnit}) {
+      MeasurementUnit? measurementUnit,
+      bool? confirmed}) {
     return FoodItem(
         name: name ?? this.name,
         id: id ?? this.id,
@@ -45,7 +49,8 @@ class FoodItem extends Equatable {
         preparationMethod: preparationMethod ?? this.preparationMethod,
         measurementMethod: measurementMethod ?? this.measurementMethod,
         measurementValue: measurementValue ?? this.measurementValue,
-        measurementUnit: measurementUnit ?? this.measurementUnit);
+        measurementUnit: measurementUnit ?? this.measurementUnit,
+        confirmed: confirmed ?? this.confirmed);
   }
 
   @override
@@ -58,7 +63,8 @@ class FoodItem extends Equatable {
         preparationMethod,
         measurementMethod,
         measurementValue,
-        measurementUnit
+        measurementUnit,
+        confirmed
       ];
 }
 

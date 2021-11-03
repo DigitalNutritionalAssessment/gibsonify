@@ -176,3 +176,17 @@ class FoodItemMeasurementUnitChanged extends CollectionEvent {
   @override
   List<Object> get props => [foodItemMeasurementUnit, foodItem];
 }
+
+class FoodItemConfirmationChanged extends CollectionEvent {
+  final bool foodItemConfirmed;
+  // TODO: delete foodItem and pass only uuid instead
+  final FoodItem foodItem;
+  // TODO: implement
+  // final String foodItemUuid;
+
+  const FoodItemConfirmationChanged(
+      {required this.foodItemConfirmed, required this.foodItem});
+
+  @override
+  List<Object> get props => [foodItemConfirmed, foodItem];
+}
