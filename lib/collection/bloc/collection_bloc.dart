@@ -14,6 +14,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     on<RespondentTelNumberChanged>(_onRespondentTelNumberChanged);
     on<InterviewDateChanged>(_onInterviewDateChanged);
     on<FoodItemAdded>(_onFoodItemAdded);
+    on<FoodItemDeleted>(_onFoodItemDeleted);
     on<FoodItemNameChanged>(_onFoodItemNameChanged);
     on<FoodItemTimePeriodChanged>(_onFoodItemTimePeriodChanged);
     on<FoodItemSourceChanged>(_onFoodItemSourceChanged);
@@ -79,6 +80,16 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     final foodItem = FoodItem();
     List<FoodItem> foodItems = List.from(state.foodItems);
     foodItems.add(foodItem);
+
+    emit(state.copyWith(foodItems: foodItems));
+  }
+
+  void _onFoodItemDeleted(
+      FoodItemDeleted event, Emitter<CollectionState> emit) {
+    List<FoodItem> foodItems = List.from(state.foodItems);
+
+    // TODO: change into UUID-based indexing
+    foodItems.remove(event.foodItem);
 
     emit(state.copyWith(foodItems: foodItems));
   }

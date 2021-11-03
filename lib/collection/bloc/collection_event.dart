@@ -45,6 +45,17 @@ class InterviewDateChanged extends CollectionEvent {
 
 class FoodItemAdded extends CollectionEvent {}
 
+class FoodItemDeleted extends CollectionEvent {
+  // TODO: delete foodItem and pass only uuid instead
+  final FoodItem foodItem;
+  // TODO: implement
+  // final String foodItemUuid;
+  const FoodItemDeleted({required this.foodItem});
+
+  @override
+  List<Object> get props => [foodItem];
+}
+
 class FoodItemNameChanged extends CollectionEvent {
   final String foodItemName;
   // TODO: delete foodItem and pass only uuid instead

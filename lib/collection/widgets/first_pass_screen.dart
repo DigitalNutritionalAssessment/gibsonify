@@ -32,6 +32,9 @@ class FirstPassScreen extends StatelessWidget {
                       child: Column(
                         children: [
                           TextFormField(
+                            // A unique key needs to be set in order to properly
+                            // rebuild this Field after deleting a FoodItem
+                            key: Key(state.foodItems[index].id),
                             initialValue: state.foodItems[index].name.value,
                             decoration: InputDecoration(
                               icon: const Icon(Icons.fastfood),
@@ -83,6 +86,13 @@ class FirstPassScreen extends StatelessWidget {
                                       foodItemTimePeriod: value ?? ''));
                             },
                           ),
+                          const Divider(),
+                          TextButton(
+                              onPressed: () => context
+                                  .read<CollectionBloc>()
+                                  .add(FoodItemDeleted(
+                                      foodItem: state.foodItems[index])),
+                              child: const Text('Delete'))
                         ],
                       ),
                     ),
@@ -101,5 +111,3 @@ class FirstPassScreen extends StatelessWidget {
     );
   }
 }
-
-// TODO: Add a way of deleting FoodItems
