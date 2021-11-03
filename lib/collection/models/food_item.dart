@@ -10,7 +10,10 @@ class FoodItem extends Equatable {
       this.timePeriod = const TimePeriod.pure(),
       this.source = const Source.pure(),
       this.description = const Description.pure(),
-      this.preparationMethod = const PreparationMethod.pure()})
+      this.preparationMethod = const PreparationMethod.pure(),
+      this.measurementMethod = const MeasurementMethod.pure(),
+      this.measurementValue = const MeasurementValue.pure(),
+      this.measurementUnit = const MeasurementUnit.pure()})
       : id = id ?? const Uuid().v4();
 
   final Name name;
@@ -19,6 +22,9 @@ class FoodItem extends Equatable {
   final Source source;
   final Description description;
   final PreparationMethod preparationMethod;
+  final MeasurementMethod measurementMethod;
+  final MeasurementValue measurementValue;
+  final MeasurementUnit measurementUnit;
 
   FoodItem copyWith(
       {Name? name,
@@ -26,19 +32,34 @@ class FoodItem extends Equatable {
       TimePeriod? timePeriod,
       Source? source,
       Description? description,
-      PreparationMethod? preparationMethod}) {
+      PreparationMethod? preparationMethod,
+      MeasurementMethod? measurementMethod,
+      MeasurementValue? measurementValue,
+      MeasurementUnit? measurementUnit}) {
     return FoodItem(
         name: name ?? this.name,
         id: id ?? this.id,
         timePeriod: timePeriod ?? this.timePeriod,
         source: source ?? this.source,
         description: description ?? this.description,
-        preparationMethod: preparationMethod ?? this.preparationMethod);
+        preparationMethod: preparationMethod ?? this.preparationMethod,
+        measurementMethod: measurementMethod ?? this.measurementMethod,
+        measurementValue: measurementValue ?? this.measurementValue,
+        measurementUnit: measurementUnit ?? this.measurementUnit);
   }
 
   @override
-  List<Object> get props =>
-      [name, id, timePeriod, source, description, preparationMethod];
+  List<Object> get props => [
+        name,
+        id,
+        timePeriod,
+        source,
+        description,
+        preparationMethod,
+        measurementMethod,
+        measurementValue,
+        measurementUnit
+      ];
 }
 
 enum NameValidationError { invalid }
@@ -151,5 +172,76 @@ class PreparationMethod
     return _allowedPreparationMethod.contains(_lowerCaseValue)
         ? null
         : PreparationMethodValidationError.invalid;
+  }
+}
+
+enum MeasurementMethodValidationError { invalid }
+
+class MeasurementMethod
+    extends FormzInput<String, MeasurementMethodValidationError> {
+  const MeasurementMethod.pure() : super.pure('');
+  const MeasurementMethod.dirty([String value = '']) : super.dirty(value);
+
+  final _allowedMeasurementMethod = const [
+    'direct weight',
+    'volume of water',
+    'volume of food',
+    'play dough',
+    'number',
+    'size (photo)',
+  ];
+
+  @override
+  MeasurementMethodValidationError? validator(String? value) {
+    final _lowerCaseValue = (value ?? '').toLowerCase();
+    // TODO: refactor with a better null check
+    return _allowedMeasurementMethod.contains(_lowerCaseValue)
+        ? null
+        : MeasurementMethodValidationError.invalid;
+  }
+}
+
+enum MeasurementValueValidationError { invalid }
+
+// TODO: change to a number???
+
+class MeasurementValue
+    extends FormzInput<String, MeasurementValueValidationError> {
+  const MeasurementValue.pure() : super.pure('');
+  const MeasurementValue.dirty([String value = '']) : super.dirty(value);
+
+  @override
+  MeasurementValueValidationError? validator(String? value) {
+    // TODO: Add validation, currently only checks if not empty
+    return value?.isNotEmpty == true
+        ? null
+        : MeasurementValueValidationError.invalid;
+  }
+}
+
+enum MeasurementUnitValidationError { invalid }
+
+class MeasurementUnit
+    extends FormzInput<String, MeasurementUnitValidationError> {
+  const MeasurementUnit.pure() : super.pure('');
+  const MeasurementUnit.dirty([String value = '']) : super.dirty(value);
+
+  final _allowedMeasurementUnit = const [
+    'small spoon',
+    'big spoon',
+    'standard cup',
+    'small',
+    'medium',
+    'large',
+    'grams or millilitres' //TODO: check with ICRISAT if this is okay
+  ];
+
+  @override
+  MeasurementUnitValidationError? validator(String? value) {
+    final _lowerCaseValue = (value ?? '').toLowerCase();
+    // TODO: refactor with a better null check
+    return _allowedMeasurementUnit.contains(_lowerCaseValue)
+        ? null
+        : MeasurementUnitValidationError.invalid;
   }
 }

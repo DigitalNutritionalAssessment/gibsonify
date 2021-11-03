@@ -134,3 +134,45 @@ class FoodItemPreparationMethodChanged extends CollectionEvent {
   @override
   List<Object> get props => [foodItemPreparationMethod, foodItem];
 }
+
+class FoodItemMeasurementMethodChanged extends CollectionEvent {
+  final String foodItemMeasurementMethod; // TODO: change to an enum?
+  // TODO: delete foodItem and pass only uuid instead
+  final FoodItem foodItem;
+  // TODO: implement
+  // final String foodItemUuid;
+
+  const FoodItemMeasurementMethodChanged(
+      {required this.foodItemMeasurementMethod, required this.foodItem});
+
+  @override
+  List<Object> get props => [foodItemMeasurementMethod, foodItem];
+}
+
+class FoodItemMeasurementValueChanged extends CollectionEvent {
+  final String foodItemMeasurementValue; // TODO: change to an enum?
+  // TODO: delete foodItem and pass only uuid instead
+  final FoodItem foodItem;
+  // TODO: implement
+  // final String foodItemUuid;
+
+  const FoodItemMeasurementValueChanged(
+      {required this.foodItemMeasurementValue, required this.foodItem});
+
+  @override
+  List<Object> get props => [foodItemMeasurementValue, foodItem];
+}
+
+class FoodItemMeasurementUnitChanged extends CollectionEvent {
+  final String foodItemMeasurementUnit; // TODO: change to an enum?
+  // TODO: delete foodItem and pass only uuid instead
+  final FoodItem foodItem;
+  // TODO: implement
+  // final String foodItemUuid;
+
+  const FoodItemMeasurementUnitChanged(
+      {required this.foodItemMeasurementUnit, required this.foodItem});
+
+  @override
+  List<Object> get props => [foodItemMeasurementUnit, foodItem];
+}
