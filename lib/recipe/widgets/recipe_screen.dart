@@ -4,12 +4,19 @@ import 'package:gibsonify/recipe/recipe.dart';
 import 'package:gibsonify/navigation/navigation.dart';
 
 class RecipeScreen extends StatelessWidget {
+// class RecipeScreen extends StatefulWidget {
   // TODO: Make this stateful to ensure listview updates
   final int recipeIndex;
   const RecipeScreen(this.recipeIndex, {Key? key}) : super(key: key);
 
+//   @override
+//   _RecipeScreenState createState() => _RecipeScreenState();
+// }
+
+// class _RecipeScreenState extends State<RecipeScreen> {
   @override
   Widget build(BuildContext context) {
+    // int recipeIndex = widget.recipeIndex;
     return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
       return Scaffold(
           appBar: AppBar(
@@ -24,7 +31,11 @@ class RecipeScreen extends StatelessWidget {
                     heroTag: null,
                     label: const Text("Save Recipe"),
                     icon: const Icon(Icons.save_sharp),
-                    onPressed: () {}), // TODO: Implement save button logic
+                    onPressed: () => {
+                          context.read<RecipeBloc>().add(RecipeStatusChanged(
+                              recipe: state.recipes[recipeIndex],
+                              recipeSaved: true))
+                        }),
                 const SizedBox(
                   height: 10,
                 ),
@@ -176,6 +187,10 @@ class Ingredients extends StatelessWidget {
                         subtitle: Text(state.recipes[recipeIndex]
                             .ingredients[index].description.value),
                         leading: const Icon(Icons.food_bank),
+                        trailing:
+                            state.recipes[recipeIndex].ingredients[index].saved
+                                ? const Icon(Icons.done)
+                                : const Icon(Icons.rotate_left_rounded),
                         onTap: () => {
                               Navigator.pushNamed(
                                   context, PageRouter.ingredient,

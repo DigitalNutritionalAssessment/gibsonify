@@ -16,7 +16,13 @@ class IngredientPage extends StatelessWidget {
           floatingActionButton: FloatingActionButton.extended(
               label: const Text("Save Ingredient"),
               icon: const Icon(Icons.save_sharp),
-              onPressed: () {}), // TODO: Implement save button logic,
+              onPressed: () => {
+                    context.read<RecipeBloc>().add(IngredientStatusChanged(
+                        recipe: state.recipes[recipeIndex],
+                        ingredient: state
+                            .recipes[recipeIndex].ingredients[ingredientIndex],
+                        ingredientSaved: true))
+                  }),
           body: IngredientForm(recipeIndex, ingredientIndex));
     });
   }
