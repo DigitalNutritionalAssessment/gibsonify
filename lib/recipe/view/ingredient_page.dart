@@ -3,7 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gibsonify/recipe/recipe.dart';
 
 class IngredientPage extends StatelessWidget {
-  const IngredientPage({Key? key}) : super(key: key);
+  final int recipeIndex;
+  final int ingredientIndex;
+  const IngredientPage(this.recipeIndex, this.ingredientIndex, {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +17,7 @@ class IngredientPage extends StatelessWidget {
               label: const Text("Save Ingredient"),
               icon: const Icon(Icons.save_sharp),
               onPressed: () {}), // TODO: Implement save button logic,
-          body: IngredientForm());
+          body: IngredientForm(recipeIndex, ingredientIndex));
     });
   }
 }

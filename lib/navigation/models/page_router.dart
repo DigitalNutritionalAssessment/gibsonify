@@ -18,9 +18,13 @@ class PageRouter {
       case collection:
         return _buildRoute(const CollectionPage());
       case recipe:
-        return _buildRoute(const RecipePage());
+        var recipeIndex = routeSettings.arguments as int;
+        return _buildRoute(RecipePage(recipeIndex));
       case ingredient:
-        return _buildRoute(IngredientPage());
+        var indices = routeSettings.arguments as List;
+        int recipeIndex = indices[0];
+        int ingredientIndex = indices[1];
+        return _buildRoute(IngredientPage(recipeIndex, ingredientIndex));
       case sensitizationHelp:
         return _buildRoute(const SensitizationHelpPage());
       default:

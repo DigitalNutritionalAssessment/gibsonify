@@ -12,6 +12,7 @@ class Ingredient extends Equatable {
       this.measurementUnit = const MeasurementUnit.pure(),
       this.size = const Size.pure(),
       this.sizeNumber = const SizeNumber.pure(),
+      this.saved = false,
       String? id})
       : id = id ?? const Uuid().v4();
 
@@ -23,6 +24,7 @@ class Ingredient extends Equatable {
   final MeasurementUnit measurementUnit;
   final Size size;
   final SizeNumber sizeNumber;
+  final bool saved;
   final String id;
 
   Ingredient copyWith(
@@ -34,6 +36,7 @@ class Ingredient extends Equatable {
       MeasurementUnit? measurementUnit,
       Size? size,
       SizeNumber? sizeNumber,
+      bool? saved,
       String? id}) {
     return Ingredient(
         name: name ?? this.name,
@@ -44,6 +47,7 @@ class Ingredient extends Equatable {
         measurementUnit: measurementUnit ?? this.measurementUnit,
         size: size ?? this.size,
         sizeNumber: sizeNumber ?? this.sizeNumber,
+        saved: saved ?? this.saved,
         id: id ?? this.id);
   }
 
@@ -57,6 +61,7 @@ class Ingredient extends Equatable {
         measurementUnit,
         size,
         sizeNumber,
+        saved,
         id
       ];
 }
