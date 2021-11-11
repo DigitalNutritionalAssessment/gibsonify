@@ -149,8 +149,9 @@ class InterviewDateInput extends StatelessWidget {
             icon: const Icon(Icons.calendar_today),
             labelText: 'Interview Date',
             helperText: 'Date of interview start',
-            errorText:
-                state.interviewDate.invalid ? 'Choose a valid date' : null,
+            errorText: state.interviewDate.invalid
+                ? 'Choose the date of interview start'
+                : null,
           ),
           onTap: () async {
             var date = await showDatePicker(
