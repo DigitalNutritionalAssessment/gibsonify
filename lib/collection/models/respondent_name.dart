@@ -8,7 +8,6 @@ class RespondentName extends FormzInput<String, RespondentNameValidationError> {
 
   @override
   RespondentNameValidationError? validator(String? value) {
-    // TODO: Add validation, currently only checks if not empty
     return value?.isNotEmpty == true
         ? null
         : RespondentNameValidationError.invalid;
