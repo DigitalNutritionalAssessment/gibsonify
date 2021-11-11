@@ -117,6 +117,8 @@ class FourthPassScreen extends StatelessWidget {
                           TextButton(
                               // TODO: set style property to be
                               // opposite color of Card
+                              // TODO: make each fooditem change from confirmed
+                              // to unconfirmed if some field of it changes
                               onPressed: () {
                                 var confirmedNegation =
                                     !state.foodItems[index].confirmed;

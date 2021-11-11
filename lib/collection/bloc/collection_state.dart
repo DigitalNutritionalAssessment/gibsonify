@@ -1,6 +1,8 @@
 part of 'collection_bloc.dart';
 
 class CollectionState extends Equatable {
+  // TODO: refactor CollectionState to only hold one instance of a Collection
+  // class, such as GibsonsForm or similar
   final HouseholdId householdId;
   final RespondentName respondentName;
   final RespondentTelNumber respondentTelNumber;

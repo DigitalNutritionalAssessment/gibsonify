@@ -25,6 +25,7 @@ class ThirdPassScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(2.0),
                 itemCount: state.foodItems.length,
                 itemBuilder: (context, index) {
+                  // TODO: refactor to more atomized widgets
                   return Card(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -71,11 +72,9 @@ class ThirdPassScreen extends StatelessWidget {
                                   value: 'Size (photo)')
                             ],
                             onChanged: (String? value) {
-                              context
-                                  .read<CollectionBloc>()
-                                  .add(FoodItemMeasurementMethodChanged(
+                              context.read<CollectionBloc>().add(
+                                  FoodItemMeasurementMethodChanged(
                                       foodItem: state.foodItems[index],
-                                      // TODO: Make a better null check
                                       foodItemMeasurementMethod: value ?? ''));
                             },
                           ),
@@ -135,11 +134,9 @@ class ThirdPassScreen extends StatelessWidget {
                                   value: 'Grams or millilitres')
                             ],
                             onChanged: (String? value) {
-                              context
-                                  .read<CollectionBloc>()
-                                  .add(FoodItemMeasurementUnitChanged(
+                              context.read<CollectionBloc>().add(
+                                  FoodItemMeasurementUnitChanged(
                                       foodItem: state.foodItems[index],
-                                      // TODO: Make a better null check
                                       foodItemMeasurementUnit: value ?? ''));
                             },
                           ),

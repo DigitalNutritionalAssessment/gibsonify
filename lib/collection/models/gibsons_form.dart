@@ -1,4 +1,7 @@
-// TODO: rename filename to gibsons_form.dart
+// This class is not currently used, but hopefully will be in the future
+// TODO: implement all fields needed for Collection that are currently kept in
+// CollectionState into GibsonsForm
+
 class GibsonsForm {
   GibsonsForm(
       {this.householdId,

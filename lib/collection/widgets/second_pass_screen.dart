@@ -25,6 +25,7 @@ class SecondPassScreen extends StatelessWidget {
               padding: const EdgeInsets.all(2.0),
               itemCount: state.foodItems.length,
               itemBuilder: (context, index) {
+                // TODO: refactor to more atomized widgets
                 return Card(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -72,11 +73,9 @@ class SecondPassScreen extends StatelessWidget {
                                 value: 'Not applicable'),
                           ],
                           onChanged: (String? value) {
-                            context
-                                .read<CollectionBloc>()
-                                .add(FoodItemSourceChanged(
+                            context.read<CollectionBloc>().add(
+                                FoodItemSourceChanged(
                                     foodItem: state.foodItems[index],
-                                    // TODO: Make a better null check
                                     foodItemSource: value ?? ''));
                           },
                         ),
@@ -157,11 +156,9 @@ class SecondPassScreen extends StatelessWidget {
                                 child: Text('Other'), value: 'Other')
                           ],
                           onChanged: (String? value) {
-                            context
-                                .read<CollectionBloc>()
-                                .add(FoodItemPreparationMethodChanged(
+                            context.read<CollectionBloc>().add(
+                                FoodItemPreparationMethodChanged(
                                     foodItem: state.foodItems[index],
-                                    // TODO: Make a better null check
                                     foodItemPreparationMethod: value ?? ''));
                           },
                         ),

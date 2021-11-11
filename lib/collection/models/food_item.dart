@@ -1,4 +1,3 @@
-// TODO: look into making Food a child of Equatable
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 import 'package:uuid/uuid.dart';
@@ -26,7 +25,7 @@ class FoodItem extends Equatable {
   final MeasurementMethod measurementMethod;
   final MeasurementValue measurementValue;
   final MeasurementUnit measurementUnit;
-  // Add Form validation bool field to check if all fields are valid
+  // TODO: Add Form validation bool field to check if all fields are valid
   final bool confirmed;
 
   FoodItem copyWith(
@@ -70,7 +69,7 @@ class FoodItem extends Equatable {
 
 enum NameValidationError { invalid }
 
-// TODO: change classes to be private with underscore???
+// TODO: Investigate changing classes to be private (with leading underscore)
 
 class Name extends FormzInput<String, NameValidationError> {
   const Name.pure() : super.pure('');
@@ -78,7 +77,6 @@ class Name extends FormzInput<String, NameValidationError> {
 
   @override
   NameValidationError? validator(String? value) {
-    // TODO: Add validation, currently only checks if not empty
     return value?.isNotEmpty == true ? null : NameValidationError.invalid;
   }
 }
@@ -138,7 +136,6 @@ class Description extends FormzInput<String, DescriptionValidationError> {
 
   @override
   DescriptionValidationError? validator(String? value) {
-    // TODO: Add validation, currently only checks if not empty
     return value?.isNotEmpty == true
         ? null
         : DescriptionValidationError.invalid;
@@ -209,7 +206,7 @@ class MeasurementMethod
 
 enum MeasurementValueValidationError { invalid }
 
-// TODO: change to a number???
+// TODO: Investigate changing this to a string or float
 
 class MeasurementValue
     extends FormzInput<String, MeasurementValueValidationError> {
