@@ -7,11 +7,9 @@ class HouseholdId extends FormzInput<String, HouseholdIdValidationError> {
   const HouseholdId.dirty([String value = '']) : super.dirty(value);
 
   @override
-  HouseholdIdValidationError? validator(String? value) {
+  HouseholdIdValidationError? validator(String value) {
     // TODO: Add validation based on ICRISAT's criteria, currently
-    // only checks if at least 10 symbols
-
-    // TODO: refactor with a better null check
-    return (value ?? '').length > 9 ? null : HouseholdIdValidationError.invalid;
+    // only checks if at least 2 symbols
+    return value.length > 1 ? null : HouseholdIdValidationError.invalid;
   }
 }
