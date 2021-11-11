@@ -78,11 +78,9 @@ class FirstPassScreen extends StatelessWidget {
                                   child: Text('Night'), value: 'Night'),
                             ],
                             onChanged: (String? value) {
-                              context
-                                  .read<CollectionBloc>()
-                                  .add(FoodItemTimePeriodChanged(
+                              context.read<CollectionBloc>().add(
+                                  FoodItemTimePeriodChanged(
                                       foodItem: state.foodItems[index],
-                                      // TODO: Make a better null check
                                       foodItemTimePeriod: value ?? ''));
                             },
                           ),
