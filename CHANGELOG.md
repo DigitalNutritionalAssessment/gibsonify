@@ -29,10 +29,22 @@ All notable changes to this project will be documented in this file.
 - *(collection)* Remove completed todos from sensitization help page
 - *(collection)* Add first pass with food items
 - *(collection)* Update sensitization first pass button todo comment
+- *(changelog)* Update readme
+- *(changelog)* Update readme
+- *(changelog)* Update with further readme changes
+- *(changelog)* Update with fvm build and readme changes
 - *(license)* Add copyright year and owner
+- *(readme)* Add unix-like systems note again
+- *(readme)* Update contributors and acknowledgments
+- *(readme)* Add note about assuming a unix-like system
+- *(readme)* Add minor updates
+- *(readme)* Add development instructions and update authors
+- *(readme)* Add note about fvm doctor and delete unnecessary command
+- *(readme)* Update fvm and developement instructions
 - *(readme)* Update to fvm version 2.5.1
 - *(readme)* Update style in title and oneliner
-- *(readme)* Update readme with new name, correct style and typos- *(No Category)* Use git-cliff for changelog generation and update changelog
+- *(readme)* Update readme with new name, correct style and typos- *(No Category)* Move development instructions from readme to a standalone file in docs
+- *(No Category)* Use git-cliff for changelog generation and update changelog
 - *(No Category)* Add changelog
 - *(No Category)* Move user guide to docs directory
 
@@ -83,6 +95,7 @@ All notable changes to this project will be documented in this file.
 
 ### Build
 
+- *(fvm)* Bump sdk version to 2.5.3
 - *(gitignore)* Add note about checking pubspec.lock into version control
 - *(gitignore)* Don't check in flutter_export_environment to version control
 - *(gitignore)* Ignore intellij related files and folders
@@ -90,7 +103,8 @@ All notable changes to this project will be documented in this file.
 - *(gitignore)* Ignore fvm files
 - *(pubspec)* Add uuid library
 - *(pubspec)* Bump flutter_bloc and bloc_test versions
-- *(pubspec)* Update dependencies and remove unnecessary ones- *(No Category)* Remove intellij related files and folders
+- *(pubspec)* Update dependencies and remove unnecessary ones- *(No Category)* Update flutter sdk and fvm version and instructions
+- *(No Category)* Remove intellij related files and folders
 - *(No Category)* Update gitignore and remove files that should not have been checked into version control
 
 
