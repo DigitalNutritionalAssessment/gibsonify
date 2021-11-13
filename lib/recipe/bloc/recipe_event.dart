@@ -100,12 +100,12 @@ class IngredientDescriptionChanged extends RecipeEvent {
   List<Object> get props => [ingredientDescription, ingredient, recipe];
 }
 
-class CookingStateChanged extends RecipeEvent {
+class IngredientCookingStateChanged extends RecipeEvent {
   final String cookingState;
   final Ingredient ingredient;
   final Recipe recipe;
 
-  const CookingStateChanged(
+  const IngredientCookingStateChanged(
       {required this.cookingState,
       required this.ingredient,
       required this.recipe});
@@ -114,12 +114,12 @@ class CookingStateChanged extends RecipeEvent {
   List<Object> get props => [cookingState, ingredient, recipe];
 }
 
-class MeasurementMethodChanged extends RecipeEvent {
+class IngredientMeasurementMethodChanged extends RecipeEvent {
   final String measurementMethod;
   final Ingredient ingredient;
   final Recipe recipe;
 
-  const MeasurementMethodChanged(
+  const IngredientMeasurementMethodChanged(
       {required this.measurementMethod,
       required this.ingredient,
       required this.recipe});
@@ -128,12 +128,12 @@ class MeasurementMethodChanged extends RecipeEvent {
   List<Object> get props => [measurementMethod, ingredient, recipe];
 }
 
-class MeasurementChanged extends RecipeEvent {
+class IngredientMeasurementChanged extends RecipeEvent {
   final String measurement;
   final Ingredient ingredient;
   final Recipe recipe;
 
-  const MeasurementChanged(
+  const IngredientMeasurementChanged(
       {required this.measurement,
       required this.ingredient,
       required this.recipe});
@@ -142,12 +142,12 @@ class MeasurementChanged extends RecipeEvent {
   List<Object> get props => [measurement, ingredient, recipe];
 }
 
-class MeasurementUnitChanged extends RecipeEvent {
+class IngredientMeasurementUnitChanged extends RecipeEvent {
   final String measurementUnit;
   final Ingredient ingredient;
   final Recipe recipe;
 
-  const MeasurementUnitChanged(
+  const IngredientMeasurementUnitChanged(
       {required this.measurementUnit,
       required this.ingredient,
       required this.recipe});
@@ -156,24 +156,24 @@ class MeasurementUnitChanged extends RecipeEvent {
   List<Object> get props => [measurementUnit, ingredient, recipe];
 }
 
-class SizeChanged extends RecipeEvent {
+class IngredientSizeChanged extends RecipeEvent {
   final String size;
   final Ingredient ingredient;
   final Recipe recipe;
 
-  const SizeChanged(
+  const IngredientSizeChanged(
       {required this.size, required this.ingredient, required this.recipe});
 
   @override
   List<Object> get props => [size, ingredient, recipe];
 }
 
-class SizeNumberChanged extends RecipeEvent {
+class IngredientSizeNumberChanged extends RecipeEvent {
   final String sizeNumber;
   final Ingredient ingredient;
   final Recipe recipe;
 
-  const SizeNumberChanged(
+  const IngredientSizeNumberChanged(
       {required this.sizeNumber,
       required this.ingredient,
       required this.recipe});

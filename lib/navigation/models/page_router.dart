@@ -21,7 +21,7 @@ class PageRouter {
         var recipeIndex = routeSettings.arguments as int;
         return _buildRoute(RecipePage(recipeIndex));
       case ingredient:
-        var indices = routeSettings.arguments as List;
+        var indices = routeSettings.arguments as List; // TODO: Use a hash-map
         int recipeIndex = indices[0];
         int ingredientIndex = indices[1];
         return _buildRoute(IngredientPage(recipeIndex, ingredientIndex));

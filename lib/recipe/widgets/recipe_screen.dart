@@ -4,19 +4,11 @@ import 'package:gibsonify/recipe/recipe.dart';
 import 'package:gibsonify/navigation/navigation.dart';
 
 class RecipeScreen extends StatelessWidget {
-// class RecipeScreen extends StatefulWidget {
-  // TODO: Make this stateful to ensure listview updates
   final int recipeIndex;
   const RecipeScreen(this.recipeIndex, {Key? key}) : super(key: key);
 
-//   @override
-//   _RecipeScreenState createState() => _RecipeScreenState();
-// }
-
-// class _RecipeScreenState extends State<RecipeScreen> {
   @override
   Widget build(BuildContext context) {
-    // int recipeIndex = widget.recipeIndex;
     return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
       return Scaffold(
           appBar: AppBar(
@@ -29,7 +21,7 @@ class RecipeScreen extends StatelessWidget {
               children: <Widget>[
                 FloatingActionButton.extended(
                     heroTag: null,
-                    label: const Text("Save Recipe"),
+                    label: const Text("Save Recipe"), // TODO: pop page
                     icon: const Icon(Icons.save_sharp),
                     onPressed: () => {
                           context.read<RecipeBloc>().add(RecipeStatusChanged(

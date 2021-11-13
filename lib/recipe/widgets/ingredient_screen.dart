@@ -105,7 +105,7 @@ class IngredientForm extends StatelessWidget {
                 ),
                 onSaved: (dynamic str) {}, // investigate onSaved vs onChanged
                 onChanged: (dynamic value) {
-                  context.read<RecipeBloc>().add(CookingStateChanged(
+                  context.read<RecipeBloc>().add(IngredientCookingStateChanged(
                       ingredient: state
                           .recipes[recipeIndex].ingredients[ingredientIndex],
                       cookingState: value,
@@ -142,11 +142,12 @@ class IngredientForm extends StatelessWidget {
                 ),
                 onSaved: (dynamic str) {}, // investigate onSaved vs onChanged
                 onChanged: (dynamic value) {
-                  context.read<RecipeBloc>().add(MeasurementMethodChanged(
-                      ingredient: state
-                          .recipes[recipeIndex].ingredients[ingredientIndex],
-                      measurementMethod: value,
-                      recipe: state.recipes[recipeIndex]));
+                  context.read<RecipeBloc>().add(
+                      IngredientMeasurementMethodChanged(
+                          ingredient: state.recipes[recipeIndex]
+                              .ingredients[ingredientIndex],
+                          measurementMethod: value,
+                          recipe: state.recipes[recipeIndex]));
                 },
                 validator: (dynamic str) {},
                 displayItemFn: (dynamic item) => Text(
@@ -175,7 +176,7 @@ class IngredientForm extends StatelessWidget {
                       : null,
                 ),
                 onChanged: (value) {
-                  context.read<RecipeBloc>().add(MeasurementChanged(
+                  context.read<RecipeBloc>().add(IngredientMeasurementChanged(
                       ingredient: state
                           .recipes[recipeIndex].ingredients[ingredientIndex],
                       measurement: value,
@@ -197,11 +198,12 @@ class IngredientForm extends StatelessWidget {
                       : null,
                 ),
                 onChanged: (value) {
-                  context.read<RecipeBloc>().add(MeasurementUnitChanged(
-                      ingredient: state
-                          .recipes[recipeIndex].ingredients[ingredientIndex],
-                      measurementUnit: value,
-                      recipe: state.recipes[recipeIndex]));
+                  context.read<RecipeBloc>().add(
+                      IngredientMeasurementUnitChanged(
+                          ingredient: state.recipes[recipeIndex]
+                              .ingredients[ingredientIndex],
+                          measurementUnit: value,
+                          recipe: state.recipes[recipeIndex]));
                 },
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.number,
@@ -223,7 +225,7 @@ class IngredientForm extends StatelessWidget {
                 ),
                 onSaved: (dynamic str) {}, // investigate onSaved vs onChanged
                 onChanged: (dynamic value) {
-                  context.read<RecipeBloc>().add(SizeChanged(
+                  context.read<RecipeBloc>().add(IngredientSizeChanged(
                       ingredient: state
                           .recipes[recipeIndex].ingredients[ingredientIndex],
                       size: value,
@@ -256,7 +258,7 @@ class IngredientForm extends StatelessWidget {
                       : null,
                 ),
                 onChanged: (value) {
-                  context.read<RecipeBloc>().add(SizeNumberChanged(
+                  context.read<RecipeBloc>().add(IngredientSizeNumberChanged(
                       ingredient: state
                           .recipes[recipeIndex].ingredients[ingredientIndex],
                       sizeNumber: value,

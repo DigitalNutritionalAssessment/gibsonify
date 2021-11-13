@@ -14,7 +14,7 @@ class IngredientPage extends StatelessWidget {
       return Scaffold(
           appBar: AppBar(title: const Text('New Ingredient')),
           floatingActionButton: FloatingActionButton.extended(
-              label: const Text("Save Ingredient"),
+              label: const Text("Save Ingredient"), // TODO: pop page
               icon: const Icon(Icons.save_sharp),
               onPressed: () => {
                     context.read<RecipeBloc>().add(IngredientStatusChanged(

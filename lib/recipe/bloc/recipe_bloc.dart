@@ -18,12 +18,13 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     on<IngredientStatusChanged>(_onIngredientStatusChanged);
     on<IngredientNameChanged>(_onIngredientNameChanged);
     on<IngredientDescriptionChanged>(_onIngredientDescriptionChanged);
-    on<CookingStateChanged>(_onCookingStateChanged);
-    on<MeasurementMethodChanged>(_onMeasurementMethodChanged);
-    on<MeasurementChanged>(_onMeasurementChanged);
-    on<MeasurementUnitChanged>(_onMeasurementUnitChanged);
-    on<SizeChanged>(_onSizeChanged);
-    on<SizeNumberChanged>(_onSizeNumberChanged);
+    on<IngredientCookingStateChanged>(_onIngredientCookingStateChanged);
+    on<IngredientMeasurementMethodChanged>(
+        _onIngredientMeasurementMethodChanged);
+    on<IngredientMeasurementChanged>(_onIngredientMeasurementChanged);
+    on<IngredientMeasurementUnitChanged>(_onIngredientMeasurementUnitChanged);
+    on<IngredientSizeChanged>(_onIngredientSizeChanged);
+    on<IngredientSizeNumberChanged>(_onIngredientSizeNumberChanged);
   }
 
   void _onRecipeAdded(RecipeAdded event, Emitter<RecipeState> emit) {
@@ -181,8 +182,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     emit(state.copyWith(recipes: recipes));
   }
 
-  void _onCookingStateChanged(
-      CookingStateChanged event, Emitter<RecipeState> emit) {
+  void _onIngredientCookingStateChanged(
+      IngredientCookingStateChanged event, Emitter<RecipeState> emit) {
     List<Recipe> recipes = List.from(state.recipes);
 
     int changedRecipeIndex = recipes.indexOf(event.recipe);
@@ -204,8 +205,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     emit(state.copyWith(recipes: recipes));
   }
 
-  void _onMeasurementMethodChanged(
-      MeasurementMethodChanged event, Emitter<RecipeState> emit) {
+  void _onIngredientMeasurementMethodChanged(
+      IngredientMeasurementMethodChanged event, Emitter<RecipeState> emit) {
     List<Recipe> recipes = List.from(state.recipes);
 
     int changedRecipeIndex = recipes.indexOf(event.recipe);
@@ -228,8 +229,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     emit(state.copyWith(recipes: recipes));
   }
 
-  void _onMeasurementChanged(
-      MeasurementChanged event, Emitter<RecipeState> emit) {
+  void _onIngredientMeasurementChanged(
+      IngredientMeasurementChanged event, Emitter<RecipeState> emit) {
     List<Recipe> recipes = List.from(state.recipes);
 
     int changedRecipeIndex = recipes.indexOf(event.recipe);
@@ -251,8 +252,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     emit(state.copyWith(recipes: recipes));
   }
 
-  void _onMeasurementUnitChanged(
-      MeasurementUnitChanged event, Emitter<RecipeState> emit) {
+  void _onIngredientMeasurementUnitChanged(
+      IngredientMeasurementUnitChanged event, Emitter<RecipeState> emit) {
     List<Recipe> recipes = List.from(state.recipes);
 
     int changedRecipeIndex = recipes.indexOf(event.recipe);
@@ -275,7 +276,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     emit(state.copyWith(recipes: recipes));
   }
 
-  void _onSizeChanged(SizeChanged event, Emitter<RecipeState> emit) {
+  void _onIngredientSizeChanged(
+      IngredientSizeChanged event, Emitter<RecipeState> emit) {
     List<Recipe> recipes = List.from(state.recipes);
 
     int changedRecipeIndex = recipes.indexOf(event.recipe);
@@ -297,8 +299,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     emit(state.copyWith(recipes: recipes));
   }
 
-  void _onSizeNumberChanged(
-      SizeNumberChanged event, Emitter<RecipeState> emit) {
+  void _onIngredientSizeNumberChanged(
+      IngredientSizeNumberChanged event, Emitter<RecipeState> emit) {
     List<Recipe> recipes = List.from(state.recipes);
 
     int changedRecipeIndex = recipes.indexOf(event.recipe);
