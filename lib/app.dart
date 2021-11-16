@@ -24,14 +24,3 @@ class App extends StatelessWidget {
     );
   }
 }
-  //   return BlocProvider(
-  //     create: (context) => CollectionBloc(),
-  //     child: MaterialApp(
-  //       title: 'Gibsonify',
-  //       theme: ThemeData(primarySwatch: Colors.teal),
-  //       darkTheme: ThemeData.dark(), // TODO: add teal accents
-  //       onGenerateRoute: PageRouter.route,
-  //     ),
-  //   );
-  // }
-// }
