@@ -9,6 +9,7 @@ class RecipePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: investigate nesting of BlocBuilders
     return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
       return Scaffold(
         body: RecipeScreen(recipeIndex),
