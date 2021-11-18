@@ -21,82 +21,24 @@ class FirstPassScreen extends StatelessWidget {
                     icon: const Icon(Icons.help))
               ],
             ),
-            // TODO: atomize into smaller widgets
             body: ListView.builder(
                 padding: const EdgeInsets.all(2.0),
                 itemCount: state.foodItems.length,
                 itemBuilder: (context, index) {
-                  return Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          TextFormField(
-                            // A unique key needs to be set in order to properly
-                            // rebuild this Field after deleting a FoodItem
-                            key: Key(state.foodItems[index].id),
-                            initialValue: state.foodItems[index].name.value,
-                            decoration: InputDecoration(
-                              icon: const Icon(Icons.fastfood),
-                              labelText: 'Food name',
-                              helperText: 'Food name e.g. Dhal',
-                              errorText: state.foodItems[index].name.invalid
-                                  ? 'Enter a food name e.g. Banana'
-                                  : null,
-                            ),
-                            onChanged: (value) {
-                              context.read<CollectionBloc>().add(
-                                  FoodItemNameChanged(
-                                      foodItem: state.foodItems[index],
-                                      foodItemName: value));
-                            },
-                            textInputAction: TextInputAction.next,
-                          ),
-                          DropdownButtonFormField(
-                            value: state.foodItems[index].timePeriod.value,
-                            decoration: InputDecoration(
-                              icon: const Icon(Icons.access_time),
-                              labelText: 'Time period',
-                              helperText:
-                                  'Time period of consuming the food e.g. Morning',
-                              errorText:
-                                  state.foodItems[index].timePeriod.invalid
-                                      ? 'Select a time period'
-                                      : null,
-                            ),
-                            items: const [
-                              // TODO: research how to handle empty string as
-                              // the selected value other than a blank menu item
-                              DropdownMenuItem(child: Text(''), value: ''),
-                              DropdownMenuItem(
-                                  child: Text('Morning'), value: 'Morning'),
-                              DropdownMenuItem(
-                                  child: Text('Afternoon'), value: 'Afternoon'),
-                              DropdownMenuItem(
-                                  child: Text('Evening'), value: 'Evening'),
-                              DropdownMenuItem(
-                                  child: Text('Night'), value: 'Night'),
-                            ],
-                            onChanged: (String? value) {
-                              context.read<CollectionBloc>().add(
-                                  FoodItemTimePeriodChanged(
-                                      foodItem: state.foodItems[index],
-                                      foodItemTimePeriod: value ?? ''));
-                            },
-                          ),
-                          const Divider(),
-                          // TODO: Make a pop-up with a confirmation box
-                          //for deleting an item
-                          TextButton(
-                              onPressed: () => context
-                                  .read<CollectionBloc>()
-                                  .add(FoodItemDeleted(
-                                      foodItem: state.foodItems[index])),
-                              child: const Text('Delete'))
-                        ],
-                      ),
-                    ),
-                  );
+                  return FirstPassFoodItemCard(
+                      foodItem: state.foodItems[index],
+                      onNameChanged: (changedName) => context
+                          .read<CollectionBloc>()
+                          .add(FoodItemNameChanged(
+                              foodItem: state.foodItems[index],
+                              foodItemName: changedName)),
+                      onTimePeriodChanged: (changedTimePeriod) => context
+                          .read<CollectionBloc>()
+                          .add(FoodItemTimePeriodChanged(
+                              foodItem: state.foodItems[index],
+                              foodItemTimePeriod: changedTimePeriod)),
+                      onDeleted: () => context.read<CollectionBloc>().add(
+                          FoodItemDeleted(foodItem: state.foodItems[index])));
                 }),
             floatingActionButton: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
