@@ -111,12 +111,13 @@ class RecipeNumberInput extends StatelessWidget {
           decoration: InputDecoration(
             icon: const Icon(Icons.format_list_numbered),
             labelText: 'Recipe Number',
-            helperText: 'Number of recipe e.g. 9001',
             errorText: state.recipes[recipeIndex].recipeNumber.invalid
                 ? 'Enter recipe number'
                 : null,
           ),
+          enabled: false,
           onChanged: (value) {
+            // TODO: investigate if this is needed anymore
             context.read<RecipeBloc>().add(RecipeNumberChanged(
                 recipeNumber: value, recipe: state.recipes[recipeIndex]));
           },

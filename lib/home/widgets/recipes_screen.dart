@@ -18,7 +18,7 @@ class RecipesScreen extends StatelessWidget {
                 return Card(
                     child: ListTile(
                         title: Text(state.recipes[index].recipeName.value),
-                        subtitle: Text(state.recipes[index].recipeVolume.value),
+                        subtitle: Text(state.recipes[index].recipeType),
                         trailing: state.recipes[index].saved
                             ? const Icon(Icons.done)
                             : const Icon(Icons.rotate_left_rounded),
@@ -30,10 +30,32 @@ class RecipesScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
-                FloatingActionButton(
-                    child: const Icon(Icons.add),
+                FloatingActionButton.extended(
+                    heroTag: null,
+                    label: const Text("Standard Recipe"),
+                    icon: const Icon(Icons.add),
                     onPressed: () => {
-                          context.read<RecipeBloc>().add(RecipeAdded()),
+                          context.read<RecipeBloc>().add(RecipeAdded(
+                              recipeType: "Standard Recipe",
+                              recipeNumber:
+                                  (state.recipes.length + 1).toString(),
+                              standard: true)),
+                          Navigator.pushNamed(context, PageRouter.recipe,
+                              arguments: state.recipes.length),
+                        }),
+                const SizedBox(
+                  height: 10,
+                ),
+                FloatingActionButton.extended(
+                    heroTag: null,
+                    label: const Text("Modified Recipe"),
+                    icon: const Icon(Icons.add),
+                    onPressed: () => {
+                          context.read<RecipeBloc>().add(RecipeAdded(
+                              recipeType: "Modified Recipe",
+                              recipeNumber:
+                                  (state.recipes.length + 1).toString(),
+                              standard: false)),
                           Navigator.pushNamed(context, PageRouter.recipe,
                               arguments: state.recipes.length),
                         })

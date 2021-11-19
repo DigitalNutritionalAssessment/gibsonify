@@ -28,7 +28,14 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
   }
 
   void _onRecipeAdded(RecipeAdded event, Emitter<RecipeState> emit) {
-    final recipe = Recipe();
+    final newRecipe = Recipe();
+    final recipeType = event.recipeType;
+    bool standard = event.standard;
+    Recipe recipe = newRecipe.copyWith(
+        recipeNumber: RecipeNumber.dirty(event.recipeNumber),
+        recipeType: recipeType,
+        standard: standard);
+
     List<Recipe> recipes = List.from(state.recipes);
     recipes.add(recipe);
 
@@ -50,7 +57,9 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
   }
 
   void _recipeNumberChanged(
-      RecipeNumberChanged event, Emitter<RecipeState> emit) {
+      // TODO: Remove?
+      RecipeNumberChanged event,
+      Emitter<RecipeState> emit) {
     List<Recipe> recipes = List.from(state.recipes);
 
     int changedRecipeIndex = recipes.indexOf(event.recipe);
@@ -85,8 +94,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
 
     int changedRecipeIndex = recipes.indexOf(event.recipe);
 
-    Recipe recipe =
-        recipes[changedRecipeIndex].copyWith(saved: event.recipeSaved);
+    Recipe recipe = recipes[changedRecipeIndex]
+        .copyWith(saved: event.recipeSaved, standard: false);
 
     recipes.removeAt(changedRecipeIndex);
     recipes.insert(changedRecipeIndex, recipe);
@@ -95,7 +104,13 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
   }
 
   void _onIngredientAdded(IngredientAdded event, Emitter<RecipeState> emit) {
+    // if standard is false:
+    // make a copy of the current recipe and add it to the list
+    // then continue to edit this current recipe, getting a new recipe number
+    // and making recipeType = Modified Recipe
+
     List<Recipe> recipes = List.from(state.recipes);
+    Recipe standardRecipe = event.recipe;
     int changedRecipeIndex = recipes.indexOf(event.recipe);
 
     final ingredient = Ingredient();
@@ -103,12 +118,24 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
         List.from(recipes[changedRecipeIndex].ingredients);
     ingredients.add(ingredient);
 
-    Recipe recipe = recipes[changedRecipeIndex]
-        .copyWith(ingredients: ingredients, saved: false);
+    Recipe recipe = (event.recipe.standard == false &&
+            event.recipe.recipeType == "Standard Recipe")
+        ? recipes[changedRecipeIndex].copyWith(
+            ingredients: ingredients,
+            saved: false,
+            recipeType: "Modified Recipe",
+            recipeNumber: RecipeNumber.dirty((state.recipes.length + 1)
+                .toString())) // TODO: Handle recipeNumber better
+        : recipes[changedRecipeIndex]
+            .copyWith(ingredients: ingredients, saved: false);
 
     recipes.removeAt(changedRecipeIndex);
-    recipes.insert(changedRecipeIndex, recipe);
 
+    if (event.recipe.standard == false &&
+        event.recipe.recipeType == "Standard Recipe") {
+      recipes.insert(changedRecipeIndex, standardRecipe);
+    }
+    recipes.insert(changedRecipeIndex, recipe);
     emit(state.copyWith(recipes: recipes));
   }
 

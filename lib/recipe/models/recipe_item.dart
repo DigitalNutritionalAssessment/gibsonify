@@ -7,38 +7,54 @@ class Recipe extends Equatable {
   Recipe(
       {this.recipeName = const RecipeName.pure(),
       this.recipeNumber = const RecipeNumber.pure(),
+      this.recipeType = "",
       this.recipeVolume = const RecipeVolume.pure(),
       this.ingredients = const <Ingredient>[],
+      this.standard = true,
       this.saved = false,
       String? id})
       : id = id ?? const Uuid().v4();
 
   final RecipeName recipeName;
   final RecipeNumber recipeNumber;
+  final String recipeType;
   final RecipeVolume recipeVolume;
   final List<Ingredient> ingredients;
+  final bool standard;
   final bool saved;
   final String id;
 
   Recipe copyWith(
       {RecipeName? recipeName,
       RecipeNumber? recipeNumber,
+      String? recipeType,
       RecipeVolume? recipeVolume,
       List<Ingredient>? ingredients,
+      bool? standard,
       bool? saved,
       String? id}) {
     return Recipe(
         recipeName: recipeName ?? this.recipeName,
         recipeNumber: recipeNumber ?? this.recipeNumber,
+        recipeType: recipeType ?? this.recipeType,
         recipeVolume: recipeVolume ?? this.recipeVolume,
         ingredients: ingredients ?? this.ingredients,
+        standard: standard ?? this.standard,
         saved: saved ?? this.saved,
         id: id ?? this.id);
   }
 
   @override
-  List<Object> get props =>
-      [recipeName, recipeNumber, recipeVolume, ingredients, saved, id];
+  List<Object> get props => [
+        recipeName,
+        recipeNumber,
+        recipeType,
+        recipeVolume,
+        ingredients,
+        standard,
+        saved,
+        id
+      ];
 }
 
 enum RecipeNameValidationError { invalid }
