@@ -17,6 +17,14 @@ class FirstPassFoodItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const List<DropdownMenuItem<String>> dropdownMenuItems = [
+      DropdownMenuItem(child: Text(''), value: ''),
+      DropdownMenuItem(child: Text('Morning'), value: 'Morning'),
+      DropdownMenuItem(child: Text('Afternoon'), value: 'Afternoon'),
+      DropdownMenuItem(child: Text('Evening'), value: 'Evening'),
+      DropdownMenuItem(child: Text('Night'), value: 'Night')
+    ];
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -41,22 +49,14 @@ class FirstPassFoodItemCard extends StatelessWidget {
             DropdownButtonFormField(
                 value: foodItem.timePeriod.value,
                 decoration: InputDecoration(
-                  icon: const Icon(Icons.access_time),
-                  labelText: 'Time period',
-                  helperText: 'Time period of consuming the food e.g. Morning',
-                  errorText: foodItem.timePeriod.invalid
-                      ? 'Select a time period'
-                      : null,
-                ),
-                // TODO: refactor these
-                items: const [
-                  DropdownMenuItem(child: Text(''), value: ''),
-                  DropdownMenuItem(child: Text('Morning'), value: 'Morning'),
-                  DropdownMenuItem(
-                      child: Text('Afternoon'), value: 'Afternoon'),
-                  DropdownMenuItem(child: Text('Evening'), value: 'Evening'),
-                  DropdownMenuItem(child: Text('Night'), value: 'Night'),
-                ],
+                    icon: const Icon(Icons.access_time),
+                    labelText: 'Time period',
+                    helperText:
+                        'Time period of consuming the food e.g. Morning',
+                    errorText: foodItem.timePeriod.invalid
+                        ? 'Select a time period'
+                        : null),
+                items: dropdownMenuItems,
                 onChanged: (String? value) =>
                     onTimePeriodChanged!(value ?? '')),
             const Divider(),
