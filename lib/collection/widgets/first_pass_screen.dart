@@ -30,6 +30,11 @@ class FirstPassScreen extends StatelessWidget {
                       onNameChanged: (changedName) => context
                           .read<CollectionBloc>()
                           .add(FoodItemNameChanged(
+                              // TODO: change methods of FirstPassFoodItemCard
+                              // to return changed value and the foodItem
+                              // (or its uuid) that was passed to the widget
+                              // rather than to always have to pass
+                              // state.foodItems[index] to each method
                               foodItem: state.foodItems[index],
                               foodItemName: changedName)),
                       onTimePeriodChanged: (changedTimePeriod) => context
