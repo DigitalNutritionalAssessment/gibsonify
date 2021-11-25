@@ -20,26 +20,26 @@ class ThirdPassScreen extends StatelessWidget {
             ]),
             body: ListView.builder(
                 padding: const EdgeInsets.all(2.0),
-                itemCount: state.foodItems.length,
+                itemCount: state.gibsonsForm.foodItems.length,
                 itemBuilder: (context, index) {
                   return ThirdPassFoodItemCard(
-                      foodItem: state.foodItems[index],
+                      foodItem: state.gibsonsForm.foodItems[index],
                       onMeasurementMethodChanged: (changedMeasurementMethod) =>
                           context.read<CollectionBloc>().add(
                               FoodItemMeasurementMethodChanged(
-                                  foodItem: state.foodItems[index],
+                                  foodItem: state.gibsonsForm.foodItems[index],
                                   foodItemMeasurementMethod:
                                       changedMeasurementMethod)),
                       onMeasurementValueChanged: (changedMeasurementValue) =>
                           context.read<CollectionBloc>().add(
                               FoodItemMeasurementValueChanged(
-                                  foodItem: state.foodItems[index],
+                                  foodItem: state.gibsonsForm.foodItems[index],
                                   foodItemMeasurementValue:
                                       changedMeasurementValue)),
                       onMeasurementUnitChanged: (changedMeasurementUnit) =>
                           context.read<CollectionBloc>().add(
                               FoodItemMeasurementUnitChanged(
-                                  foodItem: state.foodItems[index],
+                                  foodItem: state.gibsonsForm.foodItems[index],
                                   foodItemMeasurementUnit:
                                       changedMeasurementUnit)));
                 }));

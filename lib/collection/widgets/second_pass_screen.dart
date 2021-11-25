@@ -20,24 +20,24 @@ class SecondPassScreen extends StatelessWidget {
           ]),
           body: ListView.builder(
               padding: const EdgeInsets.all(2.0),
-              itemCount: state.foodItems.length,
+              itemCount: state.gibsonsForm.foodItems.length,
               itemBuilder: (context, index) {
                 return SecondPassFoodItemCard(
-                  foodItem: state.foodItems[index],
+                  foodItem: state.gibsonsForm.foodItems[index],
                   onSourceChanged: (changedSource) => context
                       .read<CollectionBloc>()
                       .add(FoodItemSourceChanged(
-                          foodItem: state.foodItems[index],
+                          foodItem: state.gibsonsForm.foodItems[index],
                           foodItemSource: changedSource)),
                   onDescriptionChanged: (changedDescription) => context
                       .read<CollectionBloc>()
                       .add(FoodItemDescriptionChanged(
-                          foodItem: state.foodItems[index],
+                          foodItem: state.gibsonsForm.foodItems[index],
                           foodItemDescription: changedDescription)),
                   onPreparationMethodChanged: (changedPreparationMethod) =>
                       context.read<CollectionBloc>().add(
                           FoodItemPreparationMethodChanged(
-                              foodItem: state.foodItems[index],
+                              foodItem: state.gibsonsForm.foodItems[index],
                               foodItemPreparationMethod:
                                   changedPreparationMethod)),
                 );

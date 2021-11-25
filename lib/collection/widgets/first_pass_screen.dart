@@ -23,10 +23,10 @@ class FirstPassScreen extends StatelessWidget {
             ),
             body: ListView.builder(
                 padding: const EdgeInsets.all(2.0),
-                itemCount: state.foodItems.length,
+                itemCount: state.gibsonsForm.foodItems.length,
                 itemBuilder: (context, index) {
                   return FirstPassFoodItemCard(
-                      foodItem: state.foodItems[index],
+                      foodItem: state.gibsonsForm.foodItems[index],
                       onNameChanged: (changedName) => context
                           .read<CollectionBloc>()
                           .add(FoodItemNameChanged(
@@ -35,15 +35,16 @@ class FirstPassScreen extends StatelessWidget {
                               // (or its uuid) that was passed to the widget
                               // rather than to always have to pass
                               // state.foodItems[index] to each method
-                              foodItem: state.foodItems[index],
+                              foodItem: state.gibsonsForm.foodItems[index],
                               foodItemName: changedName)),
                       onTimePeriodChanged: (changedTimePeriod) => context
                           .read<CollectionBloc>()
                           .add(FoodItemTimePeriodChanged(
-                              foodItem: state.foodItems[index],
+                              foodItem: state.gibsonsForm.foodItems[index],
                               foodItemTimePeriod: changedTimePeriod)),
                       onDeleted: () => context.read<CollectionBloc>().add(
-                          FoodItemDeleted(foodItem: state.foodItems[index])));
+                          FoodItemDeleted(
+                              foodItem: state.gibsonsForm.foodItems[index])));
                 }),
             floatingActionButton: Column(
                 mainAxisAlignment: MainAxisAlignment.end,

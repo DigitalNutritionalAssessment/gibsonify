@@ -55,12 +55,12 @@ class HouseholdIdInput extends StatelessWidget {
     return BlocBuilder<CollectionBloc, CollectionState>(
       builder: (context, state) {
         return TextFormField(
-          initialValue: state.householdId.value,
+          initialValue: state.gibsonsForm.householdId.value,
           decoration: InputDecoration(
             icon: const Icon(Icons.house),
             labelText: 'Household ID',
             helperText: 'A valid Household ID e.g. IMH13D0303',
-            errorText: state.householdId.invalid
+            errorText: state.gibsonsForm.householdId.invalid
                 ? 'Enter a valid Household ID e.g. IMH13D0303'
                 : null,
           ),
@@ -84,13 +84,14 @@ class RespondentNameInput extends StatelessWidget {
     return BlocBuilder<CollectionBloc, CollectionState>(
       builder: (context, state) {
         return TextFormField(
-          initialValue: state.respondentName.value,
+          initialValue: state.gibsonsForm.respondentName.value,
           decoration: InputDecoration(
             icon: const Icon(Icons.person),
             labelText: 'Respondent Name',
             helperText: 'Full name of respondent e.g. Keira Brown',
-            errorText:
-                state.respondentName.invalid ? 'Enter respondent name' : null,
+            errorText: state.gibsonsForm.respondentName.invalid
+                ? 'Enter respondent name'
+                : null,
           ),
           onChanged: (value) {
             context
@@ -112,13 +113,13 @@ class RespondentTelNumberInput extends StatelessWidget {
     return BlocBuilder<CollectionBloc, CollectionState>(
       builder: (context, state) {
         return TextFormField(
-          initialValue: state.respondentTelNumber.value,
+          initialValue: state.gibsonsForm.respondentTelNumber.value,
           keyboardType: TextInputType.phone,
           decoration: InputDecoration(
             icon: const Icon(Icons.phone),
             labelText: 'Respondent Tel. Number',
             helperText: 'Full tel. number of respondent e.g. +447448238123',
-            errorText: state.respondentTelNumber.invalid
+            errorText: state.gibsonsForm.respondentTelNumber.invalid
                 ? 'Enter valid tel. number'
                 : null,
           ),
@@ -143,13 +144,13 @@ class InterviewDateInput extends StatelessWidget {
       builder: (context, state) {
         return TextFormField(
           readOnly: true,
-          key: Key(state.interviewDate.value),
-          initialValue: state.interviewDate.value,
+          key: Key(state.gibsonsForm.interviewDate.value),
+          initialValue: state.gibsonsForm.interviewDate.value,
           decoration: InputDecoration(
             icon: const Icon(Icons.calendar_today),
             labelText: 'Interview Date',
             helperText: 'Date of interview start',
-            errorText: state.interviewDate.invalid
+            errorText: state.gibsonsForm.interviewDate.invalid
                 ? 'Choose the date of interview start'
                 : null,
           ),
@@ -180,13 +181,13 @@ class InterviewStartTimeInput extends StatelessWidget {
       builder: (context, state) {
         return TextFormField(
           readOnly: true,
-          key: Key(state.interviewStartTime.value),
-          initialValue: state.interviewStartTime.value,
+          key: Key(state.gibsonsForm.interviewStartTime.value),
+          initialValue: state.gibsonsForm.interviewStartTime.value,
           decoration: InputDecoration(
             icon: const Icon(Icons.access_time),
             labelText: 'Interview Start Time',
             helperText: 'Time at the start of the interview',
-            errorText: state.interviewStartTime.invalid
+            errorText: state.gibsonsForm.interviewStartTime.invalid
                 ? 'Choose the start time of the interview'
                 : null,
           ),

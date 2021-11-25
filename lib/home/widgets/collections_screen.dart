@@ -26,10 +26,11 @@ class _CollectionsScreenState extends State<CollectionsScreen> {
               builder: (context, state) {
                 return ListTile(
                     leading: const Icon(Icons.description),
-                    title: Text(state.respondentName.value),
-                    subtitle: Text(state.interviewDate.value),
+                    title: Text(state.gibsonsForm.respondentName.value),
+                    subtitle: Text(state.gibsonsForm.interviewDate.value),
                     // TODO: Change to state.fourthPassStatus.isSubmissionSuccess
-                    trailing: state.sensitizationStatus.isSubmissionSuccess
+                    trailing: state
+                            .gibsonsForm.sensitizationStatus.isSubmissionSuccess
                         ? const Icon(Icons.done)
                         : const Icon(Icons.pause),
                     // TODO: Implement switching to last opened page

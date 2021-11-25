@@ -1,57 +1,14 @@
 part of 'collection_bloc.dart';
 
 class CollectionState extends Equatable {
-  // TODO: refactor CollectionState to only hold one instance of a Collection
-  // class, such as GibsonsForm or similar
-  final HouseholdId householdId;
-  final RespondentName respondentName;
-  final RespondentTelNumber respondentTelNumber;
-  final InterviewDate interviewDate;
-  final InterviewStartTime interviewStartTime;
-  // TODO: refactor all of the above
-  // fields into a single SensitizationForm class
-  final FormzStatus sensitizationStatus;
-  // final FoodItem foodItem = FoodItem();
+  final GibsonsForm gibsonsForm;
 
-  final List<FoodItem> foodItems;
+  const CollectionState({this.gibsonsForm = const GibsonsForm()});
 
-  const CollectionState(
-      {this.householdId = const HouseholdId.pure(),
-      this.respondentName = const RespondentName.pure(),
-      this.respondentTelNumber = const RespondentTelNumber.pure(),
-      this.interviewDate = const InterviewDate.pure(),
-      this.interviewStartTime = const InterviewStartTime.pure(),
-      this.sensitizationStatus = FormzStatus.pure,
-      // TODO: find a way how to initialize foodItems with one FoodItem inside
-      this.foodItems =
-          const <FoodItem>[]}); // TODO: maybe change to ordered map???
-
-  CollectionState copyWith(
-      {HouseholdId? householdId,
-      RespondentName? respondentName,
-      RespondentTelNumber? respondentTelNumber,
-      InterviewDate? interviewDate,
-      InterviewStartTime? interviewStartTime,
-      FormzStatus? sensitizationStatus,
-      List<FoodItem>? foodItems}) {
-    return CollectionState(
-        householdId: householdId ?? this.householdId,
-        respondentName: respondentName ?? this.respondentName,
-        respondentTelNumber: respondentTelNumber ?? this.respondentTelNumber,
-        interviewStartTime: interviewStartTime ?? this.interviewStartTime,
-        interviewDate: interviewDate ?? this.interviewDate,
-        sensitizationStatus: sensitizationStatus ?? this.sensitizationStatus,
-        foodItems: foodItems ?? this.foodItems);
+  CollectionState copyWith({GibsonsForm? gibsonsForm}) {
+    return CollectionState(gibsonsForm: gibsonsForm ?? this.gibsonsForm);
   }
 
   @override
-  List<Object> get props => [
-        householdId,
-        respondentName,
-        sensitizationStatus,
-        respondentTelNumber,
-        interviewDate,
-        interviewStartTime,
-        foodItems
-      ];
+  List<Object> get props => [gibsonsForm];
 }
