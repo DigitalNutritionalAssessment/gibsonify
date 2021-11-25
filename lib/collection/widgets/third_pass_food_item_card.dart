@@ -17,6 +17,30 @@ class ThirdPassFoodItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: research how to handle empty string as
+    // the selected value other than a blank menu item
+    const List<DropdownMenuItem<String>> measurementMethodDropdownMenuItems = [
+      DropdownMenuItem(child: Text(''), value: ''),
+      DropdownMenuItem(child: Text('Direct weight'), value: 'Direct weight'),
+      DropdownMenuItem(
+          child: Text('Volume of water'), value: 'Volume of water'),
+      DropdownMenuItem(child: Text('Volume of food'), value: 'Volume of food'),
+      DropdownMenuItem(child: Text('Play dough'), value: 'Play dough'),
+      DropdownMenuItem(child: Text('Number'), value: 'Number'),
+      DropdownMenuItem(child: Text('Size (photo)'), value: 'Size (photo)')
+    ];
+    const List<DropdownMenuItem<String>> measurementUnitDropdownMenuItems = [
+      DropdownMenuItem(child: Text(''), value: ''),
+      DropdownMenuItem(child: Text('Small spoon'), value: 'Small spoon'),
+      DropdownMenuItem(child: Text('Big spoon'), value: 'Big spoon'),
+      DropdownMenuItem(child: Text('Standard cup'), value: 'Standard cup'),
+      DropdownMenuItem(child: Text('Small'), value: 'Small'),
+      DropdownMenuItem(child: Text('Medium'), value: 'Medium'),
+      DropdownMenuItem(child: Text('Large'), value: 'Large'),
+      DropdownMenuItem(
+          child: Text('Grams or millilitres'), value: 'Grams or millilitres')
+    ];
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -36,23 +60,7 @@ class ThirdPassFoodItemCard extends StatelessWidget {
                       ? 'Select the measurement method'
                       : null,
                 ),
-                items: const [
-                  // TODO: research how to handle empty string as
-                  // the selected value other than a blank menu item
-                  DropdownMenuItem(child: Text(''), value: ''),
-                  DropdownMenuItem(
-                      child: Text('Direct weight'), value: 'Direct weight'),
-                  DropdownMenuItem(
-                      child: Text('Volume of water'), value: 'Volume of water'),
-                  DropdownMenuItem(
-                      child: Text('Volume of food'), value: 'Volume of food'),
-
-                  DropdownMenuItem(
-                      child: Text('Play dough'), value: 'Play dough'),
-                  DropdownMenuItem(child: Text('Number'), value: 'Number'),
-                  DropdownMenuItem(
-                      child: Text('Size (photo)'), value: 'Size (photo)')
-                ],
+                items: measurementMethodDropdownMenuItems,
                 onChanged: (String? value) =>
                     onMeasurementMethodChanged!(value ?? '')),
             TextFormField(
@@ -78,23 +86,7 @@ class ThirdPassFoodItemCard extends StatelessWidget {
                       ? 'Select the measurement unit'
                       : null,
                 ),
-                items: const [
-                  // TODO: research how to handle empty string as
-                  // the selected value other than a blank menu item
-                  DropdownMenuItem(child: Text(''), value: ''),
-                  DropdownMenuItem(
-                      child: Text('Small spoon'), value: 'Small spoon'),
-                  DropdownMenuItem(
-                      child: Text('Big spoon'), value: 'Big spoon'),
-                  DropdownMenuItem(
-                      child: Text('Standard cup'), value: 'Standard cup'),
-                  DropdownMenuItem(child: Text('Small'), value: 'Small'),
-                  DropdownMenuItem(child: Text('Medium'), value: 'Medium'),
-                  DropdownMenuItem(child: Text('Large'), value: 'Large'),
-                  DropdownMenuItem(
-                      child: Text('Grams or millilitres'),
-                      value: 'Grams or millilitres')
-                ],
+                items: measurementUnitDropdownMenuItems,
                 onChanged: (String? value) =>
                     onMeasurementUnitChanged!(value ?? '')),
           ],
