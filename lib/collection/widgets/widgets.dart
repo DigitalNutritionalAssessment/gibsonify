@@ -5,3 +5,4 @@ export 'third_pass_screen.dart';
 export 'fourth_pass_screen.dart';
 export 'first_pass_food_item_card.dart';
 export 'second_pass_food_item_card.dart';
+export 'third_pass_food_item_card.dart';
