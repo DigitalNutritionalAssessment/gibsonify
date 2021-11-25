@@ -1,6 +1,3 @@
-// TODO: page_router add route,
-// and add floating action button to sensitization scree
-
 import 'package:flutter/material.dart';
 
 class SensitizationHelpPage extends StatelessWidget {
@@ -17,7 +14,7 @@ class SensitizationHelpPage extends StatelessWidget {
             child: Text('Please explain the survey to the respondent(s)'
                 '/participants and what is expected from them.'
                 '\n\n'
-                'Afterwards, schedule an appointment for'
+                'Afterwards, schedule an appointment for '
                 'the interview the day after today.'
                 '\n\n'
                 'Lastly, hand over the food picture chart to the respondent(s) '

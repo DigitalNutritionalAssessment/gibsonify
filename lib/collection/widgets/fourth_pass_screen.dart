@@ -12,8 +12,18 @@ class FourthPassScreen extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
             appBar: AppBar(title: const Text('Fourth Pass')),
-            body: Center(
-                child: Text('DEMO Interview Date: ' + state.interviewDate.value)));
+            body: ListView.builder(
+                padding: const EdgeInsets.all(2.0),
+                itemCount: state.gibsonsForm.foodItems.length,
+                itemBuilder: (context, index) {
+                  return FourthPassFoodItemCard(
+                      foodItem: state.gibsonsForm.foodItems[index],
+                      onConfirmationChanged: (negatedConfirmation) => context
+                          .read<CollectionBloc>()
+                          .add(FoodItemConfirmationChanged(
+                              foodItem: state.gibsonsForm.foodItems[index],
+                              foodItemConfirmed: negatedConfirmation)));
+                }));
       },
     );
   }
