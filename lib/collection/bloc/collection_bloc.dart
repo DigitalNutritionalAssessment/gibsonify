@@ -125,8 +125,9 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     // TODO: change into UUID-based indexing
     int changedFoodItemIndex = foodItems.indexOf(event.foodItem);
 
-    FoodItem foodItem = foodItems[changedFoodItemIndex]
-        .copyWith(name: Name.dirty(event.foodItemName));
+    FoodItem foodItem = foodItems[changedFoodItemIndex].copyWith(
+        name: Name.dirty(event.foodItemName),
+        confirmed: false); // any change to FoodItem unconfirms it
 
     foodItems.removeAt(changedFoodItemIndex);
     foodItems.insert(changedFoodItemIndex, foodItem);
@@ -141,8 +142,9 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     // TODO: change into UUID-based indexing
     int changedFoodItemIndex = foodItems.indexOf(event.foodItem);
 
-    FoodItem foodItem = foodItems[changedFoodItemIndex]
-        .copyWith(timePeriod: TimePeriod.dirty(event.foodItemTimePeriod));
+    FoodItem foodItem = foodItems[changedFoodItemIndex].copyWith(
+        timePeriod: TimePeriod.dirty(event.foodItemTimePeriod),
+        confirmed: false);
 
     foodItems.removeAt(changedFoodItemIndex);
     foodItems.insert(changedFoodItemIndex, foodItem);
@@ -158,7 +160,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     int changedFoodItemIndex = foodItems.indexOf(event.foodItem);
 
     FoodItem foodItem = foodItems[changedFoodItemIndex]
-        .copyWith(source: Source.dirty(event.foodItemSource));
+        .copyWith(source: Source.dirty(event.foodItemSource), confirmed: false);
 
     foodItems.removeAt(changedFoodItemIndex);
     foodItems.insert(changedFoodItemIndex, foodItem);
@@ -173,8 +175,9 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     // TODO: change into UUID-based indexing
     int changedFoodItemIndex = foodItems.indexOf(event.foodItem);
 
-    FoodItem foodItem = foodItems[changedFoodItemIndex]
-        .copyWith(description: Description.dirty(event.foodItemDescription));
+    FoodItem foodItem = foodItems[changedFoodItemIndex].copyWith(
+        description: Description.dirty(event.foodItemDescription),
+        confirmed: false);
 
     foodItems.removeAt(changedFoodItemIndex);
     foodItems.insert(changedFoodItemIndex, foodItem);
@@ -191,7 +194,8 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
     FoodItem foodItem = foodItems[changedFoodItemIndex].copyWith(
         preparationMethod:
-            PreparationMethod.dirty(event.foodItemPreparationMethod));
+            PreparationMethod.dirty(event.foodItemPreparationMethod),
+        confirmed: false);
 
     foodItems.removeAt(changedFoodItemIndex);
     foodItems.insert(changedFoodItemIndex, foodItem);
@@ -211,7 +215,8 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
     FoodItem foodItem = foodItems[changedFoodItemIndex].copyWith(
         measurementMethod:
-            MeasurementMethod.dirty(event.foodItemMeasurementMethod));
+            MeasurementMethod.dirty(event.foodItemMeasurementMethod),
+        confirmed: false);
 
     foodItems.removeAt(changedFoodItemIndex);
     foodItems.insert(changedFoodItemIndex, foodItem);
@@ -231,7 +236,8 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
     FoodItem foodItem = foodItems[changedFoodItemIndex].copyWith(
         measurementValue:
-            MeasurementValue.dirty(event.foodItemMeasurementValue));
+            MeasurementValue.dirty(event.foodItemMeasurementValue),
+        confirmed: false);
 
     foodItems.removeAt(changedFoodItemIndex);
     foodItems.insert(changedFoodItemIndex, foodItem);
@@ -250,7 +256,8 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     int changedFoodItemIndex = foodItems.indexOf(event.foodItem);
 
     FoodItem foodItem = foodItems[changedFoodItemIndex].copyWith(
-        measurementUnit: MeasurementUnit.dirty(event.foodItemMeasurementUnit));
+        measurementUnit: MeasurementUnit.dirty(event.foodItemMeasurementUnit),
+        confirmed: false);
 
     foodItems.removeAt(changedFoodItemIndex);
     foodItems.insert(changedFoodItemIndex, foodItem);
