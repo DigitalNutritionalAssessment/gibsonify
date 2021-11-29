@@ -1,19 +1,22 @@
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
-import 'package:uuid/uuid.dart';
+import 'package:uuid/uuid.dart'; // TODO: each gibsons form should have a unique uuid
 
-import 'package:gibsonify/collection/collection.dart';
+import 'food_item.dart';
 
 class GibsonsForm extends Equatable {
-  const GibsonsForm(
-      {this.householdId = const HouseholdId.pure(),
+  GibsonsForm(
+      {String? id,
+      this.householdId = const HouseholdId.pure(),
       this.respondentName = const RespondentName.pure(),
       this.respondentTelNumber = const RespondentTelNumber.pure(),
       this.interviewDate = const InterviewDate.pure(),
       this.interviewStartTime = const InterviewStartTime.pure(),
       this.sensitizationStatus = FormzStatus.pure,
-      this.foodItems = const <FoodItem>[]});
+      this.foodItems = const <FoodItem>[]})
+      : id = id ?? const Uuid().v4();
 
+  final String id;
   final HouseholdId householdId;
   final RespondentName respondentName;
   final RespondentTelNumber respondentTelNumber;

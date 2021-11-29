@@ -2,13 +2,13 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 
-import 'package:gibsonify/collection/models/models.dart';
+import 'package:gibsonify_api/gibsonify_api.dart';
 
 part 'collection_event.dart';
 part 'collection_state.dart';
 
 class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
-  CollectionBloc() : super(const CollectionState()) {
+  CollectionBloc() : super(CollectionState()) {
     on<HouseholdIdChanged>(_onHouseholdIdChanged);
     on<RespondentNameChanged>(_onRespondentNameChanged);
     on<RespondentTelNumberChanged>(_onRespondentTelNumberChanged);

@@ -1,0 +1,19 @@
+name: gibsonify_api
+description: API that handles requests for Gibson's form Collections and Recipes.
+version: 1.0.0
+publish_to: none
+
+environment:
+  sdk: '>=2.14.4 <3.0.0'
+
+
+dependencies:
+  shared_preferences: ^2.0.9
+  equatable: ^2.0.3
+  formz: ^0.4.0
+  uuid: ^3.0.5
+#   path: ^1.8.0
+
+dev_dependencies:
+  lints: ^1.0.0
+  test: ^1.16.0

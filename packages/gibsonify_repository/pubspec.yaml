@@ -1,0 +1,17 @@
+name: gibsonify_repository
+description: Repository that handles requests for Gibson's form Collections and Recipes.
+version: 1.0.0
+publish_to: none
+
+environment:
+  sdk: '>=2.14.4 <3.0.0'
+
+
+dependencies:
+  gibsonify_api:
+    path: ../gibsonify_api
+#   path: ^1.8.0
+
+dev_dependencies:
+  lints: ^1.0.0
+  test: ^1.16.0

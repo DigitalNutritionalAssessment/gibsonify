@@ -3,7 +3,8 @@ part of 'collection_bloc.dart';
 class CollectionState extends Equatable {
   final GibsonsForm gibsonsForm;
 
-  const CollectionState({this.gibsonsForm = const GibsonsForm()});
+  CollectionState({GibsonsForm? gibsonsForm})
+      : gibsonsForm = gibsonsForm ?? GibsonsForm();
 
   CollectionState copyWith({GibsonsForm? gibsonsForm}) {
     return CollectionState(gibsonsForm: gibsonsForm ?? this.gibsonsForm);

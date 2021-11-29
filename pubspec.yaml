@@ -8,13 +8,15 @@ environment:
 
 dependencies:
   dropdown_plus: ^0.0.9
-  equatable: ^2.0.3
+  equatable: ^2.0.3  # TODO: see if can delete
   flutter:
     sdk: flutter
   flutter_bloc: ^7.3.0
-  formz: ^0.4.0
+  formz: ^0.4.0 # TODO: see if can delete
   intl: ^0.17.0
-  uuid: ^3.0.5
+  uuid: ^3.0.5  # TODO: see if can delete
+  gibsonify_api:
+    path: packages/gibsonify_api
 
 dev_dependencies:
   flutter_test:
