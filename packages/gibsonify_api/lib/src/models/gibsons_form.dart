@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
-import 'package:uuid/uuid.dart'; // TODO: each gibsons form should have a unique uuid
+import 'package:uuid/uuid.dart';
 
 import 'food_item.dart';
 
