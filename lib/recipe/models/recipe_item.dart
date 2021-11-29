@@ -10,7 +10,6 @@ class Recipe extends Equatable {
       this.recipeType = "",
       this.recipeVolume = const RecipeVolume.pure(),
       this.ingredients = const <Ingredient>[],
-      this.standard = true,
       this.saved = false,
       String? id})
       : id = id ?? const Uuid().v4();
@@ -20,7 +19,6 @@ class Recipe extends Equatable {
   final String recipeType;
   final RecipeVolume recipeVolume;
   final List<Ingredient> ingredients;
-  final bool standard;
   final bool saved;
   final String id;
 
@@ -30,7 +28,6 @@ class Recipe extends Equatable {
       String? recipeType,
       RecipeVolume? recipeVolume,
       List<Ingredient>? ingredients,
-      bool? standard,
       bool? saved,
       String? id}) {
     return Recipe(
@@ -39,7 +36,6 @@ class Recipe extends Equatable {
         recipeType: recipeType ?? this.recipeType,
         recipeVolume: recipeVolume ?? this.recipeVolume,
         ingredients: ingredients ?? this.ingredients,
-        standard: standard ?? this.standard,
         saved: saved ?? this.saved,
         id: id ?? this.id);
   }
@@ -51,7 +47,6 @@ class Recipe extends Equatable {
         recipeType,
         recipeVolume,
         ingredients,
-        standard,
         saved,
         id
       ];

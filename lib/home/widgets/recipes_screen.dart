@@ -38,8 +38,7 @@ class RecipesScreen extends StatelessWidget {
                           context.read<RecipeBloc>().add(RecipeAdded(
                               recipeType: "Standard Recipe",
                               recipeNumber:
-                                  (state.recipes.length + 1).toString(),
-                              standard: true)),
+                                  (state.recipes.length + 1).toString())),
                           Navigator.pushNamed(context, PageRouter.recipe,
                               arguments: state.recipes.length),
                         }),
@@ -48,14 +47,13 @@ class RecipesScreen extends StatelessWidget {
                 ),
                 FloatingActionButton.extended(
                     heroTag: null,
-                    label: const Text("Modified Recipe"),
+                    label: const Text("Non-standard Recipe"),
                     icon: const Icon(Icons.add),
                     onPressed: () => {
                           context.read<RecipeBloc>().add(RecipeAdded(
-                              recipeType: "Modified Recipe",
+                              recipeType: "Non-standard Recipe",
                               recipeNumber:
-                                  (state.recipes.length + 1).toString(),
-                              standard: false)),
+                                  (state.recipes.length + 1).toString())),
                           Navigator.pushNamed(context, PageRouter.recipe,
                               arguments: state.recipes.length),
                         })

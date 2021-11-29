@@ -21,12 +21,13 @@ class RecipeScreen extends StatelessWidget {
               children: <Widget>[
                 FloatingActionButton.extended(
                     heroTag: null,
-                    label: const Text("Save Recipe"), // TODO: pop page
+                    label: const Text("Save Recipe"),
                     icon: const Icon(Icons.save_sharp),
                     onPressed: () => {
                           context.read<RecipeBloc>().add(RecipeStatusChanged(
                               recipe: state.recipes[recipeIndex],
-                              recipeSaved: true))
+                              recipeSaved: true)),
+                          Navigator.pop(context)
                         }),
                 const SizedBox(
                   height: 10,

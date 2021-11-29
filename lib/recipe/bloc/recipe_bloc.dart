@@ -28,13 +28,9 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
   }
 
   void _onRecipeAdded(RecipeAdded event, Emitter<RecipeState> emit) {
-    final newRecipe = Recipe();
-    final recipeType = event.recipeType;
-    bool standard = event.standard;
-    Recipe recipe = newRecipe.copyWith(
+    final recipe = Recipe(
         recipeNumber: RecipeNumber.dirty(event.recipeNumber),
-        recipeType: recipeType,
-        standard: standard);
+        recipeType: event.recipeType);
 
     List<Recipe> recipes = List.from(state.recipes);
     recipes.add(recipe);
@@ -94,8 +90,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
 
     int changedRecipeIndex = recipes.indexOf(event.recipe);
 
-    Recipe recipe = recipes[changedRecipeIndex]
-        .copyWith(saved: event.recipeSaved, standard: false);
+    Recipe recipe =
+        recipes[changedRecipeIndex].copyWith(saved: event.recipeSaved);
 
     recipes.removeAt(changedRecipeIndex);
     recipes.insert(changedRecipeIndex, recipe);
@@ -118,20 +114,20 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
         List.from(recipes[changedRecipeIndex].ingredients);
     ingredients.add(ingredient);
 
-    Recipe recipe = (event.recipe.standard == false &&
+    Recipe recipe = (event.recipe.saved == true &&
             event.recipe.recipeType == "Standard Recipe")
         ? recipes[changedRecipeIndex].copyWith(
             ingredients: ingredients,
             saved: false,
             recipeType: "Modified Recipe",
             recipeNumber: RecipeNumber.dirty((state.recipes.length + 1)
-                .toString())) // TODO: Handle recipeNumber better
+                .toString())) // TODO: Handle recipeNumber better + handle UUID?
         : recipes[changedRecipeIndex]
             .copyWith(ingredients: ingredients, saved: false);
 
     recipes.removeAt(changedRecipeIndex);
 
-    if (event.recipe.standard == false &&
+    if (event.recipe.saved == true &&
         event.recipe.recipeType == "Standard Recipe") {
       recipes.insert(changedRecipeIndex, standardRecipe);
     }
