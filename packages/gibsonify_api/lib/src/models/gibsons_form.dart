@@ -51,6 +51,20 @@ class GibsonsForm extends Equatable {
   }
 
   @override
+  String toString() {
+    return '\n *** \nGibson\'s Form:\n'
+        'UUID: $id\n'
+        'HouseholdID: $householdId\n'
+        'Repondent Name: $respondentName\n'
+        'Respondent Tel Number: $respondentTelNumber\n'
+        'Interview Date: $interviewDate\n'
+        'Interview Start Time: $interviewStartTime\n'
+        'Sensitization Status: $sensitizationStatus\n'
+        'Food Items: $foodItems'
+        '\n *** \n';
+  }
+
+  @override
   List<Object> get props => [
         householdId,
         respondentName,
