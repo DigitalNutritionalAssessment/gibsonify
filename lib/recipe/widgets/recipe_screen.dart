@@ -108,20 +108,13 @@ class RecipeNumberInput extends StatelessWidget {
     return BlocBuilder<RecipeBloc, RecipeState>(
       builder: (context, state) {
         return TextFormField(
-          initialValue: state.recipes[recipeIndex].recipeNumber.value,
-          decoration: InputDecoration(
-            icon: const Icon(Icons.format_list_numbered),
+          key: Key(state.recipes[recipeIndex].recipeNumber),
+          initialValue: state.recipes[recipeIndex].recipeNumber,
+          decoration: const InputDecoration(
+            icon: Icon(Icons.format_list_numbered),
             labelText: 'Recipe Number',
-            errorText: state.recipes[recipeIndex].recipeNumber.invalid
-                ? 'Enter recipe number'
-                : null,
           ),
           enabled: false,
-          onChanged: (value) {
-            // TODO: investigate if this is needed anymore
-            context.read<RecipeBloc>().add(RecipeNumberChanged(
-                recipeNumber: value, recipe: state.recipes[recipeIndex]));
-          },
           textInputAction: TextInputAction.next,
           keyboardType: TextInputType.number,
         );

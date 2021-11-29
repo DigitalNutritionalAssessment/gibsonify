@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:uuid/uuid.dart';
 
 import 'package:gibsonify/recipe/models/models.dart';
 import 'package:gibsonify/recipe/recipe.dart';
@@ -11,7 +12,6 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
   RecipeBloc() : super(const RecipeState()) {
     on<RecipeAdded>(_onRecipeAdded);
     on<RecipeNameChanged>(_recipeNameChanged);
-    on<RecipeNumberChanged>(_recipeNumberChanged);
     on<RecipeVolumeChanged>(_recipeVolumeChanged);
     on<RecipeStatusChanged>(_onRecipeStatusChanged);
     on<IngredientAdded>(_onIngredientAdded);
@@ -28,9 +28,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
   }
 
   void _onRecipeAdded(RecipeAdded event, Emitter<RecipeState> emit) {
-    final recipe = Recipe(
-        recipeNumber: RecipeNumber.dirty(event.recipeNumber),
-        recipeType: event.recipeType);
+    final recipe = Recipe(recipeType: event.recipeType);
 
     List<Recipe> recipes = List.from(state.recipes);
     recipes.add(recipe);
@@ -45,23 +43,6 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
 
     Recipe recipe = recipes[changedRecipeIndex]
         .copyWith(recipeName: RecipeName.dirty(event.recipeName), saved: false);
-
-    recipes.removeAt(changedRecipeIndex);
-    recipes.insert(changedRecipeIndex, recipe);
-
-    emit(state.copyWith(recipes: recipes));
-  }
-
-  void _recipeNumberChanged(
-      // TODO: Remove?
-      RecipeNumberChanged event,
-      Emitter<RecipeState> emit) {
-    List<Recipe> recipes = List.from(state.recipes);
-
-    int changedRecipeIndex = recipes.indexOf(event.recipe);
-
-    Recipe recipe = recipes[changedRecipeIndex]
-        .copyWith(recipeNumber: RecipeNumber.dirty(event.recipeNumber));
 
     recipes.removeAt(changedRecipeIndex);
     recipes.insert(changedRecipeIndex, recipe);
@@ -100,11 +81,6 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
   }
 
   void _onIngredientAdded(IngredientAdded event, Emitter<RecipeState> emit) {
-    // if standard is false:
-    // make a copy of the current recipe and add it to the list
-    // then continue to edit this current recipe, getting a new recipe number
-    // and making recipeType = Modified Recipe
-
     List<Recipe> recipes = List.from(state.recipes);
     Recipe standardRecipe = event.recipe;
     int changedRecipeIndex = recipes.indexOf(event.recipe);
@@ -120,8 +96,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
             ingredients: ingredients,
             saved: false,
             recipeType: "Modified Recipe",
-            recipeNumber: RecipeNumber.dirty((state.recipes.length + 1)
-                .toString())) // TODO: Handle recipeNumber better + handle UUID?
+            recipeNumber: const Uuid().v4())
         : recipes[changedRecipeIndex]
             .copyWith(ingredients: ingredients, saved: false);
 
