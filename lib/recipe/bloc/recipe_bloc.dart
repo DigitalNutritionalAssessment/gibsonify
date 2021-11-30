@@ -147,7 +147,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     List<Recipe> recipes = List.from(state.recipes);
 
     int changedRecipeIndex = recipes.indexOf(event.recipe);
-    List<Ingredient> ingredients = recipes[changedRecipeIndex].ingredients;
+    List<Ingredient> ingredients =
+        List.from(recipes[changedRecipeIndex].ingredients);
     int changedIngredientIndex = ingredients.indexOf(event.ingredient);
 
     Ingredient ingredient = ingredients[changedIngredientIndex]
@@ -170,7 +171,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     List<Recipe> recipes = List.from(state.recipes);
 
     int changedRecipeIndex = recipes.indexOf(event.recipe);
-    List<Ingredient> ingredients = recipes[changedRecipeIndex].ingredients;
+    List<Ingredient> ingredients =
+        List.from(recipes[changedRecipeIndex].ingredients);
     int changedIngredientIndex = ingredients.indexOf(event.ingredient);
 
     Ingredient ingredient = ingredients[changedIngredientIndex]
@@ -193,7 +195,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     List<Recipe> recipes = List.from(state.recipes);
 
     int changedRecipeIndex = recipes.indexOf(event.recipe);
-    List<Ingredient> ingredients = recipes[changedRecipeIndex].ingredients;
+    List<Ingredient> ingredients =
+        List.from(recipes[changedRecipeIndex].ingredients);
     int changedIngredientIndex = ingredients.indexOf(event.ingredient);
 
     Ingredient ingredient = ingredients[changedIngredientIndex].copyWith(
@@ -217,7 +220,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     List<Recipe> recipes = List.from(state.recipes);
 
     int changedRecipeIndex = recipes.indexOf(event.recipe);
-    List<Ingredient> ingredients = recipes[changedRecipeIndex].ingredients;
+    List<Ingredient> ingredients =
+        List.from(recipes[changedRecipeIndex].ingredients);
     int changedIngredientIndex = ingredients.indexOf(event.ingredient);
 
     Ingredient ingredient = ingredients[changedIngredientIndex].copyWith(
@@ -240,7 +244,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     List<Recipe> recipes = List.from(state.recipes);
 
     int changedRecipeIndex = recipes.indexOf(event.recipe);
-    List<Ingredient> ingredients = recipes[changedRecipeIndex].ingredients;
+    List<Ingredient> ingredients =
+        List.from(recipes[changedRecipeIndex].ingredients);
     int changedIngredientIndex = ingredients.indexOf(event.ingredient);
 
     Ingredient ingredient = ingredients[changedIngredientIndex].copyWith(
@@ -264,7 +269,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     List<Recipe> recipes = List.from(state.recipes);
 
     int changedRecipeIndex = recipes.indexOf(event.recipe);
-    List<Ingredient> ingredients = recipes[changedRecipeIndex].ingredients;
+    List<Ingredient> ingredients =
+        List.from(recipes[changedRecipeIndex].ingredients);
     int changedIngredientIndex = ingredients.indexOf(event.ingredient);
 
     Ingredient ingredient = ingredients[changedIngredientIndex].copyWith(
@@ -287,7 +293,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     List<Recipe> recipes = List.from(state.recipes);
 
     int changedRecipeIndex = recipes.indexOf(event.recipe);
-    List<Ingredient> ingredients = recipes[changedRecipeIndex].ingredients;
+    List<Ingredient> ingredients =
+        List.from(recipes[changedRecipeIndex].ingredients);
     int changedIngredientIndex = ingredients.indexOf(event.ingredient);
 
     Ingredient ingredient = ingredients[changedIngredientIndex].copyWith(
@@ -311,7 +318,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     List<Recipe> recipes = List.from(state.recipes);
 
     int changedRecipeIndex = recipes.indexOf(event.recipe);
-    List<Ingredient> ingredients = recipes[changedRecipeIndex].ingredients;
+    List<Ingredient> ingredients =
+        List.from(recipes[changedRecipeIndex].ingredients);
     int changedIngredientIndex = ingredients.indexOf(event.ingredient);
 
     Ingredient ingredient = ingredients[changedIngredientIndex]
@@ -334,7 +342,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     List<Recipe> recipes = List.from(state.recipes);
 
     int changedRecipeIndex = recipes.indexOf(event.recipe);
-    List<Ingredient> ingredients = recipes[changedRecipeIndex].ingredients;
+    List<Ingredient> ingredients =
+        List.from(recipes[changedRecipeIndex].ingredients);
     int changedIngredientIndex = ingredients.indexOf(event.ingredient);
 
     Ingredient ingredient = ingredients[changedIngredientIndex]
