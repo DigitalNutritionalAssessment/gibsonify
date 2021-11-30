@@ -56,6 +56,16 @@ class IngredientAdded extends RecipeEvent {
   List<Object> get props => [recipe];
 }
 
+class IngredientDeleted extends RecipeEvent {
+  final Recipe recipe;
+  final Ingredient ingredient;
+
+  const IngredientDeleted({required this.recipe, required this.ingredient});
+
+  @override
+  List<Object> get props => [recipe, ingredient];
+}
+
 class IngredientStatusChanged extends RecipeEvent {
   final bool ingredientSaved;
   final Ingredient ingredient;

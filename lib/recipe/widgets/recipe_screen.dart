@@ -183,8 +183,52 @@ class Ingredients extends StatelessWidget {
                               Navigator.pushNamed(
                                   context, PageRouter.ingredient,
                                   arguments: [recipeIndex, index])
+                            },
+                        onLongPress: () => {
+                              showDialog<String>(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      DeleteIngredient(
+                                          recipe: state.recipes[recipeIndex],
+                                          ingredient: state.recipes[recipeIndex]
+                                              .ingredients[index]))
                             }));
               }));
+    });
+  }
+}
+
+class DeleteIngredient extends StatelessWidget {
+  final Recipe recipe;
+  final Ingredient ingredient;
+
+  const DeleteIngredient(
+      {Key? key, required this.recipe, required this.ingredient})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    String ingredientName = ingredient.name.value;
+    return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
+      return AlertDialog(
+        title: const Text('Delete ingredient'),
+        content:
+            Text('Would you like to delete the $ingredientName ingredient?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'Cancel'),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => {
+              context.read<RecipeBloc>().add(
+                  IngredientDeleted(recipe: recipe, ingredient: ingredient)),
+              Navigator.pop(context, 'OK')
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      );
     });
   }
 }
