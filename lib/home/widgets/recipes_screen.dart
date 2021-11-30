@@ -24,7 +24,14 @@ class RecipesScreen extends StatelessWidget {
                             : const Icon(Icons.rotate_left_rounded),
                         onTap: () => Navigator.pushNamed(
                             context, PageRouter.recipe,
-                            arguments: index)));
+                            arguments: index),
+                        onLongPress: () => {
+                              showDialog<String>(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      DeleteRecipe(
+                                          recipe: state.recipes[index]))
+                            }));
               }),
           floatingActionButton: Column(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -35,10 +42,8 @@ class RecipesScreen extends StatelessWidget {
                     label: const Text("Standard Recipe"),
                     icon: const Icon(Icons.add),
                     onPressed: () => {
-                          context.read<RecipeBloc>().add(RecipeAdded(
-                              recipeType: "Standard Recipe",
-                              recipeNumber:
-                                  (state.recipes.length + 1).toString())),
+                          context.read<RecipeBloc>().add(
+                              const RecipeAdded(recipeType: "Standard Recipe")),
                           Navigator.pushNamed(context, PageRouter.recipe,
                               arguments: state.recipes.length),
                         }),
@@ -50,14 +55,42 @@ class RecipesScreen extends StatelessWidget {
                     label: const Text("Non-standard Recipe"),
                     icon: const Icon(Icons.add),
                     onPressed: () => {
-                          context.read<RecipeBloc>().add(RecipeAdded(
-                              recipeType: "Non-standard Recipe",
-                              recipeNumber:
-                                  (state.recipes.length + 1).toString())),
+                          context.read<RecipeBloc>().add(const RecipeAdded(
+                              recipeType: "Non-standard Recipe")),
                           Navigator.pushNamed(context, PageRouter.recipe,
                               arguments: state.recipes.length),
                         })
               ]));
+    });
+  }
+}
+
+class DeleteRecipe extends StatelessWidget {
+  final Recipe recipe;
+
+  const DeleteRecipe({Key? key, required this.recipe}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    String recipeName = recipe.recipeName.value;
+    return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
+      return AlertDialog(
+        title: const Text('Delete recipe'),
+        content: Text('Would you like to delete the $recipeName recipe?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'Cancel'),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => {
+              context.read<RecipeBloc>().add(RecipeDeleted(recipe: recipe)),
+              Navigator.pop(context, 'OK')
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      );
     });
   }
 }

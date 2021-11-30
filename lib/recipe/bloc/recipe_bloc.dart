@@ -11,6 +11,7 @@ part 'recipe_state.dart';
 class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
   RecipeBloc() : super(const RecipeState()) {
     on<RecipeAdded>(_onRecipeAdded);
+    on<RecipeDeleted>(_onRecipeDeleted);
     on<RecipeNameChanged>(_recipeNameChanged);
     on<RecipeVolumeChanged>(_recipeVolumeChanged);
     on<RecipeStatusChanged>(_onRecipeStatusChanged);
@@ -33,6 +34,16 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
 
     List<Recipe> recipes = List.from(state.recipes);
     recipes.add(recipe);
+
+    emit(state.copyWith(recipes: recipes));
+  }
+
+  void _onRecipeDeleted(RecipeDeleted event, Emitter<RecipeState> emit) {
+    List<Recipe> recipes = List.from(state.recipes);
+
+    int changedRecipeIndex = recipes.indexOf(event.recipe);
+
+    recipes.removeAt(changedRecipeIndex);
 
     emit(state.copyWith(recipes: recipes));
   }
