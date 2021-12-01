@@ -15,6 +15,9 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     on<RecipeNameChanged>(_recipeNameChanged);
     on<RecipeVolumeChanged>(_recipeVolumeChanged);
     on<RecipeStatusChanged>(_onRecipeStatusChanged);
+    on<ProbeAdded>(_onProbeAdded);
+    on<ProbeChanged>(_onProbeChanged);
+    on<ProbeDeleted>(_onProbeDeleted);
     on<IngredientAdded>(_onIngredientAdded);
     on<IngredientDeleted>(_onIngredientDeleted);
     on<IngredientStatusChanged>(_onIngredientStatusChanged);
@@ -89,6 +92,61 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     recipes.removeAt(changedRecipeIndex);
     recipes.insert(changedRecipeIndex, recipe);
 
+    emit(state.copyWith(recipes: recipes));
+  }
+
+  void _onProbeAdded(ProbeAdded event, Emitter<RecipeState> emit) {
+    List<Recipe> recipes = List.from(state.recipes);
+    int changedRecipeIndex = recipes.indexOf(event.recipe);
+
+    const probe = '';
+    List<String> probes = List.from(recipes[changedRecipeIndex].probes);
+    probes.add(probe);
+
+    Recipe recipe =
+        recipes[changedRecipeIndex].copyWith(probes: probes, saved: false);
+
+    recipes.removeAt(changedRecipeIndex);
+
+    recipes.insert(changedRecipeIndex, recipe);
+    emit(state.copyWith(recipes: recipes));
+  }
+
+  void _onProbeChanged(ProbeChanged event, Emitter<RecipeState> emit) {
+    List<Recipe> recipes = List.from(state.recipes);
+    int changedRecipeIndex = recipes.indexOf(event.recipe);
+
+    List<String> probes = List.from(recipes[changedRecipeIndex].probes);
+    int changedProbeIndex = event.probeIndex;
+
+    String probe = event.probe;
+
+    probes.removeAt(changedProbeIndex);
+    probes.insert(changedProbeIndex, probe);
+
+    Recipe recipe =
+        recipes[changedRecipeIndex].copyWith(probes: probes, saved: false);
+
+    recipes.removeAt(changedRecipeIndex);
+    recipes.insert(changedRecipeIndex, recipe);
+
+    emit(state.copyWith(recipes: recipes));
+  }
+
+  void _onProbeDeleted(ProbeDeleted event, Emitter<RecipeState> emit) {
+    List<Recipe> recipes = List.from(state.recipes);
+    int changedRecipeIndex = recipes.indexOf(event.recipe);
+
+    List<String> probes = List.from(recipes[changedRecipeIndex].probes);
+    int changedProbeIndex = probes.indexOf(event.probe);
+    probes.removeAt(changedProbeIndex);
+
+    Recipe recipe =
+        recipes[changedRecipeIndex].copyWith(probes: probes, saved: false);
+
+    recipes.removeAt(changedRecipeIndex);
+
+    recipes.insert(changedRecipeIndex, recipe);
     emit(state.copyWith(recipes: recipes));
   }
 

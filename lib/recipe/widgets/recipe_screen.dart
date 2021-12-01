@@ -13,6 +13,13 @@ class RecipeScreen extends StatelessWidget {
       return Scaffold(
           appBar: AppBar(
             title: const Text('Add a new recipe'),
+            actions: [
+              IconButton(
+                  onPressed: () => Navigator.pushNamed(
+                      context, PageRouter.recipeProbe,
+                      arguments: recipeIndex),
+                  icon: const Icon(Icons.help))
+            ],
           ),
           body: RecipeForm(recipeIndex),
           floatingActionButton: Column(

@@ -206,7 +206,6 @@ class IngredientForm extends StatelessWidget {
                           recipe: state.recipes[recipeIndex]));
                 },
                 textInputAction: TextInputAction.next,
-                keyboardType: TextInputType.number,
               ),
               DropdownFormField<String>(
                 onEmptyActionPressed: () async {},

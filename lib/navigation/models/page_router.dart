@@ -8,6 +8,7 @@ class PageRouter {
   static const home = '/';
   static const collection = '/collection';
   static const recipe = '/recipe';
+  static const recipeProbe = '/recipeprobe';
   static const ingredient = '/ingredient';
   static const sensitizationHelp = '/sensitizationhelp';
   static const firstPassHelp = '/firstpasshelp';
@@ -23,6 +24,9 @@ class PageRouter {
       case recipe:
         var recipeIndex = routeSettings.arguments as int;
         return _buildRoute(RecipePage(recipeIndex));
+      case recipeProbe:
+        var recipeIndex = routeSettings.arguments as int;
+        return _buildRoute(RecipeProbePage(recipeIndex));
       case ingredient:
         var indices = routeSettings.arguments as List; // TODO: Use a hash-map
         int recipeIndex = indices[0];
