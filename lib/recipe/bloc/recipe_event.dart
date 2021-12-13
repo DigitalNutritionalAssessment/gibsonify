@@ -66,19 +66,21 @@ class ProbeAdded extends RecipeEvent {
 
 class ProbeChanged extends RecipeEvent {
   final Recipe recipe;
-  final String probe;
+  final String probeName;
   final int probeIndex;
 
   const ProbeChanged(
-      {required this.recipe, required this.probe, required this.probeIndex});
+      {required this.recipe,
+      required this.probeName,
+      required this.probeIndex});
 
   @override
-  List<Object> get props => [recipe, probe, probeIndex];
+  List<Object> get props => [recipe, probeName, probeIndex];
 }
 
 class ProbeDeleted extends RecipeEvent {
   final Recipe recipe;
-  final String probe;
+  final Map<String, dynamic> probe;
 
   const ProbeDeleted({required this.recipe, required this.probe});
 

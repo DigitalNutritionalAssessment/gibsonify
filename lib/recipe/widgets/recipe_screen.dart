@@ -174,9 +174,6 @@ class Ingredients extends StatelessWidget {
               itemBuilder: (context, index) {
                 return Card(
                     child: ListTile(
-                        // TODO: Fix ingredients not updating
-                        // key: Key(state.recipes[recipeIndex].ingredients[index]
-                        //     .name.value),
                         title: Text(state.recipes[recipeIndex]
                             .ingredients[index].name.value),
                         subtitle: Text(state.recipes[recipeIndex]

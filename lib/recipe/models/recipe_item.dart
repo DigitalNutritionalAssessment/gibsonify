@@ -10,7 +10,7 @@ class Recipe extends Equatable {
     this.recipeType = "",
     this.recipeVolume = const RecipeVolume.pure(),
     this.ingredients = const <Ingredient>[],
-    this.probes = const <String>[],
+    this.probes = const <Map<String, dynamic>>[],
     this.saved = false,
   }) : recipeNumber = recipeNumber ?? const Uuid().v4();
 
@@ -19,7 +19,7 @@ class Recipe extends Equatable {
   final String recipeType;
   final RecipeVolume recipeVolume;
   final List<Ingredient> ingredients;
-  final List<String> probes;
+  final List<Map<String, dynamic>> probes;
   final bool saved;
 
   Recipe copyWith({
@@ -28,7 +28,7 @@ class Recipe extends Equatable {
     String? recipeType,
     RecipeVolume? recipeVolume,
     List<Ingredient>? ingredients,
-    List<String>? probes,
+    List<Map<String, dynamic>>? probes,
     bool? saved,
   }) {
     return Recipe(

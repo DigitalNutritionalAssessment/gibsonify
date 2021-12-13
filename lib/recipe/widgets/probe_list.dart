@@ -27,8 +27,10 @@ class ProbeList extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
-                        key: Key(state.recipes[recipeIndex].probes[index]),
-                        initialValue: state.recipes[recipeIndex].probes[index],
+                        key: Key(
+                            state.recipes[recipeIndex].probes[index]['key']),
+                        initialValue: state.recipes[recipeIndex].probes[index]
+                            ['probe'],
                         decoration: InputDecoration(
                           icon: const Icon(Icons.live_help),
                           labelText: 'Probe ${index + 1}',
@@ -38,7 +40,7 @@ class ProbeList extends StatelessWidget {
                         onChanged: (value) {
                           context.read<RecipeBloc>().add(ProbeChanged(
                               recipe: state.recipes[recipeIndex],
-                              probe: value,
+                              probeName: value,
                               probeIndex: index));
                         },
                         textInputAction: TextInputAction.next,
@@ -51,7 +53,7 @@ class ProbeList extends StatelessWidget {
 
 class DeleteProbe extends StatelessWidget {
   final Recipe recipe;
-  final String probe;
+  final Map<String, dynamic> probe;
 
   const DeleteProbe({Key? key, required this.recipe, required this.probe})
       : super(key: key);
@@ -61,7 +63,7 @@ class DeleteProbe extends StatelessWidget {
     return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
       return AlertDialog(
         title: const Text('Delete probe'),
-        content: Text('Would you like to delete the $probe probe?'),
+        content: Text('Would you like to delete the ${probe['probe']} probe?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, 'Cancel'),

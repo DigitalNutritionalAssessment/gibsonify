@@ -99,8 +99,9 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     List<Recipe> recipes = List.from(state.recipes);
     int changedRecipeIndex = recipes.indexOf(event.recipe);
 
-    const probe = '';
-    List<String> probes = List.from(recipes[changedRecipeIndex].probes);
+    Map<String, dynamic> probe = {'probe': '', 'key': const Uuid().v4()};
+    List<Map<String, dynamic>> probes =
+        List.from(recipes[changedRecipeIndex].probes);
     probes.add(probe);
 
     Recipe recipe =
@@ -116,10 +117,15 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     List<Recipe> recipes = List.from(state.recipes);
     int changedRecipeIndex = recipes.indexOf(event.recipe);
 
-    List<String> probes = List.from(recipes[changedRecipeIndex].probes);
+    List<Map<String, dynamic>> probes =
+        List.from(recipes[changedRecipeIndex].probes);
     int changedProbeIndex = event.probeIndex;
 
-    String probe = event.probe;
+    String probeName = event.probeName;
+    Map<String, dynamic> probe = {
+      'probe': probeName,
+      'key': probes[changedProbeIndex]['key']
+    };
 
     probes.removeAt(changedProbeIndex);
     probes.insert(changedProbeIndex, probe);
@@ -137,7 +143,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     List<Recipe> recipes = List.from(state.recipes);
     int changedRecipeIndex = recipes.indexOf(event.recipe);
 
-    List<String> probes = List.from(recipes[changedRecipeIndex].probes);
+    List<Map<String, dynamic>> probes =
+        List.from(recipes[changedRecipeIndex].probes);
     int changedProbeIndex = probes.indexOf(event.probe);
     probes.removeAt(changedProbeIndex);
 
