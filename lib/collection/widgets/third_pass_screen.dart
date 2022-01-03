@@ -12,12 +12,20 @@ class ThirdPassScreen extends StatelessWidget {
     return BlocBuilder<CollectionBloc, CollectionState>(
       builder: (context, state) {
         return Scaffold(
-            appBar: AppBar(title: const Text('Third Pass'), actions: [
-              IconButton(
-                  onPressed: () =>
-                      Navigator.pushNamed(context, PageRouter.thirdPassHelp),
-                  icon: const Icon(Icons.help))
-            ]),
+            appBar: AppBar(
+                title: const Text('Third Pass'),
+                leading: BackButton(
+                  onPressed: () {
+                    context.read<CollectionBloc>().add(GibsonsFormSaved());
+                    Navigator.maybePop(context);
+                  },
+                ),
+                actions: [
+                  IconButton(
+                      onPressed: () => Navigator.pushNamed(
+                          context, PageRouter.thirdPassHelp),
+                      icon: const Icon(Icons.help))
+                ]),
             body: ListView.builder(
                 padding: const EdgeInsets.all(2.0),
                 itemCount: state.gibsonsForm.foodItems.length,

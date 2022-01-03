@@ -13,6 +13,13 @@ class SensitizationScreen extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Sensitization'),
+          // TODO: Refactor this BackButton as a reusable widget across passes
+          leading: BackButton(
+            onPressed: () {
+              context.read<CollectionBloc>().add(GibsonsFormSaved());
+              Navigator.maybePop(context);
+            },
+          ),
           actions: [
             IconButton(
                 onPressed: () =>
