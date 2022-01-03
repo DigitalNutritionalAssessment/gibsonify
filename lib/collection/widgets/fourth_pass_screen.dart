@@ -11,7 +11,15 @@ class FourthPassScreen extends StatelessWidget {
     return BlocBuilder<CollectionBloc, CollectionState>(
       builder: (context, state) {
         return Scaffold(
-            appBar: AppBar(title: const Text('Fourth Pass')),
+            appBar: AppBar(
+              title: const Text('Fourth Pass'),
+              leading: BackButton(
+                onPressed: () {
+                  context.read<CollectionBloc>().add(GibsonsFormSaved());
+                  Navigator.maybePop(context);
+                },
+              ),
+            ),
             body: ListView.builder(
                 padding: const EdgeInsets.all(2.0),
                 itemCount: state.gibsonsForm.foodItems.length,
@@ -23,7 +31,18 @@ class FourthPassScreen extends StatelessWidget {
                           .add(FoodItemConfirmationChanged(
                               foodItem: state.gibsonsForm.foodItems[index],
                               foodItemConfirmed: negatedConfirmation)));
-                }));
+                }),
+            floatingActionButton: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  FloatingActionButton(
+                      child: const Icon(Icons.save),
+                      onPressed: () {
+                        context.read<CollectionBloc>().add(GibsonsFormSaved());
+                        Navigator.maybePop(context);
+                      })
+                ]));
       },
     );
   }

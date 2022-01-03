@@ -14,6 +14,12 @@ class FirstPassScreen extends StatelessWidget {
         return Scaffold(
             appBar: AppBar(
               title: const Text('First Pass'),
+              leading: BackButton(
+                onPressed: () {
+                  context.read<CollectionBloc>().add(GibsonsFormSaved());
+                  Navigator.maybePop(context);
+                },
+              ),
               actions: [
                 IconButton(
                     onPressed: () =>

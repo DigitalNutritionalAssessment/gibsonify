@@ -34,8 +34,14 @@ class _CollectionsScreenState extends State<CollectionsScreen> {
                         ? const Icon(Icons.done)
                         : const Icon(Icons.pause),
                     // TODO: Implement switching to last opened page
-                    onTap: () =>
-                        Navigator.pushNamed(context, PageRouter.collection));
+                    onTap: () {
+                      // TODO: Refactor into the Collection Page accepting a
+                      // nullable instance of GibsonsForm as argument.
+                      // In this case the given GIbsonsForm will be passed, so
+                      // that no loading from API will be necessary.
+                      context.read<CollectionBloc>().add(GibsonsFormLoaded());
+                      Navigator.pushNamed(context, PageRouter.collection);
+                    });
               },
             ),
             const Divider()
@@ -47,9 +53,14 @@ class _CollectionsScreenState extends State<CollectionsScreen> {
             children: <Widget>[
               FloatingActionButton(
                   child: const Icon(Icons.add),
-                  onPressed: () =>
-                      // TODO: Fix this such that a new collection will begin
-                      Navigator.pushNamed(context, PageRouter.collection))
+                  onPressed: () {
+                    // TODO: Refactor into the Collection Page accepting a
+                    // nullable instance of GibsonsForm as argument.
+                    // In this case it will be null so a new GibsonsForm
+                    // will be initialized
+                    context.read<CollectionBloc>().add(GibsonsFormCreated());
+                    Navigator.pushNamed(context, PageRouter.collection);
+                  })
             ]));
   }
 }
