@@ -190,3 +190,27 @@ class FoodItemConfirmationChanged extends CollectionEvent {
   @override
   List<Object> get props => [foodItemConfirmed, foodItem];
 }
+
+class GibsonsFormSaved extends CollectionEvent {
+  const GibsonsFormSaved();
+
+  @override
+  List<Object> get props => [];
+}
+
+class GibsonsFormLoaded extends CollectionEvent {
+  const GibsonsFormLoaded();
+
+  @override
+  List<Object> get props => [];
+}
+
+// TODO: This event is temporary until it is implemented that CollectionBloc
+// takes a GibsonsForm when instantiated — if none is passed, it creates a new
+// one
+class GibsonsFormCreated extends CollectionEvent {
+  const GibsonsFormCreated();
+
+  @override
+  List<Object> get props => [];
+}

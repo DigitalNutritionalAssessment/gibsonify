@@ -3,12 +3,17 @@ import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
+import 'package:gibsonify_repository/gibsonify_repository.dart';
 
 part 'collection_event.dart';
 part 'collection_state.dart';
 
 class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
-  CollectionBloc() : super(CollectionState()) {
+  final GibsonifyRepository _gibsonifyRepository;
+
+  CollectionBloc({required GibsonifyRepository gibsonifyRepository})
+      : _gibsonifyRepository = gibsonifyRepository,
+        super(CollectionState()) {
     on<HouseholdIdChanged>(_onHouseholdIdChanged);
     on<RespondentNameChanged>(_onRespondentNameChanged);
     on<RespondentTelNumberChanged>(_onRespondentTelNumberChanged);
@@ -25,6 +30,9 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     on<FoodItemMeasurementValueChanged>(_onFoodItemMeasurementValueChanged);
     on<FoodItemMeasurementUnitChanged>(_onFoodItemMeasurementUnitChanged);
     on<FoodItemConfirmationChanged>(_onFoodItemConfirmationChanged);
+    on<GibsonsFormSaved>(_onGibsonsFormSaved);
+    on<GibsonsFormLoaded>(_onGibsonsFormLoaded);
+    on<GibsonsFormCreated>(_onGibsonsFormCreated);
   }
 
   void _onHouseholdIdChanged(
@@ -325,5 +333,24 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
         state.gibsonsForm.copyWith(foodItems: foodItems);
 
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+  }
+
+  // or Future<void> ?
+  void _onGibsonsFormSaved(
+      GibsonsFormSaved event, Emitter<CollectionState> emit) async {
+    await _gibsonifyRepository.saveForm(state.gibsonsForm);
+    emit(state);
+  }
+
+  void _onGibsonsFormLoaded(
+      GibsonsFormLoaded event, Emitter<CollectionState> emit) async {
+    GibsonsForm gibsonsFormLoaded = _gibsonifyRepository.loadForm();
+    emit(state.copyWith(gibsonsForm: gibsonsFormLoaded));
+  }
+
+  void _onGibsonsFormCreated(
+      GibsonsFormCreated event, Emitter<CollectionState> emit) {
+    GibsonsForm gibsonsFormCreated = GibsonsForm();
+    emit(state.copyWith(gibsonsForm: gibsonsFormCreated));
   }
 }
