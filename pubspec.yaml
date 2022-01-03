@@ -17,6 +17,8 @@ dependencies:
   uuid: ^3.0.5  # TODO: see if can delete
   gibsonify_api:
     path: packages/gibsonify_api
+  gibsonify_repository:
+    path: packages/gibsonify_repository
 
 dev_dependencies:
   flutter_test:

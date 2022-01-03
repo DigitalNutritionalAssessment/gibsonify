@@ -191,6 +191,13 @@ packages:
       relative: true
     source: path
     version: "1.0.0"
+  gibsonify_repository:
+    dependency: "direct main"
+    description:
+      path: "packages/gibsonify_repository"
+      relative: true
+    source: path
+    version: "1.0.0"
   glob:
     dependency: transitive
     description:
