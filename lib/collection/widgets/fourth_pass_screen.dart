@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:gibsonify/home/home.dart';
 import 'package:gibsonify/collection/collection.dart';
 
 class FourthPassScreen extends StatelessWidget {
@@ -15,7 +16,8 @@ class FourthPassScreen extends StatelessWidget {
               title: const Text('Fourth Pass'),
               leading: BackButton(
                 onPressed: () {
-                  context.read<CollectionBloc>().add(GibsonsFormSaved());
+                  context.read<CollectionBloc>().add(const GibsonsFormSaved());
+                  context.read<HomeBloc>().add(const GibsonsFormsLoaded());
                   Navigator.maybePop(context);
                 },
               ),
@@ -40,6 +42,7 @@ class FourthPassScreen extends StatelessWidget {
                       child: const Icon(Icons.save),
                       onPressed: () {
                         context.read<CollectionBloc>().add(GibsonsFormSaved());
+                        context.read<HomeBloc>().add(GibsonsFormsLoaded());
                         Navigator.maybePop(context);
                       })
                 ]));

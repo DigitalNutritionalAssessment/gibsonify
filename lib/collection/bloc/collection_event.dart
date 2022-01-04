@@ -198,11 +198,12 @@ class GibsonsFormSaved extends CollectionEvent {
   List<Object> get props => [];
 }
 
-class GibsonsFormLoaded extends CollectionEvent {
-  const GibsonsFormLoaded();
+class GibsonsFormProvided extends CollectionEvent {
+  final GibsonsForm gibsonsForm;
+  const GibsonsFormProvided({required this.gibsonsForm});
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [gibsonsForm];
 }
 
 // TODO: This event is temporary until it is implemented that CollectionBloc

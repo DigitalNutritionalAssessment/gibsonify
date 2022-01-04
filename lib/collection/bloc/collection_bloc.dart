@@ -31,7 +31,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     on<FoodItemMeasurementUnitChanged>(_onFoodItemMeasurementUnitChanged);
     on<FoodItemConfirmationChanged>(_onFoodItemConfirmationChanged);
     on<GibsonsFormSaved>(_onGibsonsFormSaved);
-    on<GibsonsFormLoaded>(_onGibsonsFormLoaded);
+    on<GibsonsFormProvided>(_onGibsonsFormProvided);
     on<GibsonsFormCreated>(_onGibsonsFormCreated);
   }
 
@@ -342,10 +342,9 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     emit(state);
   }
 
-  void _onGibsonsFormLoaded(
-      GibsonsFormLoaded event, Emitter<CollectionState> emit) async {
-    GibsonsForm gibsonsFormLoaded = _gibsonifyRepository.loadForm();
-    emit(state.copyWith(gibsonsForm: gibsonsFormLoaded));
+  void _onGibsonsFormProvided(
+      GibsonsFormProvided event, Emitter<CollectionState> emit) async {
+    emit(state.copyWith(gibsonsForm: event.gibsonsForm));
   }
 
   void _onGibsonsFormCreated(

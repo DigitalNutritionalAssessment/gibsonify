@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:gibsonify/home/home.dart';
 import 'package:gibsonify/collection/collection.dart';
 import 'package:gibsonify/navigation/navigation.dart';
 
@@ -16,7 +17,8 @@ class SecondPassScreen extends StatelessWidget {
               title: const Text('Second Pass'),
               leading: BackButton(
                 onPressed: () {
-                  context.read<CollectionBloc>().add(GibsonsFormSaved());
+                  context.read<CollectionBloc>().add(const GibsonsFormSaved());
+                  context.read<HomeBloc>().add(const GibsonsFormsLoaded());
                   Navigator.maybePop(context);
                 },
               ),
