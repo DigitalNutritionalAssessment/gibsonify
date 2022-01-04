@@ -98,20 +98,4 @@ class GibsonifyApi {
       _sharedPreferences.setString(gibsonFormsKey, gibsonsFormsEncoded);
     }
   }
-
-  // TODO: Delete this method
-  GibsonsForm loadForm() {
-    List<GibsonsForm?> gibsonsForms = loadForms();
-    if (gibsonsForms.isEmpty) {
-      print(
-          'API: no valid Forms found in storage, returning an empty Form'); // TODO: delete
-      GibsonsForm gibsonsForm = GibsonsForm();
-      return gibsonsForm;
-    } else {
-      print(
-          'API: returning the last of ${gibsonsForms.length} forms'); // TODO: delete
-      GibsonsForm? gibsonsForm = gibsonsForms.last;
-      return gibsonsForm!;
-    }
-  }
 }
