@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
 
-/// API that handles requests for Gibsons Forms and Recipes.
+/// API that handles requests for Gibsons Forms and Recipes. Provides
+/// functionality for loading and saving Forms and Recipes to local storage by
+/// using the SharedPreferences plugin.
 class GibsonifyApi {
   final SharedPreferences _sharedPreferences;
   GibsonifyApi({required SharedPreferences sharedPreferences})
