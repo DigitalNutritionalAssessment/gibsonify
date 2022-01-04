@@ -15,7 +15,5 @@ class GibsonifyRepository {
   // TODO: investigate providing a Stream of forms instead
   List<GibsonsForm?> loadForms() => _gibsonifyApi.loadForms();
 
-  GibsonsForm loadForm() => _gibsonifyApi.loadForm(); // TODO: delete
-
   void deleteForm(String id) => _gibsonifyApi.deleteForm(id);
 }
