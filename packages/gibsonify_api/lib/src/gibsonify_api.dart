@@ -70,8 +70,33 @@ class GibsonifyApi {
     }
     String gibsonsFormsEncoded = jsonEncode(gibsonsForms);
     print(
-        'API: Form successfuly jsonified, now saving to local storage!'); // TOOD: delete
+        'API: Forms successfuly jsonified, now saving to local storage!'); // TOOD: delete
     return _sharedPreferences.setString(gibsonFormsKey, gibsonsFormsEncoded);
+  }
+
+  /// Attempts to delete the form with the given id by loading Forms from
+  /// local storage, checking for a match, deleting the given Form if there is a
+  /// match, and saving the updated list of GibsonsForms to shared preferences.
+  void deleteForm(String id) {
+    List<GibsonsForm?> gibsonsForms = loadForms();
+    if (gibsonsForms.isEmpty) {
+      print(
+          'API: no valid Forms found in storage, there is nothing to delete'); // TODO: delete
+    } else {
+      print(
+          'API: Looking for match in ${gibsonsForms.length} forms'); // TODO: delete
+      // Null assertion operator is used here just as in saveForm()
+      int gibsonsFormIndex = gibsonsForms.indexWhere((form) => form!.id == id);
+      if (gibsonsFormIndex >= 0) {
+        print(
+            'API: match found at index $gibsonsFormIndex, deleting this Form'); // TODO: delete
+        gibsonsForms.removeAt(gibsonsFormIndex);
+      } else {
+        print('API: match not found, not deleting any Form'); // TODO: delete
+      }
+      String gibsonsFormsEncoded = jsonEncode(gibsonsForms);
+      _sharedPreferences.setString(gibsonFormsKey, gibsonsFormsEncoded);
+    }
   }
 
   // TODO: Delete this method
