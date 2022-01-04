@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gibsonify/home/bloc/home_bloc.dart';
 
 import 'package:gibsonify_repository/gibsonify_repository.dart';
 
@@ -16,14 +17,17 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return RepositoryProvider.value(
       value: gibsonifyRepository,
-      // TODO: Investigate moving Bloc Providers further down the widget tree
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-              // TODO: Change CollectionBloc for HomeBloc
+              create: (context) =>
+                  HomeBloc(gibsonifyRepository: gibsonifyRepository)
+                    ..add(const GibsonsFormsLoaded())),
+          // TODO: Refactor and move Collection and Recipe BlocProviders further
+          // down the widget tree
+          BlocProvider(
               create: (context) =>
                   CollectionBloc(gibsonifyRepository: gibsonifyRepository)),
-          // TODO: Eventually delete RecipeBloc from here, move it to Recipes
           BlocProvider(create: (context) => RecipeBloc())
         ],
         child: MaterialApp(
