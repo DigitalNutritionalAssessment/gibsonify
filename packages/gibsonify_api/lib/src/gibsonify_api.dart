@@ -41,6 +41,10 @@ class GibsonifyApi {
     }
   }
 
+  /// Saves the provided GibsonsForm by loading Forms from local storage,
+  /// checking for a match and rewriting and saving if a match is found, or if
+  /// no match is found, by adding a new Form and saving the updated list of
+  /// GibsonsForms to shared preferences.
   Future<void> saveForm(GibsonsForm gibsonsForm) {
     List<GibsonsForm?> gibsonsForms = loadForms();
 
@@ -64,41 +68,6 @@ class GibsonifyApi {
         gibsonsForms.add(gibsonsForm);
       }
     }
-
-    // TODO: delete old code
-    // List<GibsonsForm> gibsonsForms = [gibsonsForm];
-    // String? gibsonsFormsRaw = _sharedPreferences.getString(gibsonFormsKey);
-
-    // if (gibsonsFormsRaw == null || gibsonsFormsRaw.isEmpty == true) {
-    //   print(
-    //       'API: no Forms found in storage, saving the first Form'); // TODO: delete
-    // } else {
-    //   print(
-    //       'API: found at least one Form in storage, decoding'); // TODO: delete
-    //   print(gibsonsFormsRaw); // TODO: delete
-    //   // TODO: implement checks on the unsanitized input because if it is in
-    //   // incorrect format then json decoding throws an error
-    //   List<dynamic> partiallyDecodedGibsonsForms = jsonDecode(gibsonsFormsRaw);
-    //   print('LOL PARTIALLY DECODED');
-    //   // Map<String, dynamic> partiallyDecodedGibsonsForms = Map<String, dynamic>.from();
-    //   gibsonsForms = partiallyDecodedGibsonsForms
-    //       .map((e) => GibsonsForm.fromJson(e))
-    //       .toList();
-    //   print('LOL FULLY DECODED');
-    //   int formsNum = gibsonsForms.length; // TODO: delete
-    //   print('API: decoded $formsNum forms, checking for match'); // TODO: delete
-    //   int gibsonsFormIndex =
-    //       gibsonsForms.indexWhere((form) => form.id == gibsonsForm.id);
-    //   if (gibsonsFormIndex >= 0) {
-    //     print(
-    //         'API: match found at index $gibsonsFormIndex, rewriting with new Form'); // TODO: delete
-    //     gibsonsForms[gibsonsFormIndex] = gibsonsForm;
-    //   } else {
-    //     print('API: match not found, adding new Form'); // TODO: delete
-    //     gibsonsForms.add(gibsonsForm);
-    //   }
-    // }
-
     String gibsonsFormsEncoded = jsonEncode(gibsonsForms);
     print(
         'API: Form successfuly jsonified, now saving to local storage!'); // TOOD: delete
@@ -119,28 +88,5 @@ class GibsonifyApi {
       GibsonsForm? gibsonsForm = gibsonsForms.last;
       return gibsonsForm!;
     }
-
-    // TODO: delete old code
-    // String? gibsonsFormsRaw = _sharedPreferences.getString(gibsonFormsKey);
-
-    // if (gibsonsFormsRaw == null || gibsonsFormsRaw.isEmpty == true) {
-    //   print('API: no forms found, returning empty Form'); // TODO: delete
-    //   GibsonsForm gibsonsForm = GibsonsForm();
-    //   return gibsonsForm;
-    // } else {
-    //   print(
-    //       'API: found at least one Form in storage, decoding, HAHA'); // TODO: delete
-    //   print(gibsonsFormsRaw);
-    //   List<dynamic> partiallyDecodedGibsonsForms = jsonDecode(gibsonsFormsRaw);
-    //   print('LOL PARTIALLY DECODED');
-    //   List<GibsonsForm> gibsonsForms = partiallyDecodedGibsonsForms
-    //       .map((e) => GibsonsForm.fromJson(e))
-    //       .toList();
-    //   print('LOL FULLY DECODED');
-    //   int formsNum = gibsonsForms.length; // TODO: delete
-    //   print(
-    //       'API: decoded $formsNum forms, returning the last one'); // TODO: delete
-    //   return gibsonsForms.last;
-    // }
   }
 }
