@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 import 'package:gibsonify/recipe/models/recipe_ingredient.dart';
 import 'package:uuid/uuid.dart';
+import 'dart:convert';
 
 class Recipe extends Equatable {
   Recipe({
@@ -13,6 +14,27 @@ class Recipe extends Equatable {
     this.probes = const <Map<String, dynamic>>[],
     this.saved = false,
   }) : recipeNumber = recipeNumber ?? const Uuid().v4();
+
+  Recipe.fromJson(Map<String, dynamic> json)
+      : recipeName = RecipeName.fromJson(json['recipeName']),
+        recipeNumber = json['recipeNumber'],
+        recipeType = json['recipeType'],
+        recipeVolume = RecipeVolume.fromJson(json['recipeVolume']),
+        ingredients = _jsonDecodeIngredients(json['ingredients']),
+        probes = jsonDecode(json['probes']),
+        saved = json['saved'] == 'true' ? true : false;
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['recipeName'] = recipeName.toJson();
+    data['recipeNumber'] = recipeNumber;
+    data['recipeType'] = recipeType;
+    data['recipeVolume'] = recipeVolume.toJson();
+    data['ingredients'] = jsonEncode(ingredients);
+    data['probes'] = jsonEncode(probes);
+    data['saved'] = saved.toString();
+    return data;
+  }
 
   final RecipeName recipeName;
   final String recipeNumber;
@@ -54,11 +76,28 @@ class Recipe extends Equatable {
       ];
 }
 
+List<Ingredient> _jsonDecodeIngredients(jsonEncodedIngredients) {
+  List<dynamic> partiallyDecodedIngredients =
+      jsonDecode(jsonEncodedIngredients);
+  List<Ingredient> fullyDecodedFoodItems =
+      partiallyDecodedIngredients.map((e) => Ingredient.fromJson(e)).toList();
+  return fullyDecodedFoodItems;
+}
+
 enum RecipeNameValidationError { invalid }
 
 class RecipeName extends FormzInput<String, RecipeNameValidationError> {
   const RecipeName.pure() : super.pure('');
   const RecipeName.dirty([String value = '']) : super.dirty(value);
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['value'] = value;
+    data['pure'] = pure.toString();
+    return data;
+  }
+
+  RecipeName.fromJson(Map<String, dynamic> json) : super.dirty(json['value']);
 
   @override
   RecipeNameValidationError? validator(String? value) {
@@ -71,6 +110,15 @@ enum RecipeVolumeValidationError { invalid }
 class RecipeVolume extends FormzInput<String, RecipeVolumeValidationError> {
   const RecipeVolume.pure() : super.pure('');
   const RecipeVolume.dirty([String value = '']) : super.dirty(value);
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['value'] = value;
+    data['pure'] = pure.toString();
+    return data;
+  }
+
+  RecipeVolume.fromJson(Map<String, dynamic> json) : super.dirty(json['value']);
 
   @override
   RecipeVolumeValidationError? validator(String? value) {
