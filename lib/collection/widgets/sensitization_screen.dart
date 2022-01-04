@@ -27,7 +27,8 @@ class SensitizationScreen extends StatelessWidget {
                 icon: const Icon(Icons.help))
           ],
         ),
-        body: const SensitizationForm());
+        resizeToAvoidBottomInset: false,
+        body: const SingleChildScrollView(child: SensitizationForm()));
   }
 }
 
