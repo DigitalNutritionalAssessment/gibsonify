@@ -14,14 +14,15 @@ class IngredientPage extends StatelessWidget {
       return Scaffold(
           appBar: AppBar(title: const Text('New Ingredient')),
           floatingActionButton: FloatingActionButton.extended(
-              label: const Text("Save Ingredient"), // TODO: pop page
+              label: const Text("Save Ingredient"),
               icon: const Icon(Icons.save_sharp),
               onPressed: () => {
                     context.read<RecipeBloc>().add(IngredientStatusChanged(
                         recipe: state.recipes[recipeIndex],
                         ingredient: state
                             .recipes[recipeIndex].ingredients[ingredientIndex],
-                        ingredientSaved: true))
+                        ingredientSaved: true)),
+                    Navigator.pop(context)
                   }),
           body: IngredientForm(recipeIndex, ingredientIndex));
     });

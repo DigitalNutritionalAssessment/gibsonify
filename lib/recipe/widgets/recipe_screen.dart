@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gibsonify/recipe/recipe.dart';
 import 'package:gibsonify/navigation/navigation.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class RecipeScreen extends StatelessWidget {
   final int recipeIndex;
@@ -13,6 +14,13 @@ class RecipeScreen extends StatelessWidget {
       return Scaffold(
           appBar: AppBar(
             title: const Text('Add a new recipe'),
+            actions: [
+              IconButton(
+                  onPressed: () => Navigator.pushNamed(
+                      context, PageRouter.recipeProbe,
+                      arguments: recipeIndex),
+                  icon: const Icon(Icons.help))
+            ],
           ),
           body: RecipeForm(recipeIndex),
           floatingActionButton: Column(
@@ -21,12 +29,13 @@ class RecipeScreen extends StatelessWidget {
               children: <Widget>[
                 FloatingActionButton.extended(
                     heroTag: null,
-                    label: const Text("Save Recipe"), // TODO: pop page
+                    label: const Text("Save Recipe"),
                     icon: const Icon(Icons.save_sharp),
                     onPressed: () => {
                           context.read<RecipeBloc>().add(RecipeStatusChanged(
                               recipe: state.recipes[recipeIndex],
-                              recipeSaved: true))
+                              recipeSaved: true)),
+                          Navigator.pop(context)
                         }),
                 const SizedBox(
                   height: 10,
@@ -107,19 +116,13 @@ class RecipeNumberInput extends StatelessWidget {
     return BlocBuilder<RecipeBloc, RecipeState>(
       builder: (context, state) {
         return TextFormField(
-          initialValue: state.recipes[recipeIndex].recipeNumber.value,
-          decoration: InputDecoration(
-            icon: const Icon(Icons.format_list_numbered),
+          key: Key(state.recipes[recipeIndex].recipeNumber),
+          initialValue: state.recipes[recipeIndex].recipeNumber,
+          decoration: const InputDecoration(
+            icon: Icon(Icons.format_list_numbered),
             labelText: 'Recipe Number',
-            helperText: 'Number of recipe e.g. 9001',
-            errorText: state.recipes[recipeIndex].recipeNumber.invalid
-                ? 'Enter recipe number'
-                : null,
           ),
-          onChanged: (value) {
-            context.read<RecipeBloc>().add(RecipeNumberChanged(
-                recipeNumber: value, recipe: state.recipes[recipeIndex]));
-          },
+          enabled: false,
           textInputAction: TextInputAction.next,
           keyboardType: TextInputType.number,
         );
@@ -170,26 +173,80 @@ class Ingredients extends StatelessWidget {
               padding: const EdgeInsets.all(2.0),
               itemCount: state.recipes[recipeIndex].ingredients.length,
               itemBuilder: (context, index) {
-                return Card(
-                    child: ListTile(
-                        // TODO: Fix ingredients not updating
-                        // key: Key(state.recipes[recipeIndex].ingredients[index]
-                        //     .name.value),
-                        title: Text(state.recipes[recipeIndex]
-                            .ingredients[index].name.value),
-                        subtitle: Text(state.recipes[recipeIndex]
-                            .ingredients[index].description.value),
-                        leading: const Icon(Icons.food_bank),
-                        trailing:
-                            state.recipes[recipeIndex].ingredients[index].saved
-                                ? const Icon(Icons.done)
-                                : const Icon(Icons.rotate_left_rounded),
-                        onTap: () => {
-                              Navigator.pushNamed(
-                                  context, PageRouter.ingredient,
-                                  arguments: [recipeIndex, index])
-                            }));
+                return Slidable(
+                  startActionPane: ActionPane(
+                    motion: const ScrollMotion(),
+                    children: [
+                      SlidableAction(
+                        onPressed: (context) {
+                          showDialog<String>(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  DeleteIngredient(
+                                      recipe: state.recipes[recipeIndex],
+                                      ingredient: state.recipes[recipeIndex]
+                                          .ingredients[index]));
+                        },
+                        backgroundColor: const Color(0xFFFE4A49),
+                        foregroundColor: Colors.white,
+                        icon: Icons.delete,
+                        label: 'Delete',
+                      )
+                    ],
+                  ),
+                  child: Card(
+                      child: ListTile(
+                    title: Text(state
+                        .recipes[recipeIndex].ingredients[index].name.value),
+                    subtitle: Text(state.recipes[recipeIndex].ingredients[index]
+                        .description.value),
+                    leading: const Icon(Icons.food_bank),
+                    trailing:
+                        state.recipes[recipeIndex].ingredients[index].saved
+                            ? const Icon(Icons.done)
+                            : const Icon(Icons.rotate_left_rounded),
+                    onTap: () => {
+                      Navigator.pushNamed(context, PageRouter.ingredient,
+                          arguments: [recipeIndex, index])
+                    },
+                  )),
+                );
               }));
+    });
+  }
+}
+
+class DeleteIngredient extends StatelessWidget {
+  final Recipe recipe;
+  final Ingredient ingredient;
+
+  const DeleteIngredient(
+      {Key? key, required this.recipe, required this.ingredient})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    String ingredientName = ingredient.name.value;
+    return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
+      return AlertDialog(
+        title: const Text('Delete ingredient'),
+        content:
+            Text('Would you like to delete the $ingredientName ingredient?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'Cancel'),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => {
+              context.read<RecipeBloc>().add(
+                  IngredientDeleted(recipe: recipe, ingredient: ingredient)),
+              Navigator.pop(context, 'OK')
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      );
     });
   }
 }
