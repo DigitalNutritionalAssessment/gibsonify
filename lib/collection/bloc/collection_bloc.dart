@@ -342,6 +342,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     emit(state);
   }
 
+  // TODO: Delete the async?
   void _onGibsonsFormProvided(
       GibsonsFormProvided event, Emitter<CollectionState> emit) async {
     emit(state.copyWith(gibsonsForm: event.gibsonsForm));
