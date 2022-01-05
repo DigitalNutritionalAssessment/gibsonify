@@ -33,8 +33,7 @@ class _CollectionsScreenState extends State<CollectionsScreen> {
                           child: Column(
                             children: [
                               TextFormField(
-                                key: Key(state
-                                    .gibsonsForms[index]!.respondentName.value),
+                                key: UniqueKey(),
                                 onTap: () {
                                   context.read<CollectionBloc>().add(
                                       GibsonsFormProvided(
@@ -52,8 +51,7 @@ class _CollectionsScreenState extends State<CollectionsScreen> {
                                 ),
                               ),
                               TextFormField(
-                                key: Key(state
-                                    .gibsonsForms[index]!.interviewDate.value),
+                                key: UniqueKey(),
                                 onTap: () {
                                   context.read<CollectionBloc>().add(
                                       GibsonsFormProvided(
