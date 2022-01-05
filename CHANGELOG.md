@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Bug Fixes
 
+- *(collection)* Sensitization screen bottom overflowed error
 - *(collection)* Make dropdown items consistently display selected value
 - *(collection)* Add missing space to sensitization help page
 - *(collection)* Add interview date to get props method of equatable to add it to state
@@ -14,7 +15,9 @@ All notable changes to this project will be documented in this file.
 - *(recipe)* Fix bug with probelist keys updating too frequently
 - *(recipe)* Fix issue with Bloc not updating for ingredient changes
 - *(recipe)* Implement PR comments
-- *(recipe)* Fixed bug that blocked new recipe state managementand refactored old code- *(No Category)* Correct app name to start with a capital letter
+- *(recipe)* Fixed bug that blocked new recipe state managementand refactored old code- *(No Category)* Pubspec confilct and merge dev branch
+- *(No Category)* Duplicate key error in collections screen
+- *(No Category)* Correct app name to start with a capital letter
 
 
 ### Documentation
@@ -24,6 +27,7 @@ All notable changes to this project will be documented in this file.
 - *(README)* Update development instructions
 - *(README)* Update link to Gibson's method
 - *(app)* Remove commented out code
+- *(changelog)* Update
 - *(changelog)* Update
 - *(changelog)* Update
 - *(changelog)* Update to fix merge conflict
@@ -48,6 +52,9 @@ All notable changes to this project will be documented in this file.
 - *(collection)* Add first pass with food items
 - *(collection)* Update sensitization first pass button todo comment
 - *(collection_state)* Add todo about creating more collection states
+- *(gibsonify_api)* Add api documentation
+- *(gibsonify_api)* Remove commented out code and add documentation
+- *(gibsonify_api)* Remove implemented todo comment about uuids
 - *(home_page)* Remove old todo
 - *(license)* Add copyright year and owner
 - *(readme)* Add unix-like systems note again
@@ -69,6 +76,9 @@ All notable changes to this project will be documented in this file.
 
 ### Features
 
+- *(add-loading-and-creating-functionality-to-collections-screen)* Clicking on Add button now creates a new GibsonsForm for Collection and clicking on the existing GibsonsForm loads it from the repository.
+- *(collection)* Add saving gibsons form functionality to passes
+- *(collection)* Add data layer functionality to bloc
 - *(collection)* Add basic functionality of all gibsons method passes
 - *(collection)* Make any change to a food item result in unconfirming it
 - *(collection)* Add fourth pass ui and underlying bloc
@@ -82,6 +92,9 @@ All notable changes to this project will be documented in this file.
 - *(collection)* Add blocbuilders with demo display of current collection state to third and fourth passes
 - *(collection)* Add bloc, model and update collection page and screens with demo
 - *(collection)* Add sensitization, first, second, third, and fourth pass screens
+- *(gibsonify_api)* Add functionality to delete a form
+- *(gibsonify_api)* Add pretty string representation of gibsons form
+- *(gibsonify_repository)* Add loading multiple forms and form deletion functionality
 - *(recipe)* Implement recipe types and probes
 - *(recipe)* Change to slidable delete buttons
 - *(recipe)* Implement recipe probes
@@ -92,8 +105,11 @@ All notable changes to this project will be documented in this file.
 - *(recipe)* Add preliminary recipe implementation
 - *(recipe)* Add logic for changing recipe/ingredient status
 - *(recipe)* Add navigation logic to enable recipe/ingredient editing
-- *(recipe)* Add rudimentary recipe form- *(No Category)* Add generated json methods for recipes list
+- *(recipe)* Add rudimentary recipe form- *(No Category)* Add data layer and multiple collections
+- *(No Category)* Add generated json methods for recipes list
+- *(No Category)* Add home bloc
 - *(No Category)* Add manual json serialization to recipe models
+- *(No Category)* Add manual json serialization to collection models
 - *(No Category)* Add collection third pass help page and underlying navigation
 - *(No Category)* Add date picker to sensitization with formatting using intl
 - *(No Category)* Add second pass help page to collection and navigation
@@ -126,8 +142,10 @@ All notable changes to this project will be documented in this file.
 - *(collection)* Remove equatable as a base class for collection and rename to gibsonsform
 - *(collection)* Change sensitization screen form to formz inputs, add input models and demos
 - *(collection)* Change sensitization, first_pass and second_pass screens to stateless widgets
+- *(gibsonify_api)* Remove debugging print statements
 - *(recipe)* Rename ingredient screen to ingredient form
-- *(recipe)* Remove unused focus/unfocus node logic- *(No Category)* Change to feature-driven app architecture using flutter_bloc
+- *(recipe)* Remove unused focus/unfocus node logic- *(No Category)* Move collection models into repository and api
+- *(No Category)* Change to feature-driven app architecture using flutter_bloc
 - *(No Category)* Move app from main to separate file
 
 
