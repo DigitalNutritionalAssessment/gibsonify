@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gibsonify/recipe/recipe.dart';
 import 'package:gibsonify/navigation/navigation.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class RecipeScreen extends StatelessWidget {
   final int recipeIndex;
@@ -172,31 +173,44 @@ class Ingredients extends StatelessWidget {
               padding: const EdgeInsets.all(2.0),
               itemCount: state.recipes[recipeIndex].ingredients.length,
               itemBuilder: (context, index) {
-                return Card(
-                    child: ListTile(
-                        title: Text(state.recipes[recipeIndex]
-                            .ingredients[index].name.value),
-                        subtitle: Text(state.recipes[recipeIndex]
-                            .ingredients[index].description.value),
-                        leading: const Icon(Icons.food_bank),
-                        trailing:
-                            state.recipes[recipeIndex].ingredients[index].saved
-                                ? const Icon(Icons.done)
-                                : const Icon(Icons.rotate_left_rounded),
-                        onTap: () => {
-                              Navigator.pushNamed(
-                                  context, PageRouter.ingredient,
-                                  arguments: [recipeIndex, index])
-                            },
-                        onLongPress: () => {
-                              showDialog<String>(
-                                  context: context,
-                                  builder: (BuildContext context) =>
-                                      DeleteIngredient(
-                                          recipe: state.recipes[recipeIndex],
-                                          ingredient: state.recipes[recipeIndex]
-                                              .ingredients[index]))
-                            }));
+                return Slidable(
+                  startActionPane: ActionPane(
+                    motion: const ScrollMotion(),
+                    children: [
+                      SlidableAction(
+                        onPressed: (context) {
+                          showDialog<String>(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  DeleteIngredient(
+                                      recipe: state.recipes[recipeIndex],
+                                      ingredient: state.recipes[recipeIndex]
+                                          .ingredients[index]));
+                        },
+                        backgroundColor: const Color(0xFFFE4A49),
+                        foregroundColor: Colors.white,
+                        icon: Icons.delete,
+                        label: 'Delete',
+                      )
+                    ],
+                  ),
+                  child: Card(
+                      child: ListTile(
+                    title: Text(state
+                        .recipes[recipeIndex].ingredients[index].name.value),
+                    subtitle: Text(state.recipes[recipeIndex].ingredients[index]
+                        .description.value),
+                    leading: const Icon(Icons.food_bank),
+                    trailing:
+                        state.recipes[recipeIndex].ingredients[index].saved
+                            ? const Icon(Icons.done)
+                            : const Icon(Icons.rotate_left_rounded),
+                    onTap: () => {
+                      Navigator.pushNamed(context, PageRouter.ingredient,
+                          arguments: [recipeIndex, index])
+                    },
+                  )),
+                );
               }));
     });
   }
