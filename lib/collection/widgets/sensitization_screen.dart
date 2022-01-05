@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
+import 'package:gibsonify/home/home.dart';
 import 'package:gibsonify/collection/collection.dart';
 import 'package:gibsonify/navigation/navigation.dart';
 
@@ -13,6 +14,14 @@ class SensitizationScreen extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Sensitization'),
+          // TODO: Refactor this BackButton as a reusable widget across passes
+          leading: BackButton(
+            onPressed: () {
+              context.read<CollectionBloc>().add(const GibsonsFormSaved());
+              context.read<HomeBloc>().add(const GibsonsFormsLoaded());
+              Navigator.maybePop(context);
+            },
+          ),
           actions: [
             IconButton(
                 onPressed: () =>
@@ -20,7 +29,8 @@ class SensitizationScreen extends StatelessWidget {
                 icon: const Icon(Icons.help))
           ],
         ),
-        body: const SensitizationForm());
+        resizeToAvoidBottomInset: false,
+        body: const SingleChildScrollView(child: SensitizationForm()));
   }
 }
 

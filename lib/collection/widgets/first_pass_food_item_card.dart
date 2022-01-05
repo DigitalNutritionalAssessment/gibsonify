@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gibsonify/collection/collection.dart';
+
+import 'package:gibsonify_api/gibsonify_api.dart';
 
 class FirstPassFoodItemCard extends StatelessWidget {
   const FirstPassFoodItemCard(

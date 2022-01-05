@@ -1,11 +1,12 @@
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
+import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:uuid/uuid.dart';
 
 class FoodItem extends Equatable {
   FoodItem(
-      {this.name = const Name.pure(),
-      String? id,
+      {String? id,
+      this.name = const Name.pure(),
       this.timePeriod = const TimePeriod.pure(),
       this.source = const Source.pure(),
       this.description = const Description.pure(),
@@ -16,8 +17,8 @@ class FoodItem extends Equatable {
       this.confirmed = false})
       : id = id ?? const Uuid().v4();
 
-  final Name name;
   final String id;
+  final Name name;
   final TimePeriod timePeriod;
   final Source source;
   final Description description;
@@ -28,9 +29,41 @@ class FoodItem extends Equatable {
   // TODO: Add Form validation bool field to check if all fields are valid
   final bool confirmed;
 
+  // TODO: implement code generation JSON serialization using json_serializable
+  // and/or json_annotation
+
+  FoodItem.fromJson(Map<String, dynamic> json)
+      : id = json['id'],
+        name = Name.fromJson(json['name']),
+        timePeriod = TimePeriod.fromJson(json['timePeriod']),
+        source = Source.fromJson(json['source']),
+        description = Description.fromJson(json['description']),
+        preparationMethod =
+            PreparationMethod.fromJson(json['preparationMethod']),
+        measurementMethod =
+            MeasurementMethod.fromJson(json['measurementMethod']),
+        measurementValue = MeasurementValue.fromJson(json['measurementValue']),
+        measurementUnit = MeasurementUnit.fromJson(json['measurementUnit']),
+        confirmed = json['confirmed'] == 'true' ? true : false;
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['id'] = id;
+    data['name'] = name.toJson();
+    data['timePeriod'] = timePeriod.toJson();
+    data['source'] = source.toJson();
+    data['description'] = description.toJson();
+    data['preparationMethod'] = preparationMethod.toJson();
+    data['measurementMethod'] = measurementMethod.toJson();
+    data['measurementValue'] = measurementValue.toJson();
+    data['measurementUnit'] = measurementUnit.toJson();
+    data['confirmed'] = confirmed.toString();
+    return data;
+  }
+
   FoodItem copyWith(
-      {Name? name,
-      String? id,
+      {String? id,
+      Name? name,
       TimePeriod? timePeriod,
       Source? source,
       Description? description,
@@ -40,8 +73,8 @@ class FoodItem extends Equatable {
       MeasurementUnit? measurementUnit,
       bool? confirmed}) {
     return FoodItem(
-        name: name ?? this.name,
         id: id ?? this.id,
+        name: name ?? this.name,
         timePeriod: timePeriod ?? this.timePeriod,
         source: source ?? this.source,
         description: description ?? this.description,
@@ -51,6 +84,8 @@ class FoodItem extends Equatable {
         measurementUnit: measurementUnit ?? this.measurementUnit,
         confirmed: confirmed ?? this.confirmed);
   }
+
+  // TODO: override and implement toString() method
 
   @override
   List<Object> get props => [
@@ -75,6 +110,18 @@ class Name extends FormzInput<String, NameValidationError> {
   const Name.pure() : super.pure('');
   const Name.dirty([String value = '']) : super.dirty(value);
 
+  // TODO: Figure out a way to use the pure attribute or maybe drop
+  // Formz completely. It might be easier to just have all these values
+  // as strings and implement a couple of validator methods
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['value'] = value;
+    data['pure'] = pure.toString();
+    return data;
+  }
+
+  Name.fromJson(Map<String, dynamic> json) : super.dirty(json['value']);
+
   @override
   NameValidationError? validator(String? value) {
     return value?.isNotEmpty == true ? null : NameValidationError.invalid;
@@ -88,6 +135,15 @@ class TimePeriod extends FormzInput<String, TimePeriodValidationError> {
   const TimePeriod.dirty([String value = '']) : super.dirty(value);
 
   final _allowedTimePeriod = const ['morning', 'afternoon', 'evening', 'night'];
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['value'] = value;
+    data['pure'] = pure.toString();
+    return data;
+  }
+
+  TimePeriod.fromJson(Map<String, dynamic> json) : super.dirty(json['value']);
 
   @override
   TimePeriodValidationError? validator(String? value) {
@@ -118,6 +174,15 @@ class Source extends FormzInput<String, SourceValidationError> {
     'other'
   ];
 
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['value'] = value;
+    data['pure'] = pure.toString();
+    return data;
+  }
+
+  Source.fromJson(Map<String, dynamic> json) : super.dirty(json['value']);
+
   @override
   SourceValidationError? validator(String? value) {
     final _lowerCaseValue = (value ?? '').toLowerCase();
@@ -133,6 +198,15 @@ enum DescriptionValidationError { invalid }
 class Description extends FormzInput<String, DescriptionValidationError> {
   const Description.pure() : super.pure('');
   const Description.dirty([String value = '']) : super.dirty(value);
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['value'] = value;
+    data['pure'] = pure.toString();
+    return data;
+  }
+
+  Description.fromJson(Map<String, dynamic> json) : super.dirty(json['value']);
 
   @override
   DescriptionValidationError? validator(String? value) {
@@ -168,6 +242,16 @@ class PreparationMethod
     'other'
   ];
 
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['value'] = value;
+    data['pure'] = pure.toString();
+    return data;
+  }
+
+  PreparationMethod.fromJson(Map<String, dynamic> json)
+      : super.dirty(json['value']);
+
   @override
   PreparationMethodValidationError? validator(String? value) {
     final _lowerCaseValue = (value ?? '').toLowerCase();
@@ -194,6 +278,16 @@ class MeasurementMethod
     'size (photo)',
   ];
 
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['value'] = value;
+    data['pure'] = pure.toString();
+    return data;
+  }
+
+  MeasurementMethod.fromJson(Map<String, dynamic> json)
+      : super.dirty(json['value']);
+
   @override
   MeasurementMethodValidationError? validator(String? value) {
     final _lowerCaseValue = (value ?? '').toLowerCase();
@@ -212,6 +306,16 @@ class MeasurementValue
     extends FormzInput<String, MeasurementValueValidationError> {
   const MeasurementValue.pure() : super.pure('');
   const MeasurementValue.dirty([String value = '']) : super.dirty(value);
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['value'] = value;
+    data['pure'] = pure.toString();
+    return data;
+  }
+
+  MeasurementValue.fromJson(Map<String, dynamic> json)
+      : super.dirty(json['value']);
 
   @override
   MeasurementValueValidationError? validator(String? value) {
@@ -238,6 +342,16 @@ class MeasurementUnit
     'large',
     'grams or millilitres' //TODO: check with ICRISAT if this is okay
   ];
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['value'] = value;
+    data['pure'] = pure.toString();
+    return data;
+  }
+
+  MeasurementUnit.fromJson(Map<String, dynamic> json)
+      : super.dirty(json['value']);
 
   @override
   MeasurementUnitValidationError? validator(String? value) {
