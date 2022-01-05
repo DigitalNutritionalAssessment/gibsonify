@@ -25,10 +25,14 @@ class App extends StatelessWidget {
                     ..add(const GibsonsFormsLoaded())),
           // TODO: Refactor and move Collection and Recipe BlocProviders further
           // down the widget tree
+          // Or another possibility is to get rid of HomeBloc and move its
+          // functionality to CollectionBloc
           BlocProvider(
               create: (context) =>
                   CollectionBloc(gibsonifyRepository: gibsonifyRepository)),
-          BlocProvider(create: (context) => RecipeBloc())
+          BlocProvider(
+              create: (context) =>
+                  RecipeBloc(gibsonifyRepository: gibsonifyRepository))
         ],
         child: MaterialApp(
           title: 'Gibsonify',

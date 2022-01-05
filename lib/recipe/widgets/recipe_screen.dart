@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gibsonify/recipe/recipe.dart';
+import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:gibsonify/navigation/navigation.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 

@@ -1,9 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
-import 'package:gibsonify/recipe/models/recipe_ingredient.dart';
 import 'package:uuid/uuid.dart';
 import 'dart:convert';
 
+import 'recipe_ingredient.dart';
+
+// TODO: rename this file to recipe.dart instead of recipe_item.dart
 class Recipe extends Equatable {
   Recipe({
     this.recipeName = const RecipeName.pure(),
