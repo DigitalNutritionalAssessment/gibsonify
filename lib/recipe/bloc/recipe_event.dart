@@ -7,7 +7,23 @@ abstract class RecipeEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class RecipeAdded extends RecipeEvent {}
+class RecipeAdded extends RecipeEvent {
+  final String recipeType;
+
+  const RecipeAdded({required this.recipeType});
+
+  @override
+  List<Object> get props => [recipeType];
+}
+
+class RecipeDeleted extends RecipeEvent {
+  final Recipe recipe;
+
+  const RecipeDeleted({required this.recipe});
+
+  @override
+  List<Object> get props => [recipe];
+}
 
 class RecipeNameChanged extends RecipeEvent {
   final String recipeName;
@@ -17,16 +33,6 @@ class RecipeNameChanged extends RecipeEvent {
 
   @override
   List<Object> get props => [recipeName, recipe];
-}
-
-class RecipeNumberChanged extends RecipeEvent {
-  final String recipeNumber;
-  final Recipe recipe;
-
-  const RecipeNumberChanged({required this.recipeNumber, required this.recipe});
-
-  @override
-  List<Object> get props => [recipeNumber, recipe];
 }
 
 class RecipeVolumeChanged extends RecipeEvent {
@@ -49,6 +55,39 @@ class RecipeStatusChanged extends RecipeEvent {
   List<Object> get props => [recipeSaved, recipe];
 }
 
+class ProbeAdded extends RecipeEvent {
+  final Recipe recipe;
+
+  const ProbeAdded({required this.recipe});
+
+  @override
+  List<Object> get props => [recipe];
+}
+
+class ProbeChanged extends RecipeEvent {
+  final Recipe recipe;
+  final String probeName;
+  final int probeIndex;
+
+  const ProbeChanged(
+      {required this.recipe,
+      required this.probeName,
+      required this.probeIndex});
+
+  @override
+  List<Object> get props => [recipe, probeName, probeIndex];
+}
+
+class ProbeDeleted extends RecipeEvent {
+  final Recipe recipe;
+  final Map<String, dynamic> probe;
+
+  const ProbeDeleted({required this.recipe, required this.probe});
+
+  @override
+  List<Object> get props => [recipe, probe];
+}
+
 class IngredientAdded extends RecipeEvent {
   final Recipe recipe;
 
@@ -56,6 +95,16 @@ class IngredientAdded extends RecipeEvent {
 
   @override
   List<Object> get props => [recipe];
+}
+
+class IngredientDeleted extends RecipeEvent {
+  final Recipe recipe;
+  final Ingredient ingredient;
+
+  const IngredientDeleted({required this.recipe, required this.ingredient});
+
+  @override
+  List<Object> get props => [recipe, ingredient];
 }
 
 class IngredientStatusChanged extends RecipeEvent {
