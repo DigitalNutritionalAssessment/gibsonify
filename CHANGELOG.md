@@ -32,6 +32,7 @@ All notable changes to this project will be documented in this file.
 - *(changelog)* Update
 - *(changelog)* Update
 - *(changelog)* Update
+- *(changelog)* Update
 - *(changelog)* Update to fix merge conflict
 - *(changelog)* Update
 - *(changelog)* Add changes
@@ -108,7 +109,10 @@ All notable changes to this project will be documented in this file.
 - *(recipe)* Add preliminary recipe implementation
 - *(recipe)* Add logic for changing recipe/ingredient status
 - *(recipe)* Add navigation logic to enable recipe/ingredient editing
-- *(recipe)* Add rudimentary recipe form- *(No Category)* Integrate data layer, collections, recipes
+- *(recipe)* Add rudimentary recipe form- *(No Category)* Export saved data via email
+- *(No Category)* Add collections export data
+- *(No Category)* Implement data download
+- *(No Category)* Integrate data layer, collections, recipes
 - *(No Category)* Add data layer and multiple collections
 - *(No Category)* Add generated json methods for recipes list
 - *(No Category)* Add home bloc
