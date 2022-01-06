@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
+import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:uuid/uuid.dart';
 
 import 'food_item.dart';
@@ -17,6 +18,7 @@ class GibsonsForm extends Equatable {
       this.interviewDate = const InterviewDate.pure(),
       this.interviewStartTime = const InterviewStartTime.pure(),
       this.interviewEndTime = const InterviewEndTime.pure(),
+      this.interviewOutcome = const InterviewOutcome.pure(),
       this.foodItems = const <FoodItem>[]})
       : id = id ?? const Uuid().v4();
 
@@ -29,6 +31,7 @@ class GibsonsForm extends Equatable {
   final InterviewDate interviewDate;
   final InterviewStartTime interviewStartTime;
   final InterviewEndTime interviewEndTime;
+  final InterviewOutcome interviewOutcome;
   final List<FoodItem> foodItems;
 
   // TODO: add other fields from physical Gibson's form:
@@ -52,6 +55,7 @@ class GibsonsForm extends Equatable {
         interviewStartTime =
             InterviewStartTime.fromJson(json['interviewStartTime']),
         interviewEndTime = InterviewEndTime.fromJson(json['interviewEndTime']),
+        interviewOutcome = InterviewOutcome.fromJson(json['interviewOutcome']),
         foodItems = _jsonDecodeFoodItems(json['foodItems']);
 
   Map<String, dynamic> toJson() {
@@ -65,6 +69,7 @@ class GibsonsForm extends Equatable {
     data['interviewDate'] = interviewDate.toJson();
     data['interviewStartTime'] = interviewStartTime.toJson();
     data['interviewEndTime'] = interviewEndTime.toJson();
+    data['interviewOutcome'] = interviewOutcome.toJson();
     data['foodItems'] = jsonEncode(foodItems); // This calls toJson on each one
     return data;
   }
@@ -79,6 +84,7 @@ class GibsonsForm extends Equatable {
       InterviewDate? interviewDate,
       InterviewStartTime? interviewStartTime,
       InterviewEndTime? interviewEndTime,
+      InterviewOutcome? interviewOutcome,
       List<FoodItem>? foodItems}) {
     return GibsonsForm(
         id: id ?? this.id,
@@ -90,6 +96,7 @@ class GibsonsForm extends Equatable {
         interviewDate: interviewDate ?? this.interviewDate,
         interviewStartTime: interviewStartTime ?? this.interviewStartTime,
         interviewEndTime: interviewEndTime ?? this.interviewEndTime,
+        interviewOutcome: interviewOutcome ?? this.interviewOutcome,
         foodItems: foodItems ?? this.foodItems);
   }
 
@@ -105,6 +112,7 @@ class GibsonsForm extends Equatable {
         'Interview Date: $interviewDate\n'
         'Interview Start Time: $interviewStartTime\n'
         'Interview End Time: $interviewEndTime\n'
+        'Interview Outcome: $interviewOutcome\n'
         'Food Items: $foodItems'
         '\n *** \n';
   }
@@ -120,6 +128,7 @@ class GibsonsForm extends Equatable {
         interviewDate,
         interviewStartTime,
         interviewEndTime,
+        interviewOutcome,
         foodItems
       ];
 }
@@ -344,5 +353,41 @@ class InterviewEndTime
     return value?.isNotEmpty == true
         ? null
         : InterviewEndTimeValidationError.invalid;
+  }
+}
+
+enum InterviewOutcomeValidationError { invalid }
+
+class InterviewOutcome
+    extends FormzInput<String, InterviewOutcomeValidationError> {
+  const InterviewOutcome.pure() : super.pure('');
+  const InterviewOutcome.dirty([String value = '']) : super.dirty(value);
+
+  // TODO: update when accepting custom strings for 'other'
+  final _allowedRecallDay = const [
+    'completed',
+    'incomplete',
+    'absent',
+    'refused',
+    'could not locate',
+  ];
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['value'] = value;
+    data['pure'] = pure.toString();
+    return data;
+  }
+
+  InterviewOutcome.fromJson(Map<String, dynamic> json)
+      : super.dirty(json['value']);
+
+  @override
+  InterviewOutcomeValidationError? validator(String? value) {
+    final _lowerCaseValue = (value ?? '').toLowerCase();
+    // TODO: refactor with a better null check
+    return _allowedRecallDay.contains(_lowerCaseValue)
+        ? null
+        : InterviewOutcomeValidationError.invalid;
   }
 }

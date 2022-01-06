@@ -79,6 +79,15 @@ class InterviewEndTimeChanged extends CollectionEvent {
   List<Object> get props => [interviewEndTime];
 }
 
+class InterviewOutcomeChanged extends CollectionEvent {
+  final String interviewOutcome;
+
+  const InterviewOutcomeChanged({required this.interviewOutcome});
+
+  @override
+  List<Object> get props => [interviewOutcome];
+}
+
 class FoodItemAdded extends CollectionEvent {}
 
 class FoodItemDeleted extends CollectionEvent {

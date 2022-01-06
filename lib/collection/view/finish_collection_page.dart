@@ -49,7 +49,10 @@ class FinishCollectionForm extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
-        children: const <Widget>[InterviewEndTimeInput()],
+        children: const <Widget>[
+          InterviewEndTimeInput(),
+          InterviewOutcomeInput()
+        ],
       ),
     );
   }
@@ -82,6 +85,42 @@ class InterviewEndTimeInput extends StatelessWidget {
                 InterviewEndTimeChanged(interviewEndTime: formattedTime ?? ''));
           },
         );
+      },
+    );
+  }
+}
+
+class InterviewOutcomeInput extends StatelessWidget {
+  const InterviewOutcomeInput({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    const List<DropdownMenuItem<String>> dropdownMenuItems = [
+      DropdownMenuItem(child: Text(''), value: ''),
+      DropdownMenuItem(child: Text('Completed'), value: 'Completed'),
+      DropdownMenuItem(child: Text('Incomplete'), value: 'Incomplete'),
+      DropdownMenuItem(child: Text('Absent'), value: 'Absent'),
+      DropdownMenuItem(child: Text('Refused'), value: 'Refused'),
+      DropdownMenuItem(
+          child: Text('Could not locate'), value: 'Could not locate')
+    ];
+    return BlocBuilder<CollectionBloc, CollectionState>(
+      builder: (context, state) {
+        return DropdownButtonFormField(
+            value: state.gibsonsForm.interviewOutcome.value,
+            decoration: InputDecoration(
+                icon: const Icon(Icons.format_indent_increase_sharp),
+                labelText: 'Interview outcome',
+                helperText: 'Final result of the interview',
+                errorText: state.gibsonsForm.interviewOutcome.invalid
+                    ? 'Select interview outcome'
+                    : null),
+            items: dropdownMenuItems,
+            onChanged: (String? value) {
+              context
+                  .read<CollectionBloc>()
+                  .add(InterviewOutcomeChanged(interviewOutcome: value ?? ''));
+            });
       },
     );
   }
