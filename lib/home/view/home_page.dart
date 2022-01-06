@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.sync),
-            label: 'Sync',
+            label: 'Export Data',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
