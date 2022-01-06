@@ -230,3 +230,19 @@ class IngredientSizeNumberChanged extends RecipeEvent {
   @override
   List<Object> get props => [sizeNumber, ingredient, recipe];
 }
+
+// This is for recipes being saved to API, not their status changing to saved
+// TODO: Find consistent naming for saving recipes
+class RecipesSaved extends RecipeEvent {
+  const RecipesSaved();
+
+  @override
+  List<Object> get props => [];
+}
+
+class RecipesLoaded extends RecipeEvent {
+  const RecipesLoaded();
+
+  @override
+  List<Object> get props => [];
+}

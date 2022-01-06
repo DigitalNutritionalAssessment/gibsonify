@@ -3,14 +3,18 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:uuid/uuid.dart';
 
-import 'package:gibsonify/recipe/models/models.dart';
-import 'package:gibsonify/recipe/recipe.dart';
+import 'package:gibsonify_api/gibsonify_api.dart';
+import 'package:gibsonify_repository/gibsonify_repository.dart';
 
 part 'recipe_event.dart';
 part 'recipe_state.dart';
 
 class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
-  RecipeBloc() : super(const RecipeState()) {
+  final GibsonifyRepository _gibsonifyRepository;
+
+  RecipeBloc({required GibsonifyRepository gibsonifyRepository})
+      : _gibsonifyRepository = gibsonifyRepository,
+        super(const RecipeState()) {
     on<RecipeAdded>(_onRecipeAdded);
     on<RecipeDeleted>(_onRecipeDeleted);
     on<RecipeNameChanged>(_recipeNameChanged);
@@ -31,6 +35,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     on<IngredientMeasurementUnitChanged>(_onIngredientMeasurementUnitChanged);
     on<IngredientSizeChanged>(_onIngredientSizeChanged);
     on<IngredientSizeNumberChanged>(_onIngredientSizeNumberChanged);
+    on<RecipesSaved>(_onRecipesSaved);
+    on<RecipesLoaded>(_onRecipesLoaded);
   }
 
   void _onRecipeAdded(RecipeAdded event, Emitter<RecipeState> emit) {
@@ -435,6 +441,20 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     recipes.removeAt(changedRecipeIndex);
     recipes.insert(changedRecipeIndex, recipe);
 
+    emit(state.copyWith(recipes: recipes));
+  }
+
+  // TODO: investigate not using async and await here
+  // but on the other hand, maybe communication with repository/api should be
+  // asynchronous to preserve generality for the future
+  void _onRecipesSaved(RecipesSaved event, Emitter<RecipeState> emit) async {
+    List<Recipe> recipes = List.from(state.recipes);
+    await _gibsonifyRepository.saveRecipes(recipes);
+    emit(state);
+  }
+
+  void _onRecipesLoaded(RecipesLoaded event, Emitter<RecipeState> emit) {
+    List<Recipe> recipes = _gibsonifyRepository.loadRecipes();
     emit(state.copyWith(recipes: recipes));
   }
 }

@@ -18,6 +18,7 @@ class RecipeState extends Equatable {
   @override
   List<Object> get props => [recipes];
 
+  // TODO: These methods should be deleted and moved to the API if needed
   Map<String, dynamic> toMap() {
     return {
       'recipes': recipes.map((x) => x.toJson()).toList(),

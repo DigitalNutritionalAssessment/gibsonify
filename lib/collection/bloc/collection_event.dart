@@ -191,6 +191,17 @@ class FoodItemConfirmationChanged extends CollectionEvent {
   List<Object> get props => [foodItemConfirmed, foodItem];
 }
 
+class FoodItemRecipeChanged extends CollectionEvent {
+  final Recipe foodItemRecipe;
+  final String foodItemId;
+
+  const FoodItemRecipeChanged(
+      {required this.foodItemId, required this.foodItemRecipe});
+
+  @override
+  List<Object> get props => [foodItemId, foodItemRecipe];
+}
+
 class GibsonsFormSaved extends CollectionEvent {
   const GibsonsFormSaved();
 

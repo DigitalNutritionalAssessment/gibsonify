@@ -14,6 +14,7 @@ class PageRouter {
   static const firstPassHelp = '/firstpasshelp';
   static const secondPassHelp = '/secondpasshelp';
   static const thirdPassHelp = '/thirdpasshelp';
+  static const chooseRecipe = '/chooserecipe';
 
   static Route route(RouteSettings routeSettings) {
     switch (routeSettings.name) {
@@ -22,8 +23,13 @@ class PageRouter {
       case collection:
         return _buildRoute(const CollectionPage());
       case recipe:
-        var recipeIndex = routeSettings.arguments as int;
-        return _buildRoute(RecipePage(recipeIndex));
+        var indices = routeSettings.arguments as List;
+        int recipeIndex = indices[0];
+        String? assignedFoodItemId = indices[1];
+        return _buildRoute(RecipePage(
+          recipeIndex,
+          assignedFoodItemId: assignedFoodItemId,
+        ));
       case recipeProbe:
         var recipeIndex = routeSettings.arguments as int;
         return _buildRoute(RecipeProbePage(recipeIndex));
@@ -40,6 +46,10 @@ class PageRouter {
         return _buildRoute(const SecondPassHelpPage());
       case thirdPassHelp:
         return _buildRoute(const ThirdPassHelpPage());
+      case chooseRecipe:
+        var assignedFoodItemId = routeSettings.arguments as String?;
+        return _buildRoute(
+            ChooseRecipePage(assignedFoodItemId: assignedFoodItemId));
       default:
         throw Exception('Page does not exist!');
     }

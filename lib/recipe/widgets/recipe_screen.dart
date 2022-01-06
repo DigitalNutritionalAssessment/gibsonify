@@ -1,19 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gibsonify/recipe/recipe.dart';
+import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:gibsonify/navigation/navigation.dart';
+import 'package:gibsonify/collection/collection.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class RecipeScreen extends StatelessWidget {
   final int recipeIndex;
-  const RecipeScreen(this.recipeIndex, {Key? key}) : super(key: key);
+  final String? assignedFoodItemId;
+  const RecipeScreen(this.recipeIndex, {Key? key, this.assignedFoodItemId})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
       return Scaffold(
           appBar: AppBar(
-            title: const Text('Add a new recipe'),
+            title: assignedFoodItemId == null
+                ? const Text('Add a new recipe')
+                : const Text('Confirm chosen recipe'),
+            leading: BackButton(
+                onPressed: () => {
+                      context.read<RecipeBloc>().add(const RecipesSaved()),
+                      Navigator.pop(context)
+                    }),
             actions: [
               IconButton(
                   onPressed: () => Navigator.pushNamed(
@@ -29,14 +40,28 @@ class RecipeScreen extends StatelessWidget {
               children: <Widget>[
                 FloatingActionButton.extended(
                     heroTag: null,
-                    label: const Text("Save Recipe"),
-                    icon: const Icon(Icons.save_sharp),
-                    onPressed: () => {
-                          context.read<RecipeBloc>().add(RecipeStatusChanged(
-                              recipe: state.recipes[recipeIndex],
-                              recipeSaved: true)),
-                          Navigator.pop(context)
-                        }),
+                    label: assignedFoodItemId == null
+                        ? const Text("Save Recipe")
+                        : const Text("Choose Recipe"),
+                    icon: assignedFoodItemId == null
+                        ? const Icon(Icons.save_sharp)
+                        : const Icon(Icons.check),
+                    onPressed: () {
+                      if (assignedFoodItemId == null) {
+                        context.read<RecipeBloc>().add(RecipeStatusChanged(
+                            recipe: state.recipes[recipeIndex],
+                            recipeSaved: true));
+                        context.read<RecipeBloc>().add(const RecipesSaved());
+                        Navigator.pop(context);
+                      } else {
+                        context.read<CollectionBloc>().add(
+                            FoodItemRecipeChanged(
+                                foodItemId: assignedFoodItemId!,
+                                foodItemRecipe: state.recipes[recipeIndex]));
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      }
+                    }),
                 const SizedBox(
                   height: 10,
                 ),

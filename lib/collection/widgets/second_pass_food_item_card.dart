@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
+import 'package:gibsonify/navigation/navigation.dart';
 
 class SecondPassFoodItemCard extends StatelessWidget {
   const SecondPassFoodItemCard(
@@ -113,6 +114,25 @@ class SecondPassFoodItemCard extends StatelessWidget {
               items: preparationMethodDropdownMenuItems,
               onChanged: (String? value) =>
                   onPreparationMethodChanged!(value ?? ''),
+            ),
+            TextFormField(
+              initialValue: foodItem.recipe?.recipeName.value ?? '',
+              readOnly: true,
+              key: UniqueKey(),
+              decoration: InputDecoration(
+                icon: const Icon(Icons.bookmark),
+                labelText: 'Food recipe',
+                helperText: 'What is the recipe of this food',
+                // TODO:
+                // errorText: foodItem.recipe == null
+                //     ? 'Enter the food recipe'
+                //     : null,
+              ),
+              onTap: () {
+                Navigator.pushNamed(context, PageRouter.chooseRecipe,
+                    arguments: foodItem.id);
+              },
+              textInputAction: TextInputAction.next,
             ),
           ],
         ),

@@ -1,7 +1,12 @@
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
-import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:uuid/uuid.dart';
+
+// TODO: This is a temporary fix to avoid Name conflicts when importing the api
+import 'recipe_ingredient.dart'
+    show Name, Description, MeasurementMethod, MeasurementUnit;
+
+import 'recipe_item.dart';
 
 class FoodItem extends Equatable {
   FoodItem(
@@ -14,6 +19,7 @@ class FoodItem extends Equatable {
       this.measurementMethod = const MeasurementMethod.pure(),
       this.measurementValue = const MeasurementValue.pure(),
       this.measurementUnit = const MeasurementUnit.pure(),
+      this.recipe,
       this.confirmed = false})
       : id = id ?? const Uuid().v4();
 
@@ -26,6 +32,7 @@ class FoodItem extends Equatable {
   final MeasurementMethod measurementMethod;
   final MeasurementValue measurementValue;
   final MeasurementUnit measurementUnit;
+  final Recipe? recipe;
   // TODO: Add Form validation bool field to check if all fields are valid
   final bool confirmed;
 
@@ -44,6 +51,7 @@ class FoodItem extends Equatable {
             MeasurementMethod.fromJson(json['measurementMethod']),
         measurementValue = MeasurementValue.fromJson(json['measurementValue']),
         measurementUnit = MeasurementUnit.fromJson(json['measurementUnit']),
+        recipe = json['recipe'] == '' ? null : Recipe.fromJson(json['recipe']),
         confirmed = json['confirmed'] == 'true' ? true : false;
 
   Map<String, dynamic> toJson() {
@@ -57,6 +65,7 @@ class FoodItem extends Equatable {
     data['measurementMethod'] = measurementMethod.toJson();
     data['measurementValue'] = measurementValue.toJson();
     data['measurementUnit'] = measurementUnit.toJson();
+    data['recipe'] = recipe?.toJson() ?? '';
     data['confirmed'] = confirmed.toString();
     return data;
   }
@@ -71,6 +80,7 @@ class FoodItem extends Equatable {
       MeasurementMethod? measurementMethod,
       MeasurementValue? measurementValue,
       MeasurementUnit? measurementUnit,
+      Recipe? recipe,
       bool? confirmed}) {
     return FoodItem(
         id: id ?? this.id,
@@ -82,13 +92,14 @@ class FoodItem extends Equatable {
         measurementMethod: measurementMethod ?? this.measurementMethod,
         measurementValue: measurementValue ?? this.measurementValue,
         measurementUnit: measurementUnit ?? this.measurementUnit,
+        recipe: recipe ?? this.recipe,
         confirmed: confirmed ?? this.confirmed);
   }
 
   // TODO: override and implement toString() method
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         name,
         id,
         timePeriod,
@@ -98,10 +109,17 @@ class FoodItem extends Equatable {
         measurementMethod,
         measurementValue,
         measurementUnit,
+        recipe,
         confirmed
       ];
 }
+// TODO: This has been temporarily commented out to resolve name conflicts
+// The most sensible fix to this is probably getting rid of all Formz and
+// replacing them by strings only, as in 90% of the cases the only validation
+// is checking if it is not empty, and the rest can be added as custom
+// validation methods
 
+/*
 enum NameValidationError { invalid }
 
 // TODO: Investigate changing classes to be private (with leading underscore)
@@ -127,6 +145,7 @@ class Name extends FormzInput<String, NameValidationError> {
     return value?.isNotEmpty == true ? null : NameValidationError.invalid;
   }
 }
+*/
 
 enum TimePeriodValidationError { invalid }
 
@@ -193,6 +212,7 @@ class Source extends FormzInput<String, SourceValidationError> {
   }
 }
 
+/*
 enum DescriptionValidationError { invalid }
 
 class Description extends FormzInput<String, DescriptionValidationError> {
@@ -215,6 +235,7 @@ class Description extends FormzInput<String, DescriptionValidationError> {
         : DescriptionValidationError.invalid;
   }
 }
+*/
 
 enum PreparationMethodValidationError { invalid }
 
@@ -262,6 +283,8 @@ class PreparationMethod
   }
 }
 
+// TODO: allowed measurement methods are changed for not empty check only
+/*
 enum MeasurementMethodValidationError { invalid }
 
 class MeasurementMethod
@@ -297,7 +320,7 @@ class MeasurementMethod
         : MeasurementMethodValidationError.invalid;
   }
 }
-
+*/
 enum MeasurementValueValidationError { invalid }
 
 // TODO: Investigate changing this to a string or float
@@ -326,6 +349,8 @@ class MeasurementValue
   }
 }
 
+// TODO: allowed measurement units are changed for not empty check only
+/*
 enum MeasurementUnitValidationError { invalid }
 
 class MeasurementUnit
@@ -362,3 +387,4 @@ class MeasurementUnit
         : MeasurementUnitValidationError.invalid;
   }
 }
+*/

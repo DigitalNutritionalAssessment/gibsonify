@@ -1,9 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
-import 'package:gibsonify/recipe/models/recipe_ingredient.dart';
 import 'package:uuid/uuid.dart';
 import 'dart:convert';
 
+import 'recipe_ingredient.dart';
+
+// TODO: rename this file to recipe.dart instead of recipe_item.dart
 class Recipe extends Equatable {
   Recipe({
     this.recipeName = const RecipeName.pure(),
@@ -21,7 +23,7 @@ class Recipe extends Equatable {
         recipeType = json['recipeType'],
         recipeVolume = RecipeVolume.fromJson(json['recipeVolume']),
         ingredients = _jsonDecodeIngredients(json['ingredients']),
-        probes = jsonDecode(json['probes']),
+        probes = List<Map<String, dynamic>>.from(jsonDecode(json['probes'])),
         saved = json['saved'] == 'true' ? true : false;
 
   Map<String, dynamic> toJson() {
@@ -79,8 +81,8 @@ class Recipe extends Equatable {
 List<Ingredient> _jsonDecodeIngredients(jsonEncodedIngredients) {
   List<dynamic> partiallyDecodedIngredients =
       jsonDecode(jsonEncodedIngredients);
-  List<Ingredient> fullyDecodedFoodItems =
-      partiallyDecodedIngredients.map((e) => Ingredient.fromJson(e)).toList();
+  List<Ingredient> fullyDecodedFoodItems = List<Ingredient>.from(
+      partiallyDecodedIngredients.map((x) => Ingredient.fromJson(x)));
   return fullyDecodedFoodItems;
 }
 
