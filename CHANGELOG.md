@@ -15,7 +15,8 @@ All notable changes to this project will be documented in this file.
 - *(recipe)* Fix bug with probelist keys updating too frequently
 - *(recipe)* Fix issue with Bloc not updating for ingredient changes
 - *(recipe)* Implement PR comments
-- *(recipe)* Fixed bug that blocked new recipe state managementand refactored old code- *(No Category)* Pubspec confilct and merge dev branch
+- *(recipe)* Fixed bug that blocked new recipe state managementand refactored old code- *(No Category)* Recipes json method bug
+- *(No Category)* Pubspec confilct and merge dev branch
 - *(No Category)* Duplicate key error in collections screen
 - *(No Category)* Correct app name to start with a capital letter
 
@@ -30,6 +31,7 @@ All notable changes to this project will be documented in this file.
 - *(changelog)* Update
 - *(changelog)* Update
 - *(changelog)* Update
+- *(changelog)* Update
 - *(changelog)* Update to fix merge conflict
 - *(changelog)* Update
 - *(changelog)* Add changes
@@ -37,6 +39,7 @@ All notable changes to this project will be documented in this file.
 - *(changelog)* Update readme
 - *(changelog)* Update with further readme changes
 - *(changelog)* Update with fvm build and readme changes
+- *(collection)* Add todo about deleting async in bloc method
 - *(collection)* Add todo to change food item card method return values
 - *(collection)* Clean up todo comments and add new ones
 - *(collection)* Remove null check todo from first pass screen
@@ -105,7 +108,8 @@ All notable changes to this project will be documented in this file.
 - *(recipe)* Add preliminary recipe implementation
 - *(recipe)* Add logic for changing recipe/ingredient status
 - *(recipe)* Add navigation logic to enable recipe/ingredient editing
-- *(recipe)* Add rudimentary recipe form- *(No Category)* Add data layer and multiple collections
+- *(recipe)* Add rudimentary recipe form- *(No Category)* Integrate data layer, collections, recipes
+- *(No Category)* Add data layer and multiple collections
 - *(No Category)* Add generated json methods for recipes list
 - *(No Category)* Add home bloc
 - *(No Category)* Add manual json serialization to recipe models
