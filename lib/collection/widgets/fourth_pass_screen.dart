@@ -38,8 +38,10 @@ class FourthPassScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
-                  FloatingActionButton(
-                      child: const Icon(Icons.save),
+                  FloatingActionButton.extended(
+                      heroTag: null,
+                      label: const Text("Complete Collection"),
+                      icon: const Icon(Icons.check),
                       onPressed: () {
                         context.read<CollectionBloc>().add(GibsonsFormSaved());
                         context.read<HomeBloc>().add(GibsonsFormsLoaded());
