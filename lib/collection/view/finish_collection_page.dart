@@ -51,7 +51,8 @@ class FinishCollectionForm extends StatelessWidget {
       child: Column(
         children: const <Widget>[
           InterviewEndTimeInput(),
-          InterviewOutcomeInput()
+          InterviewOutcomeInput(),
+          CommentsInput()
         ],
       ),
     );
@@ -121,6 +122,31 @@ class InterviewOutcomeInput extends StatelessWidget {
                   .read<CollectionBloc>()
                   .add(InterviewOutcomeChanged(interviewOutcome: value ?? ''));
             });
+      },
+    );
+  }
+}
+
+class CommentsInput extends StatelessWidget {
+  const CommentsInput({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CollectionBloc, CollectionState>(
+      builder: (context, state) {
+        return TextFormField(
+          initialValue: state.gibsonsForm.comments.value,
+          decoration: const InputDecoration(
+              icon: Icon(Icons.comment),
+              labelText: 'Comments',
+              helperText: 'Any relevant extra information'),
+          onChanged: (value) {
+            context
+                .read<CollectionBloc>()
+                .add(CommentsChanged(comments: value));
+          },
+          textInputAction: TextInputAction.next,
+        );
       },
     );
   }

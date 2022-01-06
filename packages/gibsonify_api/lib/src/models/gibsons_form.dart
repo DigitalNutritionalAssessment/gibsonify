@@ -19,6 +19,7 @@ class GibsonsForm extends Equatable {
       this.interviewStartTime = const InterviewStartTime.pure(),
       this.interviewEndTime = const InterviewEndTime.pure(),
       this.interviewOutcome = const InterviewOutcome.pure(),
+      this.comments = const Comments.pure(),
       this.foodItems = const <FoodItem>[]})
       : id = id ?? const Uuid().v4();
 
@@ -32,6 +33,7 @@ class GibsonsForm extends Equatable {
   final InterviewStartTime interviewStartTime;
   final InterviewEndTime interviewEndTime;
   final InterviewOutcome interviewOutcome;
+  final Comments comments;
   final List<FoodItem> foodItems;
 
   // TODO: add other fields from physical Gibson's form:
@@ -56,6 +58,7 @@ class GibsonsForm extends Equatable {
             InterviewStartTime.fromJson(json['interviewStartTime']),
         interviewEndTime = InterviewEndTime.fromJson(json['interviewEndTime']),
         interviewOutcome = InterviewOutcome.fromJson(json['interviewOutcome']),
+        comments = Comments.fromJson(json['comments']),
         foodItems = _jsonDecodeFoodItems(json['foodItems']);
 
   Map<String, dynamic> toJson() {
@@ -70,6 +73,7 @@ class GibsonsForm extends Equatable {
     data['interviewStartTime'] = interviewStartTime.toJson();
     data['interviewEndTime'] = interviewEndTime.toJson();
     data['interviewOutcome'] = interviewOutcome.toJson();
+    data['comments'] = comments.toJson();
     data['foodItems'] = jsonEncode(foodItems); // This calls toJson on each one
     return data;
   }
@@ -85,6 +89,7 @@ class GibsonsForm extends Equatable {
       InterviewStartTime? interviewStartTime,
       InterviewEndTime? interviewEndTime,
       InterviewOutcome? interviewOutcome,
+      Comments? comments,
       List<FoodItem>? foodItems}) {
     return GibsonsForm(
         id: id ?? this.id,
@@ -97,6 +102,7 @@ class GibsonsForm extends Equatable {
         interviewStartTime: interviewStartTime ?? this.interviewStartTime,
         interviewEndTime: interviewEndTime ?? this.interviewEndTime,
         interviewOutcome: interviewOutcome ?? this.interviewOutcome,
+        comments: comments ?? this.comments,
         foodItems: foodItems ?? this.foodItems);
   }
 
@@ -113,6 +119,7 @@ class GibsonsForm extends Equatable {
         'Interview Start Time: $interviewStartTime\n'
         'Interview End Time: $interviewEndTime\n'
         'Interview Outcome: $interviewOutcome\n'
+        'Comments: $comments\n'
         'Food Items: $foodItems'
         '\n *** \n';
   }
@@ -129,6 +136,7 @@ class GibsonsForm extends Equatable {
         interviewStartTime,
         interviewEndTime,
         interviewOutcome,
+        comments,
         foodItems
       ];
 }
@@ -389,5 +397,27 @@ class InterviewOutcome
     return _allowedRecallDay.contains(_lowerCaseValue)
         ? null
         : InterviewOutcomeValidationError.invalid;
+  }
+}
+
+enum CommentsValidationError { invalid }
+
+class Comments extends FormzInput<String, CommentsValidationError> {
+  const Comments.pure() : super.pure('');
+  const Comments.dirty([String value = '']) : super.dirty(value);
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['value'] = value;
+    data['pure'] = pure.toString();
+    return data;
+  }
+
+  Comments.fromJson(Map<String, dynamic> json) : super.dirty(json['value']);
+
+  @override
+  CommentsValidationError? validator(String? value) {
+    // TODO: Add validation, currently only checks if not empty
+    return value?.isNotEmpty == true ? null : CommentsValidationError.invalid;
   }
 }

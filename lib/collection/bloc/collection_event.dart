@@ -88,6 +88,15 @@ class InterviewOutcomeChanged extends CollectionEvent {
   List<Object> get props => [interviewOutcome];
 }
 
+class CommentsChanged extends CollectionEvent {
+  final String comments;
+
+  const CommentsChanged({required this.comments});
+
+  @override
+  List<Object> get props => [comments];
+}
+
 class FoodItemAdded extends CollectionEvent {}
 
 class FoodItemDeleted extends CollectionEvent {
