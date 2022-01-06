@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:formz/formz.dart';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:gibsonify_repository/gibsonify_repository.dart';
@@ -21,6 +20,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     on<RecallDayChanged>(_onRecallDayChanged);
     on<InterviewDateChanged>(_onInterviewDateChanged);
     on<InterviewStartTimeChanged>(_onInterviewStartTimeChanged);
+    on<InterviewEndTimeChanged>(_onInterviewEndTimeChanged);
     on<FoodItemAdded>(_onFoodItemAdded);
     on<FoodItemDeleted>(_onFoodItemDeleted);
     on<FoodItemNameChanged>(_onFoodItemNameChanged);
@@ -99,6 +99,15 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
         InterviewStartTime.dirty(event.interviewStartTime);
     GibsonsForm changedGibsonsForm =
         state.gibsonsForm.copyWith(interviewStartTime: interviewStartTime);
+
+    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+  }
+
+  void _onInterviewEndTimeChanged(
+      InterviewEndTimeChanged event, Emitter<CollectionState> emit) {
+    final interviewEndTime = InterviewEndTime.dirty(event.interviewEndTime);
+    GibsonsForm changedGibsonsForm =
+        state.gibsonsForm.copyWith(interviewEndTime: interviewEndTime);
 
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }

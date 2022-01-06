@@ -16,6 +16,7 @@ class GibsonsForm extends Equatable {
       this.recallDay = const RecallDay.pure(),
       this.interviewDate = const InterviewDate.pure(),
       this.interviewStartTime = const InterviewStartTime.pure(),
+      this.interviewEndTime = const InterviewEndTime.pure(),
       this.foodItems = const <FoodItem>[]})
       : id = id ?? const Uuid().v4();
 
@@ -27,13 +28,13 @@ class GibsonsForm extends Equatable {
   final RecallDay recallDay;
   final InterviewDate interviewDate;
   final InterviewStartTime interviewStartTime;
+  final InterviewEndTime interviewEndTime;
   final List<FoodItem> foodItems;
 
   // TODO: add other fields from physical Gibson's form:
   // end of interview, did complete interview in one visit? (bool),
   // date of second visit, reason for second visit, final outcome of interview,
   // reason for incomplete interview, supervisor comments.
-  // And also ask ICRISAT about date of sensitization visit and recall day code.
 
   // TODO: implement code generation JSON serialization using json_serializable
   // and/or json_annotation
@@ -50,6 +51,7 @@ class GibsonsForm extends Equatable {
         interviewDate = InterviewDate.fromJson(json['interviewDate']),
         interviewStartTime =
             InterviewStartTime.fromJson(json['interviewStartTime']),
+        interviewEndTime = InterviewEndTime.fromJson(json['interviewEndTime']),
         foodItems = _jsonDecodeFoodItems(json['foodItems']);
 
   Map<String, dynamic> toJson() {
@@ -62,6 +64,7 @@ class GibsonsForm extends Equatable {
     data['recallDay'] = recallDay.toJson();
     data['interviewDate'] = interviewDate.toJson();
     data['interviewStartTime'] = interviewStartTime.toJson();
+    data['interviewEndTime'] = interviewEndTime.toJson();
     data['foodItems'] = jsonEncode(foodItems); // This calls toJson on each one
     return data;
   }
@@ -75,6 +78,7 @@ class GibsonsForm extends Equatable {
       RecallDay? recallDay,
       InterviewDate? interviewDate,
       InterviewStartTime? interviewStartTime,
+      InterviewEndTime? interviewEndTime,
       List<FoodItem>? foodItems}) {
     return GibsonsForm(
         id: id ?? this.id,
@@ -83,8 +87,9 @@ class GibsonsForm extends Equatable {
         respondentTelNumber: respondentTelNumber ?? this.respondentTelNumber,
         sensitizationDate: sensitizationDate ?? this.sensitizationDate,
         recallDay: recallDay ?? this.recallDay,
-        interviewStartTime: interviewStartTime ?? this.interviewStartTime,
         interviewDate: interviewDate ?? this.interviewDate,
+        interviewStartTime: interviewStartTime ?? this.interviewStartTime,
+        interviewEndTime: interviewEndTime ?? this.interviewEndTime,
         foodItems: foodItems ?? this.foodItems);
   }
 
@@ -99,6 +104,7 @@ class GibsonsForm extends Equatable {
         'Recall Day: $recallDay\n'
         'Interview Date: $interviewDate\n'
         'Interview Start Time: $interviewStartTime\n'
+        'Interview End Time: $interviewEndTime\n'
         'Food Items: $foodItems'
         '\n *** \n';
   }
@@ -113,6 +119,7 @@ class GibsonsForm extends Equatable {
         recallDay,
         interviewDate,
         interviewStartTime,
+        interviewEndTime,
         foodItems
       ];
 }
@@ -311,5 +318,31 @@ class InterviewStartTime
     return value?.isNotEmpty == true
         ? null
         : InterviewStartTimeValidationError.invalid;
+  }
+}
+
+enum InterviewEndTimeValidationError { invalid }
+
+class InterviewEndTime
+    extends FormzInput<String, InterviewEndTimeValidationError> {
+  const InterviewEndTime.pure() : super.pure('');
+  const InterviewEndTime.dirty([String value = '']) : super.dirty(value);
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['value'] = value;
+    data['pure'] = pure.toString();
+    return data;
+  }
+
+  InterviewEndTime.fromJson(Map<String, dynamic> json)
+      : super.dirty(json['value']);
+
+  @override
+  InterviewEndTimeValidationError? validator(String? value) {
+    // TODO: Add validation, currently only checks if not empty
+    return value?.isNotEmpty == true
+        ? null
+        : InterviewEndTimeValidationError.invalid;
   }
 }

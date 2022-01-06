@@ -15,6 +15,7 @@ class PageRouter {
   static const secondPassHelp = '/secondpasshelp';
   static const thirdPassHelp = '/thirdpasshelp';
   static const chooseRecipe = '/chooserecipe';
+  static const finishCollection = '/finishcollection';
 
   static Route route(RouteSettings routeSettings) {
     switch (routeSettings.name) {
@@ -50,6 +51,8 @@ class PageRouter {
         var assignedFoodItemId = routeSettings.arguments as String?;
         return _buildRoute(
             ChooseRecipePage(assignedFoodItemId: assignedFoodItemId));
+      case finishCollection:
+        return _buildRoute(const FinishCollectionPage());
       default:
         throw Exception('Page does not exist!');
     }
