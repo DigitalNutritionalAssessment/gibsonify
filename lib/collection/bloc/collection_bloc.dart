@@ -30,6 +30,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     on<FoodItemMeasurementValueChanged>(_onFoodItemMeasurementValueChanged);
     on<FoodItemMeasurementUnitChanged>(_onFoodItemMeasurementUnitChanged);
     on<FoodItemConfirmationChanged>(_onFoodItemConfirmationChanged);
+    on<FoodItemRecipeChanged>(_onFoodItemRecipeChanged);
     on<GibsonsFormSaved>(_onGibsonsFormSaved);
     on<GibsonsFormProvided>(_onGibsonsFormProvided);
     on<GibsonsFormCreated>(_onGibsonsFormCreated);
@@ -333,6 +334,28 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
         state.gibsonsForm.copyWith(foodItems: foodItems);
 
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+  }
+
+  void _onFoodItemRecipeChanged(
+      FoodItemRecipeChanged event, Emitter<CollectionState> emit) {
+    List<FoodItem> foodItems = List.from(state.gibsonsForm.foodItems);
+
+    int changedFoodItemIndex =
+        foodItems.indexWhere((item) => item.id == event.foodItemId);
+
+    if (changedFoodItemIndex >= 0) {
+      FoodItem foodItem = foodItems[changedFoodItemIndex]
+          .copyWith(recipe: event.foodItemRecipe, confirmed: false);
+      foodItems.removeAt(changedFoodItemIndex);
+      foodItems.insert(changedFoodItemIndex, foodItem);
+      GibsonsForm changedGibsonsForm =
+          state.gibsonsForm.copyWith(foodItems: foodItems);
+      emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+    } else {
+      // TODO: handle item not found case
+      print('food item not found!'); // TODO: delete
+      emit(state);
+    }
   }
 
   // or Future<void> ?

@@ -60,6 +60,19 @@ class FourthPassFoodItemCard extends StatelessWidget {
             ),
             TextFormField(
               readOnly: true,
+              initialValue: foodItem.recipe?.recipeName.value ?? '',
+              decoration: InputDecoration(
+                icon: const Icon(Icons.bookmark),
+                labelText: 'Food recipe',
+                helperText: 'What is the recipe of this food',
+                // TODO:
+                // errorText: foodItem.preparationMethod.invalid
+                //     ? 'Select the food\'s preparation method'
+                //     : null,
+              ),
+            ),
+            TextFormField(
+              readOnly: true,
               initialValue: foodItem.measurementMethod.value,
               decoration: InputDecoration(
                 icon: const Icon(Icons.monitor_weight_outlined),

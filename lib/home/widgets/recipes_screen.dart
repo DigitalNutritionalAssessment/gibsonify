@@ -6,13 +6,18 @@ import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class RecipesScreen extends StatelessWidget {
-  const RecipesScreen({Key? key}) : super(key: key);
+  final String? assignedFoodItemId;
+
+  const RecipesScreen({Key? key, this.assignedFoodItemId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
       return Scaffold(
-          appBar: AppBar(title: const Text('Recipes')),
+          appBar: AppBar(
+              title: assignedFoodItemId == null
+                  ? const Text('Recipes')
+                  : const Text('Choose a Recipe')),
           body: ListView.builder(
               padding: const EdgeInsets.all(2.0),
               itemCount: state.recipes.length,
@@ -43,7 +48,7 @@ class RecipesScreen extends StatelessWidget {
                         ? const Icon(Icons.done)
                         : const Icon(Icons.rotate_left_rounded),
                     onTap: () => Navigator.pushNamed(context, PageRouter.recipe,
-                        arguments: index),
+                        arguments: [index, assignedFoodItemId]),
                   )),
                 );
               }),
@@ -59,7 +64,7 @@ class RecipesScreen extends StatelessWidget {
                           context.read<RecipeBloc>().add(
                               const RecipeAdded(recipeType: "Standard Recipe")),
                           Navigator.pushNamed(context, PageRouter.recipe,
-                              arguments: state.recipes.length),
+                              arguments: [state.recipes.length, null]),
                         }),
                 const SizedBox(
                   height: 10,
@@ -72,7 +77,7 @@ class RecipesScreen extends StatelessWidget {
                           context.read<RecipeBloc>().add(const RecipeAdded(
                               recipeType: "Non-standard Recipe")),
                           Navigator.pushNamed(context, PageRouter.recipe,
-                              arguments: state.recipes.length),
+                              arguments: [state.recipes.length, null]),
                         })
               ]));
     });
