@@ -47,6 +47,7 @@ class SensitizationForm extends StatelessWidget {
           RespondentNameInput(),
           RespondentTelNumberInput(),
           SensitizationDateInput(),
+          RecallDayInput(),
           InterviewDateInput(),
           InterviewStartTimeInput()
         ],
@@ -177,6 +178,47 @@ class SensitizationDateInput extends StatelessWidget {
                 SensitizationDateChanged(sensitizationDate: formattedDate));
           },
         );
+      },
+    );
+  }
+}
+
+class RecallDayInput extends StatelessWidget {
+  const RecallDayInput({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    const List<DropdownMenuItem<String>> dropdownMenuItems = [
+      DropdownMenuItem(child: Text(''), value: ''),
+      DropdownMenuItem(child: Text('Normal day'), value: 'Normal day'),
+      DropdownMenuItem(child: Text('Sick day'), value: 'Sick day'),
+      DropdownMenuItem(child: Text('Fasting day'), value: 'Fasting day'),
+      DropdownMenuItem(
+          child: Text('Festival/religious day'),
+          value: 'Festival/religious day'),
+      DropdownMenuItem(
+          child: Text('Parties/functions day'), value: 'Parties/functions day'),
+      DropdownMenuItem(
+          child: Text('Visitors/relatives'), value: 'Visitors/relatives'),
+      DropdownMenuItem(child: Text('Other'), value: 'Other'),
+    ];
+    return BlocBuilder<CollectionBloc, CollectionState>(
+      builder: (context, state) {
+        return DropdownButtonFormField(
+            value: state.gibsonsForm.recallDay.value,
+            decoration: InputDecoration(
+                icon: const Icon(Icons.food_bank_outlined),
+                labelText: 'Recall Day',
+                helperText: 'Type of the recall day',
+                errorText: state.gibsonsForm.recallDay.invalid
+                    ? 'Select recall day type'
+                    : null),
+            items: dropdownMenuItems,
+            onChanged: (String? value) {
+              context
+                  .read<CollectionBloc>()
+                  .add(RecallDayChanged(recallDay: value ?? ''));
+            });
       },
     );
   }

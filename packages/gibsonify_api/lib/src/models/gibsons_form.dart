@@ -13,6 +13,7 @@ class GibsonsForm extends Equatable {
       this.respondentName = const RespondentName.pure(),
       this.respondentTelNumber = const RespondentTelNumber.pure(),
       this.sensitizationDate = const SensitizationDate.pure(),
+      this.recallDay = const RecallDay.pure(),
       this.interviewDate = const InterviewDate.pure(),
       this.interviewStartTime = const InterviewStartTime.pure(),
       this.foodItems = const <FoodItem>[]})
@@ -23,6 +24,7 @@ class GibsonsForm extends Equatable {
   final RespondentName respondentName;
   final RespondentTelNumber respondentTelNumber;
   final SensitizationDate sensitizationDate;
+  final RecallDay recallDay;
   final InterviewDate interviewDate;
   final InterviewStartTime interviewStartTime;
   final List<FoodItem> foodItems;
@@ -44,6 +46,7 @@ class GibsonsForm extends Equatable {
             RespondentTelNumber.fromJson(json['respondentTelNumber']),
         sensitizationDate =
             SensitizationDate.fromJson(json['sensitizationDate']),
+        recallDay = RecallDay.fromJson(json['recallDay']),
         interviewDate = InterviewDate.fromJson(json['interviewDate']),
         interviewStartTime =
             InterviewStartTime.fromJson(json['interviewStartTime']),
@@ -56,6 +59,7 @@ class GibsonsForm extends Equatable {
     data['respondentName'] = respondentName.toJson();
     data['respondentTelNumber'] = respondentTelNumber.toJson();
     data['sensitizationDate'] = sensitizationDate.toJson();
+    data['recallDay'] = recallDay.toJson();
     data['interviewDate'] = interviewDate.toJson();
     data['interviewStartTime'] = interviewStartTime.toJson();
     data['foodItems'] = jsonEncode(foodItems); // This calls toJson on each one
@@ -68,6 +72,7 @@ class GibsonsForm extends Equatable {
       RespondentName? respondentName,
       RespondentTelNumber? respondentTelNumber,
       SensitizationDate? sensitizationDate,
+      RecallDay? recallDay,
       InterviewDate? interviewDate,
       InterviewStartTime? interviewStartTime,
       List<FoodItem>? foodItems}) {
@@ -77,6 +82,7 @@ class GibsonsForm extends Equatable {
         respondentName: respondentName ?? this.respondentName,
         respondentTelNumber: respondentTelNumber ?? this.respondentTelNumber,
         sensitizationDate: sensitizationDate ?? this.sensitizationDate,
+        recallDay: recallDay ?? this.recallDay,
         interviewStartTime: interviewStartTime ?? this.interviewStartTime,
         interviewDate: interviewDate ?? this.interviewDate,
         foodItems: foodItems ?? this.foodItems);
@@ -90,6 +96,7 @@ class GibsonsForm extends Equatable {
         'Repondent Name: $respondentName\n'
         'Respondent Tel Number: $respondentTelNumber\n'
         'Sensitization Date: $sensitizationDate\n'
+        'Recall Day: $recallDay\n'
         'Interview Date: $interviewDate\n'
         'Interview Start Time: $interviewStartTime\n'
         'Food Items: $foodItems'
@@ -103,6 +110,7 @@ class GibsonsForm extends Equatable {
         respondentName,
         respondentTelNumber,
         sensitizationDate,
+        recallDay,
         interviewDate,
         interviewStartTime,
         foodItems
@@ -216,6 +224,42 @@ class SensitizationDate
     return value?.isNotEmpty == true
         ? null
         : SensitizationDateValidationError.invalid;
+  }
+}
+
+enum RecallDayValidationError { invalid }
+
+class RecallDay extends FormzInput<String, RecallDayValidationError> {
+  const RecallDay.pure() : super.pure('');
+  const RecallDay.dirty([String value = '']) : super.dirty(value);
+
+  // TODO: update when accepting custom strings for 'other'
+  final _allowedRecallDay = const [
+    'normal day',
+    'sick day',
+    'fasting day',
+    'festival/religious day',
+    'parties/functions day',
+    'visitors/relatives',
+    'other'
+  ];
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['value'] = value;
+    data['pure'] = pure.toString();
+    return data;
+  }
+
+  RecallDay.fromJson(Map<String, dynamic> json) : super.dirty(json['value']);
+
+  @override
+  RecallDayValidationError? validator(String? value) {
+    final _lowerCaseValue = (value ?? '').toLowerCase();
+    // TODO: refactor with a better null check
+    return _allowedRecallDay.contains(_lowerCaseValue)
+        ? null
+        : RecallDayValidationError.invalid;
   }
 }
 
