@@ -26,7 +26,7 @@ class FirstPassFoodItemCard extends StatelessWidget {
           child: Text('Afternoon (12:01 pm - 4:00 pm)'), value: 'Afternoon'),
       DropdownMenuItem(
           child: Text('Evening (4:01 pm - 7:00 pm)'), value: 'Evening'),
-      DropdownMenuItem(child: Text('Night (7:01 pm-3:00 am'), value: 'Night')
+      DropdownMenuItem(child: Text('Night (7:01 pm-3:00 am)'), value: 'Night')
     ];
 
     return Card(
