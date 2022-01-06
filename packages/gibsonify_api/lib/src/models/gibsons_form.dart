@@ -193,31 +193,6 @@ class RespondentTelNumber
   }
 }
 
-enum InterviewDateValidationError { invalid }
-
-class InterviewDate extends FormzInput<String, InterviewDateValidationError> {
-  const InterviewDate.pure() : super.pure('');
-  const InterviewDate.dirty([String value = '']) : super.dirty(value);
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['value'] = value;
-    data['pure'] = pure.toString();
-    return data;
-  }
-
-  InterviewDate.fromJson(Map<String, dynamic> json)
-      : super.dirty(json['value']);
-
-  @override
-  InterviewDateValidationError? validator(String? value) {
-    // TODO: Add validation, currently only checks if not empty
-    return value?.isNotEmpty == true
-        ? null
-        : InterviewDateValidationError.invalid;
-  }
-}
-
 enum SensitizationDateValidationError { invalid }
 
 class SensitizationDate
@@ -241,6 +216,31 @@ class SensitizationDate
     return value?.isNotEmpty == true
         ? null
         : SensitizationDateValidationError.invalid;
+  }
+}
+
+enum InterviewDateValidationError { invalid }
+
+class InterviewDate extends FormzInput<String, InterviewDateValidationError> {
+  const InterviewDate.pure() : super.pure('');
+  const InterviewDate.dirty([String value = '']) : super.dirty(value);
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['value'] = value;
+    data['pure'] = pure.toString();
+    return data;
+  }
+
+  InterviewDate.fromJson(Map<String, dynamic> json)
+      : super.dirty(json['value']);
+
+  @override
+  InterviewDateValidationError? validator(String? value) {
+    // TODO: Add validation, currently only checks if not empty
+    return value?.isNotEmpty == true
+        ? null
+        : InterviewDateValidationError.invalid;
   }
 }
 
