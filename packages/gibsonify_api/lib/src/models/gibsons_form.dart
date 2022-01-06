@@ -12,9 +12,9 @@ class GibsonsForm extends Equatable {
       this.householdId = const HouseholdId.pure(),
       this.respondentName = const RespondentName.pure(),
       this.respondentTelNumber = const RespondentTelNumber.pure(),
+      this.sensitizationDate = const SensitizationDate.pure(),
       this.interviewDate = const InterviewDate.pure(),
       this.interviewStartTime = const InterviewStartTime.pure(),
-      this.sensitizationStatus = FormzStatus.pure,
       this.foodItems = const <FoodItem>[]})
       : id = id ?? const Uuid().v4();
 
@@ -22,10 +22,9 @@ class GibsonsForm extends Equatable {
   final HouseholdId householdId;
   final RespondentName respondentName;
   final RespondentTelNumber respondentTelNumber;
+  final SensitizationDate sensitizationDate;
   final InterviewDate interviewDate;
   final InterviewStartTime interviewStartTime;
-  final FormzStatus sensitizationStatus;
-
   final List<FoodItem> foodItems;
 
   // TODO: add other fields from physical Gibson's form:
@@ -43,12 +42,11 @@ class GibsonsForm extends Equatable {
         respondentName = RespondentName.fromJson(json['respondentName']),
         respondentTelNumber =
             RespondentTelNumber.fromJson(json['respondentTelNumber']),
+        sensitizationDate =
+            SensitizationDate.fromJson(json['sensitizationDate']),
         interviewDate = InterviewDate.fromJson(json['interviewDate']),
         interviewStartTime =
             InterviewStartTime.fromJson(json['interviewStartTime']),
-        sensitizationStatus = json['sensitizationStatus'] == 'FormzStatus.valid'
-            ? FormzStatus.valid
-            : FormzStatus.invalid,
         foodItems = _jsonDecodeFoodItems(json['foodItems']);
 
   Map<String, dynamic> toJson() {
@@ -57,9 +55,9 @@ class GibsonsForm extends Equatable {
     data['householdId'] = householdId.toJson();
     data['respondentName'] = respondentName.toJson();
     data['respondentTelNumber'] = respondentTelNumber.toJson();
+    data['sensitizationDate'] = sensitizationDate.toJson();
     data['interviewDate'] = interviewDate.toJson();
     data['interviewStartTime'] = interviewStartTime.toJson();
-    data['sensitizationStatus'] = sensitizationStatus.toString();
     data['foodItems'] = jsonEncode(foodItems); // This calls toJson on each one
     return data;
   }
@@ -69,18 +67,18 @@ class GibsonsForm extends Equatable {
       HouseholdId? householdId,
       RespondentName? respondentName,
       RespondentTelNumber? respondentTelNumber,
+      SensitizationDate? sensitizationDate,
       InterviewDate? interviewDate,
       InterviewStartTime? interviewStartTime,
-      FormzStatus? sensitizationStatus,
       List<FoodItem>? foodItems}) {
     return GibsonsForm(
         id: id ?? this.id,
         householdId: householdId ?? this.householdId,
         respondentName: respondentName ?? this.respondentName,
         respondentTelNumber: respondentTelNumber ?? this.respondentTelNumber,
+        sensitizationDate: sensitizationDate ?? this.sensitizationDate,
         interviewStartTime: interviewStartTime ?? this.interviewStartTime,
         interviewDate: interviewDate ?? this.interviewDate,
-        sensitizationStatus: sensitizationStatus ?? this.sensitizationStatus,
         foodItems: foodItems ?? this.foodItems);
   }
 
@@ -91,9 +89,9 @@ class GibsonsForm extends Equatable {
         'HouseholdID: $householdId\n'
         'Repondent Name: $respondentName\n'
         'Respondent Tel Number: $respondentTelNumber\n'
+        'Sensitization Date: $sensitizationDate\n'
         'Interview Date: $interviewDate\n'
         'Interview Start Time: $interviewStartTime\n'
-        'Sensitization Status: $sensitizationStatus\n'
         'Food Items: $foodItems'
         '\n *** \n';
   }
@@ -104,9 +102,9 @@ class GibsonsForm extends Equatable {
         householdId,
         respondentName,
         respondentTelNumber,
+        sensitizationDate,
         interviewDate,
         interviewStartTime,
-        sensitizationStatus,
         foodItems
       ];
 }
@@ -217,6 +215,32 @@ class InterviewDate extends FormzInput<String, InterviewDateValidationError> {
     return value?.isNotEmpty == true
         ? null
         : InterviewDateValidationError.invalid;
+  }
+}
+
+enum SensitizationDateValidationError { invalid }
+
+class SensitizationDate
+    extends FormzInput<String, SensitizationDateValidationError> {
+  const SensitizationDate.pure() : super.pure('');
+  const SensitizationDate.dirty([String value = '']) : super.dirty(value);
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['value'] = value;
+    data['pure'] = pure.toString();
+    return data;
+  }
+
+  SensitizationDate.fromJson(Map<String, dynamic> json)
+      : super.dirty(json['value']);
+
+  @override
+  SensitizationDateValidationError? validator(String? value) {
+    // TODO: Add validation, currently only checks if not empty
+    return value?.isNotEmpty == true
+        ? null
+        : SensitizationDateValidationError.invalid;
   }
 }
 

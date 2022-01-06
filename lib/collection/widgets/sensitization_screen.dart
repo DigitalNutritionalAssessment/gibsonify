@@ -46,6 +46,7 @@ class SensitizationForm extends StatelessWidget {
           HouseholdIdInput(),
           RespondentNameInput(),
           RespondentTelNumberInput(),
+          SensitizationDateInput(),
           InterviewDateInput(),
           InterviewStartTimeInput()
         ],
@@ -145,6 +146,42 @@ class RespondentTelNumberInput extends StatelessWidget {
   }
 }
 
+class SensitizationDateInput extends StatelessWidget {
+  const SensitizationDateInput({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CollectionBloc, CollectionState>(
+      builder: (context, state) {
+        return TextFormField(
+          readOnly: true,
+          key: UniqueKey(),
+          initialValue: state.gibsonsForm.sensitizationDate.value,
+          decoration: InputDecoration(
+            icon: const Icon(Icons.calendar_today),
+            labelText: 'Sensitization Date',
+            helperText: 'Date of sensitization visit',
+            errorText: state.gibsonsForm.sensitizationDate.invalid
+                ? 'Choose the sensitization date'
+                : null,
+          ),
+          onTap: () async {
+            var date = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(1900),
+                lastDate: DateTime(2100));
+            var formattedDate =
+                date == null ? '' : DateFormat('yyyy-MM-dd').format(date);
+            context.read<CollectionBloc>().add(
+                SensitizationDateChanged(sensitizationDate: formattedDate));
+          },
+        );
+      },
+    );
+  }
+}
+
 class InterviewDateInput extends StatelessWidget {
   const InterviewDateInput({Key? key}) : super(key: key);
 
@@ -154,7 +191,7 @@ class InterviewDateInput extends StatelessWidget {
       builder: (context, state) {
         return TextFormField(
           readOnly: true,
-          key: Key(state.gibsonsForm.interviewDate.value),
+          key: UniqueKey(),
           initialValue: state.gibsonsForm.interviewDate.value,
           decoration: InputDecoration(
             icon: const Icon(Icons.calendar_today),
@@ -191,7 +228,7 @@ class InterviewStartTimeInput extends StatelessWidget {
       builder: (context, state) {
         return TextFormField(
           readOnly: true,
-          key: Key(state.gibsonsForm.interviewStartTime.value),
+          key: UniqueKey(),
           initialValue: state.gibsonsForm.interviewStartTime.value,
           decoration: InputDecoration(
             icon: const Icon(Icons.access_time),
@@ -214,11 +251,6 @@ class InterviewStartTimeInput extends StatelessWidget {
   }
 }
 
-
-// TODO: Add a "Tick mark" FloatingActionButton to the bottom right of Scaffold
-// that checks if the all the fields are completed
-// (i.e. checks state.sensitizationStatus.isValid) and allows to go to first
-// pass if true
 
 // Or perhaps make the bottom navigation bar be a part of the state and only 
 // allow to pass to next one if previous one is complete

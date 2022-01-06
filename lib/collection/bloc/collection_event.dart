@@ -34,6 +34,15 @@ class RespondentTelNumberChanged extends CollectionEvent {
   List<Object> get props => [respondentTelNumber];
 }
 
+class SensitizationDateChanged extends CollectionEvent {
+  final String sensitizationDate;
+
+  const SensitizationDateChanged({required this.sensitizationDate});
+
+  @override
+  List<Object> get props => [sensitizationDate];
+}
+
 class InterviewDateChanged extends CollectionEvent {
   final String interviewDate;
 

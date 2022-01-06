@@ -17,6 +17,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     on<HouseholdIdChanged>(_onHouseholdIdChanged);
     on<RespondentNameChanged>(_onRespondentNameChanged);
     on<RespondentTelNumberChanged>(_onRespondentTelNumberChanged);
+    on<SensitizationDateChanged>(_onSensitizationDateChanged);
     on<InterviewDateChanged>(_onInterviewDateChanged);
     on<InterviewStartTimeChanged>(_onInterviewStartTimeChanged);
     on<FoodItemAdded>(_onFoodItemAdded);
@@ -39,16 +40,8 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
   void _onHouseholdIdChanged(
       HouseholdIdChanged event, Emitter<CollectionState> emit) {
     final householdId = HouseholdId.dirty(event.householdId);
-    GibsonsForm changedGibsonsForm = state.gibsonsForm.copyWith(
-        householdId: householdId,
-        sensitizationStatus: Formz.validate([
-          householdId,
-          state.gibsonsForm.respondentName,
-          state.gibsonsForm.respondentTelNumber,
-          state.gibsonsForm.interviewDate,
-          state.gibsonsForm.interviewStartTime
-        ]) // TODO: validate other sensitization fields once added
-        );
+    GibsonsForm changedGibsonsForm =
+        state.gibsonsForm.copyWith(householdId: householdId);
 
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }
@@ -56,15 +49,8 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
   void _onRespondentNameChanged(
       RespondentNameChanged event, Emitter<CollectionState> emit) {
     final respondentName = RespondentName.dirty(event.respondentName);
-    GibsonsForm changedGibsonsForm = state.gibsonsForm.copyWith(
-        respondentName: respondentName,
-        sensitizationStatus: Formz.validate([
-          state.gibsonsForm.householdId,
-          respondentName,
-          state.gibsonsForm.respondentTelNumber,
-          state.gibsonsForm.interviewDate,
-          state.gibsonsForm.interviewStartTime
-        ]));
+    GibsonsForm changedGibsonsForm =
+        state.gibsonsForm.copyWith(respondentName: respondentName);
 
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }
@@ -73,15 +59,17 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
       RespondentTelNumberChanged event, Emitter<CollectionState> emit) {
     final respondentTelNumber =
         RespondentTelNumber.dirty(event.respondentTelNumber);
-    GibsonsForm changedGibsonsForm = state.gibsonsForm.copyWith(
-        respondentTelNumber: respondentTelNumber,
-        sensitizationStatus: Formz.validate([
-          state.gibsonsForm.householdId,
-          state.gibsonsForm.respondentName,
-          respondentTelNumber,
-          state.gibsonsForm.interviewDate,
-          state.gibsonsForm.interviewStartTime
-        ]));
+    GibsonsForm changedGibsonsForm =
+        state.gibsonsForm.copyWith(respondentTelNumber: respondentTelNumber);
+
+    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+  }
+
+  void _onSensitizationDateChanged(
+      SensitizationDateChanged event, Emitter<CollectionState> emit) {
+    final sensitizationDate = SensitizationDate.dirty(event.sensitizationDate);
+    GibsonsForm changedGibsonsForm =
+        state.gibsonsForm.copyWith(sensitizationDate: sensitizationDate);
 
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }
@@ -89,15 +77,8 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
   void _onInterviewDateChanged(
       InterviewDateChanged event, Emitter<CollectionState> emit) {
     final interviewDate = InterviewDate.dirty(event.interviewDate);
-    GibsonsForm changedGibsonsForm = state.gibsonsForm.copyWith(
-        interviewDate: interviewDate,
-        sensitizationStatus: Formz.validate([
-          state.gibsonsForm.householdId,
-          state.gibsonsForm.respondentName,
-          state.gibsonsForm.respondentTelNumber,
-          interviewDate,
-          state.gibsonsForm.interviewStartTime
-        ]));
+    GibsonsForm changedGibsonsForm =
+        state.gibsonsForm.copyWith(interviewDate: interviewDate);
 
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }
@@ -106,15 +87,8 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
       InterviewStartTimeChanged event, Emitter<CollectionState> emit) {
     final interviewStartTime =
         InterviewStartTime.dirty(event.interviewStartTime);
-    GibsonsForm changedGibsonsForm = state.gibsonsForm.copyWith(
-        interviewStartTime: interviewStartTime,
-        sensitizationStatus: Formz.validate([
-          state.gibsonsForm.householdId,
-          state.gibsonsForm.respondentName,
-          state.gibsonsForm.respondentTelNumber,
-          state.gibsonsForm.interviewDate,
-          interviewStartTime
-        ]));
+    GibsonsForm changedGibsonsForm =
+        state.gibsonsForm.copyWith(interviewStartTime: interviewStartTime);
 
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }
