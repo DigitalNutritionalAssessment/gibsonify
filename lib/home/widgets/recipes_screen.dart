@@ -64,7 +64,10 @@ class RecipesScreen extends StatelessWidget {
                           context.read<RecipeBloc>().add(
                               const RecipeAdded(recipeType: "Standard Recipe")),
                           Navigator.pushNamed(context, PageRouter.recipe,
-                              arguments: [state.recipes.length, null]),
+                              arguments: [
+                                state.recipes.length,
+                                assignedFoodItemId
+                              ]),
                         }),
                 const SizedBox(
                   height: 10,
@@ -77,7 +80,10 @@ class RecipesScreen extends StatelessWidget {
                           context.read<RecipeBloc>().add(const RecipeAdded(
                               recipeType: "Non-standard Recipe")),
                           Navigator.pushNamed(context, PageRouter.recipe,
-                              arguments: [state.recipes.length, null]),
+                              arguments: [
+                                state.recipes.length,
+                                assignedFoodItemId
+                              ]),
                         })
               ]));
     });

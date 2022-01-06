@@ -58,6 +58,7 @@ class RecipeScreen extends StatelessWidget {
                             FoodItemRecipeChanged(
                                 foodItemId: assignedFoodItemId!,
                                 foodItemRecipe: state.recipes[recipeIndex]));
+                        context.read<RecipeBloc>().add(const RecipesSaved());
                         Navigator.pop(context);
                         Navigator.pop(context);
                       }
