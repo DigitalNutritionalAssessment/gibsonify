@@ -30,9 +30,12 @@ class App extends StatelessWidget {
           BlocProvider(
               create: (context) =>
                   CollectionBloc(gibsonifyRepository: gibsonifyRepository)),
+          // TODO: think about setting lazy to false as there is a slight lag
+          // when loading Recipes
           BlocProvider(
               create: (context) =>
-                  RecipeBloc(gibsonifyRepository: gibsonifyRepository))
+                  RecipeBloc(gibsonifyRepository: gibsonifyRepository)
+                    ..add(const RecipesLoaded()))
         ],
         child: MaterialApp(
           title: 'Gibsonify',

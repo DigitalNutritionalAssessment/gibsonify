@@ -11,7 +11,90 @@ class GibsonifyApi {
       : _sharedPreferences = sharedPreferences;
 
   static const gibsonFormsKey = 'gibsonify_gibsons_forms_key';
+  static const recipesKey = 'gibsonify_recipes_key';
 
+  // TODO: add documentation
+  List<Recipe> loadRecipes() {
+    List<Recipe> recipes = [];
+    print('API: loading recipes from local storage'); // TODO: delete
+    String? recipesRaw = _sharedPreferences.getString(recipesKey);
+    if (recipesRaw == null || recipesRaw.isEmpty == true) {
+      print('API: no recipes found'); // TODO: delete
+      return [];
+    } else {
+      try {
+        print('API: found something in storage, decoding'); // TODO: delete
+        List<dynamic> partiallyDecodedRecipes = jsonDecode(recipesRaw);
+        print(
+            'API: partially decoded ${partiallyDecodedRecipes.length} recipes'); // TODO: delete
+        print(partiallyDecodedRecipes);
+
+        // print('API: type is:');
+        // print(partiallyDecodedRecipes.first.runtimeType);
+
+        // recipes = List<Recipe>.from(
+        //     partiallyDecodedRecipes.map((x) => Recipe.fromJson(x)));
+
+        // print('API: partially decoding first recipe'); // TODO: delete
+        // Recipe hahaRecipe = Recipe.fromJson(partiallyDecodedRecipes.first);
+        // print('API: first recipe partially decoded'); // TODO: delete
+        // print(hahaRecipe);
+        recipes =
+            partiallyDecodedRecipes.map((e) => Recipe.fromJson(e)).toList();
+        print('API: fully decoded ${recipes.length} recipes'); // TODO: delete
+      } catch (e) {
+        print(e);
+        print('API: recipes could not be decoded'); // TODO: delete
+        return [];
+      }
+      return recipes;
+    }
+  }
+
+  Future<void> saveRecipes(List<Recipe> recipes) {
+    print('API: encoding ${recipes.length} recipes'); // TODO: delete
+    String recipesEncoded = jsonEncode(recipes);
+    print(recipesEncoded);
+
+    // TODO: delete
+    /*
+    print('first recipe encoding and decoding');
+
+    String encoded = jsonEncode(recipes.first);
+
+    try {
+      var partiallyDecoded = jsonDecode(encoded);
+      print(partiallyDecoded);
+      print(partiallyDecoded.runtimeType);
+      print('partially decoed,now going fully');
+      Recipe rerere = Recipe.fromJson(partiallyDecoded);
+      print('rec:');
+      print(rerere);
+    } catch (e) {
+      print(e);
+    }
+
+    print('recipe');
+
+
+    // print('LOLLL starting to partially decode it now');
+    // List<dynamic> partiallyDecodedRecipes = jsonDecode(recipesEncoded);
+    // print('LOLLL starting to fully decode it now');
+    // try {
+    //   List<Recipe> decodedRecipes =
+    //       partiallyDecodedRecipes.map((e) => Recipe.fromJson(e)).toList();
+    //   print('LOLLL decoded ${decodedRecipes.length} recipes');
+    // } catch (e) {
+    //   print(e);
+    // }
+    // delete up to here
+    */
+    print(
+        'API: ${recipes.length} recipes encoded, saving them now'); // TODO: delete
+    return _sharedPreferences.setString(recipesKey, recipesEncoded);
+  }
+
+  // TODO: investigate changing this to a list of non-nullable GibsonsForms
   /// Attempts to load a list Forms from shared preferences local storage.
   /// Returns an empty list if no data is found or data cannot be decoded.
   List<GibsonsForm?> loadForms() {
@@ -54,6 +137,17 @@ class GibsonifyApi {
       }
     }
     String gibsonsFormsEncoded = jsonEncode(gibsonsForms);
+    // TODO: delete
+    /*
+    print('before');
+    List<dynamic> partiallyDecodedGibsonsForms =
+        jsonDecode(gibsonsFormsEncoded);
+    List<GibsonsForm> gibsonsFormsHaha = partiallyDecodedGibsonsForms
+        .map((e) => GibsonsForm.fromJson(e))
+        .toList();
+    print(gibsonsFormsHaha);
+    print('after');
+    */
     return _sharedPreferences.setString(gibsonFormsKey, gibsonsFormsEncoded);
   }
 

@@ -99,6 +99,7 @@ class DeleteRecipe extends StatelessWidget {
           TextButton(
             onPressed: () => {
               context.read<RecipeBloc>().add(RecipeDeleted(recipe: recipe)),
+              context.read<RecipeBloc>().add(const RecipesSaved()),
               Navigator.pop(context, 'OK')
             },
             child: const Text('OK'),

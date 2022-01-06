@@ -15,6 +15,11 @@ class RecipeScreen extends StatelessWidget {
       return Scaffold(
           appBar: AppBar(
             title: const Text('Add a new recipe'),
+            leading: BackButton(
+                onPressed: () => {
+                      context.read<RecipeBloc>().add(const RecipesSaved()),
+                      Navigator.pop(context)
+                    }),
             actions: [
               IconButton(
                   onPressed: () => Navigator.pushNamed(
@@ -36,6 +41,7 @@ class RecipeScreen extends StatelessWidget {
                           context.read<RecipeBloc>().add(RecipeStatusChanged(
                               recipe: state.recipes[recipeIndex],
                               recipeSaved: true)),
+                          context.read<RecipeBloc>().add(const RecipesSaved()),
                           Navigator.pop(context)
                         }),
                 const SizedBox(

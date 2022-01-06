@@ -16,4 +16,10 @@ class GibsonifyRepository {
   List<GibsonsForm?> loadForms() => _gibsonifyApi.loadForms();
 
   void deleteForm(String id) => _gibsonifyApi.deleteForm(id);
+
+  // TODO: We should think about how this will scale with lots of recipes
+  List<Recipe> loadRecipes() => _gibsonifyApi.loadRecipes();
+
+  Future<void> saveRecipes(List<Recipe> recipes) =>
+      _gibsonifyApi.saveRecipes(recipes);
 }

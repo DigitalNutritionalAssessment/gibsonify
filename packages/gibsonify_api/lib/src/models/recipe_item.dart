@@ -23,7 +23,9 @@ class Recipe extends Equatable {
         recipeType = json['recipeType'],
         recipeVolume = RecipeVolume.fromJson(json['recipeVolume']),
         ingredients = _jsonDecodeIngredients(json['ingredients']),
-        probes = jsonDecode(json['probes']),
+        // TODO: this is a temporary fix as probes decoding doesn't work
+        // so temporarily, proble loading from Json won't work either
+        probes = const <Map<String, dynamic>>[],
         saved = json['saved'] == 'true' ? true : false;
 
   Map<String, dynamic> toJson() {
