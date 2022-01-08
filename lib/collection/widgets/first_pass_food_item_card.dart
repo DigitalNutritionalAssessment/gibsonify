@@ -20,10 +20,13 @@ class FirstPassFoodItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     const List<DropdownMenuItem<String>> dropdownMenuItems = [
       DropdownMenuItem(child: Text(''), value: ''),
-      DropdownMenuItem(child: Text('Morning'), value: 'Morning'),
-      DropdownMenuItem(child: Text('Afternoon'), value: 'Afternoon'),
-      DropdownMenuItem(child: Text('Evening'), value: 'Evening'),
-      DropdownMenuItem(child: Text('Night'), value: 'Night')
+      DropdownMenuItem(
+          child: Text('Morning (3:01 am - 12:00 pm)'), value: 'Morning'),
+      DropdownMenuItem(
+          child: Text('Afternoon (12:01 pm - 4:00 pm)'), value: 'Afternoon'),
+      DropdownMenuItem(
+          child: Text('Evening (4:01 pm - 7:00 pm)'), value: 'Evening'),
+      DropdownMenuItem(child: Text('Night (7:01 pm - 3:00 am)'), value: 'Night')
     ];
 
     return Card(

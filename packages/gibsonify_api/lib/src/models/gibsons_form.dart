@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
+import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:uuid/uuid.dart';
 
 import 'food_item.dart';
@@ -12,9 +13,13 @@ class GibsonsForm extends Equatable {
       this.householdId = const HouseholdId.pure(),
       this.respondentName = const RespondentName.pure(),
       this.respondentTelNumber = const RespondentTelNumber.pure(),
+      this.sensitizationDate = const SensitizationDate.pure(),
+      this.recallDay = const RecallDay.pure(),
       this.interviewDate = const InterviewDate.pure(),
       this.interviewStartTime = const InterviewStartTime.pure(),
-      this.sensitizationStatus = FormzStatus.pure,
+      this.interviewEndTime = const InterviewEndTime.pure(),
+      this.interviewOutcome = const InterviewOutcome.pure(),
+      this.comments = const Comments.pure(),
       this.foodItems = const <FoodItem>[]})
       : id = id ?? const Uuid().v4();
 
@@ -22,17 +27,19 @@ class GibsonsForm extends Equatable {
   final HouseholdId householdId;
   final RespondentName respondentName;
   final RespondentTelNumber respondentTelNumber;
+  final SensitizationDate sensitizationDate;
+  final RecallDay recallDay;
   final InterviewDate interviewDate;
   final InterviewStartTime interviewStartTime;
-  final FormzStatus sensitizationStatus;
-
+  final InterviewEndTime interviewEndTime;
+  final InterviewOutcome interviewOutcome;
+  final Comments comments;
   final List<FoodItem> foodItems;
 
   // TODO: add other fields from physical Gibson's form:
   // end of interview, did complete interview in one visit? (bool),
   // date of second visit, reason for second visit, final outcome of interview,
   // reason for incomplete interview, supervisor comments.
-  // And also ask ICRISAT about date of sensitization visit and recall day code.
 
   // TODO: implement code generation JSON serialization using json_serializable
   // and/or json_annotation
@@ -43,12 +50,15 @@ class GibsonsForm extends Equatable {
         respondentName = RespondentName.fromJson(json['respondentName']),
         respondentTelNumber =
             RespondentTelNumber.fromJson(json['respondentTelNumber']),
+        sensitizationDate =
+            SensitizationDate.fromJson(json['sensitizationDate']),
+        recallDay = RecallDay.fromJson(json['recallDay']),
         interviewDate = InterviewDate.fromJson(json['interviewDate']),
         interviewStartTime =
             InterviewStartTime.fromJson(json['interviewStartTime']),
-        sensitizationStatus = json['sensitizationStatus'] == 'FormzStatus.valid'
-            ? FormzStatus.valid
-            : FormzStatus.invalid,
+        interviewEndTime = InterviewEndTime.fromJson(json['interviewEndTime']),
+        interviewOutcome = InterviewOutcome.fromJson(json['interviewOutcome']),
+        comments = Comments.fromJson(json['comments']),
         foodItems = _jsonDecodeFoodItems(json['foodItems']);
 
   Map<String, dynamic> toJson() {
@@ -57,9 +67,13 @@ class GibsonsForm extends Equatable {
     data['householdId'] = householdId.toJson();
     data['respondentName'] = respondentName.toJson();
     data['respondentTelNumber'] = respondentTelNumber.toJson();
+    data['sensitizationDate'] = sensitizationDate.toJson();
+    data['recallDay'] = recallDay.toJson();
     data['interviewDate'] = interviewDate.toJson();
     data['interviewStartTime'] = interviewStartTime.toJson();
-    data['sensitizationStatus'] = sensitizationStatus.toString();
+    data['interviewEndTime'] = interviewEndTime.toJson();
+    data['interviewOutcome'] = interviewOutcome.toJson();
+    data['comments'] = comments.toJson();
     data['foodItems'] = jsonEncode(foodItems); // This calls toJson on each one
     return data;
   }
@@ -69,18 +83,26 @@ class GibsonsForm extends Equatable {
       HouseholdId? householdId,
       RespondentName? respondentName,
       RespondentTelNumber? respondentTelNumber,
+      SensitizationDate? sensitizationDate,
+      RecallDay? recallDay,
       InterviewDate? interviewDate,
       InterviewStartTime? interviewStartTime,
-      FormzStatus? sensitizationStatus,
+      InterviewEndTime? interviewEndTime,
+      InterviewOutcome? interviewOutcome,
+      Comments? comments,
       List<FoodItem>? foodItems}) {
     return GibsonsForm(
         id: id ?? this.id,
         householdId: householdId ?? this.householdId,
         respondentName: respondentName ?? this.respondentName,
         respondentTelNumber: respondentTelNumber ?? this.respondentTelNumber,
-        interviewStartTime: interviewStartTime ?? this.interviewStartTime,
+        sensitizationDate: sensitizationDate ?? this.sensitizationDate,
+        recallDay: recallDay ?? this.recallDay,
         interviewDate: interviewDate ?? this.interviewDate,
-        sensitizationStatus: sensitizationStatus ?? this.sensitizationStatus,
+        interviewStartTime: interviewStartTime ?? this.interviewStartTime,
+        interviewEndTime: interviewEndTime ?? this.interviewEndTime,
+        interviewOutcome: interviewOutcome ?? this.interviewOutcome,
+        comments: comments ?? this.comments,
         foodItems: foodItems ?? this.foodItems);
   }
 
@@ -91,9 +113,13 @@ class GibsonsForm extends Equatable {
         'HouseholdID: $householdId\n'
         'Repondent Name: $respondentName\n'
         'Respondent Tel Number: $respondentTelNumber\n'
+        'Sensitization Date: $sensitizationDate\n'
+        'Recall Day: $recallDay\n'
         'Interview Date: $interviewDate\n'
         'Interview Start Time: $interviewStartTime\n'
-        'Sensitization Status: $sensitizationStatus\n'
+        'Interview End Time: $interviewEndTime\n'
+        'Interview Outcome: $interviewOutcome\n'
+        'Comments: $comments\n'
         'Food Items: $foodItems'
         '\n *** \n';
   }
@@ -104,9 +130,13 @@ class GibsonsForm extends Equatable {
         householdId,
         respondentName,
         respondentTelNumber,
+        sensitizationDate,
+        recallDay,
         interviewDate,
         interviewStartTime,
-        sensitizationStatus,
+        interviewEndTime,
+        interviewOutcome,
+        comments,
         foodItems
       ];
 }
@@ -195,6 +225,68 @@ class RespondentTelNumber
   }
 }
 
+enum SensitizationDateValidationError { invalid }
+
+class SensitizationDate
+    extends FormzInput<String, SensitizationDateValidationError> {
+  const SensitizationDate.pure() : super.pure('');
+  const SensitizationDate.dirty([String value = '']) : super.dirty(value);
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['value'] = value;
+    data['pure'] = pure.toString();
+    return data;
+  }
+
+  SensitizationDate.fromJson(Map<String, dynamic> json)
+      : super.dirty(json['value']);
+
+  @override
+  SensitizationDateValidationError? validator(String? value) {
+    // TODO: Add validation, currently only checks if not empty
+    return value?.isNotEmpty == true
+        ? null
+        : SensitizationDateValidationError.invalid;
+  }
+}
+
+enum RecallDayValidationError { invalid }
+
+class RecallDay extends FormzInput<String, RecallDayValidationError> {
+  const RecallDay.pure() : super.pure('');
+  const RecallDay.dirty([String value = '']) : super.dirty(value);
+
+  // TODO: update when accepting custom strings for 'other'
+  final _allowedRecallDay = const [
+    'normal day',
+    'sick day',
+    'fasting day',
+    'festival/religious day',
+    'parties/functions day',
+    'visitors/relatives',
+    'other'
+  ];
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['value'] = value;
+    data['pure'] = pure.toString();
+    return data;
+  }
+
+  RecallDay.fromJson(Map<String, dynamic> json) : super.dirty(json['value']);
+
+  @override
+  RecallDayValidationError? validator(String? value) {
+    final _lowerCaseValue = (value ?? '').toLowerCase();
+    // TODO: refactor with a better null check
+    return _allowedRecallDay.contains(_lowerCaseValue)
+        ? null
+        : RecallDayValidationError.invalid;
+  }
+}
+
 enum InterviewDateValidationError { invalid }
 
 class InterviewDate extends FormzInput<String, InterviewDateValidationError> {
@@ -243,5 +335,89 @@ class InterviewStartTime
     return value?.isNotEmpty == true
         ? null
         : InterviewStartTimeValidationError.invalid;
+  }
+}
+
+enum InterviewEndTimeValidationError { invalid }
+
+class InterviewEndTime
+    extends FormzInput<String, InterviewEndTimeValidationError> {
+  const InterviewEndTime.pure() : super.pure('');
+  const InterviewEndTime.dirty([String value = '']) : super.dirty(value);
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['value'] = value;
+    data['pure'] = pure.toString();
+    return data;
+  }
+
+  InterviewEndTime.fromJson(Map<String, dynamic> json)
+      : super.dirty(json['value']);
+
+  @override
+  InterviewEndTimeValidationError? validator(String? value) {
+    // TODO: Add validation, currently only checks if not empty
+    return value?.isNotEmpty == true
+        ? null
+        : InterviewEndTimeValidationError.invalid;
+  }
+}
+
+enum InterviewOutcomeValidationError { invalid }
+
+class InterviewOutcome
+    extends FormzInput<String, InterviewOutcomeValidationError> {
+  const InterviewOutcome.pure() : super.pure('');
+  const InterviewOutcome.dirty([String value = '']) : super.dirty(value);
+
+  // TODO: update when accepting custom strings for 'other'
+  final _allowedRecallDay = const [
+    'completed',
+    'incomplete',
+    'absent',
+    'refused',
+    'could not locate',
+  ];
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['value'] = value;
+    data['pure'] = pure.toString();
+    return data;
+  }
+
+  InterviewOutcome.fromJson(Map<String, dynamic> json)
+      : super.dirty(json['value']);
+
+  @override
+  InterviewOutcomeValidationError? validator(String? value) {
+    final _lowerCaseValue = (value ?? '').toLowerCase();
+    // TODO: refactor with a better null check
+    return _allowedRecallDay.contains(_lowerCaseValue)
+        ? null
+        : InterviewOutcomeValidationError.invalid;
+  }
+}
+
+enum CommentsValidationError { invalid }
+
+class Comments extends FormzInput<String, CommentsValidationError> {
+  const Comments.pure() : super.pure('');
+  const Comments.dirty([String value = '']) : super.dirty(value);
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['value'] = value;
+    data['pure'] = pure.toString();
+    return data;
+  }
+
+  Comments.fromJson(Map<String, dynamic> json) : super.dirty(json['value']);
+
+  @override
+  CommentsValidationError? validator(String? value) {
+    // TODO: Add validation, currently only checks if not empty
+    return value?.isNotEmpty == true ? null : CommentsValidationError.invalid;
   }
 }

@@ -81,8 +81,10 @@ class _CollectionsScreenState extends State<CollectionsScreen> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
-                  FloatingActionButton(
-                      child: const Icon(Icons.add),
+                  FloatingActionButton.extended(
+                      heroTag: null,
+                      label: const Text("New Collection"),
+                      icon: const Icon(Icons.add),
                       onPressed: () {
                         // TODO: Refactor into the Collection Page accepting a
                         // nullable instance of GibsonsForm as argument.

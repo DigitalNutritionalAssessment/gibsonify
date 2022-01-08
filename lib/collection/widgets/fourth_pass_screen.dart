@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:gibsonify/home/home.dart';
 import 'package:gibsonify/collection/collection.dart';
+import 'package:gibsonify/navigation/navigation.dart';
 
 class FourthPassScreen extends StatelessWidget {
   const FourthPassScreen({Key? key}) : super(key: key);
@@ -38,13 +39,12 @@ class FourthPassScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
-                  FloatingActionButton(
-                      child: const Icon(Icons.save),
-                      onPressed: () {
-                        context.read<CollectionBloc>().add(GibsonsFormSaved());
-                        context.read<HomeBloc>().add(GibsonsFormsLoaded());
-                        Navigator.maybePop(context);
-                      })
+                  FloatingActionButton.extended(
+                      heroTag: null,
+                      label: const Text("Finish Collection"),
+                      icon: const Icon(Icons.check),
+                      onPressed: () => Navigator.pushNamed(
+                          context, PageRouter.finishCollection))
                 ]));
       },
     );

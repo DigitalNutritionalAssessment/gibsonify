@@ -34,6 +34,24 @@ class RespondentTelNumberChanged extends CollectionEvent {
   List<Object> get props => [respondentTelNumber];
 }
 
+class SensitizationDateChanged extends CollectionEvent {
+  final String sensitizationDate;
+
+  const SensitizationDateChanged({required this.sensitizationDate});
+
+  @override
+  List<Object> get props => [sensitizationDate];
+}
+
+class RecallDayChanged extends CollectionEvent {
+  final String recallDay;
+
+  const RecallDayChanged({required this.recallDay});
+
+  @override
+  List<Object> get props => [recallDay];
+}
+
 class InterviewDateChanged extends CollectionEvent {
   final String interviewDate;
 
@@ -50,6 +68,33 @@ class InterviewStartTimeChanged extends CollectionEvent {
 
   @override
   List<Object> get props => [interviewStartTime];
+}
+
+class InterviewEndTimeChanged extends CollectionEvent {
+  final String interviewEndTime;
+
+  const InterviewEndTimeChanged({required this.interviewEndTime});
+
+  @override
+  List<Object> get props => [interviewEndTime];
+}
+
+class InterviewOutcomeChanged extends CollectionEvent {
+  final String interviewOutcome;
+
+  const InterviewOutcomeChanged({required this.interviewOutcome});
+
+  @override
+  List<Object> get props => [interviewOutcome];
+}
+
+class CommentsChanged extends CollectionEvent {
+  final String comments;
+
+  const CommentsChanged({required this.comments});
+
+  @override
+  List<Object> get props => [comments];
 }
 
 class FoodItemAdded extends CollectionEvent {}
