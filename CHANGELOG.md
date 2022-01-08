@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 
 ### Bug Fixes
 
+- *(collection)* First pass food item card typo
+- *(collection)* First pass food item card typo
 - *(collection)* Sensitization screen bottom overflowed error
 - *(collection)* Make dropdown items consistently display selected value
 - *(collection)* Add missing space to sensitization help page
@@ -15,7 +17,8 @@ All notable changes to this project will be documented in this file.
 - *(recipe)* Fix bug with probelist keys updating too frequently
 - *(recipe)* Fix issue with Bloc not updating for ingredient changes
 - *(recipe)* Implement PR comments
-- *(recipe)* Fixed bug that blocked new recipe state managementand refactored old code- *(No Category)* Recipes json method bug
+- *(recipe)* Fixed bug that blocked new recipe state managementand refactored old code- *(No Category)* Recipes not saving when created from collection
+- *(No Category)* Recipes json method bug
 - *(No Category)* Pubspec confilct and merge dev branch
 - *(No Category)* Duplicate key error in collections screen
 - *(No Category)* Correct app name to start with a capital letter
@@ -28,6 +31,7 @@ All notable changes to this project will be documented in this file.
 - *(README)* Update development instructions
 - *(README)* Update link to Gibson's method
 - *(app)* Remove commented out code
+- *(changelog)* Update
 - *(changelog)* Update
 - *(changelog)* Update
 - *(changelog)* Update
@@ -56,6 +60,7 @@ All notable changes to this project will be documented in this file.
 - *(collection)* Add first pass with food items
 - *(collection)* Update sensitization first pass button todo comment
 - *(collection_state)* Add todo about creating more collection states
+- *(gibsonify_api)* Remove unnecessary code, add documentation
 - *(gibsonify_api)* Add api documentation
 - *(gibsonify_api)* Remove commented out code and add documentation
 - *(gibsonify_api)* Remove implemented todo comment about uuids
@@ -109,7 +114,9 @@ All notable changes to this project will be documented in this file.
 - *(recipe)* Add preliminary recipe implementation
 - *(recipe)* Add logic for changing recipe/ingredient status
 - *(recipe)* Add navigation logic to enable recipe/ingredient editing
-- *(recipe)* Add rudimentary recipe form- *(No Category)* Export saved data via email
+- *(recipe)* Add rudimentary recipe form- *(No Category)* Minor collection features
+- *(No Category)* Change buttons and time periods display
+- *(No Category)* Export saved data via email
 - *(No Category)* Add collections export data
 - *(No Category)* Implement data download
 - *(No Category)* Integrate data layer, collections, recipes
@@ -150,6 +157,7 @@ All notable changes to this project will be documented in this file.
 - *(collection)* Remove equatable as a base class for collection and rename to gibsonsform
 - *(collection)* Change sensitization screen form to formz inputs, add input models and demos
 - *(collection)* Change sensitization, first_pass and second_pass screens to stateless widgets
+- *(gibsonify_api)* Rearrange code order for readability
 - *(gibsonify_api)* Remove debugging print statements
 - *(recipe)* Rename ingredient screen to ingredient form
 - *(recipe)* Remove unused focus/unfocus node logic- *(No Category)* Move collection models into repository and api
@@ -180,7 +188,8 @@ All notable changes to this project will be documented in this file.
 - *(pubspec)* Add dropdown_plus library to lock file
 - *(pubspec)* Add uuid library
 - *(pubspec)* Bump flutter_bloc and bloc_test versions
-- *(pubspec)* Update dependencies and remove unnecessary ones- *(No Category)* Resolve merge conflict with dev
+- *(pubspec)* Update dependencies and remove unnecessary ones- *(No Category)* Update generated plugin restraint swift file
+- *(No Category)* Resolve merge conflict with dev
 - *(No Category)* Resolve merge conflict with dev
 - *(No Category)* Resolve changelog merge conflict with dev branch
 - *(No Category)* Update flutter sdk and fvm version and instructions
