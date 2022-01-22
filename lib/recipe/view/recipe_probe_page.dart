@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gibsonify/recipe/recipe.dart';
+import 'package:gibsonify/navigation/navigation.dart';
 
 class RecipeProbePage extends StatelessWidget {
   final int recipeIndex;
@@ -20,6 +21,11 @@ class RecipeProbePage extends StatelessWidget {
                     context
                         .read<RecipeBloc>()
                         .add(ProbeAdded(recipe: state.recipes[recipeIndex])),
+                    Navigator.pushNamed(context, PageRouter.editProbe,
+                        arguments: [
+                          recipeIndex,
+                          state.recipes[recipeIndex].probes.length
+                        ])
                   }),
           body: ProbeList(recipeIndex: recipeIndex));
     });

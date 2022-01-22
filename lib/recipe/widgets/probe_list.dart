@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gibsonify/recipe/recipe.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:gibsonify/navigation/navigation.dart';
 
 class ProbeList extends StatelessWidget {
   final int recipeIndex;
@@ -36,26 +37,17 @@ class ProbeList extends StatelessWidget {
                 ],
               ),
               child: Card(
-                  child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  key: Key(state.recipes[recipeIndex].probes[index]['key']),
-                  initialValue: state.recipes[recipeIndex].probes[index]
-                      ['probe'],
-                  decoration: InputDecoration(
-                    icon: const Icon(Icons.live_help),
-                    labelText: 'Probe ${index + 1}',
-                    helperText:
-                        'Recipe probe - e.g. Which flour did you use to make roti?',
-                  ),
-                  onChanged: (value) {
-                    context.read<RecipeBloc>().add(ProbeChanged(
-                        recipe: state.recipes[recipeIndex],
-                        probeName: value,
-                        probeIndex: index));
-                  },
-                  textInputAction: TextInputAction.next,
+                  child: ListTile(
+                title: Text(state.recipes[recipeIndex].probes[index]['probe']),
+                leading: const Icon(Icons.live_help),
+                trailing: Checkbox(
+                  value: false,
+                  onChanged: (bool? newValue) {},
                 ),
+                onTap: () => {
+                  Navigator.pushNamed(context, PageRouter.editProbe,
+                      arguments: [recipeIndex, index])
+                },
               )),
             );
           });
