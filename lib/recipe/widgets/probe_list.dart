@@ -41,8 +41,13 @@ class ProbeList extends StatelessWidget {
                 title: Text(state.recipes[recipeIndex].probes[index]['probe']),
                 leading: const Icon(Icons.live_help),
                 trailing: Checkbox(
-                  value: false,
-                  onChanged: (bool? newValue) {},
+                  value: state.recipes[recipeIndex].probes[index]['checked'],
+                  onChanged: (bool? value) {
+                    context.read<RecipeBloc>().add(ProbeChecked(
+                        recipe: state.recipes[recipeIndex],
+                        probeCheck: value!,
+                        probeIndex: index));
+                  },
                 ),
                 onTap: () => {
                   Navigator.pushNamed(context, PageRouter.editProbe,

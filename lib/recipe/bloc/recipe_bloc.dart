@@ -22,6 +22,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     on<RecipeStatusChanged>(_onRecipeStatusChanged);
     on<ProbeAdded>(_onProbeAdded);
     on<ProbeChanged>(_onProbeChanged);
+    on<ProbeChecked>(_onProbeChecked);
     on<ProbeDeleted>(_onProbeDeleted);
     on<IngredientAdded>(_onIngredientAdded);
     on<IngredientDeleted>(_onIngredientDeleted);
@@ -106,7 +107,11 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     List<Recipe> recipes = List.from(state.recipes);
     int changedRecipeIndex = recipes.indexOf(event.recipe);
 
-    Map<String, dynamic> probe = {'probe': '', 'key': const Uuid().v4()};
+    Map<String, dynamic> probe = {
+      'probe': '',
+      'checked': false,
+      'key': const Uuid().v4()
+    };
     List<Map<String, dynamic>> probes =
         List.from(recipes[changedRecipeIndex].probes);
     probes.add(probe);
@@ -131,6 +136,34 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     String probeName = event.probeName;
     Map<String, dynamic> probe = {
       'probe': probeName,
+      'checked': probes[changedProbeIndex]['checked'],
+      'key': probes[changedProbeIndex]['key']
+    };
+
+    probes.removeAt(changedProbeIndex);
+    probes.insert(changedProbeIndex, probe);
+
+    Recipe recipe =
+        recipes[changedRecipeIndex].copyWith(probes: probes, saved: false);
+
+    recipes.removeAt(changedRecipeIndex);
+    recipes.insert(changedRecipeIndex, recipe);
+
+    emit(state.copyWith(recipes: recipes));
+  }
+
+  void _onProbeChecked(ProbeChecked event, Emitter<RecipeState> emit) {
+    List<Recipe> recipes = List.from(state.recipes);
+    int changedRecipeIndex = recipes.indexOf(event.recipe);
+
+    List<Map<String, dynamic>> probes =
+        List.from(recipes[changedRecipeIndex].probes);
+    int changedProbeIndex = event.probeIndex;
+
+    bool probeCheck = event.probeCheck;
+    Map<String, dynamic> probe = {
+      'probe': probes[changedProbeIndex]['probe'],
+      'checked': probeCheck,
       'key': probes[changedProbeIndex]['key']
     };
 
