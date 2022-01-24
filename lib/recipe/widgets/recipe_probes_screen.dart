@@ -5,6 +5,35 @@ import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gibsonify/navigation/navigation.dart';
 
+class RecipeProbeScreen extends StatelessWidget {
+  final int recipeIndex;
+  const RecipeProbeScreen(this.recipeIndex, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
+      return Scaffold(
+          appBar: AppBar(
+              title: Text(
+                  'Probe list for ${state.recipes[recipeIndex].recipeName.value}')),
+          floatingActionButton: FloatingActionButton.extended(
+              label: const Text("Add probe"),
+              icon: const Icon(Icons.add),
+              onPressed: () => {
+                    context
+                        .read<RecipeBloc>()
+                        .add(ProbeAdded(recipe: state.recipes[recipeIndex])),
+                    Navigator.pushNamed(context, PageRouter.editProbe,
+                        arguments: [
+                          recipeIndex,
+                          state.recipes[recipeIndex].probes.length
+                        ])
+                  }),
+          body: ProbeList(recipeIndex: recipeIndex));
+    });
+  }
+}
+
 class ProbeList extends StatelessWidget {
   final int recipeIndex;
 

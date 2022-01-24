@@ -1,20 +1,66 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:gibsonify/recipe/recipe.dart';
 
-class RecipePage extends StatelessWidget {
+class RecipePage extends StatefulWidget {
   final int recipeIndex;
   final String? assignedFoodItemId;
+  final int? selectedScreenIndex;
 
-  const RecipePage(this.recipeIndex, {Key? key, this.assignedFoodItemId})
+  const RecipePage(this.recipeIndex,
+      {Key? key, this.assignedFoodItemId, this.selectedScreenIndex})
       : super(key: key);
 
   @override
+  State<RecipePage> createState() => _RecipePageState();
+}
+
+class _RecipePageState extends State<RecipePage> {
+  int selectedScreenIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedScreenIndex =
+        (widget.selectedScreenIndex == null) ? 0 : widget.selectedScreenIndex!;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
-      return Scaffold(
-        body: RecipeScreen(recipeIndex, assignedFoodItemId: assignedFoodItemId),
-      );
+    final List<Widget> _screens = [
+      RecipeProbeScreen(widget.recipeIndex),
+      RecipeScreen(widget.recipeIndex,
+          assignedFoodItemId: widget.assignedFoodItemId),
+      RecipeDetailsScreen(widget.recipeIndex,
+          assignedFoodItemId: widget.assignedFoodItemId),
+    ];
+    return Scaffold(
+      body: _screens[selectedScreenIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        currentIndex: selectedScreenIndex,
+        onTap: _onScreenSelected,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.live_help),
+            label: 'Probes',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.food_bank),
+            label: 'Recipe Ingredients',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.description),
+            label: 'Recipe Details',
+          )
+        ],
+      ),
+    );
+  }
+
+  void _onScreenSelected(int index) {
+    setState(() {
+      selectedScreenIndex = index;
     });
   }
 }
