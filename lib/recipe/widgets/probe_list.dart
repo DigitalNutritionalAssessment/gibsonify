@@ -13,49 +13,73 @@ class ProbeList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
-      return ListView.builder(
-          padding: const EdgeInsets.all(2.0),
-          itemCount: state.recipes[recipeIndex].probes.length,
-          itemBuilder: (context, index) {
-            return Slidable(
-              startActionPane: ActionPane(
-                motion: const ScrollMotion(),
-                children: [
-                  SlidableAction(
-                    onPressed: (context) {
-                      showDialog<String>(
-                          context: context,
-                          builder: (BuildContext context) => DeleteProbe(
+      return Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+                padding: const EdgeInsets.all(2.0),
+                itemCount: state.recipes[recipeIndex].probes.length,
+                itemBuilder: (context, index) {
+                  return Slidable(
+                    startActionPane: ActionPane(
+                      motion: const ScrollMotion(),
+                      children: [
+                        SlidableAction(
+                          onPressed: (context) {
+                            showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) => DeleteProbe(
+                                    recipe: state.recipes[recipeIndex],
+                                    probe: state
+                                        .recipes[recipeIndex].probes[index]));
+                          },
+                          backgroundColor: const Color(0xFFFE4A49),
+                          foregroundColor: Colors.white,
+                          icon: Icons.delete,
+                          label: 'Delete',
+                        )
+                      ],
+                    ),
+                    child: Card(
+                        child: ListTile(
+                      title: Text(
+                          state.recipes[recipeIndex].probes[index]['probe']),
+                      leading: const Icon(Icons.live_help),
+                      trailing: Checkbox(
+                        value: state.recipes[recipeIndex].probes[index]
+                            ['checked'],
+                        onChanged: (bool? value) {
+                          context.read<RecipeBloc>().add(ProbeChecked(
                               recipe: state.recipes[recipeIndex],
-                              probe: state.recipes[recipeIndex].probes[index]));
-                    },
-                    backgroundColor: const Color(0xFFFE4A49),
-                    foregroundColor: Colors.white,
-                    icon: Icons.delete,
-                    label: 'Delete',
-                  )
-                ],
-              ),
-              child: Card(
-                  child: ListTile(
-                title: Text(state.recipes[recipeIndex].probes[index]['probe']),
-                leading: const Icon(Icons.live_help),
-                trailing: Checkbox(
-                  value: state.recipes[recipeIndex].probes[index]['checked'],
-                  onChanged: (bool? value) {
-                    context.read<RecipeBloc>().add(ProbeChecked(
-                        recipe: state.recipes[recipeIndex],
-                        probeCheck: value!,
-                        probeIndex: index));
-                  },
-                ),
-                onTap: () => {
-                  Navigator.pushNamed(context, PageRouter.editProbe,
-                      arguments: [recipeIndex, index])
-                },
-              )),
-            );
-          });
+                              probeCheck: value!,
+                              probeIndex: index));
+                        },
+                      ),
+                      onTap: () => {
+                        Navigator.pushNamed(context, PageRouter.editProbe,
+                            arguments: [recipeIndex, index])
+                      },
+                    )),
+                  );
+                }),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          ListTile(
+            title: state.recipes[recipeIndex].probesChecked
+                ? const Text('This is a standard recipe.')
+                : const Text('This is a modified recipe.'),
+            subtitle: state.recipes[recipeIndex].probesChecked
+                ? const Text('Confirm recipe volume on Recipe Details page')
+                : const Text(
+                    'Add or remove ingredients on the ingredients page'),
+            tileColor: state.recipes[recipeIndex].probesChecked
+                ? Colors.green
+                : Colors.red,
+          )
+        ],
+      );
     });
   }
 }

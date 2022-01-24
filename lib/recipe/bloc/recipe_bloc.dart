@@ -116,8 +116,17 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
         List.from(recipes[changedRecipeIndex].probes);
     probes.add(probe);
 
-    Recipe recipe =
-        recipes[changedRecipeIndex].copyWith(probes: probes, saved: false);
+    bool probesChecked = true;
+
+    for (Map<String, dynamic> probe in probes) {
+      if (probe['checked'] == false) {
+        probesChecked = false;
+        break;
+      }
+    }
+
+    Recipe recipe = recipes[changedRecipeIndex]
+        .copyWith(probes: probes, probesChecked: probesChecked, saved: false);
 
     recipes.removeAt(changedRecipeIndex);
 
@@ -170,8 +179,17 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     probes.removeAt(changedProbeIndex);
     probes.insert(changedProbeIndex, probe);
 
-    Recipe recipe =
-        recipes[changedRecipeIndex].copyWith(probes: probes, saved: false);
+    bool probesChecked = true;
+
+    for (Map<String, dynamic> probe in probes) {
+      if (probe['checked'] == false) {
+        probesChecked = false;
+        break;
+      }
+    }
+
+    Recipe recipe = recipes[changedRecipeIndex]
+        .copyWith(probes: probes, probesChecked: probesChecked, saved: false);
 
     recipes.removeAt(changedRecipeIndex);
     recipes.insert(changedRecipeIndex, recipe);
@@ -188,8 +206,17 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     int changedProbeIndex = probes.indexOf(event.probe);
     probes.removeAt(changedProbeIndex);
 
-    Recipe recipe =
-        recipes[changedRecipeIndex].copyWith(probes: probes, saved: false);
+    bool probesChecked = probes.isEmpty ? false : true;
+
+    for (Map<String, dynamic> probe in probes) {
+      if (probe['checked'] == false) {
+        probesChecked = false;
+        break;
+      }
+    }
+
+    Recipe recipe = recipes[changedRecipeIndex]
+        .copyWith(probes: probes, probesChecked: probesChecked, saved: false);
 
     recipes.removeAt(changedRecipeIndex);
 

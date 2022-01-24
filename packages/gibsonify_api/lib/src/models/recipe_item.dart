@@ -14,6 +14,7 @@ class Recipe extends Equatable {
     this.recipeVolume = const RecipeVolume.pure(),
     this.ingredients = const <Ingredient>[],
     this.probes = const <Map<String, dynamic>>[],
+    this.probesChecked = false,
     this.saved = false,
   }) : recipeNumber = recipeNumber ?? const Uuid().v4();
 
@@ -24,6 +25,7 @@ class Recipe extends Equatable {
         recipeVolume = RecipeVolume.fromJson(json['recipeVolume']),
         ingredients = _jsonDecodeIngredients(json['ingredients']),
         probes = List<Map<String, dynamic>>.from(jsonDecode(json['probes'])),
+        probesChecked = json['probesChecked'] == 'true' ? true : false,
         saved = json['saved'] == 'true' ? true : false;
 
   Map<String, dynamic> toJson() {
@@ -34,6 +36,7 @@ class Recipe extends Equatable {
     data['recipeVolume'] = recipeVolume.toJson();
     data['ingredients'] = jsonEncode(ingredients);
     data['probes'] = jsonEncode(probes);
+    data['probesChecked'] = probesChecked.toString();
     data['saved'] = saved.toString();
     return data;
   }
@@ -44,6 +47,7 @@ class Recipe extends Equatable {
   final RecipeVolume recipeVolume;
   final List<Ingredient> ingredients;
   final List<Map<String, dynamic>> probes;
+  final bool probesChecked;
   final bool saved;
 
   Recipe copyWith({
@@ -53,6 +57,7 @@ class Recipe extends Equatable {
     RecipeVolume? recipeVolume,
     List<Ingredient>? ingredients,
     List<Map<String, dynamic>>? probes,
+    bool? probesChecked,
     bool? saved,
   }) {
     return Recipe(
@@ -62,6 +67,7 @@ class Recipe extends Equatable {
       recipeVolume: recipeVolume ?? this.recipeVolume,
       ingredients: ingredients ?? this.ingredients,
       probes: probes ?? this.probes,
+      probesChecked: probesChecked ?? this.probesChecked,
       saved: saved ?? this.saved,
     );
   }
@@ -74,6 +80,7 @@ class Recipe extends Equatable {
         recipeVolume,
         ingredients,
         probes,
+        probesChecked,
         saved,
       ];
 }
