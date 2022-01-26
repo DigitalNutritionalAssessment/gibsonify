@@ -12,7 +12,13 @@ class EditProbePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
       return Scaffold(
-          appBar: AppBar(title: const Text('Edit Probe')),
+          appBar: AppBar(
+              title: const Text('Edit Probe'),
+              leading: BackButton(
+                  onPressed: () => {
+                        context.read<RecipeBloc>().add(const RecipesSaved()),
+                        Navigator.pop(context)
+                      })),
           floatingActionButton: FloatingActionButton.extended(
               label: const Text("Save Probe"),
               icon: const Icon(Icons.save_sharp),

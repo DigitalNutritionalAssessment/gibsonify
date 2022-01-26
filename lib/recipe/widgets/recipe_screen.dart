@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gibsonify/recipe/recipe.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:gibsonify/navigation/navigation.dart';
-import 'package:gibsonify/collection/collection.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class RecipeScreen extends StatelessWidget {
@@ -48,15 +47,22 @@ class RecipeForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: <Widget>[
-          RecipeNameInput(recipeIndex),
-          Ingredients(recipeIndex),
-        ],
-      ),
-    );
+    return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: <Widget>[
+            RecipeNameInput(recipeIndex),
+            const SizedBox(height: 10),
+            ListTile(
+                title: (state.recipes[recipeIndex].ingredients.isNotEmpty)
+                    ? const Text('Ingredients:')
+                    : null),
+            Ingredients(recipeIndex),
+          ],
+        ),
+      );
+    });
   }
 }
 

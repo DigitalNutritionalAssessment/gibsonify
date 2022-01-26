@@ -48,7 +48,12 @@ class RecipesScreen extends StatelessWidget {
                         ? const Icon(Icons.done)
                         : const Icon(Icons.rotate_left_rounded),
                     onTap: () => Navigator.pushNamed(context, PageRouter.recipe,
-                        arguments: [index, assignedFoodItemId, 1]),
+                        arguments: (assignedFoodItemId == null ||
+                                state.recipes[index].probes.isEmpty ||
+                                state.recipes[index].recipeType !=
+                                    'Standard Recipe')
+                            ? [index, assignedFoodItemId, 1]
+                            : [index, assignedFoodItemId, 0]),
                   )),
                 );
               }),

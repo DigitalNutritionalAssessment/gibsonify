@@ -28,7 +28,10 @@ class _RecipePageState extends State<RecipePage> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> _screens = [
-      RecipeProbeScreen(widget.recipeIndex),
+      RecipeProbeScreen(
+        widget.recipeIndex,
+        assignedFoodItemId: widget.assignedFoodItemId,
+      ),
       RecipeScreen(widget.recipeIndex,
           assignedFoodItemId: widget.assignedFoodItemId),
       RecipeDetailsScreen(widget.recipeIndex,
