@@ -189,7 +189,6 @@ class Source extends FormzInput<String, SourceValidationError> {
     'leftover',
     'wild food',
     'food aid',
-    'not applicable',
     'other'
   ];
 
