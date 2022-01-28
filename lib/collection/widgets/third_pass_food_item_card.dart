@@ -34,7 +34,12 @@ class ThirdPassFoodItemCard extends StatelessWidget {
       DropdownMenuItem(child: Text(''), value: ''),
       DropdownMenuItem(child: Text('Small spoon'), value: 'Small spoon'),
       DropdownMenuItem(child: Text('Big spoon'), value: 'Big spoon'),
-      DropdownMenuItem(child: Text('Standard cup'), value: 'Standard cup'),
+      DropdownMenuItem(
+          child: Text('Small standard cup'), value: 'Small standard cup'),
+      DropdownMenuItem(
+          child: Text('Medium standard cup'), value: 'Medium standard cup'),
+      DropdownMenuItem(
+          child: Text('Large standard cup'), value: 'Large standard cup'),
       DropdownMenuItem(child: Text('Small'), value: 'Small'),
       DropdownMenuItem(child: Text('Medium'), value: 'Medium'),
       DropdownMenuItem(child: Text('Large'), value: 'Large'),
