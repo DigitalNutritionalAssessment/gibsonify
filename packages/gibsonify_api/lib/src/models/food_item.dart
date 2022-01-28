@@ -339,10 +339,16 @@ class MeasurementValue
   MeasurementValue.fromJson(Map<String, dynamic> json)
       : super.dirty(json['value']);
 
+  static final _measurementValueRegex = RegExp(
+    r'^\d+$', // numeric only
+  );
+
   @override
-  MeasurementValueValidationError? validator(String? value) {
+  MeasurementValueValidationError? validator(String value) {
     // TODO: Add validation, currently only checks if not empty
-    return value?.isNotEmpty == true
+    return value.length >= 1 &&
+            value.length <= 4 &&
+            _measurementValueRegex.hasMatch(value)
         ? null
         : MeasurementValueValidationError.invalid;
   }

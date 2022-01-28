@@ -71,7 +71,7 @@ class ThirdPassFoodItemCard extends StatelessWidget {
                 labelText: 'Measurement value',
                 helperText: 'The amount or number you measured',
                 errorText: foodItem.measurementValue.invalid
-                    ? 'Enter the dish measurement'
+                    ? 'Enter the dish measurement in 1 to 4 digits'
                     : null,
               ),
               onChanged: (value) => onMeasurementValueChanged!(value),
