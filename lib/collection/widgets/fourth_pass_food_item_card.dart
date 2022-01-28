@@ -4,11 +4,15 @@ import 'package:gibsonify_api/gibsonify_api.dart';
 
 class FourthPassFoodItemCard extends StatelessWidget {
   const FourthPassFoodItemCard(
-      {Key? key, required this.foodItem, this.onConfirmationChanged})
+      {Key? key,
+      required this.foodItem,
+      this.onConfirmationChanged,
+      this.onDeleted})
       : super(key: key);
 
   final FoodItem foodItem;
   final ValueChanged<bool>? onConfirmationChanged;
+  final VoidCallback? onDeleted;
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +122,10 @@ class FourthPassFoodItemCard extends StatelessWidget {
                 onPressed: () => onConfirmationChanged!(!foodItem.confirmed),
                 child: foodItem.confirmed
                     ? const Text('Unconfirm')
-                    : const Text('Confirm'))
+                    : const Text('Confirm')),
+            const Divider(),
+            TextButton(
+                onPressed: () => onDeleted!(), child: const Text('Delete'))
           ],
         ),
       ),

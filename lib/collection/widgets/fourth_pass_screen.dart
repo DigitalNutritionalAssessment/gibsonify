@@ -33,7 +33,10 @@ class FourthPassScreen extends StatelessWidget {
                           .read<CollectionBloc>()
                           .add(FoodItemConfirmationChanged(
                               foodItem: state.gibsonsForm.foodItems[index],
-                              foodItemConfirmed: negatedConfirmation)));
+                              foodItemConfirmed: negatedConfirmation)),
+                      onDeleted: () => context.read<CollectionBloc>().add(
+                          FoodItemDeleted(
+                              foodItem: state.gibsonsForm.foodItems[index])));
                 }),
             floatingActionButton: Column(
                 mainAxisAlignment: MainAxisAlignment.end,

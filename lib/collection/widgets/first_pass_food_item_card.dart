@@ -65,6 +65,7 @@ class FirstPassFoodItemCard extends StatelessWidget {
             // TODO: Make a pop-up with a confirmation box
             // for deleting an item, this might need to be done in First Pass
             // Screen
+            // Or, make a three dot button that opens a window to delete
             TextButton(
                 onPressed: () => onDeleted!(), child: const Text('Delete'))
           ],
