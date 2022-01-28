@@ -171,7 +171,7 @@ class SensitizationDateInput extends StatelessWidget {
                 context: context,
                 initialDate: DateTime.now(),
                 firstDate: DateTime(1900),
-                lastDate: DateTime(2100));
+                lastDate: DateTime.now());
             var formattedDate =
                 date == null ? '' : DateFormat('yyyy-MM-dd').format(date);
             context.read<CollectionBloc>().add(
@@ -248,7 +248,7 @@ class InterviewDateInput extends StatelessWidget {
                 context: context,
                 initialDate: DateTime.now(),
                 firstDate: DateTime(1900),
-                lastDate: DateTime(2100));
+                lastDate: DateTime.now());
             var formattedDate =
                 date == null ? '' : DateFormat('yyyy-MM-dd').format(date);
             context
