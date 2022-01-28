@@ -36,7 +36,7 @@ class IngredientForm extends StatelessWidget {
   final List<String> sizes = [
     "Small Spoon",
     "Big spoon",
-    "Standard cup",
+    "Standard cup", // TODO: add small and large standard cups
     "Small",
     "Medium",
     "Large"
