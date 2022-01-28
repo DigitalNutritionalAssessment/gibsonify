@@ -170,7 +170,9 @@ class HouseholdId extends FormzInput<String, HouseholdIdValidationError> {
   HouseholdIdValidationError? validator(String value) {
     // TODO: Add validation based on ICRISAT's criteria, currently
     // only checks if at least 2 symbols
-    return value.length > 1 ? null : HouseholdIdValidationError.invalid;
+    return value.length >= 10 && value.length <= 15
+        ? null
+        : HouseholdIdValidationError.invalid;
   }
 }
 
