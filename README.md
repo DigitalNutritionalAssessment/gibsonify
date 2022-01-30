@@ -1,8 +1,8 @@
-# Gibsonify
+![Gibsonify](./docs/images/gibsonify_name_styled.png)
 
 [![License](https://img.shields.io/github/license/DigitalNutritionalAssessment/gibsonify)](https://opensource.org/licenses/Apache-2.0) [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org) [![Bloc Library](https://tinyurl.com/bloc-library)](https://github.com/felangel/bloc)
 
-Gibsonify is a Flutter app designed to follow [Gibson's 24-hour methodology](https://www.gov.uk/research-for-development-outputs/an-interactive-24-hour-recall-for-assessing-the-adequacy-of-iron-and-zinc-intakes-in-developing-countries) for nutritional data collection.
+**Gibsonify** is a Flutter app designed to follow [Gibson's 24-hour methodology](https://www.gov.uk/research-for-development-outputs/an-interactive-24-hour-recall-for-assessing-the-adequacy-of-iron-and-zinc-intakes-in-developing-countries) for nutritional data collection.
 
 _TODO Add demo gif_
 
