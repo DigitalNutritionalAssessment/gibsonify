@@ -6,9 +6,9 @@
 
 
 <p align='center'> 
-    <img src="docs/images/phone_screenshot_1.jpg" width="30%"/>
-    <img src="docs/images/phone_screenshot_2.jpg" width="30%"/>
-    <img src="docs/images/phone_screenshot_3.jpg" width="30%"/> 
+    <img src="docs/images/phone_screenshot_1.jpg" width="33%"/>
+    <img src="docs/images/phone_screenshot_2.jpg" width="33%"/>
+    <img src="docs/images/phone_screenshot_3.jpg" width="33%"/> 
 </p>
 
 
