@@ -1,0 +1,8 @@
+commitizen:
+  name: cz_conventional_commits
+  tag_format: $version
+  annotated_tag: true
+  version: 0.0.1
+  changelog_file: CHANGELOG.md
+  version_files:
+  - pubspec.yaml:version
