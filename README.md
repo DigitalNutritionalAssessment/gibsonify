@@ -4,7 +4,13 @@
 
 **Gibsonify** is a Flutter app designed to follow [Gibson's 24-hour methodology](https://www.gov.uk/research-for-development-outputs/an-interactive-24-hour-recall-for-assessing-the-adequacy-of-iron-and-zinc-intakes-in-developing-countries) for nutritional data collection.
 
-![Phone screenshot 1](./docs/images/phone_screenshot_1.jpg) ![Phone screenshot 2](./docs/images/phone_screenshot_2.jpg) ![Phone screenshot 3](./docs/images/phone_screenshot_3.jpg)
+
+<p align='center'> 
+    <img src="docs/images/phone_screenshot_1.jpg" width="30%"/>
+    <img src="docs/images/phone_screenshot_2.jpg" width="30%"/>
+    <img src="docs/images/phone_screenshot_3.jpg" width="30%"/> 
+</p>
+
 
 ## Description
 
