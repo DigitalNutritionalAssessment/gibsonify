@@ -18,7 +18,9 @@ The app follows the structure of the four passes of Gibson's methodology. It has
 
 ## Installation
 
-_TODO Add installation instructions_
+The latest stable Android version of Gibsonify can be downloaded as an `.apk` file from [GitHub releases](https://github.com/DigitalNutritionalAssessment/Gibsonify/releases/latest). Instructions for verifying that you've downloaded the correct file are in [docs/release_verification.md](docs/release_verification.md). After downloading the `apk` file to your Android smartphone, you need to [allow installation of apps from unknown sources](https://www.maketecheasier.com/install-apps-from-unknown-sources-android/), and then tap on the `apk` file, and allow all other prompts to install it.
+
+Releases on platforms other than Android are currently not officially supported, although they can be built by following the development instructions outlined in the section below.
 
 <!--
 Probably direct (PGP-signed) apk download from GitHub releases (and tags?), then maybe Google Play Store & F-droid links?
