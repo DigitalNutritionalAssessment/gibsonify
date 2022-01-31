@@ -58,8 +58,10 @@ class FirstPassScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
-                  FloatingActionButton(
-                      child: const Icon(Icons.add),
+                  FloatingActionButton.extended(
+                      heroTag: null,
+                      label: const Text("New Food Item"),
+                      icon: const Icon(Icons.add),
                       onPressed: () =>
                           context.read<CollectionBloc>().add(FoodItemAdded()))
                 ]));

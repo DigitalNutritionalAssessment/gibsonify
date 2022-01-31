@@ -1,4 +1,4 @@
-package com.example.gibsonify
+package org.gibsonify.gibsonify
 
 import io.flutter.embedding.android.FlutterActivity
 

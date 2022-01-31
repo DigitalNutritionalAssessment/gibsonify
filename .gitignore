@@ -72,6 +72,9 @@ app.*.map.json
 # Android studio generated .gitignore
 # the extras that weren't yet present above
 
+# Android Signing Key Properties
+**/android/key.properties
+
 # Android related
 **/android/**/gradle-wrapper.jar
 **/android/.gradle
