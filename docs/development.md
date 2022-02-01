@@ -58,13 +58,9 @@ The underlying classes used by the BLoC of each feature are in the `models` subd
 
 ## Contributing
 
-<!--
-TODO: delete `main` branch and rename `dev` to main to simplify development.
--->
+This project follows a simplified gitflow branch structure and [Conventional Commits](https://www.conventionalcommits.org/). The main branch is `main`, which contains both the active development source code and the source of stable release versions of Gibsonify. These stable versions are in commits with tags containing the given version number, e.g. `1.0.0`. The `main` branch shouldn't be directly commited to, as commits should be made into branches branched _out of_ the `main` branch, e.g. `feat/add-awesome-feature`. These are then merged to `main` after passing tests and being approved.
 
-This project follows the gitflow branch structure and [Conventional Commits](https://www.conventionalcommits.org/). The stable branch is `main`, which shouldn't be directly commited to. The main development branch, `dev`, is merged into `main` after checks pass, but `dev` also shouldn't be directly commited to. Commits should be made into branches branched out from the `dev` branch, e.g. `feat/add-awesome-feature`.
-
-To contribute, open a pull request (PR) from your branch to the `dev` branch, naming your PR according to Conventional Commits, e.g. `feat: add awesome feature`. Your commits should also follow Conventional Commits, and it is recommended to use [Commitizen](https://commitizen-tools.github.io/commitizen/), which creates conventional commits for you using `cz c`. For major changes, please open an issue first to discuss what you would like to change.
+To contribute, open a pull request (PR) from your branch to the `main` branch, naming your PR according to Conventional Commits, e.g. `feat: add awesome feature`. Your commits should also follow Conventional Commits, and it is recommended to use [Commitizen](https://commitizen-tools.github.io/commitizen/), which creates conventional commits for you using `cz c`. For major changes, please open an issue first to discuss what you would like to change.
 
 All changes are documented in `CHANGELOG.md`, which is generated using commitizen as well. After a PR is approved, run the following to update the changelog
 
@@ -72,12 +68,12 @@ All changes are documented in `CHANGELOG.md`, which is generated using commitize
 cz changelog
 ```
 
-This should be then commited as `docs(changelog): update`, and the PR should be merged to dev `dev` using a merge commit with message corresponding to the PR name (e.g. `feat: add awesome feature`). If the commits in the PR _don't_ follow conventional commits, do a squash and merge to preserve conventional commits in `dev`.
+This should be then commited as `docs(changelog): update`, and the PR should be merged to `main` using a merge commit with a message corresponding to the PR name (e.g. `feat: add awesome feature`). If the commits in the PR _don't_ follow conventional commits, do a squash and merge to preserve conventional commits in `main`.
 
 <!-- 
-TODO: Check if the above works (i.e. if there are no merge conflicts with `dev` after generating the changelog), if not, rewrite to:
+TODO: Check if the above works (i.e. if there are no merge conflicts with `main` after generating the changelog), if not, rewrite to:
 
-This can then be commited straight to `dev` (the only exception, as it avoids merge conflicts), with the message `docs(changelog): update`
+This can then be commited straight to `main` (the only exception, as it avoids merge conflicts), with the message `docs(changelog): update`
 -->
 
 <!--
@@ -86,7 +82,7 @@ TODO Add testing instructions once a testing suite is implemented, probably usin
 
 ## Releasing
 
-Before making a new release version, create a `chore/release-x.y.z` branch from the `dev` branch, implement any pre-release changes, and open a PR named `chore: release x.y.z`, where `x.y.z` can be deduced by running `cz bump --dry-run` and observing the printed version. This is an automatically generated [Semantic Version](https://semver.org/) from conventional commits. 
+Before making a new release version, create a `chore/release-x.y.z` branch from the `main` branch, implement any pre-release changes, and open a PR named `chore: release x.y.z`, where `x.y.z` can be deduced by running `cz bump --dry-run` and observing the printed version. This is an automatically generated [Semantic Version](https://semver.org/) from conventional commits. 
 
 After implementing all changes and having the PR approved, update the version in `cz.yaml` and `pubspec.yaml` and also update the changelog all in a single command by running
 
@@ -94,11 +90,7 @@ After implementing all changes and having the PR approved, update the version in
 cz bump
 ```
 
-This will update these three files and create a commit `chore: bump version a.b.c to x.y.z`, along with an annotated git tag `x.y.z`. The PR should be then merged into `dev` (and also `main`) with the merge commit message `chore: release x.y.z`.
-
-<!--
-TODO: Rewrite this using just `main` after getting rid of `dev` and `main`.
--->
+This will update these three files and create a commit `chore: bump version a.b.c to x.y.z`, along with an annotated git tag `x.y.z`. The PR should be then merged into `main` with the merge commit message `chore: release x.y.z`.
 
 To release _a signed version_ of the Gibsonify android app via an `apk`, you need to have the Gibsonify java signing key on your machine. This key was generated using instructions found [here](https://docs.flutter.dev/deployment/android#signing-the-app) and [here](https://fahadjameel.com/2020/09/07/how-to-properly-sign-your-flutter-apps-before-uploading-to-the-android-app-store/) on 30 January 2022 and has the id `7c909176`. You then need to have a `key.properties` file in the `android` subdirectory of Gibsonify, which includes the path and password to the key. Only trusted developers should be able to build signed releases of Gibsonify, and this key should only be circulated amongst them.
 
