@@ -14,7 +14,7 @@
 
 ## Description
 
-The app follows the structure of the four passes of Gibson's methodology. It has been designed with prompts to help the enumerator carrying out the survey to make the process as intuitive as possible. Having been designed with offline usage in mind, it stores the recipes and all collected data locally on the device, and allows to export it later.
+The app follows the structure of the four passes of Gibson's methodology. It has been designed with prompts to help the enumerator carrying out the survey to make the process as intuitive as possible. Having been designed with offline usage in mind, it stores the recipes and all collected data locally on the device, allowing it to be exported at a future point.
 
 ## Installation
 
