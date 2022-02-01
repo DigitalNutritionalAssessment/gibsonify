@@ -14,16 +14,16 @@
 
 ## Description
 
-The app follows the structure of the four passes of Gibson's methodology. It has been designed with prompts to help the enumerator carrying out the survey to make the process as intuitive as possible. Having been designed with offline usage in mind, it uses a local database of the recipes and recent data collected.
+The app follows the structure of the four passes of Gibson's methodology. It has been designed with prompts to help the enumerator carrying out the survey to make the process as intuitive as possible. Having been designed with offline usage in mind, it stores the recipes and all collected data locally on the device, and allows to export it later.
 
 ## Installation
 
-The latest stable Android version of Gibsonify can be downloaded as an `.apk` file from [GitHub releases](https://github.com/DigitalNutritionalAssessment/Gibsonify/releases/latest). Instructions for verifying that you've downloaded the correct file are in [docs/release_verification.md](docs/release_verification.md). After downloading the `apk` file to your Android smartphone, you need to [allow installation of apps from unknown sources](https://www.maketecheasier.com/install-apps-from-unknown-sources-android/), and then tap on the `apk` file, and allow all other prompts to install it.
+The latest stable Android version of Gibsonify can be downloaded as an `.apk` file [here](https://github.com/DigitalNutritionalAssessment/gibsonify/releases/latest/download/app-release.apk). Instructions for verifying that you've downloaded the correct file are in [docs/release_verification.md](docs/release_verification.md). After downloading the `apk` file to your Android smartphone, you need to [allow installation of apps from unknown sources](https://www.maketecheasier.com/install-apps-from-unknown-sources-android/), and then tap on the `apk` file, and allow all other prompts to install it.
 
 Releases on platforms other than Android are currently not officially supported, although they can be built by following the development instructions outlined in the section below.
 
 <!--
-Probably direct (PGP-signed) apk download from GitHub releases (and tags?), then maybe Google Play Store & F-droid links?
+TODO: Add Google Play Store & F-droid links?
 -->
 
 ## Development
