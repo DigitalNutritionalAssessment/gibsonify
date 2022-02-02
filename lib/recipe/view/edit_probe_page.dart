@@ -19,10 +19,28 @@ class EditProbePage extends StatelessWidget {
                         context.read<RecipeBloc>().add(const RecipesSaved()),
                         Navigator.pop(context)
                       })),
-          floatingActionButton: FloatingActionButton.extended(
-              label: const Text("Save Probe"),
-              icon: const Icon(Icons.save_sharp),
-              onPressed: () => {Navigator.pop(context)}),
+          floatingActionButton: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: <Widget>[
+                FloatingActionButton.extended(
+                    heroTag: null,
+                    label: const Text("Add probe response"),
+                    icon: const Icon(Icons.add),
+                    onPressed: () => {
+                          context.read<RecipeBloc>().add(ProbeOptionAdded(
+                              recipe: state.recipes[recipeIndex],
+                              probeIndex: probeIndex)),
+                        }),
+                const SizedBox(
+                  height: 10,
+                ),
+                FloatingActionButton.extended(
+                    heroTag: null,
+                    label: const Text("Save Probe"),
+                    icon: const Icon(Icons.save_sharp),
+                    onPressed: () => {Navigator.pop(context)})
+              ]),
           body: ProbeForm(recipeIndex, probeIndex));
     });
   }

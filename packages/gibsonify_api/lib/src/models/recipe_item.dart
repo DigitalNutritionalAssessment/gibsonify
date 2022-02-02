@@ -4,6 +4,7 @@ import 'package:uuid/uuid.dart';
 import 'dart:convert';
 
 import 'recipe_ingredient.dart';
+import 'recipe_probe.dart';
 
 // TODO: rename this file to recipe.dart instead of recipe_item.dart
 class Recipe extends Equatable {
@@ -13,7 +14,7 @@ class Recipe extends Equatable {
     this.recipeType = "",
     this.recipeVolume = const RecipeVolume.pure(),
     this.ingredients = const <Ingredient>[],
-    this.probes = const <Map<String, dynamic>>[],
+    this.probes = const <Probe>[],
     this.probesChecked = false,
     this.saved = false,
   }) : recipeNumber = recipeNumber ?? const Uuid().v4();
@@ -24,7 +25,7 @@ class Recipe extends Equatable {
         recipeType = json['recipeType'],
         recipeVolume = RecipeVolume.fromJson(json['recipeVolume']),
         ingredients = _jsonDecodeIngredients(json['ingredients']),
-        probes = List<Map<String, dynamic>>.from(jsonDecode(json['probes'])),
+        probes = _jsonDecodeProbes(json['probes']),
         probesChecked = json['probesChecked'] == 'true' ? true : false,
         saved = json['saved'] == 'true' ? true : false;
 
@@ -46,7 +47,7 @@ class Recipe extends Equatable {
   final String recipeType;
   final RecipeVolume recipeVolume;
   final List<Ingredient> ingredients;
-  final List<Map<String, dynamic>> probes;
+  final List<Probe> probes;
   final bool probesChecked;
   final bool saved;
 
@@ -56,7 +57,7 @@ class Recipe extends Equatable {
     String? recipeType,
     RecipeVolume? recipeVolume,
     List<Ingredient>? ingredients,
-    List<Map<String, dynamic>>? probes,
+    List<Probe>? probes,
     bool? probesChecked,
     bool? saved,
   }) {
@@ -88,9 +89,16 @@ class Recipe extends Equatable {
 List<Ingredient> _jsonDecodeIngredients(jsonEncodedIngredients) {
   List<dynamic> partiallyDecodedIngredients =
       jsonDecode(jsonEncodedIngredients);
-  List<Ingredient> fullyDecodedFoodItems = List<Ingredient>.from(
+  List<Ingredient> fullyDecodedIngredients = List<Ingredient>.from(
       partiallyDecodedIngredients.map((x) => Ingredient.fromJson(x)));
-  return fullyDecodedFoodItems;
+  return fullyDecodedIngredients;
+}
+
+List<Probe> _jsonDecodeProbes(jsonEncodedProbes) {
+  List<dynamic> partiallyDecodedProbes = jsonDecode(jsonEncodedProbes);
+  List<Probe> fullyDecodedProbes =
+      List<Probe>.from(partiallyDecodedProbes.map((x) => Probe.fromJson(x)));
+  return fullyDecodedProbes;
 }
 
 enum RecipeNameValidationError { invalid }

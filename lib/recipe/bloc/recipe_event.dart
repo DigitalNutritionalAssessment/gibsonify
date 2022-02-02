@@ -94,12 +94,65 @@ class ProbeChecked extends RecipeEvent {
 
 class ProbeDeleted extends RecipeEvent {
   final Recipe recipe;
-  final Map<String, dynamic> probe;
+  final Probe probe;
 
   const ProbeDeleted({required this.recipe, required this.probe});
 
   @override
   List<Object> get props => [recipe, probe];
+}
+
+class ProbeOptionAdded extends RecipeEvent {
+  final Recipe recipe;
+  final int probeIndex;
+
+  const ProbeOptionAdded({required this.recipe, required this.probeIndex});
+
+  @override
+  List<Object> get props => [recipe, probeIndex];
+}
+
+class ProbeOptionChanged extends RecipeEvent {
+  final Recipe recipe;
+  final int probeIndex;
+  final int probeOptionIndex;
+  final String probeOptionName;
+
+  const ProbeOptionChanged(
+      {required this.recipe,
+      required this.probeIndex,
+      required this.probeOptionIndex,
+      required this.probeOptionName});
+
+  @override
+  List<Object> get props =>
+      [recipe, probeIndex, probeOptionIndex, probeOptionName];
+}
+
+class ProbeOptionDeleted extends RecipeEvent {
+  final Recipe recipe;
+  final int probeIndex;
+  final int probeOptionIndex;
+
+  const ProbeOptionDeleted(
+      {required this.recipe,
+      required this.probeIndex,
+      required this.probeOptionIndex});
+
+  @override
+  List<Object> get props => [recipe, probeIndex, probeOptionIndex];
+}
+
+class ProbeOptionSelected extends RecipeEvent {
+  final Recipe recipe;
+  final int probeIndex;
+  final String answer;
+
+  const ProbeOptionSelected(
+      {required this.recipe, required this.probeIndex, required this.answer});
+
+  @override
+  List<Object> get props => [recipe, probeIndex, answer];
 }
 
 class IngredientAdded extends RecipeEvent {

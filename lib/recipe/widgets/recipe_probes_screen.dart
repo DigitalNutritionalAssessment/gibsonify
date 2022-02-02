@@ -4,6 +4,7 @@ import 'package:gibsonify/recipe/recipe.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gibsonify/navigation/navigation.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 
 class RecipeProbeScreen extends StatelessWidget {
   final int recipeIndex;
@@ -88,26 +89,55 @@ class ProbeList extends StatelessWidget {
                       ],
                     ),
                     child: Card(
-                        child: ListTile(
-                      title: Text(
-                          state.recipes[recipeIndex].probes[index]['probe']),
-                      leading: const Icon(Icons.live_help),
-                      trailing: (assignedFoodItemId != null)
-                          ? Checkbox(
-                              value: state.recipes[recipeIndex].probes[index]
-                                  ['checked'],
-                              onChanged: (bool? value) {
-                                context.read<RecipeBloc>().add(ProbeChecked(
-                                    recipe: state.recipes[recipeIndex],
-                                    probeCheck: value!,
-                                    probeIndex: index));
-                              },
-                            )
-                          : const Icon(Icons.quiz_rounded),
-                      onTap: () => {
-                        Navigator.pushNamed(context, PageRouter.editProbe,
-                            arguments: [recipeIndex, index])
-                      },
+                        child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          ListTile(
+                            title: Text(state.recipes[recipeIndex].probes[index]
+                                    .probeName ??
+                                ''),
+                            leading: const Icon(Icons.live_help),
+                            trailing: (assignedFoodItemId != null)
+                                ? Checkbox(
+                                    value: state.recipes[recipeIndex]
+                                        .probes[index].checked,
+                                    onChanged: (bool? value) {
+                                      context.read<RecipeBloc>().add(
+                                          ProbeChecked(
+                                              recipe:
+                                                  state.recipes[recipeIndex],
+                                              probeCheck: value!,
+                                              probeIndex: index));
+                                    },
+                                  )
+                                : const SizedBox.shrink(),
+                            onTap: () => {
+                              Navigator.pushNamed(context, PageRouter.editProbe,
+                                  arguments: [recipeIndex, index])
+                            },
+                          ),
+                          Visibility(
+                            visible: (assignedFoodItemId != null),
+                            child: DropdownSearch<String>(
+                                mode: Mode.MENU,
+                                showSelectedItems: true,
+                                showSearchBox: true,
+                                items: state.recipes[recipeIndex].probes[index]
+                                    .optionsList(),
+                                onChanged: (String? answer) => context
+                                    .read<RecipeBloc>()
+                                    .add(ProbeOptionSelected(
+                                        recipe: state.recipes[recipeIndex],
+                                        probeIndex: index,
+                                        answer: answer!)),
+                                selectedItem: state.recipes[recipeIndex]
+                                        .probes[index].answer ??
+                                    state.recipes[recipeIndex].probes[index]
+                                        .optionsList()[0]),
+                          )
+                        ],
+                      ),
                     )),
                   );
                 }),
@@ -162,7 +192,7 @@ class ProbesPrompt extends StatelessWidget {
 
 class DeleteProbe extends StatelessWidget {
   final Recipe recipe;
-  final Map<String, dynamic> probe;
+  final Probe probe;
 
   const DeleteProbe({Key? key, required this.recipe, required this.probe})
       : super(key: key);
@@ -172,7 +202,7 @@ class DeleteProbe extends StatelessWidget {
     return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
       return AlertDialog(
         title: const Text('Delete probe'),
-        content: Text('Would you like to delete the ${probe['probe']} probe?'),
+        content: Text('Would you like to delete the ${probe.probeName} probe?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, 'Cancel'),
