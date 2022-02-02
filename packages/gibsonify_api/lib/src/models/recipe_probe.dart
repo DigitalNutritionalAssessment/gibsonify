@@ -27,6 +27,13 @@ class Probe extends Equatable {
     return options;
   }
 
+  bool standardAnswer() {
+    if (answer == optionsList()[0] || answer == null) {
+      return true;
+    }
+    return false;
+  }
+
   Probe.fromJson(Map<String, dynamic> json)
       : probeName = json['probeName'],
         checked = json['checked'] == 'true' ? true : false,

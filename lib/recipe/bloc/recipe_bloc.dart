@@ -228,8 +228,16 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     probes.removeAt(changedProbeIndex);
     probes.insert(changedProbeIndex, probe);
 
-    Recipe recipe =
-        recipes[changedRecipeIndex].copyWith(probes: probes, saved: false);
+    bool probesStandard = true;
+    for (Probe probe in probes) {
+      if (probe.standardAnswer() == false) {
+        probesStandard = false;
+        break;
+      }
+    }
+
+    Recipe recipe = recipes[changedRecipeIndex]
+        .copyWith(probes: probes, probesStandard: probesStandard, saved: false);
 
     recipes.removeAt(changedRecipeIndex);
     recipes.insert(changedRecipeIndex, recipe);
@@ -289,8 +297,16 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     probes.removeAt(changedProbeIndex);
     probes.insert(changedProbeIndex, probe);
 
-    Recipe recipe =
-        recipes[changedRecipeIndex].copyWith(probes: probes, saved: false);
+    bool probesStandard = true;
+    for (Probe probe in probes) {
+      if (probe.standardAnswer() == false) {
+        probesStandard = false;
+        break;
+      }
+    }
+
+    Recipe recipe = recipes[changedRecipeIndex]
+        .copyWith(probes: probes, probesStandard: probesStandard, saved: false);
 
     recipes.removeAt(changedRecipeIndex);
     recipes.insert(changedRecipeIndex, recipe);
@@ -311,8 +327,16 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     probes.removeAt(changedProbeIndex);
     probes.insert(changedProbeIndex, probe);
 
-    Recipe recipe =
-        recipes[changedRecipeIndex].copyWith(probes: probes, saved: false);
+    bool probesStandard = true;
+    for (Probe probe in probes) {
+      if (probe.standardAnswer() == false) {
+        probesStandard = false;
+        break;
+      }
+    }
+
+    Recipe recipe = recipes[changedRecipeIndex]
+        .copyWith(probes: probes, probesStandard: probesStandard, saved: false);
 
     recipes.removeAt(changedRecipeIndex);
     recipes.insert(changedRecipeIndex, recipe);
