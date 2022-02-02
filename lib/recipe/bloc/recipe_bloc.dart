@@ -218,7 +218,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
 
     List<Probe> probes = List.from(recipes[changedRecipeIndex].probes);
     int changedProbeIndex = event.probeIndex;
-    List<Map<String, String?>> probeOptions =
+    List<Map<String, dynamic>> probeOptions =
         List.from(probes[changedProbeIndex].probeOptions);
 
     probeOptions.add({'option': null, 'id': const Uuid().v4()});
@@ -252,7 +252,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
 
     List<Probe> probes = List.from(recipes[changedRecipeIndex].probes);
     int changedProbeIndex = event.probeIndex;
-    List<Map<String, String?>> probeOptions =
+    List<Map<String, dynamic>> probeOptions =
         List.from(probes[changedProbeIndex].probeOptions);
     int changedProbeOptionIndex = event.probeOptionIndex;
 
@@ -286,7 +286,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
 
     List<Probe> probes = List.from(recipes[changedRecipeIndex].probes);
     int changedProbeIndex = event.probeIndex;
-    List<Map<String, String?>> probeOptions =
+    List<Map<String, dynamic>> probeOptions =
         List.from(probes[changedProbeIndex].probeOptions);
 
     probeOptions.removeAt(event.probeOptionIndex);

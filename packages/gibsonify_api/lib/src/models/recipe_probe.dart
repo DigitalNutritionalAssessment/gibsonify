@@ -7,7 +7,7 @@ class Probe extends Equatable {
       {this.probeName,
       this.checked = false,
       this.answer,
-      List<Map<String, String?>>? probeOptions})
+      List<Map<String, dynamic>>? probeOptions})
       : probeOptions = probeOptions ??
             [
               {'option': null, 'id': const Uuid().v4()},
@@ -17,11 +17,11 @@ class Probe extends Equatable {
   final String? probeName;
   final bool checked;
   final String? answer;
-  final List<Map<String, String?>> probeOptions;
+  final List<Map<String, dynamic>> probeOptions;
 
   List<String> optionsList() {
     final List<String> options = [];
-    for (Map<String, String?> option in probeOptions) {
+    for (Map<String, dynamic> option in probeOptions) {
       options.add(option['option'] ?? '');
     }
     return options;
@@ -39,7 +39,7 @@ class Probe extends Equatable {
         checked = json['checked'] == 'true' ? true : false,
         answer = json['answer'],
         probeOptions =
-            List<Map<String, String?>>.from(jsonDecode(json['probeOptions']));
+            List<Map<String, dynamic>>.from(jsonDecode(json['probeOptions']));
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -54,7 +54,7 @@ class Probe extends Equatable {
       {String? probeName,
       bool? checked,
       String? answer,
-      List<Map<String, String?>>? probeOptions,
+      List<Map<String, dynamic>>? probeOptions,
       String? id}) {
     return Probe(
         probeName: probeName ?? this.probeName,
