@@ -25,21 +25,24 @@ class RecipeProbeScreen extends StatelessWidget {
                       Navigator.pop(context)
                     }),
           ),
-          floatingActionButton:
-              (state.recipes[recipeIndex].recipeType == 'Standard Recipe')
-                  ? FloatingActionButton.extended(
-                      label: const Text("Add probe"),
-                      icon: const Icon(Icons.add),
-                      onPressed: () => {
-                            context.read<RecipeBloc>().add(
-                                ProbeAdded(recipe: state.recipes[recipeIndex])),
-                            Navigator.pushNamed(context, PageRouter.editProbe,
-                                arguments: [
-                                  recipeIndex,
-                                  state.recipes[recipeIndex].probes.length
-                                ])
-                          })
-                  : const SizedBox.shrink(),
+          floatingActionButton: Visibility(
+            visible:
+                (state.recipes[recipeIndex].recipeType == 'Standard Recipe' &&
+                    assignedFoodItemId == null),
+            child: FloatingActionButton.extended(
+                label: const Text("Add probe"),
+                icon: const Icon(Icons.add),
+                onPressed: () => {
+                      context
+                          .read<RecipeBloc>()
+                          .add(ProbeAdded(recipe: state.recipes[recipeIndex])),
+                      Navigator.pushNamed(context, PageRouter.editProbe,
+                          arguments: [
+                            recipeIndex,
+                            state.recipes[recipeIndex].probes.length
+                          ])
+                    }),
+          ),
           body: ProbeList(
             recipeIndex: recipeIndex,
             assignedFoodItemId: assignedFoodItemId,
@@ -63,84 +66,93 @@ class ProbeList extends StatelessWidget {
         children: [
           ProbesPrompt(
               recipeIndex: recipeIndex, assignedFoodItemId: assignedFoodItemId),
-          Expanded(
-            child: ListView.builder(
-                padding: const EdgeInsets.all(2.0),
-                itemCount: state.recipes[recipeIndex].probes.length,
-                itemBuilder: (context, index) {
-                  return Slidable(
-                    startActionPane: ActionPane(
-                      motion: const ScrollMotion(),
-                      children: [
-                        SlidableAction(
-                          onPressed: (context) {
-                            showDialog<String>(
-                                context: context,
-                                builder: (BuildContext context) => DeleteProbe(
-                                    recipe: state.recipes[recipeIndex],
-                                    probe: state
-                                        .recipes[recipeIndex].probes[index]));
-                          },
-                          backgroundColor: const Color(0xFFFE4A49),
-                          foregroundColor: Colors.white,
-                          icon: Icons.delete,
-                          label: 'Delete',
-                        )
-                      ],
-                    ),
-                    child: Card(
-                        child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
+          Visibility(
+            visible:
+                (state.recipes[recipeIndex].recipeType == 'Standard Recipe'),
+            child: Expanded(
+              child: ListView.builder(
+                  padding: const EdgeInsets.all(2.0),
+                  itemCount: state.recipes[recipeIndex].probes.length,
+                  itemBuilder: (context, index) {
+                    return Slidable(
+                      startActionPane: ActionPane(
+                        motion: const ScrollMotion(),
                         children: [
-                          ListTile(
-                            title: Text(state.recipes[recipeIndex].probes[index]
-                                    .probeName ??
-                                ''),
-                            leading: const Icon(Icons.live_help),
-                            trailing: (assignedFoodItemId != null)
-                                ? Checkbox(
-                                    value: state.recipes[recipeIndex]
-                                        .probes[index].checked,
-                                    onChanged: (bool? value) {
-                                      context.read<RecipeBloc>().add(
-                                          ProbeChecked(
-                                              recipe:
-                                                  state.recipes[recipeIndex],
-                                              probeCheck: value!,
-                                              probeIndex: index));
-                                    },
-                                  )
-                                : const SizedBox.shrink(),
-                            onTap: () => {
-                              Navigator.pushNamed(context, PageRouter.editProbe,
-                                  arguments: [recipeIndex, index])
+                          SlidableAction(
+                            onPressed: (context) {
+                              showDialog<String>(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      DeleteProbe(
+                                          recipe: state.recipes[recipeIndex],
+                                          probe: state.recipes[recipeIndex]
+                                              .probes[index]));
                             },
-                          ),
-                          Visibility(
-                            visible: (assignedFoodItemId != null),
-                            child: DropdownSearch<String>(
-                                mode: Mode.MENU,
-                                showSelectedItems: true,
-                                showSearchBox: true,
-                                items: state.recipes[recipeIndex].probes[index]
-                                    .optionsList(),
-                                onChanged: (String? answer) => context
-                                    .read<RecipeBloc>()
-                                    .add(ProbeOptionSelected(
-                                        recipe: state.recipes[recipeIndex],
-                                        probeIndex: index,
-                                        answer: answer!)),
-                                selectedItem: state.recipes[recipeIndex]
-                                        .probes[index].answer ??
-                                    state.recipes[recipeIndex].probes[index]
-                                        .optionsList()[0]),
+                            backgroundColor: const Color(0xFFFE4A49),
+                            foregroundColor: Colors.white,
+                            icon: Icons.delete,
+                            label: 'Delete',
                           )
                         ],
                       ),
-                    )),
-                  );
-                }),
+                      child: Card(
+                          child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            ListTile(
+                              title: Text(state.recipes[recipeIndex]
+                                      .probes[index].probeName ??
+                                  ''),
+                              leading: const Icon(Icons.live_help),
+                              trailing: Visibility(
+                                visible: (assignedFoodItemId != null),
+                                child: Checkbox(
+                                  value: state.recipes[recipeIndex]
+                                      .probes[index].checked,
+                                  onChanged: (bool? value) {
+                                    context.read<RecipeBloc>().add(ProbeChecked(
+                                        recipe: state.recipes[recipeIndex],
+                                        probeCheck: value!,
+                                        probeIndex: index));
+                                  },
+                                ),
+                              ),
+                              onTap: () => {
+                                if (assignedFoodItemId == null)
+                                  {
+                                    Navigator.pushNamed(
+                                        context, PageRouter.editProbe,
+                                        arguments: [recipeIndex, index])
+                                  }
+                              },
+                            ),
+                            Visibility(
+                              visible: (assignedFoodItemId != null),
+                              child: DropdownSearch<String>(
+                                  mode: Mode.MENU,
+                                  showSelectedItems: true,
+                                  showSearchBox: true,
+                                  items: state
+                                      .recipes[recipeIndex].probes[index]
+                                      .optionsList(),
+                                  onChanged: (String? answer) => context
+                                      .read<RecipeBloc>()
+                                      .add(ProbeOptionSelected(
+                                          recipe: state.recipes[recipeIndex],
+                                          probeIndex: index,
+                                          answer: answer!)),
+                                  selectedItem: state.recipes[recipeIndex]
+                                          .probes[index].answer ??
+                                      state.recipes[recipeIndex].probes[index]
+                                          .optionsList()[0]),
+                            )
+                          ],
+                        ),
+                      )),
+                    );
+                  }),
+            ),
           ),
         ],
       );
