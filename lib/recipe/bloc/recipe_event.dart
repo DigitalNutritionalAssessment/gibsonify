@@ -155,6 +155,15 @@ class ProbeOptionSelected extends RecipeEvent {
   List<Object> get props => [recipe, probeIndex, answer];
 }
 
+class ProbeCleared extends RecipeEvent {
+  final Recipe recipe;
+
+  const ProbeCleared({required this.recipe});
+
+  @override
+  List<Object> get props => [recipe];
+}
+
 class IngredientAdded extends RecipeEvent {
   final Recipe recipe;
 

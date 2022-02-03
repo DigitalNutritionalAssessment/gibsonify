@@ -47,13 +47,18 @@ class RecipesScreen extends StatelessWidget {
                     trailing: state.recipes[index].saved
                         ? const Icon(Icons.done)
                         : const Icon(Icons.rotate_left_rounded),
-                    onTap: () => Navigator.pushNamed(context, PageRouter.recipe,
-                        arguments: (assignedFoodItemId == null ||
-                                state.recipes[index].probes.isEmpty ||
-                                state.recipes[index].recipeType !=
-                                    'Standard Recipe')
-                            ? [index, assignedFoodItemId, 1]
-                            : [index, assignedFoodItemId, 0]),
+                    onTap: () => {
+                      context
+                          .read<RecipeBloc>()
+                          .add(ProbeCleared(recipe: state.recipes[index])),
+                      Navigator.pushNamed(context, PageRouter.recipe,
+                          arguments: (assignedFoodItemId == null ||
+                                  state.recipes[index].probes.isEmpty ||
+                                  state.recipes[index].recipeType !=
+                                      'Standard Recipe')
+                              ? [index, assignedFoodItemId, 1]
+                              : [index, assignedFoodItemId, 0])
+                    },
                   )),
                 );
               }),

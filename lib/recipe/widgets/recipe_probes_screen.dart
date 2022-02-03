@@ -133,8 +133,7 @@ class ProbeList extends StatelessWidget {
                                   mode: Mode.MENU,
                                   showSelectedItems: true,
                                   showSearchBox: true,
-                                  items: state
-                                      .recipes[recipeIndex].probes[index]
+                                  items: state.recipes[recipeIndex].probes[index]
                                       .optionsList(),
                                   onChanged: (String? answer) => context
                                       .read<RecipeBloc>()
@@ -142,10 +141,15 @@ class ProbeList extends StatelessWidget {
                                           recipe: state.recipes[recipeIndex],
                                           probeIndex: index,
                                           answer: answer!)),
-                                  selectedItem: state.recipes[recipeIndex]
-                                          .probes[index].answer ??
-                                      state.recipes[recipeIndex].probes[index]
-                                          .optionsList()[0]),
+                                  selectedItem: (state.recipes[recipeIndex]
+                                                  .probes[index].answer ==
+                                              null ||
+                                          state.recipes[recipeIndex]
+                                                  .probes[index].answer ==
+                                              '')
+                                      ? state.recipes[recipeIndex].probes[index]
+                                          .optionsList()[0]
+                                      : state.recipes[recipeIndex].probes[index].answer),
                             )
                           ],
                         ),
