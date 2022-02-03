@@ -70,6 +70,15 @@ class InterviewStartTimeChanged extends CollectionEvent {
   List<Object> get props => [interviewStartTime];
 }
 
+class PictureChartCollectedChanged extends CollectionEvent {
+  final String pictureChartCollected;
+
+  const PictureChartCollectedChanged({required this.pictureChartCollected});
+
+  @override
+  List<Object> get props => [pictureChartCollected];
+}
+
 class InterviewEndTimeChanged extends CollectionEvent {
   final String interviewEndTime;
 

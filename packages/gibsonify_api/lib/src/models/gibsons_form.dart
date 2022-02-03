@@ -18,6 +18,7 @@ class GibsonsForm extends Equatable {
       this.interviewDate = const InterviewDate.pure(),
       this.interviewStartTime = const InterviewStartTime.pure(),
       this.geoLocation = const GeoLocation.pure(),
+      this.pictureChartCollected = const PictureChartCollected.pure(),
       this.interviewEndTime = const InterviewEndTime.pure(),
       this.interviewOutcome = const InterviewOutcome.pure(),
       this.comments = const Comments.pure(),
@@ -33,6 +34,7 @@ class GibsonsForm extends Equatable {
   final InterviewDate interviewDate;
   final InterviewStartTime interviewStartTime;
   final GeoLocation geoLocation;
+  final PictureChartCollected pictureChartCollected;
   final InterviewEndTime interviewEndTime;
   final InterviewOutcome interviewOutcome;
   final Comments comments;
@@ -59,6 +61,8 @@ class GibsonsForm extends Equatable {
         interviewStartTime =
             InterviewStartTime.fromJson(json['interviewStartTime']),
         geoLocation = GeoLocation.fromJson(json['geoLocation']),
+        pictureChartCollected =
+            PictureChartCollected.fromJson(json['pictureChartCollected']),
         interviewEndTime = InterviewEndTime.fromJson(json['interviewEndTime']),
         interviewOutcome = InterviewOutcome.fromJson(json['interviewOutcome']),
         comments = Comments.fromJson(json['comments']),
@@ -75,6 +79,7 @@ class GibsonsForm extends Equatable {
     data['interviewDate'] = interviewDate.toJson();
     data['interviewStartTime'] = interviewStartTime.toJson();
     data['geoLocation'] = geoLocation.toJson();
+    data['pictureChartCollected'] = pictureChartCollected.toJson();
     data['interviewEndTime'] = interviewEndTime.toJson();
     data['interviewOutcome'] = interviewOutcome.toJson();
     data['comments'] = comments.toJson();
@@ -92,6 +97,7 @@ class GibsonsForm extends Equatable {
       InterviewDate? interviewDate,
       InterviewStartTime? interviewStartTime,
       GeoLocation? geoLocation,
+      PictureChartCollected? pictureChartCollected,
       InterviewEndTime? interviewEndTime,
       InterviewOutcome? interviewOutcome,
       Comments? comments,
@@ -106,6 +112,8 @@ class GibsonsForm extends Equatable {
         interviewDate: interviewDate ?? this.interviewDate,
         interviewStartTime: interviewStartTime ?? this.interviewStartTime,
         geoLocation: geoLocation ?? this.geoLocation,
+        pictureChartCollected:
+            pictureChartCollected ?? this.pictureChartCollected,
         interviewEndTime: interviewEndTime ?? this.interviewEndTime,
         interviewOutcome: interviewOutcome ?? this.interviewOutcome,
         comments: comments ?? this.comments,
@@ -124,6 +132,7 @@ class GibsonsForm extends Equatable {
         'Interview Date: $interviewDate\n'
         'Interview Start Time: $interviewStartTime\n'
         'Geo Location: $geoLocation\n'
+        'Picture Chart Collected: $pictureChartCollected\n'
         'Interview End Time: $interviewEndTime\n'
         'Interview Outcome: $interviewOutcome\n'
         'Comments: $comments\n'
@@ -142,6 +151,7 @@ class GibsonsForm extends Equatable {
         interviewDate,
         interviewStartTime,
         geoLocation,
+        pictureChartCollected,
         interviewEndTime,
         interviewOutcome,
         comments,
@@ -369,6 +379,32 @@ class GeoLocation extends FormzInput<String, GeoLocationValidationError> {
     return value?.isNotEmpty == true
         ? null
         : GeoLocationValidationError.invalid;
+  }
+}
+
+enum PictureChartCollectedValidationError { invalid }
+
+class PictureChartCollected
+    extends FormzInput<String, PictureChartCollectedValidationError> {
+  const PictureChartCollected.pure() : super.pure('');
+  const PictureChartCollected.dirty([String value = '']) : super.dirty(value);
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['value'] = value;
+    data['pure'] = pure.toString();
+    return data;
+  }
+
+  PictureChartCollected.fromJson(Map<String, dynamic> json)
+      : super.dirty(json['value']);
+
+  @override
+  PictureChartCollectedValidationError? validator(String? value) {
+    // TODO: Add validation, currently only checks if not empty
+    return value?.isNotEmpty == true
+        ? null
+        : PictureChartCollectedValidationError.invalid;
   }
 }
 

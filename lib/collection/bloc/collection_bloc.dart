@@ -21,6 +21,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     on<RecallDayChanged>(_onRecallDayChanged);
     on<InterviewDateChanged>(_onInterviewDateChanged);
     on<InterviewStartTimeChanged>(_onInterviewStartTimeChanged);
+    on<PictureChartCollectedChanged>(_onPictureChartCollectedChanged);
     on<InterviewEndTimeChanged>(_onInterviewEndTimeChanged);
     on<InterviewOutcomeChanged>(_onInterviewOutcomeChanged);
     on<CommentsChanged>(_onCommentsChanged);
@@ -103,6 +104,16 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
         InterviewStartTime.dirty(event.interviewStartTime);
     GibsonsForm changedGibsonsForm =
         state.gibsonsForm.copyWith(interviewStartTime: interviewStartTime);
+
+    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+  }
+
+  void _onPictureChartCollectedChanged(
+      PictureChartCollectedChanged event, Emitter<CollectionState> emit) {
+    final pictureChartCollected =
+        PictureChartCollected.dirty(event.pictureChartCollected);
+    GibsonsForm changedGibsonsForm = state.gibsonsForm
+        .copyWith(pictureChartCollected: pictureChartCollected);
 
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }

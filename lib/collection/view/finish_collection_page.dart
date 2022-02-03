@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:gibsonify/collection/collection.dart';
 import 'package:gibsonify/home/home.dart';
+import 'package:gibsonify_api/gibsonify_api.dart';
 
 class FinishCollectionPage extends StatelessWidget {
   const FinishCollectionPage({Key? key}) : super(key: key);
@@ -50,11 +51,43 @@ class FinishCollectionForm extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: const <Widget>[
+          PictureChartCollectedInput(),
           InterviewEndTimeInput(),
           InterviewOutcomeInput(),
           CommentsInput()
         ],
       ),
+    );
+  }
+}
+
+class PictureChartCollectedInput extends StatelessWidget {
+  const PictureChartCollectedInput({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    const List<DropdownMenuItem<String>> dropdownMenuItems = [
+      DropdownMenuItem(child: Text(''), value: ''),
+      DropdownMenuItem(child: Text('Yes'), value: 'Yes'),
+      DropdownMenuItem(child: Text('No'), value: 'No')
+    ];
+    return BlocBuilder<CollectionBloc, CollectionState>(
+      builder: (context, state) {
+        return DropdownButtonFormField(
+            value: state.gibsonsForm.pictureChartCollected.value,
+            decoration: InputDecoration(
+                icon: const Icon(Icons.photo_size_select_actual_rounded),
+                labelText: 'Is picture chart collected',
+                helperText: 'Have you collected the picture chart?',
+                errorText: state.gibsonsForm.pictureChartCollected.invalid
+                    ? 'Select if you collected the picture chart'
+                    : null),
+            items: dropdownMenuItems,
+            onChanged: (String? value) {
+              context.read<CollectionBloc>().add(PictureChartCollectedChanged(
+                  pictureChartCollected: value ?? ''));
+            });
+      },
     );
   }
 }
