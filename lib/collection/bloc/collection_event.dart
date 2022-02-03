@@ -271,3 +271,10 @@ class GibsonsFormCreated extends CollectionEvent {
   @override
   List<Object> get props => [];
 }
+
+class GeoLocationRequested extends CollectionEvent {
+  const GeoLocationRequested();
+
+  @override
+  List<Object> get props => [];
+}

@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:geolocator/geolocator.dart';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:gibsonify_repository/gibsonify_repository.dart';
@@ -38,6 +39,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     on<GibsonsFormSaved>(_onGibsonsFormSaved);
     on<GibsonsFormProvided>(_onGibsonsFormProvided);
     on<GibsonsFormCreated>(_onGibsonsFormCreated);
+    on<GeoLocationRequested>(_onGeoLocationRequested);
   }
 
   void _onHouseholdIdChanged(
@@ -388,5 +390,73 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
       GibsonsFormCreated event, Emitter<CollectionState> emit) {
     GibsonsForm gibsonsFormCreated = GibsonsForm();
     emit(state.copyWith(gibsonsForm: gibsonsFormCreated));
+  }
+
+  Future<void> _onGeoLocationRequested(
+      GeoLocationRequested event, Emitter<CollectionState> emit) async {
+    String geoLocationFormatted = 'Requested';
+
+    var geoLocation = GeoLocation.dirty(geoLocationFormatted);
+
+    GibsonsForm changedGibsonsForm =
+        state.gibsonsForm.copyWith(geoLocation: geoLocation);
+
+    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+
+    try {
+      Position position = await _determinePosition();
+
+      geoLocationFormatted =
+          position.latitude.toString() + ', ' + position.longitude.toString();
+    } catch (e) {
+      geoLocationFormatted = 'Undetermined';
+    }
+
+    geoLocation = GeoLocation.dirty(geoLocationFormatted);
+
+    changedGibsonsForm = state.gibsonsForm.copyWith(geoLocation: geoLocation);
+
+    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+  }
+
+  /// Determine the current position of the device.
+  ///
+  /// When the location services are not enabled or permissions
+  /// are denied the `Future` will return an error.
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    return await Geolocator.getCurrentPosition();
   }
 }

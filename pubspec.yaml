@@ -22,6 +22,7 @@ dependencies:
     path: packages/gibsonify_repository
   path_provider: ^2.0.8
   flutter_mailer: ^2.0.0
+  geolocator: ^8.0.5
 
 dev_dependencies:
   flutter_test:

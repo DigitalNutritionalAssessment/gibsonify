@@ -49,7 +49,8 @@ class SensitizationForm extends StatelessWidget {
           SensitizationDateInput(),
           RecallDayInput(),
           InterviewDateInput(),
-          InterviewStartTimeInput()
+          InterviewStartTimeInput(),
+          GeoLocationInput()
         ],
       ),
     );
@@ -293,6 +294,32 @@ class InterviewStartTimeInput extends StatelessWidget {
   }
 }
 
+class GeoLocationInput extends StatelessWidget {
+  const GeoLocationInput({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CollectionBloc, CollectionState>(
+      builder: (context, state) {
+        return TextFormField(
+          readOnly: true,
+          key: UniqueKey(),
+          initialValue: state.gibsonsForm.geoLocation.value,
+          onTap: () =>
+              context.read<CollectionBloc>().add(const GeoLocationRequested()),
+          decoration: InputDecoration(
+            icon: const Icon(Icons.location_on_outlined),
+            labelText: 'GPS Location',
+            helperText: 'GPS Coordinates',
+            errorText: state.gibsonsForm.geoLocation.invalid
+                ? 'Request the GPS location'
+                : null,
+          ),
+        );
+      },
+    );
+  }
+}
 
 // Or perhaps make the bottom navigation bar be a part of the state and only 
 // allow to pass to next one if previous one is complete

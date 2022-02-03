@@ -17,6 +17,7 @@ class GibsonsForm extends Equatable {
       this.recallDay = const RecallDay.pure(),
       this.interviewDate = const InterviewDate.pure(),
       this.interviewStartTime = const InterviewStartTime.pure(),
+      this.geoLocation = const GeoLocation.pure(),
       this.interviewEndTime = const InterviewEndTime.pure(),
       this.interviewOutcome = const InterviewOutcome.pure(),
       this.comments = const Comments.pure(),
@@ -31,6 +32,7 @@ class GibsonsForm extends Equatable {
   final RecallDay recallDay;
   final InterviewDate interviewDate;
   final InterviewStartTime interviewStartTime;
+  final GeoLocation geoLocation;
   final InterviewEndTime interviewEndTime;
   final InterviewOutcome interviewOutcome;
   final Comments comments;
@@ -56,6 +58,7 @@ class GibsonsForm extends Equatable {
         interviewDate = InterviewDate.fromJson(json['interviewDate']),
         interviewStartTime =
             InterviewStartTime.fromJson(json['interviewStartTime']),
+        geoLocation = GeoLocation.fromJson(json['geoLocation']),
         interviewEndTime = InterviewEndTime.fromJson(json['interviewEndTime']),
         interviewOutcome = InterviewOutcome.fromJson(json['interviewOutcome']),
         comments = Comments.fromJson(json['comments']),
@@ -71,6 +74,7 @@ class GibsonsForm extends Equatable {
     data['recallDay'] = recallDay.toJson();
     data['interviewDate'] = interviewDate.toJson();
     data['interviewStartTime'] = interviewStartTime.toJson();
+    data['geoLocation'] = geoLocation.toJson();
     data['interviewEndTime'] = interviewEndTime.toJson();
     data['interviewOutcome'] = interviewOutcome.toJson();
     data['comments'] = comments.toJson();
@@ -87,6 +91,7 @@ class GibsonsForm extends Equatable {
       RecallDay? recallDay,
       InterviewDate? interviewDate,
       InterviewStartTime? interviewStartTime,
+      GeoLocation? geoLocation,
       InterviewEndTime? interviewEndTime,
       InterviewOutcome? interviewOutcome,
       Comments? comments,
@@ -100,6 +105,7 @@ class GibsonsForm extends Equatable {
         recallDay: recallDay ?? this.recallDay,
         interviewDate: interviewDate ?? this.interviewDate,
         interviewStartTime: interviewStartTime ?? this.interviewStartTime,
+        geoLocation: geoLocation ?? this.geoLocation,
         interviewEndTime: interviewEndTime ?? this.interviewEndTime,
         interviewOutcome: interviewOutcome ?? this.interviewOutcome,
         comments: comments ?? this.comments,
@@ -117,6 +123,7 @@ class GibsonsForm extends Equatable {
         'Recall Day: $recallDay\n'
         'Interview Date: $interviewDate\n'
         'Interview Start Time: $interviewStartTime\n'
+        'Geo Location: $geoLocation\n'
         'Interview End Time: $interviewEndTime\n'
         'Interview Outcome: $interviewOutcome\n'
         'Comments: $comments\n'
@@ -134,6 +141,7 @@ class GibsonsForm extends Equatable {
         recallDay,
         interviewDate,
         interviewStartTime,
+        geoLocation,
         interviewEndTime,
         interviewOutcome,
         comments,
@@ -337,6 +345,30 @@ class InterviewStartTime
     return value?.isNotEmpty == true
         ? null
         : InterviewStartTimeValidationError.invalid;
+  }
+}
+
+enum GeoLocationValidationError { invalid }
+
+class GeoLocation extends FormzInput<String, GeoLocationValidationError> {
+  const GeoLocation.pure() : super.pure('');
+  const GeoLocation.dirty([String value = '']) : super.dirty(value);
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['value'] = value;
+    data['pure'] = pure.toString();
+    return data;
+  }
+
+  GeoLocation.fromJson(Map<String, dynamic> json) : super.dirty(json['value']);
+
+  @override
+  GeoLocationValidationError? validator(String? value) {
+    // TODO: Add validation, currently only checks if not empty
+    return value?.isNotEmpty == true
+        ? null
+        : GeoLocationValidationError.invalid;
   }
 }
 
