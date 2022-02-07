@@ -101,7 +101,7 @@ class IngredientForm extends StatelessWidget {
                 selectedItem: state.recipes[recipeIndex]
                     .ingredients[ingredientIndex].cookingState.value),
             const SizedBox(height: 10),
-            Measurements(recipeIndex, ingredientIndex)
+            IngredientMeasurements(recipeIndex, ingredientIndex)
           ],
         ),
       );
@@ -109,32 +109,12 @@ class IngredientForm extends StatelessWidget {
   }
 }
 
-class Measurements extends StatelessWidget {
+class IngredientMeasurements extends StatelessWidget {
   final int recipeIndex;
   final int ingredientIndex;
-  Measurements(this.recipeIndex, this.ingredientIndex, {Key? key})
+  const IngredientMeasurements(this.recipeIndex, this.ingredientIndex,
+      {Key? key})
       : super(key: key);
-
-  final List<String> measurementMethods = [
-    "Direct weight",
-    "Volume of water",
-    "Volume of food",
-    "Play dough",
-    "Number",
-    "Size (photo)"
-  ];
-  final List<String> measurementUnits = [
-    "Small Spoon",
-    "Big spoon",
-    "Small standard cup",
-    "Medium standard cup",
-    "Large standard cup",
-    "Small",
-    "Medium",
-    "Large",
-    "Grams",
-    "Millilitres"
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -156,7 +136,7 @@ class Measurements extends StatelessWidget {
                         showDialog<String>(
                             context: context,
                             builder: (BuildContext context) =>
-                                DeleteMeasurement(
+                                DeleteIngredientMeasurement(
                                     recipe: state.recipes[recipeIndex],
                                     ingredient: state.recipes[recipeIndex]
                                         .ingredients[ingredientIndex],
@@ -197,7 +177,7 @@ class Measurements extends StatelessWidget {
                           mode: Mode.MENU,
                           showSelectedItems: true,
                           showSearchBox: true,
-                          items: measurementMethods,
+                          items: Measurement.measurementMethods,
                           onChanged: (String? answer) => context
                               .read<RecipeBloc>()
                               .add(IngredientMeasurementMethodChanged(
@@ -271,7 +251,7 @@ class Measurements extends StatelessWidget {
                           mode: Mode.MENU,
                           showSelectedItems: true,
                           showSearchBox: true,
-                          items: measurementUnits,
+                          items: Measurement.measurementUnits,
                           onChanged: (String? answer) => context
                               .read<RecipeBloc>()
                               .add(IngredientMeasurementUnitChanged(
@@ -286,13 +266,15 @@ class Measurements extends StatelessWidget {
                               .measurements[index]
                               .measurementUnit),
                       const Divider(),
-                      TextButton(
-                          onPressed: () => context.read<RecipeBloc>().add(
-                              IngredientMeasurementAdded(
-                                  ingredient: state.recipes[recipeIndex]
-                                      .ingredients[ingredientIndex],
-                                  recipe: state.recipes[recipeIndex])),
-                          child: const Text('Add measurement'))
+                      ListTile(
+                        title: const Text('Add measurement'),
+                        leading: const Icon(Icons.add),
+                        onTap: () => context.read<RecipeBloc>().add(
+                            IngredientMeasurementAdded(
+                                ingredient: state.recipes[recipeIndex]
+                                    .ingredients[ingredientIndex],
+                                recipe: state.recipes[recipeIndex])),
+                      ),
                     ],
                   ),
                 )),
@@ -303,12 +285,12 @@ class Measurements extends StatelessWidget {
   }
 }
 
-class DeleteMeasurement extends StatelessWidget {
+class DeleteIngredientMeasurement extends StatelessWidget {
   final Recipe recipe;
   final Ingredient ingredient;
   final int measurementIndex;
 
-  const DeleteMeasurement(
+  const DeleteIngredientMeasurement(
       {Key? key,
       required this.recipe,
       required this.ingredient,
@@ -319,7 +301,7 @@ class DeleteMeasurement extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
       return AlertDialog(
-        title: const Text('Delete ingredient'),
+        title: const Text('Delete measurement'),
         content: const Text('Would you like to delete the measurement?'),
         actions: [
           TextButton(

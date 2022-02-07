@@ -14,6 +14,26 @@ class Measurement extends Equatable {
   final String? measurementUnit;
   final String? measurementVolume;
   final String id;
+  static final List<String> measurementMethods = [
+    "Direct weight",
+    "Volume of water",
+    "Volume of food",
+    "Play dough",
+    "Number",
+    "Size (photo)"
+  ];
+  static final List<String> measurementUnits = [
+    "Small Spoon",
+    "Big spoon",
+    "Small standard cup",
+    "Medium standard cup",
+    "Large standard cup",
+    "Small",
+    "Medium",
+    "Large",
+    "Grams",
+    "Millilitres"
+  ];
 
   Measurement copyWith(
       {String? measurementMethod,

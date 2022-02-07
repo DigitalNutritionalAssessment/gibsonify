@@ -18,7 +18,11 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     on<RecipeAdded>(_onRecipeAdded);
     on<RecipeDeleted>(_onRecipeDeleted);
     on<RecipeNameChanged>(_recipeNameChanged);
-    on<RecipeVolumeChanged>(_recipeVolumeChanged);
+    on<RecipeMeasurementAdded>(_onRecipeMeasurementAdded);
+    on<RecipeMeasurementDeleted>(_onRecipeMeasurementDeleted);
+    on<RecipeMeasurementMethodChanged>(_onRecipeMeasurementMethodChanged);
+    on<RecipeMeasurementUnitChanged>(_onRecipeMeasurementUnitChanged);
+    on<RecipeMeasurementVolumeChanged>(_onRecipeMeasurementVolumeChanged);
     on<RecipeStatusChanged>(_onRecipeStatusChanged);
     on<ProbeAdded>(_onProbeAdded);
     on<ProbeChanged>(_onProbeChanged);
@@ -79,14 +83,111 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     emit(state.copyWith(recipes: recipes));
   }
 
-  void _recipeVolumeChanged(
-      RecipeVolumeChanged event, Emitter<RecipeState> emit) {
+  void _onRecipeMeasurementAdded(
+      RecipeMeasurementAdded event, Emitter<RecipeState> emit) {
     List<Recipe> recipes = List.from(state.recipes);
-
     int changedRecipeIndex = recipes.indexOf(event.recipe);
 
-    Recipe recipe = recipes[changedRecipeIndex].copyWith(
-        recipeVolume: RecipeVolume.dirty(event.recipeVolume), saved: false);
+    List<Measurement> measurements =
+        List.from(recipes[changedRecipeIndex].measurements);
+
+    final measurement = Measurement();
+    measurements.add(measurement);
+
+    Recipe recipe =
+        recipes[changedRecipeIndex].copyWith(measurements: measurements);
+
+    recipes.removeAt(changedRecipeIndex);
+    recipes.insert(changedRecipeIndex, recipe);
+
+    emit(state.copyWith(recipes: recipes));
+  }
+
+  void _onRecipeMeasurementDeleted(
+      RecipeMeasurementDeleted event, Emitter<RecipeState> emit) {
+    List<Recipe> recipes = List.from(state.recipes);
+    int changedRecipeIndex = recipes.indexOf(event.recipe);
+
+    List<Measurement> measurements =
+        List.from(recipes[changedRecipeIndex].measurements);
+    int changedmeasurementIndex = event.measurementIndex;
+
+    measurements.removeAt(changedmeasurementIndex);
+
+    Recipe recipe =
+        recipes[changedRecipeIndex].copyWith(measurements: measurements);
+
+    recipes.removeAt(changedRecipeIndex);
+    recipes.insert(changedRecipeIndex, recipe);
+
+    emit(state.copyWith(recipes: recipes));
+  }
+
+  void _onRecipeMeasurementMethodChanged(
+      RecipeMeasurementMethodChanged event, Emitter<RecipeState> emit) {
+    List<Recipe> recipes = List.from(state.recipes);
+    int changedRecipeIndex = recipes.indexOf(event.recipe);
+
+    List<Measurement> measurements =
+        List.from(recipes[changedRecipeIndex].measurements);
+    int changedmeasurementIndex = event.measurementIndex;
+
+    Measurement measurement = measurements[changedmeasurementIndex]
+        .copyWith(measurementMethod: event.measurementMethod);
+
+    measurements.removeAt(changedmeasurementIndex);
+    measurements.insert(changedmeasurementIndex, measurement);
+
+    Recipe recipe =
+        recipes[changedRecipeIndex].copyWith(measurements: measurements);
+
+    recipes.removeAt(changedRecipeIndex);
+    recipes.insert(changedRecipeIndex, recipe);
+
+    emit(state.copyWith(recipes: recipes));
+  }
+
+  void _onRecipeMeasurementUnitChanged(
+      RecipeMeasurementUnitChanged event, Emitter<RecipeState> emit) {
+    List<Recipe> recipes = List.from(state.recipes);
+    int changedRecipeIndex = recipes.indexOf(event.recipe);
+
+    List<Measurement> measurements =
+        List.from(recipes[changedRecipeIndex].measurements);
+    int changedmeasurementIndex = event.measurementIndex;
+
+    Measurement measurement = measurements[changedmeasurementIndex]
+        .copyWith(measurementUnit: event.measurementUnit);
+
+    measurements.removeAt(changedmeasurementIndex);
+    measurements.insert(changedmeasurementIndex, measurement);
+
+    Recipe recipe =
+        recipes[changedRecipeIndex].copyWith(measurements: measurements);
+
+    recipes.removeAt(changedRecipeIndex);
+    recipes.insert(changedRecipeIndex, recipe);
+
+    emit(state.copyWith(recipes: recipes));
+  }
+
+  void _onRecipeMeasurementVolumeChanged(
+      RecipeMeasurementVolumeChanged event, Emitter<RecipeState> emit) {
+    List<Recipe> recipes = List.from(state.recipes);
+    int changedRecipeIndex = recipes.indexOf(event.recipe);
+
+    List<Measurement> measurements =
+        List.from(recipes[changedRecipeIndex].measurements);
+    int changedmeasurementIndex = event.measurementIndex;
+
+    Measurement measurement = measurements[changedmeasurementIndex]
+        .copyWith(measurementVolume: event.measurementVolume);
+
+    measurements.removeAt(changedmeasurementIndex);
+    measurements.insert(changedmeasurementIndex, measurement);
+
+    Recipe recipe =
+        recipes[changedRecipeIndex].copyWith(measurements: measurements);
 
     recipes.removeAt(changedRecipeIndex);
     recipes.insert(changedRecipeIndex, recipe);

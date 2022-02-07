@@ -35,14 +35,66 @@ class RecipeNameChanged extends RecipeEvent {
   List<Object> get props => [recipeName, recipe];
 }
 
-class RecipeVolumeChanged extends RecipeEvent {
-  final String recipeVolume;
+class RecipeMeasurementAdded extends RecipeEvent {
   final Recipe recipe;
 
-  const RecipeVolumeChanged({required this.recipeVolume, required this.recipe});
+  const RecipeMeasurementAdded({required this.recipe});
 
   @override
-  List<Object> get props => [recipeVolume, recipe];
+  List<Object> get props => [recipe];
+}
+
+class RecipeMeasurementDeleted extends RecipeEvent {
+  final int measurementIndex;
+  final Recipe recipe;
+
+  const RecipeMeasurementDeleted(
+      {required this.measurementIndex, required this.recipe});
+
+  @override
+  List<Object> get props => [measurementIndex, recipe];
+}
+
+class RecipeMeasurementMethodChanged extends RecipeEvent {
+  final String measurementMethod;
+  final int measurementIndex;
+  final Recipe recipe;
+
+  const RecipeMeasurementMethodChanged(
+      {required this.measurementMethod,
+      required this.measurementIndex,
+      required this.recipe});
+
+  @override
+  List<Object> get props => [measurementMethod, measurementIndex, recipe];
+}
+
+class RecipeMeasurementUnitChanged extends RecipeEvent {
+  final String measurementUnit;
+  final int measurementIndex;
+  final Recipe recipe;
+
+  const RecipeMeasurementUnitChanged(
+      {required this.measurementUnit,
+      required this.measurementIndex,
+      required this.recipe});
+
+  @override
+  List<Object> get props => [measurementUnit, measurementIndex, recipe];
+}
+
+class RecipeMeasurementVolumeChanged extends RecipeEvent {
+  final String measurementVolume;
+  final int measurementIndex;
+  final Recipe recipe;
+
+  const RecipeMeasurementVolumeChanged(
+      {required this.measurementVolume,
+      required this.measurementIndex,
+      required this.recipe});
+
+  @override
+  List<Object> get props => [measurementVolume, measurementIndex, recipe];
 }
 
 class RecipeStatusChanged extends RecipeEvent {
