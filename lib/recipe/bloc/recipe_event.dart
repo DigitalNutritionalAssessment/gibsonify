@@ -239,72 +239,80 @@ class IngredientCookingStateChanged extends RecipeEvent {
   List<Object> get props => [cookingState, ingredient, recipe];
 }
 
+class IngredientMeasurementAdded extends RecipeEvent {
+  final Recipe recipe;
+  final Ingredient ingredient;
+
+  const IngredientMeasurementAdded(
+      {required this.recipe, required this.ingredient});
+
+  @override
+  List<Object> get props => [recipe, ingredient];
+}
+
+class IngredientMeasurementDeleted extends RecipeEvent {
+  final int measurementIndex;
+  final Ingredient ingredient;
+  final Recipe recipe;
+
+  const IngredientMeasurementDeleted(
+      {required this.measurementIndex,
+      required this.ingredient,
+      required this.recipe});
+
+  @override
+  List<Object> get props => [measurementIndex, ingredient, recipe];
+}
+
 class IngredientMeasurementMethodChanged extends RecipeEvent {
   final String measurementMethod;
+  final int measurementIndex;
   final Ingredient ingredient;
   final Recipe recipe;
 
   const IngredientMeasurementMethodChanged(
       {required this.measurementMethod,
+      required this.measurementIndex,
       required this.ingredient,
       required this.recipe});
 
   @override
-  List<Object> get props => [measurementMethod, ingredient, recipe];
-}
-
-class IngredientMeasurementChanged extends RecipeEvent {
-  final String measurement;
-  final Ingredient ingredient;
-  final Recipe recipe;
-
-  const IngredientMeasurementChanged(
-      {required this.measurement,
-      required this.ingredient,
-      required this.recipe});
-
-  @override
-  List<Object> get props => [measurement, ingredient, recipe];
+  List<Object> get props =>
+      [measurementMethod, measurementIndex, ingredient, recipe];
 }
 
 class IngredientMeasurementUnitChanged extends RecipeEvent {
   final String measurementUnit;
+  final int measurementIndex;
   final Ingredient ingredient;
   final Recipe recipe;
 
   const IngredientMeasurementUnitChanged(
       {required this.measurementUnit,
+      required this.measurementIndex,
       required this.ingredient,
       required this.recipe});
 
   @override
-  List<Object> get props => [measurementUnit, ingredient, recipe];
+  List<Object> get props =>
+      [measurementUnit, measurementIndex, ingredient, recipe];
 }
 
-class IngredientSizeChanged extends RecipeEvent {
-  final String size;
+class IngredientMeasurementVolumeChanged extends RecipeEvent {
+  final String measurementVolume;
+  final int measurementIndex;
   final Ingredient ingredient;
   final Recipe recipe;
 
-  const IngredientSizeChanged(
-      {required this.size, required this.ingredient, required this.recipe});
-
-  @override
-  List<Object> get props => [size, ingredient, recipe];
-}
-
-class IngredientSizeNumberChanged extends RecipeEvent {
-  final String sizeNumber;
-  final Ingredient ingredient;
-  final Recipe recipe;
-
-  const IngredientSizeNumberChanged(
-      {required this.sizeNumber,
+  const IngredientMeasurementVolumeChanged(
+      {required this.measurementVolume,
+      required this.measurementIndex,
       required this.ingredient,
       required this.recipe});
 
   @override
-  List<Object> get props => [sizeNumber, ingredient, recipe];
+  List<Object> get props =>
+      [measurementVolume, measurementIndex, ingredient, recipe];
 }
 
 // This is for recipes being saved to API, not their status changing to saved

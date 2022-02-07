@@ -3,8 +3,7 @@ import 'package:formz/formz.dart';
 import 'package:uuid/uuid.dart';
 
 // TODO: This is a temporary fix to avoid Name conflicts when importing the api
-import 'recipe_ingredient.dart'
-    show Name, Description, MeasurementMethod, MeasurementUnit;
+import 'recipe_ingredient.dart' show Name, Description;
 
 import 'recipe_item.dart';
 
@@ -284,7 +283,7 @@ class PreparationMethod
 }
 
 // TODO: allowed measurement methods are changed for not empty check only
-/*
+
 enum MeasurementMethodValidationError { invalid }
 
 class MeasurementMethod
@@ -320,7 +319,7 @@ class MeasurementMethod
         : MeasurementMethodValidationError.invalid;
   }
 }
-*/
+
 enum MeasurementValueValidationError { invalid }
 
 // TODO: Investigate changing this to a string or float
@@ -350,7 +349,7 @@ class MeasurementValue
 }
 
 // TODO: allowed measurement units are changed for not empty check only
-/*
+
 enum MeasurementUnitValidationError { invalid }
 
 class MeasurementUnit
@@ -387,4 +386,3 @@ class MeasurementUnit
         : MeasurementUnitValidationError.invalid;
   }
 }
-*/
