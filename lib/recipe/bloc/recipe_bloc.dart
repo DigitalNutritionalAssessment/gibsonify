@@ -75,7 +75,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     int changedRecipeIndex = recipes.indexOf(event.recipe);
 
     Recipe recipe = recipes[changedRecipeIndex]
-        .copyWith(recipeName: RecipeName.dirty(event.recipeName), saved: false);
+        .copyWith(recipeName: event.recipeName, saved: false);
 
     recipes.removeAt(changedRecipeIndex);
     recipes.insert(changedRecipeIndex, recipe);

@@ -116,7 +116,7 @@ class SecondPassFoodItemCard extends StatelessWidget {
                   onPreparationMethodChanged!(value ?? ''),
             ),
             TextFormField(
-              initialValue: foodItem.recipe?.recipeName.value ?? '',
+              initialValue: foodItem.recipe?.recipeName ?? '',
               readOnly: true,
               key: UniqueKey(),
               decoration: InputDecoration(

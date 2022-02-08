@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:formz/formz.dart';
 import 'package:uuid/uuid.dart';
 import 'dart:convert';
 
@@ -9,13 +8,9 @@ import 'recipe_probe.dart';
 
 class Recipe extends Equatable {
   Recipe({
-    this.recipeName = const RecipeName.pure(),
+    this.recipeName,
     String? recipeNumber,
     this.recipeType = "",
-    this.measurementMethod,
-    this.measurementUnit,
-    this.measurementVolume,
-    this.recipeVolume = const RecipeVolume.pure(),
     List<Measurement>? measurements,
     this.ingredients = const <Ingredient>[],
     this.probes = const <Probe>[],
@@ -25,28 +20,21 @@ class Recipe extends Equatable {
   })  : recipeNumber = recipeNumber ?? const Uuid().v4(),
         measurements = measurements ?? [Measurement()];
 
-  final RecipeName recipeName;
+  final String? recipeName;
   final String recipeNumber;
   final String recipeType;
-  final String? measurementMethod;
-  final String? measurementUnit;
-  final int? measurementVolume;
-  final RecipeVolume recipeVolume;
   final List<Measurement> measurements;
   final List<Ingredient> ingredients;
   final List<Probe> probes;
-  final bool probesChecked;
-  final bool probesStandard;
+  final bool probesChecked; // Flag to show all recipe probes have been checked
+  final bool
+      probesStandard; // Flag to show all answers to recipe probe match the standard recipe answer
   final bool saved;
 
   Recipe copyWith({
-    RecipeName? recipeName,
+    String? recipeName,
     String? recipeNumber,
     String? recipeType,
-    String? measurementMethod,
-    String? measurementUnit,
-    int? measurementVolume,
-    RecipeVolume? recipeVolume,
     List<Measurement>? measurements,
     List<Ingredient>? ingredients,
     List<Probe>? probes,
@@ -58,10 +46,6 @@ class Recipe extends Equatable {
       recipeName: recipeName ?? this.recipeName,
       recipeNumber: recipeNumber ?? this.recipeNumber,
       recipeType: recipeType ?? this.recipeType,
-      measurementMethod: measurementMethod ?? this.measurementMethod,
-      measurementUnit: measurementUnit ?? this.measurementUnit,
-      measurementVolume: measurementVolume ?? this.measurementVolume,
-      recipeVolume: recipeVolume ?? this.recipeVolume,
       measurements: measurements ?? this.measurements,
       ingredients: ingredients ?? this.ingredients,
       probes: probes ?? this.probes,
@@ -76,10 +60,6 @@ class Recipe extends Equatable {
         recipeName,
         recipeNumber,
         recipeType,
-        measurementMethod,
-        measurementUnit,
-        measurementVolume,
-        recipeVolume,
         measurements,
         ingredients,
         probes,
@@ -89,13 +69,9 @@ class Recipe extends Equatable {
       ];
 
   Recipe.fromJson(Map<String, dynamic> json)
-      : recipeName = RecipeName.fromJson(json['recipeName']),
+      : recipeName = json['recipeName'],
         recipeNumber = json['recipeNumber'],
         recipeType = json['recipeType'],
-        measurementMethod = json['measurementMethod'],
-        measurementUnit = json['measurementUnit'],
-        measurementVolume = json['measurementVolume'],
-        recipeVolume = RecipeVolume.fromJson(json['recipeVolume']),
         measurements = Measurement.jsonDecodeMeasurements(json['measurements']),
         ingredients = _jsonDecodeIngredients(json['ingredients']),
         probes = _jsonDecodeProbes(json['probes']),
@@ -105,13 +81,9 @@ class Recipe extends Equatable {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['recipeName'] = recipeName.toJson();
+    data['recipeName'] = recipeName;
     data['recipeNumber'] = recipeNumber;
     data['recipeType'] = recipeType;
-    data['measurementMethod'] = measurementMethod;
-    data['measurementUnit'] = measurementUnit;
-    data['measurementVolume'] = measurementVolume;
-    data['recipeVolume'] = recipeVolume.toJson();
     data['measurements'] = jsonEncode(measurements);
     data['ingredients'] = jsonEncode(ingredients);
     data['probes'] = jsonEncode(probes);
@@ -135,48 +107,4 @@ List<Probe> _jsonDecodeProbes(jsonEncodedProbes) {
   List<Probe> fullyDecodedProbes =
       List<Probe>.from(partiallyDecodedProbes.map((x) => Probe.fromJson(x)));
   return fullyDecodedProbes;
-}
-
-enum RecipeNameValidationError { invalid }
-
-class RecipeName extends FormzInput<String, RecipeNameValidationError> {
-  const RecipeName.pure() : super.pure('');
-  const RecipeName.dirty([String value = '']) : super.dirty(value);
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['value'] = value;
-    data['pure'] = pure.toString();
-    return data;
-  }
-
-  RecipeName.fromJson(Map<String, dynamic> json) : super.dirty(json['value']);
-
-  @override
-  RecipeNameValidationError? validator(String? value) {
-    return value?.isNotEmpty == true ? null : RecipeNameValidationError.invalid;
-  }
-}
-
-enum RecipeVolumeValidationError { invalid }
-
-class RecipeVolume extends FormzInput<String, RecipeVolumeValidationError> {
-  const RecipeVolume.pure() : super.pure('');
-  const RecipeVolume.dirty([String value = '']) : super.dirty(value);
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['value'] = value;
-    data['pure'] = pure.toString();
-    return data;
-  }
-
-  RecipeVolume.fromJson(Map<String, dynamic> json) : super.dirty(json['value']);
-
-  @override
-  RecipeVolumeValidationError? validator(String? value) {
-    return value?.isNotEmpty == true
-        ? null
-        : RecipeVolumeValidationError.invalid;
-  }
 }

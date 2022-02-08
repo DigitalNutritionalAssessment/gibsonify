@@ -76,12 +76,13 @@ class RecipeNameInput extends StatelessWidget {
     return BlocBuilder<RecipeBloc, RecipeState>(
       builder: (context, state) {
         return TextFormField(
-          initialValue: state.recipes[recipeIndex].recipeName.value,
+          initialValue: state.recipes[recipeIndex].recipeName,
           decoration: InputDecoration(
             icon: const Icon(Icons.assignment_rounded),
             labelText: 'Recipe Name',
             helperText: 'A valid recipe name, e.g. Aloo bandhgobhi',
-            errorText: state.recipes[recipeIndex].recipeName.invalid
+            errorText: (state.recipes[recipeIndex].recipeName != null &&
+                    state.recipes[recipeIndex].recipeName == '')
                 ? 'Enter a valid recipe name, e.g. Aloo bandhgobhi'
                 : null,
           ),
