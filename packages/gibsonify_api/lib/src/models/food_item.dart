@@ -2,9 +2,6 @@ import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 import 'package:uuid/uuid.dart';
 
-// TODO: This is a temporary fix to avoid Name conflicts when importing the api
-import 'recipe_ingredient.dart' show Name, Description;
-
 import 'recipe.dart';
 
 class FoodItem extends Equatable {
@@ -112,13 +109,11 @@ class FoodItem extends Equatable {
         confirmed
       ];
 }
-// TODO: This has been temporarily commented out to resolve name conflicts
-// The most sensible fix to this is probably getting rid of all Formz and
+// TODO: The most sensible fix to this is probably getting rid of all Formz and
 // replacing them by strings only, as in 90% of the cases the only validation
 // is checking if it is not empty, and the rest can be added as custom
 // validation methods
 
-/*
 enum NameValidationError { invalid }
 
 // TODO: Investigate changing classes to be private (with leading underscore)
@@ -144,7 +139,6 @@ class Name extends FormzInput<String, NameValidationError> {
     return value?.isNotEmpty == true ? null : NameValidationError.invalid;
   }
 }
-*/
 
 enum TimePeriodValidationError { invalid }
 
@@ -211,7 +205,6 @@ class Source extends FormzInput<String, SourceValidationError> {
   }
 }
 
-/*
 enum DescriptionValidationError { invalid }
 
 class Description extends FormzInput<String, DescriptionValidationError> {
@@ -234,7 +227,6 @@ class Description extends FormzInput<String, DescriptionValidationError> {
         : DescriptionValidationError.invalid;
   }
 }
-*/
 
 enum PreparationMethodValidationError { invalid }
 

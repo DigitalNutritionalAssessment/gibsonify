@@ -132,10 +132,12 @@ class Ingredients extends StatelessWidget {
                   ),
                   child: Card(
                       child: ListTile(
-                    title: Text(state
-                        .recipes[recipeIndex].ingredients[index].name.value),
+                    title: Text(
+                        state.recipes[recipeIndex].ingredients[index].name ??
+                            ''),
                     subtitle: Text(state.recipes[recipeIndex].ingredients[index]
-                        .description.value),
+                            .description ??
+                        ''),
                     leading: const Icon(Icons.food_bank),
                     trailing:
                         state.recipes[recipeIndex].ingredients[index].saved
@@ -162,7 +164,7 @@ class DeleteIngredient extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String ingredientName = ingredient.name.value;
+    String? ingredientName = ingredient.name;
     return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
       return AlertDialog(
         title: const Text('Delete ingredient'),

@@ -561,7 +561,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     int changedIngredientIndex = ingredients.indexOf(event.ingredient);
 
     Ingredient ingredient = ingredients[changedIngredientIndex]
-        .copyWith(name: Name.dirty(event.ingredientName), saved: false);
+        .copyWith(name: event.ingredientName, saved: false);
 
     ingredients.removeAt(changedIngredientIndex);
     ingredients.insert(changedIngredientIndex, ingredient);
@@ -584,9 +584,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
         List.from(recipes[changedRecipeIndex].ingredients);
     int changedIngredientIndex = ingredients.indexOf(event.ingredient);
 
-    Ingredient ingredient = ingredients[changedIngredientIndex].copyWith(
-        description: Description.dirty(event.ingredientDescription),
-        saved: false);
+    Ingredient ingredient = ingredients[changedIngredientIndex]
+        .copyWith(description: event.ingredientDescription, saved: false);
 
     ingredients.removeAt(changedIngredientIndex);
     ingredients.insert(changedIngredientIndex, ingredient);
@@ -609,8 +608,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
         List.from(recipes[changedRecipeIndex].ingredients);
     int changedIngredientIndex = ingredients.indexOf(event.ingredient);
 
-    Ingredient ingredient = ingredients[changedIngredientIndex].copyWith(
-        cookingState: CookingState.dirty(event.cookingState), saved: false);
+    Ingredient ingredient = ingredients[changedIngredientIndex]
+        .copyWith(cookingState: event.cookingState, saved: false);
 
     ingredients.removeAt(changedIngredientIndex);
     ingredients.insert(changedIngredientIndex, ingredient);

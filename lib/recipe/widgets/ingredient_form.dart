@@ -37,14 +37,18 @@ class IngredientForm extends StatelessWidget {
         child: Column(
           children: [
             TextFormField(
-              initialValue: state
-                  .recipes[recipeIndex].ingredients[ingredientIndex].name.value,
+              initialValue:
+                  state.recipes[recipeIndex].ingredients[ingredientIndex].name,
               decoration: InputDecoration(
                 icon: const Icon(Icons.set_meal_rounded),
                 labelText: 'Ingredient name',
                 helperText: 'Ingredient name e.g. Rice',
-                errorText: state.recipes[recipeIndex]
-                        .ingredients[ingredientIndex].name.invalid
+                errorText: (state.recipes[recipeIndex]
+                                .ingredients[ingredientIndex].name !=
+                            null &&
+                        state.recipes[recipeIndex].ingredients[ingredientIndex]
+                                .name ==
+                            '')
                     ? 'Enter an ingredient name e.g. Tomato'
                     : null,
               ),
@@ -59,13 +63,17 @@ class IngredientForm extends StatelessWidget {
             ),
             TextFormField(
               initialValue: state.recipes[recipeIndex]
-                  .ingredients[ingredientIndex].description.value,
+                  .ingredients[ingredientIndex].description,
               decoration: InputDecoration(
                 icon: const Icon(Icons.description_rounded),
                 labelText: 'Ingredient description',
                 helperText: 'Ingredient description e.g. Big, dry, ripe etc.',
-                errorText: state.recipes[recipeIndex]
-                        .ingredients[ingredientIndex].description.invalid
+                errorText: (state.recipes[recipeIndex]
+                                .ingredients[ingredientIndex].description !=
+                            null &&
+                        state.recipes[recipeIndex].ingredients[ingredientIndex]
+                                .description ==
+                            '')
                     ? 'Enter an ingredient description e.g. Ripe'
                     : null,
               ),
@@ -79,14 +87,10 @@ class IngredientForm extends StatelessWidget {
               textInputAction: TextInputAction.next,
             ),
             DropdownSearch<String>(
-                dropdownSearchDecoration: InputDecoration(
-                  icon: const Icon(Icons.food_bank_rounded),
+                dropdownSearchDecoration: const InputDecoration(
+                  icon: Icon(Icons.food_bank_rounded),
                   labelText: "Cooking state",
                   helperText: 'How the ingredient is prepared',
-                  errorText: state.recipes[recipeIndex]
-                          .ingredients[ingredientIndex].cookingState.invalid
-                      ? 'Enter a cooking state'
-                      : null,
                 ),
                 mode: Mode.MENU,
                 showSelectedItems: true,
@@ -99,7 +103,7 @@ class IngredientForm extends StatelessWidget {
                         cookingState: answer!,
                         recipe: state.recipes[recipeIndex])),
                 selectedItem: state.recipes[recipeIndex]
-                    .ingredients[ingredientIndex].cookingState.value),
+                    .ingredients[ingredientIndex].cookingState),
             const SizedBox(height: 10),
             IngredientMeasurements(recipeIndex, ingredientIndex)
           ],
