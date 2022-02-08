@@ -7,7 +7,6 @@ import 'measurement.dart';
 import 'recipe_ingredient.dart';
 import 'recipe_probe.dart';
 
-// TODO: rename this file to recipe.dart instead of recipe_item.dart
 class Recipe extends Equatable {
   Recipe({
     this.recipeName = const RecipeName.pure(),

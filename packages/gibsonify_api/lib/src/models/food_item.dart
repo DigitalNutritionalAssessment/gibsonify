@@ -5,7 +5,7 @@ import 'package:uuid/uuid.dart';
 // TODO: This is a temporary fix to avoid Name conflicts when importing the api
 import 'recipe_ingredient.dart' show Name, Description;
 
-import 'recipe_item.dart';
+import 'recipe.dart';
 
 class FoodItem extends Equatable {
   FoodItem(
