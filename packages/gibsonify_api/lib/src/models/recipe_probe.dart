@@ -10,8 +10,8 @@ class Probe extends Equatable {
       List<Map<String, dynamic>>? probeOptions})
       : probeOptions = probeOptions ??
             [
-              {'option': null, 'id': const Uuid().v4()},
-              {'option': null, 'id': const Uuid().v4()}
+              {'option': 'Yes', 'id': const Uuid().v4()},
+              {'option': 'No', 'id': const Uuid().v4()}
             ];
 
   final String? probeName;
