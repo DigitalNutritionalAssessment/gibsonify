@@ -28,7 +28,7 @@ class Probe extends Equatable {
   }
 
   bool standardAnswer() {
-    if (answer == optionsList()[0] || answer == null) {
+    if (answer == optionsList()[0] || answer == null || answer == '') {
       return true;
     }
     return false;
