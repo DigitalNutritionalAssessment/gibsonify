@@ -27,6 +27,7 @@ class PageRouter {
         var indices = routeSettings.arguments as List;
         int recipeIndex = indices[0];
         String? assignedFoodItemId = indices[1];
+        // TODO: rewrite as named strings mapping to index for each screen
         int selectedScreenIndex = indices[2];
         return _buildRoute(RecipePage(
           recipeIndex,

@@ -55,6 +55,7 @@ class RecipesScreen extends StatelessWidget {
                                   state.recipes[index].probes.isEmpty ||
                                   state.recipes[index].recipeType !=
                                       'Standard Recipe')
+                              // TODO: rewrite as named strings for each screen
                               ? [index, assignedFoodItemId, 1]
                               : [index, assignedFoodItemId, 0])
                     },
@@ -75,6 +76,7 @@ class RecipesScreen extends StatelessWidget {
                           Navigator.pushNamed(context, PageRouter.recipe,
                               arguments: [
                                 state.recipes.length,
+                                // TODO: rewrite as named strings for each screen
                                 assignedFoodItemId,
                                 1
                               ]),
@@ -93,6 +95,7 @@ class RecipesScreen extends StatelessWidget {
                               arguments: [
                                 state.recipes.length,
                                 assignedFoodItemId,
+                                // TODO: rewrite as named strings for each screen
                                 1
                               ]),
                         })
