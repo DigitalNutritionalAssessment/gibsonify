@@ -38,6 +38,7 @@ class ProbeForm extends StatelessWidget {
                       probeName: value,
                       probeIndex: probeIndex));
                 },
+                textCapitalization: TextCapitalization.sentences,
                 textInputAction: TextInputAction.next,
               ),
               const ListTile(title: Text('Edit probe options:')),
@@ -97,6 +98,7 @@ class ProbeForm extends StatelessWidget {
                                         probeOptionIndex: index,
                                         probeOptionName: value));
                               },
+                              textCapitalization: TextCapitalization.sentences,
                               textInputAction: TextInputAction.next,
                             ),
                           )));

@@ -60,6 +60,7 @@ class IngredientForm extends StatelessWidget {
                     recipe: state.recipes[recipeIndex]));
               },
               textInputAction: TextInputAction.next,
+              textCapitalization: TextCapitalization.sentences,
             ),
             TextFormField(
               initialValue: state.recipes[recipeIndex]
@@ -84,6 +85,7 @@ class IngredientForm extends StatelessWidget {
                     ingredientDescription: value,
                     recipe: state.recipes[recipeIndex]));
               },
+              textCapitalization: TextCapitalization.sentences,
               textInputAction: TextInputAction.next,
             ),
             DropdownSearch<String>(

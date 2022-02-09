@@ -90,6 +90,7 @@ class RecipeNameInput extends StatelessWidget {
             context.read<RecipeBloc>().add(RecipeNameChanged(
                 recipeName: value, recipe: state.recipes[recipeIndex]));
           },
+          textCapitalization: TextCapitalization.sentences,
           textInputAction: TextInputAction.next,
         );
       },

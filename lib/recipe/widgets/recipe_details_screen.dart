@@ -192,6 +192,7 @@ class RecipeMeasurements extends StatelessWidget {
                                   measurementVolume: value,
                                   recipe: state.recipes[recipeIndex]));
                         },
+                        textCapitalization: TextCapitalization.sentences,
                         textInputAction: TextInputAction.next,
                         keyboardType: TextInputType.number,
                       ),
