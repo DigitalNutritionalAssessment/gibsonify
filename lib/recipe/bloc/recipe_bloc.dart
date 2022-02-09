@@ -326,7 +326,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     probes.removeAt(changedProbeIndex);
     probes.insert(changedProbeIndex, probe);
 
-    bool probesStandard = true;
+    bool probesStandard = true; //TODO: refactor logic into function
     for (Probe probe in probes) {
       if (probe.standardAnswer() == false) {
         probesStandard = false;
