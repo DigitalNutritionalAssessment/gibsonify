@@ -1,0 +1,22 @@
+name: commitizen-check-commits
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  python-check:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+    - name: Install dependencies
+      run: |
+        python -m pip install Commitizen
+    - name: Run commitizen check
+      run: |
+        cz check --rev-range 57b44180fbc245a2e88ecc2f386a3b177ed73e69..HEAD
