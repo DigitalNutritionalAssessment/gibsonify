@@ -28,11 +28,11 @@ class _RecipePageState extends State<RecipePage> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> _screens = [
-      RecipeProbeScreen(
+      RecipeProbesScreen(
         widget.recipeIndex,
         assignedFoodItemId: widget.assignedFoodItemId,
       ),
-      RecipeScreen(widget.recipeIndex,
+      RecipeIngredientsScreen(widget.recipeIndex,
           assignedFoodItemId: widget.assignedFoodItemId),
       RecipeDetailsScreen(widget.recipeIndex,
           assignedFoodItemId: widget.assignedFoodItemId),
@@ -46,7 +46,7 @@ class _RecipePageState extends State<RecipePage> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.live_help),
-            label: 'Probes',
+            label: 'Recipe Probes',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.food_bank),

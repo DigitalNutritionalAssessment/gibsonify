@@ -6,10 +6,11 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gibsonify/navigation/navigation.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 
-class RecipeProbeScreen extends StatelessWidget {
+class RecipeProbesScreen extends StatelessWidget {
   final int recipeIndex;
   final String? assignedFoodItemId;
-  const RecipeProbeScreen(this.recipeIndex, {Key? key, this.assignedFoodItemId})
+  const RecipeProbesScreen(this.recipeIndex,
+      {Key? key, this.assignedFoodItemId})
       : super(key: key);
 
   @override
@@ -17,8 +18,7 @@ class RecipeProbeScreen extends StatelessWidget {
     return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
       return Scaffold(
           appBar: AppBar(
-            title: Text(
-                'Probe list for ${state.recipes[recipeIndex].recipeName.value}'),
+            title: const Text('Recipe probes list'),
             leading: BackButton(
                 onPressed: () => {
                       context.read<RecipeBloc>().add(const RecipesSaved()),

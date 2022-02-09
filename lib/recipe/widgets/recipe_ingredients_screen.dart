@@ -5,10 +5,11 @@ import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:gibsonify/navigation/navigation.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-class RecipeScreen extends StatelessWidget {
+class RecipeIngredientsScreen extends StatelessWidget {
   final int recipeIndex;
   final String? assignedFoodItemId;
-  const RecipeScreen(this.recipeIndex, {Key? key, this.assignedFoodItemId})
+  const RecipeIngredientsScreen(this.recipeIndex,
+      {Key? key, this.assignedFoodItemId})
       : super(key: key);
 
   @override
@@ -16,7 +17,7 @@ class RecipeScreen extends StatelessWidget {
     return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
       return Scaffold(
           appBar: AppBar(
-            title: const Text('Edit recipe'),
+            title: const Text('Recipe ingredients'),
             leading: BackButton(
                 onPressed: () => {
                       context.read<RecipeBloc>().add(const RecipesSaved()),
