@@ -60,7 +60,13 @@ The underlying classes used by the BLoC of each feature are in the `models` subd
 
 This project follows a simplified gitflow branch structure and [Conventional Commits](https://www.conventionalcommits.org/). The main branch is `main`, which contains both the active development source code and the source of stable release versions of Gibsonify. These stable versions are in commits with tags containing the given version number, e.g. `1.0.0`. The `main` branch shouldn't be directly commited to, as commits should be made into branches branched _out of_ the `main` branch, e.g. `feat/add-awesome-feature`. These are then merged to `main` after passing tests and being approved.
 
-To contribute, open a pull request (PR) from your branch to the `main` branch, naming your PR according to Conventional Commits, e.g. `feat: add awesome feature`. Your commits should also follow Conventional Commits, and it is recommended to use [Commitizen](https://commitizen-tools.github.io/commitizen/), which creates conventional commits for you using `cz c`. For major changes, please open an issue first to discuss what you would like to change.
+To contribute, open a pull request (PR) from your branch to the `main` branch, naming your PR according to Conventional Commits, e.g. `feat: add awesome feature`. For major changes, please open an issue first to discuss what you would like to change.
+
+Your commits should also follow Conventional Commits, and it is recommended to use [Commitizen](https://commitizen-tools.github.io/commitizen/), which creates conventional commits for you using `cz c`. The compliance of each commit can be automatically checked by [pre-commit](https://pre-commit.com/), by installing it as outlined [here](https://pre-commit.com/#installation), and installing the commitizen hook
+
+```bash
+pre-commit install --hook-type commit-msg
+```
 
 All changes are documented in `CHANGELOG.md`, which is generated using commitizen as well. After a PR is approved, run the following to update the changelog
 
