@@ -28,7 +28,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     on<ProbeOptionChanged>(_onProbeOptionChanged);
     on<ProbeOptionDeleted>(_onProbeOptionDeleted);
     on<ProbeOptionSelected>(_onProbeOptionSelected);
-    on<ProbeCleared>(_onProbeCleared);
+    on<RecipeProbesCleared>(_onRecipeProbesCleared);
     on<IngredientAdded>(_onIngredientAdded);
     on<IngredientDeleted>(_onIngredientDeleted);
     on<IngredientStatusChanged>(_onIngredientStatusChanged);
@@ -343,7 +343,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     emit(state.copyWith(recipes: recipes));
   }
 
-  void _onProbeCleared(ProbeCleared event, Emitter<RecipeState> emit) {
+  void _onRecipeProbesCleared(
+      RecipeProbesCleared event, Emitter<RecipeState> emit) {
     List<Recipe> recipes = List.from(state.recipes);
     int changedRecipeIndex = recipes.indexOf(event.recipe);
 
