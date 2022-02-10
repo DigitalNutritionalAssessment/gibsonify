@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:gibsonify/recipe/recipe.dart';
@@ -320,7 +321,12 @@ class DeleteIngredientMeasurement extends StatelessWidget {
                   recipe: recipe,
                   ingredient: ingredient,
                   measurementIndex: measurementIndex)),
-              Navigator.pop(context, 'OK')
+              Navigator.pop(context, 'OK'),
+              if (ingredient.measurements.length == 1)
+                {
+                  Fluttertoast.showToast(
+                      msg: 'An ingredient must have at least one measurement')
+                }
             },
             child: const Text('OK'),
           ),
