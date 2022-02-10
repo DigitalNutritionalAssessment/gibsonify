@@ -22,7 +22,13 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     on<RecipeStatusChanged>(_onRecipeStatusChanged);
     on<ProbeAdded>(_onProbeAdded);
     on<ProbeChanged>(_onProbeChanged);
+    on<ProbeChecked>(_onProbeChecked);
     on<ProbeDeleted>(_onProbeDeleted);
+    on<ProbeOptionAdded>(_onProbeOptionAdded);
+    on<ProbeOptionChanged>(_onProbeOptionChanged);
+    on<ProbeOptionDeleted>(_onProbeOptionDeleted);
+    on<ProbeOptionSelected>(_onProbeOptionSelected);
+    on<RecipeProbesCleared>(_onRecipeProbesCleared);
     on<IngredientAdded>(_onIngredientAdded);
     on<IngredientDeleted>(_onIngredientDeleted);
     on<IngredientStatusChanged>(_onIngredientStatusChanged);
@@ -106,13 +112,22 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     List<Recipe> recipes = List.from(state.recipes);
     int changedRecipeIndex = recipes.indexOf(event.recipe);
 
-    Map<String, dynamic> probe = {'probe': '', 'key': const Uuid().v4()};
-    List<Map<String, dynamic>> probes =
-        List.from(recipes[changedRecipeIndex].probes);
+    final probe = Probe();
+
+    List<Probe> probes = List.from(recipes[changedRecipeIndex].probes);
     probes.add(probe);
 
-    Recipe recipe =
-        recipes[changedRecipeIndex].copyWith(probes: probes, saved: false);
+    bool probesChecked = true;
+
+    for (Probe probe in probes) {
+      if (probe.checked == false) {
+        probesChecked = false;
+        break;
+      }
+    }
+
+    Recipe recipe = recipes[changedRecipeIndex]
+        .copyWith(probes: probes, probesChecked: probesChecked);
 
     recipes.removeAt(changedRecipeIndex);
 
@@ -124,21 +139,46 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     List<Recipe> recipes = List.from(state.recipes);
     int changedRecipeIndex = recipes.indexOf(event.recipe);
 
-    List<Map<String, dynamic>> probes =
-        List.from(recipes[changedRecipeIndex].probes);
+    List<Probe> probes = List.from(recipes[changedRecipeIndex].probes);
     int changedProbeIndex = event.probeIndex;
 
-    String probeName = event.probeName;
-    Map<String, dynamic> probe = {
-      'probe': probeName,
-      'key': probes[changedProbeIndex]['key']
-    };
+    Probe probe =
+        probes[changedProbeIndex].copyWith(probeName: event.probeName);
 
     probes.removeAt(changedProbeIndex);
     probes.insert(changedProbeIndex, probe);
 
-    Recipe recipe =
-        recipes[changedRecipeIndex].copyWith(probes: probes, saved: false);
+    Recipe recipe = recipes[changedRecipeIndex].copyWith(probes: probes);
+
+    recipes.removeAt(changedRecipeIndex);
+    recipes.insert(changedRecipeIndex, recipe);
+
+    emit(state.copyWith(recipes: recipes));
+  }
+
+  void _onProbeChecked(ProbeChecked event, Emitter<RecipeState> emit) {
+    List<Recipe> recipes = List.from(state.recipes);
+    int changedRecipeIndex = recipes.indexOf(event.recipe);
+
+    List<Probe> probes = List.from(recipes[changedRecipeIndex].probes);
+    int changedProbeIndex = event.probeIndex;
+
+    Probe probe = probes[changedProbeIndex].copyWith(checked: event.probeCheck);
+
+    probes.removeAt(changedProbeIndex);
+    probes.insert(changedProbeIndex, probe);
+
+    bool probesChecked = true;
+
+    for (Probe probe in probes) {
+      if (probe.checked == false) {
+        probesChecked = false;
+        break;
+      }
+    }
+
+    Recipe recipe = recipes[changedRecipeIndex]
+        .copyWith(probes: probes, probesChecked: probesChecked);
 
     recipes.removeAt(changedRecipeIndex);
     recipes.insert(changedRecipeIndex, recipe);
@@ -150,13 +190,173 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     List<Recipe> recipes = List.from(state.recipes);
     int changedRecipeIndex = recipes.indexOf(event.recipe);
 
-    List<Map<String, dynamic>> probes =
-        List.from(recipes[changedRecipeIndex].probes);
+    List<Probe> probes = List.from(recipes[changedRecipeIndex].probes);
     int changedProbeIndex = probes.indexOf(event.probe);
     probes.removeAt(changedProbeIndex);
 
-    Recipe recipe =
-        recipes[changedRecipeIndex].copyWith(probes: probes, saved: false);
+    bool probesChecked = probes.isEmpty ? false : true;
+
+    for (Probe probe in probes) {
+      if (probe.checked == false) {
+        probesChecked = false;
+        break;
+      }
+    }
+
+    Recipe recipe = recipes[changedRecipeIndex]
+        .copyWith(probes: probes, probesChecked: probesChecked);
+
+    recipes.removeAt(changedRecipeIndex);
+
+    recipes.insert(changedRecipeIndex, recipe);
+    emit(state.copyWith(recipes: recipes));
+  }
+
+  void _onProbeOptionAdded(ProbeOptionAdded event, Emitter<RecipeState> emit) {
+    List<Recipe> recipes = List.from(state.recipes);
+    int changedRecipeIndex = recipes.indexOf(event.recipe);
+
+    List<Probe> probes = List.from(recipes[changedRecipeIndex].probes);
+    int changedProbeIndex = event.probeIndex;
+    List<Map<String, dynamic>> probeOptions =
+        List.from(probes[changedProbeIndex].probeOptions);
+
+    probeOptions.add({'option': null, 'id': const Uuid().v4()});
+    Probe probe =
+        probes[changedProbeIndex].copyWith(probeOptions: probeOptions);
+
+    probes.removeAt(changedProbeIndex);
+    probes.insert(changedProbeIndex, probe);
+
+    bool probesStandard = true;
+    for (Probe probe in probes) {
+      if (probe.standardAnswer() == false) {
+        probesStandard = false;
+        break;
+      }
+    }
+
+    Recipe recipe = recipes[changedRecipeIndex]
+        .copyWith(probes: probes, probesStandard: probesStandard);
+
+    recipes.removeAt(changedRecipeIndex);
+    recipes.insert(changedRecipeIndex, recipe);
+
+    emit(state.copyWith(recipes: recipes));
+  }
+
+  void _onProbeOptionChanged(
+      ProbeOptionChanged event, Emitter<RecipeState> emit) {
+    List<Recipe> recipes = List.from(state.recipes);
+    int changedRecipeIndex = recipes.indexOf(event.recipe);
+
+    List<Probe> probes = List.from(recipes[changedRecipeIndex].probes);
+    int changedProbeIndex = event.probeIndex;
+    List<Map<String, dynamic>> probeOptions =
+        List.from(probes[changedProbeIndex].probeOptions);
+    int changedProbeOptionIndex = event.probeOptionIndex;
+
+    String probeOptionName = event.probeOptionName;
+    Map<String, String?> probeOption = {
+      'option': probeOptionName,
+      'id': probeOptions[changedProbeOptionIndex]['id']
+    };
+    probeOptions.removeAt(changedProbeOptionIndex);
+    probeOptions.insert(changedProbeOptionIndex, probeOption);
+
+    Probe probe =
+        probes[changedProbeIndex].copyWith(probeOptions: probeOptions);
+
+    probes.removeAt(changedProbeIndex);
+    probes.insert(changedProbeIndex, probe);
+
+    Recipe recipe = recipes[changedRecipeIndex].copyWith(probes: probes);
+
+    recipes.removeAt(changedRecipeIndex);
+    recipes.insert(changedRecipeIndex, recipe);
+
+    emit(state.copyWith(recipes: recipes));
+  }
+
+  void _onProbeOptionDeleted(
+      ProbeOptionDeleted event, Emitter<RecipeState> emit) {
+    List<Recipe> recipes = List.from(state.recipes);
+    int changedRecipeIndex = recipes.indexOf(event.recipe);
+
+    List<Probe> probes = List.from(recipes[changedRecipeIndex].probes);
+    int changedProbeIndex = event.probeIndex;
+    List<Map<String, dynamic>> probeOptions =
+        List.from(probes[changedProbeIndex].probeOptions);
+
+    probeOptions.removeAt(event.probeOptionIndex);
+
+    Probe probe =
+        probes[changedProbeIndex].copyWith(probeOptions: probeOptions);
+
+    probes.removeAt(changedProbeIndex);
+    probes.insert(changedProbeIndex, probe);
+
+    bool probesStandard = true;
+    for (Probe probe in probes) {
+      if (probe.standardAnswer() == false) {
+        probesStandard = false;
+        break;
+      }
+    }
+
+    Recipe recipe = recipes[changedRecipeIndex]
+        .copyWith(probes: probes, probesStandard: probesStandard);
+
+    recipes.removeAt(changedRecipeIndex);
+    recipes.insert(changedRecipeIndex, recipe);
+
+    emit(state.copyWith(recipes: recipes));
+  }
+
+  void _onProbeOptionSelected(
+      ProbeOptionSelected event, Emitter<RecipeState> emit) {
+    List<Recipe> recipes = List.from(state.recipes);
+    int changedRecipeIndex = recipes.indexOf(event.recipe);
+
+    List<Probe> probes = List.from(recipes[changedRecipeIndex].probes);
+    int changedProbeIndex = event.probeIndex;
+
+    Probe probe = probes[changedProbeIndex].copyWith(answer: event.answer);
+
+    probes.removeAt(changedProbeIndex);
+    probes.insert(changedProbeIndex, probe);
+
+    bool probesStandard = true; //TODO: refactor logic into function
+    for (Probe probe in probes) {
+      if (probe.standardAnswer() == false) {
+        probesStandard = false;
+        break;
+      }
+    }
+
+    Recipe recipe = recipes[changedRecipeIndex]
+        .copyWith(probes: probes, probesStandard: probesStandard);
+
+    recipes.removeAt(changedRecipeIndex);
+    recipes.insert(changedRecipeIndex, recipe);
+
+    emit(state.copyWith(recipes: recipes));
+  }
+
+  void _onRecipeProbesCleared(
+      RecipeProbesCleared event, Emitter<RecipeState> emit) {
+    List<Recipe> recipes = List.from(state.recipes);
+    int changedRecipeIndex = recipes.indexOf(event.recipe);
+
+    List<Probe> probes = List.from(recipes[changedRecipeIndex].probes);
+    List<Probe> clearedProbes = [];
+
+    for (Probe probe in probes) {
+      clearedProbes.add(probe.copyWith(checked: false, answer: ''));
+    }
+
+    Recipe recipe = recipes[changedRecipeIndex].copyWith(
+        probes: clearedProbes, probesChecked: false, probesStandard: true);
 
     recipes.removeAt(changedRecipeIndex);
 

@@ -8,8 +8,8 @@ class PageRouter {
   static const home = '/';
   static const collection = '/collection';
   static const recipe = '/recipe';
-  static const recipeProbe = '/recipeprobe';
   static const ingredient = '/ingredient';
+  static const editProbe = '/editprobe';
   static const sensitizationHelp = '/sensitizationhelp';
   static const firstPassHelp = '/firstpasshelp';
   static const secondPassHelp = '/secondpasshelp';
@@ -27,18 +27,23 @@ class PageRouter {
         var indices = routeSettings.arguments as List;
         int recipeIndex = indices[0];
         String? assignedFoodItemId = indices[1];
+        // TODO: rewrite as named strings mapping to index for each screen
+        int selectedScreenIndex = indices[2];
         return _buildRoute(RecipePage(
           recipeIndex,
           assignedFoodItemId: assignedFoodItemId,
+          selectedScreenIndex: selectedScreenIndex,
         ));
-      case recipeProbe:
-        var recipeIndex = routeSettings.arguments as int;
-        return _buildRoute(RecipeProbePage(recipeIndex));
       case ingredient:
         var indices = routeSettings.arguments as List; // TODO: Use a hash-map
         int recipeIndex = indices[0];
         int ingredientIndex = indices[1];
         return _buildRoute(IngredientPage(recipeIndex, ingredientIndex));
+      case editProbe:
+        var indices = routeSettings.arguments as List; // TODO: Use a hash-map
+        int recipeIndex = indices[0];
+        int probeIndex = indices[1];
+        return _buildRoute(EditProbePage(recipeIndex, probeIndex));
       case sensitizationHelp:
         return _buildRoute(const SensitizationHelpPage());
       case firstPassHelp:

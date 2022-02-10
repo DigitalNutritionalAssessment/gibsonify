@@ -3,6 +3,29 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Refactor
+
+- specify dependency versions
+- **recipe**: rename files and text widgets for consistency
+- **recipe**: rename recipe probes clearing function
+
+### Fix
+
+- **recipe**: fix probe logic bug
+- fix bug causing recipes to not save in device memory
+
+### Feat
+
+- **recipe**: add probe resetting when selecting recipes
+- **recipe**: add visibility widgets and probe logic
+- **recipe**: add probe option validation logic
+- **recipe**: refactor probes as class and add dropdown list
+- **recipe**: add standard recipe checks and recipe saving
+- **recipe**: implement recipe page states
+- **recipe**: implement probes status check
+- **recipe**: implement probes checkbox backend
+- **recipe**: implement new probes page ui
+
 ## 1.0.0 (2022-01-30)
 
 ### Feat

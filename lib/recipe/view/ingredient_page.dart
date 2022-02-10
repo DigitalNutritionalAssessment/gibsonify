@@ -12,7 +12,7 @@ class IngredientPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
       return Scaffold(
-          appBar: AppBar(title: const Text('New Ingredient')),
+          appBar: AppBar(title: const Text('Edit Ingredient')),
           floatingActionButton: FloatingActionButton.extended(
               label: const Text("Save Ingredient"),
               icon: const Icon(Icons.save_sharp),
