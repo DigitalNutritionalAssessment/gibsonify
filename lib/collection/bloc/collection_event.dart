@@ -85,6 +85,16 @@ class PictureChartCollectedChanged extends CollectionEvent {
   List<Object> get props => [pictureChartCollected];
 }
 
+class PictureChartNotCollectedReasonChanged extends CollectionEvent {
+  final String pictureChartNotCollectedReason;
+
+  const PictureChartNotCollectedReasonChanged(
+      {required this.pictureChartNotCollectedReason});
+
+  @override
+  List<Object> get props => [pictureChartNotCollectedReason];
+}
+
 class InterviewEndTimeChanged extends CollectionEvent {
   final String interviewEndTime;
 

@@ -52,6 +52,7 @@ class FinishCollectionForm extends StatelessWidget {
       child: Column(
         children: const <Widget>[
           PictureChartCollectedInput(),
+          PictureChartNotCollectedReason(),
           InterviewEndTimeInput(),
           InterviewOutcomeInput(),
           CommentsInput()
@@ -87,6 +88,38 @@ class PictureChartCollectedInput extends StatelessWidget {
               context.read<CollectionBloc>().add(PictureChartCollectedChanged(
                   pictureChartCollected: value ?? ''));
             });
+      },
+    );
+  }
+}
+
+class PictureChartNotCollectedReason extends StatelessWidget {
+  const PictureChartNotCollectedReason({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CollectionBloc, CollectionState>(
+      builder: (context, state) {
+        return Visibility(
+            visible: state.gibsonsForm.pictureChartCollected.valid &&
+                !state.gibsonsForm.isPictureChartCollected(),
+            child: TextFormField(
+              initialValue: state.gibsonsForm.pictureChartNotCollectedReason,
+              decoration: InputDecoration(
+                icon: const Icon(Icons.device_unknown_outlined),
+                labelText: 'Reason for not collecting the picture chart',
+                helperText: 'Why did you not collect the picture chart',
+                errorText:
+                    state.gibsonsForm.pictureChartNotCollectedReason.isEmpty
+                        ? 'Choose the reason'
+                        : null,
+              ),
+              onChanged: (value) {
+                context.read<CollectionBloc>().add(
+                    PictureChartNotCollectedReasonChanged(
+                        pictureChartNotCollectedReason: value));
+              },
+            ));
       },
     );
   }

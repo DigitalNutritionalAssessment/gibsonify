@@ -21,6 +21,7 @@ class GibsonsForm extends Equatable {
       this.interviewStartTime = const InterviewStartTime.pure(),
       this.geoLocation = const GeoLocation.pure(),
       this.pictureChartCollected = const PictureChartCollected.pure(),
+      this.pictureChartNotCollectedReason = '',
       this.interviewEndTime = const InterviewEndTime.pure(),
       this.interviewOutcome = const InterviewOutcome.pure(),
       this.comments = const Comments.pure(),
@@ -39,6 +40,7 @@ class GibsonsForm extends Equatable {
   final InterviewStartTime interviewStartTime;
   final GeoLocation geoLocation;
   final PictureChartCollected pictureChartCollected;
+  final String pictureChartNotCollectedReason;
   final InterviewEndTime interviewEndTime;
   final InterviewOutcome interviewOutcome;
   final Comments comments;
@@ -69,6 +71,7 @@ class GibsonsForm extends Equatable {
         geoLocation = GeoLocation.fromJson(json['geoLocation']),
         pictureChartCollected =
             PictureChartCollected.fromJson(json['pictureChartCollected']),
+        pictureChartNotCollectedReason = json['pictureChartNotCollectedReason'],
         interviewEndTime = InterviewEndTime.fromJson(json['interviewEndTime']),
         interviewOutcome = InterviewOutcome.fromJson(json['interviewOutcome']),
         comments = Comments.fromJson(json['comments']),
@@ -88,6 +91,7 @@ class GibsonsForm extends Equatable {
     data['interviewStartTime'] = interviewStartTime.toJson();
     data['geoLocation'] = geoLocation.toJson();
     data['pictureChartCollected'] = pictureChartCollected.toJson();
+    data['pictureChartNotCollectedReason'] = pictureChartNotCollectedReason;
     data['interviewEndTime'] = interviewEndTime.toJson();
     data['interviewOutcome'] = interviewOutcome.toJson();
     data['comments'] = comments.toJson();
@@ -108,6 +112,7 @@ class GibsonsForm extends Equatable {
       InterviewStartTime? interviewStartTime,
       GeoLocation? geoLocation,
       PictureChartCollected? pictureChartCollected,
+      String? pictureChartNotCollectedReason,
       InterviewEndTime? interviewEndTime,
       InterviewOutcome? interviewOutcome,
       Comments? comments,
@@ -128,6 +133,8 @@ class GibsonsForm extends Equatable {
         geoLocation: geoLocation ?? this.geoLocation,
         pictureChartCollected:
             pictureChartCollected ?? this.pictureChartCollected,
+        pictureChartNotCollectedReason: pictureChartNotCollectedReason ??
+            this.pictureChartNotCollectedReason,
         interviewEndTime: interviewEndTime ?? this.interviewEndTime,
         interviewOutcome: interviewOutcome ?? this.interviewOutcome,
         comments: comments ?? this.comments,
@@ -136,6 +143,10 @@ class GibsonsForm extends Equatable {
 
   bool allFoodItemsConfirmed() {
     return foodItems.every((foodItem) => foodItem.confirmed);
+  }
+
+  bool isPictureChartCollected() {
+    return pictureChartCollected.value.toLowerCase() == 'yes';
   }
 
   @override
@@ -153,6 +164,7 @@ class GibsonsForm extends Equatable {
         'Interview Start Time: $interviewStartTime\n'
         'Geo Location: $geoLocation\n'
         'Picture Chart Collected: $pictureChartCollected\n'
+        'Picture Chart Not Collected Reason: $pictureChartNotCollectedReason\n'
         'Interview End Time: $interviewEndTime\n'
         'Interview Outcome: $interviewOutcome\n'
         'Comments: $comments\n'
@@ -174,6 +186,7 @@ class GibsonsForm extends Equatable {
         interviewStartTime,
         geoLocation,
         pictureChartCollected,
+        pictureChartNotCollectedReason,
         interviewEndTime,
         interviewOutcome,
         comments,
