@@ -24,6 +24,7 @@ class GibsonsForm extends Equatable {
       this.pictureChartNotCollectedReason = '',
       this.interviewEndTime = const InterviewEndTime.pure(),
       this.interviewOutcome = const InterviewOutcome.pure(),
+      this.interviewOutcomeNotCompletedReason = '',
       this.comments = const Comments.pure(),
       this.foodItems = const <FoodItem>[]})
       : id = id ?? const Uuid().v4();
@@ -43,13 +44,13 @@ class GibsonsForm extends Equatable {
   final String pictureChartNotCollectedReason;
   final InterviewEndTime interviewEndTime;
   final InterviewOutcome interviewOutcome;
+  final String interviewOutcomeNotCompletedReason;
   final Comments comments;
   final List<FoodItem> foodItems;
 
   // TODO: add other fields from physical Gibson's form:
   // end of interview, did complete interview in one visit? (bool),
-  // date of second visit, reason for second visit, final outcome of interview,
-  // reason for incomplete interview, supervisor comments.
+  // date of second visit, reason for second visit...
 
   // TODO: implement code generation JSON serialization using json_serializable
   // and/or json_annotation
@@ -74,6 +75,8 @@ class GibsonsForm extends Equatable {
         pictureChartNotCollectedReason = json['pictureChartNotCollectedReason'],
         interviewEndTime = InterviewEndTime.fromJson(json['interviewEndTime']),
         interviewOutcome = InterviewOutcome.fromJson(json['interviewOutcome']),
+        interviewOutcomeNotCompletedReason =
+            json['interviewOutcomeNotCompletedReason'],
         comments = Comments.fromJson(json['comments']),
         foodItems = _jsonDecodeFoodItems(json['foodItems']);
 
@@ -94,6 +97,8 @@ class GibsonsForm extends Equatable {
     data['pictureChartNotCollectedReason'] = pictureChartNotCollectedReason;
     data['interviewEndTime'] = interviewEndTime.toJson();
     data['interviewOutcome'] = interviewOutcome.toJson();
+    data['interviewOutcomeNotCompletedReason'] =
+        interviewOutcomeNotCompletedReason;
     data['comments'] = comments.toJson();
     data['foodItems'] = jsonEncode(foodItems); // This calls toJson on each one
     return data;
@@ -115,6 +120,7 @@ class GibsonsForm extends Equatable {
       String? pictureChartNotCollectedReason,
       InterviewEndTime? interviewEndTime,
       InterviewOutcome? interviewOutcome,
+      String? interviewOutcomeNotCompletedReason,
       Comments? comments,
       List<FoodItem>? foodItems}) {
     return GibsonsForm(
@@ -137,16 +143,11 @@ class GibsonsForm extends Equatable {
             this.pictureChartNotCollectedReason,
         interviewEndTime: interviewEndTime ?? this.interviewEndTime,
         interviewOutcome: interviewOutcome ?? this.interviewOutcome,
+        interviewOutcomeNotCompletedReason:
+            interviewOutcomeNotCompletedReason ??
+                this.interviewOutcomeNotCompletedReason,
         comments: comments ?? this.comments,
         foodItems: foodItems ?? this.foodItems);
-  }
-
-  bool allFoodItemsConfirmed() {
-    return foodItems.every((foodItem) => foodItem.confirmed);
-  }
-
-  bool isPictureChartCollected() {
-    return pictureChartCollected.value.toLowerCase() == 'yes';
   }
 
   @override
@@ -167,6 +168,8 @@ class GibsonsForm extends Equatable {
         'Picture Chart Not Collected Reason: $pictureChartNotCollectedReason\n'
         'Interview End Time: $interviewEndTime\n'
         'Interview Outcome: $interviewOutcome\n'
+        'Interview Outcome Not Completed Reason: '
+        '$interviewOutcomeNotCompletedReason\n'
         'Comments: $comments\n'
         'Food Items: $foodItems'
         '\n *** \n';
@@ -189,9 +192,22 @@ class GibsonsForm extends Equatable {
         pictureChartNotCollectedReason,
         interviewEndTime,
         interviewOutcome,
+        interviewOutcomeNotCompletedReason,
         comments,
         foodItems
       ];
+
+  bool allFoodItemsConfirmed() {
+    return foodItems.every((foodItem) => foodItem.confirmed);
+  }
+
+  bool isPictureChartCollected() {
+    return pictureChartCollected.value.toLowerCase() == 'yes';
+  }
+
+  bool isInterviewOutcomeCompleted() {
+    return interviewOutcome.value.toLowerCase() == 'completed';
+  }
 }
 
 List<FoodItem> _jsonDecodeFoodItems(jsonEncodedFoodItems) {

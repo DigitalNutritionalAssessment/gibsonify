@@ -55,6 +55,7 @@ class FinishCollectionForm extends StatelessWidget {
           PictureChartNotCollectedReason(),
           InterviewEndTimeInput(),
           InterviewOutcomeInput(),
+          InterviewOutcomeNotCompletedReason(),
           CommentsInput()
         ],
       ),
@@ -188,6 +189,39 @@ class InterviewOutcomeInput extends StatelessWidget {
                   .read<CollectionBloc>()
                   .add(InterviewOutcomeChanged(interviewOutcome: value ?? ''));
             });
+      },
+    );
+  }
+}
+
+class InterviewOutcomeNotCompletedReason extends StatelessWidget {
+  const InterviewOutcomeNotCompletedReason({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CollectionBloc, CollectionState>(
+      builder: (context, state) {
+        return Visibility(
+            visible: state.gibsonsForm.interviewOutcome.valid &&
+                !state.gibsonsForm.isInterviewOutcomeCompleted(),
+            child: TextFormField(
+              initialValue:
+                  state.gibsonsForm.interviewOutcomeNotCompletedReason,
+              decoration: InputDecoration(
+                icon: const Icon(Icons.device_unknown_outlined),
+                labelText: 'Reason for not completing the interview',
+                helperText: 'Why did you not complete the interview',
+                errorText:
+                    state.gibsonsForm.interviewOutcomeNotCompletedReason.isEmpty
+                        ? 'Explain the reason'
+                        : null,
+              ),
+              onChanged: (value) {
+                context.read<CollectionBloc>().add(
+                    InterviewOutcomeNotCompletedReasonChanged(
+                        interviewOutcomeNotCompletedReason: value));
+              },
+            ));
       },
     );
   }

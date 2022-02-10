@@ -113,6 +113,16 @@ class InterviewOutcomeChanged extends CollectionEvent {
   List<Object> get props => [interviewOutcome];
 }
 
+class InterviewOutcomeNotCompletedReasonChanged extends CollectionEvent {
+  final String interviewOutcomeNotCompletedReason;
+
+  const InterviewOutcomeNotCompletedReasonChanged(
+      {required this.interviewOutcomeNotCompletedReason});
+
+  @override
+  List<Object> get props => [interviewOutcomeNotCompletedReason];
+}
+
 class CommentsChanged extends CollectionEvent {
   final String comments;
 
