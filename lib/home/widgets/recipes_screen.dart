@@ -7,8 +7,11 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 
 class RecipesScreen extends StatelessWidget {
   final String? assignedFoodItemId;
+  final String? foodItemDescription;
 
-  const RecipesScreen({Key? key, this.assignedFoodItemId}) : super(key: key);
+  const RecipesScreen(
+      {Key? key, this.assignedFoodItemId, this.foodItemDescription})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -56,8 +59,18 @@ class RecipesScreen extends StatelessWidget {
                                   state.recipes[index].recipeType !=
                                       'Standard Recipe')
                               // TODO: rewrite as named strings for each screen
-                              ? [index, assignedFoodItemId, 1]
-                              : [index, assignedFoodItemId, 0])
+                              ? [
+                                  index,
+                                  assignedFoodItemId,
+                                  foodItemDescription,
+                                  1
+                                ]
+                              : [
+                                  index,
+                                  assignedFoodItemId,
+                                  foodItemDescription,
+                                  0
+                                ])
                     },
                   )),
                 );
@@ -78,6 +91,7 @@ class RecipesScreen extends StatelessWidget {
                                 state.recipes.length,
                                 // TODO: rewrite as named strings for each screen
                                 assignedFoodItemId,
+                                foodItemDescription,
                                 1
                               ]),
                         }),
@@ -95,6 +109,7 @@ class RecipesScreen extends StatelessWidget {
                               arguments: [
                                 state.recipes.length,
                                 assignedFoodItemId,
+                                foodItemDescription,
                                 // TODO: rewrite as named strings for each screen
                                 1
                               ]),
