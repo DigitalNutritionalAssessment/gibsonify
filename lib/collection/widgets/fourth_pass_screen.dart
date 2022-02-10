@@ -46,8 +46,17 @@ class FourthPassScreen extends StatelessWidget {
                       heroTag: null,
                       label: const Text("Finish Collection"),
                       icon: const Icon(Icons.check),
-                      onPressed: () => Navigator.pushNamed(
-                          context, PageRouter.finishCollection))
+                      onPressed: () {
+                        const snackBar = SnackBar(
+                            content: Text(
+                                'Confirm all food items before finishing!'));
+                        if (state.gibsonsForm.allFoodItemsConfirmed()) {
+                          Navigator.pushNamed(
+                              context, PageRouter.finishCollection);
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        }
+                      })
                 ]));
       },
     );

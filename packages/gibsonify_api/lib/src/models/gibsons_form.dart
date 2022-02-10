@@ -134,6 +134,10 @@ class GibsonsForm extends Equatable {
         foodItems: foodItems ?? this.foodItems);
   }
 
+  bool allFoodItemsConfirmed() {
+    return foodItems.every((foodItem) => foodItem.confirmed);
+  }
+
   @override
   String toString() {
     return '\n *** \nGibson\'s Form:\n'
