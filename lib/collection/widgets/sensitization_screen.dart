@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 
 import 'package:gibsonify/home/home.dart';
 import 'package:gibsonify/collection/collection.dart';
@@ -45,7 +46,7 @@ class SensitizationForm extends StatelessWidget {
         children: const <Widget>[
           HouseholdIdInput(),
           RespondentNameInput(),
-          RespondentTelNumberInput(),
+          RespondentTelInfoInput(),
           SensitizationDateInput(),
           RecallDayInput(),
           InterviewDateInput(),
@@ -118,30 +119,31 @@ class RespondentNameInput extends StatelessWidget {
   }
 }
 
-class RespondentTelNumberInput extends StatelessWidget {
-  const RespondentTelNumberInput({Key? key}) : super(key: key);
+class RespondentTelInfoInput extends StatelessWidget {
+  const RespondentTelInfoInput({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CollectionBloc, CollectionState>(
       builder: (context, state) {
-        return TextFormField(
-          initialValue: state.gibsonsForm.respondentTelNumber.value,
-          keyboardType: TextInputType.phone,
+        return IntlPhoneField(
+          invalidNumberMessage: 'Enter a valid tel. number',
           decoration: InputDecoration(
-            icon: const Icon(Icons.phone),
             labelText: 'Respondent Tel. Number',
+            icon: const Icon(Icons.phone),
             helperText: 'Full tel. number of respondent e.g. +447448238123',
-            errorText: state.gibsonsForm.respondentTelNumber.invalid
-                ? 'Enter valid tel. number'
-                : null,
           ),
-          onChanged: (value) {
-            context
-                .read<CollectionBloc>()
-                .add(RespondentTelNumberChanged(respondentTelNumber: value));
+          initialValue: state.gibsonsForm.respondentTelNumber.value,
+          initialCountryCode:
+              state.gibsonsForm.respondentTelNumber.value.isEmpty
+                  ? 'IN'
+                  : state.gibsonsForm.respondentCountryCode,
+          onChanged: (phoneNumber) {
+            context.read<CollectionBloc>().add(RespondentTelInfoChanged(
+                respondentCountryCode: phoneNumber.countryISOCode,
+                respondentTelNumberPrefix: phoneNumber.countryCode,
+                respondentTelNumber: phoneNumber.number));
           },
-          textInputAction: TextInputAction.next,
         );
       },
     );

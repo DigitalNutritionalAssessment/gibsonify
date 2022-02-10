@@ -12,6 +12,8 @@ class GibsonsForm extends Equatable {
       {String? id,
       this.householdId = const HouseholdId.pure(),
       this.respondentName = const RespondentName.pure(),
+      this.respondentCountryCode = '',
+      this.respondentTelNumberPrefix = '',
       this.respondentTelNumber = const RespondentTelNumber.pure(),
       this.sensitizationDate = const SensitizationDate.pure(),
       this.recallDay = const RecallDay.pure(),
@@ -28,6 +30,8 @@ class GibsonsForm extends Equatable {
   final String id;
   final HouseholdId householdId;
   final RespondentName respondentName;
+  final String respondentCountryCode;
+  final String respondentTelNumberPrefix;
   final RespondentTelNumber respondentTelNumber;
   final SensitizationDate sensitizationDate;
   final RecallDay recallDay;
@@ -52,6 +56,8 @@ class GibsonsForm extends Equatable {
       : id = json['id'],
         householdId = HouseholdId.fromJson(json['householdId']),
         respondentName = RespondentName.fromJson(json['respondentName']),
+        respondentCountryCode = json['respondentCountryCode'],
+        respondentTelNumberPrefix = json['respondentTelNumberPrefix'],
         respondentTelNumber =
             RespondentTelNumber.fromJson(json['respondentTelNumber']),
         sensitizationDate =
@@ -73,6 +79,8 @@ class GibsonsForm extends Equatable {
     data['id'] = id;
     data['householdId'] = householdId.toJson();
     data['respondentName'] = respondentName.toJson();
+    data['respondentCountryCode'] = respondentCountryCode;
+    data['respondentTelNumberPrefix'] = respondentTelNumberPrefix;
     data['respondentTelNumber'] = respondentTelNumber.toJson();
     data['sensitizationDate'] = sensitizationDate.toJson();
     data['recallDay'] = recallDay.toJson();
@@ -91,6 +99,8 @@ class GibsonsForm extends Equatable {
       {String? id,
       HouseholdId? householdId,
       RespondentName? respondentName,
+      String? respondentCountryCode,
+      String? respondentTelNumberPrefix,
       RespondentTelNumber? respondentTelNumber,
       SensitizationDate? sensitizationDate,
       RecallDay? recallDay,
@@ -106,6 +116,10 @@ class GibsonsForm extends Equatable {
         id: id ?? this.id,
         householdId: householdId ?? this.householdId,
         respondentName: respondentName ?? this.respondentName,
+        respondentCountryCode:
+            respondentCountryCode ?? this.respondentCountryCode,
+        respondentTelNumberPrefix:
+            respondentTelNumberPrefix ?? this.respondentTelNumberPrefix,
         respondentTelNumber: respondentTelNumber ?? this.respondentTelNumber,
         sensitizationDate: sensitizationDate ?? this.sensitizationDate,
         recallDay: recallDay ?? this.recallDay,
@@ -126,6 +140,8 @@ class GibsonsForm extends Equatable {
         'UUID: $id\n'
         'HouseholdID: $householdId\n'
         'Repondent Name: $respondentName\n'
+        'Repondent Country Code: $respondentCountryCode\n'
+        'Respondent Tel Number Prefix: $respondentTelNumberPrefix\n'
         'Respondent Tel Number: $respondentTelNumber\n'
         'Sensitization Date: $sensitizationDate\n'
         'Recall Day: $recallDay\n'
@@ -145,6 +161,8 @@ class GibsonsForm extends Equatable {
         id,
         householdId,
         respondentName,
+        respondentCountryCode,
+        respondentTelNumberPrefix,
         respondentTelNumber,
         sensitizationDate,
         recallDay,

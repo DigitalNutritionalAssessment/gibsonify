@@ -25,13 +25,19 @@ class RespondentNameChanged extends CollectionEvent {
   List<Object> get props => [respondentName];
 }
 
-class RespondentTelNumberChanged extends CollectionEvent {
+class RespondentTelInfoChanged extends CollectionEvent {
+  final String respondentCountryCode;
+  final String respondentTelNumberPrefix;
   final String respondentTelNumber;
 
-  const RespondentTelNumberChanged({required this.respondentTelNumber});
+  const RespondentTelInfoChanged(
+      {required this.respondentCountryCode,
+      required this.respondentTelNumberPrefix,
+      required this.respondentTelNumber});
 
   @override
-  List<Object> get props => [respondentTelNumber];
+  List<Object> get props =>
+      [respondentCountryCode, respondentTelNumberPrefix, respondentTelNumber];
 }
 
 class SensitizationDateChanged extends CollectionEvent {
