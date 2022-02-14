@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gibsonify/recipe/recipe.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class ProbeForm extends StatelessWidget {
   final int recipeIndex;
@@ -144,8 +143,8 @@ class DeleteProbeOption extends StatelessWidget {
               Navigator.pop(context, 'OK'),
               if (recipe.probes[probeIndex].probeOptions.length == 2)
                 {
-                  Fluttertoast.showToast(
-                      msg: 'A probe must have at least two options')
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text('A probe must have at least two options')))
                 }
             },
             child: const Text('OK'),

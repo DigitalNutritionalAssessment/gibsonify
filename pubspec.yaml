@@ -23,7 +23,6 @@ dependencies:
   path_provider: ^2.0.8
   flutter_mailer: ^2.0.0
   dropdown_search: ^2.0.1
-  fluttertoast: ^8.0.8
 
 dev_dependencies:
   flutter_test:
