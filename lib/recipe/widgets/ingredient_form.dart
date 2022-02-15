@@ -75,7 +75,17 @@ class _IngredientFormState extends State<IngredientForm> {
                         selectedItem: state.recipes[widget.recipeIndex]
                             .ingredients[widget.ingredientIndex].name);
                   } else {
-                    return const SizedBox.shrink();
+                    return DropdownSearch<String>(
+                        dropdownSearchDecoration: const InputDecoration(
+                          icon: Icon(Icons.food_bank_rounded),
+                          labelText: 'Ingredient name',
+                          helperText: 'Ingredient name e.g. Potato',
+                        ),
+                        enabled: false,
+                        mode: Mode.MENU,
+                        showSelectedItems: true,
+                        selectedItem: state.recipes[widget.recipeIndex]
+                            .ingredients[widget.ingredientIndex].name);
                   }
                 }),
             Visibility(
