@@ -2,15 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'dart:convert';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:gibsonify/recipe/recipe.dart';
 
-class IngredientForm extends StatelessWidget {
+class IngredientForm extends StatefulWidget {
   final int recipeIndex;
   final int ingredientIndex;
-  IngredientForm(this.recipeIndex, this.ingredientIndex, {Key? key})
+  const IngredientForm(this.recipeIndex, this.ingredientIndex, {Key? key})
       : super(key: key);
+
+  @override
+  State<IngredientForm> createState() => _IngredientFormState();
+}
+
+class _IngredientFormState extends State<IngredientForm> {
+  Future<String>? _ingredients;
+
+  @override
+  void initState() {
+    super.initState();
+    _ingredients = Ingredient.getIngredients();
+  }
 
   final List<String> cookingStates = [
     "Raw",
@@ -36,43 +50,77 @@ class IngredientForm extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            TextFormField(
-              initialValue:
-                  state.recipes[recipeIndex].ingredients[ingredientIndex].name,
-              decoration: InputDecoration(
-                icon: const Icon(Icons.set_meal_rounded),
-                labelText: 'Ingredient name',
-                helperText: 'Ingredient name e.g. Rice',
-                errorText: (state.recipes[recipeIndex]
-                                .ingredients[ingredientIndex].name !=
-                            null &&
-                        state.recipes[recipeIndex].ingredients[ingredientIndex]
-                                .name ==
-                            '')
-                    ? 'Enter an ingredient name e.g. Tomato'
-                    : null,
+            FutureBuilder(
+                future: _ingredients,
+                builder:
+                    (BuildContext context, AsyncSnapshot<String> snapshot) {
+                  if (snapshot.hasData) {
+                    return DropdownSearch<String>(
+                        dropdownSearchDecoration: const InputDecoration(
+                          icon: Icon(Icons.food_bank_rounded),
+                          labelText: 'Ingredient name',
+                          helperText: 'Ingredient name e.g. Potato',
+                        ),
+                        mode: Mode.MENU,
+                        showSelectedItems: true,
+                        showSearchBox: true,
+                        items: json.decode(snapshot.data!).keys.toList(),
+                        onChanged: (String? answer) => context
+                            .read<RecipeBloc>()
+                            .add(IngredientNameChanged(
+                                ingredient: state.recipes[widget.recipeIndex]
+                                    .ingredients[widget.ingredientIndex],
+                                ingredientName: answer!,
+                                recipe: state.recipes[widget.recipeIndex])),
+                        selectedItem: state.recipes[widget.recipeIndex]
+                            .ingredients[widget.ingredientIndex].name);
+                  } else {
+                    return const SizedBox.shrink();
+                  }
+                }),
+            Visibility(
+              visible: (state.recipes[widget.recipeIndex]
+                      .ingredients[widget.ingredientIndex].name ==
+                  "Other (please specify)"),
+              child: TextFormField(
+                initialValue: state.recipes[widget.recipeIndex]
+                    .ingredients[widget.ingredientIndex].otherName,
+                decoration: InputDecoration(
+                  icon: const Icon(Icons.set_meal_rounded),
+                  labelText: 'Specify ingredient',
+                  helperText: 'Ingredient name e.g. Black rice',
+                  errorText: (state.recipes[widget.recipeIndex]
+                              .ingredients[widget.ingredientIndex].otherName ==
+                          null)
+                      ? 'Enter an ingredient name e.g. Black rice'
+                      : null,
+                ),
+                onChanged: (value) {
+                  context.read<RecipeBloc>().add(IngredientOtherNameChanged(
+                      ingredient: state.recipes[widget.recipeIndex]
+                          .ingredients[widget.ingredientIndex],
+                      ingredientOtherName: value,
+                      recipe: state.recipes[widget.recipeIndex]));
+                },
+                textInputAction: TextInputAction.next,
+                textCapitalization: TextCapitalization.sentences,
               ),
-              onChanged: (value) {
-                context.read<RecipeBloc>().add(IngredientNameChanged(
-                    ingredient:
-                        state.recipes[recipeIndex].ingredients[ingredientIndex],
-                    ingredientName: value,
-                    recipe: state.recipes[recipeIndex]));
-              },
-              textInputAction: TextInputAction.next,
-              textCapitalization: TextCapitalization.sentences,
             ),
             TextFormField(
-              initialValue: state.recipes[recipeIndex]
-                  .ingredients[ingredientIndex].description,
+              initialValue: state.recipes[widget.recipeIndex]
+                  .ingredients[widget.ingredientIndex].description,
               decoration: InputDecoration(
                 icon: const Icon(Icons.description_rounded),
                 labelText: 'Ingredient description',
                 helperText: 'Ingredient description e.g. Big, dry, ripe etc.',
-                errorText: (state.recipes[recipeIndex]
-                                .ingredients[ingredientIndex].description !=
+                errorText: (state
+                                .recipes[widget.recipeIndex]
+                                .ingredients[widget.ingredientIndex]
+                                .description !=
                             null &&
-                        state.recipes[recipeIndex].ingredients[ingredientIndex]
+                        state
+                                .recipes[widget.recipeIndex]
+                                .ingredients[widget.ingredientIndex]
                                 .description ==
                             '')
                     ? 'Enter an ingredient description e.g. Ripe'
@@ -80,10 +128,10 @@ class IngredientForm extends StatelessWidget {
               ),
               onChanged: (value) {
                 context.read<RecipeBloc>().add(IngredientDescriptionChanged(
-                    ingredient:
-                        state.recipes[recipeIndex].ingredients[ingredientIndex],
+                    ingredient: state.recipes[widget.recipeIndex]
+                        .ingredients[widget.ingredientIndex],
                     ingredientDescription: value,
-                    recipe: state.recipes[recipeIndex]));
+                    recipe: state.recipes[widget.recipeIndex]));
               },
               textCapitalization: TextCapitalization.sentences,
               textInputAction: TextInputAction.next,
@@ -100,14 +148,14 @@ class IngredientForm extends StatelessWidget {
                 items: cookingStates,
                 onChanged: (String? answer) => context.read<RecipeBloc>().add(
                     IngredientCookingStateChanged(
-                        ingredient: state
-                            .recipes[recipeIndex].ingredients[ingredientIndex],
+                        ingredient: state.recipes[widget.recipeIndex]
+                            .ingredients[widget.ingredientIndex],
                         cookingState: answer!,
-                        recipe: state.recipes[recipeIndex])),
-                selectedItem: state.recipes[recipeIndex]
-                    .ingredients[ingredientIndex].cookingState),
+                        recipe: state.recipes[widget.recipeIndex])),
+                selectedItem: state.recipes[widget.recipeIndex]
+                    .ingredients[widget.ingredientIndex].cookingState),
             const SizedBox(height: 10),
-            IngredientMeasurements(recipeIndex, ingredientIndex)
+            IngredientMeasurements(widget.recipeIndex, widget.ingredientIndex)
           ],
         ),
       );

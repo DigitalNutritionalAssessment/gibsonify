@@ -263,6 +263,20 @@ class IngredientNameChanged extends RecipeEvent {
   List<Object> get props => [ingredientName, ingredient, recipe];
 }
 
+class IngredientOtherNameChanged extends RecipeEvent {
+  final String ingredientOtherName;
+  final Ingredient ingredient;
+  final Recipe recipe;
+
+  const IngredientOtherNameChanged(
+      {required this.ingredientOtherName,
+      required this.ingredient,
+      required this.recipe});
+
+  @override
+  List<Object> get props => [ingredientOtherName, ingredient, recipe];
+}
+
 class IngredientDescriptionChanged extends RecipeEvent {
   final String ingredientDescription;
   final Ingredient ingredient;

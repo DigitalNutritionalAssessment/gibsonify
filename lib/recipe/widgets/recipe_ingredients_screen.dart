@@ -133,9 +133,15 @@ class Ingredients extends StatelessWidget {
                   ),
                   child: Card(
                       child: ListTile(
-                    title: Text(
-                        state.recipes[recipeIndex].ingredients[index].name ??
-                            ''),
+                    title:
+                        (state.recipes[recipeIndex].ingredients[index].name ==
+                                "Other (please specify)")
+                            ? Text(state.recipes[recipeIndex].ingredients[index]
+                                    .otherName ??
+                                '')
+                            : Text(state.recipes[recipeIndex].ingredients[index]
+                                    .name ??
+                                ''),
                     subtitle: Text(state.recipes[recipeIndex].ingredients[index]
                             .description ??
                         ''),
