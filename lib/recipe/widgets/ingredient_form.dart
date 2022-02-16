@@ -24,8 +24,7 @@ class _IngredientFormState extends State<IngredientForm> {
   void initState() {
     super.initState();
     _ingredients = Ingredient.getIngredients();
-    // TODO: Evaluate if loading asset into RecipeBloc is a better approach to
-    // make IngredientForm a StatelessWidget
+    // TODO: Move loading asset into RecipeBloc
   }
 
   final List<String> cookingStates = [
@@ -94,6 +93,8 @@ class _IngredientFormState extends State<IngredientForm> {
               visible: (state.recipes[widget.recipeIndex]
                       .ingredients[widget.ingredientIndex].name ==
                   "Other (please specify)"),
+              // TODO: Implement a better implementation for this check
+              // possibly a flag to show customName is chosen
               child: TextFormField(
                 initialValue: state.recipes[widget.recipeIndex]
                     .ingredients[widget.ingredientIndex].customName,
@@ -125,6 +126,7 @@ class _IngredientFormState extends State<IngredientForm> {
                 icon: const Icon(Icons.description_rounded),
                 labelText: 'Ingredient description',
                 helperText: 'Ingredient description e.g. Big, dry, ripe etc.',
+                // TODO: Refactor the error condition into a reusable method
                 errorText: (state
                                 .recipes[widget.recipeIndex]
                                 .ingredients[widget.ingredientIndex]
@@ -236,6 +238,7 @@ class IngredientMeasurements extends StatelessWidget {
                             icon: const Icon(Icons.food_bank_rounded),
                             labelText: "Measurement method",
                             helperText: 'How the measurement is measured',
+                            // TODO: Refactor the error condition into a reusable method
                             errorText: (state
                                             .recipes[recipeIndex]
                                             .ingredients[ingredientIndex]
@@ -278,6 +281,7 @@ class IngredientMeasurements extends StatelessWidget {
                           icon: const Icon(Icons.format_list_numbered_rounded),
                           labelText: 'Measurement value',
                           helperText: 'Input measurement value',
+                          // TODO: Refactor the error condition into a reusable method
                           errorText: (state
                                           .recipes[recipeIndex]
                                           .ingredients[ingredientIndex]
@@ -310,6 +314,7 @@ class IngredientMeasurements extends StatelessWidget {
                             icon: const Icon(Icons.local_dining_rounded),
                             labelText: "Measurement unit",
                             helperText: 'The size of each measurement value',
+                            // TODO: Refactor the error condition into a reusable method
                             errorText: (state
                                             .recipes[recipeIndex]
                                             .ingredients[ingredientIndex]

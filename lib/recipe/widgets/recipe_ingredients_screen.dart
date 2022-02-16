@@ -81,6 +81,7 @@ class RecipeNameInput extends StatelessWidget {
             icon: const Icon(Icons.assignment_rounded),
             labelText: 'Recipe Name',
             helperText: 'A valid recipe name, e.g. Aloo bandhgobhi',
+            // TODO: Refactor the error condition into a reusable method
             errorText: (state.recipes[recipeIndex].recipeName != null &&
                     state.recipes[recipeIndex].recipeName == '')
                 ? 'Enter a valid recipe name, e.g. Aloo bandhgobhi'
@@ -133,15 +134,17 @@ class Ingredients extends StatelessWidget {
                   ),
                   child: Card(
                       child: ListTile(
-                    title:
-                        (state.recipes[recipeIndex].ingredients[index].name ==
-                                "Other (please specify)")
-                            ? Text(state.recipes[recipeIndex].ingredients[index]
-                                    .customName ??
-                                '')
-                            : Text(state.recipes[recipeIndex].ingredients[index]
-                                    .name ??
-                                ''),
+                    title: (state
+                                .recipes[recipeIndex].ingredients[index].name ==
+                            "Other (please specify)")
+                        // TODO: Implement a better implementation for this check
+                        // possibly a flag to show customName is chosen
+                        ? Text(state.recipes[recipeIndex].ingredients[index]
+                                .customName ??
+                            '')
+                        : Text(state
+                                .recipes[recipeIndex].ingredients[index].name ??
+                            ''),
                     subtitle: Text(state.recipes[recipeIndex].ingredients[index]
                             .description ??
                         ''),

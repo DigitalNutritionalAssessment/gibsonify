@@ -149,6 +149,7 @@ class RecipeMeasurements extends StatelessWidget {
                             icon: const Icon(Icons.food_bank_rounded),
                             labelText: "Measurement method",
                             helperText: 'How the measurement is measured',
+                            // TODO: Refactor the error condition into a reusable method
                             errorText: (state
                                             .recipes[recipeIndex]
                                             .measurements[index]
@@ -181,6 +182,7 @@ class RecipeMeasurements extends StatelessWidget {
                           icon: const Icon(Icons.format_list_numbered_rounded),
                           labelText: 'Measurement value',
                           helperText: 'Input measurement value',
+                          // TODO: Refactor the error condition into a reusable method
                           errorText: (state
                                           .recipes[recipeIndex]
                                           .measurements[index]
@@ -208,6 +210,7 @@ class RecipeMeasurements extends StatelessWidget {
                             icon: const Icon(Icons.local_dining_rounded),
                             labelText: "Measurement unit",
                             helperText: 'The size of each measurement value',
+                            // TODO: Refactor the error condition into a reusable method
                             errorText: (state
                                             .recipes[recipeIndex]
                                             .measurements[index]
