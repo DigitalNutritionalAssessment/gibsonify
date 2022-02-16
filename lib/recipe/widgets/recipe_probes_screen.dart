@@ -9,8 +9,9 @@ import 'package:dropdown_search/dropdown_search.dart';
 class RecipeProbesScreen extends StatelessWidget {
   final int recipeIndex;
   final String? assignedFoodItemId;
+  final String? foodItemDescription;
   const RecipeProbesScreen(this.recipeIndex,
-      {Key? key, this.assignedFoodItemId})
+      {Key? key, this.assignedFoodItemId, this.foodItemDescription})
       : super(key: key);
 
   @override
@@ -46,6 +47,7 @@ class RecipeProbesScreen extends StatelessWidget {
           body: ProbeList(
             recipeIndex: recipeIndex,
             assignedFoodItemId: assignedFoodItemId,
+            foodItemDescription: foodItemDescription,
           ));
     });
   }
@@ -54,9 +56,13 @@ class RecipeProbesScreen extends StatelessWidget {
 class ProbeList extends StatelessWidget {
   final int recipeIndex;
   final String? assignedFoodItemId;
+  final String? foodItemDescription;
 
   const ProbeList(
-      {Key? key, required this.recipeIndex, this.assignedFoodItemId})
+      {Key? key,
+      required this.recipeIndex,
+      this.assignedFoodItemId,
+      this.foodItemDescription})
       : super(key: key);
 
   @override
@@ -66,6 +72,16 @@ class ProbeList extends StatelessWidget {
         children: [
           ProbesPrompt(
               recipeIndex: recipeIndex, assignedFoodItemId: assignedFoodItemId),
+          Visibility(
+            visible:
+                (state.recipes[recipeIndex].recipeType == 'Standard Recipe' &&
+                    assignedFoodItemId != null),
+            child: ListTile(
+              title: const Text('Food item description'),
+              subtitle: Text(foodItemDescription ?? ''),
+              leading: const Icon(Icons.description),
+            ),
+          ),
           Visibility(
             visible:
                 (state.recipes[recipeIndex].recipeType == 'Standard Recipe'),
@@ -181,8 +197,8 @@ class ProbesPrompt extends StatelessWidget {
           tileColor: Colors.blue,
         );
       } else if (assignedFoodItemId != null &&
-          state.recipes[recipeIndex].probesChecked &&
-          state.recipes[recipeIndex].probesStandard &&
+          state.recipes[recipeIndex].allProbesChecked &&
+          state.recipes[recipeIndex].allProbeAnswersStandard &&
           state.recipes[recipeIndex].recipeType == 'Standard Recipe' &&
           state.recipes[recipeIndex].probes.isNotEmpty) {
         return const ListTile(
@@ -191,8 +207,8 @@ class ProbesPrompt extends StatelessWidget {
           tileColor: Colors.green,
         );
       } else if (assignedFoodItemId != null &&
-          state.recipes[recipeIndex].probesChecked &&
-          !state.recipes[recipeIndex].probesStandard &&
+          state.recipes[recipeIndex].allProbesChecked &&
+          !state.recipes[recipeIndex].allProbeAnswersStandard &&
           state.recipes[recipeIndex].recipeType == 'Standard Recipe' &&
           state.recipes[recipeIndex].probes.isNotEmpty) {
         return const ListTile(

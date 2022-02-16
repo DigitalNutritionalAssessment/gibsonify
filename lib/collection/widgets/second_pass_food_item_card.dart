@@ -115,7 +115,7 @@ class SecondPassFoodItemCard extends StatelessWidget {
                   onPreparationMethodChanged!(value ?? ''),
             ),
             TextFormField(
-              initialValue: foodItem.recipe?.recipeName.value ?? '',
+              initialValue: foodItem.recipe?.recipeName ?? '',
               readOnly: true,
               key: UniqueKey(),
               decoration: InputDecoration(
@@ -129,7 +129,7 @@ class SecondPassFoodItemCard extends StatelessWidget {
               ),
               onTap: () {
                 Navigator.pushNamed(context, PageRouter.chooseRecipe,
-                    arguments: foodItem.id);
+                    arguments: [foodItem.id, foodItem.description.value]);
               },
               textInputAction: TextInputAction.next,
             ),

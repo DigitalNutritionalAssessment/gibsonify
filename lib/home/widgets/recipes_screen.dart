@@ -7,8 +7,11 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 
 class RecipesScreen extends StatelessWidget {
   final String? assignedFoodItemId;
+  final String? foodItemDescription;
 
-  const RecipesScreen({Key? key, this.assignedFoodItemId}) : super(key: key);
+  const RecipesScreen(
+      {Key? key, this.assignedFoodItemId, this.foodItemDescription})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +45,7 @@ class RecipesScreen extends StatelessWidget {
                   ),
                   child: Card(
                       child: ListTile(
-                    title: Text(state.recipes[index].recipeName.value),
+                    title: Text(state.recipes[index].recipeName ?? ''),
                     subtitle: Text(state.recipes[index].recipeType),
                     trailing: state.recipes[index].saved
                         ? const Icon(Icons.done)
@@ -56,8 +59,18 @@ class RecipesScreen extends StatelessWidget {
                                   state.recipes[index].recipeType !=
                                       'Standard Recipe')
                               // TODO: rewrite as named strings for each screen
-                              ? [index, assignedFoodItemId, 1]
-                              : [index, assignedFoodItemId, 0])
+                              ? [
+                                  index,
+                                  assignedFoodItemId,
+                                  foodItemDescription,
+                                  1
+                                ]
+                              : [
+                                  index,
+                                  assignedFoodItemId,
+                                  foodItemDescription,
+                                  0
+                                ])
                     },
                   )),
                 );
@@ -78,6 +91,7 @@ class RecipesScreen extends StatelessWidget {
                                 state.recipes.length,
                                 // TODO: rewrite as named strings for each screen
                                 assignedFoodItemId,
+                                foodItemDescription,
                                 1
                               ]),
                         }),
@@ -95,6 +109,7 @@ class RecipesScreen extends StatelessWidget {
                               arguments: [
                                 state.recipes.length,
                                 assignedFoodItemId,
+                                foodItemDescription,
                                 // TODO: rewrite as named strings for each screen
                                 1
                               ]),
@@ -111,7 +126,7 @@ class DeleteRecipe extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String recipeName = recipe.recipeName.value;
+    String? recipeName = recipe.recipeName;
     return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
       return AlertDialog(
         title: const Text('Delete recipe'),

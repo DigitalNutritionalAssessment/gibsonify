@@ -3,19 +3,19 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
-### Refactor
-
-- specify dependency versions
-- **recipe**: rename files and text widgets for consistency
-- **recipe**: rename recipe probes clearing function
-
-### Fix
-
-- **recipe**: fix probe logic bug
-- fix bug causing recipes to not save in device memory
-
 ### Feat
 
+- **recipe**: change item deletion constraint implementation
+- **recipe**: add dummy dropdownfield as placeholder while waiting for asset loading
+- **recipe**: add ingredients json as asset, async logic to call ingredients file and unlisted ingredient name logic
+- **recipe**: change fluttertoast implementation to native snackbar
+- **recipe**: add food item description to probe list
+- **recipe**: constrain probe option and measurement deletion and add warning message
+- **recipe**: add auto capitalisation for text fields
+- **recipe**: set default probe values
+- **recipe**: implement multiple ingredient measurements logic
+- **recipe**: create measurements class and reimplement ingredient measurements
+- **recipe**: redesign following app feedback
 - **recipe**: add probe resetting when selecting recipes
 - **recipe**: add visibility widgets and probe logic
 - **recipe**: add probe option validation logic
@@ -25,6 +25,21 @@ All notable changes to this project will be documented in this file.
 - **recipe**: implement probes status check
 - **recipe**: implement probes checkbox backend
 - **recipe**: implement new probes page ui
+
+### Refactor
+
+- **recipe**: rename variables to more accurate descriptions of variables
+- **recipe**: replace Formz usage with Strings and validation
+- **recipe**: remove Formz usage from recipe implementation
+- rename recipe_item.dart to recipe.dart
+- specify dependency versions
+- **recipe**: rename files and text widgets for consistency
+- **recipe**: rename recipe probes clearing function
+
+### Fix
+
+- **recipe**: fix probe logic bug
+- fix bug causing recipes to not save in device memory
 
 ## 1.0.0 (2022-01-30)
 
