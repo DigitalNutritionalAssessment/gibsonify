@@ -242,8 +242,9 @@ class InterviewDateInput extends StatelessWidget {
             icon: const Icon(Icons.calendar_today),
             labelText: 'Interview Date',
             helperText: 'Date of interview start',
-            errorText: state.gibsonsForm.interviewDate.invalid
-                ? 'Choose the date of interview start'
+            errorText: !state.gibsonsForm.isInterviewDateValid()
+                ? 'Interview date needs to be at '
+                    'least two days after sensitization date'
                 : null,
           ),
           onTap: () async {

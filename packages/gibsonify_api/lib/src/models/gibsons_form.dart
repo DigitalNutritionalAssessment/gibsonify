@@ -208,6 +208,26 @@ class GibsonsForm extends Equatable {
   bool isInterviewOutcomeCompleted() {
     return interviewOutcome.value.toLowerCase() == 'completed';
   }
+
+  bool isInterviewDateValid() {
+    // TODO: change to checking if form field has been modified using null after
+    // dropping Formz
+    if (sensitizationDate.pure || interviewDate.pure) {
+      return true;
+    }
+    try {
+      // TODO: refactor sensitizationDate and interviewDate to be DateTime fields
+      // so that wouldn't have to parse in this method, just compare
+      var parsedSensitizationDate = DateTime.parse(sensitizationDate.value);
+      var parsedInterviewDate = DateTime.parse(interviewDate.value);
+      bool isInterviewAtLeastTwoDaysAfterSensitization = parsedInterviewDate
+          .subtract(Duration(days: 1))
+          .isAfter(parsedSensitizationDate);
+      return isInterviewAtLeastTwoDaysAfterSensitization;
+    } catch (e) {
+      return false;
+    }
+  }
 }
 
 List<FoodItem> _jsonDecodeFoodItems(jsonEncodedFoodItems) {
