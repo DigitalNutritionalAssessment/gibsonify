@@ -137,7 +137,7 @@ class Ingredients extends StatelessWidget {
                         (state.recipes[recipeIndex].ingredients[index].name ==
                                 "Other (please specify)")
                             ? Text(state.recipes[recipeIndex].ingredients[index]
-                                    .otherName ??
+                                    .customName ??
                                 '')
                             : Text(state.recipes[recipeIndex].ingredients[index]
                                     .name ??

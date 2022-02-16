@@ -197,8 +197,8 @@ class ProbesPrompt extends StatelessWidget {
           tileColor: Colors.blue,
         );
       } else if (assignedFoodItemId != null &&
-          state.recipes[recipeIndex].probesChecked &&
-          state.recipes[recipeIndex].probesStandard &&
+          state.recipes[recipeIndex].allProbesChecked &&
+          state.recipes[recipeIndex].allProbeAnswersStandard &&
           state.recipes[recipeIndex].recipeType == 'Standard Recipe' &&
           state.recipes[recipeIndex].probes.isNotEmpty) {
         return const ListTile(
@@ -207,8 +207,8 @@ class ProbesPrompt extends StatelessWidget {
           tileColor: Colors.green,
         );
       } else if (assignedFoodItemId != null &&
-          state.recipes[recipeIndex].probesChecked &&
-          !state.recipes[recipeIndex].probesStandard &&
+          state.recipes[recipeIndex].allProbesChecked &&
+          !state.recipes[recipeIndex].allProbeAnswersStandard &&
           state.recipes[recipeIndex].recipeType == 'Standard Recipe' &&
           state.recipes[recipeIndex].probes.isNotEmpty) {
         return const ListTile(

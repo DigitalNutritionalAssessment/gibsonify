@@ -169,27 +169,27 @@ class RecipeMeasurements extends StatelessWidget {
                               .measurements[index].measurementMethod),
                       TextFormField(
                         initialValue: state.recipes[recipeIndex]
-                            .measurements[index].measurementVolume,
+                            .measurements[index].measurementValue,
                         decoration: InputDecoration(
                           icon: const Icon(Icons.format_list_numbered_rounded),
-                          labelText: 'Measurement volume',
-                          helperText: 'Input measurement volume',
+                          labelText: 'Measurement value',
+                          helperText: 'Input measurement value',
                           errorText: (state
                                           .recipes[recipeIndex]
                                           .measurements[index]
-                                          .measurementVolume !=
+                                          .measurementValue !=
                                       null &&
                                   state.recipes[recipeIndex].measurements[index]
-                                          .measurementVolume ==
+                                          .measurementValue ==
                                       '')
-                              ? 'Enter a measurement volume'
+                              ? 'Enter a measurement value'
                               : null,
                         ),
                         onChanged: (value) {
                           context.read<RecipeBloc>().add(
-                              RecipeMeasurementVolumeChanged(
+                              RecipeMeasurementValueChanged(
                                   measurementIndex: index,
-                                  measurementVolume: value,
+                                  measurementValue: value,
                                   recipe: state.recipes[recipeIndex]));
                         },
                         textCapitalization: TextCapitalization.sentences,

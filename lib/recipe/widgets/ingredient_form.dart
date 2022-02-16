@@ -94,22 +94,22 @@ class _IngredientFormState extends State<IngredientForm> {
                   "Other (please specify)"),
               child: TextFormField(
                 initialValue: state.recipes[widget.recipeIndex]
-                    .ingredients[widget.ingredientIndex].otherName,
+                    .ingredients[widget.ingredientIndex].customName,
                 decoration: InputDecoration(
                   icon: const Icon(Icons.set_meal_rounded),
                   labelText: 'Specify ingredient',
                   helperText: 'Ingredient name e.g. Black rice',
                   errorText: (state.recipes[widget.recipeIndex]
-                              .ingredients[widget.ingredientIndex].otherName ==
+                              .ingredients[widget.ingredientIndex].customName ==
                           null)
                       ? 'Enter an ingredient name e.g. Black rice'
                       : null,
                 ),
                 onChanged: (value) {
-                  context.read<RecipeBloc>().add(IngredientOtherNameChanged(
+                  context.read<RecipeBloc>().add(IngredientCustomNameChanged(
                       ingredient: state.recipes[widget.recipeIndex]
                           .ingredients[widget.ingredientIndex],
-                      ingredientOtherName: value,
+                      ingredientCustomName: value,
                       recipe: state.recipes[widget.recipeIndex]));
                 },
                 textInputAction: TextInputAction.next,
@@ -260,33 +260,33 @@ class IngredientMeasurements extends StatelessWidget {
                             .recipes[recipeIndex]
                             .ingredients[ingredientIndex]
                             .measurements[index]
-                            .measurementVolume,
+                            .measurementValue,
                         decoration: InputDecoration(
                           icon: const Icon(Icons.format_list_numbered_rounded),
-                          labelText: 'Measurement volume',
-                          helperText: 'Input measurement volume',
+                          labelText: 'Measurement value',
+                          helperText: 'Input measurement value',
                           errorText: (state
                                           .recipes[recipeIndex]
                                           .ingredients[ingredientIndex]
                                           .measurements[index]
-                                          .measurementVolume !=
+                                          .measurementValue !=
                                       null &&
                                   state
                                           .recipes[recipeIndex]
                                           .ingredients[ingredientIndex]
                                           .measurements[index]
-                                          .measurementVolume ==
+                                          .measurementValue ==
                                       '')
-                              ? 'Enter a measurement volume'
+                              ? 'Enter a measurement value'
                               : null,
                         ),
                         onChanged: (value) {
                           context.read<RecipeBloc>().add(
-                              IngredientMeasurementVolumeChanged(
+                              IngredientMeasurementValueChanged(
                                   measurementIndex: index,
                                   ingredient: state.recipes[recipeIndex]
                                       .ingredients[ingredientIndex],
-                                  measurementVolume: value,
+                                  measurementValue: value,
                                   recipe: state.recipes[recipeIndex]));
                         },
                         textInputAction: TextInputAction.next,

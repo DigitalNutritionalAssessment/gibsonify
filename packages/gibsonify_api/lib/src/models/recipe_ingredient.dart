@@ -8,7 +8,7 @@ import 'measurement.dart';
 class Ingredient extends Equatable {
   Ingredient(
       {this.name,
-      this.otherName,
+      this.customName,
       this.description,
       this.cookingState,
       List<Measurement>? measurements,
@@ -18,7 +18,7 @@ class Ingredient extends Equatable {
         measurements = measurements ?? [Measurement()];
 
   final String? name;
-  final String? otherName;
+  final String? customName;
   final String? description;
   final String? cookingState;
   final List<Measurement> measurements;
@@ -29,7 +29,7 @@ class Ingredient extends Equatable {
 
   Ingredient copyWith(
       {String? name,
-      String? otherName,
+      String? customName,
       String? description,
       String? cookingState,
       List<Measurement>? measurements,
@@ -37,7 +37,7 @@ class Ingredient extends Equatable {
       String? id}) {
     return Ingredient(
         name: name ?? this.name,
-        otherName: otherName ?? this.otherName,
+        customName: customName ?? this.customName,
         description: description ?? this.description,
         cookingState: cookingState ?? this.cookingState,
         measurements: measurements ?? this.measurements,
@@ -47,7 +47,7 @@ class Ingredient extends Equatable {
 
   @override
   List<Object?> get props =>
-      [name, otherName, description, cookingState, measurements, saved, id];
+      [name, customName, description, cookingState, measurements, saved, id];
 
   static Future<String> getIngredients() {
     return rootBundle.loadString('assets/ingredients/ingredients.json');
@@ -55,7 +55,7 @@ class Ingredient extends Equatable {
 
   Ingredient.fromJson(Map<String, dynamic> json)
       : name = json['name'],
-        otherName = json['otherName'],
+        customName = json['customName'],
         description = json['description'],
         cookingState = json['cookingState'],
         measurements = Measurement.jsonDecodeMeasurements(json['measurements']),
@@ -66,7 +66,7 @@ class Ingredient extends Equatable {
     final Map<String, dynamic> data = <String, dynamic>{};
 
     data['name'] = name;
-    data['otherName'] = otherName;
+    data['customName'] = customName;
     data['description'] = description;
     data['cookingState'] = cookingState;
     data['measurements'] = jsonEncode(measurements);

@@ -6,13 +6,13 @@ class Measurement extends Equatable {
   Measurement(
       {this.measurementMethod,
       this.measurementUnit,
-      this.measurementVolume,
+      this.measurementValue,
       String? id})
       : id = id ?? const Uuid().v4();
 
   final String? measurementMethod;
   final String? measurementUnit;
-  final String? measurementVolume;
+  final String? measurementValue;
   final String id;
   static final List<String> measurementMethods = [
     "Direct weight",
@@ -38,30 +38,30 @@ class Measurement extends Equatable {
   Measurement copyWith(
       {String? measurementMethod,
       String? measurementUnit,
-      String? measurementVolume,
+      String? measurementValue,
       String? id}) {
     return Measurement(
         measurementMethod: measurementMethod ?? this.measurementMethod,
         measurementUnit: measurementUnit ?? this.measurementUnit,
-        measurementVolume: measurementVolume ?? this.measurementVolume,
+        measurementValue: measurementValue ?? this.measurementValue,
         id: id ?? this.id);
   }
 
   @override
   List<Object?> get props =>
-      [measurementMethod, measurementUnit, measurementVolume, id];
+      [measurementMethod, measurementUnit, measurementValue, id];
 
   Measurement.fromJson(Map<String, dynamic> json)
       : measurementMethod = json['measurementMethod'],
         measurementUnit = json['measurementUnit'],
-        measurementVolume = json['measurementVolume'],
+        measurementValue = json['measurementValue'],
         id = json['id'];
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['measurementMethod'] = measurementMethod;
     data['measurementUnit'] = measurementUnit;
-    data['measurementVolume'] = measurementVolume;
+    data['measurementValue'] = measurementValue;
     data['id'] = id;
     return data;
   }

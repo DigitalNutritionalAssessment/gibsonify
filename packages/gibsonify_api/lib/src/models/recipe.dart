@@ -14,8 +14,8 @@ class Recipe extends Equatable {
     List<Measurement>? measurements,
     this.ingredients = const <Ingredient>[],
     this.probes = const <Probe>[],
-    this.probesStandard = true,
-    this.probesChecked = false,
+    this.allProbeAnswersStandard = true,
+    this.allProbesChecked = false,
     this.saved = false,
   })  : recipeNumber = recipeNumber ?? const Uuid().v4(),
         measurements = measurements ?? [Measurement()];
@@ -26,9 +26,8 @@ class Recipe extends Equatable {
   final List<Measurement> measurements;
   final List<Ingredient> ingredients;
   final List<Probe> probes;
-  final bool probesChecked; // Flag to show all recipe probes have been checked
-  final bool
-      probesStandard; // Flag to show all answers to recipe probe match the standard recipe answer
+  final bool allProbesChecked;
+  final bool allProbeAnswersStandard;
   final bool saved;
 
   Recipe copyWith({
@@ -38,8 +37,8 @@ class Recipe extends Equatable {
     List<Measurement>? measurements,
     List<Ingredient>? ingredients,
     List<Probe>? probes,
-    bool? probesChecked,
-    bool? probesStandard,
+    bool? allProbesChecked,
+    bool? allProbeAnswersStandard,
     bool? saved,
   }) {
     return Recipe(
@@ -49,8 +48,9 @@ class Recipe extends Equatable {
       measurements: measurements ?? this.measurements,
       ingredients: ingredients ?? this.ingredients,
       probes: probes ?? this.probes,
-      probesChecked: probesChecked ?? this.probesChecked,
-      probesStandard: probesStandard ?? this.probesStandard,
+      allProbesChecked: allProbesChecked ?? this.allProbesChecked,
+      allProbeAnswersStandard:
+          allProbeAnswersStandard ?? this.allProbeAnswersStandard,
       saved: saved ?? this.saved,
     );
   }
@@ -63,8 +63,8 @@ class Recipe extends Equatable {
         measurements,
         ingredients,
         probes,
-        probesChecked,
-        probesStandard,
+        allProbesChecked,
+        allProbeAnswersStandard,
         saved,
       ];
 
@@ -75,8 +75,9 @@ class Recipe extends Equatable {
         measurements = Measurement.jsonDecodeMeasurements(json['measurements']),
         ingredients = _jsonDecodeIngredients(json['ingredients']),
         probes = _jsonDecodeProbes(json['probes']),
-        probesChecked = json['probesChecked'] == 'true' ? true : false,
-        probesStandard = json['probesStandard'] == 'true' ? true : false,
+        allProbesChecked = json['allProbesChecked'] == 'true' ? true : false,
+        allProbeAnswersStandard =
+            json['allProbeAnswersStandard'] == 'true' ? true : false,
         saved = json['saved'] == 'true' ? true : false;
 
   Map<String, dynamic> toJson() {
@@ -87,8 +88,8 @@ class Recipe extends Equatable {
     data['measurements'] = jsonEncode(measurements);
     data['ingredients'] = jsonEncode(ingredients);
     data['probes'] = jsonEncode(probes);
-    data['probesChecked'] = probesChecked.toString();
-    data['probesStandard'] = probesStandard.toString();
+    data['allProbesChecked'] = allProbesChecked.toString();
+    data['allProbeAnswersStandard'] = allProbeAnswersStandard.toString();
     data['saved'] = saved.toString();
     return data;
   }
