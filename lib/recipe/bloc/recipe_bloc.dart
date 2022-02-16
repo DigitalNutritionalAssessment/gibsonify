@@ -112,9 +112,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
         List.from(recipes[changedRecipeIndex].measurements);
     int changedmeasurementIndex = event.measurementIndex;
 
-    if (measurements.length > 1) {
-      measurements.removeAt(changedmeasurementIndex);
-    }
+    measurements.removeAt(changedmeasurementIndex);
 
     Recipe recipe =
         recipes[changedRecipeIndex].copyWith(measurements: measurements);
@@ -392,9 +390,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     List<Map<String, dynamic>> probeOptions =
         List.from(probes[changedProbeIndex].probeOptions);
 
-    if (probeOptions.length > 2) {
-      probeOptions.removeAt(event.probeOptionIndex);
-    }
+    probeOptions.removeAt(event.probeOptionIndex);
 
     Probe probe =
         probes[changedProbeIndex].copyWith(probeOptions: probeOptions);
@@ -698,9 +694,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
         .measurements);
     int changedmeasurementIndex = event.measurementIndex;
 
-    if (measurements.length > 1) {
-      measurements.removeAt(changedmeasurementIndex);
-    }
+    measurements.removeAt(changedmeasurementIndex);
 
     Ingredient ingredient = ingredients[changedIngredientIndex]
         .copyWith(measurements: measurements);

@@ -54,14 +54,26 @@ class ProbeForm extends StatelessWidget {
                             children: [
                               SlidableAction(
                                 onPressed: (context) {
-                                  showDialog<String>(
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                          DeleteProbeOption(
-                                              recipe:
-                                                  state.recipes[recipeIndex],
-                                              probeIndex: probeIndex,
-                                              probeOptionIndex: index));
+                                  if (state
+                                          .recipes[recipeIndex]
+                                          .probes[probeIndex]
+                                          .probeOptions
+                                          .length >
+                                      2) {
+                                    showDialog<String>(
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                            DeleteProbeOption(
+                                                recipe:
+                                                    state.recipes[recipeIndex],
+                                                probeIndex: probeIndex,
+                                                probeOptionIndex: index));
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                            content: Text(
+                                                'A probe must have at least two options')));
+                                  }
                                 },
                                 backgroundColor: const Color(0xFFFE4A49),
                                 foregroundColor: Colors.white,
@@ -141,11 +153,6 @@ class DeleteProbeOption extends StatelessWidget {
                   probeIndex: probeIndex,
                   probeOptionIndex: probeOptionIndex)),
               Navigator.pop(context, 'OK'),
-              if (recipe.probes[probeIndex].probeOptions.length == 2)
-                {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text('A probe must have at least two options')))
-                }
             },
             child: const Text('OK'),
           ),

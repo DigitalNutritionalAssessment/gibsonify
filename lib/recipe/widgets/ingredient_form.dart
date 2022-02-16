@@ -199,14 +199,25 @@ class IngredientMeasurements extends StatelessWidget {
                   children: [
                     SlidableAction(
                       onPressed: (context) {
-                        showDialog<String>(
-                            context: context,
-                            builder: (BuildContext context) =>
-                                DeleteIngredientMeasurement(
-                                    recipe: state.recipes[recipeIndex],
-                                    ingredient: state.recipes[recipeIndex]
-                                        .ingredients[ingredientIndex],
-                                    measurementIndex: index));
+                        if (state
+                                .recipes[recipeIndex]
+                                .ingredients[ingredientIndex]
+                                .measurements
+                                .length >
+                            1) {
+                          showDialog<String>(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  DeleteIngredientMeasurement(
+                                      recipe: state.recipes[recipeIndex],
+                                      ingredient: state.recipes[recipeIndex]
+                                          .ingredients[ingredientIndex],
+                                      measurementIndex: index));
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                              content: Text(
+                                  'An ingredient must have at least one measurement')));
+                        }
                       },
                       backgroundColor: const Color(0xFFFE4A49),
                       foregroundColor: Colors.white,
@@ -381,12 +392,6 @@ class DeleteIngredientMeasurement extends StatelessWidget {
                   ingredient: ingredient,
                   measurementIndex: measurementIndex)),
               Navigator.pop(context, 'OK'),
-              if (ingredient.measurements.length == 1)
-                {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text(
-                          'An ingredient must have at least one measurement')))
-                }
             },
             child: const Text('OK'),
           ),

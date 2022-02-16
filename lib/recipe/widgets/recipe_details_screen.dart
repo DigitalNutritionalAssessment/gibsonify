@@ -118,12 +118,19 @@ class RecipeMeasurements extends StatelessWidget {
                   children: [
                     SlidableAction(
                       onPressed: (context) {
-                        showDialog<String>(
-                            context: context,
-                            builder: (BuildContext context) =>
-                                DeleteRecipeMeasurement(
-                                    recipe: state.recipes[recipeIndex],
-                                    measurementIndex: index));
+                        if (state.recipes[recipeIndex].measurements.length >
+                            1) {
+                          showDialog<String>(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  DeleteRecipeMeasurement(
+                                      recipe: state.recipes[recipeIndex],
+                                      measurementIndex: index));
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                              content: Text(
+                                  'A recipe must have at least one measurement')));
+                        }
                       },
                       backgroundColor: const Color(0xFFFE4A49),
                       foregroundColor: Colors.white,
@@ -268,12 +275,6 @@ class DeleteRecipeMeasurement extends StatelessWidget {
               context.read<RecipeBloc>().add(RecipeMeasurementDeleted(
                   recipe: recipe, measurementIndex: measurementIndex)),
               Navigator.pop(context, 'OK'),
-              if (recipe.measurements.length == 1)
-                {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content:
-                          Text('A recipe must have at least one measurement')))
-                }
             },
             child: const Text('OK'),
           ),
