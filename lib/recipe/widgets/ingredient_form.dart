@@ -24,6 +24,8 @@ class _IngredientFormState extends State<IngredientForm> {
   void initState() {
     super.initState();
     _ingredients = Ingredient.getIngredients();
+    // TODO: Evaluate if loading asset into RecipeBloc is a better approach to
+    // make IngredientForm a StatelessWidget
   }
 
   final List<String> cookingStates = [
