@@ -34,6 +34,8 @@ dev_dependencies:
   flutter_lints: ^1.0.0
 
 flutter:
+  assets:
+    - assets/ingredients/ingredients.json
   uses-material-design: true
 
 flutter_icons:

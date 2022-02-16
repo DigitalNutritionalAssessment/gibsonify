@@ -76,12 +76,14 @@ class RecipeNameInput extends StatelessWidget {
     return BlocBuilder<RecipeBloc, RecipeState>(
       builder: (context, state) {
         return TextFormField(
-          initialValue: state.recipes[recipeIndex].recipeName.value,
+          initialValue: state.recipes[recipeIndex].recipeName,
           decoration: InputDecoration(
             icon: const Icon(Icons.assignment_rounded),
             labelText: 'Recipe Name',
             helperText: 'A valid recipe name, e.g. Aloo bandhgobhi',
-            errorText: state.recipes[recipeIndex].recipeName.invalid
+            // TODO: Refactor the error condition into a reusable method
+            errorText: (state.recipes[recipeIndex].recipeName != null &&
+                    state.recipes[recipeIndex].recipeName == '')
                 ? 'Enter a valid recipe name, e.g. Aloo bandhgobhi'
                 : null,
           ),
@@ -89,6 +91,7 @@ class RecipeNameInput extends StatelessWidget {
             context.read<RecipeBloc>().add(RecipeNameChanged(
                 recipeName: value, recipe: state.recipes[recipeIndex]));
           },
+          textCapitalization: TextCapitalization.sentences,
           textInputAction: TextInputAction.next,
         );
       },
@@ -131,10 +134,20 @@ class Ingredients extends StatelessWidget {
                   ),
                   child: Card(
                       child: ListTile(
-                    title: Text(state
-                        .recipes[recipeIndex].ingredients[index].name.value),
+                    title: (state
+                                .recipes[recipeIndex].ingredients[index].name ==
+                            "Other (please specify)")
+                        // TODO: Implement a better implementation for this check
+                        // possibly a flag to show customName is chosen
+                        ? Text(state.recipes[recipeIndex].ingredients[index]
+                                .customName ??
+                            '')
+                        : Text(state
+                                .recipes[recipeIndex].ingredients[index].name ??
+                            ''),
                     subtitle: Text(state.recipes[recipeIndex].ingredients[index]
-                        .description.value),
+                            .description ??
+                        ''),
                     leading: const Icon(Icons.food_bank),
                     trailing:
                         state.recipes[recipeIndex].ingredients[index].saved
@@ -161,7 +174,7 @@ class DeleteIngredient extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String ingredientName = ingredient.name.value;
+    String? ingredientName = ingredient.name;
     return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
       return AlertDialog(
         title: const Text('Delete ingredient'),

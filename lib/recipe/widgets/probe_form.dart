@@ -38,6 +38,7 @@ class ProbeForm extends StatelessWidget {
                       probeName: value,
                       probeIndex: probeIndex));
                 },
+                textCapitalization: TextCapitalization.sentences,
                 textInputAction: TextInputAction.next,
               ),
               const ListTile(title: Text('Edit probe options:')),
@@ -53,14 +54,26 @@ class ProbeForm extends StatelessWidget {
                             children: [
                               SlidableAction(
                                 onPressed: (context) {
-                                  showDialog<String>(
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                          DeleteProbeOption(
-                                              recipe:
-                                                  state.recipes[recipeIndex],
-                                              probeIndex: probeIndex,
-                                              probeOptionIndex: index));
+                                  if (state
+                                          .recipes[recipeIndex]
+                                          .probes[probeIndex]
+                                          .probeOptions
+                                          .length >
+                                      2) {
+                                    showDialog<String>(
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                            DeleteProbeOption(
+                                                recipe:
+                                                    state.recipes[recipeIndex],
+                                                probeIndex: probeIndex,
+                                                probeOptionIndex: index));
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                            content: Text(
+                                                'A probe must have at least two options')));
+                                  }
                                 },
                                 backgroundColor: const Color(0xFFFE4A49),
                                 foregroundColor: Colors.white,
@@ -87,7 +100,7 @@ class ProbeForm extends StatelessWidget {
                                     ? 'Default option'
                                     : 'Option ${index + 1}',
                                 helperText:
-                                    'Probe response option - e.g Yes or No',
+                                    'Probe response option - e.g. Yes/No or a type of ingredient like wheat flour',
                               ),
                               onChanged: (value) {
                                 context.read<RecipeBloc>().add(
@@ -97,6 +110,7 @@ class ProbeForm extends StatelessWidget {
                                         probeOptionIndex: index,
                                         probeOptionName: value));
                               },
+                              textCapitalization: TextCapitalization.sentences,
                               textInputAction: TextInputAction.next,
                             ),
                           )));
@@ -138,7 +152,7 @@ class DeleteProbeOption extends StatelessWidget {
                   recipe: recipe,
                   probeIndex: probeIndex,
                   probeOptionIndex: probeOptionIndex)),
-              Navigator.pop(context, 'OK')
+              Navigator.pop(context, 'OK'),
             },
             child: const Text('OK'),
           ),

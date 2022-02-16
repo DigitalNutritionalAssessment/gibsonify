@@ -27,11 +27,13 @@ class PageRouter {
         var indices = routeSettings.arguments as List;
         int recipeIndex = indices[0];
         String? assignedFoodItemId = indices[1];
+        String? foodItemDescription = indices[2];
         // TODO: rewrite as named strings mapping to index for each screen
-        int selectedScreenIndex = indices[2];
+        int selectedScreenIndex = indices[3];
         return _buildRoute(RecipePage(
           recipeIndex,
           assignedFoodItemId: assignedFoodItemId,
+          foodItemDescription: foodItemDescription,
           selectedScreenIndex: selectedScreenIndex,
         ));
       case ingredient:
@@ -53,9 +55,12 @@ class PageRouter {
       case thirdPassHelp:
         return _buildRoute(const ThirdPassHelpPage());
       case chooseRecipe:
-        var assignedFoodItemId = routeSettings.arguments as String?;
-        return _buildRoute(
-            ChooseRecipePage(assignedFoodItemId: assignedFoodItemId));
+        var indices = routeSettings.arguments as List;
+        String? assignedFoodItemId = indices[0];
+        String? foodItemDescription = indices[1];
+        return _buildRoute(ChooseRecipePage(
+            assignedFoodItemId: assignedFoodItemId,
+            foodItemDescription: foodItemDescription));
       case finishCollection:
         return _buildRoute(const FinishCollectionPage());
       default:

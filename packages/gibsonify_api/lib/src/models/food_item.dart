@@ -2,11 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 import 'package:uuid/uuid.dart';
 
-// TODO: This is a temporary fix to avoid Name conflicts when importing the api
-import 'recipe_ingredient.dart'
-    show Name, Description, MeasurementMethod, MeasurementUnit;
-
-import 'recipe_item.dart';
+import 'recipe.dart';
 
 class FoodItem extends Equatable {
   FoodItem(
@@ -113,13 +109,11 @@ class FoodItem extends Equatable {
         confirmed
       ];
 }
-// TODO: This has been temporarily commented out to resolve name conflicts
-// The most sensible fix to this is probably getting rid of all Formz and
+// TODO: The most sensible fix to this is probably getting rid of all Formz and
 // replacing them by strings only, as in 90% of the cases the only validation
 // is checking if it is not empty, and the rest can be added as custom
 // validation methods
 
-/*
 enum NameValidationError { invalid }
 
 // TODO: Investigate changing classes to be private (with leading underscore)
@@ -145,7 +139,6 @@ class Name extends FormzInput<String, NameValidationError> {
     return value?.isNotEmpty == true ? null : NameValidationError.invalid;
   }
 }
-*/
 
 enum TimePeriodValidationError { invalid }
 
@@ -212,7 +205,6 @@ class Source extends FormzInput<String, SourceValidationError> {
   }
 }
 
-/*
 enum DescriptionValidationError { invalid }
 
 class Description extends FormzInput<String, DescriptionValidationError> {
@@ -235,7 +227,6 @@ class Description extends FormzInput<String, DescriptionValidationError> {
         : DescriptionValidationError.invalid;
   }
 }
-*/
 
 enum PreparationMethodValidationError { invalid }
 
@@ -284,7 +275,7 @@ class PreparationMethod
 }
 
 // TODO: allowed measurement methods are changed for not empty check only
-/*
+
 enum MeasurementMethodValidationError { invalid }
 
 class MeasurementMethod
@@ -320,7 +311,7 @@ class MeasurementMethod
         : MeasurementMethodValidationError.invalid;
   }
 }
-*/
+
 enum MeasurementValueValidationError { invalid }
 
 // TODO: Investigate changing this to a string or float
@@ -350,7 +341,7 @@ class MeasurementValue
 }
 
 // TODO: allowed measurement units are changed for not empty check only
-/*
+
 enum MeasurementUnitValidationError { invalid }
 
 class MeasurementUnit
@@ -387,4 +378,3 @@ class MeasurementUnit
         : MeasurementUnitValidationError.invalid;
   }
 }
-*/

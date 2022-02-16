@@ -5,10 +5,14 @@ import 'package:gibsonify/recipe/recipe.dart';
 class RecipePage extends StatefulWidget {
   final int recipeIndex;
   final String? assignedFoodItemId;
+  final String? foodItemDescription;
   final int? selectedScreenIndex;
 
   const RecipePage(this.recipeIndex,
-      {Key? key, this.assignedFoodItemId, this.selectedScreenIndex})
+      {Key? key,
+      this.assignedFoodItemId,
+      this.foodItemDescription,
+      this.selectedScreenIndex})
       : super(key: key);
 
   @override
@@ -28,10 +32,9 @@ class _RecipePageState extends State<RecipePage> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> _screens = [
-      RecipeProbesScreen(
-        widget.recipeIndex,
-        assignedFoodItemId: widget.assignedFoodItemId,
-      ),
+      RecipeProbesScreen(widget.recipeIndex,
+          assignedFoodItemId: widget.assignedFoodItemId,
+          foodItemDescription: widget.foodItemDescription),
       RecipeIngredientsScreen(widget.recipeIndex,
           assignedFoodItemId: widget.assignedFoodItemId),
       RecipeDetailsScreen(widget.recipeIndex,

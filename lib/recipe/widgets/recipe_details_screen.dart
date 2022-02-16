@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:dropdown_search/dropdown_search.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+
 import 'package:gibsonify/recipe/recipe.dart';
 import 'package:gibsonify/collection/collection.dart';
+import 'package:gibsonify_api/gibsonify_api.dart';
 
 class RecipeDetailsScreen extends StatelessWidget {
   final int recipeIndex;
@@ -63,7 +67,8 @@ class RecipeDetails extends StatelessWidget {
         children: <Widget>[
           RecipeNameInput(recipeIndex),
           RecipeNumberInput(recipeIndex),
-          RecipeVolumeInput(recipeIndex),
+          const SizedBox(height: 10),
+          RecipeMeasurements(recipeIndex),
         ],
       ),
     );
@@ -94,32 +99,190 @@ class RecipeNumberInput extends StatelessWidget {
   }
 }
 
-class RecipeVolumeInput extends StatelessWidget {
+class RecipeMeasurements extends StatelessWidget {
   final int recipeIndex;
-  const RecipeVolumeInput(this.recipeIndex, {Key? key}) : super(key: key);
+  const RecipeMeasurements(this.recipeIndex, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RecipeBloc, RecipeState>(
-      builder: (context, state) {
-        return TextFormField(
-          initialValue: state.recipes[recipeIndex].recipeVolume.value,
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            icon: const Icon(Icons.play_for_work_rounded),
-            labelText: 'Recipe Volume',
-            helperText: 'Volume of recipe in ml e.g 250 ml',
-            errorText: state.recipes[recipeIndex].recipeVolume.invalid
-                ? 'Enter valid volume'
-                : null,
+    return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
+      return Expanded(
+        child: ListView.builder(
+            padding: const EdgeInsets.all(2.0),
+            itemCount: state.recipes[recipeIndex].measurements.length,
+            itemBuilder: (context, index) {
+              return Slidable(
+                key: Key(state.recipes[recipeIndex].measurements[index].id),
+                startActionPane: ActionPane(
+                  motion: const ScrollMotion(),
+                  children: [
+                    SlidableAction(
+                      onPressed: (context) {
+                        if (state.recipes[recipeIndex].measurements.length >
+                            1) {
+                          showDialog<String>(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  DeleteRecipeMeasurement(
+                                      recipe: state.recipes[recipeIndex],
+                                      measurementIndex: index));
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                              content: Text(
+                                  'A recipe must have at least one measurement')));
+                        }
+                      },
+                      backgroundColor: const Color(0xFFFE4A49),
+                      foregroundColor: Colors.white,
+                      icon: Icons.delete,
+                      label: 'Delete',
+                    )
+                  ],
+                ),
+                child: Card(
+                    child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      DropdownSearch<String>(
+                          dropdownSearchDecoration: InputDecoration(
+                            icon: const Icon(Icons.food_bank_rounded),
+                            labelText: "Measurement method",
+                            helperText: 'How the measurement is measured',
+                            // TODO: Refactor the error condition into a reusable method
+                            errorText: (state
+                                            .recipes[recipeIndex]
+                                            .measurements[index]
+                                            .measurementMethod !=
+                                        null &&
+                                    state
+                                            .recipes[recipeIndex]
+                                            .measurements[index]
+                                            .measurementMethod ==
+                                        '')
+                                ? 'Enter a measurement method'
+                                : null,
+                          ),
+                          mode: Mode.MENU,
+                          showSelectedItems: true,
+                          showSearchBox: true,
+                          items: Measurement.measurementMethods,
+                          onChanged: (String? answer) => context
+                              .read<RecipeBloc>()
+                              .add(RecipeMeasurementMethodChanged(
+                                  measurementIndex: index,
+                                  measurementMethod: answer!,
+                                  recipe: state.recipes[recipeIndex])),
+                          selectedItem: state.recipes[recipeIndex]
+                              .measurements[index].measurementMethod),
+                      TextFormField(
+                        initialValue: state.recipes[recipeIndex]
+                            .measurements[index].measurementValue,
+                        decoration: InputDecoration(
+                          icon: const Icon(Icons.format_list_numbered_rounded),
+                          labelText: 'Measurement value',
+                          helperText: 'Input measurement value',
+                          // TODO: Refactor the error condition into a reusable method
+                          errorText: (state
+                                          .recipes[recipeIndex]
+                                          .measurements[index]
+                                          .measurementValue !=
+                                      null &&
+                                  state.recipes[recipeIndex].measurements[index]
+                                          .measurementValue ==
+                                      '')
+                              ? 'Enter a measurement value'
+                              : null,
+                        ),
+                        onChanged: (value) {
+                          context.read<RecipeBloc>().add(
+                              RecipeMeasurementValueChanged(
+                                  measurementIndex: index,
+                                  measurementValue: value,
+                                  recipe: state.recipes[recipeIndex]));
+                        },
+                        textCapitalization: TextCapitalization.sentences,
+                        textInputAction: TextInputAction.next,
+                        keyboardType: TextInputType.number,
+                      ),
+                      DropdownSearch<String>(
+                          dropdownSearchDecoration: InputDecoration(
+                            icon: const Icon(Icons.local_dining_rounded),
+                            labelText: "Measurement unit",
+                            helperText: 'The size of each measurement value',
+                            // TODO: Refactor the error condition into a reusable method
+                            errorText: (state
+                                            .recipes[recipeIndex]
+                                            .measurements[index]
+                                            .measurementUnit !=
+                                        null &&
+                                    state
+                                            .recipes[recipeIndex]
+                                            .measurements[index]
+                                            .measurementUnit ==
+                                        '')
+                                ? 'Select the measurement unit'
+                                : null,
+                          ),
+                          mode: Mode.MENU,
+                          showSelectedItems: true,
+                          showSearchBox: true,
+                          items: Measurement.measurementUnits,
+                          onChanged: (String? answer) => context
+                              .read<RecipeBloc>()
+                              .add(RecipeMeasurementUnitChanged(
+                                  measurementIndex: index,
+                                  measurementUnit: answer!,
+                                  recipe: state.recipes[recipeIndex])),
+                          selectedItem: state.recipes[recipeIndex]
+                              .measurements[index].measurementUnit),
+                      const Divider(),
+                      ListTile(
+                        title: const Text('Add measurement'),
+                        leading: const Icon(Icons.add),
+                        onTap: () => context.read<RecipeBloc>().add(
+                            RecipeMeasurementAdded(
+                                recipe: state.recipes[recipeIndex])),
+                      ),
+                    ],
+                  ),
+                )),
+              );
+            }),
+      );
+    });
+  }
+}
+
+class DeleteRecipeMeasurement extends StatelessWidget {
+  final Recipe recipe;
+  final int measurementIndex;
+
+  const DeleteRecipeMeasurement(
+      {Key? key, required this.recipe, required this.measurementIndex})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
+      return AlertDialog(
+        title: const Text('Delete measurement'),
+        content: const Text('Would you like to delete the measurement?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'Cancel'),
+            child: const Text('Cancel'),
           ),
-          onChanged: (value) {
-            context.read<RecipeBloc>().add(RecipeVolumeChanged(
-                recipeVolume: value, recipe: state.recipes[recipeIndex]));
-          },
-          textInputAction: TextInputAction.next,
-        );
-      },
-    );
+          TextButton(
+            onPressed: () => {
+              context.read<RecipeBloc>().add(RecipeMeasurementDeleted(
+                  recipe: recipe, measurementIndex: measurementIndex)),
+              Navigator.pop(context, 'OK'),
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      );
+    });
   }
 }
