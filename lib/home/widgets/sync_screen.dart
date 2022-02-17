@@ -8,6 +8,10 @@ import 'package:gibsonify/home/home.dart';
 import 'dart:convert';
 
 class SyncScreen extends StatelessWidget {
+  final _exportSubject = 'Gibsonify collection and recipe data';
+  final _exportText = 'Gibsonify collection and recipe data attached as a JSON '
+      'string. <br> Data can be pasted into '
+      'https://www.convertcsv.com/json-to-csv.htm to obtain a csv file.';
   const SyncScreen({Key? key}) : super(key: key);
 
   @override
@@ -21,7 +25,7 @@ class SyncScreen extends StatelessWidget {
               homeState.gibsonsForms.map((x) => x!.toJson()).toList(),
         });
         return Scaffold(
-            appBar: AppBar(title: const Text('Export Data via Email')),
+            appBar: AppBar(title: const Text('Export Data')),
             body: Center(
                 child: ElevatedButton.icon(
               onPressed: () async {
@@ -36,7 +40,8 @@ class SyncScreen extends StatelessWidget {
                 final _collectionfile = File(_collectionfilePath);
                 _collectionfile.writeAsString(collectionJson);
 
-                await Share.shareFiles([_recipefilePath, _collectionfilePath]);
+                await Share.shareFiles([_recipefilePath, _collectionfilePath],
+                    subject: _exportSubject, text: _exportText);
               },
               icon: const Icon(Icons.send, size: 18),
               label: const Text("Export saved data as JSON"),
