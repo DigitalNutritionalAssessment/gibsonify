@@ -19,9 +19,6 @@ class ThirdPassFoodItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: research how to handle empty string as
-    // the selected value other than a blank menu item
-
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
