@@ -75,41 +75,69 @@ class FourthPassFoodItemCard extends StatelessWidget {
                 //     : null,
               ),
             ),
-            TextFormField(
-              readOnly: true,
-              initialValue: foodItem.measurements[0].measurementMethod,
-              decoration: InputDecoration(
-                icon: const Icon(Icons.monitor_weight_outlined),
-                labelText: 'Measurement method',
-                helperText: 'The method used to estimate food quantity',
-                errorText: !foodItem.measurements[0].isMethodValid()
-                    ? 'Select the measurement method'
-                    : null,
-              ),
-            ),
-            TextFormField(
-              readOnly: true,
-              initialValue: foodItem.measurements[0].measurementValue,
-              decoration: InputDecoration(
-                icon: const Icon(Icons.drive_file_rename_outline_rounded),
-                labelText: 'Measurement value',
-                helperText: 'The amount or number you measured',
-                errorText: !foodItem.measurements[0].isValueValid()
-                    ? 'Enter the dish measurement'
-                    : null,
-              ),
-            ),
-            TextFormField(
-              readOnly: true,
-              initialValue: foodItem.measurements[0].measurementUnit,
-              decoration: InputDecoration(
-                icon: const Icon(Icons.radio_button_unchecked_outlined),
-                labelText: 'Measurement unit',
-                helperText: 'The size of each measurement value',
-                errorText: !foodItem.measurements[0].isUnitValid()
-                    ? 'Select the measurement unit'
-                    : null,
-              ),
+            Column(
+              children: [
+                ListView.builder(
+                    // required to avoid Vertical viewport unbounded height error
+                    shrinkWrap: true,
+                    physics: const ClampingScrollPhysics(),
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    itemCount: foodItem.measurements.length,
+                    itemBuilder: (context, index) {
+                      return Card(
+                        child: Column(
+                          children: [
+                            TextFormField(
+                              readOnly: true,
+                              initialValue: foodItem
+                                  .measurements[index].measurementMethod,
+                              decoration: InputDecoration(
+                                icon: const Icon(Icons.monitor_weight_outlined),
+                                labelText: 'Measurement method',
+                                helperText:
+                                    'The method used to estimate food quantity',
+                                errorText: !foodItem.measurements[index]
+                                        .isMethodValid()
+                                    ? 'Select the measurement method'
+                                    : null,
+                              ),
+                            ),
+                            TextFormField(
+                              readOnly: true,
+                              initialValue:
+                                  foodItem.measurements[index].measurementValue,
+                              decoration: InputDecoration(
+                                icon: const Icon(
+                                    Icons.drive_file_rename_outline_rounded),
+                                labelText: 'Measurement value',
+                                helperText: 'The amount or number you measured',
+                                errorText:
+                                    !foodItem.measurements[index].isValueValid()
+                                        ? 'Enter the dish measurement'
+                                        : null,
+                              ),
+                            ),
+                            TextFormField(
+                              readOnly: true,
+                              initialValue:
+                                  foodItem.measurements[index].measurementUnit,
+                              decoration: InputDecoration(
+                                icon: const Icon(
+                                    Icons.radio_button_unchecked_outlined),
+                                labelText: 'Measurement unit',
+                                helperText:
+                                    'The size of each measurement value',
+                                errorText:
+                                    !foodItem.measurements[index].isUnitValid()
+                                        ? 'Select the measurement unit'
+                                        : null,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    })
+              ],
             ),
             const Divider(),
             TextButton(

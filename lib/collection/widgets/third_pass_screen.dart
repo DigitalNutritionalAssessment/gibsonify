@@ -35,25 +35,44 @@ class ThirdPassScreen extends StatelessWidget {
                 itemCount: state.gibsonsForm.foodItems.length,
                 itemBuilder: (context, index) {
                   return ThirdPassFoodItemCard(
-                      foodItem: state.gibsonsForm.foodItems[index],
-                      onMeasurementMethodChanged: (changedMeasurementMethod) =>
-                          context.read<CollectionBloc>().add(
-                              FoodItemMeasurementMethodChanged(
-                                  foodItem: state.gibsonsForm.foodItems[index],
-                                  foodItemMeasurementMethod:
-                                      changedMeasurementMethod)),
-                      onMeasurementValueChanged: (changedMeasurementValue) =>
-                          context.read<CollectionBloc>().add(
-                              FoodItemMeasurementValueChanged(
-                                  foodItem: state.gibsonsForm.foodItems[index],
-                                  foodItemMeasurementValue:
-                                      changedMeasurementValue)),
-                      onMeasurementUnitChanged: (changedMeasurementUnit) =>
-                          context.read<CollectionBloc>().add(
-                              FoodItemMeasurementUnitChanged(
-                                  foodItem: state.gibsonsForm.foodItems[index],
-                                  foodItemMeasurementUnit:
-                                      changedMeasurementUnit)));
+                    foodItem: state.gibsonsForm.foodItems[index],
+                    onMeasurementMethodChanged:
+                        (changedMeasurementIndexAndMethod) => context
+                            .read<CollectionBloc>()
+                            .add(FoodItemMeasurementMethodChanged(
+                                foodItem: state.gibsonsForm.foodItems[index],
+                                measurementIndex:
+                                    changedMeasurementIndexAndMethod[0],
+                                foodItemMeasurementMethod:
+                                    changedMeasurementIndexAndMethod[1])),
+                    onMeasurementValueChanged:
+                        (changedMeasurementIndexAndValue) => context
+                            .read<CollectionBloc>()
+                            .add(FoodItemMeasurementValueChanged(
+                                foodItem: state.gibsonsForm.foodItems[index],
+                                measurementIndex:
+                                    changedMeasurementIndexAndValue[0],
+                                foodItemMeasurementValue:
+                                    changedMeasurementIndexAndValue[1])),
+                    onMeasurementUnitChanged:
+                        (changedMeasurementIndexAndUnit) => context
+                            .read<CollectionBloc>()
+                            .add(FoodItemMeasurementUnitChanged(
+                                foodItem: state.gibsonsForm.foodItems[index],
+                                measurementIndex:
+                                    changedMeasurementIndexAndUnit[0],
+                                foodItemMeasurementUnit:
+                                    changedMeasurementIndexAndUnit[1])),
+                    onMeasurementAdded: () => context
+                        .read<CollectionBloc>()
+                        .add(FoodItemMeasurementAdded(
+                            foodItem: state.gibsonsForm.foodItems[index])),
+                    onMeasurementDeleted: (deletedMeasurementIndex) => context
+                        .read<CollectionBloc>()
+                        .add(FoodItemMeasurementDeleted(
+                            foodItem: state.gibsonsForm.foodItems[index],
+                            measurementIndex: deletedMeasurementIndex)),
+                  );
                 }));
       },
     );

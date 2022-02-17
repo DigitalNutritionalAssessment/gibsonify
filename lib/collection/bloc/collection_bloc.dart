@@ -36,6 +36,8 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     on<FoodItemSourceChanged>(_onFoodItemSourceChanged);
     on<FoodItemDescriptionChanged>(_onFoodItemDescriptionChanged);
     on<FoodItemPreparationMethodChanged>(_onFoodItemPreparationMethodChanged);
+    on<FoodItemMeasurementAdded>(_onFoodItemMeasurementAdded);
+    on<FoodItemMeasurementDeleted>(_onFoodItemMeasurementDeleted);
     on<FoodItemMeasurementMethodChanged>(_onFoodItemMeasurementMethodChanged);
     on<FoodItemMeasurementValueChanged>(_onFoodItemMeasurementValueChanged);
     on<FoodItemMeasurementUnitChanged>(_onFoodItemMeasurementUnitChanged);
@@ -294,6 +296,65 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }
 
+  void _onFoodItemMeasurementAdded(
+      FoodItemMeasurementAdded event, Emitter<CollectionState> emit) {
+    // TODO: refactor all of this finding an item and changing
+    // it logic to one reusable function, probably a method of the GibsonsForm
+    // class
+    List<FoodItem> foodItems = List.from(state.gibsonsForm.foodItems);
+
+    // TODO: change into UUID-based indexing
+    int changedFoodItemIndex = foodItems.indexOf(event.foodItem);
+
+    List<Measurement> measurements =
+        List.from(foodItems[changedFoodItemIndex].measurements);
+
+    final measurement = Measurement();
+
+    measurements.add(measurement);
+
+    FoodItem foodItem = foodItems[changedFoodItemIndex]
+        .copyWith(measurements: measurements, confirmed: false);
+
+    foodItems.removeAt(changedFoodItemIndex);
+    foodItems.insert(changedFoodItemIndex, foodItem);
+
+    GibsonsForm changedGibsonsForm =
+        state.gibsonsForm.copyWith(foodItems: foodItems);
+
+    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+  }
+
+  void _onFoodItemMeasurementDeleted(
+      FoodItemMeasurementDeleted event, Emitter<CollectionState> emit) {
+    // TODO: refactor all of this finding an item and changing
+    // it logic to one reusable function, probably a method of the GibsonsForm
+    // class
+    List<FoodItem> foodItems = List.from(state.gibsonsForm.foodItems);
+
+    // TODO: change into UUID-based indexing
+    int changedFoodItemIndex = foodItems.indexOf(event.foodItem);
+
+    List<Measurement> measurements =
+        List.from(foodItems[changedFoodItemIndex].measurements);
+
+    // TODO: refactor to UUID based indexing of measurements
+    int changedmeasurementIndex = event.measurementIndex;
+
+    measurements.removeAt(changedmeasurementIndex);
+
+    FoodItem foodItem = foodItems[changedFoodItemIndex]
+        .copyWith(measurements: measurements, confirmed: false);
+
+    foodItems.removeAt(changedFoodItemIndex);
+    foodItems.insert(changedFoodItemIndex, foodItem);
+
+    GibsonsForm changedGibsonsForm =
+        state.gibsonsForm.copyWith(foodItems: foodItems);
+
+    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+  }
+
   void _onFoodItemMeasurementMethodChanged(
       FoodItemMeasurementMethodChanged event, Emitter<CollectionState> emit) {
     // TODO: refactor all of this finding an item and changing
@@ -306,7 +367,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
     List<Measurement> measurements =
         List.from(foodItems[changedFoodItemIndex].measurements);
-    int changedmeasurementIndex = 0; // TODO: event.measurementIndex;
+    int changedmeasurementIndex = event.measurementIndex;
 
     Measurement measurement = measurements[changedmeasurementIndex]
         .copyWith(measurementMethod: event.foodItemMeasurementMethod);
@@ -338,7 +399,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
     List<Measurement> measurements =
         List.from(foodItems[changedFoodItemIndex].measurements);
-    int changedmeasurementIndex = 0; // TODO: event.measurementIndex;
+    int changedmeasurementIndex = event.measurementIndex;
 
     Measurement measurement = measurements[changedmeasurementIndex]
         .copyWith(measurementValue: event.foodItemMeasurementValue);
@@ -370,7 +431,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
     List<Measurement> measurements =
         List.from(foodItems[changedFoodItemIndex].measurements);
-    int changedmeasurementIndex = 0; // TODO: event.measurementIndex;
+    int changedmeasurementIndex = event.measurementIndex;
 
     Measurement measurement = measurements[changedmeasurementIndex]
         .copyWith(measurementUnit: event.foodItemMeasurementUnit);
