@@ -14,6 +14,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
   CollectionBloc({required GibsonifyRepository gibsonifyRepository})
       : _gibsonifyRepository = gibsonifyRepository,
         super(CollectionState()) {
+    on<SelectedScreenIndexChanged>(_onSelectedScreenIndexChanged);
     on<HouseholdIdChanged>(_onHouseholdIdChanged);
     on<RespondentNameChanged>(_onRespondentNameChanged);
     on<RespondentTelInfoChanged>(_onRespondentTelInfoChanged);
@@ -47,6 +48,11 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     on<GibsonsFormProvided>(_onGibsonsFormProvided);
     on<GibsonsFormCreated>(_onGibsonsFormCreated);
     on<GeoLocationRequested>(_onGeoLocationRequested);
+  }
+
+  void _onSelectedScreenIndexChanged(
+      SelectedScreenIndexChanged event, Emitter<CollectionState> emit) {
+    emit(state.copyWith(selectedScreenIndex: event.changedSelectedScreenIndex));
   }
 
   void _onHouseholdIdChanged(
