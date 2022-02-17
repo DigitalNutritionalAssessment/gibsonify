@@ -1,9 +1,12 @@
 import 'package:equatable/equatable.dart';
 import 'package:uuid/uuid.dart';
+import 'package:gibsonify_api/gibsonify_api.dart';
 import 'dart:convert';
 
 class Measurement extends Equatable {
   Measurement(
+      // TODO: refactor to just `method`, `unit`, and `value` as these are fields
+      // of `Measurement` already
       {this.measurementMethod,
       this.measurementUnit,
       this.measurementValue,
@@ -28,9 +31,7 @@ class Measurement extends Equatable {
     "Small standard cup",
     "Medium standard cup",
     "Large standard cup",
-    "Small",
-    "Medium",
-    "Large",
+    "Size number (photo)",
     "Grams",
     "Millilitres"
   ];
@@ -72,5 +73,33 @@ class Measurement extends Equatable {
     List<Measurement> fullyDecodedMeasurements = List<Measurement>.from(
         partiallyDecodedMeasurements.map((x) => Measurement.fromJson(x)));
     return fullyDecodedMeasurements;
+  }
+
+  static final _measurementValueRegex = RegExp(
+    r'^\d+$', // numeric only
+  );
+
+  bool isMethodValid() {
+    // TODO: add checks for different options
+    return !isFieldModifiedAndEmpty(measurementMethod);
+  }
+
+  bool isValueValid() {
+    // TODO: refactor null checks to something nicer
+    if (measurementValue == null) {
+      return true; // currently meaning that it is untouched, change to a
+      // separate method later
+    } else if ((measurementValue ?? '').isNotEmpty &&
+        (measurementValue ?? '').length <= 4 &&
+        _measurementValueRegex.hasMatch(measurementValue ?? '')) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  bool isUnitValid() {
+    // TODO: add checks for different options
+    return !isFieldModifiedAndEmpty(measurementUnit);
   }
 }
