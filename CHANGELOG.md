@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 
 ### Feat
 
+- **recipe**: add ingredients from RetentionFactors.csv
+- **recipe**: implement requested recipe features
 - **recipe**: change item deletion constraint implementation
 - **recipe**: add dummy dropdownfield as placeholder while waiting for asset loading
 - **recipe**: add ingredients json as asset, async logic to call ingredients file and unlisted ingredient name logic
