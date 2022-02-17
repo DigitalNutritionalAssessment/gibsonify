@@ -304,10 +304,18 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     // TODO: change into UUID-based indexing
     int changedFoodItemIndex = foodItems.indexOf(event.foodItem);
 
-    FoodItem foodItem = foodItems[changedFoodItemIndex].copyWith(
-        measurementMethod:
-            MeasurementMethod.dirty(event.foodItemMeasurementMethod),
-        confirmed: false);
+    List<Measurement> measurements =
+        List.from(foodItems[changedFoodItemIndex].measurements);
+    int changedmeasurementIndex = 0; // TODO: event.measurementIndex;
+
+    Measurement measurement = measurements[changedmeasurementIndex]
+        .copyWith(measurementMethod: event.foodItemMeasurementMethod);
+
+    measurements.removeAt(changedmeasurementIndex);
+    measurements.insert(changedmeasurementIndex, measurement);
+
+    FoodItem foodItem = foodItems[changedFoodItemIndex]
+        .copyWith(measurements: measurements, confirmed: false);
 
     foodItems.removeAt(changedFoodItemIndex);
     foodItems.insert(changedFoodItemIndex, foodItem);
@@ -328,10 +336,18 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     // TODO: change into UUID-based indexing
     int changedFoodItemIndex = foodItems.indexOf(event.foodItem);
 
-    FoodItem foodItem = foodItems[changedFoodItemIndex].copyWith(
-        measurementValue:
-            MeasurementValue.dirty(event.foodItemMeasurementValue),
-        confirmed: false);
+    List<Measurement> measurements =
+        List.from(foodItems[changedFoodItemIndex].measurements);
+    int changedmeasurementIndex = 0; // TODO: event.measurementIndex;
+
+    Measurement measurement = measurements[changedmeasurementIndex]
+        .copyWith(measurementValue: event.foodItemMeasurementValue);
+
+    measurements.removeAt(changedmeasurementIndex);
+    measurements.insert(changedmeasurementIndex, measurement);
+
+    FoodItem foodItem = foodItems[changedFoodItemIndex]
+        .copyWith(measurements: measurements, confirmed: false);
 
     foodItems.removeAt(changedFoodItemIndex);
     foodItems.insert(changedFoodItemIndex, foodItem);
@@ -352,9 +368,18 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     // TODO: change into UUID-based indexing
     int changedFoodItemIndex = foodItems.indexOf(event.foodItem);
 
-    FoodItem foodItem = foodItems[changedFoodItemIndex].copyWith(
-        measurementUnit: MeasurementUnit.dirty(event.foodItemMeasurementUnit),
-        confirmed: false);
+    List<Measurement> measurements =
+        List.from(foodItems[changedFoodItemIndex].measurements);
+    int changedmeasurementIndex = 0; // TODO: event.measurementIndex;
+
+    Measurement measurement = measurements[changedmeasurementIndex]
+        .copyWith(measurementUnit: event.foodItemMeasurementUnit);
+
+    measurements.removeAt(changedmeasurementIndex);
+    measurements.insert(changedmeasurementIndex, measurement);
+
+    FoodItem foodItem = foodItems[changedFoodItemIndex]
+        .copyWith(measurements: measurements, confirmed: false);
 
     foodItems.removeAt(changedFoodItemIndex);
     foodItems.insert(changedFoodItemIndex, foodItem);

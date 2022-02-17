@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
 
@@ -20,30 +21,6 @@ class ThirdPassFoodItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: research how to handle empty string as
     // the selected value other than a blank menu item
-    const List<DropdownMenuItem<String>> measurementMethodDropdownMenuItems = [
-      DropdownMenuItem(child: Text(''), value: ''),
-      DropdownMenuItem(child: Text('Direct weight'), value: 'Direct weight'),
-      DropdownMenuItem(
-          child: Text('Volume of water'), value: 'Volume of water'),
-      DropdownMenuItem(child: Text('Volume of food'), value: 'Volume of food'),
-      DropdownMenuItem(child: Text('Play dough'), value: 'Play dough'),
-      DropdownMenuItem(child: Text('Number'), value: 'Number'),
-      DropdownMenuItem(child: Text('Size (photo)'), value: 'Size (photo)')
-    ];
-    const List<DropdownMenuItem<String>> measurementUnitDropdownMenuItems = [
-      DropdownMenuItem(child: Text(''), value: ''),
-      DropdownMenuItem(child: Text('Small spoon'), value: 'Small spoon'),
-      DropdownMenuItem(child: Text('Big spoon'), value: 'Big spoon'),
-      DropdownMenuItem(
-          child: Text('Small standard cup'), value: 'Small standard cup'),
-      DropdownMenuItem(
-          child: Text('Medium standard cup'), value: 'Medium standard cup'),
-      DropdownMenuItem(
-          child: Text('Large standard cup'), value: 'Large standard cup'),
-      // TODO: Add size numbers
-      DropdownMenuItem(child: Text('Grams'), value: 'Grams'),
-      DropdownMenuItem(child: Text('Millilitres'), value: 'Millilitres')
-    ];
 
     return Card(
       child: Padding(
@@ -54,45 +31,63 @@ class ThirdPassFoodItemCard extends StatelessWidget {
                 ' consumed in the ' +
                 foodItem.timePeriod.value),
             // TODO: fix RenderFlex overflow
-            DropdownButtonFormField(
-                value: foodItem.measurementMethod.value,
-                decoration: InputDecoration(
+            DropdownSearch<String>(
+                dropdownSearchDecoration: InputDecoration(
                   icon: const Icon(Icons.monitor_weight_outlined),
-                  labelText: 'Measurement method',
-                  helperText: 'The method used to estimate food quantity',
-                  errorText: foodItem.measurementMethod.invalid
-                      ? 'Select the measurement method'
+                  labelText: "Measurement method",
+                  helperText: 'How the measurement is measured',
+                  // TODO: the errorText should be displayed if nothing is chosen
+                  // so investigate how this can be achieved with focusnodes or
+                  // mayge send an empty string (although that would not work all
+                  // the time)
+                  errorText: !foodItem.measurements[0].isMethodValid()
+                      ? 'Enter a measurement method'
                       : null,
                 ),
-                items: measurementMethodDropdownMenuItems,
+                mode: Mode.MENU,
+                showSelectedItems: true,
+                showSearchBox: false,
+                items: Measurement.measurementMethods,
                 onChanged: (String? value) =>
-                    onMeasurementMethodChanged!(value ?? '')),
+                    onMeasurementMethodChanged!(value ?? ''),
+                selectedItem: foodItem.measurements[0].measurementMethod),
+
             TextFormField(
-              initialValue: foodItem.measurementValue.value,
+              initialValue: foodItem.measurements[0].measurementValue,
               decoration: InputDecoration(
                 icon: const Icon(Icons.drive_file_rename_outline_rounded),
                 labelText: 'Measurement value',
                 helperText: 'The amount or number you measured',
-                errorText: foodItem.measurementValue.invalid
-                    ? 'Enter the dish measurement in 1 to 4 digits'
+                errorText: !foodItem.measurements[0].isValueValid()
+                    // TODO: the errorText should be displayed if nothing is typed
+                    // so investigate how this can be achieved with focusnodes
+                    ? 'Enter the measured value in 1 to 4 digits'
                     : null,
               ),
               onChanged: (value) => onMeasurementValueChanged!(value),
               textInputAction: TextInputAction.next,
             ),
-            DropdownButtonFormField(
-                value: foodItem.measurementUnit.value,
-                decoration: InputDecoration(
+
+            DropdownSearch<String>(
+                dropdownSearchDecoration: InputDecoration(
                   icon: const Icon(Icons.radio_button_unchecked_outlined),
-                  labelText: 'Measurement unit',
+                  labelText: "Measurement unit",
                   helperText: 'The size of each measurement value',
-                  errorText: foodItem.measurementUnit.invalid
+                  // TODO: the errorText should be displayed if nothing is chosen
+                  // so investigate how this can be achieved with focusnodes or
+                  // mayge send an empty string (although that would not work all
+                  // the time)
+                  errorText: !foodItem.measurements[0].isUnitValid()
                       ? 'Select the measurement unit'
                       : null,
                 ),
-                items: measurementUnitDropdownMenuItems,
+                mode: Mode.MENU,
+                showSelectedItems: true,
+                showSearchBox: false,
+                items: Measurement.measurementUnits,
                 onChanged: (String? value) =>
-                    onMeasurementUnitChanged!(value ?? '')),
+                    onMeasurementUnitChanged!(value ?? ''),
+                selectedItem: foodItem.measurements[0].measurementUnit),
           ],
         ),
       ),

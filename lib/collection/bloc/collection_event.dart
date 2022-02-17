@@ -216,6 +216,7 @@ class FoodItemPreparationMethodChanged extends CollectionEvent {
 }
 
 class FoodItemMeasurementMethodChanged extends CollectionEvent {
+  // TODO: rename to just measurementMethod, do also for Value and Unit events
   final String foodItemMeasurementMethod; // TODO: change to an enum?
   // TODO: delete foodItem and pass only uuid instead
   final FoodItem foodItem;

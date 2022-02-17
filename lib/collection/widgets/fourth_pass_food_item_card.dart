@@ -77,36 +77,36 @@ class FourthPassFoodItemCard extends StatelessWidget {
             ),
             TextFormField(
               readOnly: true,
-              initialValue: foodItem.measurementMethod.value,
+              initialValue: foodItem.measurements[0].measurementMethod,
               decoration: InputDecoration(
                 icon: const Icon(Icons.monitor_weight_outlined),
                 labelText: 'Measurement method',
                 helperText: 'The method used to estimate food quantity',
-                errorText: foodItem.measurementMethod.invalid
+                errorText: !foodItem.measurements[0].isMethodValid()
                     ? 'Select the measurement method'
                     : null,
               ),
             ),
             TextFormField(
               readOnly: true,
-              initialValue: foodItem.measurementValue.value,
+              initialValue: foodItem.measurements[0].measurementValue,
               decoration: InputDecoration(
                 icon: const Icon(Icons.drive_file_rename_outline_rounded),
                 labelText: 'Measurement value',
                 helperText: 'The amount or number you measured',
-                errorText: foodItem.measurementValue.invalid
+                errorText: !foodItem.measurements[0].isValueValid()
                     ? 'Enter the dish measurement'
                     : null,
               ),
             ),
             TextFormField(
               readOnly: true,
-              initialValue: foodItem.measurementUnit.value,
+              initialValue: foodItem.measurements[0].measurementUnit,
               decoration: InputDecoration(
                 icon: const Icon(Icons.radio_button_unchecked_outlined),
                 labelText: 'Measurement unit',
                 helperText: 'The size of each measurement value',
-                errorText: foodItem.measurementUnit.invalid
+                errorText: !foodItem.measurements[0].isUnitValid()
                     ? 'Select the measurement unit'
                     : null,
               ),
