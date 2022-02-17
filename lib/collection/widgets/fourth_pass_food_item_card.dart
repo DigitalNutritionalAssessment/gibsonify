@@ -7,12 +7,14 @@ class FourthPassFoodItemCard extends StatelessWidget {
       {Key? key,
       required this.foodItem,
       this.onConfirmationChanged,
-      this.onDeleted})
+      this.onDeleted,
+      this.onSelectedScreenChanged})
       : super(key: key);
 
   final FoodItem foodItem;
   final ValueChanged<bool>? onConfirmationChanged;
   final VoidCallback? onDeleted;
+  final ValueChanged<int>? onSelectedScreenChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +31,8 @@ class FourthPassFoodItemCard extends StatelessWidget {
                 foodItem.timePeriod.value),
             TextFormField(
               readOnly: true,
+              // TODO add snackbar confirmation and scroll in the given page
+              onTap: () => onSelectedScreenChanged!(2),
               initialValue: foodItem.source.value,
               decoration: InputDecoration(
                 icon: const Icon(Icons.kitchen),
@@ -40,6 +44,7 @@ class FourthPassFoodItemCard extends StatelessWidget {
             ),
             TextFormField(
               readOnly: true,
+              onTap: () => onSelectedScreenChanged!(2),
               initialValue: foodItem.description.value,
               decoration: InputDecoration(
                 icon: const Icon(Icons.info),
@@ -52,6 +57,7 @@ class FourthPassFoodItemCard extends StatelessWidget {
             ),
             TextFormField(
               readOnly: true,
+              onTap: () => onSelectedScreenChanged!(2),
               initialValue: foodItem.preparationMethod.value,
               decoration: InputDecoration(
                 icon: const Icon(Icons.coffee_maker_outlined),
@@ -64,6 +70,7 @@ class FourthPassFoodItemCard extends StatelessWidget {
             ),
             TextFormField(
               readOnly: true,
+              onTap: () => onSelectedScreenChanged!(2),
               initialValue: foodItem.recipe?.recipeName ?? '',
               decoration: InputDecoration(
                 icon: const Icon(Icons.bookmark),
@@ -89,6 +96,7 @@ class FourthPassFoodItemCard extends StatelessWidget {
                           children: [
                             TextFormField(
                               readOnly: true,
+                              onTap: () => onSelectedScreenChanged!(3),
                               initialValue: foodItem
                                   .measurements[index].measurementMethod,
                               decoration: InputDecoration(
@@ -104,6 +112,7 @@ class FourthPassFoodItemCard extends StatelessWidget {
                             ),
                             TextFormField(
                               readOnly: true,
+                              onTap: () => onSelectedScreenChanged!(3),
                               initialValue:
                                   foodItem.measurements[index].measurementValue,
                               decoration: InputDecoration(
@@ -119,6 +128,7 @@ class FourthPassFoodItemCard extends StatelessWidget {
                             ),
                             TextFormField(
                               readOnly: true,
+                              onTap: () => onSelectedScreenChanged!(3),
                               initialValue:
                                   foodItem.measurements[index].measurementUnit,
                               decoration: InputDecoration(

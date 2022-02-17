@@ -28,15 +28,20 @@ class FourthPassScreen extends StatelessWidget {
                 itemCount: state.gibsonsForm.foodItems.length,
                 itemBuilder: (context, index) {
                   return FourthPassFoodItemCard(
-                      foodItem: state.gibsonsForm.foodItems[index],
-                      onConfirmationChanged: (negatedConfirmation) => context
-                          .read<CollectionBloc>()
-                          .add(FoodItemConfirmationChanged(
-                              foodItem: state.gibsonsForm.foodItems[index],
-                              foodItemConfirmed: negatedConfirmation)),
-                      onDeleted: () => context.read<CollectionBloc>().add(
-                          FoodItemDeleted(
-                              foodItem: state.gibsonsForm.foodItems[index])));
+                    foodItem: state.gibsonsForm.foodItems[index],
+                    onConfirmationChanged: (negatedConfirmation) => context
+                        .read<CollectionBloc>()
+                        .add(FoodItemConfirmationChanged(
+                            foodItem: state.gibsonsForm.foodItems[index],
+                            foodItemConfirmed: negatedConfirmation)),
+                    onDeleted: () => context.read<CollectionBloc>().add(
+                        FoodItemDeleted(
+                            foodItem: state.gibsonsForm.foodItems[index])),
+                    onSelectedScreenChanged: (value) => context
+                        .read<CollectionBloc>()
+                        .add(SelectedScreenIndexChanged(
+                            changedSelectedScreenIndex: value)),
+                  );
                 }),
             floatingActionButton: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
