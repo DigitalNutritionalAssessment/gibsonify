@@ -2,7 +2,7 @@ part of 'collection_bloc.dart';
 
 class CollectionState extends Equatable {
   final GibsonsForm gibsonsForm;
-  int selectedScreenIndex;
+  final int selectedScreenIndex;
 
   CollectionState({GibsonsForm? gibsonsForm, this.selectedScreenIndex = 0})
       : gibsonsForm = gibsonsForm ?? GibsonsForm();
