@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
-import 'package:flutter_mailer/flutter_mailer.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gibsonify/recipe/recipe.dart';
@@ -36,18 +36,7 @@ class SyncScreen extends StatelessWidget {
                 final _collectionfile = File(_collectionfilePath);
                 _collectionfile.writeAsString(collectionJson);
 
-                final MailOptions mailOptions = MailOptions(
-                  body:
-                      'Gibsonify collection and recipe data attached as a JSON string. <br> Data can be pasted into https://www.convertcsv.com/json-to-csv.htm to obtain a csv file.',
-                  subject: 'Gibsonify collection and recipe data',
-                  recipients: [],
-                  isHTML: true,
-                  bccRecipients: [],
-                  ccRecipients: [],
-                  attachments: [_collectionfilePath, _recipefilePath],
-                );
-
-                await FlutterMailer.send(mailOptions);
+                await Share.shareFiles([_recipefilePath, _collectionfilePath]);
               },
               icon: const Icon(Icons.send, size: 18),
               label: const Text("Export saved data as JSON"),

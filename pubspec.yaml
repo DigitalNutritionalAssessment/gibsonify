@@ -25,6 +25,7 @@ dependencies:
   geolocator: ^8.0.5
   dropdown_search: ^2.0.1
   intl_phone_field: ^3.0.1
+  share_plus: ^3.0.5
 
 dev_dependencies:
   flutter_test:
