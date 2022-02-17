@@ -44,6 +44,22 @@ class FourthPassScreen extends StatelessWidget {
                 children: <Widget>[
                   FloatingActionButton.extended(
                       heroTag: null,
+                      label: const Text("New Food"),
+                      icon: const Icon(Icons.add),
+                      onPressed: () {
+                        context.read<CollectionBloc>().add(FoodItemAdded());
+                        context.read<CollectionBloc>().add(
+                            const SelectedScreenIndexChanged(
+                                changedSelectedScreenIndex: 1));
+                        // TODO: Add a ScrollController to BLoC state,
+                        // pass it to first pass screen ListView and
+                        // scroll down in this onPressed call
+                      }),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  FloatingActionButton.extended(
+                      heroTag: null,
                       label: const Text("Finish Collection"),
                       icon: const Icon(Icons.check),
                       onPressed: () {
@@ -57,7 +73,7 @@ class FourthPassScreen extends StatelessWidget {
                           ScaffoldMessenger.of(context)
                               .showSnackBar(confirmAllFoodItemsSnackBar);
                         }
-                      })
+                      }),
                 ]));
       },
     );
