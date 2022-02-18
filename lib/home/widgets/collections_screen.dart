@@ -39,6 +39,9 @@ class _CollectionsScreenState extends State<CollectionsScreen> {
                                       GibsonsFormProvided(
                                           gibsonsForm:
                                               state.gibsonsForms[index]!));
+                                  context.read<CollectionBloc>().add(
+                                      const SelectedScreenIndexChanged(
+                                          changedSelectedScreenIndex: 0));
                                   Navigator.pushNamed(
                                       context, PageRouter.collection);
                                 },
@@ -57,6 +60,9 @@ class _CollectionsScreenState extends State<CollectionsScreen> {
                                       GibsonsFormProvided(
                                           gibsonsForm:
                                               state.gibsonsForms[index]!));
+                                  context.read<CollectionBloc>().add(
+                                      const SelectedScreenIndexChanged(
+                                          changedSelectedScreenIndex: 0));
                                   Navigator.pushNamed(
                                       context, PageRouter.collection);
                                 },
@@ -93,6 +99,9 @@ class _CollectionsScreenState extends State<CollectionsScreen> {
                         context
                             .read<CollectionBloc>()
                             .add(const GibsonsFormCreated());
+                        context.read<CollectionBloc>().add(
+                            const SelectedScreenIndexChanged(
+                                changedSelectedScreenIndex: 0));
                         Navigator.pushNamed(context, PageRouter.collection);
                       })
                 ]));
