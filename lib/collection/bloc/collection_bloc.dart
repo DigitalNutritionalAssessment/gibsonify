@@ -513,6 +513,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
       GibsonsFormProvided event, Emitter<CollectionState> emit) async {
     emit(state.copyWith(
         gibsonsForm: event.gibsonsForm,
+        selectedScreenIndex: 0,
         geoLocationStatus: GeoLocationStatus.none));
   }
 
@@ -521,6 +522,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     GibsonsForm gibsonsFormCreated = GibsonsForm();
     emit(state.copyWith(
         gibsonsForm: gibsonsFormCreated,
+        selectedScreenIndex: 0,
         geoLocationStatus: GeoLocationStatus.none));
   }
 
