@@ -360,7 +360,7 @@ class GeoLocationInput extends StatelessWidget {
             key: UniqueKey(),
             initialValue: state.gibsonsForm.geoLocation.value,
             onTap: () {
-              ScaffoldMessenger.of(context)
+              ScaffoldMessenger.of(context) // TODO: move to BlocListener
                 ..hideCurrentSnackBar()
                 ..showSnackBar(
                   const SnackBar(

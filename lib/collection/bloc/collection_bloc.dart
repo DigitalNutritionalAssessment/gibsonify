@@ -522,33 +522,57 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
   Future<void> _onGeoLocationRequested(
       GeoLocationRequested event, Emitter<CollectionState> emit) async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      emit(state.copyWith(
+          geoLocationStatus: GeoLocationStatus.locationDisabled));
+      return;
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        emit(state.copyWith(
+            geoLocationStatus: GeoLocationStatus.locationDenied));
+        return;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      emit(state.copyWith(
+          geoLocationStatus: GeoLocationStatus.locationPermanentlyDenied));
+      return;
+    }
+
     emit(
         state.copyWith(geoLocationStatus: GeoLocationStatus.locationRequested));
 
     String? geoLocationFormatted;
 
     try {
-      Position position =
-          await _determinePosition(timeLimit: const Duration(seconds: 45));
+      Position position = await Geolocator.getCurrentPosition(
+          timeLimit: const Duration(seconds: 45));
 
       geoLocationFormatted =
           position.latitude.toString() + ', ' + position.longitude.toString();
     } catch (e) {
-      if (e.toString() == 'Location services are disabled.') {
-        emit(state.copyWith(
-            geoLocationStatus: GeoLocationStatus.locationDisabled));
-      } else if (e.toString() == 'Location permissions are denied') {
-        emit(state.copyWith(
-            geoLocationStatus: GeoLocationStatus.locationDenied));
-      } else if (e.toString() ==
-          'Location permissions are permanently denied,'
-              ' we cannot request permissions.') {
-        emit(state.copyWith(
-            geoLocationStatus: GeoLocationStatus.locationPermanentlyDenied));
-      } else {
-        emit(state.copyWith(
-            geoLocationStatus: GeoLocationStatus.locationTimedOut));
-      }
+      emit(state.copyWith(
+          geoLocationStatus: GeoLocationStatus.locationTimedOut));
+
       geoLocationFormatted = 'Undetermined';
     }
 
@@ -563,46 +587,5 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
       emit(state.copyWith(
           geoLocationStatus: GeoLocationStatus.locationDetermined));
     }
-  }
-
-  /// Determine the current position of the device.
-  ///
-  /// When the location services are not enabled or permissions
-  /// are denied the `Future` will return an error.
-  Future<Position> _determinePosition({Duration? timeLimit}) async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    // Test if location services are enabled.
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      // Location services are not enabled don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
-      return Future.error('Location services are disabled.');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        // Permissions are denied, next time you could try
-        // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale
-        // returned true. According to Android guidelines
-        // your App should show an explanatory UI now.
-        return Future.error('Location permissions are denied');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-
-    // When we reach here, permissions are granted and we can
-    // continue accessing the position of the device.
-    return await Geolocator.getCurrentPosition(timeLimit: timeLimit);
   }
 }
