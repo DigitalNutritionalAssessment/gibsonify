@@ -303,7 +303,17 @@ class GeoLocationInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<CollectionBloc, CollectionState>(
+      listenWhen: (previous, current) =>
+          previous.geoLocationStatus != current.geoLocationStatus,
       listener: (context, state) {
+        if (state.geoLocationStatus == GeoLocationStatus.locationRequested) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              const SnackBar(
+                  content: Text('Requested device location, please wait.')),
+            );
+        }
         if (state.geoLocationStatus == GeoLocationStatus.locationDetermined) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
@@ -359,15 +369,9 @@ class GeoLocationInput extends StatelessWidget {
             readOnly: true,
             key: UniqueKey(),
             initialValue: state.gibsonsForm.geoLocation.value,
-            onTap: () {
-              ScaffoldMessenger.of(context) // TODO: move to BlocListener
-                ..hideCurrentSnackBar()
-                ..showSnackBar(
-                  const SnackBar(
-                      content: Text('Requested device location, please wait.')),
-                );
-              context.read<CollectionBloc>().add(const GeoLocationRequested());
-            },
+            onTap: () => context
+                .read<CollectionBloc>()
+                .add(const GeoLocationRequested()),
             decoration: InputDecoration(
               suffixIcon:
                   state.geoLocationStatus == GeoLocationStatus.locationRequested

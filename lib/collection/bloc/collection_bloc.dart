@@ -511,13 +511,17 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
   // TODO: Delete the async?
   void _onGibsonsFormProvided(
       GibsonsFormProvided event, Emitter<CollectionState> emit) async {
-    emit(state.copyWith(gibsonsForm: event.gibsonsForm));
+    emit(state.copyWith(
+        gibsonsForm: event.gibsonsForm,
+        geoLocationStatus: GeoLocationStatus.none));
   }
 
   void _onGibsonsFormCreated(
       GibsonsFormCreated event, Emitter<CollectionState> emit) {
     GibsonsForm gibsonsFormCreated = GibsonsForm();
-    emit(state.copyWith(gibsonsForm: gibsonsFormCreated));
+    emit(state.copyWith(
+        gibsonsForm: gibsonsFormCreated,
+        geoLocationStatus: GeoLocationStatus.none));
   }
 
   Future<void> _onGeoLocationRequested(
