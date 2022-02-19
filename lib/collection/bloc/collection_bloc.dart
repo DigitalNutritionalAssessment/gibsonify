@@ -522,36 +522,54 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
   Future<void> _onGeoLocationRequested(
       GeoLocationRequested event, Emitter<CollectionState> emit) async {
-    String geoLocationFormatted = 'Requested';
+    emit(
+        state.copyWith(geoLocationStatus: GeoLocationStatus.locationRequested));
 
-    var geoLocation = GeoLocation.dirty(geoLocationFormatted);
+    String? geoLocationFormatted;
+
+    try {
+      Position position =
+          await _determinePosition(timeLimit: const Duration(seconds: 45));
+
+      geoLocationFormatted =
+          position.latitude.toString() + ', ' + position.longitude.toString();
+    } catch (e) {
+      if (e.toString() == 'Location services are disabled.') {
+        emit(state.copyWith(
+            geoLocationStatus: GeoLocationStatus.locationDisabled));
+      } else if (e.toString() == 'Location permissions are denied') {
+        emit(state.copyWith(
+            geoLocationStatus: GeoLocationStatus.locationDenied));
+      } else if (e.toString() ==
+          'Location permissions are permanently denied,'
+              ' we cannot request permissions.') {
+        emit(state.copyWith(
+            geoLocationStatus: GeoLocationStatus.locationPermanentlyDenied));
+      } else {
+        emit(state.copyWith(
+            geoLocationStatus: GeoLocationStatus.locationTimedOut));
+      }
+      geoLocationFormatted = 'Undetermined';
+    }
+
+    GeoLocation geoLocation = GeoLocation.dirty(geoLocationFormatted);
 
     GibsonsForm changedGibsonsForm =
         state.gibsonsForm.copyWith(geoLocation: geoLocation);
 
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
 
-    try {
-      Position position = await _determinePosition();
-
-      geoLocationFormatted =
-          position.latitude.toString() + ', ' + position.longitude.toString();
-    } catch (e) {
-      geoLocationFormatted = 'Undetermined';
+    if (geoLocationFormatted != 'Undetermined') {
+      emit(state.copyWith(
+          geoLocationStatus: GeoLocationStatus.locationDetermined));
     }
-
-    geoLocation = GeoLocation.dirty(geoLocationFormatted);
-
-    changedGibsonsForm = state.gibsonsForm.copyWith(geoLocation: geoLocation);
-
-    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }
 
   /// Determine the current position of the device.
   ///
   /// When the location services are not enabled or permissions
   /// are denied the `Future` will return an error.
-  Future<Position> _determinePosition() async {
+  Future<Position> _determinePosition({Duration? timeLimit}) async {
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -585,6 +603,6 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
-    return await Geolocator.getCurrentPosition();
+    return await Geolocator.getCurrentPosition(timeLimit: timeLimit);
   }
 }
