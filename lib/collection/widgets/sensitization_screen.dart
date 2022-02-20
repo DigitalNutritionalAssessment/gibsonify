@@ -128,9 +128,9 @@ class RespondentTelInfoInput extends StatelessWidget {
       builder: (context, state) {
         return IntlPhoneField(
           invalidNumberMessage: 'Enter a valid tel. number',
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: 'Respondent Tel. Number',
-            icon: const Icon(Icons.phone),
+            icon: Icon(Icons.phone),
             helperText: 'Full tel. number of respondent e.g. +447448238123',
           ),
           initialValue: state.gibsonsForm.respondentTelNumber.value,
