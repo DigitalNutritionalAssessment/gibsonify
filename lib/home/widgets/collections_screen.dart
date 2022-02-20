@@ -6,14 +6,9 @@ import 'package:gibsonify/home/home.dart';
 import 'package:gibsonify/navigation/navigation.dart';
 import 'package:gibsonify/collection/collection.dart';
 
-class CollectionsScreen extends StatefulWidget {
+class CollectionsScreen extends StatelessWidget {
   const CollectionsScreen({Key? key}) : super(key: key);
 
-  @override
-  _CollectionsScreenState createState() => _CollectionsScreenState();
-}
-
-class _CollectionsScreenState extends State<CollectionsScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HomeBloc, HomeState>(
