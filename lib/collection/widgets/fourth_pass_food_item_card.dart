@@ -114,6 +114,9 @@ class FourthPassFoodItemCard extends StatelessWidget {
                       itemCount: foodItem.measurements.length,
                       itemBuilder: (context, index) {
                         return Card(
+                          color: foodItem.confirmed
+                              ? Theme.of(context).colorScheme.background
+                              : null,
                           child: Column(
                             children: [
                               TextFormField(
