@@ -210,6 +210,17 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     emit(state.copyWith(recipes: recipes));
   }
 
+  bool _checkProbesChecked(List<Probe> probes) {
+    bool allProbesChecked = true;
+    for (Probe probe in probes) {
+      if (probe.checked == false) {
+        allProbesChecked = false;
+        break;
+      }
+    }
+    return allProbesChecked;
+  }
+
   void _onProbeAdded(ProbeAdded event, Emitter<RecipeState> emit) {
     List<Recipe> recipes = List.from(state.recipes);
     int changedRecipeIndex = recipes.indexOf(event.recipe);
@@ -219,14 +230,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     List<Probe> probes = List.from(recipes[changedRecipeIndex].probes);
     probes.add(probe);
 
-    bool allProbesChecked = true;
-
-    for (Probe probe in probes) {
-      if (probe.checked == false) {
-        allProbesChecked = false;
-        break;
-      }
-    }
+    bool allProbesChecked = _checkProbesChecked(probes);
 
     Recipe recipe = recipes[changedRecipeIndex]
         .copyWith(probes: probes, allProbesChecked: allProbesChecked);
@@ -270,14 +274,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     probes.removeAt(changedProbeIndex);
     probes.insert(changedProbeIndex, probe);
 
-    bool allProbesChecked = true;
-
-    for (Probe probe in probes) {
-      if (probe.checked == false) {
-        allProbesChecked = false;
-        break;
-      }
-    }
+    bool allProbesChecked = _checkProbesChecked(probes);
 
     Recipe recipe = recipes[changedRecipeIndex]
         .copyWith(probes: probes, allProbesChecked: allProbesChecked);
@@ -296,14 +293,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     int changedProbeIndex = probes.indexOf(event.probe);
     probes.removeAt(changedProbeIndex);
 
-    bool allProbesChecked = probes.isEmpty ? false : true;
-
-    for (Probe probe in probes) {
-      if (probe.checked == false) {
-        allProbesChecked = false;
-        break;
-      }
-    }
+    bool allProbesChecked = _checkProbesChecked(probes);
 
     Recipe recipe = recipes[changedRecipeIndex]
         .copyWith(probes: probes, allProbesChecked: allProbesChecked);
@@ -312,6 +302,17 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
 
     recipes.insert(changedRecipeIndex, recipe);
     emit(state.copyWith(recipes: recipes));
+  }
+
+  bool _checkProbeAnswers(List<Probe> probes) {
+    bool allProbeAnswersStandard = true;
+    for (Probe probe in probes) {
+      if (probe.standardAnswer() == false) {
+        allProbeAnswersStandard = false;
+        break;
+      }
+    }
+    return allProbeAnswersStandard;
   }
 
   void _onProbeOptionAdded(ProbeOptionAdded event, Emitter<RecipeState> emit) {
@@ -330,13 +331,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     probes.removeAt(changedProbeIndex);
     probes.insert(changedProbeIndex, probe);
 
-    bool allProbeAnswersStandard = true;
-    for (Probe probe in probes) {
-      if (probe.standardAnswer() == false) {
-        allProbeAnswersStandard = false;
-        break;
-      }
-    }
+    bool allProbeAnswersStandard = _checkProbeAnswers(probes);
 
     Recipe recipe = recipes[changedRecipeIndex].copyWith(
         probes: probes, allProbeAnswersStandard: allProbeAnswersStandard);
@@ -398,13 +393,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     probes.removeAt(changedProbeIndex);
     probes.insert(changedProbeIndex, probe);
 
-    bool allProbeAnswersStandard = true;
-    for (Probe probe in probes) {
-      if (probe.standardAnswer() == false) {
-        allProbeAnswersStandard = false;
-        break;
-      }
-    }
+    bool allProbeAnswersStandard = _checkProbeAnswers(probes);
 
     Recipe recipe = recipes[changedRecipeIndex].copyWith(
         probes: probes, allProbeAnswersStandard: allProbeAnswersStandard);
@@ -428,13 +417,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     probes.removeAt(changedProbeIndex);
     probes.insert(changedProbeIndex, probe);
 
-    bool allProbeAnswersStandard = true; //TODO: refactor logic into function
-    for (Probe probe in probes) {
-      if (probe.standardAnswer() == false) {
-        allProbeAnswersStandard = false;
-        break;
-      }
-    }
+    bool allProbeAnswersStandard = _checkProbeAnswers(probes);
 
     Recipe recipe = recipes[changedRecipeIndex].copyWith(
         probes: probes, allProbeAnswersStandard: allProbeAnswersStandard);
