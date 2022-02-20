@@ -42,27 +42,28 @@ class ThirdPassScreen extends StatelessWidget {
                             .add(FoodItemMeasurementMethodChanged(
                                 foodItem: state.gibsonsForm.foodItems[index],
                                 measurementIndex:
-                                    changedMeasurementIndexAndMethod[0],
+                                    changedMeasurementIndexAndMethod['index'],
                                 foodItemMeasurementMethod:
-                                    changedMeasurementIndexAndMethod[1])),
+                                    changedMeasurementIndexAndMethod[
+                                        'method'])),
                     onMeasurementValueChanged:
                         (changedMeasurementIndexAndValue) => context
                             .read<CollectionBloc>()
                             .add(FoodItemMeasurementValueChanged(
                                 foodItem: state.gibsonsForm.foodItems[index],
                                 measurementIndex:
-                                    changedMeasurementIndexAndValue[0],
+                                    changedMeasurementIndexAndValue['index'],
                                 foodItemMeasurementValue:
-                                    changedMeasurementIndexAndValue[1])),
+                                    changedMeasurementIndexAndValue['value'])),
                     onMeasurementUnitChanged:
                         (changedMeasurementIndexAndUnit) => context
                             .read<CollectionBloc>()
                             .add(FoodItemMeasurementUnitChanged(
                                 foodItem: state.gibsonsForm.foodItems[index],
                                 measurementIndex:
-                                    changedMeasurementIndexAndUnit[0],
+                                    changedMeasurementIndexAndUnit['index'],
                                 foodItemMeasurementUnit:
-                                    changedMeasurementIndexAndUnit[1])),
+                                    changedMeasurementIndexAndUnit['unit'])),
                     onMeasurementAdded: () => context
                         .read<CollectionBloc>()
                         .add(FoodItemMeasurementAdded(
