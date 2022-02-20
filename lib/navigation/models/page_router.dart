@@ -56,12 +56,6 @@ class PageRouter {
         return _buildRoute(ChooseRecipePage(
             assignedFoodItemId: args['assignedFoodItemId'],
             foodItemDescription: args['foodItemDescription']));
-      // var indices = routeSettings.arguments as List;
-      // String? assignedFoodItemId = indices[0];
-      // String? foodItemDescription = indices[1];
-      // return _buildRoute(ChooseRecipePage(
-      //     assignedFoodItemId: assignedFoodItemId,
-      //     foodItemDescription: foodItemDescription));
       case finishCollection:
         return _buildRoute(const FinishCollectionPage());
       default:

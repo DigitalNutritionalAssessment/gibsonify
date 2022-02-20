@@ -2,21 +2,25 @@ part of 'recipe_bloc.dart';
 
 class RecipeState extends Equatable {
   final List<Recipe> recipes;
+  final String? ingredientsJson;
 
   const RecipeState({
     this.recipes = const <Recipe>[],
+    this.ingredientsJson,
   });
 
   RecipeState copyWith({
     List<Recipe>? recipes,
+    String? ingredientsJson,
   }) {
     return RecipeState(
       recipes: recipes ?? this.recipes,
+      ingredientsJson: ingredientsJson ?? this.ingredientsJson,
     );
   }
 
   @override
-  List<Object> get props => [recipes];
+  List<Object?> get props => [recipes, ingredientsJson];
 
   // TODO: These methods should be deleted and moved to the API if needed
   Map<String, dynamic> toMap() {

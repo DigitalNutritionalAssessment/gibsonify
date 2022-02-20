@@ -48,6 +48,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     on<IngredientMeasurementValueChanged>(_onIngredientMeasurementValueChanged);
     on<RecipesSaved>(_onRecipesSaved);
     on<RecipesLoaded>(_onRecipesLoaded);
+    on<IngredientsLoaded>(_onIngredientsLoaded);
   }
 
   void _onRecipeAdded(RecipeAdded event, Emitter<RecipeState> emit) {
@@ -811,5 +812,17 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
   void _onRecipesLoaded(RecipesLoaded event, Emitter<RecipeState> emit) {
     List<Recipe> recipes = _gibsonifyRepository.loadRecipes();
     emit(state.copyWith(recipes: recipes));
+  }
+
+  Future<void> _onIngredientsLoaded(
+      IngredientsLoaded event, Emitter<RecipeState> emit) async {
+    if (state.ingredientsJson == null) {
+      try {
+        String ingredientsJson = await Ingredient.getIngredients();
+        emit(state.copyWith(ingredientsJson: ingredientsJson));
+      } catch (e) {
+        return;
+      }
+    }
   }
 }
