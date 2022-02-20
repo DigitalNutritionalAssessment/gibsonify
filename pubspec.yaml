@@ -20,7 +20,6 @@ dependencies:
     path: packages/gibsonify_api
   gibsonify_repository:
     path: packages/gibsonify_repository
-  flutter_mailer: ^2.0.0
   geolocator: ^8.0.5
   dropdown_search: ^2.0.1
   intl_phone_field: ^3.0.1
