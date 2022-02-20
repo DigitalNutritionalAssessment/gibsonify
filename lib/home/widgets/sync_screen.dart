@@ -25,27 +25,34 @@ class SyncScreen extends StatelessWidget {
               homeState.gibsonsForms.map((x) => x!.toJson()).toList(),
         });
         return Scaffold(
-            appBar: AppBar(title: const Text('Export Data')),
-            body: Center(
-                child: ElevatedButton.icon(
-              onPressed: () async {
-                final directory = await getApplicationDocumentsDirectory();
-                final path = directory.path;
+          appBar: AppBar(title: const Text('Export Data')),
+          floatingActionButton: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: <Widget>[
+                FloatingActionButton.extended(
+                  heroTag: null,
+                  label: const Text("Share data as JSON"),
+                  icon: const Icon(Icons.share),
+                  onPressed: () async {
+                    final directory = await getApplicationDocumentsDirectory();
+                    final path = directory.path;
 
-                final _recipefilePath = '$path/recipe_data.txt';
-                final _recipefile = File(_recipefilePath);
-                _recipefile.writeAsString(recipeJson);
+                    final _recipefilePath = '$path/recipe_data.txt';
+                    final _recipefile = File(_recipefilePath);
+                    _recipefile.writeAsString(recipeJson);
 
-                final _collectionfilePath = '$path/collection_data.txt';
-                final _collectionfile = File(_collectionfilePath);
-                _collectionfile.writeAsString(collectionJson);
+                    final _collectionfilePath = '$path/collection_data.txt';
+                    final _collectionfile = File(_collectionfilePath);
+                    _collectionfile.writeAsString(collectionJson);
 
-                await Share.shareFiles([_recipefilePath, _collectionfilePath],
-                    subject: _exportSubject, text: _exportText);
-              },
-              icon: const Icon(Icons.send, size: 18),
-              label: const Text("Export saved data as JSON"),
-            )));
+                    await Share.shareFiles(
+                        [_recipefilePath, _collectionfilePath],
+                        subject: _exportSubject, text: _exportText);
+                  },
+                )
+              ]),
+        );
       });
     });
   }
