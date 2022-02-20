@@ -37,10 +37,10 @@ class FourthPassScreen extends StatelessWidget {
                     onDeleted: () => context.read<CollectionBloc>().add(
                         FoodItemDeleted(
                             foodItem: state.gibsonsForm.foodItems[index])),
-                    onSelectedScreenChanged: (value) => context
+                    onSelectedScreenChanged: (screen) => context
                         .read<CollectionBloc>()
-                        .add(SelectedScreenIndexChanged(
-                            changedSelectedScreenIndex: value)),
+                        .add(SelectedScreenChanged(
+                            changedSelectedScreen: screen)),
                   );
                 }),
             floatingActionButton: Column(
@@ -54,8 +54,9 @@ class FourthPassScreen extends StatelessWidget {
                       onPressed: () {
                         context.read<CollectionBloc>().add(FoodItemAdded());
                         context.read<CollectionBloc>().add(
-                            const SelectedScreenIndexChanged(
-                                changedSelectedScreenIndex: 1));
+                            const SelectedScreenChanged(
+                                changedSelectedScreen:
+                                    SelectedScreen.firstPass));
                         // TODO: Add a ScrollController to BLoC state,
                         // pass it to first pass screen ListView and
                         // scroll down in this onPressed call

@@ -7,12 +7,12 @@ abstract class CollectionEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class SelectedScreenIndexChanged extends CollectionEvent {
-  final int changedSelectedScreenIndex;
-  const SelectedScreenIndexChanged({required this.changedSelectedScreenIndex});
+class SelectedScreenChanged extends CollectionEvent {
+  final SelectedScreen changedSelectedScreen;
+  const SelectedScreenChanged({required this.changedSelectedScreen});
 
   @override
-  List<Object> get props => [changedSelectedScreenIndex];
+  List<Object> get props => [changedSelectedScreen];
 }
 
 class HouseholdIdChanged extends CollectionEvent {

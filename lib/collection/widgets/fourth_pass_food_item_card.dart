@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:gibsonify/collection/collection.dart';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
 
@@ -15,7 +16,7 @@ class FourthPassFoodItemCard extends StatelessWidget {
   final FoodItem foodItem;
   final ValueChanged<bool>? onConfirmationChanged;
   final VoidCallback? onDeleted;
-  final ValueChanged<int>? onSelectedScreenChanged;
+  final ValueChanged<SelectedScreen>? onSelectedScreenChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +50,8 @@ class FourthPassFoodItemCard extends StatelessWidget {
               TextFormField(
                 readOnly: true,
                 // TODO add snackbar confirmation and scroll in the given page
-                onTap: () => onSelectedScreenChanged!(2),
+                onTap: () =>
+                    onSelectedScreenChanged!(SelectedScreen.secondPass),
                 initialValue: foodItem.source.value,
                 decoration: InputDecoration(
                   icon: const Icon(Icons.kitchen),
@@ -61,7 +63,8 @@ class FourthPassFoodItemCard extends StatelessWidget {
               ),
               TextFormField(
                 readOnly: true,
-                onTap: () => onSelectedScreenChanged!(2),
+                onTap: () =>
+                    onSelectedScreenChanged!(SelectedScreen.secondPass),
                 initialValue: foodItem.description.value,
                 decoration: InputDecoration(
                   icon: const Icon(Icons.info),
@@ -74,7 +77,8 @@ class FourthPassFoodItemCard extends StatelessWidget {
               ),
               TextFormField(
                 readOnly: true,
-                onTap: () => onSelectedScreenChanged!(2),
+                onTap: () =>
+                    onSelectedScreenChanged!(SelectedScreen.secondPass),
                 initialValue: foodItem.preparationMethod.value,
                 decoration: InputDecoration(
                   icon: const Icon(Icons.coffee_maker_outlined),
@@ -87,10 +91,11 @@ class FourthPassFoodItemCard extends StatelessWidget {
               ),
               TextFormField(
                 readOnly: true,
-                onTap: () => onSelectedScreenChanged!(2),
+                onTap: () =>
+                    onSelectedScreenChanged!(SelectedScreen.secondPass),
                 initialValue: foodItem.recipe?.recipeName ?? '',
-                decoration: InputDecoration(
-                  icon: const Icon(Icons.bookmark),
+                decoration: const InputDecoration(
+                  icon: Icon(Icons.bookmark),
                   labelText: 'Food recipe',
                   helperText: 'What is the recipe of this food',
                   // TODO:
@@ -113,7 +118,8 @@ class FourthPassFoodItemCard extends StatelessWidget {
                             children: [
                               TextFormField(
                                 readOnly: true,
-                                onTap: () => onSelectedScreenChanged!(3),
+                                onTap: () => onSelectedScreenChanged!(
+                                    SelectedScreen.thirdPass),
                                 initialValue: foodItem
                                     .measurements[index].measurementMethod,
                                 decoration: InputDecoration(
@@ -130,7 +136,8 @@ class FourthPassFoodItemCard extends StatelessWidget {
                               ),
                               TextFormField(
                                 readOnly: true,
-                                onTap: () => onSelectedScreenChanged!(3),
+                                onTap: () => onSelectedScreenChanged!(
+                                    SelectedScreen.thirdPass),
                                 initialValue: foodItem
                                     .measurements[index].measurementValue,
                                 decoration: InputDecoration(
@@ -147,7 +154,8 @@ class FourthPassFoodItemCard extends StatelessWidget {
                               ),
                               TextFormField(
                                 readOnly: true,
-                                onTap: () => onSelectedScreenChanged!(3),
+                                onTap: () => onSelectedScreenChanged!(
+                                    SelectedScreen.thirdPass),
                                 initialValue: foodItem
                                     .measurements[index].measurementUnit,
                                 decoration: InputDecoration(
