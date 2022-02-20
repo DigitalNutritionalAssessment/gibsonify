@@ -31,6 +31,54 @@ class SyncScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
                 FloatingActionButton.extended(
+                    heroTag: null,
+                    label: const Text("Save data to file"),
+                    icon: const Icon(Icons.save),
+                    onPressed: () async {
+                      try {
+                        final directory = await getExternalStorageDirectory();
+
+                        if (directory == null) {
+                          ScaffoldMessenger.of(context)
+                            ..hideCurrentSnackBar()
+                            ..showSnackBar(
+                              const SnackBar(
+                                  content: Text(
+                                      'No permission to save data to file!')),
+                            );
+                        } else {
+                          final path = directory.path;
+
+                          final _recipefilePath = '$path/recipe_data.txt';
+                          final _recipefile = File(_recipefilePath);
+                          _recipefile.writeAsString(recipeJson);
+
+                          final _collectionfilePath =
+                              '$path/collection_data.txt';
+                          final _collectionfile = File(_collectionfilePath);
+                          _collectionfile.writeAsString(collectionJson);
+
+                          ScaffoldMessenger.of(context)
+                            ..hideCurrentSnackBar()
+                            ..showSnackBar(
+                              SnackBar(
+                                  content: Text(
+                                      'Data successfully saved to: ' + path)),
+                            );
+                        }
+                      } catch (e) {
+                        ScaffoldMessenger.of(context)
+                          ..hideCurrentSnackBar()
+                          ..showSnackBar(
+                            const SnackBar(
+                                content: Text('Error, cannot save data!')),
+                          );
+                      }
+                    }),
+                const SizedBox(
+                  height: 10,
+                ),
+                FloatingActionButton.extended(
                   heroTag: null,
                   label: const Text("Share data as JSON"),
                   icon: const Icon(Icons.share),
