@@ -24,28 +24,24 @@ class PageRouter {
       case collection:
         return _buildRoute(const CollectionPage());
       case recipe:
-        var indices = routeSettings.arguments as List;
-        int recipeIndex = indices[0];
-        String? assignedFoodItemId = indices[1];
-        String? foodItemDescription = indices[2];
-        // TODO: rewrite as named strings mapping to index for each screen
-        int selectedScreenIndex = indices[3];
+        Map<String, dynamic> args =
+            routeSettings.arguments as Map<String, dynamic>;
         return _buildRoute(RecipePage(
-          recipeIndex,
-          assignedFoodItemId: assignedFoodItemId,
-          foodItemDescription: foodItemDescription,
-          selectedScreenIndex: selectedScreenIndex,
+          args['recipeIndex'],
+          assignedFoodItemId: args['assignedFoodItemId'],
+          foodItemDescription: args['foodItemDescription'],
+          selectedScreenIndex: args['selectedScreenIndex'],
         ));
       case ingredient:
-        var indices = routeSettings.arguments as List; // TODO: Use a hash-map
-        int recipeIndex = indices[0];
-        int ingredientIndex = indices[1];
-        return _buildRoute(IngredientPage(recipeIndex, ingredientIndex));
+        Map<String, dynamic> args =
+            routeSettings.arguments as Map<String, dynamic>;
+        return _buildRoute(
+            IngredientPage(args['recipeIndex'], args['ingredientIndex']));
       case editProbe:
-        var indices = routeSettings.arguments as List; // TODO: Use a hash-map
-        int recipeIndex = indices[0];
-        int probeIndex = indices[1];
-        return _buildRoute(EditProbePage(recipeIndex, probeIndex));
+        Map<String, dynamic> args =
+            routeSettings.arguments as Map<String, dynamic>;
+        return _buildRoute(
+            EditProbePage(args['recipeIndex'], args['probeIndex']));
       case sensitizationHelp:
         return _buildRoute(const SensitizationHelpPage());
       case firstPassHelp:
@@ -55,12 +51,17 @@ class PageRouter {
       case thirdPassHelp:
         return _buildRoute(const ThirdPassHelpPage());
       case chooseRecipe:
-        var indices = routeSettings.arguments as List;
-        String? assignedFoodItemId = indices[0];
-        String? foodItemDescription = indices[1];
+        Map<String, dynamic> args =
+            routeSettings.arguments as Map<String, dynamic>;
         return _buildRoute(ChooseRecipePage(
-            assignedFoodItemId: assignedFoodItemId,
-            foodItemDescription: foodItemDescription));
+            assignedFoodItemId: args['assignedFoodItemId'],
+            foodItemDescription: args['foodItemDescription']));
+      // var indices = routeSettings.arguments as List;
+      // String? assignedFoodItemId = indices[0];
+      // String? foodItemDescription = indices[1];
+      // return _buildRoute(ChooseRecipePage(
+      //     assignedFoodItemId: assignedFoodItemId,
+      //     foodItemDescription: foodItemDescription));
       case finishCollection:
         return _buildRoute(const FinishCollectionPage());
       default:

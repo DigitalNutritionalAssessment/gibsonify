@@ -59,18 +59,18 @@ class RecipesScreen extends StatelessWidget {
                                   state.recipes[index].recipeType !=
                                       'Standard Recipe')
                               // TODO: rewrite as named strings for each screen
-                              ? [
-                                  index,
-                                  assignedFoodItemId,
-                                  foodItemDescription,
-                                  1
-                                ]
-                              : [
-                                  index,
-                                  assignedFoodItemId,
-                                  foodItemDescription,
-                                  0
-                                ])
+                              ? {
+                                  'recipeIndex': index,
+                                  'assignedFoodItemId': assignedFoodItemId,
+                                  'foodItemDescription': foodItemDescription,
+                                  'selectedScreenIndex': 1
+                                }
+                              : {
+                                  'recipeIndex': index,
+                                  'assignedFoodItemId': assignedFoodItemId,
+                                  'foodItemDescription': foodItemDescription,
+                                  'selectedScreenIndex': 0
+                                })
                     },
                   )),
                 );
@@ -87,13 +87,12 @@ class RecipesScreen extends StatelessWidget {
                           context.read<RecipeBloc>().add(
                               const RecipeAdded(recipeType: "Standard Recipe")),
                           Navigator.pushNamed(context, PageRouter.recipe,
-                              arguments: [
-                                state.recipes.length,
-                                // TODO: rewrite as named strings for each screen
-                                assignedFoodItemId,
-                                foodItemDescription,
-                                1
-                              ]),
+                              arguments: {
+                                'recipeIndex': state.recipes.length,
+                                'assignedFoodItemId': assignedFoodItemId,
+                                'foodItemDescription': foodItemDescription,
+                                'selectedScreenIndex': 1
+                              }),
                         }),
                 const SizedBox(
                   height: 10,
@@ -106,13 +105,12 @@ class RecipesScreen extends StatelessWidget {
                           context.read<RecipeBloc>().add(const RecipeAdded(
                               recipeType: "Non-standard Recipe")),
                           Navigator.pushNamed(context, PageRouter.recipe,
-                              arguments: [
-                                state.recipes.length,
-                                assignedFoodItemId,
-                                foodItemDescription,
-                                // TODO: rewrite as named strings for each screen
-                                1
-                              ]),
+                              arguments: {
+                                'recipeIndex': state.recipes.length,
+                                'assignedFoodItemId': assignedFoodItemId,
+                                'foodItemDescription': foodItemDescription,
+                                'selectedScreenIndex': 1
+                              }),
                         })
               ]));
     });

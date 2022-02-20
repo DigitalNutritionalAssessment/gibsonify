@@ -129,7 +129,10 @@ class SecondPassFoodItemCard extends StatelessWidget {
               ),
               onTap: () {
                 Navigator.pushNamed(context, PageRouter.chooseRecipe,
-                    arguments: [foodItem.id, foodItem.description.value]);
+                    arguments: {
+                      'assignedFoodItemId': foodItem.id,
+                      'foodItemDescription': foodItem.description.value,
+                    });
               },
               textInputAction: TextInputAction.next,
             ),
