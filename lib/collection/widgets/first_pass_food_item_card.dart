@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
 
@@ -29,45 +30,55 @@ class FirstPassFoodItemCard extends StatelessWidget {
       DropdownMenuItem(child: Text('Night (7:01 pm - 3:00 am)'), value: 'Night')
     ];
 
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            TextFormField(
-                // A unique key needs to be set in order to properly
-                // rebuild this Field after deleting a FoodItem
-                key: Key(foodItem.id),
-                initialValue: foodItem.name.value,
-                decoration: InputDecoration(
-                    icon: const Icon(Icons.fastfood),
-                    labelText: 'Food name',
-                    helperText: 'Food name e.g. Dhal',
-                    errorText: foodItem.name.invalid
-                        ? 'Enter a food name e.g. Banana'
-                        : null),
-                onChanged: (value) => onNameChanged!(value),
-                textInputAction: TextInputAction.next),
-            DropdownButtonFormField(
-                value: foodItem.timePeriod.value,
-                decoration: InputDecoration(
-                    icon: const Icon(Icons.access_time),
-                    labelText: 'Time period',
-                    helperText:
-                        'Time period of consuming the food e.g. Morning',
-                    errorText: foodItem.timePeriod.invalid
-                        ? 'Select a time period'
-                        : null),
-                items: dropdownMenuItems,
-                onChanged: (String? value) =>
-                    onTimePeriodChanged!(value ?? '')),
-            const Divider(),
-            // TODO: Make a pop-up with a confirmation box
-            // for deleting an item, this might need to be done in First Pass
-            // Screen
-            TextButton(
-                onPressed: () => onDeleted!(), child: const Text('Delete'))
-          ],
+    return Slidable(
+      key: Key(foodItem.id),
+      startActionPane: ActionPane(
+        motion: const ScrollMotion(),
+        children: [
+          SlidableAction(
+            // TODO: implement deletion confirmation dialog
+            onPressed: (context) => onDeleted!(),
+            backgroundColor: const Color(0xFFFE4A49),
+            foregroundColor: Colors.white,
+            icon: Icons.delete,
+            label: 'Delete',
+          )
+        ],
+      ),
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              TextFormField(
+                  // A unique key needs to be set in order to properly
+                  // rebuild this Field after deleting a FoodItem
+                  key: Key(foodItem.id),
+                  initialValue: foodItem.name.value,
+                  decoration: InputDecoration(
+                      icon: const Icon(Icons.fastfood),
+                      labelText: 'Food name',
+                      helperText: 'Food name e.g. Dhal',
+                      errorText: foodItem.name.invalid
+                          ? 'Enter a food name e.g. Banana'
+                          : null),
+                  onChanged: (value) => onNameChanged!(value),
+                  textInputAction: TextInputAction.next),
+              DropdownButtonFormField(
+                  value: foodItem.timePeriod.value,
+                  decoration: InputDecoration(
+                      icon: const Icon(Icons.access_time),
+                      labelText: 'Time period',
+                      helperText:
+                          'Time period of consuming the food e.g. Morning',
+                      errorText: foodItem.timePeriod.invalid
+                          ? 'Select a time period'
+                          : null),
+                  items: dropdownMenuItems,
+                  onChanged: (String? value) =>
+                      onTimePeriodChanged!(value ?? '')),
+            ],
+          ),
         ),
       ),
     );

@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 import 'package:uuid/uuid.dart';
 
 import 'recipe.dart';
+import 'measurement.dart';
 
 class FoodItem extends Equatable {
   FoodItem(
@@ -12,12 +15,11 @@ class FoodItem extends Equatable {
       this.source = const Source.pure(),
       this.description = const Description.pure(),
       this.preparationMethod = const PreparationMethod.pure(),
-      this.measurementMethod = const MeasurementMethod.pure(),
-      this.measurementValue = const MeasurementValue.pure(),
-      this.measurementUnit = const MeasurementUnit.pure(),
+      List<Measurement>? measurements,
       this.recipe,
       this.confirmed = false})
-      : id = id ?? const Uuid().v4();
+      : id = id ?? const Uuid().v4(),
+        measurements = measurements ?? [Measurement()];
 
   final String id;
   final Name name;
@@ -25,9 +27,7 @@ class FoodItem extends Equatable {
   final Source source;
   final Description description;
   final PreparationMethod preparationMethod;
-  final MeasurementMethod measurementMethod;
-  final MeasurementValue measurementValue;
-  final MeasurementUnit measurementUnit;
+  final List<Measurement> measurements;
   final Recipe? recipe;
   // TODO: Add Form validation bool field to check if all fields are valid
   final bool confirmed;
@@ -43,10 +43,7 @@ class FoodItem extends Equatable {
         description = Description.fromJson(json['description']),
         preparationMethod =
             PreparationMethod.fromJson(json['preparationMethod']),
-        measurementMethod =
-            MeasurementMethod.fromJson(json['measurementMethod']),
-        measurementValue = MeasurementValue.fromJson(json['measurementValue']),
-        measurementUnit = MeasurementUnit.fromJson(json['measurementUnit']),
+        measurements = Measurement.jsonDecodeMeasurements(json['measurements']),
         recipe = json['recipe'] == '' ? null : Recipe.fromJson(json['recipe']),
         confirmed = json['confirmed'] == 'true' ? true : false;
 
@@ -58,9 +55,7 @@ class FoodItem extends Equatable {
     data['source'] = source.toJson();
     data['description'] = description.toJson();
     data['preparationMethod'] = preparationMethod.toJson();
-    data['measurementMethod'] = measurementMethod.toJson();
-    data['measurementValue'] = measurementValue.toJson();
-    data['measurementUnit'] = measurementUnit.toJson();
+    data['measurements'] = jsonEncode(measurements);
     data['recipe'] = recipe?.toJson() ?? '';
     data['confirmed'] = confirmed.toString();
     return data;
@@ -73,9 +68,7 @@ class FoodItem extends Equatable {
       Source? source,
       Description? description,
       PreparationMethod? preparationMethod,
-      MeasurementMethod? measurementMethod,
-      MeasurementValue? measurementValue,
-      MeasurementUnit? measurementUnit,
+      List<Measurement>? measurements,
       Recipe? recipe,
       bool? confirmed}) {
     return FoodItem(
@@ -85,9 +78,7 @@ class FoodItem extends Equatable {
         source: source ?? this.source,
         description: description ?? this.description,
         preparationMethod: preparationMethod ?? this.preparationMethod,
-        measurementMethod: measurementMethod ?? this.measurementMethod,
-        measurementValue: measurementValue ?? this.measurementValue,
-        measurementUnit: measurementUnit ?? this.measurementUnit,
+        measurements: measurements ?? this.measurements,
         recipe: recipe ?? this.recipe,
         confirmed: confirmed ?? this.confirmed);
   }
@@ -102,9 +93,7 @@ class FoodItem extends Equatable {
         source,
         description,
         preparationMethod,
-        measurementMethod,
-        measurementValue,
-        measurementUnit,
+        measurements,
         recipe,
         confirmed
       ];
@@ -182,7 +171,6 @@ class Source extends FormzInput<String, SourceValidationError> {
     'leftover',
     'wild food',
     'food aid',
-    'not applicable',
     'other'
   ];
 
@@ -271,110 +259,5 @@ class PreparationMethod
     return _allowedPreparationMethod.contains(_lowerCaseValue)
         ? null
         : PreparationMethodValidationError.invalid;
-  }
-}
-
-// TODO: allowed measurement methods are changed for not empty check only
-
-enum MeasurementMethodValidationError { invalid }
-
-class MeasurementMethod
-    extends FormzInput<String, MeasurementMethodValidationError> {
-  const MeasurementMethod.pure() : super.pure('');
-  const MeasurementMethod.dirty([String value = '']) : super.dirty(value);
-
-  final _allowedMeasurementMethod = const [
-    'direct weight',
-    'volume of water',
-    'volume of food',
-    'play dough',
-    'number',
-    'size (photo)',
-  ];
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['value'] = value;
-    data['pure'] = pure.toString();
-    return data;
-  }
-
-  MeasurementMethod.fromJson(Map<String, dynamic> json)
-      : super.dirty(json['value']);
-
-  @override
-  MeasurementMethodValidationError? validator(String? value) {
-    final _lowerCaseValue = (value ?? '').toLowerCase();
-    // TODO: refactor with a better null check
-    return _allowedMeasurementMethod.contains(_lowerCaseValue)
-        ? null
-        : MeasurementMethodValidationError.invalid;
-  }
-}
-
-enum MeasurementValueValidationError { invalid }
-
-// TODO: Investigate changing this to a string or float
-
-class MeasurementValue
-    extends FormzInput<String, MeasurementValueValidationError> {
-  const MeasurementValue.pure() : super.pure('');
-  const MeasurementValue.dirty([String value = '']) : super.dirty(value);
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['value'] = value;
-    data['pure'] = pure.toString();
-    return data;
-  }
-
-  MeasurementValue.fromJson(Map<String, dynamic> json)
-      : super.dirty(json['value']);
-
-  @override
-  MeasurementValueValidationError? validator(String? value) {
-    // TODO: Add validation, currently only checks if not empty
-    return value?.isNotEmpty == true
-        ? null
-        : MeasurementValueValidationError.invalid;
-  }
-}
-
-// TODO: allowed measurement units are changed for not empty check only
-
-enum MeasurementUnitValidationError { invalid }
-
-class MeasurementUnit
-    extends FormzInput<String, MeasurementUnitValidationError> {
-  const MeasurementUnit.pure() : super.pure('');
-  const MeasurementUnit.dirty([String value = '']) : super.dirty(value);
-
-  final _allowedMeasurementUnit = const [
-    'small spoon',
-    'big spoon',
-    'standard cup',
-    'small',
-    'medium',
-    'large',
-    'grams or millilitres' //TODO: check with ICRISAT if this is okay
-  ];
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['value'] = value;
-    data['pure'] = pure.toString();
-    return data;
-  }
-
-  MeasurementUnit.fromJson(Map<String, dynamic> json)
-      : super.dirty(json['value']);
-
-  @override
-  MeasurementUnitValidationError? validator(String? value) {
-    final _lowerCaseValue = (value ?? '').toLowerCase();
-    // TODO: refactor with a better null check
-    return _allowedMeasurementUnit.contains(_lowerCaseValue)
-        ? null
-        : MeasurementUnitValidationError.invalid;
   }
 }

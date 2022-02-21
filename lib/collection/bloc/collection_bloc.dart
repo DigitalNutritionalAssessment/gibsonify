@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:geolocator/geolocator.dart';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:gibsonify_repository/gibsonify_repository.dart';
@@ -13,15 +14,21 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
   CollectionBloc({required GibsonifyRepository gibsonifyRepository})
       : _gibsonifyRepository = gibsonifyRepository,
         super(CollectionState()) {
+    on<SelectedScreenChanged>(_onSelectedScreenChanged);
     on<HouseholdIdChanged>(_onHouseholdIdChanged);
     on<RespondentNameChanged>(_onRespondentNameChanged);
-    on<RespondentTelNumberChanged>(_onRespondentTelNumberChanged);
+    on<RespondentTelInfoChanged>(_onRespondentTelInfoChanged);
     on<SensitizationDateChanged>(_onSensitizationDateChanged);
     on<RecallDayChanged>(_onRecallDayChanged);
     on<InterviewDateChanged>(_onInterviewDateChanged);
     on<InterviewStartTimeChanged>(_onInterviewStartTimeChanged);
+    on<PictureChartCollectedChanged>(_onPictureChartCollectedChanged);
+    on<PictureChartNotCollectedReasonChanged>(
+        _onPictureChartNotCollectedReasonChanged);
     on<InterviewEndTimeChanged>(_onInterviewEndTimeChanged);
     on<InterviewOutcomeChanged>(_onInterviewOutcomeChanged);
+    on<InterviewOutcomeNotCompletedReasonChanged>(
+        _onInterviewOutcomeNotCompletedReasonChanged);
     on<CommentsChanged>(_onCommentsChanged);
     on<FoodItemAdded>(_onFoodItemAdded);
     on<FoodItemDeleted>(_onFoodItemDeleted);
@@ -30,6 +37,8 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     on<FoodItemSourceChanged>(_onFoodItemSourceChanged);
     on<FoodItemDescriptionChanged>(_onFoodItemDescriptionChanged);
     on<FoodItemPreparationMethodChanged>(_onFoodItemPreparationMethodChanged);
+    on<FoodItemMeasurementAdded>(_onFoodItemMeasurementAdded);
+    on<FoodItemMeasurementDeleted>(_onFoodItemMeasurementDeleted);
     on<FoodItemMeasurementMethodChanged>(_onFoodItemMeasurementMethodChanged);
     on<FoodItemMeasurementValueChanged>(_onFoodItemMeasurementValueChanged);
     on<FoodItemMeasurementUnitChanged>(_onFoodItemMeasurementUnitChanged);
@@ -38,6 +47,12 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     on<GibsonsFormSaved>(_onGibsonsFormSaved);
     on<GibsonsFormProvided>(_onGibsonsFormProvided);
     on<GibsonsFormCreated>(_onGibsonsFormCreated);
+    on<GeoLocationRequested>(_onGeoLocationRequested);
+  }
+
+  void _onSelectedScreenChanged(
+      SelectedScreenChanged event, Emitter<CollectionState> emit) {
+    emit(state.copyWith(selectedScreen: event.changedSelectedScreen));
   }
 
   void _onHouseholdIdChanged(
@@ -58,12 +73,14 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }
 
-  void _onRespondentTelNumberChanged(
-      RespondentTelNumberChanged event, Emitter<CollectionState> emit) {
+  void _onRespondentTelInfoChanged(
+      RespondentTelInfoChanged event, Emitter<CollectionState> emit) {
     final respondentTelNumber =
         RespondentTelNumber.dirty(event.respondentTelNumber);
-    GibsonsForm changedGibsonsForm =
-        state.gibsonsForm.copyWith(respondentTelNumber: respondentTelNumber);
+    GibsonsForm changedGibsonsForm = state.gibsonsForm.copyWith(
+        respondentCountryCode: event.respondentCountryCode,
+        respondentTelNumberPrefix: event.respondentTelNumberPrefix,
+        respondentTelNumber: respondentTelNumber);
 
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }
@@ -105,6 +122,25 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }
 
+  void _onPictureChartCollectedChanged(
+      PictureChartCollectedChanged event, Emitter<CollectionState> emit) {
+    final pictureChartCollected =
+        PictureChartCollected.dirty(event.pictureChartCollected);
+    GibsonsForm changedGibsonsForm = state.gibsonsForm
+        .copyWith(pictureChartCollected: pictureChartCollected);
+
+    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+  }
+
+  void _onPictureChartNotCollectedReasonChanged(
+      PictureChartNotCollectedReasonChanged event,
+      Emitter<CollectionState> emit) {
+    GibsonsForm changedGibsonsForm = state.gibsonsForm.copyWith(
+        pictureChartNotCollectedReason: event.pictureChartNotCollectedReason);
+
+    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+  }
+
   void _onInterviewEndTimeChanged(
       InterviewEndTimeChanged event, Emitter<CollectionState> emit) {
     final interviewEndTime = InterviewEndTime.dirty(event.interviewEndTime);
@@ -119,6 +155,16 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     final interviewOutcome = InterviewOutcome.dirty(event.interviewOutcome);
     GibsonsForm changedGibsonsForm =
         state.gibsonsForm.copyWith(interviewOutcome: interviewOutcome);
+
+    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+  }
+
+  void _onInterviewOutcomeNotCompletedReasonChanged(
+      InterviewOutcomeNotCompletedReasonChanged event,
+      Emitter<CollectionState> emit) {
+    GibsonsForm changedGibsonsForm = state.gibsonsForm.copyWith(
+        interviewOutcomeNotCompletedReason:
+            event.interviewOutcomeNotCompletedReason);
 
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }
@@ -256,6 +302,65 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }
 
+  void _onFoodItemMeasurementAdded(
+      FoodItemMeasurementAdded event, Emitter<CollectionState> emit) {
+    // TODO: refactor all of this finding an item and changing
+    // it logic to one reusable function, probably a method of the GibsonsForm
+    // class
+    List<FoodItem> foodItems = List.from(state.gibsonsForm.foodItems);
+
+    // TODO: change into UUID-based indexing
+    int changedFoodItemIndex = foodItems.indexOf(event.foodItem);
+
+    List<Measurement> measurements =
+        List.from(foodItems[changedFoodItemIndex].measurements);
+
+    final measurement = Measurement();
+
+    measurements.add(measurement);
+
+    FoodItem foodItem = foodItems[changedFoodItemIndex]
+        .copyWith(measurements: measurements, confirmed: false);
+
+    foodItems.removeAt(changedFoodItemIndex);
+    foodItems.insert(changedFoodItemIndex, foodItem);
+
+    GibsonsForm changedGibsonsForm =
+        state.gibsonsForm.copyWith(foodItems: foodItems);
+
+    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+  }
+
+  void _onFoodItemMeasurementDeleted(
+      FoodItemMeasurementDeleted event, Emitter<CollectionState> emit) {
+    // TODO: refactor all of this finding an item and changing
+    // it logic to one reusable function, probably a method of the GibsonsForm
+    // class
+    List<FoodItem> foodItems = List.from(state.gibsonsForm.foodItems);
+
+    // TODO: change into UUID-based indexing
+    int changedFoodItemIndex = foodItems.indexOf(event.foodItem);
+
+    List<Measurement> measurements =
+        List.from(foodItems[changedFoodItemIndex].measurements);
+
+    // TODO: refactor to UUID based indexing of measurements
+    int changedmeasurementIndex = event.measurementIndex;
+
+    measurements.removeAt(changedmeasurementIndex);
+
+    FoodItem foodItem = foodItems[changedFoodItemIndex]
+        .copyWith(measurements: measurements, confirmed: false);
+
+    foodItems.removeAt(changedFoodItemIndex);
+    foodItems.insert(changedFoodItemIndex, foodItem);
+
+    GibsonsForm changedGibsonsForm =
+        state.gibsonsForm.copyWith(foodItems: foodItems);
+
+    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+  }
+
   void _onFoodItemMeasurementMethodChanged(
       FoodItemMeasurementMethodChanged event, Emitter<CollectionState> emit) {
     // TODO: refactor all of this finding an item and changing
@@ -266,10 +371,18 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     // TODO: change into UUID-based indexing
     int changedFoodItemIndex = foodItems.indexOf(event.foodItem);
 
-    FoodItem foodItem = foodItems[changedFoodItemIndex].copyWith(
-        measurementMethod:
-            MeasurementMethod.dirty(event.foodItemMeasurementMethod),
-        confirmed: false);
+    List<Measurement> measurements =
+        List.from(foodItems[changedFoodItemIndex].measurements);
+    int changedmeasurementIndex = event.measurementIndex;
+
+    Measurement measurement = measurements[changedmeasurementIndex]
+        .copyWith(measurementMethod: event.foodItemMeasurementMethod);
+
+    measurements.removeAt(changedmeasurementIndex);
+    measurements.insert(changedmeasurementIndex, measurement);
+
+    FoodItem foodItem = foodItems[changedFoodItemIndex]
+        .copyWith(measurements: measurements, confirmed: false);
 
     foodItems.removeAt(changedFoodItemIndex);
     foodItems.insert(changedFoodItemIndex, foodItem);
@@ -290,10 +403,18 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     // TODO: change into UUID-based indexing
     int changedFoodItemIndex = foodItems.indexOf(event.foodItem);
 
-    FoodItem foodItem = foodItems[changedFoodItemIndex].copyWith(
-        measurementValue:
-            MeasurementValue.dirty(event.foodItemMeasurementValue),
-        confirmed: false);
+    List<Measurement> measurements =
+        List.from(foodItems[changedFoodItemIndex].measurements);
+    int changedmeasurementIndex = event.measurementIndex;
+
+    Measurement measurement = measurements[changedmeasurementIndex]
+        .copyWith(measurementValue: event.foodItemMeasurementValue);
+
+    measurements.removeAt(changedmeasurementIndex);
+    measurements.insert(changedmeasurementIndex, measurement);
+
+    FoodItem foodItem = foodItems[changedFoodItemIndex]
+        .copyWith(measurements: measurements, confirmed: false);
 
     foodItems.removeAt(changedFoodItemIndex);
     foodItems.insert(changedFoodItemIndex, foodItem);
@@ -314,9 +435,18 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     // TODO: change into UUID-based indexing
     int changedFoodItemIndex = foodItems.indexOf(event.foodItem);
 
-    FoodItem foodItem = foodItems[changedFoodItemIndex].copyWith(
-        measurementUnit: MeasurementUnit.dirty(event.foodItemMeasurementUnit),
-        confirmed: false);
+    List<Measurement> measurements =
+        List.from(foodItems[changedFoodItemIndex].measurements);
+    int changedmeasurementIndex = event.measurementIndex;
+
+    Measurement measurement = measurements[changedmeasurementIndex]
+        .copyWith(measurementUnit: event.foodItemMeasurementUnit);
+
+    measurements.removeAt(changedmeasurementIndex);
+    measurements.insert(changedmeasurementIndex, measurement);
+
+    FoodItem foodItem = foodItems[changedFoodItemIndex]
+        .copyWith(measurements: measurements, confirmed: false);
 
     foodItems.removeAt(changedFoodItemIndex);
     foodItems.insert(changedFoodItemIndex, foodItem);
@@ -381,12 +511,87 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
   // TODO: Delete the async?
   void _onGibsonsFormProvided(
       GibsonsFormProvided event, Emitter<CollectionState> emit) async {
-    emit(state.copyWith(gibsonsForm: event.gibsonsForm));
+    emit(state.copyWith(
+        gibsonsForm: event.gibsonsForm,
+        selectedScreen: SelectedScreen.sensitization,
+        geoLocationStatus: GeoLocationStatus.none));
   }
 
   void _onGibsonsFormCreated(
       GibsonsFormCreated event, Emitter<CollectionState> emit) {
     GibsonsForm gibsonsFormCreated = GibsonsForm();
-    emit(state.copyWith(gibsonsForm: gibsonsFormCreated));
+    emit(state.copyWith(
+        gibsonsForm: gibsonsFormCreated,
+        selectedScreen: SelectedScreen.sensitization,
+        geoLocationStatus: GeoLocationStatus.none));
+  }
+
+  Future<void> _onGeoLocationRequested(
+      GeoLocationRequested event, Emitter<CollectionState> emit) async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      emit(state.copyWith(
+          geoLocationStatus: GeoLocationStatus.locationDisabled));
+      return;
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        emit(state.copyWith(
+            geoLocationStatus: GeoLocationStatus.locationDenied));
+        return;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      emit(state.copyWith(
+          geoLocationStatus: GeoLocationStatus.locationPermanentlyDenied));
+      return;
+    }
+
+    emit(
+        state.copyWith(geoLocationStatus: GeoLocationStatus.locationRequested));
+
+    String? geoLocationFormatted;
+
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+          timeLimit: const Duration(seconds: 45));
+
+      geoLocationFormatted =
+          position.latitude.toString() + ', ' + position.longitude.toString();
+    } catch (e) {
+      emit(state.copyWith(
+          geoLocationStatus: GeoLocationStatus.locationTimedOut));
+
+      geoLocationFormatted = 'Undetermined';
+    }
+
+    GeoLocation geoLocation = GeoLocation.dirty(geoLocationFormatted);
+
+    GibsonsForm changedGibsonsForm =
+        state.gibsonsForm.copyWith(geoLocation: geoLocation);
+
+    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+
+    if (geoLocationFormatted != 'Undetermined') {
+      emit(state.copyWith(
+          geoLocationStatus: GeoLocationStatus.locationDetermined));
+    }
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:gibsonify/collection/collection.dart';
 import 'package:gibsonify/home/home.dart';
+import 'package:gibsonify_api/gibsonify_api.dart';
 
 class FinishCollectionPage extends StatelessWidget {
   const FinishCollectionPage({Key? key}) : super(key: key);
@@ -50,11 +51,77 @@ class FinishCollectionForm extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: const <Widget>[
+          PictureChartCollectedInput(),
+          PictureChartNotCollectedReason(),
           InterviewEndTimeInput(),
           InterviewOutcomeInput(),
+          InterviewOutcomeNotCompletedReason(),
           CommentsInput()
         ],
       ),
+    );
+  }
+}
+
+class PictureChartCollectedInput extends StatelessWidget {
+  const PictureChartCollectedInput({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    const List<DropdownMenuItem<String>> dropdownMenuItems = [
+      DropdownMenuItem(child: Text(''), value: ''),
+      DropdownMenuItem(child: Text('Yes'), value: 'Yes'),
+      DropdownMenuItem(child: Text('No'), value: 'No')
+    ];
+    return BlocBuilder<CollectionBloc, CollectionState>(
+      builder: (context, state) {
+        return DropdownButtonFormField(
+            value: state.gibsonsForm.pictureChartCollected.value,
+            decoration: InputDecoration(
+                icon: const Icon(Icons.photo_size_select_actual_rounded),
+                labelText: 'Is picture chart collected',
+                helperText: 'Have you collected the picture chart?',
+                errorText: state.gibsonsForm.pictureChartCollected.invalid
+                    ? 'Select if you collected the picture chart'
+                    : null),
+            items: dropdownMenuItems,
+            onChanged: (String? value) {
+              context.read<CollectionBloc>().add(PictureChartCollectedChanged(
+                  pictureChartCollected: value ?? ''));
+            });
+      },
+    );
+  }
+}
+
+class PictureChartNotCollectedReason extends StatelessWidget {
+  const PictureChartNotCollectedReason({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CollectionBloc, CollectionState>(
+      builder: (context, state) {
+        return Visibility(
+            visible: state.gibsonsForm.pictureChartCollected.valid &&
+                !state.gibsonsForm.isPictureChartCollected(),
+            child: TextFormField(
+              initialValue: state.gibsonsForm.pictureChartNotCollectedReason,
+              decoration: InputDecoration(
+                icon: const Icon(Icons.device_unknown_outlined),
+                labelText: 'Reason for not collecting the picture chart',
+                helperText: 'Why did you not collect the picture chart',
+                errorText:
+                    state.gibsonsForm.pictureChartNotCollectedReason.isEmpty
+                        ? 'Choose the reason'
+                        : null,
+              ),
+              onChanged: (value) {
+                context.read<CollectionBloc>().add(
+                    PictureChartNotCollectedReasonChanged(
+                        pictureChartNotCollectedReason: value));
+              },
+            ));
+      },
     );
   }
 }
@@ -122,6 +189,39 @@ class InterviewOutcomeInput extends StatelessWidget {
                   .read<CollectionBloc>()
                   .add(InterviewOutcomeChanged(interviewOutcome: value ?? ''));
             });
+      },
+    );
+  }
+}
+
+class InterviewOutcomeNotCompletedReason extends StatelessWidget {
+  const InterviewOutcomeNotCompletedReason({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CollectionBloc, CollectionState>(
+      builder: (context, state) {
+        return Visibility(
+            visible: state.gibsonsForm.interviewOutcome.valid &&
+                !state.gibsonsForm.isInterviewOutcomeCompleted(),
+            child: TextFormField(
+              initialValue:
+                  state.gibsonsForm.interviewOutcomeNotCompletedReason,
+              decoration: InputDecoration(
+                icon: const Icon(Icons.device_unknown_outlined),
+                labelText: 'Reason for not completing the interview',
+                helperText: 'Why did you not complete the interview',
+                errorText:
+                    state.gibsonsForm.interviewOutcomeNotCompletedReason.isEmpty
+                        ? 'Explain the reason'
+                        : null,
+              ),
+              onChanged: (value) {
+                context.read<CollectionBloc>().add(
+                    InterviewOutcomeNotCompletedReasonChanged(
+                        interviewOutcomeNotCompletedReason: value));
+              },
+            ));
       },
     );
   }

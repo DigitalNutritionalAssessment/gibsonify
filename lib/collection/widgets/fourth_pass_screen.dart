@@ -28,12 +28,20 @@ class FourthPassScreen extends StatelessWidget {
                 itemCount: state.gibsonsForm.foodItems.length,
                 itemBuilder: (context, index) {
                   return FourthPassFoodItemCard(
-                      foodItem: state.gibsonsForm.foodItems[index],
-                      onConfirmationChanged: (negatedConfirmation) => context
-                          .read<CollectionBloc>()
-                          .add(FoodItemConfirmationChanged(
-                              foodItem: state.gibsonsForm.foodItems[index],
-                              foodItemConfirmed: negatedConfirmation)));
+                    foodItem: state.gibsonsForm.foodItems[index],
+                    onConfirmationChanged: (negatedConfirmation) => context
+                        .read<CollectionBloc>()
+                        .add(FoodItemConfirmationChanged(
+                            foodItem: state.gibsonsForm.foodItems[index],
+                            foodItemConfirmed: negatedConfirmation)),
+                    onDeleted: () => context.read<CollectionBloc>().add(
+                        FoodItemDeleted(
+                            foodItem: state.gibsonsForm.foodItems[index])),
+                    onSelectedScreenChanged: (screen) => context
+                        .read<CollectionBloc>()
+                        .add(SelectedScreenChanged(
+                            changedSelectedScreen: screen)),
+                  );
                 }),
             floatingActionButton: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -41,10 +49,37 @@ class FourthPassScreen extends StatelessWidget {
                 children: <Widget>[
                   FloatingActionButton.extended(
                       heroTag: null,
+                      label: const Text("New Food"),
+                      icon: const Icon(Icons.add),
+                      onPressed: () {
+                        context.read<CollectionBloc>().add(FoodItemAdded());
+                        context.read<CollectionBloc>().add(
+                            const SelectedScreenChanged(
+                                changedSelectedScreen:
+                                    SelectedScreen.firstPass));
+                        // TODO: Add a ScrollController to BLoC state,
+                        // pass it to first pass screen ListView and
+                        // scroll down in this onPressed call
+                      }),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  FloatingActionButton.extended(
+                      heroTag: null,
                       label: const Text("Finish Collection"),
                       icon: const Icon(Icons.check),
-                      onPressed: () => Navigator.pushNamed(
-                          context, PageRouter.finishCollection))
+                      onPressed: () {
+                        const confirmAllFoodItemsSnackBar = SnackBar(
+                            content: Text(
+                                'Confirm all food items before finishing!'));
+                        if (state.gibsonsForm.allFoodItemsConfirmed()) {
+                          Navigator.pushNamed(
+                              context, PageRouter.finishCollection);
+                        } else {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(confirmAllFoodItemsSnackBar);
+                        }
+                      }),
                 ]));
       },
     );

@@ -12,13 +12,19 @@ class GibsonsForm extends Equatable {
       {String? id,
       this.householdId = const HouseholdId.pure(),
       this.respondentName = const RespondentName.pure(),
+      this.respondentCountryCode = '',
+      this.respondentTelNumberPrefix = '',
       this.respondentTelNumber = const RespondentTelNumber.pure(),
       this.sensitizationDate = const SensitizationDate.pure(),
       this.recallDay = const RecallDay.pure(),
       this.interviewDate = const InterviewDate.pure(),
       this.interviewStartTime = const InterviewStartTime.pure(),
+      this.geoLocation = const GeoLocation.pure(),
+      this.pictureChartCollected = const PictureChartCollected.pure(),
+      this.pictureChartNotCollectedReason = '',
       this.interviewEndTime = const InterviewEndTime.pure(),
       this.interviewOutcome = const InterviewOutcome.pure(),
+      this.interviewOutcomeNotCompletedReason = '',
       this.comments = const Comments.pure(),
       this.foodItems = const <FoodItem>[]})
       : id = id ?? const Uuid().v4();
@@ -26,20 +32,25 @@ class GibsonsForm extends Equatable {
   final String id;
   final HouseholdId householdId;
   final RespondentName respondentName;
+  final String respondentCountryCode;
+  final String respondentTelNumberPrefix;
   final RespondentTelNumber respondentTelNumber;
   final SensitizationDate sensitizationDate;
   final RecallDay recallDay;
   final InterviewDate interviewDate;
   final InterviewStartTime interviewStartTime;
+  final GeoLocation geoLocation;
+  final PictureChartCollected pictureChartCollected;
+  final String pictureChartNotCollectedReason;
   final InterviewEndTime interviewEndTime;
   final InterviewOutcome interviewOutcome;
+  final String interviewOutcomeNotCompletedReason;
   final Comments comments;
   final List<FoodItem> foodItems;
 
   // TODO: add other fields from physical Gibson's form:
   // end of interview, did complete interview in one visit? (bool),
-  // date of second visit, reason for second visit, final outcome of interview,
-  // reason for incomplete interview, supervisor comments.
+  // date of second visit, reason for second visit...
 
   // TODO: implement code generation JSON serialization using json_serializable
   // and/or json_annotation
@@ -48,6 +59,8 @@ class GibsonsForm extends Equatable {
       : id = json['id'],
         householdId = HouseholdId.fromJson(json['householdId']),
         respondentName = RespondentName.fromJson(json['respondentName']),
+        respondentCountryCode = json['respondentCountryCode'],
+        respondentTelNumberPrefix = json['respondentTelNumberPrefix'],
         respondentTelNumber =
             RespondentTelNumber.fromJson(json['respondentTelNumber']),
         sensitizationDate =
@@ -56,8 +69,14 @@ class GibsonsForm extends Equatable {
         interviewDate = InterviewDate.fromJson(json['interviewDate']),
         interviewStartTime =
             InterviewStartTime.fromJson(json['interviewStartTime']),
+        geoLocation = GeoLocation.fromJson(json['geoLocation']),
+        pictureChartCollected =
+            PictureChartCollected.fromJson(json['pictureChartCollected']),
+        pictureChartNotCollectedReason = json['pictureChartNotCollectedReason'],
         interviewEndTime = InterviewEndTime.fromJson(json['interviewEndTime']),
         interviewOutcome = InterviewOutcome.fromJson(json['interviewOutcome']),
+        interviewOutcomeNotCompletedReason =
+            json['interviewOutcomeNotCompletedReason'],
         comments = Comments.fromJson(json['comments']),
         foodItems = _jsonDecodeFoodItems(json['foodItems']);
 
@@ -66,13 +85,20 @@ class GibsonsForm extends Equatable {
     data['id'] = id;
     data['householdId'] = householdId.toJson();
     data['respondentName'] = respondentName.toJson();
+    data['respondentCountryCode'] = respondentCountryCode;
+    data['respondentTelNumberPrefix'] = respondentTelNumberPrefix;
     data['respondentTelNumber'] = respondentTelNumber.toJson();
     data['sensitizationDate'] = sensitizationDate.toJson();
     data['recallDay'] = recallDay.toJson();
     data['interviewDate'] = interviewDate.toJson();
     data['interviewStartTime'] = interviewStartTime.toJson();
+    data['geoLocation'] = geoLocation.toJson();
+    data['pictureChartCollected'] = pictureChartCollected.toJson();
+    data['pictureChartNotCollectedReason'] = pictureChartNotCollectedReason;
     data['interviewEndTime'] = interviewEndTime.toJson();
     data['interviewOutcome'] = interviewOutcome.toJson();
+    data['interviewOutcomeNotCompletedReason'] =
+        interviewOutcomeNotCompletedReason;
     data['comments'] = comments.toJson();
     data['foodItems'] = jsonEncode(foodItems); // This calls toJson on each one
     return data;
@@ -82,26 +108,44 @@ class GibsonsForm extends Equatable {
       {String? id,
       HouseholdId? householdId,
       RespondentName? respondentName,
+      String? respondentCountryCode,
+      String? respondentTelNumberPrefix,
       RespondentTelNumber? respondentTelNumber,
       SensitizationDate? sensitizationDate,
       RecallDay? recallDay,
       InterviewDate? interviewDate,
       InterviewStartTime? interviewStartTime,
+      GeoLocation? geoLocation,
+      PictureChartCollected? pictureChartCollected,
+      String? pictureChartNotCollectedReason,
       InterviewEndTime? interviewEndTime,
       InterviewOutcome? interviewOutcome,
+      String? interviewOutcomeNotCompletedReason,
       Comments? comments,
       List<FoodItem>? foodItems}) {
     return GibsonsForm(
         id: id ?? this.id,
         householdId: householdId ?? this.householdId,
         respondentName: respondentName ?? this.respondentName,
+        respondentCountryCode:
+            respondentCountryCode ?? this.respondentCountryCode,
+        respondentTelNumberPrefix:
+            respondentTelNumberPrefix ?? this.respondentTelNumberPrefix,
         respondentTelNumber: respondentTelNumber ?? this.respondentTelNumber,
         sensitizationDate: sensitizationDate ?? this.sensitizationDate,
         recallDay: recallDay ?? this.recallDay,
         interviewDate: interviewDate ?? this.interviewDate,
         interviewStartTime: interviewStartTime ?? this.interviewStartTime,
+        geoLocation: geoLocation ?? this.geoLocation,
+        pictureChartCollected:
+            pictureChartCollected ?? this.pictureChartCollected,
+        pictureChartNotCollectedReason: pictureChartNotCollectedReason ??
+            this.pictureChartNotCollectedReason,
         interviewEndTime: interviewEndTime ?? this.interviewEndTime,
         interviewOutcome: interviewOutcome ?? this.interviewOutcome,
+        interviewOutcomeNotCompletedReason:
+            interviewOutcomeNotCompletedReason ??
+                this.interviewOutcomeNotCompletedReason,
         comments: comments ?? this.comments,
         foodItems: foodItems ?? this.foodItems);
   }
@@ -112,13 +156,20 @@ class GibsonsForm extends Equatable {
         'UUID: $id\n'
         'HouseholdID: $householdId\n'
         'Repondent Name: $respondentName\n'
+        'Repondent Country Code: $respondentCountryCode\n'
+        'Respondent Tel Number Prefix: $respondentTelNumberPrefix\n'
         'Respondent Tel Number: $respondentTelNumber\n'
         'Sensitization Date: $sensitizationDate\n'
         'Recall Day: $recallDay\n'
         'Interview Date: $interviewDate\n'
         'Interview Start Time: $interviewStartTime\n'
+        'Geo Location: $geoLocation\n'
+        'Picture Chart Collected: $pictureChartCollected\n'
+        'Picture Chart Not Collected Reason: $pictureChartNotCollectedReason\n'
         'Interview End Time: $interviewEndTime\n'
         'Interview Outcome: $interviewOutcome\n'
+        'Interview Outcome Not Completed Reason: '
+        '$interviewOutcomeNotCompletedReason\n'
         'Comments: $comments\n'
         'Food Items: $foodItems'
         '\n *** \n';
@@ -129,16 +180,54 @@ class GibsonsForm extends Equatable {
         id,
         householdId,
         respondentName,
+        respondentCountryCode,
+        respondentTelNumberPrefix,
         respondentTelNumber,
         sensitizationDate,
         recallDay,
         interviewDate,
         interviewStartTime,
+        geoLocation,
+        pictureChartCollected,
+        pictureChartNotCollectedReason,
         interviewEndTime,
         interviewOutcome,
+        interviewOutcomeNotCompletedReason,
         comments,
         foodItems
       ];
+
+  bool allFoodItemsConfirmed() {
+    return foodItems.every((foodItem) => foodItem.confirmed);
+  }
+
+  bool isPictureChartCollected() {
+    return pictureChartCollected.value.toLowerCase() == 'yes';
+  }
+
+  bool isInterviewOutcomeCompleted() {
+    return interviewOutcome.value.toLowerCase() == 'completed';
+  }
+
+  bool isInterviewDateValid() {
+    // TODO: change to checking if form field has been modified using null after
+    // dropping Formz
+    if (sensitizationDate.pure || interviewDate.pure) {
+      return true;
+    }
+    try {
+      // TODO: refactor sensitizationDate and interviewDate to be DateTime fields
+      // so that wouldn't have to parse in this method, just compare
+      var parsedSensitizationDate = DateTime.parse(sensitizationDate.value);
+      var parsedInterviewDate = DateTime.parse(interviewDate.value);
+      bool isInterviewAtLeastTwoDaysAfterSensitization = parsedInterviewDate
+          .subtract(Duration(days: 1))
+          .isAfter(parsedSensitizationDate);
+      return isInterviewAtLeastTwoDaysAfterSensitization;
+    } catch (e) {
+      return false;
+    }
+  }
 }
 
 List<FoodItem> _jsonDecodeFoodItems(jsonEncodedFoodItems) {
@@ -170,7 +259,9 @@ class HouseholdId extends FormzInput<String, HouseholdIdValidationError> {
   HouseholdIdValidationError? validator(String value) {
     // TODO: Add validation based on ICRISAT's criteria, currently
     // only checks if at least 2 symbols
-    return value.length > 1 ? null : HouseholdIdValidationError.invalid;
+    return value.length >= 10 && value.length <= 15
+        ? null
+        : HouseholdIdValidationError.invalid;
   }
 }
 
@@ -335,6 +426,56 @@ class InterviewStartTime
     return value?.isNotEmpty == true
         ? null
         : InterviewStartTimeValidationError.invalid;
+  }
+}
+
+enum GeoLocationValidationError { invalid }
+
+class GeoLocation extends FormzInput<String, GeoLocationValidationError> {
+  const GeoLocation.pure() : super.pure('');
+  const GeoLocation.dirty([String value = '']) : super.dirty(value);
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['value'] = value;
+    data['pure'] = pure.toString();
+    return data;
+  }
+
+  GeoLocation.fromJson(Map<String, dynamic> json) : super.dirty(json['value']);
+
+  @override
+  GeoLocationValidationError? validator(String? value) {
+    // TODO: Add validation, currently only checks if not empty
+    return value?.isNotEmpty == true
+        ? null
+        : GeoLocationValidationError.invalid;
+  }
+}
+
+enum PictureChartCollectedValidationError { invalid }
+
+class PictureChartCollected
+    extends FormzInput<String, PictureChartCollectedValidationError> {
+  const PictureChartCollected.pure() : super.pure('');
+  const PictureChartCollected.dirty([String value = '']) : super.dirty(value);
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['value'] = value;
+    data['pure'] = pure.toString();
+    return data;
+  }
+
+  PictureChartCollected.fromJson(Map<String, dynamic> json)
+      : super.dirty(json['value']);
+
+  @override
+  PictureChartCollectedValidationError? validator(String? value) {
+    // TODO: Add validation, currently only checks if not empty
+    return value?.isNotEmpty == true
+        ? null
+        : PictureChartCollectedValidationError.invalid;
   }
 }
 

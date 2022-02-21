@@ -34,7 +34,6 @@ class SecondPassFoodItemCard extends StatelessWidget {
       DropdownMenuItem(child: Text('Wild food'), value: 'Wild food'),
       DropdownMenuItem(child: Text('Food aid'), value: 'Food aid'),
       DropdownMenuItem(child: Text('Other'), value: 'Other'),
-      DropdownMenuItem(child: Text('Not applicable'), value: 'Not applicable')
     ];
     const List<DropdownMenuItem<String>> preparationMethodDropdownMenuItems = [
       DropdownMenuItem(child: Text(''), value: ''),

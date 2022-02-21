@@ -7,6 +7,14 @@ abstract class CollectionEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class SelectedScreenChanged extends CollectionEvent {
+  final SelectedScreen changedSelectedScreen;
+  const SelectedScreenChanged({required this.changedSelectedScreen});
+
+  @override
+  List<Object> get props => [changedSelectedScreen];
+}
+
 class HouseholdIdChanged extends CollectionEvent {
   final String householdId;
 
@@ -25,13 +33,19 @@ class RespondentNameChanged extends CollectionEvent {
   List<Object> get props => [respondentName];
 }
 
-class RespondentTelNumberChanged extends CollectionEvent {
+class RespondentTelInfoChanged extends CollectionEvent {
+  final String respondentCountryCode;
+  final String respondentTelNumberPrefix;
   final String respondentTelNumber;
 
-  const RespondentTelNumberChanged({required this.respondentTelNumber});
+  const RespondentTelInfoChanged(
+      {required this.respondentCountryCode,
+      required this.respondentTelNumberPrefix,
+      required this.respondentTelNumber});
 
   @override
-  List<Object> get props => [respondentTelNumber];
+  List<Object> get props =>
+      [respondentCountryCode, respondentTelNumberPrefix, respondentTelNumber];
 }
 
 class SensitizationDateChanged extends CollectionEvent {
@@ -70,6 +84,25 @@ class InterviewStartTimeChanged extends CollectionEvent {
   List<Object> get props => [interviewStartTime];
 }
 
+class PictureChartCollectedChanged extends CollectionEvent {
+  final String pictureChartCollected;
+
+  const PictureChartCollectedChanged({required this.pictureChartCollected});
+
+  @override
+  List<Object> get props => [pictureChartCollected];
+}
+
+class PictureChartNotCollectedReasonChanged extends CollectionEvent {
+  final String pictureChartNotCollectedReason;
+
+  const PictureChartNotCollectedReasonChanged(
+      {required this.pictureChartNotCollectedReason});
+
+  @override
+  List<Object> get props => [pictureChartNotCollectedReason];
+}
+
 class InterviewEndTimeChanged extends CollectionEvent {
   final String interviewEndTime;
 
@@ -86,6 +119,16 @@ class InterviewOutcomeChanged extends CollectionEvent {
 
   @override
   List<Object> get props => [interviewOutcome];
+}
+
+class InterviewOutcomeNotCompletedReasonChanged extends CollectionEvent {
+  final String interviewOutcomeNotCompletedReason;
+
+  const InterviewOutcomeNotCompletedReasonChanged(
+      {required this.interviewOutcomeNotCompletedReason});
+
+  @override
+  List<Object> get props => [interviewOutcomeNotCompletedReason];
 }
 
 class CommentsChanged extends CollectionEvent {
@@ -180,46 +223,84 @@ class FoodItemPreparationMethodChanged extends CollectionEvent {
   List<Object> get props => [foodItemPreparationMethod, foodItem];
 }
 
-class FoodItemMeasurementMethodChanged extends CollectionEvent {
-  final String foodItemMeasurementMethod; // TODO: change to an enum?
+class FoodItemMeasurementAdded extends CollectionEvent {
   // TODO: delete foodItem and pass only uuid instead
   final FoodItem foodItem;
   // TODO: implement
   // final String foodItemUuid;
 
-  const FoodItemMeasurementMethodChanged(
-      {required this.foodItemMeasurementMethod, required this.foodItem});
+  const FoodItemMeasurementAdded({required this.foodItem});
 
   @override
-  List<Object> get props => [foodItemMeasurementMethod, foodItem];
+  List<Object> get props => [foodItem];
+}
+
+class FoodItemMeasurementDeleted extends CollectionEvent {
+  // TODO: delete foodItem and pass only uuid instead
+  final FoodItem foodItem;
+  final int measurementIndex;
+
+  const FoodItemMeasurementDeleted(
+      {required this.foodItem, required this.measurementIndex});
+
+  @override
+  List<Object> get props => [foodItem, measurementIndex];
+}
+
+class FoodItemMeasurementMethodChanged extends CollectionEvent {
+  // TODO: delete foodItem and pass only uuid instead
+  final FoodItem foodItem;
+  // TODO: implement
+  // final String foodItemUuid;
+  final int measurementIndex;
+  // TODO: rename to just measurementMethod, do also for Value and Unit events
+  final String foodItemMeasurementMethod; // TODO: change to an enum?
+
+  const FoodItemMeasurementMethodChanged({
+    required this.measurementIndex,
+    required this.foodItemMeasurementMethod,
+    required this.foodItem,
+  });
+
+  @override
+  List<Object> get props =>
+      [measurementIndex, foodItemMeasurementMethod, foodItem];
 }
 
 class FoodItemMeasurementValueChanged extends CollectionEvent {
-  final String foodItemMeasurementValue; // TODO: change to an enum?
-  // TODO: delete foodItem and pass only uuid instead
   final FoodItem foodItem;
   // TODO: implement
   // final String foodItemUuid;
+  final int measurementIndex;
+  final String foodItemMeasurementValue; // TODO: change to an enum?
+  // TODO: delete foodItem and pass only uuid instead
 
   const FoodItemMeasurementValueChanged(
-      {required this.foodItemMeasurementValue, required this.foodItem});
+      {required this.measurementIndex,
+      required this.foodItemMeasurementValue,
+      required this.foodItem});
 
   @override
-  List<Object> get props => [foodItemMeasurementValue, foodItem];
+  List<Object> get props =>
+      [measurementIndex, foodItemMeasurementValue, foodItem];
 }
 
 class FoodItemMeasurementUnitChanged extends CollectionEvent {
-  final String foodItemMeasurementUnit; // TODO: change to an enum?
-  // TODO: delete foodItem and pass only uuid instead
   final FoodItem foodItem;
   // TODO: implement
   // final String foodItemUuid;
+  final int measurementIndex;
+  final String foodItemMeasurementUnit; // TODO: change to an enum?
+  // TODO: delete foodItem and pass only uuid instead
 
   const FoodItemMeasurementUnitChanged(
-      {required this.foodItemMeasurementUnit, required this.foodItem});
+      {required this.measurementIndex,
+      required this.foodItemMeasurementUnit,
+      required this.foodItem});
 
   @override
-  List<Object> get props => [foodItemMeasurementUnit, foodItem];
+  List<Object> get props =>
+      [measurementIndex, foodItemMeasurementUnit, foodItem];
 }
 
 class FoodItemConfirmationChanged extends CollectionEvent {
@@ -267,6 +348,13 @@ class GibsonsFormProvided extends CollectionEvent {
 // one
 class GibsonsFormCreated extends CollectionEvent {
   const GibsonsFormCreated();
+
+  @override
+  List<Object> get props => [];
+}
+
+class GeoLocationRequested extends CollectionEvent {
+  const GeoLocationRequested();
 
   @override
   List<Object> get props => [];

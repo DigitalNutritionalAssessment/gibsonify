@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 
 import 'package:gibsonify/home/home.dart';
 import 'package:gibsonify/collection/collection.dart';
@@ -45,11 +46,12 @@ class SensitizationForm extends StatelessWidget {
         children: const <Widget>[
           HouseholdIdInput(),
           RespondentNameInput(),
-          RespondentTelNumberInput(),
+          RespondentTelInfoInput(),
           SensitizationDateInput(),
           RecallDayInput(),
           InterviewDateInput(),
-          InterviewStartTimeInput()
+          InterviewStartTimeInput(),
+          GeoLocationInput()
         ],
       ),
     );
@@ -117,30 +119,31 @@ class RespondentNameInput extends StatelessWidget {
   }
 }
 
-class RespondentTelNumberInput extends StatelessWidget {
-  const RespondentTelNumberInput({Key? key}) : super(key: key);
+class RespondentTelInfoInput extends StatelessWidget {
+  const RespondentTelInfoInput({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CollectionBloc, CollectionState>(
       builder: (context, state) {
-        return TextFormField(
-          initialValue: state.gibsonsForm.respondentTelNumber.value,
-          keyboardType: TextInputType.phone,
-          decoration: InputDecoration(
-            icon: const Icon(Icons.phone),
+        return IntlPhoneField(
+          invalidNumberMessage: 'Enter a valid tel. number',
+          decoration: const InputDecoration(
             labelText: 'Respondent Tel. Number',
+            icon: Icon(Icons.phone),
             helperText: 'Full tel. number of respondent e.g. +447448238123',
-            errorText: state.gibsonsForm.respondentTelNumber.invalid
-                ? 'Enter valid tel. number'
-                : null,
           ),
-          onChanged: (value) {
-            context
-                .read<CollectionBloc>()
-                .add(RespondentTelNumberChanged(respondentTelNumber: value));
+          initialValue: state.gibsonsForm.respondentTelNumber.value,
+          initialCountryCode:
+              state.gibsonsForm.respondentTelNumber.value.isEmpty
+                  ? 'IN'
+                  : state.gibsonsForm.respondentCountryCode,
+          onChanged: (phoneNumber) {
+            context.read<CollectionBloc>().add(RespondentTelInfoChanged(
+                respondentCountryCode: phoneNumber.countryISOCode,
+                respondentTelNumberPrefix: phoneNumber.countryCode,
+                respondentTelNumber: phoneNumber.number));
           },
-          textInputAction: TextInputAction.next,
         );
       },
     );
@@ -171,7 +174,7 @@ class SensitizationDateInput extends StatelessWidget {
                 context: context,
                 initialDate: DateTime.now(),
                 firstDate: DateTime(1900),
-                lastDate: DateTime(2100));
+                lastDate: DateTime.now());
             var formattedDate =
                 date == null ? '' : DateFormat('yyyy-MM-dd').format(date);
             context.read<CollectionBloc>().add(
@@ -239,8 +242,9 @@ class InterviewDateInput extends StatelessWidget {
             icon: const Icon(Icons.calendar_today),
             labelText: 'Interview Date',
             helperText: 'Date of interview start',
-            errorText: state.gibsonsForm.interviewDate.invalid
-                ? 'Choose the date of interview start'
+            errorText: !state.gibsonsForm.isInterviewDateValid()
+                ? 'Interview date needs to be at '
+                    'least two days after sensitization date'
                 : null,
           ),
           onTap: () async {
@@ -248,7 +252,7 @@ class InterviewDateInput extends StatelessWidget {
                 context: context,
                 initialDate: DateTime.now(),
                 firstDate: DateTime(1900),
-                lastDate: DateTime(2100));
+                lastDate: DateTime.now());
             var formattedDate =
                 date == null ? '' : DateFormat('yyyy-MM-dd').format(date);
             context
@@ -293,6 +297,99 @@ class InterviewStartTimeInput extends StatelessWidget {
   }
 }
 
+class GeoLocationInput extends StatelessWidget {
+  const GeoLocationInput({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<CollectionBloc, CollectionState>(
+      listenWhen: (previous, current) =>
+          previous.geoLocationStatus != current.geoLocationStatus,
+      listener: (context, state) {
+        if (state.geoLocationStatus == GeoLocationStatus.locationRequested) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              const SnackBar(
+                  content: Text('Requested device location, please wait.')),
+            );
+        }
+        if (state.geoLocationStatus == GeoLocationStatus.locationDetermined) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              const SnackBar(
+                  content: Text('Location successfully determined!')),
+            );
+        }
+        if (state.geoLocationStatus == GeoLocationStatus.locationDisabled) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              const SnackBar(
+                  content: Text('Location services are disabled. '
+                      'Please enable location services first and restart '
+                      'the app.')),
+            );
+        }
+        if (state.geoLocationStatus == GeoLocationStatus.locationDenied) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              const SnackBar(
+                  content: Text('Location services are denied. '
+                      'Please allow location access for Gibsonify.')),
+            );
+        }
+        if (state.geoLocationStatus ==
+            GeoLocationStatus.locationPermanentlyDenied) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              const SnackBar(
+                  content: Text('Location services are permanently denied. '
+                      'Please allow location access for Gibsonify in device '
+                      'settings.')),
+            );
+        }
+        if (state.geoLocationStatus == GeoLocationStatus.locationTimedOut) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              const SnackBar(
+                  content: Text(
+                      'Location could not be determined in a reasonable time. '
+                      'Please ensure you have proper GPS signal reception.')),
+            );
+        }
+      },
+      child: BlocBuilder<CollectionBloc, CollectionState>(
+        builder: (context, state) {
+          return TextFormField(
+            readOnly: true,
+            key: UniqueKey(),
+            initialValue: state.gibsonsForm.geoLocation.value,
+            onTap: () => context
+                .read<CollectionBloc>()
+                .add(const GeoLocationRequested()),
+            decoration: InputDecoration(
+              suffixIcon:
+                  state.geoLocationStatus == GeoLocationStatus.locationRequested
+                      ? const CircularProgressIndicator()
+                      : null,
+              icon: const Icon(Icons.location_on_outlined),
+              labelText: 'GPS Location',
+              helperText: 'GPS Coordinates',
+              errorText: state.gibsonsForm.geoLocation.invalid
+                  ? 'Request the GPS location'
+                  : null,
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
 
 // Or perhaps make the bottom navigation bar be a part of the state and only 
 // allow to pass to next one if previous one is complete
