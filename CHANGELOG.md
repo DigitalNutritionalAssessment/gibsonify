@@ -1,10 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## 1.1.0 (2022-02-21)
 
 ### Fix
 
+- email export of data
 - remove html from export text
 - **collection**: fourth pass card color upon confirmation
 - **collection**: location status reset and snackbar usage
