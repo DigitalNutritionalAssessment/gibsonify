@@ -10,7 +10,7 @@ import 'dart:convert';
 class SyncScreen extends StatelessWidget {
   final _exportSubject = 'Gibsonify collection and recipe data';
   final _exportText = 'Gibsonify collection and recipe data attached as a JSON '
-      'string. <br> Data can be pasted into '
+      'string. Data can be pasted into '
       'https://www.convertcsv.com/json-to-csv.htm to obtain a csv file.';
   const SyncScreen({Key? key}) : super(key: key);
 
