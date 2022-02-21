@@ -3,27 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
-### Refactor
-
-- **collection**: correct const fields
-- **collection**: change third pass card to use maps
-- change collectionsscreen to stateless
-- **collection**: change screen index to enum
-- move screen index reset to collection bloc
-- **collection**: change state screen index to final
-- **collection**: move selected screen index to state
-- **collection**: use measurement class
-- **recipe**: rename variables to more accurate descriptions of variables
-- **collection**: change fourth pass snack bar name
-- **recipe**: replace Formz usage with Strings and validation
-- **recipe**: remove Formz usage from recipe implementation
-- rename recipe_item.dart to recipe.dart
-- specify dependency versions
-- **recipe**: rename files and text widgets for consistency
-- **recipe**: rename recipe probes clearing function
-
 ### Fix
 
+- remove html from export text
 - **collection**: fourth pass card color upon confirmation
 - **collection**: location status reset and snackbar usage
 - **collection**: correctly display gps loading indicator
@@ -33,12 +15,17 @@ All notable changes to this project will be documented in this file.
 
 ### Feat
 
+- add collection feature requests
+- add data saving to file
+- change export button to floating action
 - change collections deletion to slidable
 - **collection**: feat(collection): switch to slidable deletion in fourth pass
 - **collection**: switch to slidable deletion in first pass
 - **collection**: add gps status outcomes
 - **recipe**: add ingredients from retentionfactors.csv
+- add export subject and text
 - **recipe**: add ingredients from RetentionFactors.csv
+- replace flutter_mailer by share_plus
 - **collection**: add fourth pass screen switching
 - **collection**: add new food item button to fourth pass
 - **collection**: shorten add new food button text
@@ -80,6 +67,25 @@ All notable changes to this project will be documented in this file.
 - **recipe**: implement probes status check
 - **recipe**: implement probes checkbox backend
 - **recipe**: implement new probes page ui
+
+### Refactor
+
+- **collection**: correct const fields
+- **collection**: change third pass card to use maps
+- change collectionsscreen to stateless
+- **collection**: change screen index to enum
+- move screen index reset to collection bloc
+- **collection**: change state screen index to final
+- **collection**: move selected screen index to state
+- **collection**: use measurement class
+- **recipe**: rename variables to more accurate descriptions of variables
+- **collection**: change fourth pass snack bar name
+- **recipe**: replace Formz usage with Strings and validation
+- **recipe**: remove Formz usage from recipe implementation
+- rename recipe_item.dart to recipe.dart
+- specify dependency versions
+- **recipe**: rename files and text widgets for consistency
+- **recipe**: rename recipe probes clearing function
 
 ## 1.0.0 (2022-01-30)
 
