@@ -16,10 +16,9 @@ class ThirdPassFoodItemCard extends StatelessWidget {
       : super(key: key);
 
   final FoodItem foodItem;
-  // TODO: refactor to Map<String, dynamic> and name the arguments as keys
-  final ValueChanged<List<dynamic>>? onMeasurementMethodChanged;
-  final ValueChanged<List<dynamic>>? onMeasurementValueChanged;
-  final ValueChanged<List<dynamic>>? onMeasurementUnitChanged;
+  final ValueChanged<Map<String, dynamic>>? onMeasurementMethodChanged;
+  final ValueChanged<Map<String, dynamic>>? onMeasurementValueChanged;
+  final ValueChanged<Map<String, dynamic>>? onMeasurementUnitChanged;
   final VoidCallback? onMeasurementAdded;
   final ValueChanged<int>? onMeasurementDeleted;
 
@@ -93,10 +92,11 @@ class ThirdPassFoodItemCard extends StatelessWidget {
                               showSelectedItems: true,
                               showSearchBox: false,
                               items: Measurement.measurementMethods,
-                              onChanged: (String? value) =>
-                                  // TODO: create map
-                                  onMeasurementMethodChanged!(
-                                      [index, value ?? '']),
+                              onChanged: (String? measurementMethod) =>
+                                  onMeasurementMethodChanged!({
+                                    'index': index,
+                                    'method': measurementMethod
+                                  }),
                               selectedItem: foodItem
                                   .measurements[index].measurementMethod),
 
@@ -115,8 +115,11 @@ class ThirdPassFoodItemCard extends StatelessWidget {
                                   ? 'Enter the measured value in 1 to 4 digits'
                                   : null,
                             ),
-                            onChanged: (value) =>
-                                onMeasurementValueChanged!([index, value]),
+                            onChanged: (measurementValue) =>
+                                onMeasurementValueChanged!({
+                              'index': index,
+                              'value': measurementValue
+                            }),
                             textInputAction: TextInputAction.next,
                           ),
 
@@ -140,9 +143,11 @@ class ThirdPassFoodItemCard extends StatelessWidget {
                               showSelectedItems: true,
                               showSearchBox: false,
                               items: Measurement.measurementUnits,
-                              onChanged: (String? value) =>
-                                  onMeasurementUnitChanged!(
-                                      [index, value ?? '']),
+                              onChanged: (String? measurementUnit) =>
+                                  onMeasurementUnitChanged!({
+                                    'index': index,
+                                    'unit': measurementUnit
+                                  }),
                               selectedItem:
                                   foodItem.measurements[index].measurementUnit),
                         ],

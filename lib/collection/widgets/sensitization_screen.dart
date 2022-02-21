@@ -128,9 +128,9 @@ class RespondentTelInfoInput extends StatelessWidget {
       builder: (context, state) {
         return IntlPhoneField(
           invalidNumberMessage: 'Enter a valid tel. number',
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             labelText: 'Respondent Tel. Number',
-            icon: const Icon(Icons.phone),
+            icon: Icon(Icons.phone),
             helperText: 'Full tel. number of respondent e.g. +447448238123',
           ),
           initialValue: state.gibsonsForm.respondentTelNumber.value,
@@ -302,24 +302,91 @@ class GeoLocationInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CollectionBloc, CollectionState>(
-      builder: (context, state) {
-        return TextFormField(
-          readOnly: true,
-          key: UniqueKey(),
-          initialValue: state.gibsonsForm.geoLocation.value,
-          onTap: () =>
-              context.read<CollectionBloc>().add(const GeoLocationRequested()),
-          decoration: InputDecoration(
-            icon: const Icon(Icons.location_on_outlined),
-            labelText: 'GPS Location',
-            helperText: 'GPS Coordinates',
-            errorText: state.gibsonsForm.geoLocation.invalid
-                ? 'Request the GPS location'
-                : null,
-          ),
-        );
+    return BlocListener<CollectionBloc, CollectionState>(
+      listenWhen: (previous, current) =>
+          previous.geoLocationStatus != current.geoLocationStatus,
+      listener: (context, state) {
+        if (state.geoLocationStatus == GeoLocationStatus.locationRequested) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              const SnackBar(
+                  content: Text('Requested device location, please wait.')),
+            );
+        }
+        if (state.geoLocationStatus == GeoLocationStatus.locationDetermined) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              const SnackBar(
+                  content: Text('Location successfully determined!')),
+            );
+        }
+        if (state.geoLocationStatus == GeoLocationStatus.locationDisabled) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              const SnackBar(
+                  content: Text('Location services are disabled. '
+                      'Please enable location services first and restart '
+                      'the app.')),
+            );
+        }
+        if (state.geoLocationStatus == GeoLocationStatus.locationDenied) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              const SnackBar(
+                  content: Text('Location services are denied. '
+                      'Please allow location access for Gibsonify.')),
+            );
+        }
+        if (state.geoLocationStatus ==
+            GeoLocationStatus.locationPermanentlyDenied) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              const SnackBar(
+                  content: Text('Location services are permanently denied. '
+                      'Please allow location access for Gibsonify in device '
+                      'settings.')),
+            );
+        }
+        if (state.geoLocationStatus == GeoLocationStatus.locationTimedOut) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              const SnackBar(
+                  content: Text(
+                      'Location could not be determined in a reasonable time. '
+                      'Please ensure you have proper GPS signal reception.')),
+            );
+        }
       },
+      child: BlocBuilder<CollectionBloc, CollectionState>(
+        builder: (context, state) {
+          return TextFormField(
+            readOnly: true,
+            key: UniqueKey(),
+            initialValue: state.gibsonsForm.geoLocation.value,
+            onTap: () => context
+                .read<CollectionBloc>()
+                .add(const GeoLocationRequested()),
+            decoration: InputDecoration(
+              suffixIcon:
+                  state.geoLocationStatus == GeoLocationStatus.locationRequested
+                      ? const CircularProgressIndicator()
+                      : null,
+              icon: const Icon(Icons.location_on_outlined),
+              labelText: 'GPS Location',
+              helperText: 'GPS Coordinates',
+              errorText: state.gibsonsForm.geoLocation.invalid
+                  ? 'Request the GPS location'
+                  : null,
+            ),
+          );
+        },
+      ),
     );
   }
 }

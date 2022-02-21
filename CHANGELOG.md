@@ -3,32 +3,18 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
-### Feat
-
-- **recipe**: change item deletion constraint implementation
-- **recipe**: add dummy dropdownfield as placeholder while waiting for asset loading
-- **recipe**: add ingredients json as asset, async logic to call ingredients file and unlisted ingredient name logic
-- **recipe**: change fluttertoast implementation to native snackbar
-- **recipe**: add food item description to probe list
-- **recipe**: constrain probe option and measurement deletion and add warning message
-- **recipe**: add auto capitalisation for text fields
-- **recipe**: set default probe values
-- **recipe**: implement multiple ingredient measurements logic
-- **recipe**: create measurements class and reimplement ingredient measurements
-- **recipe**: redesign following app feedback
-- **recipe**: add probe resetting when selecting recipes
-- **recipe**: add visibility widgets and probe logic
-- **recipe**: add probe option validation logic
-- **recipe**: refactor probes as class and add dropdown list
-- **recipe**: add standard recipe checks and recipe saving
-- **recipe**: implement recipe page states
-- **recipe**: implement probes status check
-- **recipe**: implement probes checkbox backend
-- **recipe**: implement new probes page ui
-
 ### Refactor
 
+- **collection**: correct const fields
+- **collection**: change third pass card to use maps
+- change collectionsscreen to stateless
+- **collection**: change screen index to enum
+- move screen index reset to collection bloc
+- **collection**: change state screen index to final
+- **collection**: move selected screen index to state
+- **collection**: use measurement class
 - **recipe**: rename variables to more accurate descriptions of variables
+- **collection**: change fourth pass snack bar name
 - **recipe**: replace Formz usage with Strings and validation
 - **recipe**: remove Formz usage from recipe implementation
 - rename recipe_item.dart to recipe.dart
@@ -38,8 +24,62 @@ All notable changes to this project will be documented in this file.
 
 ### Fix
 
+- **collection**: fourth pass card color upon confirmation
+- **collection**: location status reset and snackbar usage
+- **collection**: correctly display gps loading indicator
+- reset selected screen when opening collections
 - **recipe**: fix probe logic bug
 - fix bug causing recipes to not save in device memory
+
+### Feat
+
+- change collections deletion to slidable
+- **collection**: feat(collection): switch to slidable deletion in fourth pass
+- **collection**: switch to slidable deletion in first pass
+- **collection**: add gps status outcomes
+- **recipe**: add ingredients from retentionfactors.csv
+- **recipe**: add ingredients from RetentionFactors.csv
+- **collection**: add fourth pass screen switching
+- **collection**: add new food item button to fourth pass
+- **collection**: shorten add new food button text
+- **collection**: add combined measurement functionality
+- **gibsonify_api**: add helper, update measurement class
+- **recipe**: implement requested recipe features
+- add check if interview date is valid
+- **recipe**: change item deletion constraint implementation
+- **recipe**: add dummy dropdownfield as placeholder while waiting for asset loading
+- **recipe**: add ingredients json as asset, async logic to call ingredients file and unlisted ingredient name logic
+- **recipe**: change fluttertoast implementation to native snackbar
+- add interview outcome not completed reason
+- add picture chart not collected reason
+- add check for confirmation of food items
+- add intl phone number support
+- **recipe**: add food item description to probe list
+- **recipe**: constrain probe option and measurement deletion and add warning message
+- **collection**: remove measurement unit sizes
+- **recipe**: add auto capitalisation for text fields
+- **recipe**: set default probe values
+- **recipe**: implement multiple ingredient measurements logic
+- **recipe**: create measurements class and reimplement ingredient measurements
+- **recipe**: redesign following app feedback
+- **recipe**: add probe resetting when selecting recipes
+- **recipe**: add visibility widgets and probe logic
+- add picture chart collected field
+- add geolocation using gps
+- **recipe**: add probe option validation logic
+- **recipe**: refactor probes as class and add dropdown list
+- **collection**: add delete button to fourth pass
+- **collection**: add standard cup sizes
+- **collection**: separate grams and millilitres units
+- restrict measurement value to max 4 digits
+- remove not applicable food source option
+- **collection**: restrict sensitization dates to past
+- restrict household id length
+- **recipe**: add standard recipe checks and recipe saving
+- **recipe**: implement recipe page states
+- **recipe**: implement probes status check
+- **recipe**: implement probes checkbox backend
+- **recipe**: implement new probes page ui
 
 ## 1.0.0 (2022-01-30)
 

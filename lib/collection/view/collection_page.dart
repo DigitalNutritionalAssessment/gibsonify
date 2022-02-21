@@ -18,12 +18,13 @@ class CollectionPage extends StatelessWidget {
     return BlocBuilder<CollectionBloc, CollectionState>(
       builder: (context, state) {
         return Scaffold(
-          body: _screens[state.selectedScreenIndex],
+          body: _screens[state.selectedScreenIndex()],
           bottomNavigationBar: BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
-            currentIndex: state.selectedScreenIndex,
+            currentIndex: state.selectedScreenIndex(),
             onTap: (int index) => context.read<CollectionBloc>().add(
-                SelectedScreenIndexChanged(changedSelectedScreenIndex: index)),
+                SelectedScreenChanged(
+                    changedSelectedScreen: state.screenOfSelectedIndex(index))),
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 icon: Icon(Icons.description),

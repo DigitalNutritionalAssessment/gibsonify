@@ -14,7 +14,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
   CollectionBloc({required GibsonifyRepository gibsonifyRepository})
       : _gibsonifyRepository = gibsonifyRepository,
         super(CollectionState()) {
-    on<SelectedScreenIndexChanged>(_onSelectedScreenIndexChanged);
+    on<SelectedScreenChanged>(_onSelectedScreenChanged);
     on<HouseholdIdChanged>(_onHouseholdIdChanged);
     on<RespondentNameChanged>(_onRespondentNameChanged);
     on<RespondentTelInfoChanged>(_onRespondentTelInfoChanged);
@@ -50,9 +50,9 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     on<GeoLocationRequested>(_onGeoLocationRequested);
   }
 
-  void _onSelectedScreenIndexChanged(
-      SelectedScreenIndexChanged event, Emitter<CollectionState> emit) {
-    emit(state.copyWith(selectedScreenIndex: event.changedSelectedScreenIndex));
+  void _onSelectedScreenChanged(
+      SelectedScreenChanged event, Emitter<CollectionState> emit) {
+    emit(state.copyWith(selectedScreen: event.changedSelectedScreen));
   }
 
   void _onHouseholdIdChanged(
@@ -511,47 +511,23 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
   // TODO: Delete the async?
   void _onGibsonsFormProvided(
       GibsonsFormProvided event, Emitter<CollectionState> emit) async {
-    emit(state.copyWith(gibsonsForm: event.gibsonsForm));
+    emit(state.copyWith(
+        gibsonsForm: event.gibsonsForm,
+        selectedScreen: SelectedScreen.sensitization,
+        geoLocationStatus: GeoLocationStatus.none));
   }
 
   void _onGibsonsFormCreated(
       GibsonsFormCreated event, Emitter<CollectionState> emit) {
     GibsonsForm gibsonsFormCreated = GibsonsForm();
-    emit(state.copyWith(gibsonsForm: gibsonsFormCreated));
+    emit(state.copyWith(
+        gibsonsForm: gibsonsFormCreated,
+        selectedScreen: SelectedScreen.sensitization,
+        geoLocationStatus: GeoLocationStatus.none));
   }
 
   Future<void> _onGeoLocationRequested(
       GeoLocationRequested event, Emitter<CollectionState> emit) async {
-    String geoLocationFormatted = 'Requested';
-
-    var geoLocation = GeoLocation.dirty(geoLocationFormatted);
-
-    GibsonsForm changedGibsonsForm =
-        state.gibsonsForm.copyWith(geoLocation: geoLocation);
-
-    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
-
-    try {
-      Position position = await _determinePosition();
-
-      geoLocationFormatted =
-          position.latitude.toString() + ', ' + position.longitude.toString();
-    } catch (e) {
-      geoLocationFormatted = 'Undetermined';
-    }
-
-    geoLocation = GeoLocation.dirty(geoLocationFormatted);
-
-    changedGibsonsForm = state.gibsonsForm.copyWith(geoLocation: geoLocation);
-
-    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
-  }
-
-  /// Determine the current position of the device.
-  ///
-  /// When the location services are not enabled or permissions
-  /// are denied the `Future` will return an error.
-  Future<Position> _determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -561,7 +537,9 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
       // Location services are not enabled don't continue
       // accessing the position and request users of the
       // App to enable the location services.
-      return Future.error('Location services are disabled.');
+      emit(state.copyWith(
+          geoLocationStatus: GeoLocationStatus.locationDisabled));
+      return;
     }
 
     permission = await Geolocator.checkPermission();
@@ -573,18 +551,47 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
         // Android's shouldShowRequestPermissionRationale
         // returned true. According to Android guidelines
         // your App should show an explanatory UI now.
-        return Future.error('Location permissions are denied');
+        emit(state.copyWith(
+            geoLocationStatus: GeoLocationStatus.locationDenied));
+        return;
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
       // Permissions are denied forever, handle appropriately.
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
+      emit(state.copyWith(
+          geoLocationStatus: GeoLocationStatus.locationPermanentlyDenied));
+      return;
     }
 
-    // When we reach here, permissions are granted and we can
-    // continue accessing the position of the device.
-    return await Geolocator.getCurrentPosition();
+    emit(
+        state.copyWith(geoLocationStatus: GeoLocationStatus.locationRequested));
+
+    String? geoLocationFormatted;
+
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+          timeLimit: const Duration(seconds: 45));
+
+      geoLocationFormatted =
+          position.latitude.toString() + ', ' + position.longitude.toString();
+    } catch (e) {
+      emit(state.copyWith(
+          geoLocationStatus: GeoLocationStatus.locationTimedOut));
+
+      geoLocationFormatted = 'Undetermined';
+    }
+
+    GeoLocation geoLocation = GeoLocation.dirty(geoLocationFormatted);
+
+    GibsonsForm changedGibsonsForm =
+        state.gibsonsForm.copyWith(geoLocation: geoLocation);
+
+    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+
+    if (geoLocationFormatted != 'Undetermined') {
+      emit(state.copyWith(
+          geoLocationStatus: GeoLocationStatus.locationDetermined));
+    }
   }
 }
