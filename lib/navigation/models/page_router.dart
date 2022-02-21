@@ -30,7 +30,7 @@ class PageRouter {
           args['recipeIndex'],
           assignedFoodItemId: args['assignedFoodItemId'],
           foodItemDescription: args['foodItemDescription'],
-          selectedScreenIndex: args['selectedScreenIndex'],
+          selectedScreen: args['selectedScreen'],
         ));
       case ingredient:
         Map<String, dynamic> args =

@@ -2,17 +2,23 @@ import 'package:flutter/material.dart';
 
 import 'package:gibsonify/recipe/recipe.dart';
 
+enum SelectedRecipeScreen {
+  probeScreen,
+  ingredientScreen,
+  detailScreen,
+}
+
 class RecipePage extends StatefulWidget {
   final int recipeIndex;
   final String? assignedFoodItemId;
   final String? foodItemDescription;
-  final int? selectedScreenIndex;
+  final SelectedRecipeScreen? selectedScreen;
 
   const RecipePage(this.recipeIndex,
       {Key? key,
       this.assignedFoodItemId,
       this.foodItemDescription,
-      this.selectedScreenIndex})
+      this.selectedScreen})
       : super(key: key);
 
   @override
@@ -20,13 +26,20 @@ class RecipePage extends StatefulWidget {
 }
 
 class _RecipePageState extends State<RecipePage> {
-  int selectedScreenIndex = 0;
+  SelectedRecipeScreen selectedScreen = SelectedRecipeScreen.probeScreen;
+
+  final Map<SelectedRecipeScreen, int> _selectedScreenIndices = {
+    SelectedRecipeScreen.probeScreen: 0,
+    SelectedRecipeScreen.ingredientScreen: 1,
+    SelectedRecipeScreen.detailScreen: 2,
+  };
 
   @override
   void initState() {
     super.initState();
-    selectedScreenIndex =
-        (widget.selectedScreenIndex == null) ? 0 : widget.selectedScreenIndex!;
+    selectedScreen = (widget.selectedScreen == null)
+        ? SelectedRecipeScreen.probeScreen
+        : widget.selectedScreen!;
   }
 
   @override
@@ -41,10 +54,10 @@ class _RecipePageState extends State<RecipePage> {
           assignedFoodItemId: widget.assignedFoodItemId),
     ];
     return Scaffold(
-      body: _screens[selectedScreenIndex],
+      body: _screens[selectedScreenIndex()],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        currentIndex: selectedScreenIndex,
+        currentIndex: selectedScreenIndex(),
         onTap: _onScreenSelected,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -64,9 +77,24 @@ class _RecipePageState extends State<RecipePage> {
     );
   }
 
+  int selectedScreenIndex() {
+    int? index = _selectedScreenIndices[selectedScreen];
+    if (index == null) {
+      throw const FormatException('Index of selected screen not found');
+    } else {
+      return index;
+    }
+  }
+
   void _onScreenSelected(int index) {
-    setState(() {
-      selectedScreenIndex = index;
-    });
+    var indicesToScreens = _selectedScreenIndices.map((k, v) => MapEntry(v, k));
+    SelectedRecipeScreen? screen = indicesToScreens[index];
+    if (screen == null) {
+      throw const FormatException('Screen of selected index not found');
+    } else {
+      setState(() {
+        selectedScreen = screen;
+      });
+    }
   }
 }

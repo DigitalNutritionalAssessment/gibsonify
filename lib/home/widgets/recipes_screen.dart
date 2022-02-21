@@ -58,18 +58,19 @@ class RecipesScreen extends StatelessWidget {
                                   state.recipes[index].probes.isEmpty ||
                                   state.recipes[index].recipeType !=
                                       'Standard Recipe')
-                              // TODO: rewrite as named strings for each screen
                               ? {
                                   'recipeIndex': index,
                                   'assignedFoodItemId': assignedFoodItemId,
                                   'foodItemDescription': foodItemDescription,
-                                  'selectedScreenIndex': 1
+                                  'selectedScreen':
+                                      SelectedRecipeScreen.ingredientScreen
                                 }
                               : {
                                   'recipeIndex': index,
                                   'assignedFoodItemId': assignedFoodItemId,
                                   'foodItemDescription': foodItemDescription,
-                                  'selectedScreenIndex': 0
+                                  'selectedScreenIndex':
+                                      SelectedRecipeScreen.probeScreen
                                 })
                     },
                   )),
@@ -91,7 +92,8 @@ class RecipesScreen extends StatelessWidget {
                                 'recipeIndex': state.recipes.length,
                                 'assignedFoodItemId': assignedFoodItemId,
                                 'foodItemDescription': foodItemDescription,
-                                'selectedScreenIndex': 1
+                                'selectedScreenIndex':
+                                    SelectedRecipeScreen.ingredientScreen
                               }),
                         }),
                 const SizedBox(
@@ -109,7 +111,8 @@ class RecipesScreen extends StatelessWidget {
                                 'recipeIndex': state.recipes.length,
                                 'assignedFoodItemId': assignedFoodItemId,
                                 'foodItemDescription': foodItemDescription,
-                                'selectedScreenIndex': 1
+                                'selectedScreenIndex':
+                                    SelectedRecipeScreen.ingredientScreen
                               }),
                         })
               ]));
