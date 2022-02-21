@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
-import 'package:flutter_mailer/flutter_mailer.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gibsonify/recipe/recipe.dart';
@@ -8,6 +8,10 @@ import 'package:gibsonify/home/home.dart';
 import 'dart:convert';
 
 class SyncScreen extends StatelessWidget {
+  final _exportSubject = 'Gibsonify collection and recipe data';
+  final _exportText = 'Gibsonify collection and recipe data attached as a JSON '
+      'string. Data can be pasted into '
+      'https://www.convertcsv.com/json-to-csv.htm to obtain a csv file.';
   const SyncScreen({Key? key}) : super(key: key);
 
   @override
@@ -21,37 +25,82 @@ class SyncScreen extends StatelessWidget {
               homeState.gibsonsForms.map((x) => x!.toJson()).toList(),
         });
         return Scaffold(
-            appBar: AppBar(title: const Text('Export Data via Email')),
-            body: Center(
-                child: ElevatedButton.icon(
-              onPressed: () async {
-                final directory = await getApplicationDocumentsDirectory();
-                final path = directory.path;
+          appBar: AppBar(title: const Text('Export Data')),
+          floatingActionButton: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: <Widget>[
+                FloatingActionButton.extended(
+                    heroTag: null,
+                    label: const Text("Save data to file"),
+                    icon: const Icon(Icons.save),
+                    onPressed: () async {
+                      try {
+                        final directory = await getExternalStorageDirectory();
 
-                final _recipefilePath = '$path/recipe_data.txt';
-                final _recipefile = File(_recipefilePath);
-                _recipefile.writeAsString(recipeJson);
+                        if (directory == null) {
+                          ScaffoldMessenger.of(context)
+                            ..hideCurrentSnackBar()
+                            ..showSnackBar(
+                              const SnackBar(
+                                  content: Text(
+                                      'No permission to save data to file!')),
+                            );
+                        } else {
+                          final path = directory.path;
 
-                final _collectionfilePath = '$path/collection_data.txt';
-                final _collectionfile = File(_collectionfilePath);
-                _collectionfile.writeAsString(collectionJson);
+                          final _recipefilePath = '$path/recipe_data.txt';
+                          final _recipefile = File(_recipefilePath);
+                          _recipefile.writeAsString(recipeJson);
 
-                final MailOptions mailOptions = MailOptions(
-                  body:
-                      'Gibsonify collection and recipe data attached as a JSON string. <br> Data can be pasted into https://www.convertcsv.com/json-to-csv.htm to obtain a csv file.',
-                  subject: 'Gibsonify collection and recipe data',
-                  recipients: [],
-                  isHTML: true,
-                  bccRecipients: [],
-                  ccRecipients: [],
-                  attachments: [_collectionfilePath, _recipefilePath],
-                );
+                          final _collectionfilePath =
+                              '$path/collection_data.txt';
+                          final _collectionfile = File(_collectionfilePath);
+                          _collectionfile.writeAsString(collectionJson);
 
-                await FlutterMailer.send(mailOptions);
-              },
-              icon: const Icon(Icons.send, size: 18),
-              label: const Text("Export saved data as JSON"),
-            )));
+                          ScaffoldMessenger.of(context)
+                            ..hideCurrentSnackBar()
+                            ..showSnackBar(
+                              SnackBar(
+                                  content: Text(
+                                      'Data successfully saved to: ' + path)),
+                            );
+                        }
+                      } catch (e) {
+                        ScaffoldMessenger.of(context)
+                          ..hideCurrentSnackBar()
+                          ..showSnackBar(
+                            const SnackBar(
+                                content: Text('Error, cannot save data!')),
+                          );
+                      }
+                    }),
+                const SizedBox(
+                  height: 10,
+                ),
+                FloatingActionButton.extended(
+                  heroTag: null,
+                  label: const Text("Share data as JSON"),
+                  icon: const Icon(Icons.share),
+                  onPressed: () async {
+                    final directory = await getApplicationDocumentsDirectory();
+                    final path = directory.path;
+
+                    final _recipefilePath = '$path/recipe_data.txt';
+                    final _recipefile = File(_recipefilePath);
+                    _recipefile.writeAsString(recipeJson);
+
+                    final _collectionfilePath = '$path/collection_data.txt';
+                    final _collectionfile = File(_collectionfilePath);
+                    _collectionfile.writeAsString(collectionJson);
+
+                    await Share.shareFiles(
+                        [_recipefilePath, _collectionfilePath],
+                        subject: _exportSubject, text: _exportText);
+                  },
+                )
+              ]),
+        );
       });
     });
   }
