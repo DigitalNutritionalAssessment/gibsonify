@@ -69,7 +69,7 @@ class RecipesScreen extends StatelessWidget {
                                   'recipeIndex': index,
                                   'assignedFoodItemId': assignedFoodItemId,
                                   'foodItemDescription': foodItemDescription,
-                                  'selectedScreenIndex':
+                                  'selectedScreen':
                                       SelectedRecipeScreen.probeScreen
                                 })
                     },
@@ -92,7 +92,7 @@ class RecipesScreen extends StatelessWidget {
                                 'recipeIndex': state.recipes.length,
                                 'assignedFoodItemId': assignedFoodItemId,
                                 'foodItemDescription': foodItemDescription,
-                                'selectedScreenIndex':
+                                'selectedScreen':
                                     SelectedRecipeScreen.ingredientScreen
                               }),
                         }),
@@ -111,7 +111,7 @@ class RecipesScreen extends StatelessWidget {
                                 'recipeIndex': state.recipes.length,
                                 'assignedFoodItemId': assignedFoodItemId,
                                 'foodItemDescription': foodItemDescription,
-                                'selectedScreenIndex':
+                                'selectedScreen':
                                     SelectedRecipeScreen.ingredientScreen
                               }),
                         })
