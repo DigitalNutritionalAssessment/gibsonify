@@ -24,6 +24,8 @@ dependencies:
   intl_phone_field: ^3.0.1
   share_plus: ^3.0.5
   path_provider: ^2.0.9
+  file_picker: ^4.4.0
+  csv: ^5.0.1
 
 dev_dependencies:
   flutter_test:

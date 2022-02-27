@@ -403,3 +403,10 @@ class IngredientsLoaded extends RecipeEvent {
   @override
   List<Object> get props => [];
 }
+
+class RecipeImported extends RecipeEvent {
+  const RecipeImported();
+
+  @override
+  List<Object> get props => [];
+}

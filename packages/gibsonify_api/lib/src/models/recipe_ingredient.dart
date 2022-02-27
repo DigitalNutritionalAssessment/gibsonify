@@ -12,6 +12,7 @@ class Ingredient extends Equatable {
       this.description,
       this.cookingState,
       List<Measurement>? measurements,
+      this.foodComposition,
       this.saved = false,
       String? id})
       : id = id ?? const Uuid().v4(),
@@ -22,10 +23,9 @@ class Ingredient extends Equatable {
   final String? description;
   final String? cookingState;
   final List<Measurement> measurements;
+  final Map<String, dynamic>? foodComposition;
   final bool saved;
   final String id;
-  // TODO: Either add a Map? variable to hold ALL nutritional details of
-  // ingredient or add a String variable to hold C_CODE of ingredient
 
   Ingredient copyWith(
       {String? name,
@@ -33,6 +33,7 @@ class Ingredient extends Equatable {
       String? description,
       String? cookingState,
       List<Measurement>? measurements,
+      Map<String, dynamic>? foodComposition,
       bool? saved,
       String? id}) {
     return Ingredient(
@@ -41,13 +42,22 @@ class Ingredient extends Equatable {
         description: description ?? this.description,
         cookingState: cookingState ?? this.cookingState,
         measurements: measurements ?? this.measurements,
+        foodComposition: foodComposition ?? this.foodComposition,
         saved: saved ?? this.saved,
         id: id ?? this.id);
   }
 
   @override
-  List<Object?> get props =>
-      [name, customName, description, cookingState, measurements, saved, id];
+  List<Object?> get props => [
+        name,
+        customName,
+        description,
+        cookingState,
+        measurements,
+        foodComposition,
+        saved,
+        id
+      ];
 
   static Future<String> getIngredients() {
     return rootBundle.loadString('assets/ingredients/ingredients.json');
@@ -59,6 +69,7 @@ class Ingredient extends Equatable {
         description = json['description'],
         cookingState = json['cookingState'],
         measurements = Measurement.jsonDecodeMeasurements(json['measurements']),
+        foodComposition = jsonDecode(json['foodComposition']),
         saved = json['saved'] == 'true' ? true : false,
         id = json['id'];
 
@@ -70,6 +81,7 @@ class Ingredient extends Equatable {
     data['description'] = description;
     data['cookingState'] = cookingState;
     data['measurements'] = jsonEncode(measurements);
+    data['foodComposition'] = jsonEncode(foodComposition);
     data['saved'] = saved.toString();
     data['id'] = id;
     return data;

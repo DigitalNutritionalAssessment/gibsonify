@@ -1,7 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:uuid/uuid.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:csv/csv.dart';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:gibsonify_repository/gibsonify_repository.dart';
@@ -49,6 +52,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     on<RecipesSaved>(_onRecipesSaved);
     on<RecipesLoaded>(_onRecipesLoaded);
     on<IngredientsLoaded>(_onIngredientsLoaded);
+    on<RecipeImported>(_onRecipeImported);
   }
 
   void _onRecipeAdded(RecipeAdded event, Emitter<RecipeState> emit) {
@@ -546,8 +550,13 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
         List.from(recipes[changedRecipeIndex].ingredients);
     int changedIngredientIndex = ingredients.indexOf(event.ingredient);
 
-    Ingredient ingredient = ingredients[changedIngredientIndex]
-        .copyWith(name: event.ingredientName, saved: false);
+    String ingredientName = event.ingredientName;
+    Map<String, dynamic> ingredientMap = json.decode(state.ingredientsJson!);
+
+    Ingredient ingredient = ingredients[changedIngredientIndex].copyWith(
+        name: ingredientName,
+        foodComposition: ingredientMap[ingredientName],
+        saved: false);
 
     ingredients.removeAt(changedIngredientIndex);
     ingredients.insert(changedIngredientIndex, ingredient);
@@ -823,6 +832,141 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
       } catch (e) {
         return;
       }
+    }
+  }
+
+  Recipe? _returnRecipeIfExists(String id, List<Recipe> recipes) {
+    for (Recipe recipe in recipes) {
+      if (recipe.recipeNumber == id) {
+        return recipe;
+      }
+    }
+    return null;
+  }
+
+  Future<void> _onRecipeImported(
+      RecipeImported event, Emitter<RecipeState> emit) async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+        // TODO: Find out why extension restriction doesnt work
+        // type: FileType.custom,
+        // allowedExtensions: ['csv'],
+        );
+
+    if (result != null) {
+      final input = File(result.files.single.path!).openRead();
+      List data = await input
+          .transform(utf8.decoder)
+          .transform(const CsvToListConverter())
+          .toList();
+      data.removeAt(0); // Remove headings line in csv
+
+      List<Recipe> newRecipes = [];
+      for (List row in data) {
+        // TODO: consider replacing hardcoded column indices with a map that determines the indices
+        String recipeNumber = row[0];
+        String recipeName = row[1];
+        String recipeType = row[2];
+        String recipeAttribute = row[3];
+        String recipeMeasurement = row[4];
+        String recipeProbeName = row[5];
+        String recipeProbeAnswers = row[6];
+        String ingredientName = row[7];
+        String ingredientDescription = row[8];
+        String ingredientCookingState = row[9];
+        String ingredientMeasurement = row[10];
+
+        Recipe recipe = Recipe(
+            recipeNumber: recipeNumber,
+            recipeName: recipeName,
+            recipeType: recipeType.trim() + ' Recipe',
+            measurements: const [],
+            saved: true); // TODO: handle no measurement case
+
+        for (Recipe existingRecipe in newRecipes) {
+          if (existingRecipe.recipeNumber == recipeNumber) {
+            recipe = existingRecipe;
+            newRecipes.remove(existingRecipe);
+            break;
+          }
+        }
+
+        if (recipeAttribute == 'Measurement') {
+          List<Measurement> measurements = List.from(recipe.measurements);
+
+          List<String> newMeasurements = recipeMeasurement.split('+');
+          for (String newMeasurement in newMeasurements) {
+            List<String> fields = newMeasurement.trim().split('_');
+            final measurement = Measurement(
+                measurementMethod: fields[0],
+                measurementUnit: fields[1],
+                measurementValue: fields[2]);
+            measurements.add(measurement);
+          }
+
+          recipe = recipe.copyWith(measurements: measurements);
+        } else if (recipeAttribute == 'Probe') {
+          List<Probe> probes = List.from(recipe.probes);
+
+          List<String> probeAnswers = recipeProbeAnswers.split('+');
+          List<Map<String, dynamic>> probeOptions = [];
+          for (String answer in probeAnswers) {
+            probeOptions
+                .add({'option': answer.trim(), 'id': const Uuid().v4()});
+          }
+          final probe =
+              Probe(probeName: recipeProbeName, probeOptions: probeOptions);
+          probes.add(probe);
+
+          recipe = recipe.copyWith(probes: probes);
+        } else if (recipeAttribute == 'Ingredient') {
+          List<Ingredient> ingredients = List.from(recipe.ingredients);
+
+          List<Measurement> measurements = [];
+          List<String> newMeasurements = ingredientMeasurement.split('+');
+          for (String newMeasurement in newMeasurements) {
+            List<String> fields = newMeasurement.trim().split('_');
+            final measurement = Measurement(
+                measurementMethod: fields[0],
+                measurementUnit: fields[1],
+                measurementValue: fields[2]);
+            measurements.add(measurement);
+          }
+          final ingredient = Ingredient(
+              name: ingredientName,
+              description: ingredientDescription,
+              cookingState: ingredientCookingState,
+              measurements: measurements,
+              saved: true); // TODO: Figure out food composition implementation
+          ingredients.add(ingredient);
+
+          recipe = recipe.copyWith(ingredients: ingredients);
+        } else {
+          // TODO: Handle error case
+        }
+
+        newRecipes.add(recipe);
+      }
+      List<Recipe> existingRecipes = List<Recipe>.from(state.recipes);
+      for (Recipe recipe in newRecipes) {
+        if (recipe.measurements.isEmpty) {
+          // Protect against recipes without Measurements
+          Recipe recipeWithMeasurement =
+              recipe.copyWith(measurements: [Measurement()]);
+          newRecipes.remove(recipe);
+          newRecipes.add(recipeWithMeasurement);
+        }
+        // for (Recipe existingRecipe in existingRecipes) {
+        //   if (recipe.recipeNumber == existingRecipe.recipeNumber) {
+        //     newRecipes.remove(recipe);
+        //     // print(recipe);
+        //     break;
+        //   }
+        // }
+      }
+      List<Recipe> recipes = existingRecipes + newRecipes;
+      emit(state.copyWith(recipes: recipes));
+    } else {
+      return;
     }
   }
 }

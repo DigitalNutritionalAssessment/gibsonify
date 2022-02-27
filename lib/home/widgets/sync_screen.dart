@@ -100,6 +100,12 @@ class SyncScreen extends StatelessWidget {
                   },
                 )
               ]),
+          body: ListTile(
+            title: const Text('Import recipe file'),
+            onTap: () {
+              context.read<RecipeBloc>().add(const RecipeImported());
+            },
+          ),
         );
       });
     });
