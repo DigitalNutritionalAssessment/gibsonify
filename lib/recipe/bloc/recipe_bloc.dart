@@ -835,13 +835,14 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     }
   }
 
-  Recipe? _returnRecipeIfExists(String id, List<Recipe> recipes) {
-    for (Recipe recipe in recipes) {
-      if (recipe.recipeNumber == id) {
-        return recipe;
+  bool _recipeOnDevice(recipeNumber) {
+    List<Recipe> deviceRecipes = List<Recipe>.from(state.recipes);
+    for (Recipe recipe in deviceRecipes) {
+      if (recipe.recipeNumber == recipeNumber) {
+        return true;
       }
     }
-    return null;
+    return false;
   }
 
   Future<void> _onRecipeImported(
@@ -861,6 +862,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
       data.removeAt(0); // Remove headings line in csv
 
       List<Recipe> newRecipes = [];
+      List<String> visitedDeviceRecipeIds = [];
+
       for (List row in data) {
         // TODO: consider replacing hardcoded column indices with a map that determines the indices
         String recipeNumber = row[0];
@@ -875,16 +878,24 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
         String ingredientCookingState = row[9];
         String ingredientMeasurement = row[10];
 
+        if (visitedDeviceRecipeIds.contains(recipeNumber)) {
+          continue;
+        } else if (_recipeOnDevice(recipeNumber)) {
+          visitedDeviceRecipeIds.add(recipeNumber);
+          continue;
+        }
+
         Recipe recipe = Recipe(
             recipeNumber: recipeNumber,
             recipeName: recipeName,
             recipeType: recipeType.trim() + ' Recipe',
             measurements: const [],
-            saved: true); // TODO: handle no measurement case
+            saved: true);
 
         for (Recipe existingRecipe in newRecipes) {
           if (existingRecipe.recipeNumber == recipeNumber) {
             recipe = existingRecipe;
+            //if deleting here proves to be a problem, can obtain index of here then delete it later
             newRecipes.remove(existingRecipe);
             break;
           }
@@ -941,12 +952,12 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
 
           recipe = recipe.copyWith(ingredients: ingredients);
         } else {
-          // TODO: Handle error case
+          // TODO: Handle recipe attribute error case
         }
 
         newRecipes.add(recipe);
       }
-      List<Recipe> existingRecipes = List<Recipe>.from(state.recipes);
+
       for (Recipe recipe in newRecipes) {
         if (recipe.measurements.isEmpty) {
           // Protect against recipes without Measurements
@@ -955,14 +966,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
           newRecipes.remove(recipe);
           newRecipes.add(recipeWithMeasurement);
         }
-        // for (Recipe existingRecipe in existingRecipes) {
-        //   if (recipe.recipeNumber == existingRecipe.recipeNumber) {
-        //     newRecipes.remove(recipe);
-        //     // print(recipe);
-        //     break;
-        //   }
-        // }
       }
+      List<Recipe> existingRecipes = List<Recipe>.from(state.recipes);
       List<Recipe> recipes = existingRecipes + newRecipes;
       emit(state.copyWith(recipes: recipes));
     } else {

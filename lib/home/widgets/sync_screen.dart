@@ -104,6 +104,7 @@ class SyncScreen extends StatelessWidget {
             title: const Text('Import recipe file'),
             onTap: () {
               context.read<RecipeBloc>().add(const RecipeImported());
+              context.read<RecipeBloc>().add(const RecipesSaved());
             },
           ),
         );
