@@ -866,6 +866,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
 
       for (List row in data) {
         // TODO: consider replacing hardcoded column indices with a map that determines the indices
+        // TODO: add if statement to ensure length of row
         String recipeNumber = row[0];
         String recipeName = row[1];
         String recipeType = row[2];
@@ -952,7 +953,10 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
 
           recipe = recipe.copyWith(ingredients: ingredients);
         } else {
-          // TODO: Handle recipe attribute error case
+          continue;
+          // TODO: Return a successful import message or an error depending on
+          // outcome. Possibly something like 'Imported X recipes and
+          // encountered Y errors.
         }
 
         newRecipes.add(recipe);
