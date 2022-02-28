@@ -847,6 +847,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
 
   Future<void> _onRecipeImported(
       RecipeImported event, Emitter<RecipeState> emit) async {
+    emit(state.copyWith(recipeImportStatus: '')); // Clear status for snackbar
     FilePickerResult? result = await FilePicker.platform.pickFiles(
         // TODO: Find out why extension restriction doesnt work
         // type: FileType.custom,
@@ -865,8 +866,11 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
       List<String> visitedDeviceRecipeIds = [];
 
       for (List row in data) {
-        // TODO: consider replacing hardcoded column indices with a map that determines the indices
-        // TODO: add if statement to ensure length of row
+        if (row.length < 11) {
+          emit(state.copyWith(
+              recipeImportStatus: 'Import file has too few columns'));
+          return;
+        }
         String recipeNumber = row[0];
         String recipeName = row[1];
         String recipeType = row[2];
@@ -896,7 +900,6 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
         for (Recipe existingRecipe in newRecipes) {
           if (existingRecipe.recipeNumber == recipeNumber) {
             recipe = existingRecipe;
-            //if deleting here proves to be a problem, can obtain index of here then delete it later
             newRecipes.remove(existingRecipe);
             break;
           }
@@ -953,10 +956,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
 
           recipe = recipe.copyWith(ingredients: ingredients);
         } else {
-          continue;
-          // TODO: Return a successful import message or an error depending on
-          // outcome. Possibly something like 'Imported X recipes and
-          // encountered Y errors.
+          continue; // Skip line with bad recipe attribute
         }
 
         newRecipes.add(recipe);
@@ -973,8 +973,12 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
       }
       List<Recipe> existingRecipes = List<Recipe>.from(state.recipes);
       List<Recipe> recipes = existingRecipes + newRecipes;
-      emit(state.copyWith(recipes: recipes));
+      emit(state.copyWith(
+          recipes: recipes,
+          recipeImportStatus:
+              'Imported ${newRecipes.length} recipe(s) successfully'));
     } else {
+      emit(state.copyWith(recipeImportStatus: 'File not selected'));
       return;
     }
   }

@@ -100,15 +100,39 @@ class SyncScreen extends StatelessWidget {
                   },
                 )
               ]),
-          body: ListTile(
-            title: const Text('Import recipe file'),
-            onTap: () {
-              context.read<RecipeBloc>().add(const RecipeImported());
-              context.read<RecipeBloc>().add(const RecipesSaved());
-            },
-          ),
+          body: const RecipeImport(),
         );
       });
     });
+  }
+}
+
+class RecipeImport extends StatelessWidget {
+  const RecipeImport({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<RecipeBloc, RecipeState>(
+      listenWhen: (previous, current) =>
+          previous.recipeImportStatus != current.recipeImportStatus,
+      listener: (context, state) {
+        context.read<RecipeBloc>().add(const RecipesSaved());
+        if (state.recipeImportStatus != '') {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(SnackBar(content: Text(state.recipeImportStatus!)));
+        }
+      },
+      child: BlocBuilder<RecipeBloc, RecipeState>(
+        builder: (context, state) {
+          return ListTile(
+            title: const Text('Import recipe file'),
+            onTap: () {
+              context.read<RecipeBloc>().add(const RecipeImported());
+            },
+          );
+        },
+      ),
+    );
   }
 }
