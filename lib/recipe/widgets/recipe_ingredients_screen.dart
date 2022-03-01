@@ -33,10 +33,11 @@ class RecipeIngredientsScreen extends StatelessWidget {
                     context.read<RecipeBloc>().add(
                         IngredientAdded(recipe: state.recipes[recipeIndex])),
                     Navigator.pushNamed(context, PageRouter.ingredient,
-                        arguments: [
-                          recipeIndex,
-                          state.recipes[recipeIndex].ingredients.length
-                        ]),
+                        arguments: {
+                          'recipeIndex': recipeIndex,
+                          'ingredientIndex':
+                              state.recipes[recipeIndex].ingredients.length,
+                        }),
                   }));
     });
   }
@@ -155,7 +156,10 @@ class Ingredients extends StatelessWidget {
                             : const Icon(Icons.rotate_left_rounded),
                     onTap: () => {
                       Navigator.pushNamed(context, PageRouter.ingredient,
-                          arguments: [recipeIndex, index])
+                          arguments: {
+                            'recipeIndex': recipeIndex,
+                            'ingredientIndex': index,
+                          })
                     },
                   )),
                 );

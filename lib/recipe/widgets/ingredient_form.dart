@@ -7,25 +7,11 @@ import 'dart:convert';
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:gibsonify/recipe/recipe.dart';
 
-class IngredientForm extends StatefulWidget {
+class IngredientForm extends StatelessWidget {
   final int recipeIndex;
   final int ingredientIndex;
-  const IngredientForm(this.recipeIndex, this.ingredientIndex, {Key? key})
+  IngredientForm(this.recipeIndex, this.ingredientIndex, {Key? key})
       : super(key: key);
-
-  @override
-  State<IngredientForm> createState() => _IngredientFormState();
-}
-
-class _IngredientFormState extends State<IngredientForm> {
-  Future<String>? _ingredients;
-
-  @override
-  void initState() {
-    super.initState();
-    _ingredients = Ingredient.getIngredients();
-    // TODO: Move loading asset into RecipeBloc
-  }
 
   final List<String> cookingStates = [
     "Raw",
@@ -47,94 +33,74 @@ class _IngredientFormState extends State<IngredientForm> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
+      context.read<RecipeBloc>().add(const IngredientsLoaded());
       return Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            FutureBuilder(
-                future: _ingredients,
-                builder:
-                    (BuildContext context, AsyncSnapshot<String> snapshot) {
-                  if (snapshot.hasData) {
-                    return DropdownSearch<String>(
-                        dropdownSearchDecoration: const InputDecoration(
-                          icon: Icon(Icons.food_bank_rounded),
-                          labelText: 'Ingredient name',
-                          helperText: 'Ingredient name e.g. Potato',
-                        ),
-                        mode: Mode.MENU,
-                        showSelectedItems: true,
-                        showSearchBox: true,
-                        items: json.decode(snapshot.data!).keys.toList(),
-                        onChanged: (String? answer) => context
-                            .read<RecipeBloc>()
-                            .add(IngredientNameChanged(
-                                ingredient: state.recipes[widget.recipeIndex]
-                                    .ingredients[widget.ingredientIndex],
-                                ingredientName: answer!,
-                                recipe: state.recipes[widget.recipeIndex])),
-                        selectedItem: state.recipes[widget.recipeIndex]
-                            .ingredients[widget.ingredientIndex].name);
-                  } else {
-                    return DropdownSearch<String>(
-                        dropdownSearchDecoration: const InputDecoration(
-                          icon: Icon(Icons.food_bank_rounded),
-                          labelText: 'Ingredient name',
-                          helperText: 'Ingredient name e.g. Potato',
-                        ),
-                        enabled: false,
-                        mode: Mode.MENU,
-                        showSelectedItems: true,
-                        selectedItem: state.recipes[widget.recipeIndex]
-                            .ingredients[widget.ingredientIndex].name);
-                  }
-                }),
+            DropdownSearch<String>(
+                dropdownSearchDecoration: const InputDecoration(
+                  icon: Icon(Icons.food_bank_rounded),
+                  labelText: 'Ingredient name',
+                  helperText: 'Ingredient name e.g. Potato',
+                ),
+                mode: Mode.MENU,
+                showSelectedItems: true,
+                showSearchBox: true,
+                enabled: (state.ingredientsJson != null),
+                items: (state.ingredientsJson != null)
+                    ? json.decode(state.ingredientsJson!).keys.toList()
+                    : [],
+                onChanged: (String? answer) => context.read<RecipeBloc>().add(
+                    IngredientNameChanged(
+                        ingredient: state
+                            .recipes[recipeIndex].ingredients[ingredientIndex],
+                        ingredientName: answer!,
+                        recipe: state.recipes[recipeIndex])),
+                selectedItem: state
+                    .recipes[recipeIndex].ingredients[ingredientIndex].name),
             Visibility(
-              visible: (state.recipes[widget.recipeIndex]
-                      .ingredients[widget.ingredientIndex].name ==
+              visible: (state
+                      .recipes[recipeIndex].ingredients[ingredientIndex].name ==
                   "Other (please specify)"),
               // TODO: Implement a better implementation for this check
               // possibly a flag to show customName is chosen
               child: TextFormField(
-                initialValue: state.recipes[widget.recipeIndex]
-                    .ingredients[widget.ingredientIndex].customName,
+                initialValue: state.recipes[recipeIndex]
+                    .ingredients[ingredientIndex].customName,
                 decoration: InputDecoration(
                   icon: const Icon(Icons.set_meal_rounded),
                   labelText: 'Specify ingredient',
                   helperText: 'Ingredient name e.g. Black rice',
-                  errorText: (state.recipes[widget.recipeIndex]
-                              .ingredients[widget.ingredientIndex].customName ==
+                  errorText: (state.recipes[recipeIndex]
+                              .ingredients[ingredientIndex].customName ==
                           null)
                       ? 'Enter an ingredient name e.g. Black rice'
                       : null,
                 ),
                 onChanged: (value) {
                   context.read<RecipeBloc>().add(IngredientCustomNameChanged(
-                      ingredient: state.recipes[widget.recipeIndex]
-                          .ingredients[widget.ingredientIndex],
+                      ingredient: state
+                          .recipes[recipeIndex].ingredients[ingredientIndex],
                       ingredientCustomName: value,
-                      recipe: state.recipes[widget.recipeIndex]));
+                      recipe: state.recipes[recipeIndex]));
                 },
                 textInputAction: TextInputAction.next,
                 textCapitalization: TextCapitalization.sentences,
               ),
             ),
             TextFormField(
-              initialValue: state.recipes[widget.recipeIndex]
-                  .ingredients[widget.ingredientIndex].description,
+              initialValue: state.recipes[recipeIndex]
+                  .ingredients[ingredientIndex].description,
               decoration: InputDecoration(
                 icon: const Icon(Icons.description_rounded),
                 labelText: 'Ingredient description',
                 helperText: 'Ingredient description e.g. Big, dry, ripe etc.',
                 // TODO: Refactor the error condition into a reusable method
-                errorText: (state
-                                .recipes[widget.recipeIndex]
-                                .ingredients[widget.ingredientIndex]
-                                .description !=
+                errorText: (state.recipes[recipeIndex]
+                                .ingredients[ingredientIndex].description !=
                             null &&
-                        state
-                                .recipes[widget.recipeIndex]
-                                .ingredients[widget.ingredientIndex]
+                        state.recipes[recipeIndex].ingredients[ingredientIndex]
                                 .description ==
                             '')
                     ? 'Enter an ingredient description e.g. Ripe'
@@ -142,10 +108,10 @@ class _IngredientFormState extends State<IngredientForm> {
               ),
               onChanged: (value) {
                 context.read<RecipeBloc>().add(IngredientDescriptionChanged(
-                    ingredient: state.recipes[widget.recipeIndex]
-                        .ingredients[widget.ingredientIndex],
+                    ingredient:
+                        state.recipes[recipeIndex].ingredients[ingredientIndex],
                     ingredientDescription: value,
-                    recipe: state.recipes[widget.recipeIndex]));
+                    recipe: state.recipes[recipeIndex]));
               },
               textCapitalization: TextCapitalization.sentences,
               textInputAction: TextInputAction.next,
@@ -162,14 +128,14 @@ class _IngredientFormState extends State<IngredientForm> {
                 items: cookingStates,
                 onChanged: (String? answer) => context.read<RecipeBloc>().add(
                     IngredientCookingStateChanged(
-                        ingredient: state.recipes[widget.recipeIndex]
-                            .ingredients[widget.ingredientIndex],
+                        ingredient: state
+                            .recipes[recipeIndex].ingredients[ingredientIndex],
                         cookingState: answer!,
-                        recipe: state.recipes[widget.recipeIndex])),
-                selectedItem: state.recipes[widget.recipeIndex]
-                    .ingredients[widget.ingredientIndex].cookingState),
+                        recipe: state.recipes[recipeIndex])),
+                selectedItem: state.recipes[recipeIndex]
+                    .ingredients[ingredientIndex].cookingState),
             const SizedBox(height: 10),
-            IngredientMeasurements(widget.recipeIndex, widget.ingredientIndex)
+            IngredientMeasurements(recipeIndex, ingredientIndex)
           ],
         ),
       );

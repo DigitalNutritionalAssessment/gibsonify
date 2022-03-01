@@ -38,10 +38,11 @@ class RecipeProbesScreen extends StatelessWidget {
                           .read<RecipeBloc>()
                           .add(ProbeAdded(recipe: state.recipes[recipeIndex])),
                       Navigator.pushNamed(context, PageRouter.editProbe,
-                          arguments: [
-                            recipeIndex,
-                            state.recipes[recipeIndex].probes.length
-                          ])
+                          arguments: {
+                            'recipeIndex': recipeIndex,
+                            'probeIndex':
+                                state.recipes[recipeIndex].probes.length,
+                          })
                     }),
           ),
           body: ProbeList(
@@ -139,7 +140,10 @@ class ProbeList extends StatelessWidget {
                                   {
                                     Navigator.pushNamed(
                                         context, PageRouter.editProbe,
-                                        arguments: [recipeIndex, index])
+                                        arguments: {
+                                          'recipeIndex': recipeIndex,
+                                          'probeIndex': index,
+                                        })
                                   }
                               },
                             ),

@@ -48,6 +48,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     on<IngredientMeasurementValueChanged>(_onIngredientMeasurementValueChanged);
     on<RecipesSaved>(_onRecipesSaved);
     on<RecipesLoaded>(_onRecipesLoaded);
+    on<IngredientsLoaded>(_onIngredientsLoaded);
   }
 
   void _onRecipeAdded(RecipeAdded event, Emitter<RecipeState> emit) {
@@ -210,6 +211,17 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     emit(state.copyWith(recipes: recipes));
   }
 
+  bool _areAllProbesChecked(List<Probe> probes) {
+    bool allProbesChecked = true;
+    for (Probe probe in probes) {
+      if (probe.checked == false) {
+        allProbesChecked = false;
+        break;
+      }
+    }
+    return allProbesChecked;
+  }
+
   void _onProbeAdded(ProbeAdded event, Emitter<RecipeState> emit) {
     List<Recipe> recipes = List.from(state.recipes);
     int changedRecipeIndex = recipes.indexOf(event.recipe);
@@ -219,14 +231,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     List<Probe> probes = List.from(recipes[changedRecipeIndex].probes);
     probes.add(probe);
 
-    bool allProbesChecked = true;
-
-    for (Probe probe in probes) {
-      if (probe.checked == false) {
-        allProbesChecked = false;
-        break;
-      }
-    }
+    bool allProbesChecked = _areAllProbesChecked(probes);
 
     Recipe recipe = recipes[changedRecipeIndex]
         .copyWith(probes: probes, allProbesChecked: allProbesChecked);
@@ -270,14 +275,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     probes.removeAt(changedProbeIndex);
     probes.insert(changedProbeIndex, probe);
 
-    bool allProbesChecked = true;
-
-    for (Probe probe in probes) {
-      if (probe.checked == false) {
-        allProbesChecked = false;
-        break;
-      }
-    }
+    bool allProbesChecked = _areAllProbesChecked(probes);
 
     Recipe recipe = recipes[changedRecipeIndex]
         .copyWith(probes: probes, allProbesChecked: allProbesChecked);
@@ -296,14 +294,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     int changedProbeIndex = probes.indexOf(event.probe);
     probes.removeAt(changedProbeIndex);
 
-    bool allProbesChecked = probes.isEmpty ? false : true;
-
-    for (Probe probe in probes) {
-      if (probe.checked == false) {
-        allProbesChecked = false;
-        break;
-      }
-    }
+    bool allProbesChecked = _areAllProbesChecked(probes);
 
     Recipe recipe = recipes[changedRecipeIndex]
         .copyWith(probes: probes, allProbesChecked: allProbesChecked);
@@ -312,6 +303,17 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
 
     recipes.insert(changedRecipeIndex, recipe);
     emit(state.copyWith(recipes: recipes));
+  }
+
+  bool _areAllProbeAnswersStandard(List<Probe> probes) {
+    bool allProbeAnswersStandard = true;
+    for (Probe probe in probes) {
+      if (probe.standardAnswer() == false) {
+        allProbeAnswersStandard = false;
+        break;
+      }
+    }
+    return allProbeAnswersStandard;
   }
 
   void _onProbeOptionAdded(ProbeOptionAdded event, Emitter<RecipeState> emit) {
@@ -330,13 +332,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     probes.removeAt(changedProbeIndex);
     probes.insert(changedProbeIndex, probe);
 
-    bool allProbeAnswersStandard = true;
-    for (Probe probe in probes) {
-      if (probe.standardAnswer() == false) {
-        allProbeAnswersStandard = false;
-        break;
-      }
-    }
+    bool allProbeAnswersStandard = _areAllProbeAnswersStandard(probes);
 
     Recipe recipe = recipes[changedRecipeIndex].copyWith(
         probes: probes, allProbeAnswersStandard: allProbeAnswersStandard);
@@ -398,13 +394,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     probes.removeAt(changedProbeIndex);
     probes.insert(changedProbeIndex, probe);
 
-    bool allProbeAnswersStandard = true;
-    for (Probe probe in probes) {
-      if (probe.standardAnswer() == false) {
-        allProbeAnswersStandard = false;
-        break;
-      }
-    }
+    bool allProbeAnswersStandard = _areAllProbeAnswersStandard(probes);
 
     Recipe recipe = recipes[changedRecipeIndex].copyWith(
         probes: probes, allProbeAnswersStandard: allProbeAnswersStandard);
@@ -428,13 +418,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     probes.removeAt(changedProbeIndex);
     probes.insert(changedProbeIndex, probe);
 
-    bool allProbeAnswersStandard = true; //TODO: refactor logic into function
-    for (Probe probe in probes) {
-      if (probe.standardAnswer() == false) {
-        allProbeAnswersStandard = false;
-        break;
-      }
-    }
+    bool allProbeAnswersStandard = _areAllProbeAnswersStandard(probes);
 
     Recipe recipe = recipes[changedRecipeIndex].copyWith(
         probes: probes, allProbeAnswersStandard: allProbeAnswersStandard);
@@ -828,5 +812,17 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
   void _onRecipesLoaded(RecipesLoaded event, Emitter<RecipeState> emit) {
     List<Recipe> recipes = _gibsonifyRepository.loadRecipes();
     emit(state.copyWith(recipes: recipes));
+  }
+
+  Future<void> _onIngredientsLoaded(
+      IngredientsLoaded event, Emitter<RecipeState> emit) async {
+    if (state.ingredientsJson == null) {
+      try {
+        String ingredientsJson = await Ingredient.getIngredients();
+        emit(state.copyWith(ingredientsJson: ingredientsJson));
+      } catch (e) {
+        return;
+      }
+    }
   }
 }

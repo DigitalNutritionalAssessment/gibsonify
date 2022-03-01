@@ -1,6 +1,22 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### Refactor
+
+- **recipe**: rename bloc private functions
+- **recipe**: standardise ingredients json fields
+- **recipe**: remove unused dependency
+- **recipe**: use named strings for page navigation
+- **recipe**: refactor ingredient loading into bloc and store in state
+- **recipe**: add helper functions to refactor bloc functions
+- **recipe**: use maps instead of lists for arg passing
+
+### Fix
+
+- fix wrongly named map key for argument passing for page navigation
+
 ## 1.1.0 (2022-02-21)
 
 ### Fix
