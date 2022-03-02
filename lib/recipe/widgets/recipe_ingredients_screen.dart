@@ -113,7 +113,7 @@ class Ingredients extends StatelessWidget {
               itemCount: state.recipes[recipeIndex].ingredients.length,
               itemBuilder: (context, index) {
                 return Slidable(
-                  startActionPane: ActionPane(
+                  endActionPane: ActionPane(
                     motion: const ScrollMotion(),
                     children: [
                       SlidableAction(

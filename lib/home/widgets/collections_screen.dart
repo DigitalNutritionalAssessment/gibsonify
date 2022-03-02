@@ -22,7 +22,7 @@ class CollectionsScreen extends StatelessWidget {
                   // TODO: Refactor to a standalone widget
                   return Slidable(
                     key: Key(state.gibsonsForms[index]!.id),
-                    startActionPane: ActionPane(
+                    endActionPane: ActionPane(
                       motion: const ScrollMotion(),
                       children: [
                         SlidableAction(

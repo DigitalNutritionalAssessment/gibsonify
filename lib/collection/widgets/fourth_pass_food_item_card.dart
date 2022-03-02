@@ -22,7 +22,7 @@ class FourthPassFoodItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Slidable(
       key: Key(foodItem.id),
-      startActionPane: ActionPane(
+      endActionPane: ActionPane(
         motion: const ScrollMotion(),
         children: [
           SlidableAction(

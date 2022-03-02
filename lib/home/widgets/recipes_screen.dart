@@ -26,7 +26,7 @@ class RecipesScreen extends StatelessWidget {
               itemCount: state.recipes.length,
               itemBuilder: (context, index) {
                 return Slidable(
-                  startActionPane: ActionPane(
+                  endActionPane: ActionPane(
                     motion: const ScrollMotion(),
                     children: [
                       SlidableAction(

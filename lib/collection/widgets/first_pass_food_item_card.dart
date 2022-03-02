@@ -32,7 +32,7 @@ class FirstPassFoodItemCard extends StatelessWidget {
 
     return Slidable(
       key: Key(foodItem.id),
-      startActionPane: ActionPane(
+      endActionPane: ActionPane(
         motion: const ScrollMotion(),
         children: [
           SlidableAction(

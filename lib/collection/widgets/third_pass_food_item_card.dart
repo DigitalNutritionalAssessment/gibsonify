@@ -42,7 +42,7 @@ class ThirdPassFoodItemCard extends StatelessWidget {
                   // TODO: Try out a pop up button instead of Slidable
                   return Slidable(
                     key: Key(foodItem.measurements[index].id),
-                    startActionPane: ActionPane(
+                    endActionPane: ActionPane(
                       motion: const ScrollMotion(),
                       children: [
                         SlidableAction(

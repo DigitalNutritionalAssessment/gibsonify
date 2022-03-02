@@ -92,7 +92,7 @@ class ProbeList extends StatelessWidget {
                   itemCount: state.recipes[recipeIndex].probes.length,
                   itemBuilder: (context, index) {
                     return Slidable(
-                      startActionPane: ActionPane(
+                      endActionPane: ActionPane(
                         motion: const ScrollMotion(),
                         children: [
                           SlidableAction(
