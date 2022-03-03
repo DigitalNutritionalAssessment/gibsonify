@@ -5,6 +5,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gibsonify/home/home.dart';
 import 'package:gibsonify/navigation/navigation.dart';
 import 'package:gibsonify/collection/collection.dart';
+import 'package:gibsonify_api/gibsonify_api.dart';
 
 class CollectionsScreen extends StatelessWidget {
   const CollectionsScreen({Key? key}) : super(key: key);
@@ -26,10 +27,11 @@ class CollectionsScreen extends StatelessWidget {
                       motion: const ScrollMotion(),
                       children: [
                         SlidableAction(
-                          // TODO: implement deletion confirmation dialog
-                          onPressed: (context) => context.read<HomeBloc>().add(
-                              GibsonsFormDeleted(
-                                  id: state.gibsonsForms[index]!.id)),
+                          onPressed: (context) => showDialog<String>(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  DeleteCollectionDialog(
+                                      gibsonsForm: state.gibsonsForms[index]!)),
                           backgroundColor: const Color(0xFFFE4A49),
                           foregroundColor: Colors.white,
                           icon: Icons.delete,
@@ -104,6 +106,41 @@ class CollectionsScreen extends StatelessWidget {
                         Navigator.pushNamed(context, PageRouter.collection);
                       })
                 ]));
+      },
+    );
+  }
+}
+
+class DeleteCollectionDialog extends StatelessWidget {
+  final GibsonsForm gibsonsForm;
+  const DeleteCollectionDialog({Key? key, required this.gibsonsForm})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    String? respondentName = gibsonsForm.respondentName.value;
+    return BlocBuilder<CollectionBloc, CollectionState>(
+      builder: (context, state) {
+        return AlertDialog(
+          title: const Text('Delete collection'),
+          content: Text(
+              'Would you like to delete the collection of $respondentName?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'Cancel'),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                context
+                    .read<HomeBloc>()
+                    .add(GibsonsFormDeleted(id: gibsonsForm.id));
+                Navigator.pop(context, 'Delete');
+              },
+              child: const Text('Delete'),
+            ),
+          ],
+        );
       },
     );
   }
