@@ -123,7 +123,7 @@ class RecipeMeasurements extends StatelessWidget {
                           showDialog<String>(
                               context: context,
                               builder: (BuildContext context) =>
-                                  DeleteRecipeMeasurement(
+                                  DeleteRecipeMeasurementDialog(
                                       recipe: state.recipes[recipeIndex],
                                       measurementIndex: index));
                         } else {
@@ -254,11 +254,11 @@ class RecipeMeasurements extends StatelessWidget {
   }
 }
 
-class DeleteRecipeMeasurement extends StatelessWidget {
+class DeleteRecipeMeasurementDialog extends StatelessWidget {
   final Recipe recipe;
   final int measurementIndex;
 
-  const DeleteRecipeMeasurement(
+  const DeleteRecipeMeasurementDialog(
       {Key? key, required this.recipe, required this.measurementIndex})
       : super(key: key);
 
@@ -277,9 +277,9 @@ class DeleteRecipeMeasurement extends StatelessWidget {
             onPressed: () => {
               context.read<RecipeBloc>().add(RecipeMeasurementDeleted(
                   recipe: recipe, measurementIndex: measurementIndex)),
-              Navigator.pop(context, 'OK'),
+              Navigator.pop(context, 'Delete'),
             },
-            child: const Text('OK'),
+            child: const Text('Delete'),
           ),
         ],
       );

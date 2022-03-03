@@ -167,11 +167,11 @@ class ThirdPassFoodItemCard extends StatelessWidget {
 }
 
 // TODO: Implement pop up confirmation box
-// class DeleteFoodItemeMeasurement extends StatelessWidget {
+// class DeleteFoodItemeMeasurementDialog extends StatelessWidget {
 //   final FoodItem foodItem;
 //   final int measurementIndex;
 
-//   const DeleteFoodItemeMeasurement(
+//   const DeleteFoodItemeMeasurementDialog(
 //       {Key? key, required this.foodItem, required this.measurementIndex})
 //       : super(key: key);
 
@@ -190,9 +190,9 @@ class ThirdPassFoodItemCard extends StatelessWidget {
 //             onPressed: () => {
 //               context.read<CollectionBloc>().add(RecipeMeasurementDeleted(
 //                   recipe: recipe, measurementIndex: measurementIndex)),
-//               Navigator.pop(context, 'OK'),
+//               Navigator.pop(context, 'Delete'),
 //             },
-//             child: const Text('OK'),
+//             child: const Text('Delete'),
 //           ),
 //         ],
 //       );

@@ -142,9 +142,9 @@ class DeleteRecipeDialog extends StatelessWidget {
             onPressed: () => {
               context.read<RecipeBloc>().add(RecipeDeleted(recipe: recipe)),
               context.read<RecipeBloc>().add(const RecipesSaved()),
-              Navigator.pop(context, 'OK')
+              Navigator.pop(context, 'Delete')
             },
-            child: const Text('OK'),
+            child: const Text('Delete'),
           ),
         ],
       );

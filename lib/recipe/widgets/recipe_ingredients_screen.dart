@@ -121,7 +121,7 @@ class Ingredients extends StatelessWidget {
                           showDialog<String>(
                               context: context,
                               builder: (BuildContext context) =>
-                                  DeleteIngredient(
+                                  DeleteIngredientDialog(
                                       recipe: state.recipes[recipeIndex],
                                       ingredient: state.recipes[recipeIndex]
                                           .ingredients[index]));
@@ -168,11 +168,11 @@ class Ingredients extends StatelessWidget {
   }
 }
 
-class DeleteIngredient extends StatelessWidget {
+class DeleteIngredientDialog extends StatelessWidget {
   final Recipe recipe;
   final Ingredient ingredient;
 
-  const DeleteIngredient(
+  const DeleteIngredientDialog(
       {Key? key, required this.recipe, required this.ingredient})
       : super(key: key);
 
@@ -193,9 +193,9 @@ class DeleteIngredient extends StatelessWidget {
             onPressed: () => {
               context.read<RecipeBloc>().add(
                   IngredientDeleted(recipe: recipe, ingredient: ingredient)),
-              Navigator.pop(context, 'OK')
+              Navigator.pop(context, 'Delete')
             },
-            child: const Text('OK'),
+            child: const Text('Delete'),
           ),
         ],
       );

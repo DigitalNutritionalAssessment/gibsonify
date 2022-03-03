@@ -63,7 +63,7 @@ class ProbeForm extends StatelessWidget {
                                     showDialog<String>(
                                         context: context,
                                         builder: (BuildContext context) =>
-                                            DeleteProbeOption(
+                                            DeleteProbeOptionDialog(
                                                 recipe:
                                                     state.recipes[recipeIndex],
                                                 probeIndex: probeIndex,
@@ -122,12 +122,12 @@ class ProbeForm extends StatelessWidget {
   }
 }
 
-class DeleteProbeOption extends StatelessWidget {
+class DeleteProbeOptionDialog extends StatelessWidget {
   final Recipe recipe;
   final int probeIndex;
   final int probeOptionIndex;
 
-  const DeleteProbeOption(
+  const DeleteProbeOptionDialog(
       {Key? key,
       required this.recipe,
       required this.probeIndex,
@@ -152,9 +152,9 @@ class DeleteProbeOption extends StatelessWidget {
                   recipe: recipe,
                   probeIndex: probeIndex,
                   probeOptionIndex: probeOptionIndex)),
-              Navigator.pop(context, 'OK'),
+              Navigator.pop(context, 'Delete'),
             },
-            child: const Text('OK'),
+            child: const Text('Delete'),
           ),
         ],
       );
