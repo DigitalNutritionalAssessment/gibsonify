@@ -30,13 +30,11 @@ class RecipesScreen extends StatelessWidget {
                     motion: const ScrollMotion(),
                     children: [
                       SlidableAction(
-                        onPressed: (context) {
-                          showDialog<String>(
-                              context: context,
-                              builder: (BuildContext context) =>
-                                  DeleteRecipeDialog(
-                                      recipe: state.recipes[index]));
-                        },
+                        onPressed: (context) => showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) =>
+                                DeleteRecipeDialog(
+                                    recipe: state.recipes[index])),
                         backgroundColor: const Color(0xFFFE4A49),
                         foregroundColor: Colors.white,
                         icon: Icons.delete,
@@ -74,6 +72,10 @@ class RecipesScreen extends StatelessWidget {
                                       SelectedRecipeScreen.probeScreen
                                 })
                     },
+                    onLongPress: () => showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) =>
+                            DeleteRecipeDialog(recipe: state.recipes[index])),
                   )),
                 );
               }),
