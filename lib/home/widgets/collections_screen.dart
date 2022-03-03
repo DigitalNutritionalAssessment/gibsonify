@@ -40,51 +40,21 @@ class CollectionsScreen extends StatelessWidget {
                       ],
                     ),
                     child: Card(
-                        // Unique key is needed to correctly rebuild after
-                        // deleting or modifying this widget and its subwidgets
-                        key: Key(state.gibsonsForms[index]!.id),
-                        child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              children: [
-                                TextFormField(
-                                  key: UniqueKey(),
-                                  onTap: () {
-                                    context.read<CollectionBloc>().add(
-                                        GibsonsFormProvided(
-                                            gibsonsForm:
-                                                state.gibsonsForms[index]!));
-                                    Navigator.pushNamed(
-                                        context, PageRouter.collection);
-                                  },
-                                  readOnly: true,
-                                  initialValue: state.gibsonsForms[index]!
-                                      .respondentName.value,
-                                  decoration: const InputDecoration(
-                                    icon: Icon(Icons.person),
-                                    labelText: 'Respondent Name',
-                                  ),
-                                ),
-                                TextFormField(
-                                  key: UniqueKey(),
-                                  onTap: () {
-                                    context.read<CollectionBloc>().add(
-                                        GibsonsFormProvided(
-                                            gibsonsForm:
-                                                state.gibsonsForms[index]!));
-                                    Navigator.pushNamed(
-                                        context, PageRouter.collection);
-                                  },
-                                  readOnly: true,
-                                  initialValue: state
-                                      .gibsonsForms[index]!.interviewDate.value,
-                                  decoration: const InputDecoration(
-                                    icon: Icon(Icons.calendar_today),
-                                    labelText: 'Interview Date',
-                                  ),
-                                ),
-                              ],
-                            ))),
+                      child: ListTile(
+                        leading: const Icon(Icons.person),
+                        title: Text(
+                            state.gibsonsForms[index]!.respondentName.value),
+                        subtitle: Text(
+                            state.gibsonsForms[index]!.interviewDate.value),
+                        // TODO: add trailing icon depending on whether collection is saved or not
+                        onTap: () {
+                          context.read<CollectionBloc>().add(
+                              GibsonsFormProvided(
+                                  gibsonsForm: state.gibsonsForms[index]!));
+                          Navigator.pushNamed(context, PageRouter.collection);
+                        },
+                      ),
+                    ),
                   );
                 }),
             floatingActionButton: Column(
