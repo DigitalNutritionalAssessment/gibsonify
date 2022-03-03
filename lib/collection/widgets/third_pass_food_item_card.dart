@@ -68,7 +68,6 @@ class ThirdPassFoodItemCard extends StatelessWidget {
                       child: Card(
                         child: Column(
                           children: [
-                            // TODO: fix RenderFlex overflow
                             DropdownSearch<String>(
                                 dropdownSearchDecoration: InputDecoration(
                                   icon:
@@ -95,7 +94,6 @@ class ThirdPassFoodItemCard extends StatelessWidget {
                                     }),
                                 selectedItem: foodItem
                                     .measurements[index].measurementMethod),
-
                             TextFormField(
                               initialValue:
                                   foodItem.measurements[index].measurementValue,
@@ -118,7 +116,6 @@ class ThirdPassFoodItemCard extends StatelessWidget {
                               }),
                               textInputAction: TextInputAction.next,
                             ),
-
                             DropdownSearch<String>(
                                 dropdownSearchDecoration: InputDecoration(
                                   icon: const Icon(
