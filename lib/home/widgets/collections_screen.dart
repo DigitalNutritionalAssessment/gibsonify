@@ -53,6 +53,11 @@ class CollectionsScreen extends StatelessWidget {
                                   gibsonsForm: state.gibsonsForms[index]!));
                           Navigator.pushNamed(context, PageRouter.collection);
                         },
+                        onLongPress: () => showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) =>
+                                DeleteCollectionDialog(
+                                    gibsonsForm: state.gibsonsForms[index]!)),
                       ),
                     ),
                   );
