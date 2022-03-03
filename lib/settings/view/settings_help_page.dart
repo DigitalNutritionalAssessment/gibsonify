@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsHelpPage extends StatefulWidget {
   // TODO: Once there is more functionality in settings, move the logic
@@ -19,6 +20,9 @@ class _SettingsHelpPageState extends State<SettingsHelpPage> {
     buildSignature: 'Unknown',
   );
 
+  final String _gibsonifyRepositoryUrl =
+      'https://github.com/DigitalNutritionalAssessment/gibsonify';
+
   @override
   void initState() {
     super.initState();
@@ -32,6 +36,18 @@ class _SettingsHelpPageState extends State<SettingsHelpPage> {
     });
   }
 
+  void _launchUrl() async {
+    try {
+      await launch(_gibsonifyRepositoryUrl);
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(content: Text('Could not launch $_gibsonifyRepositoryUrl')),
+        );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,6 +56,13 @@ class _SettingsHelpPageState extends State<SettingsHelpPage> {
           ListTile(
             title: const Text('App version'),
             subtitle: Text(_packageInfo.version),
+          ),
+          ListTile(
+            title: const Text('Source code'),
+            subtitle:
+                const Text('github.com/DigitalNutritionalAssessment/gibsonify'),
+            onTap: _launchUrl,
+            trailing: const Icon(Icons.open_in_new),
           ),
           const ListTile(
             title: Text('© DigitalNutritionalAssessment'),
