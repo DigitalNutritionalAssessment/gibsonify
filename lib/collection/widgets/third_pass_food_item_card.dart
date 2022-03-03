@@ -49,13 +49,6 @@ class ThirdPassFoodItemCard extends StatelessWidget {
                           onPressed: (context) {
                             if (foodItem.measurements.length > 1) {
                               onMeasurementDeleted!(index);
-                              // TODO: implement deletion dialog
-                              // showDialog<String>(
-                              //     context: context,
-                              //     builder: (BuildContext context) =>
-                              //         DeleteFoodItemMeasurement(
-                              //             foodItem: foodItem,
-                              //             measurementIndex: index));
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
@@ -165,37 +158,3 @@ class ThirdPassFoodItemCard extends StatelessWidget {
     );
   }
 }
-
-// TODO: Implement pop up confirmation box
-// class DeleteFoodItemeMeasurementDialog extends StatelessWidget {
-//   final FoodItem foodItem;
-//   final int measurementIndex;
-
-//   const DeleteFoodItemeMeasurementDialog(
-//       {Key? key, required this.foodItem, required this.measurementIndex})
-//       : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
-//       return AlertDialog(
-//         title: const Text('Delete measurement'),
-//         content: const Text('Would you like to delete the measurement?'),
-//         actions: [
-//           TextButton(
-//             onPressed: () => Navigator.pop(context, 'Cancel'),
-//             child: const Text('Cancel'),
-//           ),
-//           TextButton(
-//             onPressed: () => {
-//               context.read<CollectionBloc>().add(RecipeMeasurementDeleted(
-//                   recipe: recipe, measurementIndex: measurementIndex)),
-//               Navigator.pop(context, 'Delete'),
-//             },
-//             child: const Text('Delete'),
-//           ),
-//         ],
-//       );
-//     });
-//   }
-// }
