@@ -132,7 +132,7 @@ class RecipeMeasurements extends StatelessWidget {
                                   'A recipe must have at least one measurement')));
                         }
                       },
-                      backgroundColor: const Color(0xFFFE4A49),
+                      backgroundColor: Colors.red,
                       foregroundColor: Colors.white,
                       icon: Icons.delete,
                       label: 'Delete',

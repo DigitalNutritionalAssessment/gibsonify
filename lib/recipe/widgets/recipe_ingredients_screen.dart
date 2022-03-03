@@ -126,7 +126,7 @@ class Ingredients extends StatelessWidget {
                                       ingredient: state.recipes[recipeIndex]
                                           .ingredients[index]));
                         },
-                        backgroundColor: const Color(0xFFFE4A49),
+                        backgroundColor: Colors.red,
                         foregroundColor: Colors.white,
                         icon: Icons.delete,
                         label: 'Delete',

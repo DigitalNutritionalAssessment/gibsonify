@@ -75,7 +75,7 @@ class ProbeForm extends StatelessWidget {
                                                 'A probe must have at least two options')));
                                   }
                                 },
-                                backgroundColor: const Color(0xFFFE4A49),
+                                backgroundColor: Colors.red,
                                 foregroundColor: Colors.white,
                                 icon: Icons.delete,
                                 label: 'Delete',

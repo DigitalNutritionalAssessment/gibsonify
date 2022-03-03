@@ -56,7 +56,7 @@ class ThirdPassFoodItemCard extends StatelessWidget {
                         SlidableAction(
                           onPressed: (context) =>
                               _onMeasurementDeleted(context, index),
-                          backgroundColor: const Color(0xFFFE4A49),
+                          backgroundColor: Colors.red,
                           foregroundColor: Colors.white,
                           icon: Icons.delete,
                           label: 'Delete',

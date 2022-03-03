@@ -187,7 +187,7 @@ class IngredientMeasurements extends StatelessWidget {
                                   'An ingredient must have at least one measurement')));
                         }
                       },
-                      backgroundColor: const Color(0xFFFE4A49),
+                      backgroundColor: Colors.red,
                       foregroundColor: Colors.white,
                       icon: Icons.delete,
                       label: 'Delete',

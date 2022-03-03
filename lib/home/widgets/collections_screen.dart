@@ -32,7 +32,7 @@ class CollectionsScreen extends StatelessWidget {
                               builder: (BuildContext context) =>
                                   DeleteCollectionDialog(
                                       gibsonsForm: state.gibsonsForms[index]!)),
-                          backgroundColor: const Color(0xFFFE4A49),
+                          backgroundColor: Colors.red,
                           foregroundColor: Colors.white,
                           icon: Icons.delete,
                           label: 'Delete',

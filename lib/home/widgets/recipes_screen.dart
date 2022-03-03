@@ -35,7 +35,7 @@ class RecipesScreen extends StatelessWidget {
                             builder: (BuildContext context) =>
                                 DeleteRecipeDialog(
                                     recipe: state.recipes[index])),
-                        backgroundColor: const Color(0xFFFE4A49),
+                        backgroundColor: Colors.red,
                         foregroundColor: Colors.white,
                         icon: Icons.delete,
                         label: 'Delete',
