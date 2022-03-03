@@ -34,7 +34,8 @@ class RecipesScreen extends StatelessWidget {
                           showDialog<String>(
                               context: context,
                               builder: (BuildContext context) =>
-                                  DeleteRecipe(recipe: state.recipes[index]));
+                                  DeleteRecipeDialog(
+                                      recipe: state.recipes[index]));
                         },
                         backgroundColor: const Color(0xFFFE4A49),
                         foregroundColor: Colors.white,
@@ -120,10 +121,10 @@ class RecipesScreen extends StatelessWidget {
   }
 }
 
-class DeleteRecipe extends StatelessWidget {
+class DeleteRecipeDialog extends StatelessWidget {
   final Recipe recipe;
 
-  const DeleteRecipe({Key? key, required this.recipe}) : super(key: key);
+  const DeleteRecipeDialog({Key? key, required this.recipe}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
