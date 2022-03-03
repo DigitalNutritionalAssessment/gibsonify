@@ -63,88 +63,84 @@ class ThirdPassFoodItemCard extends StatelessWidget {
                         )
                       ],
                     ),
-                    child: InkWell(
-                      onLongPress: () => _onMeasurementDeleted(context, index),
-                      child: Card(
-                        child: Column(
-                          children: [
-                            DropdownSearch<String>(
-                                dropdownSearchDecoration: InputDecoration(
-                                  icon:
-                                      const Icon(Icons.monitor_weight_outlined),
-                                  labelText: "Measurement method",
-                                  helperText: 'How the measurement is measured',
-                                  // TODO: the errorText should be displayed if nothing is chosen
-                                  // so investigate how this can be achieved with focusnodes or
-                                  // mayge send an empty string (although that would not work all
-                                  // the time)
-                                  errorText: !foodItem.measurements[index]
-                                          .isMethodValid()
-                                      ? 'Enter a measurement method'
-                                      : null,
-                                ),
-                                mode: Mode.MENU,
-                                showSelectedItems: true,
-                                showSearchBox: false,
-                                items: Measurement.measurementMethods,
-                                onChanged: (String? measurementMethod) =>
-                                    onMeasurementMethodChanged!({
-                                      'index': index,
-                                      'method': measurementMethod
-                                    }),
-                                selectedItem: foodItem
-                                    .measurements[index].measurementMethod),
-                            TextFormField(
-                              initialValue:
-                                  foodItem.measurements[index].measurementValue,
-                              decoration: InputDecoration(
-                                icon: const Icon(
-                                    Icons.drive_file_rename_outline_rounded),
-                                labelText: 'Measurement value',
-                                helperText: 'The amount or number you measured',
+                    child: Card(
+                      child: Column(
+                        children: [
+                          DropdownSearch<String>(
+                              dropdownSearchDecoration: InputDecoration(
+                                icon: const Icon(Icons.monitor_weight_outlined),
+                                labelText: "Measurement method",
+                                helperText: 'How the measurement is measured',
+                                // TODO: the errorText should be displayed if nothing is chosen
+                                // so investigate how this can be achieved with focusnodes or
+                                // mayge send an empty string (although that would not work all
+                                // the time)
                                 errorText: !foodItem.measurements[index]
-                                        .isValueValid()
-                                    // TODO: the errorText should be displayed if nothing is typed
-                                    // so investigate how this can be achieved with focusnodes
-                                    ? 'Enter the measured value in 1 to 4 digits'
+                                        .isMethodValid()
+                                    ? 'Enter a measurement method'
                                     : null,
                               ),
-                              onChanged: (measurementValue) =>
-                                  onMeasurementValueChanged!({
-                                'index': index,
-                                'value': measurementValue
-                              }),
-                              textInputAction: TextInputAction.next,
+                              mode: Mode.MENU,
+                              showSelectedItems: true,
+                              showSearchBox: false,
+                              items: Measurement.measurementMethods,
+                              onChanged: (String? measurementMethod) =>
+                                  onMeasurementMethodChanged!({
+                                    'index': index,
+                                    'method': measurementMethod
+                                  }),
+                              selectedItem: foodItem
+                                  .measurements[index].measurementMethod),
+                          TextFormField(
+                            initialValue:
+                                foodItem.measurements[index].measurementValue,
+                            decoration: InputDecoration(
+                              icon: const Icon(
+                                  Icons.drive_file_rename_outline_rounded),
+                              labelText: 'Measurement value',
+                              helperText: 'The amount or number you measured',
+                              errorText: !foodItem.measurements[index]
+                                      .isValueValid()
+                                  // TODO: the errorText should be displayed if nothing is typed
+                                  // so investigate how this can be achieved with focusnodes
+                                  ? 'Enter the measured value in 1 to 4 digits'
+                                  : null,
                             ),
-                            DropdownSearch<String>(
-                                dropdownSearchDecoration: InputDecoration(
-                                  icon: const Icon(
-                                      Icons.radio_button_unchecked_outlined),
-                                  labelText: "Measurement unit",
-                                  helperText:
-                                      'The size of each measurement value',
-                                  // TODO: the errorText should be displayed if nothing is chosen
-                                  // so investigate how this can be achieved with focusnodes or
-                                  // mayge send an empty string (although that would not work all
-                                  // the time)
-                                  errorText: !foodItem.measurements[index]
-                                          .isUnitValid()
-                                      ? 'Select the measurement unit'
-                                      : null,
-                                ),
-                                mode: Mode.MENU,
-                                showSelectedItems: true,
-                                showSearchBox: false,
-                                items: Measurement.measurementUnits,
-                                onChanged: (String? measurementUnit) =>
-                                    onMeasurementUnitChanged!({
-                                      'index': index,
-                                      'unit': measurementUnit
-                                    }),
-                                selectedItem: foodItem
-                                    .measurements[index].measurementUnit),
-                          ],
-                        ),
+                            onChanged: (measurementValue) =>
+                                onMeasurementValueChanged!({
+                              'index': index,
+                              'value': measurementValue
+                            }),
+                            textInputAction: TextInputAction.next,
+                          ),
+                          DropdownSearch<String>(
+                              dropdownSearchDecoration: InputDecoration(
+                                icon: const Icon(
+                                    Icons.radio_button_unchecked_outlined),
+                                labelText: "Measurement unit",
+                                helperText:
+                                    'The size of each measurement value',
+                                // TODO: the errorText should be displayed if nothing is chosen
+                                // so investigate how this can be achieved with focusnodes or
+                                // mayge send an empty string (although that would not work all
+                                // the time)
+                                errorText:
+                                    !foodItem.measurements[index].isUnitValid()
+                                        ? 'Select the measurement unit'
+                                        : null,
+                              ),
+                              mode: Mode.MENU,
+                              showSelectedItems: true,
+                              showSearchBox: false,
+                              items: Measurement.measurementUnits,
+                              onChanged: (String? measurementUnit) =>
+                                  onMeasurementUnitChanged!({
+                                    'index': index,
+                                    'unit': measurementUnit
+                                  }),
+                              selectedItem:
+                                  foodItem.measurements[index].measurementUnit),
+                        ],
                       ),
                     ),
                   );
