@@ -24,6 +24,7 @@ dependencies:
   intl_phone_field: ^3.0.1
   share_plus: ^3.0.5
   path_provider: ^2.0.9
+  package_info_plus: ^1.4.0
 
 dev_dependencies:
   flutter_test:
