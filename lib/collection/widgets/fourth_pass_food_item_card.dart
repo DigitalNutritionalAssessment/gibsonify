@@ -26,7 +26,6 @@ class FourthPassFoodItemCard extends StatelessWidget {
         motion: const ScrollMotion(),
         children: [
           SlidableAction(
-            // TODO: implement deletion confirmation dialog
             onPressed: (context) => onDeleted!(),
             backgroundColor: Colors.red,
             foregroundColor: Colors.white,
