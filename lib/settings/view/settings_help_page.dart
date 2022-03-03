@@ -41,6 +41,10 @@ class _SettingsHelpPageState extends State<SettingsHelpPage> {
             title: const Text('App version'),
             subtitle: Text(_packageInfo.version),
           ),
+          const ListTile(
+            title: Text('© DigitalNutritionalAssessment'),
+            subtitle: Text('Licensed under the Apache 2.0 license'),
+          )
         ]));
   }
 }
