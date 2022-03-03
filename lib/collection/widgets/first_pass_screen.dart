@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gibsonify/home/home.dart';
 import 'package:gibsonify/collection/collection.dart';
 import 'package:gibsonify/navigation/navigation.dart';
+import 'package:gibsonify_api/gibsonify_api.dart';
 
 class FirstPassScreen extends StatelessWidget {
   const FirstPassScreen({Key? key}) : super(key: key);
@@ -50,9 +51,12 @@ class FirstPassScreen extends StatelessWidget {
                           .add(FoodItemTimePeriodChanged(
                               foodItem: state.gibsonsForm.foodItems[index],
                               foodItemTimePeriod: changedTimePeriod)),
-                      onDeleted: () => context.read<CollectionBloc>().add(
-                          FoodItemDeleted(
-                              foodItem: state.gibsonsForm.foodItems[index])));
+                      onDeleted: () => showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) =>
+                              DeleteFoodItemDialog(
+                                  foodItem:
+                                      state.gibsonsForm.foodItems[index])));
                 }),
             floatingActionButton: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -65,6 +69,40 @@ class FirstPassScreen extends StatelessWidget {
                       onPressed: () =>
                           context.read<CollectionBloc>().add(FoodItemAdded()))
                 ]));
+      },
+    );
+  }
+}
+
+class DeleteFoodItemDialog extends StatelessWidget {
+  final FoodItem foodItem;
+  const DeleteFoodItemDialog({Key? key, required this.foodItem})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    String? name = foodItem.name.value;
+    return BlocBuilder<CollectionBloc, CollectionState>(
+      builder: (context, state) {
+        return AlertDialog(
+          title: const Text('Delete food'),
+          content: Text('Would you like to delete the $name food?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'Cancel'),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                context
+                    .read<CollectionBloc>()
+                    .add(FoodItemDeleted(foodItem: foodItem));
+                Navigator.pop(context, 'Delete');
+              },
+              child: const Text('Delete'),
+            ),
+          ],
+        );
       },
     );
   }
