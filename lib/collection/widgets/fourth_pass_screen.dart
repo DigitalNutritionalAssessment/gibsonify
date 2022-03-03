@@ -34,8 +34,9 @@ class FourthPassScreen extends StatelessWidget {
                         .add(FoodItemConfirmationChanged(
                             foodItem: state.gibsonsForm.foodItems[index],
                             foodItemConfirmed: negatedConfirmation)),
-                    onDeleted: () => context.read<CollectionBloc>().add(
-                        FoodItemDeleted(
+                    onDeleted: () => showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => DeleteFoodItemDialog(
                             foodItem: state.gibsonsForm.foodItems[index])),
                     onSelectedScreenChanged: (screen) => context
                         .read<CollectionBloc>()
