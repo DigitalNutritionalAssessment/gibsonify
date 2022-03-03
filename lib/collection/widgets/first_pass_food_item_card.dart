@@ -44,39 +44,42 @@ class FirstPassFoodItemCard extends StatelessWidget {
           )
         ],
       ),
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              TextFormField(
-                  // A unique key needs to be set in order to properly
-                  // rebuild this Field after deleting a FoodItem
-                  key: Key(foodItem.id),
-                  initialValue: foodItem.name.value,
-                  decoration: InputDecoration(
-                      icon: const Icon(Icons.fastfood),
-                      labelText: 'Food name',
-                      helperText: 'Food name e.g. Dhal',
-                      errorText: foodItem.name.invalid
-                          ? 'Enter a food name e.g. Banana'
-                          : null),
-                  onChanged: (value) => onNameChanged!(value),
-                  textInputAction: TextInputAction.next),
-              DropdownButtonFormField(
-                  value: foodItem.timePeriod.value,
-                  decoration: InputDecoration(
-                      icon: const Icon(Icons.access_time),
-                      labelText: 'Time period',
-                      helperText:
-                          'Time period of consuming the food e.g. Morning',
-                      errorText: foodItem.timePeriod.invalid
-                          ? 'Select a time period'
-                          : null),
-                  items: dropdownMenuItems,
-                  onChanged: (String? value) =>
-                      onTimePeriodChanged!(value ?? '')),
-            ],
+      child: InkWell(
+        onLongPress: () => onDeleted!(),
+        child: Card(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                TextFormField(
+                    // A unique key needs to be set in order to properly
+                    // rebuild this Field after deleting a FoodItem
+                    key: Key(foodItem.id),
+                    initialValue: foodItem.name.value,
+                    decoration: InputDecoration(
+                        icon: const Icon(Icons.fastfood),
+                        labelText: 'Food name',
+                        helperText: 'Food name e.g. Dhal',
+                        errorText: foodItem.name.invalid
+                            ? 'Enter a food name e.g. Banana'
+                            : null),
+                    onChanged: (value) => onNameChanged!(value),
+                    textInputAction: TextInputAction.next),
+                DropdownButtonFormField(
+                    value: foodItem.timePeriod.value,
+                    decoration: InputDecoration(
+                        icon: const Icon(Icons.access_time),
+                        labelText: 'Time period',
+                        helperText:
+                            'Time period of consuming the food e.g. Morning',
+                        errorText: foodItem.timePeriod.invalid
+                            ? 'Select a time period'
+                            : null),
+                    items: dropdownMenuItems,
+                    onChanged: (String? value) =>
+                        onTimePeriodChanged!(value ?? '')),
+              ],
+            ),
           ),
         ),
       ),
