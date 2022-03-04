@@ -179,17 +179,15 @@ class FourthPassFoodItemCard extends StatelessWidget {
                       })
                 ],
               ),
-              TextButton(
-                  // TODO: set style property to be
-                  // opposite color of Card
-                  // TODO: make each fooditem change from confirmed
-                  // to unconfirmed if some field of it changes
-                  // TODO: only allow to confirm if all fields are
-                  // validated by Formz
-                  onPressed: () => onConfirmationChanged!(!foodItem.confirmed),
-                  child: foodItem.confirmed
+              ListTile(
+                  title: foodItem.confirmed
                       ? const Text('Unconfirm')
-                      : const Text('Confirm')),
+                      : const Text('Confirm'),
+                  subtitle: Text(foodItem.name.value),
+                  leading: foodItem.confirmed
+                      ? const Icon(Icons.check_box_outlined)
+                      : const Icon(Icons.check_box_outline_blank_outlined),
+                  onTap: () => onConfirmationChanged!(!foodItem.confirmed)),
             ],
           ),
         ),
