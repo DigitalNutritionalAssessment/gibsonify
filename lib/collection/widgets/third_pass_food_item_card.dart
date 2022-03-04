@@ -121,6 +121,7 @@ class ThirdPassFoodItemCard extends StatelessWidget {
                               'value': measurementValue
                             }),
                             textInputAction: TextInputAction.next,
+                            keyboardType: TextInputType.number,
                           ),
 
                           DropdownSearch<String>(
