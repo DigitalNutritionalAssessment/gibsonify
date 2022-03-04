@@ -184,9 +184,11 @@ class FourthPassFoodItemCard extends StatelessWidget {
                       ? const Text('Unconfirm')
                       : const Text('Confirm'),
                   subtitle: Text(foodItem.name.value),
-                  leading: foodItem.confirmed
-                      ? const Icon(Icons.check_box_outlined)
-                      : const Icon(Icons.check_box_outline_blank_outlined),
+                  leading: Checkbox(
+                    value: foodItem.confirmed,
+                    onChanged: (bool? value) =>
+                        onConfirmationChanged!(!foodItem.confirmed),
+                  ),
                   onTap: () => onConfirmationChanged!(!foodItem.confirmed)),
             ],
           ),
