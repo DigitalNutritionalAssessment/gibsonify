@@ -7,3 +7,4 @@ export 'first_pass_food_item_card.dart';
 export 'second_pass_food_item_card.dart';
 export 'third_pass_food_item_card.dart';
 export 'fourth_pass_food_item_card.dart';
+export 'collection_pop.dart';

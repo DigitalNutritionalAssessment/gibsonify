@@ -15,42 +15,47 @@ class CollectionPage extends StatelessWidget {
       const ThirdPassScreen(),
       const FourthPassScreen(),
     ];
-    return BlocBuilder<CollectionBloc, CollectionState>(
-      builder: (context, state) {
-        return Scaffold(
-          body: _screens[state.selectedScreenIndex()],
-          bottomNavigationBar: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            currentIndex: state.selectedScreenIndex(),
-            onTap: (int index) => context.read<CollectionBloc>().add(
-                SelectedScreenChanged(
-                    changedSelectedScreen: state.screenOfSelectedIndex(index))),
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Icon(Icons.description),
-                label: 'Sensitization',
-              ),
-              BottomNavigationBarItem(
-                // TODO: Change icons to just numbers
-                icon: Icon(Icons.one_k),
-                label: 'First',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.two_k),
-                label: 'Second',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.three_k),
-                label: 'Third',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.four_k),
-                label: 'Fourth',
-              )
-            ],
-          ),
-        );
-      },
+    return WillPopScope(
+      // Override back button/swipe to save Collection and reload Collections
+      onWillPop: () => collectionPop(context),
+      child: BlocBuilder<CollectionBloc, CollectionState>(
+        builder: (context, state) {
+          return Scaffold(
+            body: _screens[state.selectedScreenIndex()],
+            bottomNavigationBar: BottomNavigationBar(
+              type: BottomNavigationBarType.fixed,
+              currentIndex: state.selectedScreenIndex(),
+              onTap: (int index) => context.read<CollectionBloc>().add(
+                  SelectedScreenChanged(
+                      changedSelectedScreen:
+                          state.screenOfSelectedIndex(index))),
+              items: const <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.description),
+                  label: 'Sensitization',
+                ),
+                BottomNavigationBarItem(
+                  // TODO: Change icons to just numbers
+                  icon: Icon(Icons.one_k),
+                  label: 'First',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.two_k),
+                  label: 'Second',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.three_k),
+                  label: 'Third',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.four_k),
+                  label: 'Fourth',
+                )
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }
