@@ -75,6 +75,7 @@ class ThirdPassFoodItemCard extends StatelessWidget {
                         children: [
                           // TODO: fix RenderFlex overflow
                           DropdownSearch<String>(
+                              maxHeight: 336.0,
                               dropdownSearchDecoration: InputDecoration(
                                 icon: const Icon(Icons.monitor_weight_outlined),
                                 labelText: "Measurement method",
@@ -101,6 +102,7 @@ class ThirdPassFoodItemCard extends StatelessWidget {
                                   .measurements[index].measurementMethod),
 
                           DropdownSearch<String>(
+                              maxHeight: 450.0,
                               dropdownSearchDecoration: InputDecoration(
                                 icon: const Icon(
                                     Icons.radio_button_unchecked_outlined),
