@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:gibsonify/collection/collection.dart';
+import 'package:gibsonify/home/home.dart';
 
 class CollectionPage extends StatelessWidget {
   const CollectionPage({Key? key}) : super(key: key);
@@ -15,9 +16,19 @@ class CollectionPage extends StatelessWidget {
       const ThirdPassScreen(),
       const FourthPassScreen(),
     ];
+
+    /// Custom pop function used in `WillPopScope`'s `onWillPop` argument in
+    /// `CollectionPage` to override the Android Back button and swipe gesture
+    /// to save current Collection and reload all Collections to `HomeBloc`.
+    Future<bool> _popCollectionPage(BuildContext context) async {
+      context.read<CollectionBloc>().add(const GibsonsFormSaved());
+      context.read<HomeBloc>().add(const GibsonsFormsLoaded());
+      Navigator.of(context).pop(true);
+      return true;
+    }
+
     return WillPopScope(
-      // Override back button/swipe to save Collection and reload Collections
-      onWillPop: () => collectionPop(context),
+      onWillPop: () => _popCollectionPage(context),
       child: BlocBuilder<CollectionBloc, CollectionState>(
         builder: (context, state) {
           return Scaffold(
