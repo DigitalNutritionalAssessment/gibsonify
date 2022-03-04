@@ -100,30 +100,6 @@ class ThirdPassFoodItemCard extends StatelessWidget {
                               selectedItem: foodItem
                                   .measurements[index].measurementMethod),
 
-                          TextFormField(
-                            initialValue:
-                                foodItem.measurements[index].measurementValue,
-                            decoration: InputDecoration(
-                              icon: const Icon(
-                                  Icons.drive_file_rename_outline_rounded),
-                              labelText: 'Measurement value',
-                              helperText: 'The amount or number you measured',
-                              errorText: !foodItem.measurements[index]
-                                      .isValueValid()
-                                  // TODO: the errorText should be displayed if nothing is typed
-                                  // so investigate how this can be achieved with focusnodes
-                                  ? 'Enter the measured value in 1 to 4 digits'
-                                  : null,
-                            ),
-                            onChanged: (measurementValue) =>
-                                onMeasurementValueChanged!({
-                              'index': index,
-                              'value': measurementValue
-                            }),
-                            textInputAction: TextInputAction.next,
-                            keyboardType: TextInputType.number,
-                          ),
-
                           DropdownSearch<String>(
                               dropdownSearchDecoration: InputDecoration(
                                 icon: const Icon(
@@ -151,6 +127,30 @@ class ThirdPassFoodItemCard extends StatelessWidget {
                                   }),
                               selectedItem:
                                   foodItem.measurements[index].measurementUnit),
+
+                          TextFormField(
+                            initialValue:
+                                foodItem.measurements[index].measurementValue,
+                            decoration: InputDecoration(
+                              icon: const Icon(
+                                  Icons.drive_file_rename_outline_rounded),
+                              labelText: 'Measurement value',
+                              helperText: 'The amount or number you measured',
+                              errorText: !foodItem.measurements[index]
+                                      .isValueValid()
+                                  // TODO: the errorText should be displayed if nothing is typed
+                                  // so investigate how this can be achieved with focusnodes
+                                  ? 'Enter the measured value in 1 to 4 digits'
+                                  : null,
+                            ),
+                            onChanged: (measurementValue) =>
+                                onMeasurementValueChanged!({
+                              'index': index,
+                              'value': measurementValue
+                            }),
+                            textInputAction: TextInputAction.next,
+                            keyboardType: TextInputType.number,
+                          ),
                         ],
                       ),
                     ),
