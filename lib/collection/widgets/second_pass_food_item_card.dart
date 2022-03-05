@@ -91,10 +91,10 @@ class SecondPassFoodItemCard extends StatelessWidget {
               initialValue: foodItem.description.value,
               decoration: InputDecoration(
                 icon: const Icon(Icons.info),
-                labelText: 'Food description',
-                helperText: 'Detailed dish description',
+                labelText: 'Food ingredients',
+                helperText: 'Detailed list of ingredients',
                 errorText: foodItem.description.invalid
-                    ? 'Enter the dish description'
+                    ? 'Enter the full list of ingredients'
                     : null,
               ),
               onChanged: (value) => onDescriptionChanged!(value),

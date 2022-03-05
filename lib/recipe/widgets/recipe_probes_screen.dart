@@ -78,7 +78,7 @@ class ProbeList extends StatelessWidget {
                 (state.recipes[recipeIndex].recipeType == 'Standard Recipe' &&
                     assignedFoodItemId != null),
             child: ListTile(
-              title: const Text('Food item description'),
+              title: const Text('Food ingredients'),
               subtitle: Text(foodItemDescription ?? ''),
               leading: const Icon(Icons.description),
             ),
