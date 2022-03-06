@@ -849,7 +849,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
       RecipeImported event, Emitter<RecipeState> emit) async {
     emit(state.copyWith(recipeImportStatus: '')); // Clear status for snackbar
     FilePickerResult? result = await FilePicker.platform.pickFiles(
-        // TODO: Find out why extension restriction doesnt work
+        // TODO: Implement extension restriction once csv is supported by package
         // type: FileType.custom,
         // allowedExtensions: ['csv'],
         );
