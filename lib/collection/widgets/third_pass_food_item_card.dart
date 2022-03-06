@@ -102,7 +102,7 @@ class ThirdPassFoodItemCard extends StatelessWidget {
                                   .measurements[index].measurementMethod),
 
                           DropdownSearch<String>(
-                              maxHeight: 450.0,
+                              maxHeight: 448.0,
                               dropdownSearchDecoration: InputDecoration(
                                 icon: const Icon(
                                     Icons.radio_button_unchecked_outlined),
