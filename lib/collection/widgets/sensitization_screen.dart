@@ -396,5 +396,5 @@ class GeoLocationInput extends StatelessWidget {
   }
 }
 
-// Or perhaps make the bottom navigation bar be a part of the state and only 
-// allow to pass to next one if previous one is complete
+// TODO: Only allow to move to first pass if all sensitization fields are valid,
+// e.g. perhaps make a isSensitizationValid() method in GibsonsForm
