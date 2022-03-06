@@ -69,7 +69,6 @@ class SecondPassFoodItemCard extends StatelessWidget {
             Text(foodItem.name.value +
                 ' consumed in the ' +
                 foodItem.timePeriod.value),
-            // TODO: fix RenderFlex overflow
             DropdownSearch<String>(
                 maxHeight: 448.0,
                 dropdownSearchDecoration: InputDecoration(
