@@ -30,35 +30,22 @@ class SecondPassFoodItemCard extends StatelessWidget {
       'Food aid',
       'Other'
     ];
-    const List<DropdownMenuItem<String>> preparationMethodDropdownMenuItems = [
-      DropdownMenuItem(child: Text(''), value: ''),
-      DropdownMenuItem(child: Text('Raw'), value: 'Raw'),
-      DropdownMenuItem(child: Text('Boiled'), value: 'Boiled'),
-      DropdownMenuItem(
-          child: Text('Boiled in water but retained water'),
-          value: 'Boiled in water but retained water'),
-      DropdownMenuItem(
-          child: Text('Boiled in water but removed water'),
-          value: 'Boiled in water but removed water'),
-      DropdownMenuItem(child: Text('Steamed'), value: 'Steamed'),
-      DropdownMenuItem(
-          child: Text('Roasted with oil'), value: 'Roasted with oil'),
-      DropdownMenuItem(
-          child: Text('Roasted without oil'), value: 'Roasted without oil'),
-      DropdownMenuItem(child: Text('Fried'), value: 'Fried'),
-      DropdownMenuItem(child: Text('Stir-fried'), value: 'Stir-fried'),
-      DropdownMenuItem(
-          child: Text('Soaking and stir-fried'),
-          value: 'Soaking and stir-fried'),
-      DropdownMenuItem(
-          child: Text('Boiled and fried'), value: 'Boiled and fried'),
-      DropdownMenuItem(
-          child: Text('Boiled and stir-fried'), value: 'Boiled and stir-fried'),
-      DropdownMenuItem(
-          child: Text('Steamed and fried'), value: 'Steamed and fried'),
-      DropdownMenuItem(
-          child: Text('Roasted and boiled'), value: 'Roasted and boiled'),
-      DropdownMenuItem(child: Text('Other'), value: 'Other')
+    const List<String> preparationMethods = [
+      'Raw',
+      'Boiled',
+      'Boiled in water but retained water',
+      'Boiled in water but removed water',
+      'Steamed',
+      'Roasted with oil',
+      'Roasted without oil',
+      'Fried',
+      'Stir-fried',
+      'Soaking and stir-fried',
+      'Boiled and fried',
+      'Boiled and stir-fried',
+      'Steamed and fried',
+      'Roasted and boiled',
+      'Other'
     ];
 
     return Card(
@@ -104,20 +91,28 @@ class SecondPassFoodItemCard extends StatelessWidget {
               onChanged: (value) => onDescriptionChanged!(value),
               textInputAction: TextInputAction.next,
             ),
-            DropdownButtonFormField(
-              value: foodItem.preparationMethod.value,
-              decoration: InputDecoration(
-                icon: const Icon(Icons.coffee_maker_outlined),
-                labelText: 'Form when eaten',
-                helperText: 'The preparation method of the food',
-                errorText: foodItem.preparationMethod.invalid
-                    ? 'Select the food\'s preparation method'
-                    : null,
-              ),
-              items: preparationMethodDropdownMenuItems,
-              onChanged: (String? value) =>
-                  onPreparationMethodChanged!(value ?? ''),
-            ),
+            DropdownSearch<String>(
+                maxHeight: 645.0,
+                dropdownSearchDecoration: InputDecoration(
+                    icon: const Icon(Icons.coffee_maker_outlined),
+                    labelText: 'Form when eaten',
+                    helperText: 'The preparation method of the food',
+                    // TODO: the errorText should be displayed if nothing is chosen
+                    // so investigate how this can be achieved with focusnodes or
+                    // maybe send an empty string (although that would not work all
+                    // the time)
+                    errorText: foodItem.preparationMethod.invalid
+                        ? 'Select the food\'s preparation method'
+                        : null),
+                mode: Mode.MENU,
+                showSelectedItems: true,
+                showSearchBox: false,
+                items: preparationMethods,
+                onChanged: (String? preparationMethod) =>
+                    onPreparationMethodChanged!(preparationMethod ?? ''),
+                // TODO: the selected item has to be a nullable string for the
+                // dropdown field to display properly, fix this once we drop Formz
+                selectedItem: foodItem.preparationMethod.value),
             TextFormField(
               initialValue: foodItem.recipe?.recipeName ?? '',
               readOnly: true,
