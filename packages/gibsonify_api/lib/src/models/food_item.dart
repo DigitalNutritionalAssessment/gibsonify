@@ -135,7 +135,12 @@ class TimePeriod extends FormzInput<String, TimePeriodValidationError> {
   const TimePeriod.pure() : super.pure('');
   const TimePeriod.dirty([String value = '']) : super.dirty(value);
 
-  final _allowedTimePeriod = const ['morning', 'afternoon', 'evening', 'night'];
+  final _allowedTimePeriods = const [
+    'morning (3:01 am - 12:00 pm)',
+    'afternoon (12:01 pm - 4:00 pm)',
+    'evening (4:01 pm - 7:00 pm)',
+    'night (7:01 pm - 3:00 am)'
+  ];
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
@@ -150,7 +155,7 @@ class TimePeriod extends FormzInput<String, TimePeriodValidationError> {
   TimePeriodValidationError? validator(String? value) {
     final _lowerCaseValue = (value ?? '').toLowerCase();
     // TODO: refactor with a better null check
-    return _allowedTimePeriod.contains(_lowerCaseValue)
+    return _allowedTimePeriods.contains(_lowerCaseValue)
         ? null
         : TimePeriodValidationError.invalid;
   }
