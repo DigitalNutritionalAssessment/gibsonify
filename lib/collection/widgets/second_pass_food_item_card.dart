@@ -94,7 +94,7 @@ class SecondPassFoodItemCard extends StatelessWidget {
                 labelText: 'Food ingredients',
                 helperText: 'Detailed list of ingredients',
                 errorText: foodItem.description.invalid
-                    ? 'Enter the full list of ingredients'
+                    ? 'Write down the full list of ingredients'
                     : null,
               ),
               onChanged: (value) => onDescriptionChanged!(value),
