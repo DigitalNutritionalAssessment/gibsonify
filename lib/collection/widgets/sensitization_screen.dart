@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 
 import 'package:gibsonify/home/home.dart';
 import 'package:gibsonify/collection/collection.dart';
@@ -191,37 +192,41 @@ class RecallDayInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const List<DropdownMenuItem<String>> dropdownMenuItems = [
-      DropdownMenuItem(child: Text(''), value: ''),
-      DropdownMenuItem(child: Text('Normal day'), value: 'Normal day'),
-      DropdownMenuItem(child: Text('Sick day'), value: 'Sick day'),
-      DropdownMenuItem(child: Text('Fasting day'), value: 'Fasting day'),
-      DropdownMenuItem(
-          child: Text('Festival/religious day'),
-          value: 'Festival/religious day'),
-      DropdownMenuItem(
-          child: Text('Parties/functions day'), value: 'Parties/functions day'),
-      DropdownMenuItem(
-          child: Text('Visitors/relatives'), value: 'Visitors/relatives'),
-      DropdownMenuItem(child: Text('Other'), value: 'Other'),
+    const List<String> recallDayTypes = [
+      'Normal day',
+      'Sick day',
+      'Fasting day',
+      'Festival/religious day',
+      'Parties/functions day',
+      'Visitors/relatives',
+      'Other'
     ];
+
     return BlocBuilder<CollectionBloc, CollectionState>(
       builder: (context, state) {
-        return DropdownButtonFormField(
-            value: state.gibsonsForm.recallDay.value,
-            decoration: InputDecoration(
+        return DropdownSearch<String>(
+            maxHeight: 395.0,
+            dropdownSearchDecoration: InputDecoration(
                 icon: const Icon(Icons.food_bank_outlined),
-                labelText: 'Recall Day',
+                labelText: "Recall Day",
                 helperText: 'Type of the recall day',
+                // TODO: the errorText should be displayed if nothing is chosen
+                // so investigate how this can be achieved with focusnodes or
+                // maybe send an empty string (although that would not work all
+                // the time)
                 errorText: state.gibsonsForm.recallDay.invalid
                     ? 'Select recall day type'
                     : null),
-            items: dropdownMenuItems,
-            onChanged: (String? value) {
-              context
-                  .read<CollectionBloc>()
-                  .add(RecallDayChanged(recallDay: value ?? ''));
-            });
+            mode: Mode.MENU,
+            showSelectedItems: true,
+            showSearchBox: false,
+            items: recallDayTypes,
+            onChanged: (String? recallDayType) => context
+                .read<CollectionBloc>()
+                .add(RecallDayChanged(recallDay: recallDayType ?? '')),
+            // TODO: the selected item has to be a nullable string for the
+            // dropdown field to display properly, fix this once we drop Formz
+            selectedItem: state.gibsonsForm.recallDay.value);
       },
     );
   }
