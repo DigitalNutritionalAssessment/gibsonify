@@ -168,7 +168,7 @@ class Source extends FormzInput<String, SourceValidationError> {
   const Source.dirty([String value = '']) : super.dirty(value);
 
   // TODO: update when accepting custom strings for 'other'
-  final _allowedSource = const [
+  final _allowedSources = const [
     'home made',
     'purchased',
     'gift/given by neighbor',
@@ -192,7 +192,7 @@ class Source extends FormzInput<String, SourceValidationError> {
   SourceValidationError? validator(String? value) {
     final _lowerCaseValue = (value ?? '').toLowerCase();
     // TODO: refactor with a better null check
-    return _allowedSource.contains(_lowerCaseValue)
+    return _allowedSources.contains(_lowerCaseValue)
         ? null
         : SourceValidationError.invalid;
   }
@@ -229,7 +229,7 @@ class PreparationMethod
   const PreparationMethod.dirty([String value = '']) : super.dirty(value);
 
   // TODO: update when accepting custom strings for 'other'
-  final _allowedPreparationMethod = const [
+  final _allowedPreparationMethods = const [
     'raw',
     'boiled',
     'boiled in water but retained water',
@@ -261,7 +261,7 @@ class PreparationMethod
   PreparationMethodValidationError? validator(String? value) {
     final _lowerCaseValue = (value ?? '').toLowerCase();
     // TODO: refactor with a better null check
-    return _allowedPreparationMethod.contains(_lowerCaseValue)
+    return _allowedPreparationMethods.contains(_lowerCaseValue)
         ? null
         : PreparationMethodValidationError.invalid;
   }
