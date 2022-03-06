@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:gibsonify/navigation/navigation.dart';
@@ -19,21 +20,15 @@ class SecondPassFoodItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: research how to handle empty string as
-    // the selected value other than a blank menu item
-    const List<DropdownMenuItem<String>> sourceDropdownMenuItems = [
-      DropdownMenuItem(child: Text(''), value: ''),
-      DropdownMenuItem(child: Text('Home made'), value: 'Home made'),
-      DropdownMenuItem(child: Text('Purchased'), value: 'Purchased'),
-      DropdownMenuItem(
-          child: Text('Gift/given by neighbor'),
-          value: 'Gift/given by neighbor'),
-      DropdownMenuItem(
-          child: Text('Home garden/farm'), value: 'Home garden/farm'),
-      DropdownMenuItem(child: Text('Leftover'), value: 'Leftover'),
-      DropdownMenuItem(child: Text('Wild food'), value: 'Wild food'),
-      DropdownMenuItem(child: Text('Food aid'), value: 'Food aid'),
-      DropdownMenuItem(child: Text('Other'), value: 'Other'),
+    const List<String> foodSources = [
+      'Home made',
+      'Purchased',
+      'Gift/given by neighbor',
+      'Home garden/farm',
+      'Leftover',
+      'Wild food',
+      'Food aid',
+      'Other'
     ];
     const List<DropdownMenuItem<String>> preparationMethodDropdownMenuItems = [
       DropdownMenuItem(child: Text(''), value: ''),
@@ -75,18 +70,28 @@ class SecondPassFoodItemCard extends StatelessWidget {
                 ' consumed in the ' +
                 foodItem.timePeriod.value),
             // TODO: fix RenderFlex overflow
-            DropdownButtonFormField(
-              value: foodItem.source.value,
-              decoration: InputDecoration(
-                icon: const Icon(Icons.kitchen),
-                labelText: 'Food source',
-                helperText: 'Where does the food come from',
-                errorText:
-                    foodItem.source.invalid ? 'Select the food source' : null,
-              ),
-              items: sourceDropdownMenuItems,
-              onChanged: (String? value) => onSourceChanged!(value ?? ''),
-            ),
+            DropdownSearch<String>(
+                maxHeight: 448.0,
+                dropdownSearchDecoration: InputDecoration(
+                    icon: const Icon(Icons.kitchen),
+                    labelText: 'Food source',
+                    helperText: 'Where does the food come from',
+                    // TODO: the errorText should be displayed if nothing is chosen
+                    // so investigate how this can be achieved with focusnodes or
+                    // maybe send an empty string (although that would not work all
+                    // the time)
+                    errorText: foodItem.source.invalid
+                        ? 'Select the food source'
+                        : null),
+                mode: Mode.MENU,
+                showSelectedItems: true,
+                showSearchBox: false,
+                items: foodSources,
+                onChanged: (String? foodSource) =>
+                    onSourceChanged!(foodSource ?? ''),
+                // TODO: the selected item has to be a nullable string for the
+                // dropdown field to display properly, fix this once we drop Formz
+                selectedItem: foodItem.source.value),
             TextFormField(
               initialValue: foodItem.description.value,
               decoration: InputDecoration(
