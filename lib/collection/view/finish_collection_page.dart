@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 
 import 'package:gibsonify/collection/collection.dart';
 import 'package:gibsonify/home/home.dart';
-import 'package:gibsonify_api/gibsonify_api.dart';
 
 class FinishCollectionPage extends StatelessWidget {
   const FinishCollectionPage({Key? key}) : super(key: key);
@@ -68,27 +68,32 @@ class PictureChartCollectedInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const List<DropdownMenuItem<String>> dropdownMenuItems = [
-      DropdownMenuItem(child: Text(''), value: ''),
-      DropdownMenuItem(child: Text('Yes'), value: 'Yes'),
-      DropdownMenuItem(child: Text('No'), value: 'No')
-    ];
     return BlocBuilder<CollectionBloc, CollectionState>(
       builder: (context, state) {
-        return DropdownButtonFormField(
-            value: state.gibsonsForm.pictureChartCollected.value,
-            decoration: InputDecoration(
+        return DropdownSearch<String>(
+            maxHeight: 112.0,
+            dropdownSearchDecoration: InputDecoration(
                 icon: const Icon(Icons.photo_size_select_actual_rounded),
                 labelText: 'Is picture chart collected',
                 helperText: 'Have you collected the picture chart?',
+                // TODO: the errorText should be displayed if nothing is chosen
+                // so investigate how this can be achieved with focusnodes or
+                // maybe send an empty string (although that would not work all
+                // the time)
                 errorText: state.gibsonsForm.pictureChartCollected.invalid
                     ? 'Select if you collected the picture chart'
                     : null),
-            items: dropdownMenuItems,
-            onChanged: (String? value) {
-              context.read<CollectionBloc>().add(PictureChartCollectedChanged(
-                  pictureChartCollected: value ?? ''));
-            });
+            mode: Mode.MENU,
+            showSelectedItems: true,
+            showSearchBox: false,
+            items: const ['Yes', 'No'],
+            onChanged: (String? pictureChartCollected) => context
+                .read<CollectionBloc>()
+                .add(PictureChartCollectedChanged(
+                    pictureChartCollected: pictureChartCollected ?? '')),
+            // TODO: the selected item has to be a nullable string for the
+            // dropdown field to display properly, fix this once we drop Formz
+            selectedItem: state.gibsonsForm.pictureChartCollected.value);
       },
     );
   }
