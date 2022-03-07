@@ -168,32 +168,39 @@ class InterviewOutcomeInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const List<DropdownMenuItem<String>> dropdownMenuItems = [
-      DropdownMenuItem(child: Text(''), value: ''),
-      DropdownMenuItem(child: Text('Completed'), value: 'Completed'),
-      DropdownMenuItem(child: Text('Incomplete'), value: 'Incomplete'),
-      DropdownMenuItem(child: Text('Absent'), value: 'Absent'),
-      DropdownMenuItem(child: Text('Refused'), value: 'Refused'),
-      DropdownMenuItem(
-          child: Text('Could not locate'), value: 'Could not locate')
+    const List<String> interviewOutcomes = [
+      'Completed',
+      'Incomplete',
+      'Absent',
+      'Refused',
+      'Could not locate'
     ];
     return BlocBuilder<CollectionBloc, CollectionState>(
       builder: (context, state) {
-        return DropdownButtonFormField(
-            value: state.gibsonsForm.interviewOutcome.value,
-            decoration: InputDecoration(
+        return DropdownSearch<String>(
+            maxHeight: 280.0,
+            dropdownSearchDecoration: InputDecoration(
                 icon: const Icon(Icons.format_indent_increase_sharp),
                 labelText: 'Interview outcome',
                 helperText: 'Final result of the interview',
+                // TODO: the errorText should be displayed if nothing is chosen
+                // so investigate how this can be achieved with focusnodes or
+                // maybe send an empty string (although that would not work all
+                // the time)
                 errorText: state.gibsonsForm.interviewOutcome.invalid
                     ? 'Select interview outcome'
                     : null),
-            items: dropdownMenuItems,
-            onChanged: (String? value) {
-              context
-                  .read<CollectionBloc>()
-                  .add(InterviewOutcomeChanged(interviewOutcome: value ?? ''));
-            });
+            mode: Mode.MENU,
+            showSelectedItems: true,
+            showSearchBox: false,
+            items: interviewOutcomes,
+            onChanged: (String? interviewOutcome) => context
+                .read<CollectionBloc>()
+                .add(InterviewOutcomeChanged(
+                    interviewOutcome: interviewOutcome ?? '')),
+            // TODO: the selected item has to be a nullable string for the
+            // dropdown field to display properly, fix this once we drop Formz
+            selectedItem: state.gibsonsForm.interviewOutcome.value);
       },
     );
   }
