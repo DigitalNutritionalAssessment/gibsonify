@@ -854,14 +854,14 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     }
   }
 
-  bool _recipeOnDevice(recipeNumber) {
+  Recipe? _recipeOnDevice(recipeNumber) {
     List<Recipe> deviceRecipes = List<Recipe>.from(state.recipes);
     for (Recipe recipe in deviceRecipes) {
       if (recipe.recipeNumber == recipeNumber) {
-        return true;
+        return recipe;
       }
     }
-    return false;
+    return null;
   }
 
   Future<void> _onRecipeImported(
@@ -882,35 +882,45 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
       data.removeAt(0); // Remove headings line in csv
 
       List<Recipe> newRecipes = [];
-      List<String> visitedDeviceRecipeIds = [];
+      List<String> newerRecipesRecipeIds = [];
+      List<Recipe> existingRecipes = List<Recipe>.from(state.recipes);
 
       for (List row in data) {
-        if (row.length < 11) {
+        if (row.length < 12) {
           emit(state.copyWith(
               recipeImportStatus: 'Import file has too few columns'));
           return;
         }
         String recipeNumber = row[0];
-        String recipeName = row[1];
-        String recipeType = row[2];
-        String recipeAttribute = row[3];
-        String recipeMeasurement = row[4];
-        String recipeProbeName = row[5];
-        String recipeProbeAnswers = row[6];
-        String ingredientName = row[7];
-        String ingredientDescription = row[8];
-        String ingredientCookingState = row[9];
-        String ingredientMeasurement = row[10];
+        String date = row[1];
+        String recipeName = row[2];
+        String recipeType = row[3];
+        String recipeAttribute = row[4];
+        String recipeMeasurement = row[5];
+        String recipeProbeName = row[6];
+        String recipeProbeAnswers = row[7];
+        String ingredientName = row[8];
+        String ingredientDescription = row[9];
+        String ingredientCookingState = row[10];
+        String ingredientMeasurement = row[11];
 
-        if (visitedDeviceRecipeIds.contains(recipeNumber)) {
+        Recipe? recipeOnDevice = _recipeOnDevice(recipeNumber);
+
+        if (newerRecipesRecipeIds.contains(recipeNumber)) {
           continue;
-        } else if (_recipeOnDevice(recipeNumber)) {
-          visitedDeviceRecipeIds.add(recipeNumber);
-          continue;
+        } else if (recipeOnDevice != null) {
+          if (DateTime.parse(recipeOnDevice.date)
+              .isAfter(DateTime.parse(date))) {
+            newerRecipesRecipeIds.add(recipeNumber);
+            continue;
+          } else {
+            existingRecipes.remove(recipeOnDevice);
+          }
         }
 
         Recipe recipe = Recipe(
             recipeNumber: recipeNumber,
+            date: date,
             recipeName: recipeName,
             recipeType: recipeType.trim() + ' Recipe',
             measurements: const [],
@@ -990,8 +1000,9 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
           newRecipes.add(recipeWithMeasurement);
         }
       }
-      List<Recipe> existingRecipes = List<Recipe>.from(state.recipes);
+
       List<Recipe> recipes = existingRecipes + newRecipes;
+
       emit(state.copyWith(
           recipes: recipes,
           recipeImportStatus:
