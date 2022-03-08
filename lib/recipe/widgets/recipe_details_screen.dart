@@ -138,23 +138,10 @@ class RecipeMeasurements extends StatelessWidget {
                   child: Column(
                     children: [
                       DropdownSearch<String>(
-                          dropdownSearchDecoration: InputDecoration(
-                            icon: const Icon(Icons.food_bank_rounded),
+                          dropdownSearchDecoration: const InputDecoration(
+                            icon: Icon(Icons.food_bank_rounded),
                             labelText: "Measurement method",
                             helperText: 'How the measurement is measured',
-                            // TODO: Refactor the error condition into a reusable method
-                            errorText: (state
-                                            .recipes[recipeIndex]
-                                            .measurements[index]
-                                            .measurementMethod !=
-                                        null &&
-                                    state
-                                            .recipes[recipeIndex]
-                                            .measurements[index]
-                                            .measurementMethod ==
-                                        '')
-                                ? 'Enter a measurement method'
-                                : null,
                           ),
                           mode: Mode.MENU,
                           showSelectedItems: true,
@@ -168,54 +155,11 @@ class RecipeMeasurements extends StatelessWidget {
                                   recipe: state.recipes[recipeIndex])),
                           selectedItem: state.recipes[recipeIndex]
                               .measurements[index].measurementMethod),
-                      TextFormField(
-                        initialValue: state.recipes[recipeIndex]
-                            .measurements[index].measurementValue,
-                        decoration: InputDecoration(
-                          icon: const Icon(Icons.format_list_numbered_rounded),
-                          labelText: 'Measurement value',
-                          helperText: 'Input measurement value',
-                          // TODO: Refactor the error condition into a reusable method
-                          errorText: (state
-                                          .recipes[recipeIndex]
-                                          .measurements[index]
-                                          .measurementValue !=
-                                      null &&
-                                  state.recipes[recipeIndex].measurements[index]
-                                          .measurementValue ==
-                                      '')
-                              ? 'Enter a measurement value'
-                              : null,
-                        ),
-                        onChanged: (value) {
-                          context.read<RecipeBloc>().add(
-                              RecipeMeasurementValueChanged(
-                                  measurementIndex: index,
-                                  measurementValue: value,
-                                  recipe: state.recipes[recipeIndex]));
-                        },
-                        textCapitalization: TextCapitalization.sentences,
-                        textInputAction: TextInputAction.next,
-                        keyboardType: TextInputType.number,
-                      ),
                       DropdownSearch<String>(
-                          dropdownSearchDecoration: InputDecoration(
-                            icon: const Icon(Icons.local_dining_rounded),
+                          dropdownSearchDecoration: const InputDecoration(
+                            icon: Icon(Icons.local_dining_rounded),
                             labelText: "Measurement unit",
-                            helperText: 'The size of each measurement value',
-                            // TODO: Refactor the error condition into a reusable method
-                            errorText: (state
-                                            .recipes[recipeIndex]
-                                            .measurements[index]
-                                            .measurementUnit !=
-                                        null &&
-                                    state
-                                            .recipes[recipeIndex]
-                                            .measurements[index]
-                                            .measurementUnit ==
-                                        '')
-                                ? 'Select the measurement unit'
-                                : null,
+                            helperText: 'The unit of each measurement value',
                           ),
                           mode: Mode.MENU,
                           showSelectedItems: true,
@@ -229,6 +173,30 @@ class RecipeMeasurements extends StatelessWidget {
                                   recipe: state.recipes[recipeIndex])),
                           selectedItem: state.recipes[recipeIndex]
                               .measurements[index].measurementUnit),
+                      TextFormField(
+                        initialValue: state.recipes[recipeIndex]
+                            .measurements[index].measurementValue,
+                        decoration: InputDecoration(
+                          icon: const Icon(Icons.format_list_numbered_rounded),
+                          labelText: 'Measurement value',
+                          helperText: 'Input measurement value',
+                          errorText: !state
+                                  .recipes[recipeIndex].measurements[index]
+                                  .isValueValid()
+                              ? 'Enter the measured value in 1 to 4 digits'
+                              : null,
+                        ),
+                        onChanged: (value) {
+                          context.read<RecipeBloc>().add(
+                              RecipeMeasurementValueChanged(
+                                  measurementIndex: index,
+                                  measurementValue: value,
+                                  recipe: state.recipes[recipeIndex]));
+                        },
+                        textCapitalization: TextCapitalization.sentences,
+                        textInputAction: TextInputAction.next,
+                        keyboardType: TextInputType.number,
+                      ),
                       const Divider(),
                       ListTile(
                         title: const Text('Add measurement'),
