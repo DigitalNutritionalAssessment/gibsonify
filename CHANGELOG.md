@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 
 ### Refactor
 
+- remove second ingredients source
+- **recipe**: improve code readability
 - **recipe**: rename bloc private functions
 - **recipe**: standardise ingredients json fields
 - **recipe**: remove unused dependency
@@ -12,6 +14,10 @@ All notable changes to this project will be documented in this file.
 - **recipe**: refactor ingredient loading into bloc and store in state
 - **recipe**: add helper functions to refactor bloc functions
 - **recipe**: use maps instead of lists for arg passing
+
+### Feat
+
+- add script for generating ingredient list
 
 ### Fix
 
