@@ -15,16 +15,28 @@ class GibsonifyApi {
   static const loginInfoKey = 'gibsonify_login_info_key';
 
   LoginInfo loadLoginInfo() {
+    LoginInfo loginInfo = LoginInfo();
     String? loginInfoRaw = _sharedPreferences.getString(loginInfoKey);
-    if (loginInfoRaw != null && loginInfoRaw.isEmpty != true) {
+    if (loginInfoRaw == null || loginInfoRaw.isEmpty == true) {
+      return LoginInfo();
+    } else {
       try {
         dynamic partiallyDecodedLoginInfo = jsonDecode(loginInfoRaw);
-        return LoginInfo.fromJson(partiallyDecodedLoginInfo);
+        loginInfo = LoginInfo.fromJson(partiallyDecodedLoginInfo);
       } catch (e) {
         return LoginInfo();
       }
+      return loginInfo;
     }
-    return LoginInfo();
+    // if (loginInfoRaw != null && loginInfoRaw.isEmpty != true) {
+    //   try {
+    //     dynamic partiallyDecodedLoginInfo = jsonDecode(loginInfoRaw);
+    //     return LoginInfo.fromJson(partiallyDecodedLoginInfo);
+    //   } catch (e) {
+    //     return LoginInfo();
+    //   }
+    // }
+    // return LoginInfo();
   }
 
   Future<void> saveLoginInfo(LoginInfo loginInfo) {

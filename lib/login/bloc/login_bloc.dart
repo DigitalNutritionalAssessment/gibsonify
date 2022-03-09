@@ -29,7 +29,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   void _onEmployeeIdChanged(EmployeeIdChanged event, Emitter<LoginState> emit) {
     LoginInfo loginInfo =
-        state.loginInfo.copyWith(employeeName: event.employeeId);
+        state.loginInfo.copyWith(employeeId: event.employeeId);
 
     emit(state.copyWith(loginInfo: loginInfo));
   }
