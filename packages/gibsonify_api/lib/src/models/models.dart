@@ -5,3 +5,4 @@ export 'recipe_ingredient.dart';
 export 'recipe_probe.dart';
 export 'recipe.dart';
 export 'utils.dart';
+export 'login_info.dart';
