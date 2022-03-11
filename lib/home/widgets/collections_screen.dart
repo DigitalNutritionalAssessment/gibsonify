@@ -5,6 +5,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gibsonify/home/home.dart';
 import 'package:gibsonify/navigation/navigation.dart';
 import 'package:gibsonify/collection/collection.dart';
+import 'package:gibsonify_api/gibsonify_api.dart';
 
 class CollectionsScreen extends StatelessWidget {
   const CollectionsScreen({Key? key}) : super(key: key);
@@ -22,15 +23,16 @@ class CollectionsScreen extends StatelessWidget {
                   // TODO: Refactor to a standalone widget
                   return Slidable(
                     key: Key(state.gibsonsForms[index]!.id),
-                    startActionPane: ActionPane(
+                    endActionPane: ActionPane(
                       motion: const ScrollMotion(),
                       children: [
                         SlidableAction(
-                          // TODO: implement deletion confirmation dialog
-                          onPressed: (context) => context.read<HomeBloc>().add(
-                              GibsonsFormDeleted(
-                                  id: state.gibsonsForms[index]!.id)),
-                          backgroundColor: const Color(0xFFFE4A49),
+                          onPressed: (context) => showDialog<String>(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  DeleteCollectionDialog(
+                                      gibsonsForm: state.gibsonsForms[index]!)),
+                          backgroundColor: Colors.red,
                           foregroundColor: Colors.white,
                           icon: Icons.delete,
                           label: 'Delete',
@@ -38,51 +40,26 @@ class CollectionsScreen extends StatelessWidget {
                       ],
                     ),
                     child: Card(
-                        // Unique key is needed to correctly rebuild after
-                        // deleting or modifying this widget and its subwidgets
-                        key: Key(state.gibsonsForms[index]!.id),
-                        child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              children: [
-                                TextFormField(
-                                  key: UniqueKey(),
-                                  onTap: () {
-                                    context.read<CollectionBloc>().add(
-                                        GibsonsFormProvided(
-                                            gibsonsForm:
-                                                state.gibsonsForms[index]!));
-                                    Navigator.pushNamed(
-                                        context, PageRouter.collection);
-                                  },
-                                  readOnly: true,
-                                  initialValue: state.gibsonsForms[index]!
-                                      .respondentName.value,
-                                  decoration: const InputDecoration(
-                                    icon: Icon(Icons.person),
-                                    labelText: 'Respondent Name',
-                                  ),
-                                ),
-                                TextFormField(
-                                  key: UniqueKey(),
-                                  onTap: () {
-                                    context.read<CollectionBloc>().add(
-                                        GibsonsFormProvided(
-                                            gibsonsForm:
-                                                state.gibsonsForms[index]!));
-                                    Navigator.pushNamed(
-                                        context, PageRouter.collection);
-                                  },
-                                  readOnly: true,
-                                  initialValue: state
-                                      .gibsonsForms[index]!.interviewDate.value,
-                                  decoration: const InputDecoration(
-                                    icon: Icon(Icons.calendar_today),
-                                    labelText: 'Interview Date',
-                                  ),
-                                ),
-                              ],
-                            ))),
+                      child: ListTile(
+                        leading: const Icon(Icons.person),
+                        title: Text(
+                            state.gibsonsForms[index]!.respondentName.value),
+                        subtitle: Text(
+                            state.gibsonsForms[index]!.interviewDate.value),
+                        // TODO: add trailing icon depending on whether collection is saved or not
+                        onTap: () {
+                          context.read<CollectionBloc>().add(
+                              GibsonsFormProvided(
+                                  gibsonsForm: state.gibsonsForms[index]!));
+                          Navigator.pushNamed(context, PageRouter.collection);
+                        },
+                        onLongPress: () => showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) =>
+                                DeleteCollectionDialog(
+                                    gibsonsForm: state.gibsonsForms[index]!)),
+                      ),
+                    ),
                   );
                 }),
             floatingActionButton: Column(
@@ -104,6 +81,41 @@ class CollectionsScreen extends StatelessWidget {
                         Navigator.pushNamed(context, PageRouter.collection);
                       })
                 ]));
+      },
+    );
+  }
+}
+
+class DeleteCollectionDialog extends StatelessWidget {
+  final GibsonsForm gibsonsForm;
+  const DeleteCollectionDialog({Key? key, required this.gibsonsForm})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    String? respondentName = gibsonsForm.respondentName.value;
+    return BlocBuilder<CollectionBloc, CollectionState>(
+      builder: (context, state) {
+        return AlertDialog(
+          title: const Text('Delete collection'),
+          content: Text(
+              'Would you like to delete the collection of $respondentName?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'Cancel'),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                context
+                    .read<HomeBloc>()
+                    .add(GibsonsFormDeleted(id: gibsonsForm.id));
+                Navigator.pop(context, 'Delete');
+              },
+              child: const Text('Delete'),
+            ),
+          ],
+        );
       },
     );
   }

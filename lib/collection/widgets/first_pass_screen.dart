@@ -50,9 +50,12 @@ class FirstPassScreen extends StatelessWidget {
                           .add(FoodItemTimePeriodChanged(
                               foodItem: state.gibsonsForm.foodItems[index],
                               foodItemTimePeriod: changedTimePeriod)),
-                      onDeleted: () => context.read<CollectionBloc>().add(
-                          FoodItemDeleted(
-                              foodItem: state.gibsonsForm.foodItems[index])));
+                      onDeleted: () => showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) =>
+                              DeleteFoodItemDialog(
+                                  foodItem:
+                                      state.gibsonsForm.foodItems[index])));
                 }),
             floatingActionButton: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
