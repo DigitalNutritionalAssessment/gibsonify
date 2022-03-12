@@ -3,6 +3,28 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Feat
+
+- **settings**: add source code link to settings help page
+- **settings**: show copyright in settings help page
+- add settings help page with app version
+- update and simplify settings screen
+- update item deletion
+- add delete dialog to fourth pass
+- simplify slidable background red color
+- add long-press-to-delete option to third pass
+- add delete dialog to third pass
+- add long-press-to-delete option to first pass
+- add delete dialog to first pass
+- add long-press-to-delete recipe option
+- standardize delete dialogs
+- add long-press-to-delete collection option
+- change collection form fields to tiles
+- add deletion dialog to collections screen
+- reverse slide to delete direction
+- trim ingredient list and add generating script
+- add script for generating ingredient list
+
 ### Refactor
 
 - **collection**: move food item deletion dialog class
@@ -21,23 +43,6 @@ All notable changes to this project will be documented in this file.
 
 - **collection**: temporarily remove long-press-to-delete
 - fix wrongly named map key for argument passing for page navigation
-
-### Feat
-
-- add delete dialog to fourth pass
-- simplify slidable background red color
-- add long-press-to-delete option to third pass
-- add delete dialog to third pass
-- add long-press-to-delete option to first pass
-- add delete dialog to first pass
-- add long-press-to-delete recipe option
-- standardize delete dialogs
-- add long-press-to-delete collection option
-- change collection form fields to tiles
-- add deletion dialog to collections screen
-- reverse slide to delete direction
-- trim ingredient list and add generating script
-- add script for generating ingredient list
 
 ## 1.1.0 (2022-02-21)
 
