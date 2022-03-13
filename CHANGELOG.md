@@ -3,6 +3,14 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Fix
+
+- saving using native back button or swipe
+- **recipe**: override back button/swipe to save
+- **collection**: override back button/swipe to save
+- **collection**: temporarily remove long-press-to-delete
+- fix wrongly named map key for argument passing for page navigation
+
 ### Feat
 
 - add settings help page with app information
@@ -25,13 +33,6 @@ All notable changes to this project will be documented in this file.
 - reverse slide to delete direction
 - trim ingredient list and add generating script
 - add script for generating ingredient list
-
-### Fix
-
-- **recipe**: override back button/swipe to save
-- **collection**: override back button/swipe to save
-- **collection**: temporarily remove long-press-to-delete
-- fix wrongly named map key for argument passing for page navigation
 
 ### Refactor
 
