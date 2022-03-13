@@ -16,14 +16,7 @@ class RecipeIngredientsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
       return Scaffold(
-          appBar: AppBar(
-            title: const Text('Recipe ingredients'),
-            leading: BackButton(
-                onPressed: () => {
-                      context.read<RecipeBloc>().add(const RecipesSaved()),
-                      Navigator.pop(context)
-                    }),
-          ),
+          appBar: AppBar(title: const Text('Recipe ingredients')),
           body: RecipeForm(recipeIndex),
           floatingActionButton: FloatingActionButton.extended(
               heroTag: null,
