@@ -22,6 +22,15 @@ class ThirdPassFoodItemCard extends StatelessWidget {
   final VoidCallback? onMeasurementAdded;
   final ValueChanged<int>? onMeasurementDeleted;
 
+  void _onMeasurementDeleted(BuildContext context, int index) {
+    if (foodItem.measurements.length > 1) {
+      onMeasurementDeleted!(index);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Each food must have at least one measurement')));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -39,31 +48,15 @@ class ThirdPassFoodItemCard extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 8.0),
                 itemCount: foodItem.measurements.length,
                 itemBuilder: (context, index) {
-                  // TODO: Try out a pop up button instead of Slidable
                   return Slidable(
                     key: Key(foodItem.measurements[index].id),
-                    startActionPane: ActionPane(
+                    endActionPane: ActionPane(
                       motion: const ScrollMotion(),
                       children: [
                         SlidableAction(
-                          onPressed: (context) {
-                            if (foodItem.measurements.length > 1) {
-                              onMeasurementDeleted!(index);
-                              // TODO: implement deletion dialog
-                              // showDialog<String>(
-                              //     context: context,
-                              //     builder: (BuildContext context) =>
-                              //         DeleteFoodItemMeasurement(
-                              //             foodItem: foodItem,
-                              //             measurementIndex: index));
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text(
-                                          'Each food must have at least one measurement')));
-                            }
-                          },
-                          backgroundColor: const Color(0xFFFE4A49),
+                          onPressed: (context) =>
+                              _onMeasurementDeleted(context, index),
+                          backgroundColor: Colors.red,
                           foregroundColor: Colors.white,
                           icon: Icons.delete,
                           label: 'Delete',
@@ -73,7 +66,6 @@ class ThirdPassFoodItemCard extends StatelessWidget {
                     child: Card(
                       child: Column(
                         children: [
-                          // TODO: fix RenderFlex overflow
                           DropdownSearch<String>(
                               dropdownSearchDecoration: InputDecoration(
                                 icon: const Icon(Icons.monitor_weight_outlined),
@@ -99,7 +91,6 @@ class ThirdPassFoodItemCard extends StatelessWidget {
                                   }),
                               selectedItem: foodItem
                                   .measurements[index].measurementMethod),
-
                           TextFormField(
                             initialValue:
                                 foodItem.measurements[index].measurementValue,
@@ -122,7 +113,6 @@ class ThirdPassFoodItemCard extends StatelessWidget {
                             }),
                             textInputAction: TextInputAction.next,
                           ),
-
                           DropdownSearch<String>(
                               dropdownSearchDecoration: InputDecoration(
                                 icon: const Icon(
@@ -165,37 +155,3 @@ class ThirdPassFoodItemCard extends StatelessWidget {
     );
   }
 }
-
-// TODO: Implement pop up confirmation box
-// class DeleteFoodItemeMeasurement extends StatelessWidget {
-//   final FoodItem foodItem;
-//   final int measurementIndex;
-
-//   const DeleteFoodItemeMeasurement(
-//       {Key? key, required this.foodItem, required this.measurementIndex})
-//       : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
-//       return AlertDialog(
-//         title: const Text('Delete measurement'),
-//         content: const Text('Would you like to delete the measurement?'),
-//         actions: [
-//           TextButton(
-//             onPressed: () => Navigator.pop(context, 'Cancel'),
-//             child: const Text('Cancel'),
-//           ),
-//           TextButton(
-//             onPressed: () => {
-//               context.read<CollectionBloc>().add(RecipeMeasurementDeleted(
-//                   recipe: recipe, measurementIndex: measurementIndex)),
-//               Navigator.pop(context, 'OK'),
-//             },
-//             child: const Text('OK'),
-//           ),
-//         ],
-//       );
-//     });
-//   }
-// }

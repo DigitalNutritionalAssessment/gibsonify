@@ -49,7 +49,7 @@ class ProbeForm extends StatelessWidget {
                         .probeOptions.length,
                     itemBuilder: (context, index) {
                       return Slidable(
-                          startActionPane: ActionPane(
+                          endActionPane: ActionPane(
                             motion: const ScrollMotion(),
                             children: [
                               SlidableAction(
@@ -63,7 +63,7 @@ class ProbeForm extends StatelessWidget {
                                     showDialog<String>(
                                         context: context,
                                         builder: (BuildContext context) =>
-                                            DeleteProbeOption(
+                                            DeleteProbeOptionDialog(
                                                 recipe:
                                                     state.recipes[recipeIndex],
                                                 probeIndex: probeIndex,
@@ -75,7 +75,7 @@ class ProbeForm extends StatelessWidget {
                                                 'A probe must have at least two options')));
                                   }
                                 },
-                                backgroundColor: const Color(0xFFFE4A49),
+                                backgroundColor: Colors.red,
                                 foregroundColor: Colors.white,
                                 icon: Icons.delete,
                                 label: 'Delete',
@@ -122,12 +122,12 @@ class ProbeForm extends StatelessWidget {
   }
 }
 
-class DeleteProbeOption extends StatelessWidget {
+class DeleteProbeOptionDialog extends StatelessWidget {
   final Recipe recipe;
   final int probeIndex;
   final int probeOptionIndex;
 
-  const DeleteProbeOption(
+  const DeleteProbeOptionDialog(
       {Key? key,
       required this.recipe,
       required this.probeIndex,
@@ -152,9 +152,9 @@ class DeleteProbeOption extends StatelessWidget {
                   recipe: recipe,
                   probeIndex: probeIndex,
                   probeOptionIndex: probeOptionIndex)),
-              Navigator.pop(context, 'OK'),
+              Navigator.pop(context, 'Delete'),
             },
-            child: const Text('OK'),
+            child: const Text('Delete'),
           ),
         ],
       );

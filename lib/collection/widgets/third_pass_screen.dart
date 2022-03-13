@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:gibsonify/collection/collection.dart';
 import 'package:gibsonify/navigation/navigation.dart';
+import 'package:gibsonify_api/gibsonify_api.dart';
 
 class ThirdPassScreen extends StatelessWidget {
   const ThirdPassScreen({Key? key}) : super(key: key);
@@ -56,13 +57,51 @@ class ThirdPassScreen extends StatelessWidget {
                         .read<CollectionBloc>()
                         .add(FoodItemMeasurementAdded(
                             foodItem: state.gibsonsForm.foodItems[index])),
-                    onMeasurementDeleted: (deletedMeasurementIndex) => context
-                        .read<CollectionBloc>()
-                        .add(FoodItemMeasurementDeleted(
-                            foodItem: state.gibsonsForm.foodItems[index],
-                            measurementIndex: deletedMeasurementIndex)),
+                    onMeasurementDeleted: (deletedMeasurementIndex) =>
+                        showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) =>
+                                DeleteFoodItemMeasurementDialog(
+                                  foodItem: state.gibsonsForm.foodItems[index],
+                                  measurementIndex: deletedMeasurementIndex,
+                                )),
                   );
                 }));
+      },
+    );
+  }
+}
+
+class DeleteFoodItemMeasurementDialog extends StatelessWidget {
+  final FoodItem foodItem;
+  final int measurementIndex;
+  const DeleteFoodItemMeasurementDialog(
+      {Key? key, required this.foodItem, required this.measurementIndex})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    String? name = foodItem.name.value;
+    return BlocBuilder<CollectionBloc, CollectionState>(
+      builder: (context, state) {
+        return AlertDialog(
+          title: const Text('Delete measurement'),
+          content: const Text('Would you like to delete the measurement?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'Cancel'),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                context.read<CollectionBloc>().add(FoodItemMeasurementDeleted(
+                    foodItem: foodItem, measurementIndex: measurementIndex));
+                Navigator.pop(context, 'Delete');
+              },
+              child: const Text('Delete'),
+            ),
+          ],
+        );
       },
     );
   }

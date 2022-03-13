@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gibsonify/home/home.dart';
 import 'package:gibsonify/collection/collection.dart';
 import 'package:gibsonify/recipe/recipe.dart';
+import 'package:gibsonify/settings/settings.dart';
 
 class PageRouter {
   static const home = '/';
@@ -16,6 +17,7 @@ class PageRouter {
   static const thirdPassHelp = '/thirdpasshelp';
   static const chooseRecipe = '/chooserecipe';
   static const finishCollection = '/finishcollection';
+  static const settingsHelp = '/settingshelp';
 
   static Route route(RouteSettings routeSettings) {
     switch (routeSettings.name) {
@@ -58,6 +60,8 @@ class PageRouter {
             foodItemDescription: args['foodItemDescription']));
       case finishCollection:
         return _buildRoute(const FinishCollectionPage());
+      case settingsHelp:
+        return _buildRoute(const SettingsHelpPage());
       default:
         throw Exception('Page does not exist!');
     }

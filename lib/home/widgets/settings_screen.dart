@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:gibsonify/navigation/navigation.dart';
 
-class SettingsScreen extends StatefulWidget {
+class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
 
   @override
-  _SettingsScreenState createState() => _SettingsScreenState();
-}
-
-class _SettingsScreenState extends State<SettingsScreen> {
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text('Settings')),
-        body: const Center(child: Text('Various Settings')));
+        appBar: AppBar(
+          title: const Text('Settings'),
+          actions: [
+            IconButton(
+                onPressed: () =>
+                    Navigator.pushNamed(context, PageRouter.settingsHelp),
+                icon: const Icon(Icons.help))
+          ],
+        ),
+        body: const Center(child: Text('No settings currently available')));
   }
 }
