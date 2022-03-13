@@ -26,17 +26,16 @@ class RecipesScreen extends StatelessWidget {
               itemCount: state.recipes.length,
               itemBuilder: (context, index) {
                 return Slidable(
-                  startActionPane: ActionPane(
+                  endActionPane: ActionPane(
                     motion: const ScrollMotion(),
                     children: [
                       SlidableAction(
-                        onPressed: (context) {
-                          showDialog<String>(
-                              context: context,
-                              builder: (BuildContext context) =>
-                                  DeleteRecipe(recipe: state.recipes[index]));
-                        },
-                        backgroundColor: const Color(0xFFFE4A49),
+                        onPressed: (context) => showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) =>
+                                DeleteRecipeDialog(
+                                    recipe: state.recipes[index])),
+                        backgroundColor: Colors.red,
                         foregroundColor: Colors.white,
                         icon: Icons.delete,
                         label: 'Delete',
@@ -73,6 +72,10 @@ class RecipesScreen extends StatelessWidget {
                                       SelectedRecipeScreen.probeScreen
                                 })
                     },
+                    onLongPress: () => showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) =>
+                            DeleteRecipeDialog(recipe: state.recipes[index])),
                   )),
                 );
               }),
@@ -120,10 +123,10 @@ class RecipesScreen extends StatelessWidget {
   }
 }
 
-class DeleteRecipe extends StatelessWidget {
+class DeleteRecipeDialog extends StatelessWidget {
   final Recipe recipe;
 
-  const DeleteRecipe({Key? key, required this.recipe}) : super(key: key);
+  const DeleteRecipeDialog({Key? key, required this.recipe}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -141,9 +144,9 @@ class DeleteRecipe extends StatelessWidget {
             onPressed: () => {
               context.read<RecipeBloc>().add(RecipeDeleted(recipe: recipe)),
               context.read<RecipeBloc>().add(const RecipesSaved()),
-              Navigator.pop(context, 'OK')
+              Navigator.pop(context, 'Delete')
             },
-            child: const Text('OK'),
+            child: const Text('Delete'),
           ),
         ],
       );

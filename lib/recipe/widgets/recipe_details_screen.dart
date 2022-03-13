@@ -18,14 +18,7 @@ class RecipeDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
       return Scaffold(
-        appBar: AppBar(
-          title: const Text('Recipe details'),
-          leading: BackButton(
-              onPressed: () => {
-                    context.read<RecipeBloc>().add(const RecipesSaved()),
-                    Navigator.pop(context)
-                  }),
-        ),
+        appBar: AppBar(title: const Text('Recipe details')),
         body: RecipeDetails(recipeIndex),
         floatingActionButton: FloatingActionButton.extended(
             heroTag: null,
@@ -113,7 +106,7 @@ class RecipeMeasurements extends StatelessWidget {
             itemBuilder: (context, index) {
               return Slidable(
                 key: Key(state.recipes[recipeIndex].measurements[index].id),
-                startActionPane: ActionPane(
+                endActionPane: ActionPane(
                   motion: const ScrollMotion(),
                   children: [
                     SlidableAction(
@@ -123,7 +116,7 @@ class RecipeMeasurements extends StatelessWidget {
                           showDialog<String>(
                               context: context,
                               builder: (BuildContext context) =>
-                                  DeleteRecipeMeasurement(
+                                  DeleteRecipeMeasurementDialog(
                                       recipe: state.recipes[recipeIndex],
                                       measurementIndex: index));
                         } else {
@@ -132,7 +125,7 @@ class RecipeMeasurements extends StatelessWidget {
                                   'A recipe must have at least one measurement')));
                         }
                       },
-                      backgroundColor: const Color(0xFFFE4A49),
+                      backgroundColor: Colors.red,
                       foregroundColor: Colors.white,
                       icon: Icons.delete,
                       label: 'Delete',
@@ -254,11 +247,11 @@ class RecipeMeasurements extends StatelessWidget {
   }
 }
 
-class DeleteRecipeMeasurement extends StatelessWidget {
+class DeleteRecipeMeasurementDialog extends StatelessWidget {
   final Recipe recipe;
   final int measurementIndex;
 
-  const DeleteRecipeMeasurement(
+  const DeleteRecipeMeasurementDialog(
       {Key? key, required this.recipe, required this.measurementIndex})
       : super(key: key);
 
@@ -277,9 +270,9 @@ class DeleteRecipeMeasurement extends StatelessWidget {
             onPressed: () => {
               context.read<RecipeBloc>().add(RecipeMeasurementDeleted(
                   recipe: recipe, measurementIndex: measurementIndex)),
-              Navigator.pop(context, 'OK'),
+              Navigator.pop(context, 'Delete'),
             },
-            child: const Text('OK'),
+            child: const Text('Delete'),
           ),
         ],
       );

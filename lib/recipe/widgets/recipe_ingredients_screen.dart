@@ -16,14 +16,7 @@ class RecipeIngredientsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
       return Scaffold(
-          appBar: AppBar(
-            title: const Text('Recipe ingredients'),
-            leading: BackButton(
-                onPressed: () => {
-                      context.read<RecipeBloc>().add(const RecipesSaved()),
-                      Navigator.pop(context)
-                    }),
-          ),
+          appBar: AppBar(title: const Text('Recipe ingredients')),
           body: RecipeForm(recipeIndex),
           floatingActionButton: FloatingActionButton.extended(
               heroTag: null,
@@ -113,7 +106,7 @@ class Ingredients extends StatelessWidget {
               itemCount: state.recipes[recipeIndex].ingredients.length,
               itemBuilder: (context, index) {
                 return Slidable(
-                  startActionPane: ActionPane(
+                  endActionPane: ActionPane(
                     motion: const ScrollMotion(),
                     children: [
                       SlidableAction(
@@ -121,12 +114,12 @@ class Ingredients extends StatelessWidget {
                           showDialog<String>(
                               context: context,
                               builder: (BuildContext context) =>
-                                  DeleteIngredient(
+                                  DeleteIngredientDialog(
                                       recipe: state.recipes[recipeIndex],
                                       ingredient: state.recipes[recipeIndex]
                                           .ingredients[index]));
                         },
-                        backgroundColor: const Color(0xFFFE4A49),
+                        backgroundColor: Colors.red,
                         foregroundColor: Colors.white,
                         icon: Icons.delete,
                         label: 'Delete',
@@ -168,11 +161,11 @@ class Ingredients extends StatelessWidget {
   }
 }
 
-class DeleteIngredient extends StatelessWidget {
+class DeleteIngredientDialog extends StatelessWidget {
   final Recipe recipe;
   final Ingredient ingredient;
 
-  const DeleteIngredient(
+  const DeleteIngredientDialog(
       {Key? key, required this.recipe, required this.ingredient})
       : super(key: key);
 
@@ -193,9 +186,9 @@ class DeleteIngredient extends StatelessWidget {
             onPressed: () => {
               context.read<RecipeBloc>().add(
                   IngredientDeleted(recipe: recipe, ingredient: ingredient)),
-              Navigator.pop(context, 'OK')
+              Navigator.pop(context, 'Delete')
             },
-            child: const Text('OK'),
+            child: const Text('Delete'),
           ),
         ],
       );
