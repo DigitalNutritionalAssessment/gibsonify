@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Feat
 
+- add settings help page with app information
 - **settings**: add source code link to settings help page
 - **settings**: show copyright in settings help page
 - add settings help page with app version
@@ -25,8 +26,16 @@ All notable changes to this project will be documented in this file.
 - trim ingredient list and add generating script
 - add script for generating ingredient list
 
+### Fix
+
+- **recipe**: override back button/swipe to save
+- **collection**: override back button/swipe to save
+- **collection**: temporarily remove long-press-to-delete
+- fix wrongly named map key for argument passing for page navigation
+
 ### Refactor
 
+- **collection**: move and rename pop function
 - **collection**: move food item deletion dialog class
 - rename delete recipe to delete recipe dialog
 - remove second ingredients source
@@ -38,11 +47,6 @@ All notable changes to this project will be documented in this file.
 - **recipe**: refactor ingredient loading into bloc and store in state
 - **recipe**: add helper functions to refactor bloc functions
 - **recipe**: use maps instead of lists for arg passing
-
-### Fix
-
-- **collection**: temporarily remove long-press-to-delete
-- fix wrongly named map key for argument passing for page navigation
 
 ## 1.1.0 (2022-02-21)
 
