@@ -87,6 +87,9 @@ app.*.map.json
 # Ignore the whole ios folder as iOS is currently not a supported platform of Gibsonify
 ios/
 
+# Ignore the whole macos folder as macOS is currently not a supported platform of Gibsonify
+macos/
+
 # iOS/XCode related
 **/ios/**/*.mode1v3
 **/ios/**/*.mode2v3
