@@ -18,14 +18,7 @@ class RecipeProbesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
       return Scaffold(
-          appBar: AppBar(
-            title: const Text('Recipe probes list'),
-            leading: BackButton(
-                onPressed: () => {
-                      context.read<RecipeBloc>().add(const RecipesSaved()),
-                      Navigator.pop(context)
-                    }),
-          ),
+          appBar: AppBar(title: const Text('Recipe probes list')),
           floatingActionButton: Visibility(
             visible:
                 (state.recipes[recipeIndex].recipeType == 'Standard Recipe' &&
@@ -92,7 +85,7 @@ class ProbeList extends StatelessWidget {
                   itemCount: state.recipes[recipeIndex].probes.length,
                   itemBuilder: (context, index) {
                     return Slidable(
-                      startActionPane: ActionPane(
+                      endActionPane: ActionPane(
                         motion: const ScrollMotion(),
                         children: [
                           SlidableAction(
@@ -100,12 +93,12 @@ class ProbeList extends StatelessWidget {
                               showDialog<String>(
                                   context: context,
                                   builder: (BuildContext context) =>
-                                      DeleteProbe(
+                                      DeleteProbeDialog(
                                           recipe: state.recipes[recipeIndex],
                                           probe: state.recipes[recipeIndex]
                                               .probes[index]));
                             },
-                            backgroundColor: const Color(0xFFFE4A49),
+                            backgroundColor: Colors.red,
                             foregroundColor: Colors.white,
                             icon: Icons.delete,
                             label: 'Delete',
@@ -228,11 +221,11 @@ class ProbesPrompt extends StatelessWidget {
   }
 }
 
-class DeleteProbe extends StatelessWidget {
+class DeleteProbeDialog extends StatelessWidget {
   final Recipe recipe;
   final Probe probe;
 
-  const DeleteProbe({Key? key, required this.recipe, required this.probe})
+  const DeleteProbeDialog({Key? key, required this.recipe, required this.probe})
       : super(key: key);
 
   @override
@@ -251,9 +244,9 @@ class DeleteProbe extends StatelessWidget {
               context
                   .read<RecipeBloc>()
                   .add(ProbeDeleted(recipe: recipe, probe: probe)),
-              Navigator.pop(context, 'OK')
+              Navigator.pop(context, 'Delete')
             },
-            child: const Text('OK'),
+            child: const Text('Delete'),
           ),
         ],
       );

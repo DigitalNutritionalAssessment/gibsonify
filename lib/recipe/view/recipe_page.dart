@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:gibsonify/recipe/recipe.dart';
 
@@ -53,26 +54,36 @@ class _RecipePageState extends State<RecipePage> {
       RecipeDetailsScreen(widget.recipeIndex,
           assignedFoodItemId: widget.assignedFoodItemId),
     ];
-    return Scaffold(
-      body: _screens[selectedScreenIndex()],
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: selectedScreenIndex(),
-        onTap: _onScreenSelected,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.live_help),
-            label: 'Recipe Probes',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.food_bank),
-            label: 'Recipe Ingredients',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.description),
-            label: 'Recipe Details',
-          )
-        ],
+
+    Future<bool> _popRecipePage(BuildContext context) async {
+      context.read<RecipeBloc>().add(const RecipesSaved());
+      Navigator.of(context).pop(true);
+      return true;
+    }
+
+    return WillPopScope(
+      onWillPop: () => _popRecipePage(context),
+      child: Scaffold(
+        body: _screens[selectedScreenIndex()],
+        bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          currentIndex: selectedScreenIndex(),
+          onTap: _onScreenSelected,
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.live_help),
+              label: 'Recipe Probes',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.food_bank),
+              label: 'Recipe Ingredients',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.description),
+              label: 'Recipe Details',
+            )
+          ],
+        ),
       ),
     );
   }

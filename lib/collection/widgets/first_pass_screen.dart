@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:gibsonify/home/home.dart';
 import 'package:gibsonify/collection/collection.dart';
 import 'package:gibsonify/navigation/navigation.dart';
 
@@ -15,13 +14,6 @@ class FirstPassScreen extends StatelessWidget {
         return Scaffold(
             appBar: AppBar(
               title: const Text('First Pass'),
-              leading: BackButton(
-                onPressed: () {
-                  context.read<CollectionBloc>().add(const GibsonsFormSaved());
-                  context.read<HomeBloc>().add(const GibsonsFormsLoaded());
-                  Navigator.maybePop(context);
-                },
-              ),
               actions: [
                 IconButton(
                     onPressed: () =>
@@ -50,9 +42,12 @@ class FirstPassScreen extends StatelessWidget {
                           .add(FoodItemTimePeriodChanged(
                               foodItem: state.gibsonsForm.foodItems[index],
                               foodItemTimePeriod: changedTimePeriod)),
-                      onDeleted: () => context.read<CollectionBloc>().add(
-                          FoodItemDeleted(
-                              foodItem: state.gibsonsForm.foodItems[index])));
+                      onDeleted: () => showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) =>
+                              DeleteFoodItemDialog(
+                                  foodItem:
+                                      state.gibsonsForm.foodItems[index])));
                 }),
             floatingActionButton: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
