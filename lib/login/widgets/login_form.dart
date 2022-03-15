@@ -72,7 +72,8 @@ class LoginForm extends StatelessWidget {
                             context
                                 .read<LoginBloc>()
                                 .add(const LoginInfoSaved()),
-                            Navigator.pushNamed(context, PageRouter.home)
+                            Navigator.pushReplacementNamed(
+                                context, PageRouter.home)
                           })
                 ],
               ),
