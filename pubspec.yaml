@@ -41,6 +41,7 @@ dev_dependencies:
 flutter:
   assets:
     - assets/ingredients/ingredients.json
+    - assets/images/gibsonify_name_styled.png
   uses-material-design: true
 
 flutter_icons:
