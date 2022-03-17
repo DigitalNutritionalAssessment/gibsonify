@@ -873,7 +873,10 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
         // allowedExtensions: ['csv'],
         );
 
-    if (result != null) {
+    if (result == null) {
+      emit(state.copyWith(recipeImportStatus: 'File not selected'));
+      return;
+    } else {
       final input = File(result.files.single.path!).openRead();
       List data = await input
           .transform(utf8.decoder)
@@ -1010,9 +1013,6 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
           recipes: recipes,
           recipeImportStatus:
               'Imported ${newRecipes.length} recipe(s) successfully'));
-    } else {
-      emit(state.copyWith(recipeImportStatus: 'File not selected'));
-      return;
     }
   }
 }
