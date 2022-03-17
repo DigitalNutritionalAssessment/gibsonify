@@ -53,7 +53,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     on<RecipesSaved>(_onRecipesSaved);
     on<RecipesLoaded>(_onRecipesLoaded);
     on<IngredientsLoaded>(_onIngredientsLoaded);
-    on<RecipeImported>(_onRecipeImported);
+    on<RecipesImported>(_onRecipesImported);
   }
 
   void _onRecipeAdded(RecipeAdded event, Emitter<RecipeState> emit) {
@@ -854,7 +854,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     }
   }
 
-  Recipe? _recipeOnDevice(recipeNumber) {
+  Recipe? _getRecipeIfAlreadyExists(recipeNumber) {
     List<Recipe> deviceRecipes = List<Recipe>.from(state.recipes);
     for (Recipe recipe in deviceRecipes) {
       if (recipe.recipeNumber == recipeNumber) {
@@ -864,8 +864,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     return null;
   }
 
-  Future<void> _onRecipeImported(
-      RecipeImported event, Emitter<RecipeState> emit) async {
+  Future<void> _onRecipesImported(
+      RecipesImported event, Emitter<RecipeState> emit) async {
     emit(state.copyWith(recipeImportStatus: '')); // Clear status for snackbar
     FilePickerResult? result = await FilePicker.platform.pickFiles(
         // TODO: Implement extension restriction once csv is supported by package
@@ -879,14 +879,17 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
           .transform(utf8.decoder)
           .transform(const CsvToListConverter())
           .toList();
-      data.removeAt(0); // Remove headings line in csv
+
+      int headingLinePosition = 0;
+      data.removeAt(headingLinePosition);
 
       List<Recipe> newRecipes = [];
       List<String> newerRecipesRecipeIds = [];
       List<Recipe> existingRecipes = List<Recipe>.from(state.recipes);
 
+      int recipeInfoColumnNumber = 12;
       for (List row in data) {
-        if (row.length < 12) {
+        if (row.length < recipeInfoColumnNumber) {
           emit(state.copyWith(
               recipeImportStatus: 'Import file has too few columns'));
           return;
@@ -904,7 +907,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
         String ingredientCookingState = row[10];
         String ingredientMeasurement = row[11];
 
-        Recipe? recipeOnDevice = _recipeOnDevice(recipeNumber);
+        Recipe? recipeOnDevice = _getRecipeIfAlreadyExists(recipeNumber);
 
         if (newerRecipesRecipeIds.contains(recipeNumber)) {
           continue;
@@ -922,7 +925,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
             recipeNumber: recipeNumber,
             date: date,
             recipeName: recipeName,
-            recipeType: recipeType.trim() + ' Recipe',
+            recipeType: recipeType + ' Recipe',
             measurements: const [],
             saved: true);
 

@@ -127,9 +127,9 @@ class RecipeImport extends StatelessWidget {
         builder: (context, state) {
           return ListTile(
             leading: const Icon(Icons.download_for_offline),
-            title: const Text('Import recipe file'),
+            title: const Text('Import recipe(s) from file'),
             onTap: () {
-              context.read<RecipeBloc>().add(const RecipeImported());
+              context.read<RecipeBloc>().add(const RecipesImported());
             },
           );
         },
