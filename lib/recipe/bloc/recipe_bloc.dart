@@ -866,6 +866,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
 
   Future<void> _onRecipesImported(
       RecipesImported event, Emitter<RecipeState> emit) async {
+    // TODO: Breakdown function into sub-functions for readability
     emit(state.copyWith(recipeImportStatus: '')); // Clear status for snackbar
     FilePickerResult? result = await FilePicker.platform.pickFiles(
         // TODO: Implement extension restriction once csv is supported by package
@@ -1008,7 +1009,9 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
       }
 
       List<Recipe> recipes = existingRecipes + newRecipes;
-
+      // TODO: Approach currently overwrites older recipes with newer ones.
+      // Inform user of number of recipes overwritten.
+      // TODO: Give user option to not overwrite older recipes with new recipes.
       emit(state.copyWith(
           recipes: recipes,
           recipeImportStatus:
