@@ -229,9 +229,8 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     // TODO: change into UUID-based indexing
     int changedFoodItemIndex = foodItems.indexOf(event.foodItem);
 
-    FoodItem foodItem = foodItems[changedFoodItemIndex].copyWith(
-        timePeriod: TimePeriod.dirty(event.foodItemTimePeriod),
-        confirmed: false);
+    FoodItem foodItem = foodItems[changedFoodItemIndex]
+        .copyWith(timePeriod: event.foodItemTimePeriod, confirmed: false);
 
     foodItems.removeAt(changedFoodItemIndex);
     foodItems.insert(changedFoodItemIndex, foodItem);

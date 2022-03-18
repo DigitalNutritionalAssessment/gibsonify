@@ -11,7 +11,7 @@ class FoodItem extends Equatable {
   FoodItem(
       {String? id,
       this.name,
-      this.timePeriod = const TimePeriod.pure(),
+      this.timePeriod,
       this.source = const Source.pure(),
       this.description = const Description.pure(),
       this.preparationMethod = const PreparationMethod.pure(),
@@ -23,7 +23,9 @@ class FoodItem extends Equatable {
 
   final String id;
   final String? name;
-  final TimePeriod timePeriod;
+  // TODO: change to timePeriod to an enum with maps to Strings and back for
+  // serialization
+  final String? timePeriod;
   final Source source;
   final Description description;
   final PreparationMethod preparationMethod;
@@ -38,7 +40,7 @@ class FoodItem extends Equatable {
   FoodItem.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         name = json['name'],
-        timePeriod = TimePeriod.fromJson(json['timePeriod']),
+        timePeriod = json['timePeriod'],
         source = Source.fromJson(json['source']),
         description = Description.fromJson(json['description']),
         preparationMethod =
@@ -51,7 +53,7 @@ class FoodItem extends Equatable {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['name'] = name;
-    data['timePeriod'] = timePeriod.toJson();
+    data['timePeriod'] = timePeriod;
     data['source'] = source.toJson();
     data['description'] = description.toJson();
     data['preparationMethod'] = preparationMethod.toJson();
@@ -64,7 +66,7 @@ class FoodItem extends Equatable {
   FoodItem copyWith(
       {String? id,
       String? name,
-      TimePeriod? timePeriod,
+      String? timePeriod,
       Source? source,
       Description? description,
       PreparationMethod? preparationMethod,
@@ -102,38 +104,6 @@ class FoodItem extends Equatable {
 // replacing them by strings only, as in 90% of the cases the only validation
 // is checking if it is not empty, and the rest can be added as custom
 // validation methods
-
-enum TimePeriodValidationError { invalid }
-
-class TimePeriod extends FormzInput<String, TimePeriodValidationError> {
-  const TimePeriod.pure() : super.pure('');
-  const TimePeriod.dirty([String value = '']) : super.dirty(value);
-
-  final _allowedTimePeriods = const [
-    'morning (3:01 am - 12:00 pm)',
-    'afternoon (12:01 pm - 4:00 pm)',
-    'evening (4:01 pm - 7:00 pm)',
-    'night (7:01 pm - 3:00 am)'
-  ];
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['value'] = value;
-    data['pure'] = pure.toString();
-    return data;
-  }
-
-  TimePeriod.fromJson(Map<String, dynamic> json) : super.dirty(json['value']);
-
-  @override
-  TimePeriodValidationError? validator(String? value) {
-    final _lowerCaseValue = (value ?? '').toLowerCase();
-    // TODO: refactor with a better null check
-    return _allowedTimePeriods.contains(_lowerCaseValue)
-        ? null
-        : TimePeriodValidationError.invalid;
-  }
-}
 
 enum SourceValidationError { invalid }
 

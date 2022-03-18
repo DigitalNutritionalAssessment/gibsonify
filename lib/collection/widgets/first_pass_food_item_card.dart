@@ -73,8 +73,8 @@ class FirstPassFoodItemCard extends StatelessWidget {
                       // TODO: the errorText should be displayed if nothing is chosen
                       // so investigate how this can be achieved with focusnodes or
                       // maybe send an empty string (although that would not work all
-                      // the time)
-                      errorText: foodItem.timePeriod.invalid
+                      // the time), currently errorText is never displayed
+                      errorText: isFieldModifiedAndEmpty(foodItem.timePeriod)
                           ? 'Select a time period'
                           : null),
                   mode: Mode.MENU,
@@ -85,7 +85,7 @@ class FirstPassFoodItemCard extends StatelessWidget {
                       onTimePeriodChanged!(timePeriod ?? ''),
                   // TODO: the selected item has to be a nullable string for the
                   // dropdown field to display properly, fix this once we drop Formz
-                  selectedItem: foodItem.timePeriod.value)
+                  selectedItem: foodItem.timePeriod)
             ],
           ),
         ),

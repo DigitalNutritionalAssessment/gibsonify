@@ -23,6 +23,10 @@ class FourthPassFoodItemCard extends StatelessWidget {
     String foodItemDisplayName = isFieldUnmodifiedOrEmpty(foodItem.name)
         ? 'Unnamed food'
         : foodItem.name!;
+    String foodItemDisplayTimePeriod =
+        isFieldUnmodifiedOrEmpty(foodItem.timePeriod)
+            ? 'unspecified period'
+            : foodItem.timePeriod!;
     return Slidable(
       key: Key(foodItem.id),
       endActionPane: ActionPane(
@@ -46,8 +50,9 @@ class FourthPassFoodItemCard extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              Text('$foodItemDisplayName consumed in the ' +
-                  foodItem.timePeriod.value),
+              Text(foodItemDisplayName +
+                  ' consumed in the ' +
+                  foodItemDisplayTimePeriod),
               TextFormField(
                 readOnly: true,
                 // TODO add snackbar confirmation and scroll in the given page
