@@ -86,12 +86,12 @@ class SecondPassFoodItemCard extends StatelessWidget {
                 // dropdown field to display properly, fix this once we drop Formz
                 selectedItem: foodItem.source),
             TextFormField(
-              initialValue: foodItem.description.value,
+              initialValue: foodItem.description,
               decoration: InputDecoration(
                 icon: const Icon(Icons.info),
                 labelText: 'Food ingredients',
                 helperText: 'Detailed list of ingredients',
-                errorText: foodItem.description.invalid
+                errorText: isFieldModifiedAndEmpty(foodItem.description)
                     ? 'Write down the full list of ingredients'
                     : null,
               ),
@@ -137,7 +137,7 @@ class SecondPassFoodItemCard extends StatelessWidget {
                 Navigator.pushNamed(context, PageRouter.chooseRecipe,
                     arguments: {
                       'assignedFoodItemId': foodItem.id,
-                      'foodItemDescription': foodItem.description.value,
+                      'foodItemDescription': foodItem.description,
                     });
               },
               textInputAction: TextInputAction.next,

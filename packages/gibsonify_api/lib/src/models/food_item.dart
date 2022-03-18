@@ -13,7 +13,7 @@ class FoodItem extends Equatable {
       this.name,
       this.timePeriod,
       this.source,
-      this.description = const Description.pure(),
+      this.description,
       this.preparationMethod = const PreparationMethod.pure(),
       List<Measurement>? measurements,
       this.recipe,
@@ -27,7 +27,7 @@ class FoodItem extends Equatable {
   // to enums for serialization (toJson and fromJson)
   final String? timePeriod;
   final String? source;
-  final Description description;
+  final String? description;
   final PreparationMethod preparationMethod;
   final List<Measurement> measurements;
   final Recipe? recipe;
@@ -42,7 +42,7 @@ class FoodItem extends Equatable {
         name = json['name'],
         timePeriod = json['timePeriod'],
         source = json['source'],
-        description = Description.fromJson(json['description']),
+        description = json['description'],
         preparationMethod =
             PreparationMethod.fromJson(json['preparationMethod']),
         measurements = Measurement.jsonDecodeMeasurements(json['measurements']),
@@ -55,7 +55,7 @@ class FoodItem extends Equatable {
     data['name'] = name;
     data['timePeriod'] = timePeriod;
     data['source'] = source;
-    data['description'] = description.toJson();
+    data['description'] = description;
     data['preparationMethod'] = preparationMethod.toJson();
     data['measurements'] = jsonEncode(measurements);
     data['recipe'] = recipe?.toJson() ?? '';
@@ -68,7 +68,7 @@ class FoodItem extends Equatable {
       String? name,
       String? timePeriod,
       String? source,
-      Description? description,
+      String? description,
       PreparationMethod? preparationMethod,
       List<Measurement>? measurements,
       Recipe? recipe,
@@ -104,29 +104,6 @@ class FoodItem extends Equatable {
 // replacing them by strings only, as in 90% of the cases the only validation
 // is checking if it is not empty, and the rest can be added as custom
 // validation methods
-
-enum DescriptionValidationError { invalid }
-
-class Description extends FormzInput<String, DescriptionValidationError> {
-  const Description.pure() : super.pure('');
-  const Description.dirty([String value = '']) : super.dirty(value);
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['value'] = value;
-    data['pure'] = pure.toString();
-    return data;
-  }
-
-  Description.fromJson(Map<String, dynamic> json) : super.dirty(json['value']);
-
-  @override
-  DescriptionValidationError? validator(String? value) {
-    return value?.isNotEmpty == true
-        ? null
-        : DescriptionValidationError.invalid;
-  }
-}
 
 enum PreparationMethodValidationError { invalid }
 

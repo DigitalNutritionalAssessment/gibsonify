@@ -72,12 +72,12 @@ class FourthPassFoodItemCard extends StatelessWidget {
                 readOnly: true,
                 onTap: () =>
                     onSelectedScreenChanged!(SelectedScreen.secondPass),
-                initialValue: foodItem.description.value,
+                initialValue: foodItem.description,
                 decoration: InputDecoration(
                   icon: const Icon(Icons.info),
                   labelText: 'Food description',
                   helperText: 'Detailed dish description',
-                  errorText: foodItem.description.invalid
+                  errorText: isFieldUnmodifiedOrEmpty(foodItem.description)
                       ? 'Enter the dish description'
                       : null,
                 ),
