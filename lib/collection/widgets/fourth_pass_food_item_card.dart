@@ -101,14 +101,13 @@ class FourthPassFoodItemCard extends StatelessWidget {
                 onTap: () =>
                     onSelectedScreenChanged!(SelectedScreen.secondPass),
                 initialValue: foodItem.recipe?.recipeName ?? '',
-                decoration: const InputDecoration(
-                  icon: Icon(Icons.bookmark),
+                decoration: InputDecoration(
+                  icon: const Icon(Icons.bookmark),
                   labelText: 'Food recipe',
                   helperText: 'What is the recipe of this food',
-                  // TODO:
-                  // errorText: foodItem.preparationMethod.invalid
-                  //     ? 'Select the food\'s preparation method'
-                  //     : null,
+                  errorText: foodItem.recipe == null
+                      ? 'Select the food\'s recipe'
+                      : null,
                 ),
               ),
               Column(
@@ -138,27 +137,13 @@ class FourthPassFoodItemCard extends StatelessWidget {
                                   labelText: 'Measurement method',
                                   helperText:
                                       'The method used to estimate food quantity',
+                                  // TODO: refactor to something nicer
                                   errorText: !foodItem.measurements[index]
-                                          .isMethodValid()
+                                              .isMethodValid() ||
+                                          foodItem.measurements[index]
+                                                  .measurementMethod ==
+                                              null
                                       ? 'Select the measurement method'
-                                      : null,
-                                ),
-                              ),
-                              TextFormField(
-                                readOnly: true,
-                                onTap: () => onSelectedScreenChanged!(
-                                    SelectedScreen.thirdPass),
-                                initialValue: foodItem
-                                    .measurements[index].measurementValue,
-                                decoration: InputDecoration(
-                                  icon: const Icon(
-                                      Icons.drive_file_rename_outline_rounded),
-                                  labelText: 'Measurement value',
-                                  helperText:
-                                      'The amount or number you measured',
-                                  errorText: !foodItem.measurements[index]
-                                          .isValueValid()
-                                      ? 'Enter the dish measurement'
                                       : null,
                                 ),
                               ),
@@ -174,9 +159,35 @@ class FourthPassFoodItemCard extends StatelessWidget {
                                   labelText: 'Measurement unit',
                                   helperText:
                                       'The size of each measurement value',
+                                  // TODO: refactor to something nicer
                                   errorText: !foodItem.measurements[index]
-                                          .isUnitValid()
+                                              .isUnitValid() ||
+                                          foodItem.measurements[index]
+                                                  .measurementUnit ==
+                                              null
                                       ? 'Select the measurement unit'
+                                      : null,
+                                ),
+                              ),
+                              TextFormField(
+                                readOnly: true,
+                                onTap: () => onSelectedScreenChanged!(
+                                    SelectedScreen.thirdPass),
+                                initialValue: foodItem
+                                    .measurements[index].measurementValue,
+                                decoration: InputDecoration(
+                                  icon: const Icon(
+                                      Icons.drive_file_rename_outline_rounded),
+                                  labelText: 'Measurement value',
+                                  helperText:
+                                      'The amount or number you measured',
+                                  // TODO: refactor to something nicer
+                                  errorText: !foodItem.measurements[index]
+                                              .isValueValid() ||
+                                          foodItem.measurements[index]
+                                                  .measurementValue ==
+                                              null
+                                      ? 'Enter the measured value in 1 to 4 digits'
                                       : null,
                                 ),
                               ),
