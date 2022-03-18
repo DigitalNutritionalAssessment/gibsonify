@@ -12,7 +12,7 @@ class FoodItem extends Equatable {
       {String? id,
       this.name,
       this.timePeriod,
-      this.source = const Source.pure(),
+      this.source,
       this.description = const Description.pure(),
       this.preparationMethod = const PreparationMethod.pure(),
       List<Measurement>? measurements,
@@ -23,10 +23,10 @@ class FoodItem extends Equatable {
 
   final String id;
   final String? name;
-  // TODO: change to timePeriod to an enum with maps to Strings and back for
-  // serialization
+  // TODO: change to timePeriod, source to enums with maps to Strings and back
+  // to enums for serialization (toJson and fromJson)
   final String? timePeriod;
-  final Source source;
+  final String? source;
   final Description description;
   final PreparationMethod preparationMethod;
   final List<Measurement> measurements;
@@ -41,7 +41,7 @@ class FoodItem extends Equatable {
       : id = json['id'],
         name = json['name'],
         timePeriod = json['timePeriod'],
-        source = Source.fromJson(json['source']),
+        source = json['source'],
         description = Description.fromJson(json['description']),
         preparationMethod =
             PreparationMethod.fromJson(json['preparationMethod']),
@@ -54,7 +54,7 @@ class FoodItem extends Equatable {
     data['id'] = id;
     data['name'] = name;
     data['timePeriod'] = timePeriod;
-    data['source'] = source.toJson();
+    data['source'] = source;
     data['description'] = description.toJson();
     data['preparationMethod'] = preparationMethod.toJson();
     data['measurements'] = jsonEncode(measurements);
@@ -67,7 +67,7 @@ class FoodItem extends Equatable {
       {String? id,
       String? name,
       String? timePeriod,
-      Source? source,
+      String? source,
       Description? description,
       PreparationMethod? preparationMethod,
       List<Measurement>? measurements,
@@ -104,43 +104,6 @@ class FoodItem extends Equatable {
 // replacing them by strings only, as in 90% of the cases the only validation
 // is checking if it is not empty, and the rest can be added as custom
 // validation methods
-
-enum SourceValidationError { invalid }
-
-class Source extends FormzInput<String, SourceValidationError> {
-  const Source.pure() : super.pure('');
-  const Source.dirty([String value = '']) : super.dirty(value);
-
-  // TODO: update when accepting custom strings for 'other'
-  final _allowedSources = const [
-    'home made',
-    'purchased',
-    'gift/given by neighbor',
-    'home garden/farm',
-    'leftover',
-    'wild food',
-    'food aid',
-    'other'
-  ];
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['value'] = value;
-    data['pure'] = pure.toString();
-    return data;
-  }
-
-  Source.fromJson(Map<String, dynamic> json) : super.dirty(json['value']);
-
-  @override
-  SourceValidationError? validator(String? value) {
-    final _lowerCaseValue = (value ?? '').toLowerCase();
-    // TODO: refactor with a better null check
-    return _allowedSources.contains(_lowerCaseValue)
-        ? null
-        : SourceValidationError.invalid;
-  }
-}
 
 enum DescriptionValidationError { invalid }
 

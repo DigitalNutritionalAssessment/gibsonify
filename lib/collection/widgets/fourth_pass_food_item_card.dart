@@ -58,13 +58,14 @@ class FourthPassFoodItemCard extends StatelessWidget {
                 // TODO add snackbar confirmation and scroll in the given page
                 onTap: () =>
                     onSelectedScreenChanged!(SelectedScreen.secondPass),
-                initialValue: foodItem.source.value,
+                initialValue: foodItem.source,
                 decoration: InputDecoration(
                   icon: const Icon(Icons.kitchen),
                   labelText: 'Food source',
                   helperText: 'Where does the food come from',
-                  errorText:
-                      foodItem.source.invalid ? 'Select the food source' : null,
+                  errorText: isFieldUnmodifiedOrEmpty(foodItem.source)
+                      ? 'Select the food source'
+                      : null,
                 ),
               ),
               TextFormField(

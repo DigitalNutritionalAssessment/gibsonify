@@ -72,8 +72,8 @@ class SecondPassFoodItemCard extends StatelessWidget {
                     // TODO: the errorText should be displayed if nothing is chosen
                     // so investigate how this can be achieved with focusnodes or
                     // maybe send an empty string (although that would not work all
-                    // the time)
-                    errorText: foodItem.source.invalid
+                    // the time), currently errorText is never displayed
+                    errorText: isFieldModifiedAndEmpty(foodItem.source)
                         ? 'Select the food source'
                         : null),
                 mode: Mode.MENU,
@@ -84,7 +84,7 @@ class SecondPassFoodItemCard extends StatelessWidget {
                     onSourceChanged!(foodSource ?? ''),
                 // TODO: the selected item has to be a nullable string for the
                 // dropdown field to display properly, fix this once we drop Formz
-                selectedItem: foodItem.source.value),
+                selectedItem: foodItem.source),
             TextFormField(
               initialValue: foodItem.description.value,
               decoration: InputDecoration(
