@@ -100,8 +100,40 @@ class SyncScreen extends StatelessWidget {
                   },
                 )
               ]),
+          body: const RecipeImport(),
         );
       });
     });
+  }
+}
+
+class RecipeImport extends StatelessWidget {
+  const RecipeImport({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<RecipeBloc, RecipeState>(
+      listenWhen: (previous, current) =>
+          previous.recipeImportStatus != current.recipeImportStatus,
+      listener: (context, state) {
+        context.read<RecipeBloc>().add(const RecipesSaved());
+        if (state.recipeImportStatus != '') {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(SnackBar(content: Text(state.recipeImportStatus!)));
+        }
+      },
+      child: BlocBuilder<RecipeBloc, RecipeState>(
+        builder: (context, state) {
+          return ListTile(
+            leading: const Icon(Icons.download_for_offline),
+            title: const Text('Import recipe(s) from file'),
+            onTap: () {
+              context.read<RecipeBloc>().add(const RecipesImported());
+            },
+          );
+        },
+      ),
+    );
   }
 }

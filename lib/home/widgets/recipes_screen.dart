@@ -96,7 +96,7 @@ class RecipesScreen extends StatelessWidget {
                                 'assignedFoodItemId': assignedFoodItemId,
                                 'foodItemDescription': foodItemDescription,
                                 'selectedScreen':
-                                    SelectedRecipeScreen.ingredientScreen
+                                    SelectedRecipeScreen.probeScreen
                               }),
                         }),
                 const SizedBox(

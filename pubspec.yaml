@@ -26,6 +26,8 @@ dependencies:
   path_provider: ^2.0.9
   package_info_plus: ^1.4.0
   url_launcher: ^6.0.20
+  file_picker: ^4.4.0
+  csv: ^5.0.1
 
 dev_dependencies:
   flutter_test:

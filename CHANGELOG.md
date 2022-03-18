@@ -3,16 +3,33 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
-### Fix
+### Refactor
 
-- saving using native back button or swipe
-- **recipe**: override back button/swipe to save
-- **collection**: override back button/swipe to save
-- **collection**: temporarily remove long-press-to-delete
-- fix wrongly named map key for argument passing for page navigation
+- **recipe**: simplify import logic
+- **recipe**: reorder recipe import logic for readability
+- **recipe**: rename variables for readability
+- **recipe**: rearrange measurement fields and clean up error handling
+- **collection**: move and rename pop function
+- **collection**: move food item deletion dialog class
+- rename delete recipe to delete recipe dialog
+- remove second ingredients source
+- **recipe**: improve code readability
+- **recipe**: rename bloc private functions
+- **recipe**: standardise ingredients json fields
+- **recipe**: remove unused dependency
+- **recipe**: use named strings for page navigation
+- **recipe**: refactor ingredient loading into bloc and store in state
+- **recipe**: add helper functions to refactor bloc functions
+- **recipe**: use maps instead of lists for arg passing
 
 ### Feat
 
+- **recipe**: add logic for replacing old recipes with new ones
+- **recipe**: add logic to modify date upon recipe modification
+- **recipe**: add date field for recipe list version control
+- **recipe**: add prompts to notiy user on recipe import status
+- **recipe**: handle duplicate recipe imports
+- **recipe**: implement basic recipe import
 - add settings help page with app information
 - **settings**: add source code link to settings help page
 - **settings**: show copyright in settings help page
@@ -34,20 +51,13 @@ All notable changes to this project will be documented in this file.
 - trim ingredient list and add generating script
 - add script for generating ingredient list
 
-### Refactor
+### Fix
 
-- **collection**: move and rename pop function
-- **collection**: move food item deletion dialog class
-- rename delete recipe to delete recipe dialog
-- remove second ingredients source
-- **recipe**: improve code readability
-- **recipe**: rename bloc private functions
-- **recipe**: standardise ingredients json fields
-- **recipe**: remove unused dependency
-- **recipe**: use named strings for page navigation
-- **recipe**: refactor ingredient loading into bloc and store in state
-- **recipe**: add helper functions to refactor bloc functions
-- **recipe**: use maps instead of lists for arg passing
+- saving using native back button or swipe
+- **recipe**: override back button/swipe to save
+- **collection**: override back button/swipe to save
+- **collection**: temporarily remove long-press-to-delete
+- fix wrongly named map key for argument passing for page navigation
 
 ## 1.1.0 (2022-02-21)
 
