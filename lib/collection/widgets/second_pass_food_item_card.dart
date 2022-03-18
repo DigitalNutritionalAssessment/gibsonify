@@ -128,9 +128,10 @@ class SecondPassFoodItemCard extends StatelessWidget {
                 icon: const Icon(Icons.bookmark),
                 labelText: 'Food recipe',
                 helperText: 'What is the recipe of this food',
-                // TODO:
+                // TODO: implement errorText if user has clicked to add a recipe
+                // but has not added any recipe (if recipe is still null)
                 // errorText: foodItem.recipe == null
-                //     ? 'Enter the food recipe'
+                //     ? 'Select the food recipe'
                 //     : null,
               ),
               onTap: () {
