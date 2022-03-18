@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:uuid/uuid.dart';
+import 'package:intl/intl.dart';
 import 'dart:convert';
 
 import 'measurement.dart';
@@ -10,6 +11,7 @@ class Recipe extends Equatable {
   Recipe({
     this.recipeName,
     String? recipeNumber,
+    String? date,
     this.recipeType = "",
     List<Measurement>? measurements,
     this.ingredients = const <Ingredient>[],
@@ -18,10 +20,12 @@ class Recipe extends Equatable {
     this.allProbesChecked = false,
     this.saved = false,
   })  : recipeNumber = recipeNumber ?? const Uuid().v4(),
+        date = date ?? DateFormat('yyyy-MM-dd').format(DateTime.now()),
         measurements = measurements ?? [Measurement()];
 
   final String? recipeName;
   final String recipeNumber;
+  final String date;
   final String recipeType;
   final List<Measurement> measurements;
   final List<Ingredient> ingredients;
@@ -33,6 +37,7 @@ class Recipe extends Equatable {
   Recipe copyWith({
     String? recipeName,
     String? recipeNumber,
+    String? date,
     String? recipeType,
     List<Measurement>? measurements,
     List<Ingredient>? ingredients,
@@ -44,6 +49,7 @@ class Recipe extends Equatable {
     return Recipe(
       recipeName: recipeName ?? this.recipeName,
       recipeNumber: recipeNumber ?? this.recipeNumber,
+      date: date ?? this.date,
       recipeType: recipeType ?? this.recipeType,
       measurements: measurements ?? this.measurements,
       ingredients: ingredients ?? this.ingredients,
@@ -59,6 +65,7 @@ class Recipe extends Equatable {
   List<Object?> get props => [
         recipeName,
         recipeNumber,
+        date,
         recipeType,
         measurements,
         ingredients,
@@ -71,6 +78,7 @@ class Recipe extends Equatable {
   Recipe.fromJson(Map<String, dynamic> json)
       : recipeName = json['recipeName'],
         recipeNumber = json['recipeNumber'],
+        date = json['date'],
         recipeType = json['recipeType'],
         measurements = Measurement.jsonDecodeMeasurements(json['measurements']),
         ingredients = _jsonDecodeIngredients(json['ingredients']),
@@ -84,6 +92,7 @@ class Recipe extends Equatable {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['recipeName'] = recipeName;
     data['recipeNumber'] = recipeNumber;
+    data['date'] = date;
     data['recipeType'] = recipeType;
     data['measurements'] = jsonEncode(measurements);
     data['ingredients'] = jsonEncode(ingredients);
