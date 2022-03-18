@@ -20,6 +20,9 @@ class SecondPassFoodItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String foodItemDisplayName = isFieldUnmodifiedOrEmpty(foodItem.name)
+        ? 'Unnamed food'
+        : foodItem.name!;
     const List<String> foodSources = [
       'Home made',
       'Purchased',
@@ -53,8 +56,7 @@ class SecondPassFoodItemCard extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            Text(foodItem.name.value +
-                ' consumed in the ' +
+            Text('$foodItemDisplayName consumed in the ' +
                 foodItem.timePeriod.value),
             DropdownSearch<String>(
                 maxHeight: 448.0,

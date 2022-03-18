@@ -11,12 +11,13 @@ class DeleteFoodItemDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String? name = foodItem.name.value;
+    String foodItemDisplayName =
+        isFieldUnmodifiedOrEmpty(foodItem.name) ? 'unnamed' : foodItem.name!;
     return BlocBuilder<CollectionBloc, CollectionState>(
       builder: (context, state) {
         return AlertDialog(
           title: const Text('Delete food'),
-          content: Text('Would you like to delete the $name food?'),
+          content: Text('Would you like to delete the $foodItemDisplayName food?'),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, 'Cancel'),

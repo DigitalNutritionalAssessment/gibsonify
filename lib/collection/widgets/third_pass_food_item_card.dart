@@ -33,13 +33,15 @@ class ThirdPassFoodItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String foodItemDisplayName = isFieldUnmodifiedOrEmpty(foodItem.name)
+        ? 'Unnamed food'
+        : foodItem.name!;
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            Text(foodItem.name.value +
-                ' consumed in the ' +
+            Text('$foodItemDisplayName consumed in the ' +
                 foodItem.timePeriod.value),
             ListView.builder(
                 // required to avoid Vertical viewport unbounded height error

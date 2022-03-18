@@ -20,6 +20,9 @@ class FourthPassFoodItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String foodItemDisplayName = isFieldUnmodifiedOrEmpty(foodItem.name)
+        ? 'Unnamed food'
+        : foodItem.name!;
     return Slidable(
       key: Key(foodItem.id),
       endActionPane: ActionPane(
@@ -43,8 +46,7 @@ class FourthPassFoodItemCard extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              Text(foodItem.name.value +
-                  ' consumed in the ' +
+              Text('$foodItemDisplayName consumed in the ' +
                   foodItem.timePeriod.value),
               TextFormField(
                 readOnly: true,
@@ -182,7 +184,7 @@ class FourthPassFoodItemCard extends StatelessWidget {
                   title: foodItem.confirmed
                       ? const Text('Unconfirm')
                       : const Text('Confirm'),
-                  subtitle: Text(foodItem.name.value),
+                  subtitle: Text(foodItemDisplayName),
                   leading: Checkbox(
                     value: foodItem.confirmed,
                     onChanged: (bool? value) =>

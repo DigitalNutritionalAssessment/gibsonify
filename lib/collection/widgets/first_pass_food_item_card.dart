@@ -50,12 +50,15 @@ class FirstPassFoodItemCard extends StatelessWidget {
                   // A unique key needs to be set in order to properly
                   // rebuild this Field after deleting a FoodItem
                   key: Key(foodItem.id),
-                  initialValue: foodItem.name.value,
+                  initialValue: foodItem.name,
                   decoration: InputDecoration(
                       icon: const Icon(Icons.fastfood),
                       labelText: 'Food name',
                       helperText: 'Food name e.g. Dhal',
-                      errorText: foodItem.name.invalid
+                      // TODO: refactor such that errorText is displayed even if
+                      // the field is clicked on and then clicked away, now it
+                      // only works if something is typed and deleted
+                      errorText: isFieldModifiedAndEmpty(foodItem.name)
                           ? 'Enter a food name e.g. Banana'
                           : null),
                   onChanged: (value) => onNameChanged!(value),

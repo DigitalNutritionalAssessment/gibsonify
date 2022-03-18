@@ -10,7 +10,7 @@ import 'measurement.dart';
 class FoodItem extends Equatable {
   FoodItem(
       {String? id,
-      this.name = const Name.pure(),
+      this.name,
       this.timePeriod = const TimePeriod.pure(),
       this.source = const Source.pure(),
       this.description = const Description.pure(),
@@ -22,7 +22,7 @@ class FoodItem extends Equatable {
         measurements = measurements ?? [Measurement()];
 
   final String id;
-  final Name name;
+  final String? name;
   final TimePeriod timePeriod;
   final Source source;
   final Description description;
@@ -37,7 +37,7 @@ class FoodItem extends Equatable {
 
   FoodItem.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        name = Name.fromJson(json['name']),
+        name = json['name'],
         timePeriod = TimePeriod.fromJson(json['timePeriod']),
         source = Source.fromJson(json['source']),
         description = Description.fromJson(json['description']),
@@ -50,7 +50,7 @@ class FoodItem extends Equatable {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = id;
-    data['name'] = name.toJson();
+    data['name'] = name;
     data['timePeriod'] = timePeriod.toJson();
     data['source'] = source.toJson();
     data['description'] = description.toJson();
@@ -63,7 +63,7 @@ class FoodItem extends Equatable {
 
   FoodItem copyWith(
       {String? id,
-      Name? name,
+      String? name,
       TimePeriod? timePeriod,
       Source? source,
       Description? description,
@@ -102,32 +102,6 @@ class FoodItem extends Equatable {
 // replacing them by strings only, as in 90% of the cases the only validation
 // is checking if it is not empty, and the rest can be added as custom
 // validation methods
-
-enum NameValidationError { invalid }
-
-// TODO: Investigate changing classes to be private (with leading underscore)
-
-class Name extends FormzInput<String, NameValidationError> {
-  const Name.pure() : super.pure('');
-  const Name.dirty([String value = '']) : super.dirty(value);
-
-  // TODO: Figure out a way to use the pure attribute or maybe drop
-  // Formz completely. It might be easier to just have all these values
-  // as strings and implement a couple of validator methods
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['value'] = value;
-    data['pure'] = pure.toString();
-    return data;
-  }
-
-  Name.fromJson(Map<String, dynamic> json) : super.dirty(json['value']);
-
-  @override
-  NameValidationError? validator(String? value) {
-    return value?.isNotEmpty == true ? null : NameValidationError.invalid;
-  }
-}
 
 enum TimePeriodValidationError { invalid }
 
