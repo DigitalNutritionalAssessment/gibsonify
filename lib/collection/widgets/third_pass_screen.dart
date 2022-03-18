@@ -81,7 +81,6 @@ class DeleteFoodItemMeasurementDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String? name = foodItem.name.value;
     return BlocBuilder<CollectionBloc, CollectionState>(
       builder: (context, state) {
         return AlertDialog(
