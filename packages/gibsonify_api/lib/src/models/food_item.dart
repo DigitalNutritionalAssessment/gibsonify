@@ -48,7 +48,7 @@ class FoodItem extends Equatable {
         confirmed = json['confirmed'] == 'true' ? true : false;
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['name'] = name;
     data['timePeriod'] = timePeriod.toJson();
@@ -117,7 +117,7 @@ class TimePeriod extends FormzInput<String, TimePeriodValidationError> {
   ];
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['value'] = value;
     data['pure'] = pure.toString();
     return data;
@@ -154,7 +154,7 @@ class Source extends FormzInput<String, SourceValidationError> {
   ];
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['value'] = value;
     data['pure'] = pure.toString();
     return data;
@@ -179,7 +179,7 @@ class Description extends FormzInput<String, DescriptionValidationError> {
   const Description.dirty([String value = '']) : super.dirty(value);
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['value'] = value;
     data['pure'] = pure.toString();
     return data;
@@ -222,7 +222,7 @@ class PreparationMethod
   ];
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['value'] = value;
     data['pure'] = pure.toString();
     return data;
