@@ -877,145 +877,142 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     if (result == null) {
       emit(state.copyWith(recipeImportStatus: 'File not selected'));
       return;
-    } else {
-      final input = File(result.files.single.path!).openRead();
-      List data = await input
-          .transform(utf8.decoder)
-          .transform(const CsvToListConverter())
-          .toList();
-
-      int headingLinePosition = 0;
-      data.removeAt(headingLinePosition);
-
-      List<Recipe> newRecipes = [];
-      List<String> newerRecipesRecipeIds = [];
-      List<Recipe> existingRecipes = List<Recipe>.from(state.recipes);
-
-      int recipeInfoColumnNumber = 12;
-      for (List row in data) {
-        if (row.length < recipeInfoColumnNumber) {
-          emit(state.copyWith(
-              recipeImportStatus: 'Import file has too few columns'));
-          return;
-        }
-        String recipeNumber = row[0];
-        String date = row[1];
-        String recipeName = row[2];
-        String recipeType = row[3];
-        String recipeAttribute = row[4];
-        String recipeMeasurement = row[5];
-        String recipeProbeName = row[6];
-        String recipeProbeAnswers = row[7];
-        String ingredientName = row[8];
-        String ingredientDescription = row[9];
-        String ingredientCookingState = row[10];
-        String ingredientMeasurement = row[11];
-
-        Recipe? recipeOnDevice = _getRecipeIfAlreadyExists(recipeNumber);
-
-        if (newerRecipesRecipeIds.contains(recipeNumber)) {
-          continue;
-        } else if (recipeOnDevice != null) {
-          if (DateTime.parse(recipeOnDevice.date)
-              .isAfter(DateTime.parse(date))) {
-            newerRecipesRecipeIds.add(recipeNumber);
-            continue;
-          } else {
-            existingRecipes.remove(recipeOnDevice);
-          }
-        }
-
-        Recipe recipe = Recipe(
-            recipeNumber: recipeNumber,
-            date: date,
-            recipeName: recipeName,
-            recipeType: recipeType + ' Recipe',
-            measurements: const [],
-            saved: true);
-
-        for (Recipe existingRecipe in newRecipes) {
-          if (existingRecipe.recipeNumber == recipeNumber) {
-            recipe = existingRecipe;
-            newRecipes.remove(existingRecipe);
-            break;
-          }
-        }
-
-        if (recipeAttribute == 'Measurement') {
-          List<Measurement> measurements = List.from(recipe.measurements);
-
-          List<String> newMeasurements = recipeMeasurement.split('+');
-          for (String newMeasurement in newMeasurements) {
-            List<String> fields = newMeasurement.trim().split('_');
-            final measurement = Measurement(
-                measurementMethod: fields[0],
-                measurementUnit: fields[1],
-                measurementValue: fields[2]);
-            measurements.add(measurement);
-          }
-
-          recipe = recipe.copyWith(measurements: measurements);
-        } else if (recipeAttribute == 'Probe') {
-          List<Probe> probes = List.from(recipe.probes);
-
-          List<String> probeAnswers = recipeProbeAnswers.split('+');
-          List<Map<String, dynamic>> probeOptions = [];
-          for (String answer in probeAnswers) {
-            probeOptions
-                .add({'option': answer.trim(), 'id': const Uuid().v4()});
-          }
-          final probe =
-              Probe(probeName: recipeProbeName, probeOptions: probeOptions);
-          probes.add(probe);
-
-          recipe = recipe.copyWith(probes: probes);
-        } else if (recipeAttribute == 'Ingredient') {
-          List<Ingredient> ingredients = List.from(recipe.ingredients);
-
-          List<Measurement> measurements = [];
-          List<String> newMeasurements = ingredientMeasurement.split('+');
-          for (String newMeasurement in newMeasurements) {
-            List<String> fields = newMeasurement.trim().split('_');
-            final measurement = Measurement(
-                measurementMethod: fields[0],
-                measurementUnit: fields[1],
-                measurementValue: fields[2]);
-            measurements.add(measurement);
-          }
-          final ingredient = Ingredient(
-              name: ingredientName,
-              description: ingredientDescription,
-              cookingState: ingredientCookingState,
-              measurements: measurements,
-              saved: true); // TODO: Figure out food composition implementation
-          ingredients.add(ingredient);
-
-          recipe = recipe.copyWith(ingredients: ingredients);
-        } else {
-          continue; // Skip line with bad recipe attribute
-        }
-
-        newRecipes.add(recipe);
-      }
-
-      for (Recipe recipe in newRecipes) {
-        if (recipe.measurements.isEmpty) {
-          // Protect against recipes without Measurements
-          Recipe recipeWithMeasurement =
-              recipe.copyWith(measurements: [Measurement()]);
-          newRecipes.remove(recipe);
-          newRecipes.add(recipeWithMeasurement);
-        }
-      }
-
-      List<Recipe> recipes = existingRecipes + newRecipes;
-      // TODO: Approach currently overwrites older recipes with newer ones.
-      // Inform user of number of recipes overwritten.
-      // TODO: Give user option to not overwrite older recipes with new recipes.
-      emit(state.copyWith(
-          recipes: recipes,
-          recipeImportStatus:
-              'Imported ${newRecipes.length} recipe(s) successfully'));
     }
+    final input = File(result.files.single.path!).openRead();
+    List data = await input
+        .transform(utf8.decoder)
+        .transform(const CsvToListConverter())
+        .toList();
+
+    int headingLinePosition = 0;
+    data.removeAt(headingLinePosition);
+
+    List<Recipe> newRecipes = [];
+    List<String> newerRecipesRecipeIds = [];
+    List<Recipe> existingRecipes = List<Recipe>.from(state.recipes);
+
+    int recipeInfoColumnNumber = 12;
+    for (List row in data) {
+      if (row.length < recipeInfoColumnNumber) {
+        emit(state.copyWith(
+            recipeImportStatus: 'Import file has too few columns'));
+        return;
+      }
+      String recipeNumber = row[0];
+      String date = row[1];
+      String recipeName = row[2];
+      String recipeType = row[3];
+      String recipeAttribute = row[4];
+      String recipeMeasurement = row[5];
+      String recipeProbeName = row[6];
+      String recipeProbeAnswers = row[7];
+      String ingredientName = row[8];
+      String ingredientDescription = row[9];
+      String ingredientCookingState = row[10];
+      String ingredientMeasurement = row[11];
+
+      Recipe? recipeOnDevice = _getRecipeIfAlreadyExists(recipeNumber);
+
+      if (newerRecipesRecipeIds.contains(recipeNumber)) {
+        continue;
+      } else if (recipeOnDevice != null) {
+        if (DateTime.parse(recipeOnDevice.date).isAfter(DateTime.parse(date))) {
+          newerRecipesRecipeIds.add(recipeNumber);
+          continue;
+        } else {
+          existingRecipes.remove(recipeOnDevice);
+        }
+      }
+
+      Recipe recipe = Recipe(
+          recipeNumber: recipeNumber,
+          date: date,
+          recipeName: recipeName,
+          recipeType: recipeType + ' Recipe',
+          measurements: const [],
+          saved: true);
+
+      for (Recipe existingRecipe in newRecipes) {
+        if (existingRecipe.recipeNumber == recipeNumber) {
+          recipe = existingRecipe;
+          newRecipes.remove(existingRecipe);
+          break;
+        }
+      }
+
+      if (recipeAttribute == 'Measurement') {
+        List<Measurement> measurements = List.from(recipe.measurements);
+
+        List<String> newMeasurements = recipeMeasurement.split('+');
+        for (String newMeasurement in newMeasurements) {
+          List<String> fields = newMeasurement.trim().split('_');
+          final measurement = Measurement(
+              measurementMethod: fields[0],
+              measurementUnit: fields[1],
+              measurementValue: fields[2]);
+          measurements.add(measurement);
+        }
+
+        recipe = recipe.copyWith(measurements: measurements);
+      } else if (recipeAttribute == 'Probe') {
+        List<Probe> probes = List.from(recipe.probes);
+
+        List<String> probeAnswers = recipeProbeAnswers.split('+');
+        List<Map<String, dynamic>> probeOptions = [];
+        for (String answer in probeAnswers) {
+          probeOptions.add({'option': answer.trim(), 'id': const Uuid().v4()});
+        }
+        final probe =
+            Probe(probeName: recipeProbeName, probeOptions: probeOptions);
+        probes.add(probe);
+
+        recipe = recipe.copyWith(probes: probes);
+      } else if (recipeAttribute == 'Ingredient') {
+        List<Ingredient> ingredients = List.from(recipe.ingredients);
+
+        List<Measurement> measurements = [];
+        List<String> newMeasurements = ingredientMeasurement.split('+');
+        for (String newMeasurement in newMeasurements) {
+          List<String> fields = newMeasurement.trim().split('_');
+          final measurement = Measurement(
+              measurementMethod: fields[0],
+              measurementUnit: fields[1],
+              measurementValue: fields[2]);
+          measurements.add(measurement);
+        }
+        final ingredient = Ingredient(
+            name: ingredientName,
+            description: ingredientDescription,
+            cookingState: ingredientCookingState,
+            measurements: measurements,
+            saved: true); // TODO: Figure out food composition implementation
+        ingredients.add(ingredient);
+
+        recipe = recipe.copyWith(ingredients: ingredients);
+      } else {
+        continue; // Skip line with bad recipe attribute
+      }
+
+      newRecipes.add(recipe);
+    }
+
+    for (Recipe recipe in newRecipes) {
+      if (recipe.measurements.isEmpty) {
+        // Protect against recipes without Measurements
+        Recipe recipeWithMeasurement =
+            recipe.copyWith(measurements: [Measurement()]);
+        newRecipes.remove(recipe);
+        newRecipes.add(recipeWithMeasurement);
+      }
+    }
+
+    List<Recipe> recipes = existingRecipes + newRecipes;
+    // TODO: Approach currently overwrites older recipes with newer ones.
+    // Inform user of number of recipes overwritten.
+    // TODO: Give user option to not overwrite older recipes with new recipes.
+    emit(state.copyWith(
+        recipes: recipes,
+        recipeImportStatus:
+            'Imported ${newRecipes.length} recipe(s) successfully'));
   }
 }
