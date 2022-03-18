@@ -287,9 +287,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     int changedFoodItemIndex = foodItems.indexOf(event.foodItem);
 
     FoodItem foodItem = foodItems[changedFoodItemIndex].copyWith(
-        preparationMethod:
-            PreparationMethod.dirty(event.foodItemPreparationMethod),
-        confirmed: false);
+        preparationMethod: event.foodItemPreparationMethod, confirmed: false);
 
     foodItems.removeAt(changedFoodItemIndex);
     foodItems.insert(changedFoodItemIndex, foodItem);

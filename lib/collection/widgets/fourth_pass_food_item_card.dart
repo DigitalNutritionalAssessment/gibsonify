@@ -86,14 +86,15 @@ class FourthPassFoodItemCard extends StatelessWidget {
                 readOnly: true,
                 onTap: () =>
                     onSelectedScreenChanged!(SelectedScreen.secondPass),
-                initialValue: foodItem.preparationMethod.value,
+                initialValue: foodItem.preparationMethod,
                 decoration: InputDecoration(
                   icon: const Icon(Icons.coffee_maker_outlined),
                   labelText: 'Form when eaten',
                   helperText: 'The preparation method of the food',
-                  errorText: foodItem.preparationMethod.invalid
-                      ? 'Select the food\'s preparation method'
-                      : null,
+                  errorText:
+                      isFieldUnmodifiedOrEmpty(foodItem.preparationMethod)
+                          ? 'Select the food\'s preparation method'
+                          : null,
                 ),
               ),
               TextFormField(

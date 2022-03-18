@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
-import 'package:formz/formz.dart';
 import 'package:uuid/uuid.dart';
 
 import 'recipe.dart';
@@ -14,7 +13,7 @@ class FoodItem extends Equatable {
       this.timePeriod,
       this.source,
       this.description,
-      this.preparationMethod = const PreparationMethod.pure(),
+      this.preparationMethod,
       List<Measurement>? measurements,
       this.recipe,
       this.confirmed = false})
@@ -23,12 +22,12 @@ class FoodItem extends Equatable {
 
   final String id;
   final String? name;
-  // TODO: change to timePeriod, source to enums with maps to Strings and back
-  // to enums for serialization (toJson and fromJson)
+  // TODO: change to timePeriod, source and preparationMethod to enums with maps
+  // to Strings and back to enums for serialization (toJson and fromJson)
   final String? timePeriod;
   final String? source;
   final String? description;
-  final PreparationMethod preparationMethod;
+  final String? preparationMethod;
   final List<Measurement> measurements;
   final Recipe? recipe;
   // TODO: Add Form validation bool field to check if all fields are valid
@@ -43,8 +42,7 @@ class FoodItem extends Equatable {
         timePeriod = json['timePeriod'],
         source = json['source'],
         description = json['description'],
-        preparationMethod =
-            PreparationMethod.fromJson(json['preparationMethod']),
+        preparationMethod = json['preparationMethod'],
         measurements = Measurement.jsonDecodeMeasurements(json['measurements']),
         recipe = json['recipe'] == '' ? null : Recipe.fromJson(json['recipe']),
         confirmed = json['confirmed'] == 'true' ? true : false;
@@ -56,7 +54,7 @@ class FoodItem extends Equatable {
     data['timePeriod'] = timePeriod;
     data['source'] = source;
     data['description'] = description;
-    data['preparationMethod'] = preparationMethod.toJson();
+    data['preparationMethod'] = preparationMethod;
     data['measurements'] = jsonEncode(measurements);
     data['recipe'] = recipe?.toJson() ?? '';
     data['confirmed'] = confirmed.toString();
@@ -69,7 +67,7 @@ class FoodItem extends Equatable {
       String? timePeriod,
       String? source,
       String? description,
-      PreparationMethod? preparationMethod,
+      String? preparationMethod,
       List<Measurement>? measurements,
       Recipe? recipe,
       bool? confirmed}) {
@@ -99,54 +97,4 @@ class FoodItem extends Equatable {
         recipe,
         confirmed
       ];
-}
-// TODO: The most sensible fix to this is probably getting rid of all Formz and
-// replacing them by strings only, as in 90% of the cases the only validation
-// is checking if it is not empty, and the rest can be added as custom
-// validation methods
-
-enum PreparationMethodValidationError { invalid }
-
-class PreparationMethod
-    extends FormzInput<String, PreparationMethodValidationError> {
-  const PreparationMethod.pure() : super.pure('');
-  const PreparationMethod.dirty([String value = '']) : super.dirty(value);
-
-  // TODO: update when accepting custom strings for 'other'
-  final _allowedPreparationMethods = const [
-    'raw',
-    'boiled',
-    'boiled in water but retained water',
-    'boiled in water but removed water',
-    'steamed',
-    'roasted with oil',
-    'roasted without oil',
-    'fried',
-    'stir-fried',
-    'soaking and stir-fried',
-    'boiled and fried',
-    'boiled and stir-fried',
-    'steamed and fried',
-    'roasted and boiled',
-    'other'
-  ];
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['value'] = value;
-    data['pure'] = pure.toString();
-    return data;
-  }
-
-  PreparationMethod.fromJson(Map<String, dynamic> json)
-      : super.dirty(json['value']);
-
-  @override
-  PreparationMethodValidationError? validator(String? value) {
-    final _lowerCaseValue = (value ?? '').toLowerCase();
-    // TODO: refactor with a better null check
-    return _allowedPreparationMethods.contains(_lowerCaseValue)
-        ? null
-        : PreparationMethodValidationError.invalid;
-  }
 }
