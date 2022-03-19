@@ -22,3 +22,13 @@ bool isFieldUnmodifiedOrEmpty(String? field) {
     return false;
   }
 }
+
+/// Checks whether the String field is not `null` and not an empty string, which
+/// usually corresponds to a string attribute being valid.
+bool isFieldNotNullAndNotEmpty(String? field) {
+  if (field != null && field.isNotEmpty) {
+    return true;
+  } else {
+    return false;
+  }
+}

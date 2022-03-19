@@ -12,9 +12,9 @@ class GibsonsForm extends Equatable {
       {String? id,
       this.householdId,
       this.respondentName,
-      this.respondentCountryCode = '',
-      this.respondentTelNumberPrefix = '',
-      this.respondentTelNumber = const RespondentTelNumber.pure(),
+      this.respondentCountryCode,
+      this.respondentTelNumberPrefix,
+      this.respondentTelNumber,
       this.sensitizationDate = const SensitizationDate.pure(),
       this.recallDay = const RecallDay.pure(),
       this.interviewDate = const InterviewDate.pure(),
@@ -32,9 +32,9 @@ class GibsonsForm extends Equatable {
   final String id;
   final String? householdId;
   final String? respondentName;
-  final String respondentCountryCode;
-  final String respondentTelNumberPrefix;
-  final RespondentTelNumber respondentTelNumber;
+  final String? respondentCountryCode;
+  final String? respondentTelNumberPrefix;
+  final String? respondentTelNumber;
   final SensitizationDate sensitizationDate;
   final RecallDay recallDay;
   final InterviewDate interviewDate;
@@ -61,8 +61,7 @@ class GibsonsForm extends Equatable {
         respondentName = json['respondentName'],
         respondentCountryCode = json['respondentCountryCode'],
         respondentTelNumberPrefix = json['respondentTelNumberPrefix'],
-        respondentTelNumber =
-            RespondentTelNumber.fromJson(json['respondentTelNumber']),
+        respondentTelNumber = json['respondentTelNumber'],
         sensitizationDate =
             SensitizationDate.fromJson(json['sensitizationDate']),
         recallDay = RecallDay.fromJson(json['recallDay']),
@@ -87,7 +86,7 @@ class GibsonsForm extends Equatable {
     data['respondentName'] = respondentName;
     data['respondentCountryCode'] = respondentCountryCode;
     data['respondentTelNumberPrefix'] = respondentTelNumberPrefix;
-    data['respondentTelNumber'] = respondentTelNumber.toJson();
+    data['respondentTelNumber'] = respondentTelNumber;
     data['sensitizationDate'] = sensitizationDate.toJson();
     data['recallDay'] = recallDay.toJson();
     data['interviewDate'] = interviewDate.toJson();
@@ -110,7 +109,7 @@ class GibsonsForm extends Equatable {
       String? respondentName,
       String? respondentCountryCode,
       String? respondentTelNumberPrefix,
-      RespondentTelNumber? respondentTelNumber,
+      String? respondentTelNumber,
       SensitizationDate? sensitizationDate,
       RecallDay? recallDay,
       InterviewDate? interviewDate,
@@ -239,10 +238,11 @@ class GibsonsForm extends Equatable {
   }
 
   bool isRespondentNameValid() {
-    if (respondentName != null) {
-      return respondentName!.isNotEmpty;
-    }
-    return false;
+    return isFieldNotNullAndNotEmpty(respondentName);
+  }
+
+  bool isRespondentTelNumberValid() {
+    return isFieldNotNullAndNotEmpty(respondentTelNumber);
   }
 }
 
@@ -251,33 +251,6 @@ List<FoodItem> _jsonDecodeFoodItems(jsonEncodedFoodItems) {
   List<FoodItem> fullyDecodedFoodItems =
       partiallyDecodedFoodItems.map((e) => FoodItem.fromJson(e)).toList();
   return fullyDecodedFoodItems;
-}
-
-enum RespondentTelNumberValidationError { invalid }
-
-class RespondentTelNumber
-    extends FormzInput<String, RespondentTelNumberValidationError> {
-  const RespondentTelNumber.pure() : super.pure('');
-  const RespondentTelNumber.dirty([String value = '']) : super.dirty(value);
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['value'] = value;
-    data['pure'] = pure.toString();
-    return data;
-  }
-
-  RespondentTelNumber.fromJson(Map<String, dynamic> json)
-      : super.dirty(json['value']);
-
-  @override
-  RespondentTelNumberValidationError? validator(String? value) {
-    // TODO: Add (Regex?) number validation, currently only checks if not empty
-    // also probably could be empty? So check if either empty or valid number
-    return value?.isNotEmpty == true
-        ? null
-        : RespondentTelNumberValidationError.invalid;
-  }
 }
 
 enum SensitizationDateValidationError { invalid }

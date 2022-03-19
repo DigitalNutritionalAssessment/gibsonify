@@ -128,11 +128,8 @@ class RespondentTelInfoInput extends StatelessWidget {
             icon: Icon(Icons.phone),
             helperText: 'Full tel. number of respondent e.g. +447448238123',
           ),
-          initialValue: state.gibsonsForm.respondentTelNumber.value,
-          initialCountryCode:
-              state.gibsonsForm.respondentTelNumber.value.isEmpty
-                  ? 'IN'
-                  : state.gibsonsForm.respondentCountryCode,
+          initialValue: state.gibsonsForm.respondentTelNumber,
+          initialCountryCode: state.gibsonsForm.respondentCountryCode ?? 'IN',
           onChanged: (phoneNumber) {
             context.read<CollectionBloc>().add(RespondentTelInfoChanged(
                 respondentCountryCode: phoneNumber.countryISOCode,

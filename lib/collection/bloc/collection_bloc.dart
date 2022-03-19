@@ -73,12 +73,10 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
   void _onRespondentTelInfoChanged(
       RespondentTelInfoChanged event, Emitter<CollectionState> emit) {
-    final respondentTelNumber =
-        RespondentTelNumber.dirty(event.respondentTelNumber);
     GibsonsForm changedGibsonsForm = state.gibsonsForm.copyWith(
         respondentCountryCode: event.respondentCountryCode,
         respondentTelNumberPrefix: event.respondentTelNumberPrefix,
-        respondentTelNumber: respondentTelNumber);
+        respondentTelNumber: event.respondentTelNumber);
 
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }
