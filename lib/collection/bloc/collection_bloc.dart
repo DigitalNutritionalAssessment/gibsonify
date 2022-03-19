@@ -65,9 +65,8 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
   void _onRespondentNameChanged(
       RespondentNameChanged event, Emitter<CollectionState> emit) {
-    final respondentName = RespondentName.dirty(event.respondentName);
     GibsonsForm changedGibsonsForm =
-        state.gibsonsForm.copyWith(respondentName: respondentName);
+        state.gibsonsForm.copyWith(respondentName: event.respondentName);
 
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }

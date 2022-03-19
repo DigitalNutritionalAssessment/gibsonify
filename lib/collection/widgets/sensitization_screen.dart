@@ -92,12 +92,13 @@ class RespondentNameInput extends StatelessWidget {
     return BlocBuilder<CollectionBloc, CollectionState>(
       builder: (context, state) {
         return TextFormField(
-          initialValue: state.gibsonsForm.respondentName.value,
+          initialValue: state.gibsonsForm.respondentName,
           decoration: InputDecoration(
             icon: const Icon(Icons.person),
             labelText: 'Respondent Name',
             helperText: 'Full name of respondent e.g. Keira Brown',
-            errorText: state.gibsonsForm.respondentName.invalid
+            errorText: state.gibsonsForm.respondentName != null &&
+                    !state.gibsonsForm.isRespondentNameValid()
                 ? 'Enter respondent name'
                 : null,
           ),

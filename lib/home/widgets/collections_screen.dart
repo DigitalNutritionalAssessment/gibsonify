@@ -43,7 +43,11 @@ class CollectionsScreen extends StatelessWidget {
                       child: ListTile(
                         leading: const Icon(Icons.person),
                         title: Text(
-                            state.gibsonsForms[index]!.respondentName.value),
+                            // TODO: refactor
+                            isFieldUnmodifiedOrEmpty(
+                                    state.gibsonsForms[index]!.respondentName)
+                                ? 'Unnamed respondent'
+                                : state.gibsonsForms[index]!.respondentName!),
                         subtitle: Text(
                             state.gibsonsForms[index]!.interviewDate.value),
                         // TODO: add trailing icon depending on whether collection is saved or not
@@ -93,13 +97,16 @@ class DeleteCollectionDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String? respondentName = gibsonsForm.respondentName.value;
+    String displayRespondentName =
+        isFieldUnmodifiedOrEmpty(gibsonsForm.respondentName)
+            ? 'unnamed respondent'
+            : gibsonsForm.respondentName!;
     return BlocBuilder<CollectionBloc, CollectionState>(
       builder: (context, state) {
         return AlertDialog(
           title: const Text('Delete collection'),
           content: Text(
-              'Would you like to delete the collection of $respondentName?'),
+              'Would you like to delete the collection of $displayRespondentName?'),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, 'Cancel'),

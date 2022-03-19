@@ -11,7 +11,7 @@ class GibsonsForm extends Equatable {
   GibsonsForm(
       {String? id,
       this.householdId,
-      this.respondentName = const RespondentName.pure(),
+      this.respondentName,
       this.respondentCountryCode = '',
       this.respondentTelNumberPrefix = '',
       this.respondentTelNumber = const RespondentTelNumber.pure(),
@@ -31,7 +31,7 @@ class GibsonsForm extends Equatable {
 
   final String id;
   final String? householdId;
-  final RespondentName respondentName;
+  final String? respondentName;
   final String respondentCountryCode;
   final String respondentTelNumberPrefix;
   final RespondentTelNumber respondentTelNumber;
@@ -58,7 +58,7 @@ class GibsonsForm extends Equatable {
   GibsonsForm.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         householdId = json['householdId'],
-        respondentName = RespondentName.fromJson(json['respondentName']),
+        respondentName = json['respondentName'],
         respondentCountryCode = json['respondentCountryCode'],
         respondentTelNumberPrefix = json['respondentTelNumberPrefix'],
         respondentTelNumber =
@@ -84,7 +84,7 @@ class GibsonsForm extends Equatable {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['householdId'] = householdId;
-    data['respondentName'] = respondentName.toJson();
+    data['respondentName'] = respondentName;
     data['respondentCountryCode'] = respondentCountryCode;
     data['respondentTelNumberPrefix'] = respondentTelNumberPrefix;
     data['respondentTelNumber'] = respondentTelNumber.toJson();
@@ -107,7 +107,7 @@ class GibsonsForm extends Equatable {
   GibsonsForm copyWith(
       {String? id,
       String? householdId,
-      RespondentName? respondentName,
+      String? respondentName,
       String? respondentCountryCode,
       String? respondentTelNumberPrefix,
       RespondentTelNumber? respondentTelNumber,
@@ -237,6 +237,13 @@ class GibsonsForm extends Equatable {
     }
     return false;
   }
+
+  bool isRespondentNameValid() {
+    if (respondentName != null) {
+      return respondentName!.isNotEmpty;
+    }
+    return false;
+  }
 }
 
 List<FoodItem> _jsonDecodeFoodItems(jsonEncodedFoodItems) {
@@ -244,30 +251,6 @@ List<FoodItem> _jsonDecodeFoodItems(jsonEncodedFoodItems) {
   List<FoodItem> fullyDecodedFoodItems =
       partiallyDecodedFoodItems.map((e) => FoodItem.fromJson(e)).toList();
   return fullyDecodedFoodItems;
-}
-
-enum RespondentNameValidationError { invalid }
-
-class RespondentName extends FormzInput<String, RespondentNameValidationError> {
-  const RespondentName.pure() : super.pure('');
-  const RespondentName.dirty([String value = '']) : super.dirty(value);
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['value'] = value;
-    data['pure'] = pure.toString();
-    return data;
-  }
-
-  RespondentName.fromJson(Map<String, dynamic> json)
-      : super.dirty(json['value']);
-
-  @override
-  RespondentNameValidationError? validator(String? value) {
-    return value?.isNotEmpty == true
-        ? null
-        : RespondentNameValidationError.invalid;
-  }
 }
 
 enum RespondentTelNumberValidationError { invalid }
