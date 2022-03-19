@@ -48,8 +48,10 @@ class CollectionsScreen extends StatelessWidget {
                                     state.gibsonsForms[index]!.respondentName)
                                 ? 'Unnamed respondent'
                                 : state.gibsonsForms[index]!.respondentName!),
-                        subtitle: Text(
-                            state.gibsonsForms[index]!.interviewDate.value),
+                        subtitle: Text(isFieldUnmodifiedOrEmpty(
+                                state.gibsonsForms[index]!.interviewDate)
+                            ? 'Unspecified date'
+                            : state.gibsonsForms[index]!.interviewDate!),
                         // TODO: add trailing icon depending on whether collection is saved or not
                         onTap: () {
                           context.read<CollectionBloc>().add(

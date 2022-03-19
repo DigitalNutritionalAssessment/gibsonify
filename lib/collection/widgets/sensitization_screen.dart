@@ -152,12 +152,13 @@ class SensitizationDateInput extends StatelessWidget {
         return TextFormField(
           readOnly: true,
           key: UniqueKey(),
-          initialValue: state.gibsonsForm.sensitizationDate.value,
+          initialValue: state.gibsonsForm.sensitizationDate,
           decoration: InputDecoration(
             icon: const Icon(Icons.calendar_today),
             labelText: 'Sensitization Date',
             helperText: 'Date of sensitization visit',
-            errorText: state.gibsonsForm.sensitizationDate.invalid
+            errorText: state.gibsonsForm.sensitizationDate != null &&
+                    !state.gibsonsForm.isSensitizationDateValid()
                 ? 'Choose the sensitization date'
                 : null,
           ),
@@ -233,12 +234,13 @@ class InterviewDateInput extends StatelessWidget {
         return TextFormField(
           readOnly: true,
           key: UniqueKey(),
-          initialValue: state.gibsonsForm.interviewDate.value,
+          initialValue: state.gibsonsForm.interviewDate,
           decoration: InputDecoration(
             icon: const Icon(Icons.calendar_today),
             labelText: 'Interview Date',
             helperText: 'Date of interview start',
-            errorText: !state.gibsonsForm.isInterviewDateValid()
+            errorText: state.gibsonsForm.interviewDate != null &&
+                    !state.gibsonsForm.isInterviewDateValid()
                 ? 'Interview date needs to be at '
                     'least two days after sensitization date'
                 : null,

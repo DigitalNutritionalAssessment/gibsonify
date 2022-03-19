@@ -5,8 +5,6 @@ import 'package:formz/formz.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:uuid/uuid.dart';
 
-import 'food_item.dart';
-
 class GibsonsForm extends Equatable {
   GibsonsForm(
       {String? id,
@@ -15,9 +13,9 @@ class GibsonsForm extends Equatable {
       this.respondentCountryCode,
       this.respondentTelNumberPrefix,
       this.respondentTelNumber,
-      this.sensitizationDate = const SensitizationDate.pure(),
+      this.sensitizationDate,
       this.recallDay = const RecallDay.pure(),
-      this.interviewDate = const InterviewDate.pure(),
+      this.interviewDate,
       this.interviewStartTime = const InterviewStartTime.pure(),
       this.geoLocation = const GeoLocation.pure(),
       this.pictureChartCollected = const PictureChartCollected.pure(),
@@ -35,9 +33,9 @@ class GibsonsForm extends Equatable {
   final String? respondentCountryCode;
   final String? respondentTelNumberPrefix;
   final String? respondentTelNumber;
-  final SensitizationDate sensitizationDate;
+  final String? sensitizationDate;
   final RecallDay recallDay;
-  final InterviewDate interviewDate;
+  final String? interviewDate;
   final InterviewStartTime interviewStartTime;
   final GeoLocation geoLocation;
   final PictureChartCollected pictureChartCollected;
@@ -62,10 +60,9 @@ class GibsonsForm extends Equatable {
         respondentCountryCode = json['respondentCountryCode'],
         respondentTelNumberPrefix = json['respondentTelNumberPrefix'],
         respondentTelNumber = json['respondentTelNumber'],
-        sensitizationDate =
-            SensitizationDate.fromJson(json['sensitizationDate']),
+        sensitizationDate = json['sensitizationDate'],
         recallDay = RecallDay.fromJson(json['recallDay']),
-        interviewDate = InterviewDate.fromJson(json['interviewDate']),
+        interviewDate = json['interviewDate'],
         interviewStartTime =
             InterviewStartTime.fromJson(json['interviewStartTime']),
         geoLocation = GeoLocation.fromJson(json['geoLocation']),
@@ -87,9 +84,9 @@ class GibsonsForm extends Equatable {
     data['respondentCountryCode'] = respondentCountryCode;
     data['respondentTelNumberPrefix'] = respondentTelNumberPrefix;
     data['respondentTelNumber'] = respondentTelNumber;
-    data['sensitizationDate'] = sensitizationDate.toJson();
+    data['sensitizationDate'] = sensitizationDate;
     data['recallDay'] = recallDay.toJson();
-    data['interviewDate'] = interviewDate.toJson();
+    data['interviewDate'] = interviewDate;
     data['interviewStartTime'] = interviewStartTime.toJson();
     data['geoLocation'] = geoLocation.toJson();
     data['pictureChartCollected'] = pictureChartCollected.toJson();
@@ -110,9 +107,9 @@ class GibsonsForm extends Equatable {
       String? respondentCountryCode,
       String? respondentTelNumberPrefix,
       String? respondentTelNumber,
-      SensitizationDate? sensitizationDate,
+      String? sensitizationDate,
       RecallDay? recallDay,
-      InterviewDate? interviewDate,
+      String? interviewDate,
       InterviewStartTime? interviewStartTime,
       GeoLocation? geoLocation,
       PictureChartCollected? pictureChartCollected,
@@ -196,38 +193,6 @@ class GibsonsForm extends Equatable {
         foodItems
       ];
 
-  bool allFoodItemsConfirmed() {
-    return foodItems.every((foodItem) => foodItem.confirmed);
-  }
-
-  bool isPictureChartCollected() {
-    return pictureChartCollected.value.toLowerCase() == 'yes';
-  }
-
-  bool isInterviewOutcomeCompleted() {
-    return interviewOutcome.value.toLowerCase() == 'completed';
-  }
-
-  bool isInterviewDateValid() {
-    // TODO: change to checking if form field has been modified using null after
-    // dropping Formz
-    if (sensitizationDate.pure || interviewDate.pure) {
-      return true;
-    }
-    try {
-      // TODO: refactor sensitizationDate and interviewDate to be DateTime fields
-      // so that wouldn't have to parse in this method, just compare
-      var parsedSensitizationDate = DateTime.parse(sensitizationDate.value);
-      var parsedInterviewDate = DateTime.parse(interviewDate.value);
-      bool isInterviewAtLeastTwoDaysAfterSensitization = parsedInterviewDate
-          .subtract(Duration(days: 1))
-          .isAfter(parsedSensitizationDate);
-      return isInterviewAtLeastTwoDaysAfterSensitization;
-    } catch (e) {
-      return false;
-    }
-  }
-
   bool isHouseholdIdValid() {
     if (householdId != null) {
       if (householdId!.length >= 10 && householdId!.length <= 15) {
@@ -244,6 +209,41 @@ class GibsonsForm extends Equatable {
   bool isRespondentTelNumberValid() {
     return isFieldNotNullAndNotEmpty(respondentTelNumber);
   }
+
+  bool isSensitizationDateValid() {
+    return isFieldNotNullAndNotEmpty(sensitizationDate);
+  }
+
+  bool isInterviewDateValid() {
+    if (sensitizationDate == null || interviewDate == null) {
+      return false;
+    }
+    try {
+      // TODO: refactor sensitizationDate and interviewDate to be DateTime fields
+      // so that wouldn't have to parse in this method, just compare
+      var parsedSensitizationDate = DateTime.parse(sensitizationDate!);
+      var parsedInterviewDate = DateTime.parse(interviewDate!);
+      bool isInterviewAtLeastTwoDaysAfterSensitization = parsedInterviewDate
+          .subtract(Duration(days: 1))
+          .isAfter(parsedSensitizationDate);
+      return isInterviewAtLeastTwoDaysAfterSensitization;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  bool allFoodItemsConfirmed() {
+    return foodItems.every((foodItem) => foodItem.confirmed);
+  }
+
+  bool isPictureChartCollected() {
+    return pictureChartCollected.value.toLowerCase() == 'yes';
+  }
+
+  bool isInterviewOutcomeCompleted() {
+    return interviewOutcome.value.toLowerCase() == 'completed';
+  }
+
 }
 
 List<FoodItem> _jsonDecodeFoodItems(jsonEncodedFoodItems) {
@@ -251,32 +251,6 @@ List<FoodItem> _jsonDecodeFoodItems(jsonEncodedFoodItems) {
   List<FoodItem> fullyDecodedFoodItems =
       partiallyDecodedFoodItems.map((e) => FoodItem.fromJson(e)).toList();
   return fullyDecodedFoodItems;
-}
-
-enum SensitizationDateValidationError { invalid }
-
-class SensitizationDate
-    extends FormzInput<String, SensitizationDateValidationError> {
-  const SensitizationDate.pure() : super.pure('');
-  const SensitizationDate.dirty([String value = '']) : super.dirty(value);
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['value'] = value;
-    data['pure'] = pure.toString();
-    return data;
-  }
-
-  SensitizationDate.fromJson(Map<String, dynamic> json)
-      : super.dirty(json['value']);
-
-  @override
-  SensitizationDateValidationError? validator(String? value) {
-    // TODO: Add validation, currently only checks if not empty
-    return value?.isNotEmpty == true
-        ? null
-        : SensitizationDateValidationError.invalid;
-  }
 }
 
 enum RecallDayValidationError { invalid }
@@ -312,31 +286,6 @@ class RecallDay extends FormzInput<String, RecallDayValidationError> {
     return _allowedRecallDay.contains(_lowerCaseValue)
         ? null
         : RecallDayValidationError.invalid;
-  }
-}
-
-enum InterviewDateValidationError { invalid }
-
-class InterviewDate extends FormzInput<String, InterviewDateValidationError> {
-  const InterviewDate.pure() : super.pure('');
-  const InterviewDate.dirty([String value = '']) : super.dirty(value);
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['value'] = value;
-    data['pure'] = pure.toString();
-    return data;
-  }
-
-  InterviewDate.fromJson(Map<String, dynamic> json)
-      : super.dirty(json['value']);
-
-  @override
-  InterviewDateValidationError? validator(String? value) {
-    // TODO: Add validation, currently only checks if not empty
-    return value?.isNotEmpty == true
-        ? null
-        : InterviewDateValidationError.invalid;
   }
 }
 

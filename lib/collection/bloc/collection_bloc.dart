@@ -83,9 +83,8 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
   void _onSensitizationDateChanged(
       SensitizationDateChanged event, Emitter<CollectionState> emit) {
-    final sensitizationDate = SensitizationDate.dirty(event.sensitizationDate);
     GibsonsForm changedGibsonsForm =
-        state.gibsonsForm.copyWith(sensitizationDate: sensitizationDate);
+        state.gibsonsForm.copyWith(sensitizationDate: event.sensitizationDate);
 
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }
@@ -101,9 +100,8 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
   void _onInterviewDateChanged(
       InterviewDateChanged event, Emitter<CollectionState> emit) {
-    final interviewDate = InterviewDate.dirty(event.interviewDate);
     GibsonsForm changedGibsonsForm =
-        state.gibsonsForm.copyWith(interviewDate: interviewDate);
+        state.gibsonsForm.copyWith(interviewDate: event.interviewDate);
 
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }
