@@ -10,7 +10,7 @@ import 'food_item.dart';
 class GibsonsForm extends Equatable {
   GibsonsForm(
       {String? id,
-      this.householdId = const HouseholdId.pure(),
+      this.householdId,
       this.respondentName = const RespondentName.pure(),
       this.respondentCountryCode = '',
       this.respondentTelNumberPrefix = '',
@@ -30,7 +30,7 @@ class GibsonsForm extends Equatable {
       : id = id ?? const Uuid().v4();
 
   final String id;
-  final HouseholdId householdId;
+  final String? householdId;
   final RespondentName respondentName;
   final String respondentCountryCode;
   final String respondentTelNumberPrefix;
@@ -57,7 +57,7 @@ class GibsonsForm extends Equatable {
 
   GibsonsForm.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        householdId = HouseholdId.fromJson(json['householdId']),
+        householdId = json['householdId'],
         respondentName = RespondentName.fromJson(json['respondentName']),
         respondentCountryCode = json['respondentCountryCode'],
         respondentTelNumberPrefix = json['respondentTelNumberPrefix'],
@@ -83,7 +83,7 @@ class GibsonsForm extends Equatable {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
-    data['householdId'] = householdId.toJson();
+    data['householdId'] = householdId;
     data['respondentName'] = respondentName.toJson();
     data['respondentCountryCode'] = respondentCountryCode;
     data['respondentTelNumberPrefix'] = respondentTelNumberPrefix;
@@ -106,7 +106,7 @@ class GibsonsForm extends Equatable {
 
   GibsonsForm copyWith(
       {String? id,
-      HouseholdId? householdId,
+      String? householdId,
       RespondentName? respondentName,
       String? respondentCountryCode,
       String? respondentTelNumberPrefix,
@@ -176,7 +176,7 @@ class GibsonsForm extends Equatable {
   }
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         id,
         householdId,
         respondentName,
@@ -228,6 +228,15 @@ class GibsonsForm extends Equatable {
       return false;
     }
   }
+
+  bool isHouseholdIdValid() {
+    if (householdId != null) {
+      if (householdId!.length >= 10 && householdId!.length <= 15) {
+        return true;
+      }
+    }
+    return false;
+  }
 }
 
 List<FoodItem> _jsonDecodeFoodItems(jsonEncodedFoodItems) {
@@ -235,34 +244,6 @@ List<FoodItem> _jsonDecodeFoodItems(jsonEncodedFoodItems) {
   List<FoodItem> fullyDecodedFoodItems =
       partiallyDecodedFoodItems.map((e) => FoodItem.fromJson(e)).toList();
   return fullyDecodedFoodItems;
-}
-
-enum HouseholdIdValidationError { invalid }
-
-class HouseholdId extends FormzInput<String, HouseholdIdValidationError> {
-  const HouseholdId.pure() : super.pure('');
-  const HouseholdId.dirty([String value = '']) : super.dirty(value);
-
-  // TODO: Figure out a way to use the pure attribute or maybe drop
-  // Formz completely. It might be easier to just have all these values
-  // as strings and implement a couple of validator methods in GibsonsForm
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['value'] = value;
-    data['pure'] = pure.toString();
-    return data;
-  }
-
-  HouseholdId.fromJson(Map<String, dynamic> json) : super.dirty(json['value']);
-
-  @override
-  HouseholdIdValidationError? validator(String value) {
-    // TODO: Add validation based on ICRISAT's criteria, currently
-    // only checks if at least 2 symbols
-    return value.length >= 10 && value.length <= 15
-        ? null
-        : HouseholdIdValidationError.invalid;
-  }
 }
 
 enum RespondentNameValidationError { invalid }

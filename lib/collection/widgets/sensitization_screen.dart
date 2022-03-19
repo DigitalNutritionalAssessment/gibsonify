@@ -61,13 +61,15 @@ class HouseholdIdInput extends StatelessWidget {
     return BlocBuilder<CollectionBloc, CollectionState>(
       builder: (context, state) {
         return TextFormField(
-          initialValue: state.gibsonsForm.householdId.value,
+          initialValue: state.gibsonsForm.householdId,
           decoration: InputDecoration(
             icon: const Icon(Icons.house),
             labelText: 'Household ID',
             helperText: 'A valid Household ID e.g. IMH13D0303',
-            errorText: state.gibsonsForm.householdId.invalid
-                ? 'Enter a valid Household ID e.g. IMH13D0303'
+            // Only show errorText if modified, i.e. if not null, and invalid
+            errorText: state.gibsonsForm.householdId != null &&
+                    !state.gibsonsForm.isHouseholdIdValid()
+                ? 'Enter a valid Household ID with 10 to 15 digits'
                 : null,
           ),
           onChanged: (value) {

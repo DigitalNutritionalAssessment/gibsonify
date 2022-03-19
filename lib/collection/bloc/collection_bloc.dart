@@ -57,9 +57,8 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
   void _onHouseholdIdChanged(
       HouseholdIdChanged event, Emitter<CollectionState> emit) {
-    final householdId = HouseholdId.dirty(event.householdId);
     GibsonsForm changedGibsonsForm =
-        state.gibsonsForm.copyWith(householdId: householdId);
+        state.gibsonsForm.copyWith(householdId: event.householdId);
 
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }
