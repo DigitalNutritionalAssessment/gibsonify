@@ -263,30 +263,6 @@ List<FoodItem> _jsonDecodeFoodItems(jsonEncodedFoodItems) {
   return fullyDecodedFoodItems;
 }
 
-// enum GeoLocationValidationError { invalid }
-
-// class GeoLocation extends FormzInput<String, GeoLocationValidationError> {
-//   const GeoLocation.pure() : super.pure('');
-//   const GeoLocation.dirty([String value = '']) : super.dirty(value);
-
-//   Map<String, dynamic> toJson() {
-//     final Map<String, dynamic> data = <String, dynamic>{};
-//     data['value'] = value;
-//     data['pure'] = pure.toString();
-//     return data;
-//   }
-
-//   GeoLocation.fromJson(Map<String, dynamic> json) : super.dirty(json['value']);
-
-//   @override
-//   GeoLocationValidationError? validator(String? value) {
-//     // TODO: Add validation, currently only checks if not empty
-//     return value?.isNotEmpty == true
-//         ? null
-//         : GeoLocationValidationError.invalid;
-//   }
-// }
-
 enum PictureChartCollectedValidationError { invalid }
 
 class PictureChartCollected
