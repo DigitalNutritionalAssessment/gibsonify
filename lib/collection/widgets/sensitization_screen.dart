@@ -272,12 +272,13 @@ class InterviewStartTimeInput extends StatelessWidget {
         return TextFormField(
           readOnly: true,
           key: UniqueKey(),
-          initialValue: state.gibsonsForm.interviewStartTime.value,
+          initialValue: state.gibsonsForm.interviewStartTime,
           decoration: InputDecoration(
             icon: const Icon(Icons.access_time),
             labelText: 'Interview Start Time',
             helperText: 'Time at the start of the interview',
-            errorText: state.gibsonsForm.interviewStartTime.invalid
+            errorText: state.gibsonsForm.interviewStartTime != null &&
+                    !state.gibsonsForm.isInterviewStartTimeValid()
                 ? 'Choose the start time of the interview'
                 : null,
           ),

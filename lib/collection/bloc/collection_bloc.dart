@@ -107,10 +107,8 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
   void _onInterviewStartTimeChanged(
       InterviewStartTimeChanged event, Emitter<CollectionState> emit) {
-    final interviewStartTime =
-        InterviewStartTime.dirty(event.interviewStartTime);
-    GibsonsForm changedGibsonsForm =
-        state.gibsonsForm.copyWith(interviewStartTime: interviewStartTime);
+    GibsonsForm changedGibsonsForm = state.gibsonsForm
+        .copyWith(interviewStartTime: event.interviewStartTime);
 
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }

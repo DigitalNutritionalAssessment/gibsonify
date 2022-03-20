@@ -16,7 +16,7 @@ class GibsonsForm extends Equatable {
       this.sensitizationDate,
       this.recallDay,
       this.interviewDate,
-      this.interviewStartTime = const InterviewStartTime.pure(),
+      this.interviewStartTime,
       this.geoLocation = const GeoLocation.pure(),
       this.pictureChartCollected = const PictureChartCollected.pure(),
       this.pictureChartNotCollectedReason = '',
@@ -36,7 +36,7 @@ class GibsonsForm extends Equatable {
   final String? sensitizationDate;
   final String? recallDay; // TODO: change to an enum
   final String? interviewDate;
-  final InterviewStartTime interviewStartTime;
+  final String? interviewStartTime;
   final GeoLocation geoLocation;
   final PictureChartCollected pictureChartCollected;
   final String pictureChartNotCollectedReason;
@@ -63,8 +63,7 @@ class GibsonsForm extends Equatable {
         sensitizationDate = json['sensitizationDate'],
         recallDay = json['recallDay'],
         interviewDate = json['interviewDate'],
-        interviewStartTime =
-            InterviewStartTime.fromJson(json['interviewStartTime']),
+        interviewStartTime = json['interviewStartTime'],
         geoLocation = GeoLocation.fromJson(json['geoLocation']),
         pictureChartCollected =
             PictureChartCollected.fromJson(json['pictureChartCollected']),
@@ -87,7 +86,7 @@ class GibsonsForm extends Equatable {
     data['sensitizationDate'] = sensitizationDate;
     data['recallDay'] = recallDay;
     data['interviewDate'] = interviewDate;
-    data['interviewStartTime'] = interviewStartTime.toJson();
+    data['interviewStartTime'] = interviewStartTime;
     data['geoLocation'] = geoLocation.toJson();
     data['pictureChartCollected'] = pictureChartCollected.toJson();
     data['pictureChartNotCollectedReason'] = pictureChartNotCollectedReason;
@@ -110,7 +109,7 @@ class GibsonsForm extends Equatable {
       String? sensitizationDate,
       String? recallDay,
       String? interviewDate,
-      InterviewStartTime? interviewStartTime,
+      String? interviewStartTime,
       GeoLocation? geoLocation,
       PictureChartCollected? pictureChartCollected,
       String? pictureChartNotCollectedReason,
@@ -236,6 +235,10 @@ class GibsonsForm extends Equatable {
     return isFieldNotNullAndNotEmpty(recallDay);
   }
 
+  bool isInterviewStartTimeValid() {
+    return isFieldNotNullAndNotEmpty(interviewStartTime);
+  }
+
   bool allFoodItemsConfirmed() {
     return foodItems.every((foodItem) => foodItem.confirmed);
   }
@@ -254,32 +257,6 @@ List<FoodItem> _jsonDecodeFoodItems(jsonEncodedFoodItems) {
   List<FoodItem> fullyDecodedFoodItems =
       partiallyDecodedFoodItems.map((e) => FoodItem.fromJson(e)).toList();
   return fullyDecodedFoodItems;
-}
-
-enum InterviewStartTimeValidationError { invalid }
-
-class InterviewStartTime
-    extends FormzInput<String, InterviewStartTimeValidationError> {
-  const InterviewStartTime.pure() : super.pure('');
-  const InterviewStartTime.dirty([String value = '']) : super.dirty(value);
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['value'] = value;
-    data['pure'] = pure.toString();
-    return data;
-  }
-
-  InterviewStartTime.fromJson(Map<String, dynamic> json)
-      : super.dirty(json['value']);
-
-  @override
-  InterviewStartTimeValidationError? validator(String? value) {
-    // TODO: Add validation, currently only checks if not empty
-    return value?.isNotEmpty == true
-        ? null
-        : InterviewStartTimeValidationError.invalid;
-  }
 }
 
 enum GeoLocationValidationError { invalid }
