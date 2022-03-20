@@ -6,6 +6,7 @@ import 'package:dropdown_search/dropdown_search.dart';
 
 import 'package:gibsonify/collection/collection.dart';
 import 'package:gibsonify/navigation/navigation.dart';
+import 'package:gibsonify_api/gibsonify_api.dart';
 
 class SensitizationScreen extends StatelessWidget {
   const SensitizationScreen({Key? key}) : super(key: key);
@@ -67,8 +68,8 @@ class HouseholdIdInput extends StatelessWidget {
             labelText: 'Household ID',
             helperText: 'A valid Household ID e.g. IMH13D0303',
             // Only show errorText if modified, i.e. if not null, and invalid
-            errorText: state.gibsonsForm.householdId != null &&
-                    !state.gibsonsForm.isHouseholdIdValid()
+            errorText: isFieldModifiedAndInvalid(state.gibsonsForm.householdId,
+                    state.gibsonsForm.isHouseholdIdValid)
                 ? 'Enter a valid Household ID with 10 to 15 digits'
                 : null,
           ),
@@ -97,8 +98,9 @@ class RespondentNameInput extends StatelessWidget {
             icon: const Icon(Icons.person),
             labelText: 'Respondent Name',
             helperText: 'Full name of respondent e.g. Keira Brown',
-            errorText: state.gibsonsForm.respondentName != null &&
-                    !state.gibsonsForm.isRespondentNameValid()
+            errorText: isFieldModifiedAndInvalid(
+                    state.gibsonsForm.respondentName,
+                    state.gibsonsForm.isRespondentNameValid)
                 ? 'Enter respondent name'
                 : null,
           ),
@@ -157,8 +159,9 @@ class SensitizationDateInput extends StatelessWidget {
             icon: const Icon(Icons.calendar_today),
             labelText: 'Sensitization Date',
             helperText: 'Date of sensitization visit',
-            errorText: state.gibsonsForm.sensitizationDate != null &&
-                    !state.gibsonsForm.isSensitizationDateValid()
+            errorText: isFieldModifiedAndInvalid(
+                    state.gibsonsForm.sensitizationDate,
+                    state.gibsonsForm.isSensitizationDateValid)
                 ? 'Choose the sensitization date'
                 : null,
           ),
@@ -206,8 +209,9 @@ class RecallDayInput extends StatelessWidget {
                 // so investigate how this can be achieved with focusnodes or
                 // maybe send an empty string (although that would not work all
                 // the time), currently the errorText is never shown
-                errorText: state.gibsonsForm.recallDay != null &&
-                        !state.gibsonsForm.isRecallDayValid()
+                errorText: isFieldModifiedAndInvalid(
+                        state.gibsonsForm.recallDay,
+                        state.gibsonsForm.isRecallDayValid)
                     ? 'Select recall day type'
                     : null),
             mode: Mode.MENU,
@@ -238,8 +242,9 @@ class InterviewDateInput extends StatelessWidget {
             icon: const Icon(Icons.calendar_today),
             labelText: 'Interview Date',
             helperText: 'Date of interview start',
-            errorText: state.gibsonsForm.interviewDate != null &&
-                    !state.gibsonsForm.isInterviewDateValid()
+            errorText: isFieldModifiedAndInvalid(
+                    state.gibsonsForm.interviewDate,
+                    state.gibsonsForm.isInterviewDateValid)
                 ? 'Interview date needs to be at '
                     'least two days after sensitization date'
                 : null,
@@ -277,8 +282,9 @@ class InterviewStartTimeInput extends StatelessWidget {
             icon: const Icon(Icons.access_time),
             labelText: 'Interview Start Time',
             helperText: 'Time at the start of the interview',
-            errorText: state.gibsonsForm.interviewStartTime != null &&
-                    !state.gibsonsForm.isInterviewStartTimeValid()
+            errorText: isFieldModifiedAndInvalid(
+                    state.gibsonsForm.interviewStartTime,
+                    state.gibsonsForm.isInterviewStartTimeValid)
                 ? 'Choose the start time of the interview'
                 : null,
           ),
@@ -378,8 +384,9 @@ class GeoLocationInput extends StatelessWidget {
               icon: const Icon(Icons.location_on_outlined),
               labelText: 'GPS Location',
               helperText: 'GPS Coordinates',
-              errorText: state.gibsonsForm.geoLocation != null &&
-                      !state.gibsonsForm.isGeoLocationValid()
+              errorText: isFieldModifiedAndInvalid(
+                      state.gibsonsForm.geoLocation,
+                      state.gibsonsForm.isGeoLocationValid)
                   ? 'Request the GPS location'
                   : null,
             ),

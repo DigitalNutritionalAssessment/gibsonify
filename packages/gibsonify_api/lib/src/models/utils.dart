@@ -32,3 +32,14 @@ bool isFieldNotNullAndNotEmpty(String? field) {
     return false;
   }
 }
+
+/// Checks whether the String field is not `null` and not valid, which, in a user
+/// input form field case, usually corresponds to the condition for displaying
+/// and error text in the case where the user has modified the field and the
+/// value does not satisfy the validator of the field.
+bool isFieldModifiedAndInvalid(String? field, bool Function() fieldValidator) {
+  if (field != null && !fieldValidator()) {
+    return true;
+  }
+  return false;
+}
