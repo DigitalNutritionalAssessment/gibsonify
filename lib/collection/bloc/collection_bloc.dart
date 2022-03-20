@@ -48,6 +48,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     on<GibsonsFormSaved>(_onGibsonsFormSaved);
     on<GibsonsFormProvided>(_onGibsonsFormProvided);
     on<GibsonsFormCreated>(_onGibsonsFormCreated);
+    on<CollectionCompleted>(_onCollectionCompleted);
   }
 
   void _onSelectedScreenChanged(
@@ -578,5 +579,13 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
         gibsonsForm: gibsonsFormCreated,
         selectedScreen: SelectedScreen.sensitization,
         geoLocationStatus: GeoLocationStatus.none));
+  }
+
+  void _onCollectionCompleted(
+      CollectionCompleted event, Emitter<CollectionState> emit) async {
+    GibsonsForm changedGibsonsForm =
+        state.gibsonsForm.copyWith(completed: true);
+    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+    await _gibsonifyRepository.saveForm(state.gibsonsForm);
   }
 }

@@ -84,6 +84,13 @@ class InterviewStartTimeChanged extends CollectionEvent {
   List<Object> get props => [interviewStartTime];
 }
 
+class GeoLocationRequested extends CollectionEvent {
+  const GeoLocationRequested();
+
+  @override
+  List<Object> get props => [];
+}
+
 class PictureChartCollectedChanged extends CollectionEvent {
   final String pictureChartCollected;
 
@@ -353,8 +360,8 @@ class GibsonsFormCreated extends CollectionEvent {
   List<Object> get props => [];
 }
 
-class GeoLocationRequested extends CollectionEvent {
-  const GeoLocationRequested();
+class CollectionCompleted extends CollectionEvent {
+  const CollectionCompleted();
 
   @override
   List<Object> get props => [];

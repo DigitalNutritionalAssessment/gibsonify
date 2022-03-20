@@ -15,78 +15,99 @@ class CollectionsScreen extends StatelessWidget {
     return BlocBuilder<HomeBloc, HomeState>(
       builder: (context, state) {
         return Scaffold(
-            appBar: AppBar(title: const Text('Collections')),
-            body: ListView.builder(
-                padding: const EdgeInsets.all(2.0),
-                itemCount: state.gibsonsForms.length,
-                itemBuilder: (context, index) {
-                  // TODO: Refactor to a standalone widget
-                  return Slidable(
-                    key: Key(state.gibsonsForms[index]!.id),
-                    endActionPane: ActionPane(
-                      motion: const ScrollMotion(),
-                      children: [
-                        SlidableAction(
-                          onPressed: (context) => showDialog<String>(
-                              context: context,
-                              builder: (BuildContext context) =>
-                                  DeleteCollectionDialog(
-                                      gibsonsForm: state.gibsonsForms[index]!)),
-                          backgroundColor: Colors.red,
-                          foregroundColor: Colors.white,
-                          icon: Icons.delete,
-                          label: 'Delete',
-                        )
-                      ],
-                    ),
-                    child: Card(
-                      child: ListTile(
-                        leading: const Icon(Icons.person),
-                        title: Text(
-                            // TODO: refactor
-                            isFieldUnmodifiedOrEmpty(
-                                    state.gibsonsForms[index]!.respondentName)
-                                ? 'Unnamed respondent'
-                                : state.gibsonsForms[index]!.respondentName!),
-                        subtitle: Text(isFieldUnmodifiedOrEmpty(
-                                state.gibsonsForms[index]!.interviewDate)
-                            ? 'Unspecified date'
-                            : state.gibsonsForms[index]!.interviewDate!),
-                        // TODO: add trailing icon depending on whether collection is saved or not
-                        onTap: () {
-                          context.read<CollectionBloc>().add(
-                              GibsonsFormProvided(
-                                  gibsonsForm: state.gibsonsForms[index]!));
-                          Navigator.pushNamed(context, PageRouter.collection);
-                        },
-                        onLongPress: () => showDialog<String>(
+          appBar: AppBar(title: const Text('Collections')),
+          body: ListView.builder(
+              padding: const EdgeInsets.all(2.0),
+              itemCount: state.gibsonsForms.length,
+              itemBuilder: (context, index) {
+                // TODO: Refactor to a standalone widget
+                return Slidable(
+                  key: Key(state.gibsonsForms[index]!.id),
+                  endActionPane: ActionPane(
+                    motion: const ScrollMotion(),
+                    children: [
+                      SlidableAction(
+                        onPressed: (context) => showDialog<String>(
                             context: context,
                             builder: (BuildContext context) =>
                                 DeleteCollectionDialog(
                                     gibsonsForm: state.gibsonsForms[index]!)),
+                        backgroundColor: Colors.red,
+                        foregroundColor: Colors.white,
+                        icon: Icons.delete,
+                        label: 'Delete',
+                      )
+                    ],
+                  ),
+                  child: Card(
+                    child: ListTile(
+                      leading: const Icon(Icons.person),
+                      title: Text(
+                          // TODO: refactor
+                          isFieldUnmodifiedOrEmpty(
+                                  state.gibsonsForms[index]!.respondentName)
+                              ? 'Unnamed respondent'
+                              : state.gibsonsForms[index]!.respondentName!),
+                      subtitle: Row(
+                        children: [
+                          Text(isFieldUnmodifiedOrEmpty(
+                                  state.gibsonsForms[index]!.interviewDate)
+                              ? 'Unspecified date'
+                              : state.gibsonsForms[index]!.interviewDate!),
+                          const VerticalDivider(),
+                          Text(state.gibsonsForms[index]!.completed
+                              ? state
+                                  .gibsonsForms[index]!.interviewOutcome.value
+                              : 'In progress')
+                        ],
                       ),
+                      trailing: state.gibsonsForms[index]!.completed
+                          ? const Icon(Icons.done)
+                          : const Icon(Icons.pause),
+                      onTap: () {
+                        // TODO: remove this and allow read-only collection mode
+                        const collectionCompletedSnackBar = SnackBar(
+                            content: Text('Selected collection is completed '
+                                'and can no longer be edited'));
+                        if (state.gibsonsForms[index]!.completed) {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(collectionCompletedSnackBar);
+                        } else {
+                          context.read<CollectionBloc>().add(
+                              GibsonsFormProvided(
+                                  gibsonsForm: state.gibsonsForms[index]!));
+                          Navigator.pushNamed(context, PageRouter.collection);
+                        }
+                      },
+                      onLongPress: () => showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) =>
+                              DeleteCollectionDialog(
+                                  gibsonsForm: state.gibsonsForms[index]!)),
                     ),
-                  );
-                }),
-            floatingActionButton: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  FloatingActionButton.extended(
-                      heroTag: null,
-                      label: const Text("New Collection"),
-                      icon: const Icon(Icons.add),
-                      onPressed: () {
-                        // TODO: Refactor into the Collection Page accepting a
-                        // nullable instance of GibsonsForm as argument.
-                        // In this case it will be null so a new GibsonsForm
-                        // will be initialized
-                        context
-                            .read<CollectionBloc>()
-                            .add(const GibsonsFormCreated());
-                        Navigator.pushNamed(context, PageRouter.collection);
-                      })
-                ]));
+                  ),
+                );
+              }),
+          floatingActionButton: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: <Widget>[
+                FloatingActionButton.extended(
+                    heroTag: null,
+                    label: const Text("New Collection"),
+                    icon: const Icon(Icons.add),
+                    onPressed: () {
+                      // TODO: Refactor into the Collection Page accepting a
+                      // nullable instance of GibsonsForm as argument.
+                      // In this case it will be null so a new GibsonsForm
+                      // will be initialized
+                      context
+                          .read<CollectionBloc>()
+                          .add(const GibsonsFormCreated());
+                      Navigator.pushNamed(context, PageRouter.collection);
+                    }),
+              ]),
+        );
       },
     );
   }

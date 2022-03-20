@@ -24,6 +24,7 @@ class GibsonsForm extends Equatable {
       this.interviewOutcome = const InterviewOutcome.pure(),
       this.interviewOutcomeNotCompletedReason = '',
       this.comments = const Comments.pure(),
+      this.completed = false,
       this.foodItems = const <FoodItem>[]})
       : id = id ?? const Uuid().v4();
 
@@ -44,6 +45,7 @@ class GibsonsForm extends Equatable {
   final InterviewOutcome interviewOutcome;
   final String interviewOutcomeNotCompletedReason;
   final Comments comments;
+  final bool completed;
   final List<FoodItem> foodItems;
 
   // TODO: add other fields from physical Gibson's form:
@@ -73,6 +75,7 @@ class GibsonsForm extends Equatable {
         interviewOutcomeNotCompletedReason =
             json['interviewOutcomeNotCompletedReason'],
         comments = Comments.fromJson(json['comments']),
+        completed = json['completed'] == 'true' ? true : false,
         foodItems = _jsonDecodeFoodItems(json['foodItems']);
 
   Map<String, dynamic> toJson() {
@@ -95,6 +98,7 @@ class GibsonsForm extends Equatable {
     data['interviewOutcomeNotCompletedReason'] =
         interviewOutcomeNotCompletedReason;
     data['comments'] = comments.toJson();
+    data['completed'] = completed.toString();
     data['foodItems'] = jsonEncode(foodItems); // This calls toJson on each one
     return data;
   }
@@ -117,6 +121,7 @@ class GibsonsForm extends Equatable {
       InterviewOutcome? interviewOutcome,
       String? interviewOutcomeNotCompletedReason,
       Comments? comments,
+      bool? completed,
       List<FoodItem>? foodItems}) {
     return GibsonsForm(
         id: id ?? this.id,
@@ -142,6 +147,7 @@ class GibsonsForm extends Equatable {
             interviewOutcomeNotCompletedReason ??
                 this.interviewOutcomeNotCompletedReason,
         comments: comments ?? this.comments,
+        completed: completed ?? this.completed,
         foodItems: foodItems ?? this.foodItems);
   }
 
@@ -166,6 +172,7 @@ class GibsonsForm extends Equatable {
         'Interview Outcome Not Completed Reason: '
         '$interviewOutcomeNotCompletedReason\n'
         'Comments: $comments\n'
+        'Completed: $completed\n'
         'Food Items: $foodItems'
         '\n *** \n';
   }
@@ -189,6 +196,7 @@ class GibsonsForm extends Equatable {
         interviewOutcome,
         interviewOutcomeNotCompletedReason,
         comments,
+        completed,
         foodItems
       ];
 

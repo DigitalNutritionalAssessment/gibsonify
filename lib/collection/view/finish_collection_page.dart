@@ -26,10 +26,16 @@ class FinishCollectionPage extends StatelessWidget {
                       heroTag: null,
                       label: const Text("Complete Collection"),
                       icon: const Icon(Icons.check),
-                      onPressed: () {
+                      onPressed: () async {
+                        // TODO: only allow to finish if all required fields are filled
+                        // TODO: investigate concurrency bug when saving from
+                        // one bloc and loading from another - if the
+                        // CollectionCompleted event did not save, but the
+                        // GibsonsFormSaved event was added after it, a bug will
+                        // occur
                         context
                             .read<CollectionBloc>()
-                            .add(const GibsonsFormSaved());
+                            .add(const CollectionCompleted());
                         context
                             .read<HomeBloc>()
                             .add(const GibsonsFormsLoaded());
