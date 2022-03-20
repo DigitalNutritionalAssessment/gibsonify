@@ -36,10 +36,19 @@ class CollectionPage extends StatelessWidget {
             bottomNavigationBar: BottomNavigationBar(
               type: BottomNavigationBarType.fixed,
               currentIndex: state.selectedScreenIndex(),
-              onTap: (int index) => context.read<CollectionBloc>().add(
-                  SelectedScreenChanged(
+              onTap: (int index) {
+                const validlyCompleteSensitizationSnackBar = SnackBar(
+                    content: Text('Please complete all sensitization fields '
+                        'with valid values before moving on'));
+                if (state.gibsonsForm.isSensitizationValid()) {
+                  context.read<CollectionBloc>().add(SelectedScreenChanged(
                       changedSelectedScreen:
-                          state.screenOfSelectedIndex(index))),
+                          state.screenOfSelectedIndex(index)));
+                } else {
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(validlyCompleteSensitizationSnackBar);
+                }
+              },
               items: const <BottomNavigationBarItem>[
                 BottomNavigationBarItem(
                   icon: Icon(Icons.description),

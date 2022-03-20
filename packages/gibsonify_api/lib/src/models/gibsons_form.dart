@@ -213,6 +213,10 @@ class GibsonsForm extends Equatable {
     return isFieldNotNullAndNotEmpty(sensitizationDate);
   }
 
+  bool isRecallDayValid() {
+    return isFieldNotNullAndNotEmpty(recallDay);
+  }
+
   bool isInterviewDateValid() {
     if (sensitizationDate == null || interviewDate == null) {
       return false;
@@ -231,16 +235,24 @@ class GibsonsForm extends Equatable {
     }
   }
 
-  bool isRecallDayValid() {
-    return isFieldNotNullAndNotEmpty(recallDay);
-  }
-
   bool isInterviewStartTimeValid() {
     return isFieldNotNullAndNotEmpty(interviewStartTime);
   }
 
   bool isGeoLocationValid() {
     return isFieldNotNullAndNotEmpty(geoLocation);
+  }
+
+  bool isSensitizationValid() {
+    bool sensitizationValid = isHouseholdIdValid() &&
+        isRespondentNameValid() &&
+        isRespondentTelNumberValid() &&
+        isSensitizationDateValid() &&
+        isRecallDayValid() &&
+        isInterviewDateValid() &&
+        isInterviewStartTimeValid() &&
+        isGeoLocationValid();
+    return sensitizationValid;
   }
 
   bool allFoodItemsConfirmed() {

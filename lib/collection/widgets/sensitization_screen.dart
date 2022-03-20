@@ -396,6 +396,3 @@ class GeoLocationInput extends StatelessWidget {
     );
   }
 }
-
-// TODO: Only allow to move to first pass if all sensitization fields are valid,
-// e.g. perhaps make a isSensitizationValid() method in GibsonsForm
