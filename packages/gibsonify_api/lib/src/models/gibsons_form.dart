@@ -17,7 +17,7 @@ class GibsonsForm extends Equatable {
       this.recallDay,
       this.interviewDate,
       this.interviewStartTime,
-      this.geoLocation = const GeoLocation.pure(),
+      this.geoLocation,
       this.pictureChartCollected = const PictureChartCollected.pure(),
       this.pictureChartNotCollectedReason = '',
       this.interviewEndTime = const InterviewEndTime.pure(),
@@ -37,7 +37,7 @@ class GibsonsForm extends Equatable {
   final String? recallDay; // TODO: change to an enum
   final String? interviewDate;
   final String? interviewStartTime;
-  final GeoLocation geoLocation;
+  final String? geoLocation;
   final PictureChartCollected pictureChartCollected;
   final String pictureChartNotCollectedReason;
   final InterviewEndTime interviewEndTime;
@@ -64,7 +64,7 @@ class GibsonsForm extends Equatable {
         recallDay = json['recallDay'],
         interviewDate = json['interviewDate'],
         interviewStartTime = json['interviewStartTime'],
-        geoLocation = GeoLocation.fromJson(json['geoLocation']),
+        geoLocation = json['geoLocation'],
         pictureChartCollected =
             PictureChartCollected.fromJson(json['pictureChartCollected']),
         pictureChartNotCollectedReason = json['pictureChartNotCollectedReason'],
@@ -87,7 +87,7 @@ class GibsonsForm extends Equatable {
     data['recallDay'] = recallDay;
     data['interviewDate'] = interviewDate;
     data['interviewStartTime'] = interviewStartTime;
-    data['geoLocation'] = geoLocation.toJson();
+    data['geoLocation'] = geoLocation;
     data['pictureChartCollected'] = pictureChartCollected.toJson();
     data['pictureChartNotCollectedReason'] = pictureChartNotCollectedReason;
     data['interviewEndTime'] = interviewEndTime.toJson();
@@ -110,7 +110,7 @@ class GibsonsForm extends Equatable {
       String? recallDay,
       String? interviewDate,
       String? interviewStartTime,
-      GeoLocation? geoLocation,
+      String? geoLocation,
       PictureChartCollected? pictureChartCollected,
       String? pictureChartNotCollectedReason,
       InterviewEndTime? interviewEndTime,
@@ -239,6 +239,10 @@ class GibsonsForm extends Equatable {
     return isFieldNotNullAndNotEmpty(interviewStartTime);
   }
 
+  bool isGeoLocationValid() {
+    return isFieldNotNullAndNotEmpty(geoLocation);
+  }
+
   bool allFoodItemsConfirmed() {
     return foodItems.every((foodItem) => foodItem.confirmed);
   }
@@ -259,29 +263,29 @@ List<FoodItem> _jsonDecodeFoodItems(jsonEncodedFoodItems) {
   return fullyDecodedFoodItems;
 }
 
-enum GeoLocationValidationError { invalid }
+// enum GeoLocationValidationError { invalid }
 
-class GeoLocation extends FormzInput<String, GeoLocationValidationError> {
-  const GeoLocation.pure() : super.pure('');
-  const GeoLocation.dirty([String value = '']) : super.dirty(value);
+// class GeoLocation extends FormzInput<String, GeoLocationValidationError> {
+//   const GeoLocation.pure() : super.pure('');
+//   const GeoLocation.dirty([String value = '']) : super.dirty(value);
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['value'] = value;
-    data['pure'] = pure.toString();
-    return data;
-  }
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = <String, dynamic>{};
+//     data['value'] = value;
+//     data['pure'] = pure.toString();
+//     return data;
+//   }
 
-  GeoLocation.fromJson(Map<String, dynamic> json) : super.dirty(json['value']);
+//   GeoLocation.fromJson(Map<String, dynamic> json) : super.dirty(json['value']);
 
-  @override
-  GeoLocationValidationError? validator(String? value) {
-    // TODO: Add validation, currently only checks if not empty
-    return value?.isNotEmpty == true
-        ? null
-        : GeoLocationValidationError.invalid;
-  }
-}
+//   @override
+//   GeoLocationValidationError? validator(String? value) {
+//     // TODO: Add validation, currently only checks if not empty
+//     return value?.isNotEmpty == true
+//         ? null
+//         : GeoLocationValidationError.invalid;
+//   }
+// }
 
 enum PictureChartCollectedValidationError { invalid }
 

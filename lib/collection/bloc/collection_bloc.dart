@@ -22,6 +22,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     on<RecallDayChanged>(_onRecallDayChanged);
     on<InterviewDateChanged>(_onInterviewDateChanged);
     on<InterviewStartTimeChanged>(_onInterviewStartTimeChanged);
+    on<GeoLocationRequested>(_onGeoLocationRequested);
     on<PictureChartCollectedChanged>(_onPictureChartCollectedChanged);
     on<PictureChartNotCollectedReasonChanged>(
         _onPictureChartNotCollectedReasonChanged);
@@ -47,7 +48,6 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     on<GibsonsFormSaved>(_onGibsonsFormSaved);
     on<GibsonsFormProvided>(_onGibsonsFormProvided);
     on<GibsonsFormCreated>(_onGibsonsFormCreated);
-    on<GeoLocationRequested>(_onGeoLocationRequested);
   }
 
   void _onSelectedScreenChanged(
@@ -111,6 +111,73 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
         .copyWith(interviewStartTime: event.interviewStartTime);
 
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+  }
+
+  Future<void> _onGeoLocationRequested(
+      GeoLocationRequested event, Emitter<CollectionState> emit) async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      emit(state.copyWith(
+          geoLocationStatus: GeoLocationStatus.locationDisabled));
+      return;
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        emit(state.copyWith(
+            geoLocationStatus: GeoLocationStatus.locationDenied));
+        return;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      emit(state.copyWith(
+          geoLocationStatus: GeoLocationStatus.locationPermanentlyDenied));
+      return;
+    }
+
+    emit(
+        state.copyWith(geoLocationStatus: GeoLocationStatus.locationRequested));
+
+    String? geoLocationFormatted;
+
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+          timeLimit: const Duration(seconds: 45));
+
+      geoLocationFormatted =
+          position.latitude.toString() + ', ' + position.longitude.toString();
+    } catch (e) {
+      emit(state.copyWith(
+          geoLocationStatus: GeoLocationStatus.locationTimedOut));
+
+      geoLocationFormatted = 'Undetermined';
+    }
+
+    GibsonsForm changedGibsonsForm =
+        state.gibsonsForm.copyWith(geoLocation: geoLocationFormatted);
+
+    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+
+    if (geoLocationFormatted != 'Undetermined') {
+      emit(state.copyWith(
+          geoLocationStatus: GeoLocationStatus.locationDetermined));
+    }
   }
 
   void _onPictureChartCollectedChanged(
@@ -511,74 +578,5 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
         gibsonsForm: gibsonsFormCreated,
         selectedScreen: SelectedScreen.sensitization,
         geoLocationStatus: GeoLocationStatus.none));
-  }
-
-  Future<void> _onGeoLocationRequested(
-      GeoLocationRequested event, Emitter<CollectionState> emit) async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    // Test if location services are enabled.
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      // Location services are not enabled don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
-      emit(state.copyWith(
-          geoLocationStatus: GeoLocationStatus.locationDisabled));
-      return;
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        // Permissions are denied, next time you could try
-        // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale
-        // returned true. According to Android guidelines
-        // your App should show an explanatory UI now.
-        emit(state.copyWith(
-            geoLocationStatus: GeoLocationStatus.locationDenied));
-        return;
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
-      emit(state.copyWith(
-          geoLocationStatus: GeoLocationStatus.locationPermanentlyDenied));
-      return;
-    }
-
-    emit(
-        state.copyWith(geoLocationStatus: GeoLocationStatus.locationRequested));
-
-    String? geoLocationFormatted;
-
-    try {
-      Position position = await Geolocator.getCurrentPosition(
-          timeLimit: const Duration(seconds: 45));
-
-      geoLocationFormatted =
-          position.latitude.toString() + ', ' + position.longitude.toString();
-    } catch (e) {
-      emit(state.copyWith(
-          geoLocationStatus: GeoLocationStatus.locationTimedOut));
-
-      geoLocationFormatted = 'Undetermined';
-    }
-
-    GeoLocation geoLocation = GeoLocation.dirty(geoLocationFormatted);
-
-    GibsonsForm changedGibsonsForm =
-        state.gibsonsForm.copyWith(geoLocation: geoLocation);
-
-    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
-
-    if (geoLocationFormatted != 'Undetermined') {
-      emit(state.copyWith(
-          geoLocationStatus: GeoLocationStatus.locationDetermined));
-    }
   }
 }

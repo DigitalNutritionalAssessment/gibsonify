@@ -366,7 +366,7 @@ class GeoLocationInput extends StatelessWidget {
           return TextFormField(
             readOnly: true,
             key: UniqueKey(),
-            initialValue: state.gibsonsForm.geoLocation.value,
+            initialValue: state.gibsonsForm.geoLocation,
             onTap: () => context
                 .read<CollectionBloc>()
                 .add(const GeoLocationRequested()),
@@ -378,7 +378,8 @@ class GeoLocationInput extends StatelessWidget {
               icon: const Icon(Icons.location_on_outlined),
               labelText: 'GPS Location',
               helperText: 'GPS Coordinates',
-              errorText: state.gibsonsForm.geoLocation.invalid
+              errorText: state.gibsonsForm.geoLocation != null &&
+                      !state.gibsonsForm.isGeoLocationValid()
                   ? 'Request the GPS location'
                   : null,
             ),
