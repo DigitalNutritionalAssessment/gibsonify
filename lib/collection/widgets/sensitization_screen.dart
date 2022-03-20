@@ -205,8 +205,9 @@ class RecallDayInput extends StatelessWidget {
                 // TODO: the errorText should be displayed if nothing is chosen
                 // so investigate how this can be achieved with focusnodes or
                 // maybe send an empty string (although that would not work all
-                // the time)
-                errorText: state.gibsonsForm.recallDay.invalid
+                // the time), currently the errorText is never shown
+                errorText: state.gibsonsForm.recallDay != null &&
+                        !state.gibsonsForm.isRecallDayValid()
                     ? 'Select recall day type'
                     : null),
             mode: Mode.MENU,
@@ -216,9 +217,7 @@ class RecallDayInput extends StatelessWidget {
             onChanged: (String? recallDayType) => context
                 .read<CollectionBloc>()
                 .add(RecallDayChanged(recallDay: recallDayType ?? '')),
-            // TODO: the selected item has to be a nullable string for the
-            // dropdown field to display properly, fix this once we drop Formz
-            selectedItem: state.gibsonsForm.recallDay.value);
+            selectedItem: state.gibsonsForm.recallDay);
       },
     );
   }

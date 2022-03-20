@@ -91,9 +91,8 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
   void _onRecallDayChanged(
       RecallDayChanged event, Emitter<CollectionState> emit) {
-    final recallDay = RecallDay.dirty(event.recallDay);
     GibsonsForm changedGibsonsForm =
-        state.gibsonsForm.copyWith(recallDay: recallDay);
+        state.gibsonsForm.copyWith(recallDay: event.recallDay);
 
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }
