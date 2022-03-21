@@ -57,7 +57,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
   }
 
   void _onRecipeAdded(RecipeAdded event, Emitter<RecipeState> emit) {
-    final recipe = Recipe(recipeType: event.recipeType);
+    final recipe = Recipe(
+        employeeNumber: event.employeeNumber, recipeType: event.recipeType);
 
     List<Recipe> recipes = List.from(state.recipes);
     recipes.add(recipe);
@@ -891,25 +892,26 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     List<String> newerRecipesRecipeIds = [];
     List<Recipe> existingRecipes = List<Recipe>.from(state.recipes);
 
-    int recipeInfoColumnNumber = 12;
+    int recipeInfoColumnNumber = 13;
     for (List row in data) {
       if (row.length < recipeInfoColumnNumber) {
         emit(state.copyWith(
             recipeImportStatus: 'Import file has too few columns'));
         return;
       }
-      String recipeNumber = row[0];
-      String date = row[1];
-      String recipeName = row[2];
-      String recipeType = row[3];
-      String recipeAttribute = row[4];
-      String recipeMeasurement = row[5];
-      String recipeProbeName = row[6];
-      String recipeProbeAnswers = row[7];
-      String ingredientName = row[8];
-      String ingredientDescription = row[9];
-      String ingredientCookingState = row[10];
-      String ingredientMeasurement = row[11];
+      String employeeNumber = row[0].toString();
+      String recipeNumber = row[1];
+      String date = row[2];
+      String recipeName = row[3];
+      String recipeType = row[4];
+      String recipeAttribute = row[5];
+      String recipeMeasurement = row[6];
+      String recipeProbeName = row[7];
+      String recipeProbeAnswers = row[8];
+      String ingredientName = row[9];
+      String ingredientDescription = row[10];
+      String ingredientCookingState = row[11];
+      String ingredientMeasurement = row[12];
 
       Recipe? recipeOnDevice = _getRecipeIfAlreadyExists(recipeNumber);
 
@@ -925,6 +927,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
       }
 
       Recipe recipe = Recipe(
+          employeeNumber: employeeNumber,
           recipeNumber: recipeNumber,
           date: date,
           recipeName: recipeName,
