@@ -948,8 +948,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
           List<String> fields = newMeasurement.trim().split('_');
           final measurement = Measurement(
               measurementMethod: fields[0],
-              measurementUnit: fields[1],
-              measurementValue: fields[2]);
+              measurementValue: fields[1],
+              measurementUnit: fields[2]);
           measurements.add(measurement);
         }
 
