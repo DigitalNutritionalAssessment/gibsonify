@@ -32,4 +32,14 @@ class LoginInfo extends Equatable {
     data['id'] = id;
     return data;
   }
+
+  bool isLoginInfoValid() {
+    if (employeeName == null ||
+        employeeName!.isEmpty ||
+        employeeId == null ||
+        employeeId!.isEmpty) {
+      return false;
+    }
+    return true;
+  }
 }

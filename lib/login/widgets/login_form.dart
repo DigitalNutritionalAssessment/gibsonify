@@ -69,11 +69,24 @@ class LoginForm extends StatelessWidget {
                   ElevatedButton(
                       child: const Text('Submit'),
                       onPressed: () => {
-                            context
-                                .read<LoginBloc>()
-                                .add(const LoginInfoSaved()),
-                            Navigator.pushReplacementNamed(
-                                context, PageRouter.home)
+                            if (state.loginInfo.isLoginInfoValid())
+                              {
+                                context
+                                    .read<LoginBloc>()
+                                    .add(const LoginInfoSaved()),
+                                Navigator.pushReplacementNamed(
+                                    context, PageRouter.home)
+                              }
+                            else
+                              {
+                                ScaffoldMessenger.of(context)
+                                  ..hideCurrentSnackBar()
+                                  ..showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            'Login information cannot be empty')),
+                                  )
+                              }
                           })
                 ],
               ),
