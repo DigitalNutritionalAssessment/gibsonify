@@ -519,7 +519,8 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
   void _onGibsonsFormCreated(
       GibsonsFormCreated event, Emitter<CollectionState> emit) {
-    GibsonsForm gibsonsFormCreated = GibsonsForm();
+    GibsonsForm gibsonsFormCreated =
+        GibsonsForm(employeeNumber: event.employeeNumber);
     emit(state.copyWith(
         gibsonsForm: gibsonsFormCreated,
         selectedScreen: SelectedScreen.sensitization,

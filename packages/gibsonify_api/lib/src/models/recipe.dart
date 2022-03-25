@@ -10,6 +10,7 @@ import 'recipe_probe.dart';
 class Recipe extends Equatable {
   Recipe({
     this.recipeName,
+    this.employeeNumber,
     String? recipeNumber,
     String? date,
     this.recipeType = "",
@@ -24,6 +25,7 @@ class Recipe extends Equatable {
         measurements = measurements ?? [Measurement()];
 
   final String? recipeName;
+  final String? employeeNumber;
   final String recipeNumber;
   final String date;
   final String recipeType;
@@ -36,6 +38,7 @@ class Recipe extends Equatable {
 
   Recipe copyWith({
     String? recipeName,
+    String? employeeNumber,
     String? recipeNumber,
     String? date,
     String? recipeType,
@@ -48,6 +51,7 @@ class Recipe extends Equatable {
   }) {
     return Recipe(
       recipeName: recipeName ?? this.recipeName,
+      employeeNumber: employeeNumber ?? this.employeeNumber,
       recipeNumber: recipeNumber ?? this.recipeNumber,
       date: date ?? this.date,
       recipeType: recipeType ?? this.recipeType,
@@ -64,6 +68,7 @@ class Recipe extends Equatable {
   @override
   List<Object?> get props => [
         recipeName,
+        employeeNumber,
         recipeNumber,
         date,
         recipeType,
@@ -77,6 +82,7 @@ class Recipe extends Equatable {
 
   Recipe.fromJson(Map<String, dynamic> json)
       : recipeName = json['recipeName'],
+        employeeNumber = json['employeeNumber'],
         recipeNumber = json['recipeNumber'],
         date = json['date'],
         recipeType = json['recipeType'],
@@ -91,6 +97,7 @@ class Recipe extends Equatable {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['recipeName'] = recipeName;
+    data['employeeNumber'] = employeeNumber;
     data['recipeNumber'] = recipeNumber;
     data['date'] = date;
     data['recipeType'] = recipeType;
