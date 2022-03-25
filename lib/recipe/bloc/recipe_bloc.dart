@@ -899,7 +899,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
             recipeImportStatus: 'Import file has too few columns'));
         return;
       }
-      String employeeNumber = row[0].toString();
+      String employeeNumber = row[0].toString(); // toString prevents type bugs
       String recipeNumber = row[1];
       String date = row[2];
       String recipeName = row[3];

@@ -7,6 +7,8 @@ class LoginInfo extends Equatable {
 
   final String? employeeName;
   final String? employeeId;
+  // TODO: look into removing the id and fixing the resulting bug of TextForms
+  // not rebuilding on app start
   final String id;
 
   LoginInfo copyWith({String? employeeName, String? employeeId, String? id}) {
