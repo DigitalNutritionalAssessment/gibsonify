@@ -183,10 +183,8 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
   void _onPictureChartCollectedChanged(
       PictureChartCollectedChanged event, Emitter<CollectionState> emit) {
-    final pictureChartCollected =
-        PictureChartCollected.dirty(event.pictureChartCollected);
     GibsonsForm changedGibsonsForm = state.gibsonsForm
-        .copyWith(pictureChartCollected: pictureChartCollected);
+        .copyWith(pictureChartCollected: event.pictureChartCollected);
 
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }

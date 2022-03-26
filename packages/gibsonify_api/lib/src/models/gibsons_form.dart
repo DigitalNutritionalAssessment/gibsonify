@@ -19,7 +19,7 @@ class GibsonsForm extends Equatable {
       this.interviewDate,
       this.interviewStartTime,
       this.geoLocation,
-      this.pictureChartCollected = const PictureChartCollected.pure(),
+      this.pictureChartCollected,
       this.pictureChartNotCollectedReason = '',
       this.interviewEndTime = const InterviewEndTime.pure(),
       this.interviewOutcome = const InterviewOutcome.pure(),
@@ -41,7 +41,7 @@ class GibsonsForm extends Equatable {
   final String? interviewDate;
   final String? interviewStartTime;
   final String? geoLocation;
-  final PictureChartCollected pictureChartCollected;
+  final String? pictureChartCollected; // TODO: change to a bool
   final String pictureChartNotCollectedReason;
   final InterviewEndTime interviewEndTime;
   final InterviewOutcome interviewOutcome;
@@ -70,8 +70,7 @@ class GibsonsForm extends Equatable {
         interviewDate = json['interviewDate'],
         interviewStartTime = json['interviewStartTime'],
         geoLocation = json['geoLocation'],
-        pictureChartCollected =
-            PictureChartCollected.fromJson(json['pictureChartCollected']),
+        pictureChartCollected = json['pictureChartCollected'],
         pictureChartNotCollectedReason = json['pictureChartNotCollectedReason'],
         interviewEndTime = InterviewEndTime.fromJson(json['interviewEndTime']),
         interviewOutcome = InterviewOutcome.fromJson(json['interviewOutcome']),
@@ -95,7 +94,7 @@ class GibsonsForm extends Equatable {
     data['interviewDate'] = interviewDate;
     data['interviewStartTime'] = interviewStartTime;
     data['geoLocation'] = geoLocation;
-    data['pictureChartCollected'] = pictureChartCollected.toJson();
+    data['pictureChartCollected'] = pictureChartCollected;
     data['pictureChartNotCollectedReason'] = pictureChartNotCollectedReason;
     data['interviewEndTime'] = interviewEndTime.toJson();
     data['interviewOutcome'] = interviewOutcome.toJson();
@@ -120,7 +119,7 @@ class GibsonsForm extends Equatable {
       String? interviewDate,
       String? interviewStartTime,
       String? geoLocation,
-      PictureChartCollected? pictureChartCollected,
+      String? pictureChartCollected,
       String? pictureChartNotCollectedReason,
       InterviewEndTime? interviewEndTime,
       InterviewOutcome? interviewOutcome,
@@ -275,8 +274,12 @@ class GibsonsForm extends Equatable {
     return foodItems.every((foodItem) => foodItem.confirmed);
   }
 
+  bool isPictureChartCollectedValid() {
+    return isFieldNotNullAndNotEmpty(pictureChartCollected);
+  }
+
   bool isPictureChartCollected() {
-    return pictureChartCollected.value.toLowerCase() == 'yes';
+    return pictureChartCollected?.toLowerCase() == 'yes';
   }
 
   bool isInterviewOutcomeCompleted() {
@@ -289,32 +292,6 @@ List<FoodItem> _jsonDecodeFoodItems(jsonEncodedFoodItems) {
   List<FoodItem> fullyDecodedFoodItems =
       partiallyDecodedFoodItems.map((e) => FoodItem.fromJson(e)).toList();
   return fullyDecodedFoodItems;
-}
-
-enum PictureChartCollectedValidationError { invalid }
-
-class PictureChartCollected
-    extends FormzInput<String, PictureChartCollectedValidationError> {
-  const PictureChartCollected.pure() : super.pure('');
-  const PictureChartCollected.dirty([String value = '']) : super.dirty(value);
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['value'] = value;
-    data['pure'] = pure.toString();
-    return data;
-  }
-
-  PictureChartCollected.fromJson(Map<String, dynamic> json)
-      : super.dirty(json['value']);
-
-  @override
-  PictureChartCollectedValidationError? validator(String? value) {
-    // TODO: Add validation, currently only checks if not empty
-    return value?.isNotEmpty == true
-        ? null
-        : PictureChartCollectedValidationError.invalid;
-  }
 }
 
 enum InterviewEndTimeValidationError { invalid }

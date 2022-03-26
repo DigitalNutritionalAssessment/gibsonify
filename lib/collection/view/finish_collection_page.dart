@@ -4,6 +4,7 @@ import 'package:dropdown_search/dropdown_search.dart';
 
 import 'package:gibsonify/collection/collection.dart';
 import 'package:gibsonify/home/home.dart';
+import 'package:gibsonify_api/gibsonify_api.dart';
 
 class FinishCollectionPage extends StatelessWidget {
   const FinishCollectionPage({Key? key}) : super(key: key);
@@ -86,7 +87,9 @@ class PictureChartCollectedInput extends StatelessWidget {
                 // so investigate how this can be achieved with focusnodes or
                 // maybe send an empty string (although that would not work all
                 // the time)
-                errorText: state.gibsonsForm.pictureChartCollected.invalid
+                errorText: isFieldModifiedAndInvalid(
+                        state.gibsonsForm.pictureChartCollected,
+                        state.gibsonsForm.isPictureChartCollectedValid)
                     ? 'Select if you collected the picture chart'
                     : null),
             mode: Mode.MENU,
@@ -99,7 +102,7 @@ class PictureChartCollectedInput extends StatelessWidget {
                     pictureChartCollected: pictureChartCollected ?? '')),
             // TODO: the selected item has to be a nullable string for the
             // dropdown field to display properly, fix this once we drop Formz
-            selectedItem: state.gibsonsForm.pictureChartCollected.value);
+            selectedItem: state.gibsonsForm.pictureChartCollected);
       },
     );
   }
@@ -113,7 +116,8 @@ class PictureChartNotCollectedReason extends StatelessWidget {
     return BlocBuilder<CollectionBloc, CollectionState>(
       builder: (context, state) {
         return Visibility(
-            visible: state.gibsonsForm.pictureChartCollected.valid &&
+            visible: isFieldNotNullAndNotEmpty(
+                    state.gibsonsForm.pictureChartCollected) &&
                 !state.gibsonsForm.isPictureChartCollected(),
             child: TextFormField(
               initialValue: state.gibsonsForm.pictureChartNotCollectedReason,
