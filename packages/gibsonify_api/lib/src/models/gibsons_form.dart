@@ -8,6 +8,7 @@ import 'package:uuid/uuid.dart';
 class GibsonsForm extends Equatable {
   GibsonsForm(
       {String? id,
+      this.employeeNumber,
       this.householdId,
       this.respondentName,
       this.respondentCountryCode,
@@ -29,6 +30,7 @@ class GibsonsForm extends Equatable {
       : id = id ?? const Uuid().v4();
 
   final String id;
+  final String? employeeNumber;
   final String? householdId;
   final String? respondentName;
   final String? respondentCountryCode;
@@ -57,6 +59,7 @@ class GibsonsForm extends Equatable {
 
   GibsonsForm.fromJson(Map<String, dynamic> json)
       : id = json['id'],
+        employeeNumber = json['employeeNumber'],
         householdId = json['householdId'],
         respondentName = json['respondentName'],
         respondentCountryCode = json['respondentCountryCode'],
@@ -81,6 +84,7 @@ class GibsonsForm extends Equatable {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
+    data['employeeNumber'] = employeeNumber;
     data['householdId'] = householdId;
     data['respondentName'] = respondentName;
     data['respondentCountryCode'] = respondentCountryCode;
@@ -105,6 +109,7 @@ class GibsonsForm extends Equatable {
 
   GibsonsForm copyWith(
       {String? id,
+      String? employeeNumber,
       String? householdId,
       String? respondentName,
       String? respondentCountryCode,
@@ -125,6 +130,7 @@ class GibsonsForm extends Equatable {
       List<FoodItem>? foodItems}) {
     return GibsonsForm(
         id: id ?? this.id,
+        employeeNumber: employeeNumber ?? this.employeeNumber,
         householdId: householdId ?? this.householdId,
         respondentName: respondentName ?? this.respondentName,
         respondentCountryCode:
@@ -155,6 +161,7 @@ class GibsonsForm extends Equatable {
   String toString() {
     return '\n *** \nGibson\'s Form:\n'
         'UUID: $id\n'
+        'Employee Number: $employeeNumber\n'
         'HouseholdID: $householdId\n'
         'Repondent Name: $respondentName\n'
         'Repondent Country Code: $respondentCountryCode\n'
@@ -180,6 +187,7 @@ class GibsonsForm extends Equatable {
   @override
   List<Object?> get props => [
         id,
+        employeeNumber,
         householdId,
         respondentName,
         respondentCountryCode,

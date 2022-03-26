@@ -2,7 +2,7 @@ import 'package:gibsonify_repository/gibsonify_repository.dart';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
 
-/// Repository that handles requests for GibsonsForms and Recipes
+/// Repository that handles requests for GibsonsForms and Recipes and LoginInfo
 class GibsonifyRepository {
   final GibsonifyApi _gibsonifyApi;
 
@@ -14,6 +14,11 @@ class GibsonifyRepository {
 
   // TODO: investigate providing a Stream of forms instead
   List<GibsonsForm?> loadForms() => _gibsonifyApi.loadForms();
+
+  Future<void> saveLoginInfo(LoginInfo loginInfo) =>
+      _gibsonifyApi.saveLoginInfo(loginInfo);
+
+  LoginInfo loadLoginInfo() => _gibsonifyApi.loadLoginInfo();
 
   void deleteForm(String id) => _gibsonifyApi.deleteForm(id);
 

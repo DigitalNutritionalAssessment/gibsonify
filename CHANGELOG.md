@@ -3,27 +3,35 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
-### Refactor
+### Fix
 
-- **recipe**: simplify import logic
-- **recipe**: reorder recipe import logic for readability
-- **recipe**: rename variables for readability
-- **recipe**: rearrange measurement fields and clean up error handling
-- **collection**: move and rename pop function
-- **collection**: move food item deletion dialog class
-- rename delete recipe to delete recipe dialog
-- remove second ingredients source
-- **recipe**: improve code readability
-- **recipe**: rename bloc private functions
-- **recipe**: standardise ingredients json fields
-- **recipe**: remove unused dependency
-- **recipe**: use named strings for page navigation
-- **recipe**: refactor ingredient loading into bloc and store in state
-- **recipe**: add helper functions to refactor bloc functions
-- **recipe**: use maps instead of lists for arg passing
+- **recipe**: fix ingredient measurement field bug in recipe import
+- **recipe**: fix date fields in import csv
+- **recipe**: fix measurement field bug in recipe import
+- **login**: use pushReplacementNamed instead of pushNamed for login page
+- **login**: fix login page navigation
+- saving using native back button or swipe
+- **recipe**: override back button/swipe to save
+- **collection**: override back button/swipe to save
+- **collection**: temporarily remove long-press-to-delete
+- fix wrongly named map key for argument passing for page navigation
 
 ### Feat
 
+- **login**: integrate employee number logic to collections
+- **login**: add employee number field to gibsons form model
+- **login**: add verification of login fields for submission
+- **login**: add employee number field logic to import
+- **login**: add employee number to recipe model
+- **login**: add employee number field to recipe csvs
+- **login**: add login button on settings page
+- **login**: add gibsonify logo to login screen
+- **login**: format login page
+- **login**: add MVP login page
+- **login**: add local storage logic for login
+- **login**: add login bloc
+- **login**: add login model
+- **recipe**: implement feedback on features
 - **recipe**: add logic for replacing old recipes with new ones
 - **recipe**: add logic to modify date upon recipe modification
 - **recipe**: add date field for recipe list version control
@@ -51,13 +59,24 @@ All notable changes to this project will be documented in this file.
 - trim ingredient list and add generating script
 - add script for generating ingredient list
 
-### Fix
+### Refactor
 
-- saving using native back button or swipe
-- **recipe**: override back button/swipe to save
-- **collection**: override back button/swipe to save
-- **collection**: temporarily remove long-press-to-delete
-- fix wrongly named map key for argument passing for page navigation
+- **recipe**: simplify import logic
+- **recipe**: reorder recipe import logic for readability
+- **recipe**: rename variables for readability
+- **recipe**: rearrange measurement fields and clean up error handling
+- **collection**: move and rename pop function
+- **collection**: move food item deletion dialog class
+- rename delete recipe to delete recipe dialog
+- remove second ingredients source
+- **recipe**: improve code readability
+- **recipe**: rename bloc private functions
+- **recipe**: standardise ingredients json fields
+- **recipe**: remove unused dependency
+- **recipe**: use named strings for page navigation
+- **recipe**: refactor ingredient loading into bloc and store in state
+- **recipe**: add helper functions to refactor bloc functions
+- **recipe**: use maps instead of lists for arg passing
 
 ## 1.1.0 (2022-02-21)
 

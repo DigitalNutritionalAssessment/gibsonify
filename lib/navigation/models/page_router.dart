@@ -4,9 +4,11 @@ import 'package:gibsonify/home/home.dart';
 import 'package:gibsonify/collection/collection.dart';
 import 'package:gibsonify/recipe/recipe.dart';
 import 'package:gibsonify/settings/settings.dart';
+import 'package:gibsonify/login/login.dart';
 
 class PageRouter {
-  static const home = '/';
+  static const login = '/';
+  static const home = '/home';
   static const collection = '/collection';
   static const recipe = '/recipe';
   static const ingredient = '/ingredient';
@@ -21,6 +23,8 @@ class PageRouter {
 
   static Route route(RouteSettings routeSettings) {
     switch (routeSettings.name) {
+      case login:
+        return _buildRoute(const LoginPage());
       case home:
         return _buildRoute(const HomePage());
       case collection:

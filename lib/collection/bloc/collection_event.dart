@@ -354,10 +354,12 @@ class GibsonsFormProvided extends CollectionEvent {
 // takes a GibsonsForm when instantiated — if none is passed, it creates a new
 // one
 class GibsonsFormCreated extends CollectionEvent {
-  const GibsonsFormCreated();
+  final String employeeNumber;
+
+  const GibsonsFormCreated({required this.employeeNumber});
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [employeeNumber];
 }
 
 class CollectionCompleted extends CollectionEvent {
