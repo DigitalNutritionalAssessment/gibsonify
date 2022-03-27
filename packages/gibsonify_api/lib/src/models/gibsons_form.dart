@@ -20,7 +20,7 @@ class GibsonsForm extends Equatable {
       this.interviewStartTime,
       this.geoLocation,
       this.pictureChartCollected,
-      this.pictureChartNotCollectedReason = '',
+      this.pictureChartNotCollectedReason,
       this.interviewEndTime = const InterviewEndTime.pure(),
       this.interviewOutcome = const InterviewOutcome.pure(),
       this.interviewOutcomeNotCompletedReason = '',
@@ -42,7 +42,7 @@ class GibsonsForm extends Equatable {
   final String? interviewStartTime;
   final String? geoLocation;
   final String? pictureChartCollected; // TODO: change to a bool
-  final String pictureChartNotCollectedReason;
+  final String? pictureChartNotCollectedReason;
   final InterviewEndTime interviewEndTime;
   final InterviewOutcome interviewOutcome;
   final String interviewOutcomeNotCompletedReason;
@@ -280,6 +280,10 @@ class GibsonsForm extends Equatable {
 
   bool isPictureChartCollected() {
     return pictureChartCollected?.toLowerCase() == 'yes';
+  }
+
+  bool isPictureChartNotCollectedReasonValid() {
+    return isFieldNotNullAndNotEmpty(pictureChartNotCollectedReason);
   }
 
   bool isInterviewOutcomeCompleted() {

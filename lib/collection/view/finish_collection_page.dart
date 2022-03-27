@@ -125,10 +125,11 @@ class PictureChartNotCollectedReason extends StatelessWidget {
                 icon: const Icon(Icons.device_unknown_outlined),
                 labelText: 'Reason for not collecting the picture chart',
                 helperText: 'Why did you not collect the picture chart',
-                errorText:
-                    state.gibsonsForm.pictureChartNotCollectedReason.isEmpty
-                        ? 'Choose the reason'
-                        : null,
+                errorText: isFieldModifiedAndInvalid(
+                        state.gibsonsForm.pictureChartNotCollectedReason,
+                        state.gibsonsForm.isPictureChartNotCollectedReasonValid)
+                    ? 'Please state the reason'
+                    : null,
               ),
               onChanged: (value) {
                 context.read<CollectionBloc>().add(
