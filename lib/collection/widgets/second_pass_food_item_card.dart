@@ -82,8 +82,6 @@ class SecondPassFoodItemCard extends StatelessWidget {
                 items: foodSources,
                 onChanged: (String? foodSource) =>
                     onSourceChanged!(foodSource ?? ''),
-                // TODO: the selected item has to be a nullable string for the
-                // dropdown field to display properly, fix this once we drop Formz
                 selectedItem: foodItem.source),
             TextFormField(
               initialValue: foodItem.description,
@@ -118,8 +116,6 @@ class SecondPassFoodItemCard extends StatelessWidget {
                 items: preparationMethods,
                 onChanged: (String? preparationMethod) =>
                     onPreparationMethodChanged!(preparationMethod ?? ''),
-                // TODO: the selected item has to be a nullable string for the
-                // dropdown field to display properly, fix this once we drop Formz
                 selectedItem: foodItem.preparationMethod),
             TextFormField(
               initialValue: foodItem.recipe?.recipeName ?? '',

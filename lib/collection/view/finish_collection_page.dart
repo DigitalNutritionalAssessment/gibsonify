@@ -100,8 +100,6 @@ class PictureChartCollectedInput extends StatelessWidget {
                 .read<CollectionBloc>()
                 .add(PictureChartCollectedChanged(
                     pictureChartCollected: pictureChartCollected ?? '')),
-            // TODO: the selected item has to be a nullable string for the
-            // dropdown field to display properly, fix this once we drop Formz
             selectedItem: state.gibsonsForm.pictureChartCollected);
       },
     );

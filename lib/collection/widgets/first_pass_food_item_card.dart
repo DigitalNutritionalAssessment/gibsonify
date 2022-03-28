@@ -83,8 +83,6 @@ class FirstPassFoodItemCard extends StatelessWidget {
                   items: timePeriods,
                   onChanged: (String? timePeriod) =>
                       onTimePeriodChanged!(timePeriod ?? ''),
-                  // TODO: the selected item has to be a nullable string for the
-                  // dropdown field to display properly, fix this once we drop Formz
                   selectedItem: foodItem.timePeriod)
             ],
           ),
