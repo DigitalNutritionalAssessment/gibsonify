@@ -226,9 +226,8 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
   void _onCommentsChanged(
       CommentsChanged event, Emitter<CollectionState> emit) {
-    final comments = Comments.dirty(event.comments);
     GibsonsForm changedGibsonsForm =
-        state.gibsonsForm.copyWith(comments: comments);
+        state.gibsonsForm.copyWith(comments: event.comments);
 
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }

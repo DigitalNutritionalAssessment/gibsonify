@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
-import 'package:formz/formz.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:uuid/uuid.dart';
 
@@ -24,7 +23,7 @@ class GibsonsForm extends Equatable {
       this.interviewEndTime,
       this.interviewOutcome,
       this.interviewOutcomeNotCompletedReason,
-      this.comments = const Comments.pure(),
+      this.comments,
       this.completed = false,
       this.foodItems = const <FoodItem>[]})
       : id = id ?? const Uuid().v4();
@@ -46,7 +45,7 @@ class GibsonsForm extends Equatable {
   final String? interviewEndTime;
   final String? interviewOutcome; // TODO: change to an enum
   final String? interviewOutcomeNotCompletedReason;
-  final Comments comments;
+  final String? comments;
   final bool completed;
   final List<FoodItem> foodItems;
 
@@ -76,7 +75,7 @@ class GibsonsForm extends Equatable {
         interviewOutcome = json['interviewOutcome'],
         interviewOutcomeNotCompletedReason =
             json['interviewOutcomeNotCompletedReason'],
-        comments = Comments.fromJson(json['comments']),
+        comments = json['comments'],
         completed = json['completed'] == 'true' ? true : false,
         foodItems = _jsonDecodeFoodItems(json['foodItems']);
 
@@ -100,7 +99,7 @@ class GibsonsForm extends Equatable {
     data['interviewOutcome'] = interviewOutcome;
     data['interviewOutcomeNotCompletedReason'] =
         interviewOutcomeNotCompletedReason;
-    data['comments'] = comments.toJson();
+    data['comments'] = comments;
     data['completed'] = completed.toString();
     data['foodItems'] = jsonEncode(foodItems); // This calls toJson on each one
     return data;
@@ -124,7 +123,7 @@ class GibsonsForm extends Equatable {
       String? interviewEndTime,
       String? interviewOutcome,
       String? interviewOutcomeNotCompletedReason,
-      Comments? comments,
+      String? comments,
       bool? completed,
       List<FoodItem>? foodItems}) {
     return GibsonsForm(
@@ -294,12 +293,16 @@ class GibsonsForm extends Equatable {
     return isFieldNotNullAndNotEmpty(interviewOutcome);
   }
 
+  bool isInterviewOutcomeCompleted() {
+    return interviewOutcome?.toLowerCase() == 'completed';
+  }
+
   bool isInterviewOutcomeNotCompletedReasonValid() {
     return isFieldNotNullAndNotEmpty(interviewOutcomeNotCompletedReason);
   }
 
-  bool isInterviewOutcomeCompleted() {
-    return interviewOutcome?.toLowerCase() == 'completed';
+  bool areCommentsValid() {
+    return true; // comments are not mandatory
   }
 }
 
@@ -308,26 +311,4 @@ List<FoodItem> _jsonDecodeFoodItems(jsonEncodedFoodItems) {
   List<FoodItem> fullyDecodedFoodItems =
       partiallyDecodedFoodItems.map((e) => FoodItem.fromJson(e)).toList();
   return fullyDecodedFoodItems;
-}
-
-enum CommentsValidationError { invalid }
-
-class Comments extends FormzInput<String, CommentsValidationError> {
-  const Comments.pure() : super.pure('');
-  const Comments.dirty([String value = '']) : super.dirty(value);
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['value'] = value;
-    data['pure'] = pure.toString();
-    return data;
-  }
-
-  Comments.fromJson(Map<String, dynamic> json) : super.dirty(json['value']);
-
-  @override
-  CommentsValidationError? validator(String? value) {
-    // TODO: Add validation, currently only checks if not empty
-    return value?.isNotEmpty == true ? null : CommentsValidationError.invalid;
-  }
 }

@@ -262,7 +262,7 @@ class CommentsInput extends StatelessWidget {
     return BlocBuilder<CollectionBloc, CollectionState>(
       builder: (context, state) {
         return TextFormField(
-          initialValue: state.gibsonsForm.comments.value,
+          initialValue: state.gibsonsForm.comments,
           decoration: const InputDecoration(
               icon: Icon(Icons.comment),
               labelText: 'Comments',
