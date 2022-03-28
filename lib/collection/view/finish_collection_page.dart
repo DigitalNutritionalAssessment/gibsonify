@@ -152,12 +152,14 @@ class InterviewEndTimeInput extends StatelessWidget {
         return TextFormField(
           readOnly: true,
           key: UniqueKey(),
-          initialValue: state.gibsonsForm.interviewEndTime.value,
+          initialValue: state.gibsonsForm.interviewEndTime,
           decoration: InputDecoration(
             icon: const Icon(Icons.access_time),
             labelText: 'Interview End Time',
             helperText: 'Time at the end of the interview',
-            errorText: state.gibsonsForm.interviewEndTime.invalid
+            errorText: isFieldModifiedAndInvalid(
+                    state.gibsonsForm.interviewEndTime,
+                    state.gibsonsForm.isInterviewEndTimeValid)
                 ? 'Choose the end time of the interview'
                 : null,
           ),

@@ -21,7 +21,7 @@ class GibsonsForm extends Equatable {
       this.geoLocation,
       this.pictureChartCollected,
       this.pictureChartNotCollectedReason,
-      this.interviewEndTime = const InterviewEndTime.pure(),
+      this.interviewEndTime,
       this.interviewOutcome = const InterviewOutcome.pure(),
       this.interviewOutcomeNotCompletedReason = '',
       this.comments = const Comments.pure(),
@@ -43,7 +43,7 @@ class GibsonsForm extends Equatable {
   final String? geoLocation;
   final String? pictureChartCollected; // TODO: change to a bool
   final String? pictureChartNotCollectedReason;
-  final InterviewEndTime interviewEndTime;
+  final String? interviewEndTime;
   final InterviewOutcome interviewOutcome;
   final String interviewOutcomeNotCompletedReason;
   final Comments comments;
@@ -72,7 +72,7 @@ class GibsonsForm extends Equatable {
         geoLocation = json['geoLocation'],
         pictureChartCollected = json['pictureChartCollected'],
         pictureChartNotCollectedReason = json['pictureChartNotCollectedReason'],
-        interviewEndTime = InterviewEndTime.fromJson(json['interviewEndTime']),
+        interviewEndTime = json['interviewEndTime'],
         interviewOutcome = InterviewOutcome.fromJson(json['interviewOutcome']),
         interviewOutcomeNotCompletedReason =
             json['interviewOutcomeNotCompletedReason'],
@@ -96,7 +96,7 @@ class GibsonsForm extends Equatable {
     data['geoLocation'] = geoLocation;
     data['pictureChartCollected'] = pictureChartCollected;
     data['pictureChartNotCollectedReason'] = pictureChartNotCollectedReason;
-    data['interviewEndTime'] = interviewEndTime.toJson();
+    data['interviewEndTime'] = interviewEndTime;
     data['interviewOutcome'] = interviewOutcome.toJson();
     data['interviewOutcomeNotCompletedReason'] =
         interviewOutcomeNotCompletedReason;
@@ -121,7 +121,7 @@ class GibsonsForm extends Equatable {
       String? geoLocation,
       String? pictureChartCollected,
       String? pictureChartNotCollectedReason,
-      InterviewEndTime? interviewEndTime,
+      String? interviewEndTime,
       InterviewOutcome? interviewOutcome,
       String? interviewOutcomeNotCompletedReason,
       Comments? comments,
@@ -286,6 +286,10 @@ class GibsonsForm extends Equatable {
     return isFieldNotNullAndNotEmpty(pictureChartNotCollectedReason);
   }
 
+  bool isInterviewEndTimeValid() {
+    return isFieldNotNullAndNotEmpty(interviewEndTime);
+  }
+
   bool isInterviewOutcomeCompleted() {
     return interviewOutcome.value.toLowerCase() == 'completed';
   }
@@ -296,32 +300,6 @@ List<FoodItem> _jsonDecodeFoodItems(jsonEncodedFoodItems) {
   List<FoodItem> fullyDecodedFoodItems =
       partiallyDecodedFoodItems.map((e) => FoodItem.fromJson(e)).toList();
   return fullyDecodedFoodItems;
-}
-
-enum InterviewEndTimeValidationError { invalid }
-
-class InterviewEndTime
-    extends FormzInput<String, InterviewEndTimeValidationError> {
-  const InterviewEndTime.pure() : super.pure('');
-  const InterviewEndTime.dirty([String value = '']) : super.dirty(value);
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['value'] = value;
-    data['pure'] = pure.toString();
-    return data;
-  }
-
-  InterviewEndTime.fromJson(Map<String, dynamic> json)
-      : super.dirty(json['value']);
-
-  @override
-  InterviewEndTimeValidationError? validator(String? value) {
-    // TODO: Add validation, currently only checks if not empty
-    return value?.isNotEmpty == true
-        ? null
-        : InterviewEndTimeValidationError.invalid;
-  }
 }
 
 enum InterviewOutcomeValidationError { invalid }
