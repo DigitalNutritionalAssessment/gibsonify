@@ -12,7 +12,6 @@ dependencies:
   equatable: ^2.0.3
   uuid: ^3.0.5
   intl: ^0.17.0
-#   path: ^1.8.0
 
 dev_dependencies:
   lints: ^1.0.0
