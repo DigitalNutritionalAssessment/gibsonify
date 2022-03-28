@@ -227,7 +227,7 @@ packages:
     source: sdk
     version: "0.0.0"
   formz:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: formz
       url: "https://pub.dartlang.org"
