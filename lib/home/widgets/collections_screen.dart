@@ -60,23 +60,22 @@ class CollectionsScreen extends StatelessWidget {
                                   : homeState
                                       .gibsonsForms[index]!.interviewDate!),
                               const VerticalDivider(),
-                              Text(homeState.gibsonsForms[index]!.completed
+                              Text(homeState.gibsonsForms[index]!.finished
                                   ? homeState.gibsonsForms[index]!
                                           .interviewOutcome ??
                                       'Unspecified outcome'
                                   : 'In progress')
                             ],
                           ),
-                          trailing: homeState.gibsonsForms[index]!.completed
+                          trailing: homeState.gibsonsForms[index]!.finished
                               ? const Icon(Icons.done)
                               : const Icon(Icons.pause),
                           onTap: () {
                             // TODO: remove this and allow read-only collection mode
                             const collectionCompletedSnackBar = SnackBar(
-                                content:
-                                    Text('Selected collection is completed '
-                                        'and can no longer be edited'));
-                            if (homeState.gibsonsForms[index]!.completed) {
+                                content: Text('Selected collection is finished '
+                                    'and can no longer be edited'));
+                            if (homeState.gibsonsForms[index]!.finished) {
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(collectionCompletedSnackBar);
                             } else {

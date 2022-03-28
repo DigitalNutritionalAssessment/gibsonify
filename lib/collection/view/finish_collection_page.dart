@@ -25,7 +25,7 @@ class FinishCollectionPage extends StatelessWidget {
                 children: <Widget>[
                   FloatingActionButton.extended(
                       heroTag: null,
-                      label: const Text("Complete Collection"),
+                      label: const Text("Finish Collection"),
                       icon: const Icon(Icons.check),
                       onPressed: () async {
                         // TODO: only allow to finish if all required fields are filled
@@ -36,7 +36,7 @@ class FinishCollectionPage extends StatelessWidget {
                         // occur
                         context
                             .read<CollectionBloc>()
-                            .add(const CollectionCompleted());
+                            .add(const CollectionFinished());
                         context
                             .read<HomeBloc>()
                             .add(const GibsonsFormsLoaded());

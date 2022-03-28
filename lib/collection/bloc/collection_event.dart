@@ -362,8 +362,8 @@ class GibsonsFormCreated extends CollectionEvent {
   List<Object> get props => [employeeNumber];
 }
 
-class CollectionCompleted extends CollectionEvent {
-  const CollectionCompleted();
+class CollectionFinished extends CollectionEvent {
+  const CollectionFinished();
 
   @override
   List<Object> get props => [];
