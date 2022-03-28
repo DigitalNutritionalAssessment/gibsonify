@@ -67,9 +67,16 @@ class CollectionsScreen extends StatelessWidget {
                                   : 'In progress')
                             ],
                           ),
-                          trailing: homeState.gibsonsForms[index]!.finished
-                              ? const Icon(Icons.done)
-                              : const Icon(Icons.pause),
+                          trailing: Column(
+                            children: [
+                              homeState.gibsonsForms[index]!.finished
+                                  ? const Icon(Icons.done)
+                                  : const Icon(Icons.pause),
+                              homeState.gibsonsForms[index]!.finished
+                                  ? const Text('Finished')
+                                  : const Text('Unfinished'),
+                            ],
+                          ),
                           onTap: () {
                             // TODO: remove this and allow read-only collection mode
                             const collectionCompletedSnackBar = SnackBar(
