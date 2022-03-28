@@ -62,7 +62,8 @@ class CollectionsScreen extends StatelessWidget {
                               const VerticalDivider(),
                               Text(homeState.gibsonsForms[index]!.completed
                                   ? homeState.gibsonsForms[index]!
-                                      .interviewOutcome.value
+                                          .interviewOutcome ??
+                                      'Unspecified outcome'
                                   : 'In progress')
                             ],
                           ),

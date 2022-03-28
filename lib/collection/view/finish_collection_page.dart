@@ -199,8 +199,10 @@ class InterviewOutcomeInput extends StatelessWidget {
                 // TODO: the errorText should be displayed if nothing is chosen
                 // so investigate how this can be achieved with focusnodes or
                 // maybe send an empty string (although that would not work all
-                // the time)
-                errorText: state.gibsonsForm.interviewOutcome.invalid
+                // the time), currently errorText is never shown
+                errorText: isFieldModifiedAndInvalid(
+                        state.gibsonsForm.interviewOutcome,
+                        state.gibsonsForm.isInterviewOutcomeValid)
                     ? 'Select interview outcome'
                     : null),
             mode: Mode.MENU,
@@ -211,9 +213,7 @@ class InterviewOutcomeInput extends StatelessWidget {
                 .read<CollectionBloc>()
                 .add(InterviewOutcomeChanged(
                     interviewOutcome: interviewOutcome ?? '')),
-            // TODO: the selected item has to be a nullable string for the
-            // dropdown field to display properly, fix this once we drop Formz
-            selectedItem: state.gibsonsForm.interviewOutcome.value);
+            selectedItem: state.gibsonsForm.interviewOutcome);
       },
     );
   }
@@ -227,7 +227,7 @@ class InterviewOutcomeNotCompletedReason extends StatelessWidget {
     return BlocBuilder<CollectionBloc, CollectionState>(
       builder: (context, state) {
         return Visibility(
-            visible: state.gibsonsForm.interviewOutcome.valid &&
+            visible: state.gibsonsForm.isInterviewOutcomeValid() &&
                 !state.gibsonsForm.isInterviewOutcomeCompleted(),
             child: TextFormField(
               initialValue:

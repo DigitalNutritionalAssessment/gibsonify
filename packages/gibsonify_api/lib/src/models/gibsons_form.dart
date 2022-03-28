@@ -22,7 +22,7 @@ class GibsonsForm extends Equatable {
       this.pictureChartCollected,
       this.pictureChartNotCollectedReason,
       this.interviewEndTime,
-      this.interviewOutcome = const InterviewOutcome.pure(),
+      this.interviewOutcome,
       this.interviewOutcomeNotCompletedReason = '',
       this.comments = const Comments.pure(),
       this.completed = false,
@@ -44,7 +44,7 @@ class GibsonsForm extends Equatable {
   final String? pictureChartCollected; // TODO: change to a bool
   final String? pictureChartNotCollectedReason;
   final String? interviewEndTime;
-  final InterviewOutcome interviewOutcome;
+  final String? interviewOutcome; // TODO: change to an enum
   final String interviewOutcomeNotCompletedReason;
   final Comments comments;
   final bool completed;
@@ -73,7 +73,7 @@ class GibsonsForm extends Equatable {
         pictureChartCollected = json['pictureChartCollected'],
         pictureChartNotCollectedReason = json['pictureChartNotCollectedReason'],
         interviewEndTime = json['interviewEndTime'],
-        interviewOutcome = InterviewOutcome.fromJson(json['interviewOutcome']),
+        interviewOutcome = json['interviewOutcome'],
         interviewOutcomeNotCompletedReason =
             json['interviewOutcomeNotCompletedReason'],
         comments = Comments.fromJson(json['comments']),
@@ -97,7 +97,7 @@ class GibsonsForm extends Equatable {
     data['pictureChartCollected'] = pictureChartCollected;
     data['pictureChartNotCollectedReason'] = pictureChartNotCollectedReason;
     data['interviewEndTime'] = interviewEndTime;
-    data['interviewOutcome'] = interviewOutcome.toJson();
+    data['interviewOutcome'] = interviewOutcome;
     data['interviewOutcomeNotCompletedReason'] =
         interviewOutcomeNotCompletedReason;
     data['comments'] = comments.toJson();
@@ -122,7 +122,7 @@ class GibsonsForm extends Equatable {
       String? pictureChartCollected,
       String? pictureChartNotCollectedReason,
       String? interviewEndTime,
-      InterviewOutcome? interviewOutcome,
+      String? interviewOutcome,
       String? interviewOutcomeNotCompletedReason,
       Comments? comments,
       bool? completed,
@@ -290,8 +290,12 @@ class GibsonsForm extends Equatable {
     return isFieldNotNullAndNotEmpty(interviewEndTime);
   }
 
+  bool isInterviewOutcomeValid() {
+    return isFieldNotNullAndNotEmpty(interviewOutcome);
+  }
+
   bool isInterviewOutcomeCompleted() {
-    return interviewOutcome.value.toLowerCase() == 'completed';
+    return interviewOutcome?.toLowerCase() == 'completed';
   }
 }
 
@@ -300,42 +304,6 @@ List<FoodItem> _jsonDecodeFoodItems(jsonEncodedFoodItems) {
   List<FoodItem> fullyDecodedFoodItems =
       partiallyDecodedFoodItems.map((e) => FoodItem.fromJson(e)).toList();
   return fullyDecodedFoodItems;
-}
-
-enum InterviewOutcomeValidationError { invalid }
-
-class InterviewOutcome
-    extends FormzInput<String, InterviewOutcomeValidationError> {
-  const InterviewOutcome.pure() : super.pure('');
-  const InterviewOutcome.dirty([String value = '']) : super.dirty(value);
-
-  // TODO: update when accepting custom strings for 'other'
-  final _allowedRecallDay = const [
-    'completed',
-    'incomplete',
-    'absent',
-    'refused',
-    'could not locate',
-  ];
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['value'] = value;
-    data['pure'] = pure.toString();
-    return data;
-  }
-
-  InterviewOutcome.fromJson(Map<String, dynamic> json)
-      : super.dirty(json['value']);
-
-  @override
-  InterviewOutcomeValidationError? validator(String? value) {
-    final _lowerCaseValue = (value ?? '').toLowerCase();
-    // TODO: refactor with a better null check
-    return _allowedRecallDay.contains(_lowerCaseValue)
-        ? null
-        : InterviewOutcomeValidationError.invalid;
-  }
 }
 
 enum CommentsValidationError { invalid }

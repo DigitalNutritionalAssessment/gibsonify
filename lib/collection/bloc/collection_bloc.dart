@@ -208,9 +208,8 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
   void _onInterviewOutcomeChanged(
       InterviewOutcomeChanged event, Emitter<CollectionState> emit) {
-    final interviewOutcome = InterviewOutcome.dirty(event.interviewOutcome);
     GibsonsForm changedGibsonsForm =
-        state.gibsonsForm.copyWith(interviewOutcome: interviewOutcome);
+        state.gibsonsForm.copyWith(interviewOutcome: event.interviewOutcome);
 
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }
