@@ -236,10 +236,12 @@ class InterviewOutcomeNotCompletedReason extends StatelessWidget {
                 icon: const Icon(Icons.device_unknown_outlined),
                 labelText: 'Reason for not completing the interview',
                 helperText: 'Why did you not complete the interview',
-                errorText:
-                    state.gibsonsForm.interviewOutcomeNotCompletedReason.isEmpty
-                        ? 'Explain the reason'
-                        : null,
+                errorText: isFieldModifiedAndInvalid(
+                        state.gibsonsForm.interviewOutcomeNotCompletedReason,
+                        state.gibsonsForm
+                            .isInterviewOutcomeNotCompletedReasonValid)
+                    ? 'Explain the reason'
+                    : null,
               ),
               onChanged: (value) {
                 context.read<CollectionBloc>().add(

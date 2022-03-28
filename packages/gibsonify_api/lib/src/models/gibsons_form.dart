@@ -23,7 +23,7 @@ class GibsonsForm extends Equatable {
       this.pictureChartNotCollectedReason,
       this.interviewEndTime,
       this.interviewOutcome,
-      this.interviewOutcomeNotCompletedReason = '',
+      this.interviewOutcomeNotCompletedReason,
       this.comments = const Comments.pure(),
       this.completed = false,
       this.foodItems = const <FoodItem>[]})
@@ -45,7 +45,7 @@ class GibsonsForm extends Equatable {
   final String? pictureChartNotCollectedReason;
   final String? interviewEndTime;
   final String? interviewOutcome; // TODO: change to an enum
-  final String interviewOutcomeNotCompletedReason;
+  final String? interviewOutcomeNotCompletedReason;
   final Comments comments;
   final bool completed;
   final List<FoodItem> foodItems;
@@ -292,6 +292,10 @@ class GibsonsForm extends Equatable {
 
   bool isInterviewOutcomeValid() {
     return isFieldNotNullAndNotEmpty(interviewOutcome);
+  }
+
+  bool isInterviewOutcomeNotCompletedReasonValid() {
+    return isFieldNotNullAndNotEmpty(interviewOutcomeNotCompletedReason);
   }
 
   bool isInterviewOutcomeCompleted() {
