@@ -22,6 +22,7 @@ class GibsonsForm extends Equatable {
       this.pictureChartNotCollectedReason,
       this.interviewEndTime,
       this.interviewFinishedInOneVisit,
+      this.secondInterviewVisitDate,
       this.interviewOutcome,
       this.interviewOutcomeNotCompletedReason,
       this.comments,
@@ -45,7 +46,7 @@ class GibsonsForm extends Equatable {
   final String? pictureChartNotCollectedReason;
   final String? interviewEndTime;
   final String? interviewFinishedInOneVisit; // TODO: change to a bool
-  // TODO: Date of second visit
+  final String? secondInterviewVisitDate;
   // TODO: Reason for second visit
   final String? interviewOutcome; // TODO: change to an enum
   final String? interviewOutcomeNotCompletedReason;
@@ -77,6 +78,7 @@ class GibsonsForm extends Equatable {
         pictureChartNotCollectedReason = json['pictureChartNotCollectedReason'],
         interviewEndTime = json['interviewEndTime'],
         interviewFinishedInOneVisit = json['interviewFinishedInOneVisit'],
+        secondInterviewVisitDate = json['secondInterviewVisitDate'],
         interviewOutcome = json['interviewOutcome'],
         interviewOutcomeNotCompletedReason =
             json['interviewOutcomeNotCompletedReason'],
@@ -102,6 +104,7 @@ class GibsonsForm extends Equatable {
     data['pictureChartNotCollectedReason'] = pictureChartNotCollectedReason;
     data['interviewEndTime'] = interviewEndTime;
     data['interviewFinishedInOneVisit'] = interviewFinishedInOneVisit;
+    data['secondInterviewVisitDate'] = secondInterviewVisitDate;
     data['interviewOutcome'] = interviewOutcome;
     data['interviewOutcomeNotCompletedReason'] =
         interviewOutcomeNotCompletedReason;
@@ -128,6 +131,7 @@ class GibsonsForm extends Equatable {
       String? pictureChartNotCollectedReason,
       String? interviewEndTime,
       String? interviewFinishedInOneVisit,
+      String? secondInterviewVisitDate,
       String? interviewOutcome,
       String? interviewOutcomeNotCompletedReason,
       String? comments,
@@ -155,6 +159,8 @@ class GibsonsForm extends Equatable {
         interviewEndTime: interviewEndTime ?? this.interviewEndTime,
         interviewFinishedInOneVisit:
             interviewFinishedInOneVisit ?? this.interviewFinishedInOneVisit,
+        secondInterviewVisitDate:
+            secondInterviewVisitDate ?? this.secondInterviewVisitDate,
         interviewOutcome: interviewOutcome ?? this.interviewOutcome,
         interviewOutcomeNotCompletedReason:
             interviewOutcomeNotCompletedReason ??
@@ -182,6 +188,8 @@ class GibsonsForm extends Equatable {
         'Picture Chart Collected: $pictureChartCollected\n'
         'Picture Chart Not Collected Reason: $pictureChartNotCollectedReason\n'
         'Interview End Time: $interviewEndTime\n'
+        'Interview finished in one visit: $interviewFinishedInOneVisit'
+        'Second interview visit date: $secondInterviewVisitDate'
         'Interview Outcome: $interviewOutcome\n'
         'Interview Outcome Not Completed Reason: '
         '$interviewOutcomeNotCompletedReason\n'
@@ -209,6 +217,7 @@ class GibsonsForm extends Equatable {
         pictureChartNotCollectedReason,
         interviewEndTime,
         interviewFinishedInOneVisit,
+        secondInterviewVisitDate,
         interviewOutcome,
         interviewOutcomeNotCompletedReason,
         comments,
@@ -305,6 +314,11 @@ class GibsonsForm extends Equatable {
 
   bool isInterviewFinishedInOneVisit() {
     return interviewFinishedInOneVisit?.toLowerCase() == 'yes';
+  }
+
+  bool isSecondInterviewVisitDateValid() {
+    // TODO: add parsing checks to ensure it is after first interview date
+    return isFieldNotNullAndNotEmpty(secondInterviewVisitDate);
   }
 
   bool isInterviewOutcomeValid() {

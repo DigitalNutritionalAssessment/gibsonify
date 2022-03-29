@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:intl/intl.dart';
 
 import 'package:gibsonify/collection/collection.dart';
 import 'package:gibsonify/home/home.dart';
@@ -54,6 +55,7 @@ class FinishCollectionForm extends StatelessWidget {
           PictureChartNotCollectedReason(),
           InterviewEndTimeInput(),
           InterviewFinishedInOneVisitInput(),
+          SecondInterviewVisitDateInput(),
           InterviewOutcomeInput(),
           InterviewOutcomeNotCompletedReason(),
           CommentsInput()
@@ -146,7 +148,7 @@ class InterviewEndTimeInput extends StatelessWidget {
           initialValue: state.gibsonsForm.interviewEndTime,
           decoration: InputDecoration(
             icon: const Icon(Icons.access_time),
-            labelText: 'Interview End Time',
+            labelText: 'Interview end time',
             helperText: 'Time at the end of the interview',
             errorText: isFieldModifiedAndInvalid(
                     state.gibsonsForm.interviewEndTime,
@@ -200,6 +202,51 @@ class InterviewFinishedInOneVisitInput extends StatelessWidget {
                     interviewFinishedInOneVisit:
                         interviewFinishedInOneVisit ?? '')),
             selectedItem: state.gibsonsForm.interviewFinishedInOneVisit);
+      },
+    );
+  }
+}
+
+class SecondInterviewVisitDateInput extends StatelessWidget {
+  const SecondInterviewVisitDateInput({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CollectionBloc, CollectionState>(
+      builder: (context, state) {
+        return Visibility(
+          visible: isFieldNotNullAndNotEmpty(
+                  state.gibsonsForm.interviewFinishedInOneVisit) &&
+              !state.gibsonsForm.isInterviewFinishedInOneVisit(),
+          child: TextFormField(
+            readOnly: true,
+            key: UniqueKey(),
+            initialValue: state.gibsonsForm.secondInterviewVisitDate,
+            decoration: InputDecoration(
+              icon: const Icon(Icons.calendar_month),
+              labelText: 'Second interview visit date',
+              helperText: 'Date of the second interview visit',
+              errorText: isFieldModifiedAndInvalid(
+                      state.gibsonsForm.secondInterviewVisitDate,
+                      state.gibsonsForm.isSecondInterviewVisitDateValid)
+                  ? 'Second nterview date needs to be after '
+                      'the first interview date'
+                  : null,
+            ),
+            onTap: () async {
+              var date = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(1900),
+                  lastDate: DateTime.now());
+              var formattedDate =
+                  date == null ? '' : DateFormat('yyyy-MM-dd').format(date);
+              context.read<CollectionBloc>().add(
+                  SecondInterviewVisitDateChanged(
+                      secondInterviewVisitDate: formattedDate));
+            },
+          ),
+        );
       },
     );
   }

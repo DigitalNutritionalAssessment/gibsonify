@@ -129,6 +129,16 @@ class InterviewFinishedInOneVisitChanged extends CollectionEvent {
   List<Object> get props => [interviewFinishedInOneVisit];
 }
 
+class SecondInterviewVisitDateChanged extends CollectionEvent {
+  final String secondInterviewVisitDate;
+
+  const SecondInterviewVisitDateChanged(
+      {required this.secondInterviewVisitDate});
+
+  @override
+  List<Object> get props => [secondInterviewVisitDate];
+}
+
 class InterviewOutcomeChanged extends CollectionEvent {
   final String interviewOutcome;
 
