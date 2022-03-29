@@ -56,7 +56,6 @@ class CollectionsScreen extends StatelessWidget {
                             ),
                             child: Card(
                               child: ListTile(
-                                leading: const Icon(Icons.person),
                                 title: Text(
                                     // TODO: refactor
                                     isFieldUnmodifiedOrEmpty(homeState
@@ -73,11 +72,9 @@ class CollectionsScreen extends StatelessWidget {
                                         : homeState.gibsonsForms[index]!
                                             .interviewDate!),
                                     const VerticalDivider(),
-                                    Text(homeState.gibsonsForms[index]!.finished
-                                        ? homeState.gibsonsForms[index]!
-                                                .interviewOutcome ??
-                                            'Unspecified outcome'
-                                        : 'In progress')
+                                    Text(homeState.gibsonsForms[index]!
+                                            .interviewOutcome ??
+                                        'Unspecified outcome')
                                   ],
                                 ),
                                 trailing: Column(
@@ -87,7 +84,7 @@ class CollectionsScreen extends StatelessWidget {
                                         : const Icon(Icons.pause),
                                     homeState.gibsonsForms[index]!.finished
                                         ? const Text('Finished')
-                                        : const Text('Unfinished'),
+                                        : const Text('Paused'),
                                   ],
                                 ),
                                 onTap: () {
