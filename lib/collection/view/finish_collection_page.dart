@@ -182,8 +182,7 @@ class InterviewFinishedInOneVisitInput extends StatelessWidget {
             dropdownSearchDecoration: InputDecoration(
                 icon: const Icon(Icons.calendar_today),
                 labelText: 'Was the interview finished in one visit',
-                helperText:
-                    'Have you finished the interview in a single visit?',
+                helperText: 'Have you finished the interview in a single visit',
                 // TODO: the errorText should be displayed if nothing is chosen
                 // so investigate how this can be achieved with focusnodes or
                 // maybe send an empty string (although that would not work all
