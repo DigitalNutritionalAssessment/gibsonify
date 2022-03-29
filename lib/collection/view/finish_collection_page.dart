@@ -18,7 +18,6 @@ class FinishCollectionPage extends StatelessWidget {
             appBar: AppBar(
               title: const Text('Finish Collection'),
             ),
-            resizeToAvoidBottomInset: false,
             body: const SingleChildScrollView(child: FinishCollectionForm()),
             floatingActionButton: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
