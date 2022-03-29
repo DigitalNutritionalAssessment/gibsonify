@@ -53,6 +53,7 @@ class FinishCollectionForm extends StatelessWidget {
           PictureChartCollectedInput(),
           PictureChartNotCollectedReason(),
           InterviewEndTimeInput(),
+          InterviewFinishedInOneVisitInput(),
           InterviewOutcomeInput(),
           InterviewOutcomeNotCompletedReason(),
           CommentsInput()
@@ -78,7 +79,7 @@ class PictureChartCollectedInput extends StatelessWidget {
                 // TODO: the errorText should be displayed if nothing is chosen
                 // so investigate how this can be achieved with focusnodes or
                 // maybe send an empty string (although that would not work all
-                // the time)
+                // the time), currently no errorText is shown
                 errorText: isFieldModifiedAndInvalid(
                         state.gibsonsForm.pictureChartCollected,
                         state.gibsonsForm.isPictureChartCollectedValid)
@@ -161,6 +162,44 @@ class InterviewEndTimeInput extends StatelessWidget {
                 InterviewEndTimeChanged(interviewEndTime: formattedTime ?? ''));
           },
         );
+      },
+    );
+  }
+}
+
+class InterviewFinishedInOneVisitInput extends StatelessWidget {
+  const InterviewFinishedInOneVisitInput({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CollectionBloc, CollectionState>(
+      builder: (context, state) {
+        return DropdownSearch<String>(
+            maxHeight: 112.0,
+            dropdownSearchDecoration: InputDecoration(
+                icon: const Icon(Icons.calendar_today),
+                labelText: 'Was the interview finished in one visit',
+                helperText:
+                    'Have you finished the interview in a single visit?',
+                // TODO: the errorText should be displayed if nothing is chosen
+                // so investigate how this can be achieved with focusnodes or
+                // maybe send an empty string (although that would not work all
+                // the time), currently no errorText is shown
+                errorText: isFieldModifiedAndInvalid(
+                        state.gibsonsForm.interviewFinishedInOneVisit,
+                        state.gibsonsForm.isInterviewFinishedInOneVisitValid)
+                    ? 'Select if you finished the interview in one visit'
+                    : null),
+            mode: Mode.MENU,
+            showSelectedItems: true,
+            showSearchBox: false,
+            items: const ['Yes', 'No'],
+            onChanged: (String? interviewFinishedInOneVisit) => context
+                .read<CollectionBloc>()
+                .add(InterviewFinishedInOneVisitChanged(
+                    interviewFinishedInOneVisit:
+                        interviewFinishedInOneVisit ?? '')),
+            selectedItem: state.gibsonsForm.interviewFinishedInOneVisit);
       },
     );
   }
@@ -284,10 +323,10 @@ class FinishCollectionDialog extends StatelessWidget {
       builder: (context, state) {
         return AlertDialog(
           title: const Text('Finish collection'),
-          content: Text(
-              'Would you like to finish the collection of $displayRespondentName?\n\n'
-              'Once finished, the collection will no longer be editable, even if '
-              'it is incomplete. As an alternative, you can pause the collection.'),
+          content: Text('Would you like to finish the collection of '
+              '$displayRespondentName?\n\nOnce finished, the collection will '
+              'no longer be editable, even if it is not fully completed. As an '
+              'alternative, you can pause the collection.'),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, 'Cancel'),

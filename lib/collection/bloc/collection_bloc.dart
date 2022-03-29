@@ -28,6 +28,8 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     on<PictureChartNotCollectedReasonChanged>(
         _onPictureChartNotCollectedReasonChanged);
     on<InterviewEndTimeChanged>(_onInterviewEndTimeChanged);
+    on<InterviewFinishedInOneVisitChanged>(
+        _onInterviewFinishedInOneVisitChanged);
     on<InterviewOutcomeChanged>(_onInterviewOutcomeChanged);
     on<InterviewOutcomeNotCompletedReasonChanged>(
         _onInterviewOutcomeNotCompletedReasonChanged);
@@ -204,6 +206,14 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
       InterviewEndTimeChanged event, Emitter<CollectionState> emit) {
     GibsonsForm changedGibsonsForm =
         state.gibsonsForm.copyWith(interviewEndTime: event.interviewEndTime);
+
+    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+  }
+
+  void _onInterviewFinishedInOneVisitChanged(
+      InterviewFinishedInOneVisitChanged event, Emitter<CollectionState> emit) {
+    GibsonsForm changedGibsonsForm = state.gibsonsForm.copyWith(
+        interviewFinishedInOneVisit: event.interviewFinishedInOneVisit);
 
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }

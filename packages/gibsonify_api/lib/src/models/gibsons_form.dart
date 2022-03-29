@@ -21,6 +21,7 @@ class GibsonsForm extends Equatable {
       this.pictureChartCollected,
       this.pictureChartNotCollectedReason,
       this.interviewEndTime,
+      this.interviewFinishedInOneVisit,
       this.interviewOutcome,
       this.interviewOutcomeNotCompletedReason,
       this.comments,
@@ -43,6 +44,9 @@ class GibsonsForm extends Equatable {
   final String? pictureChartCollected; // TODO: change to a bool
   final String? pictureChartNotCollectedReason;
   final String? interviewEndTime;
+  final String? interviewFinishedInOneVisit; // TODO: change to a bool
+  // TODO: Date of second visit
+  // TODO: Reason for second visit
   final String? interviewOutcome; // TODO: change to an enum
   final String? interviewOutcomeNotCompletedReason;
   final String? comments;
@@ -72,6 +76,7 @@ class GibsonsForm extends Equatable {
         pictureChartCollected = json['pictureChartCollected'],
         pictureChartNotCollectedReason = json['pictureChartNotCollectedReason'],
         interviewEndTime = json['interviewEndTime'],
+        interviewFinishedInOneVisit = json['interviewFinishedInOneVisit'],
         interviewOutcome = json['interviewOutcome'],
         interviewOutcomeNotCompletedReason =
             json['interviewOutcomeNotCompletedReason'],
@@ -96,6 +101,7 @@ class GibsonsForm extends Equatable {
     data['pictureChartCollected'] = pictureChartCollected;
     data['pictureChartNotCollectedReason'] = pictureChartNotCollectedReason;
     data['interviewEndTime'] = interviewEndTime;
+    data['interviewFinishedInOneVisit'] = interviewFinishedInOneVisit;
     data['interviewOutcome'] = interviewOutcome;
     data['interviewOutcomeNotCompletedReason'] =
         interviewOutcomeNotCompletedReason;
@@ -121,6 +127,7 @@ class GibsonsForm extends Equatable {
       String? pictureChartCollected,
       String? pictureChartNotCollectedReason,
       String? interviewEndTime,
+      String? interviewFinishedInOneVisit,
       String? interviewOutcome,
       String? interviewOutcomeNotCompletedReason,
       String? comments,
@@ -146,6 +153,8 @@ class GibsonsForm extends Equatable {
         pictureChartNotCollectedReason: pictureChartNotCollectedReason ??
             this.pictureChartNotCollectedReason,
         interviewEndTime: interviewEndTime ?? this.interviewEndTime,
+        interviewFinishedInOneVisit:
+            interviewFinishedInOneVisit ?? this.interviewFinishedInOneVisit,
         interviewOutcome: interviewOutcome ?? this.interviewOutcome,
         interviewOutcomeNotCompletedReason:
             interviewOutcomeNotCompletedReason ??
@@ -199,6 +208,7 @@ class GibsonsForm extends Equatable {
         pictureChartCollected,
         pictureChartNotCollectedReason,
         interviewEndTime,
+        interviewFinishedInOneVisit,
         interviewOutcome,
         interviewOutcomeNotCompletedReason,
         comments,
@@ -287,6 +297,14 @@ class GibsonsForm extends Equatable {
 
   bool isInterviewEndTimeValid() {
     return isFieldNotNullAndNotEmpty(interviewEndTime);
+  }
+
+  bool isInterviewFinishedInOneVisitValid() {
+    return isFieldNotNullAndNotEmpty(interviewFinishedInOneVisit);
+  }
+
+  bool isInterviewFinishedInOneVisit() {
+    return interviewFinishedInOneVisit?.toLowerCase() == 'yes';
   }
 
   bool isInterviewOutcomeValid() {
