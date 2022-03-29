@@ -25,7 +25,7 @@ class SyncScreen extends StatelessWidget {
               homeState.gibsonsForms.map((x) => x!.toJson()).toList(),
         });
         return Scaffold(
-          appBar: AppBar(title: const Text('Export Data')),
+          appBar: AppBar(title: const Text('Import & Export Data')),
           floatingActionButton: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.end,
