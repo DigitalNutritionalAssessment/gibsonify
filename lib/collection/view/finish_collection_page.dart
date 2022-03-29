@@ -27,22 +27,14 @@ class FinishCollectionPage extends StatelessWidget {
                       heroTag: null,
                       label: const Text("Finish Collection"),
                       icon: const Icon(Icons.check),
-                      onPressed: () async {
-                        // TODO: only allow to finish if all required fields are filled
-                        // TODO: investigate concurrency bug when saving from
-                        // one bloc and loading from another - if the
-                        // CollectionCompleted event did not save, but the
-                        // GibsonsFormSaved event was added after it, a bug will
-                        // occur
-                        context
-                            .read<CollectionBloc>()
-                            .add(const CollectionFinished());
-                        context
-                            .read<HomeBloc>()
-                            .add(const GibsonsFormsLoaded());
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                      })
+                      onPressed: () => showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) =>
+                              FinishCollectionDialog(
+                                  gibsonsForm: state.gibsonsForm))
+                      // TODO: only allow to finish if all required fields are filled
+
+                      )
                 ]));
       },
     );
@@ -271,6 +263,62 @@ class CommentsInput extends StatelessWidget {
                 .add(CommentsChanged(comments: value));
           },
           textInputAction: TextInputAction.next,
+        );
+      },
+    );
+  }
+}
+
+class FinishCollectionDialog extends StatelessWidget {
+  final GibsonsForm gibsonsForm;
+  const FinishCollectionDialog({Key? key, required this.gibsonsForm})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    String displayRespondentName =
+        isFieldUnmodifiedOrEmpty(gibsonsForm.respondentName)
+            ? 'unnamed respondent'
+            : gibsonsForm.respondentName!;
+    return BlocBuilder<CollectionBloc, CollectionState>(
+      builder: (context, state) {
+        return AlertDialog(
+          title: const Text('Finish collection'),
+          content: Text(
+              'Would you like to finish the collection of $displayRespondentName?\n\n'
+              'Once finished, the collection will no longer be editable, even if '
+              'it is incomplete. As an alternative, you can pause the collection.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'Cancel'),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                context.read<CollectionBloc>().add(const GibsonsFormSaved());
+                context.read<HomeBloc>().add(const GibsonsFormsLoaded());
+                Navigator.pop(context);
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+              child: const Text('Pause'),
+            ),
+            TextButton(
+              onPressed: () async {
+                // TODO: investigate concurrency bug when saving from
+                // one bloc and loading from another - if the
+                // CollectionCompleted event did not save, but the
+                // GibsonsFormSaved event was added after it, a bug will
+                // occur, hence, saving should be moved to HomeBloc
+                context.read<CollectionBloc>().add(const CollectionFinished());
+                context.read<HomeBloc>().add(const GibsonsFormsLoaded());
+                Navigator.pop(context);
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+              child: const Text('Finish'),
+            ),
+          ],
         );
       },
     );
