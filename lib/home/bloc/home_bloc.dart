@@ -16,6 +16,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     // TODO: implement a subscription to a stream of GibsonsForms
     on<GibsonsFormsLoaded>(_onGibsonsFormsLoaded);
     on<GibsonsFormDeleted>(_onGibsonsFormDeleted);
+    on<CollectionDuplicationModeToggled>(_onCollectionDuplicationModeToggled);
   }
 
   void _onGibsonsFormsLoaded(
@@ -30,5 +31,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     // TODO: Find a more efficient implementation
     List<GibsonsForm?> gibsonsFormsLoaded = _gibsonifyRepository.loadForms();
     emit(state.copyWith(gibsonsForms: gibsonsFormsLoaded));
+  }
+
+  void _onCollectionDuplicationModeToggled(
+      CollectionDuplicationModeToggled event, Emitter<HomeState> emit) {
+    emit(state.copyWith(
+        collectionDuplicationMode: !state.collectionDuplicationMode));
   }
 }

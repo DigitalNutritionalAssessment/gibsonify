@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:uuid/uuid.dart';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:gibsonify_repository/gibsonify_repository.dart';
@@ -48,6 +49,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     on<GibsonsFormSaved>(_onGibsonsFormSaved);
     on<GibsonsFormProvided>(_onGibsonsFormProvided);
     on<GibsonsFormCreated>(_onGibsonsFormCreated);
+    on<GibsonsFormDuplicated>(_onGibsonsFormDuplicated);
     on<CollectionFinished>(_onCollectionFinished);
   }
 
@@ -577,10 +579,30 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
         geoLocationStatus: GeoLocationStatus.none));
   }
 
+  void _onGibsonsFormDuplicated(
+      GibsonsFormDuplicated event, Emitter<CollectionState> emit) async {
+    final respondentNameAndCopyText = event.gibsonsForm.respondentName == null
+        ? 'Unnamed respondent copy'
+        : event.gibsonsForm.respondentName! + ' copy';
+    GibsonsForm gibsonsFormDuplicated = event.gibsonsForm.copyWith(
+        id: const Uuid().v4(),
+        employeeNumber: event.employeeNumber,
+        respondentName: respondentNameAndCopyText);
+
+    emit(state.copyWith(
+        gibsonsForm: gibsonsFormDuplicated,
+        selectedScreen: SelectedScreen.sensitization,
+        geoLocationStatus: GeoLocationStatus.none));
+
+    // TODO: Move saving of collections to HomeBloc to avoid race conditions
+    await _gibsonifyRepository.saveForm(state.gibsonsForm);
+  }
+
   void _onCollectionFinished(
       CollectionFinished event, Emitter<CollectionState> emit) async {
     GibsonsForm changedGibsonsForm = state.gibsonsForm.copyWith(finished: true);
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+    // TODO: Move saving of collections to HomeBloc to avoid race conditions
     await _gibsonifyRepository.saveForm(state.gibsonsForm);
   }
 }

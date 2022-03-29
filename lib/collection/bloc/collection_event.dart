@@ -362,6 +362,16 @@ class GibsonsFormCreated extends CollectionEvent {
   List<Object> get props => [employeeNumber];
 }
 
+class GibsonsFormDuplicated extends CollectionEvent {
+  final String employeeNumber;
+  final GibsonsForm gibsonsForm;
+  const GibsonsFormDuplicated(
+      {required this.employeeNumber, required this.gibsonsForm});
+
+  @override
+  List<Object> get props => [employeeNumber, gibsonsForm];
+}
+
 class CollectionFinished extends CollectionEvent {
   const CollectionFinished();
 
