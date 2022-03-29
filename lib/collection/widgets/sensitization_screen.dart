@@ -23,7 +23,12 @@ class SensitizationScreen extends StatelessWidget {
                 icon: const Icon(Icons.help))
           ],
         ),
-        body: const SingleChildScrollView(child: SensitizationForm()));
+        body: Column(
+          children: const [
+            CollectionFinishedTile(),
+            Expanded(child: SingleChildScrollView(child: SensitizationForm())),
+          ],
+        ));
   }
 }
 
@@ -34,17 +39,26 @@ class SensitizationForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: const <Widget>[
-          HouseholdIdInput(),
-          RespondentNameInput(),
-          RespondentTelInfoInput(),
-          SensitizationDateInput(),
-          RecallDayInput(),
-          InterviewDateInput(),
-          InterviewStartTimeInput(),
-          GeoLocationInput()
-        ],
+      // TODO: investigate BlocBuilder nesting, probably not best practice, so
+      // maybe rewrite children widgets without BlocBuilders
+      child: BlocBuilder<CollectionBloc, CollectionState>(
+        builder: (context, state) {
+          return AbsorbPointer(
+            absorbing: state.gibsonsForm.finished,
+            child: Column(
+              children: const <Widget>[
+                HouseholdIdInput(),
+                RespondentNameInput(),
+                RespondentTelInfoInput(),
+                SensitizationDateInput(),
+                RecallDayInput(),
+                InterviewDateInput(),
+                InterviewStartTimeInput(),
+                GeoLocationInput()
+              ],
+            ),
+          );
+        },
       ),
     );
   }
@@ -123,14 +137,15 @@ class RespondentTelInfoInput extends StatelessWidget {
     return BlocBuilder<CollectionBloc, CollectionState>(
       builder: (context, state) {
         return IntlPhoneField(
+          initialValue: state.gibsonsForm.respondentTelNumber,
+          readOnly: state.gibsonsForm.finished,
+          initialCountryCode: state.gibsonsForm.respondentCountryCode ?? 'IN',
           invalidNumberMessage: 'Enter a valid tel. number',
           decoration: const InputDecoration(
             labelText: 'Respondent Tel. Number',
             icon: Icon(Icons.phone),
             helperText: 'Full tel. number of respondent e.g. +447448238123',
           ),
-          initialValue: state.gibsonsForm.respondentTelNumber,
-          initialCountryCode: state.gibsonsForm.respondentCountryCode ?? 'IN',
           onChanged: (phoneNumber) {
             context.read<CollectionBloc>().add(RespondentTelInfoChanged(
                 respondentCountryCode: phoneNumber.countryISOCode,

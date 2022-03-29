@@ -88,11 +88,6 @@ class CollectionsScreen extends StatelessWidget {
                                   ],
                                 ),
                                 onTap: () {
-                                  // TODO: remove this and allow read-only collection mode
-                                  const collectionCompletedSnackBar = SnackBar(
-                                      content: Text(
-                                          'Selected collection is finished '
-                                          'and can no longer be edited'));
                                   const collectionDuplicatedSnackBar = SnackBar(
                                       content: Text(
                                           'Selected collection has been '
@@ -112,11 +107,6 @@ class CollectionsScreen extends StatelessWidget {
                                         .add(const GibsonsFormsLoaded());
                                     context.read<HomeBloc>().add(
                                         const CollectionDuplicationModeToggled());
-                                    return;
-                                  }
-                                  if (homeState.gibsonsForms[index]!.finished) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        collectionCompletedSnackBar);
                                   } else {
                                     context.read<CollectionBloc>().add(
                                         GibsonsFormProvided(

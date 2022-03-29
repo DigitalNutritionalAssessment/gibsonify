@@ -13,51 +13,70 @@ class FourthPassScreen extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
             appBar: AppBar(title: const Text('Fourth Pass')),
-            body: ListView.builder(
-                padding: const EdgeInsets.all(2.0),
-                itemCount: state.gibsonsForm.foodItems.length,
-                itemBuilder: (context, index) {
-                  return FourthPassFoodItemCard(
-                    foodItem: state.gibsonsForm.foodItems[index],
-                    onConfirmationChanged: (negatedConfirmation) => context
-                        .read<CollectionBloc>()
-                        .add(FoodItemConfirmationChanged(
+            body: Column(
+              children: [
+                const CollectionFinishedTile(),
+                Expanded(
+                  child: ListView.builder(
+                      padding: const EdgeInsets.all(2.0),
+                      itemCount: state.gibsonsForm.foodItems.length,
+                      itemBuilder: (context, index) {
+                        return AbsorbPointer(
+                          absorbing: state.gibsonsForm.finished,
+                          child: FourthPassFoodItemCard(
                             foodItem: state.gibsonsForm.foodItems[index],
-                            foodItemConfirmed: negatedConfirmation)),
-                    onDeleted: () => showDialog<String>(
-                        context: context,
-                        builder: (BuildContext context) => DeleteFoodItemDialog(
-                            foodItem: state.gibsonsForm.foodItems[index])),
-                    onSelectedScreenChanged: (screen) => context
-                        .read<CollectionBloc>()
-                        .add(SelectedScreenChanged(
-                            changedSelectedScreen: screen)),
-                  );
-                }),
+                            onConfirmationChanged: (negatedConfirmation) =>
+                                context.read<CollectionBloc>().add(
+                                    FoodItemConfirmationChanged(
+                                        foodItem:
+                                            state.gibsonsForm.foodItems[index],
+                                        foodItemConfirmed:
+                                            negatedConfirmation)),
+                            onDeleted: () => showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    DeleteFoodItemDialog(
+                                        foodItem: state
+                                            .gibsonsForm.foodItems[index])),
+                            onSelectedScreenChanged: (screen) => context
+                                .read<CollectionBloc>()
+                                .add(SelectedScreenChanged(
+                                    changedSelectedScreen: screen)),
+                          ),
+                        );
+                      }),
+                ),
+              ],
+            ),
             floatingActionButton: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
-                  FloatingActionButton.extended(
-                      heroTag: null,
-                      label: const Text("New Food"),
-                      icon: const Icon(Icons.add),
-                      onPressed: () {
-                        context.read<CollectionBloc>().add(FoodItemAdded());
-                        context.read<CollectionBloc>().add(
-                            const SelectedScreenChanged(
-                                changedSelectedScreen:
-                                    SelectedScreen.firstPass));
-                        // TODO: Add a ScrollController to BLoC state,
-                        // pass it to first pass screen ListView and
-                        // scroll down in this onPressed call
-                      }),
+                  Visibility(
+                    visible: !state.gibsonsForm.finished,
+                    child: FloatingActionButton.extended(
+                        heroTag: null,
+                        label: const Text("New Food"),
+                        icon: const Icon(Icons.add),
+                        onPressed: () {
+                          context.read<CollectionBloc>().add(FoodItemAdded());
+                          context.read<CollectionBloc>().add(
+                              const SelectedScreenChanged(
+                                  changedSelectedScreen:
+                                      SelectedScreen.firstPass));
+                          // TODO: Add a ScrollController to BLoC state,
+                          // pass it to first pass screen ListView and
+                          // scroll down in this onPressed call
+                        }),
+                  ),
                   const SizedBox(
                     height: 10,
                   ),
                   FloatingActionButton.extended(
                       heroTag: null,
-                      label: const Text("Finish Collection"),
+                      label: state.gibsonsForm.finished
+                          ? const Text("View Finishing Information")
+                          : const Text("Finish Collection"),
                       icon: const Icon(Icons.check),
                       onPressed: () {
                         const confirmAllFoodItemsSnackBar = SnackBar(

@@ -21,44 +21,60 @@ class FirstPassScreen extends StatelessWidget {
                     icon: const Icon(Icons.help))
               ],
             ),
-            body: ListView.builder(
-                padding: const EdgeInsets.all(2.0),
-                itemCount: state.gibsonsForm.foodItems.length,
-                itemBuilder: (context, index) {
-                  return FirstPassFoodItemCard(
-                      foodItem: state.gibsonsForm.foodItems[index],
-                      onNameChanged: (changedName) => context
-                          .read<CollectionBloc>()
-                          .add(FoodItemNameChanged(
-                              // TODO: change methods of FirstPassFoodItemCard
-                              // to return changed value and the foodItem
-                              // (or its uuid) that was passed to the widget
-                              // rather than to always have to pass
-                              // state.foodItems[index] to each method
+            body: Column(
+              children: [
+                const CollectionFinishedTile(),
+                Expanded(
+                  child: ListView.builder(
+                      padding: const EdgeInsets.all(2.0),
+                      itemCount: state.gibsonsForm.foodItems.length,
+                      itemBuilder: (context, index) {
+                        return AbsorbPointer(
+                          absorbing: state.gibsonsForm.finished,
+                          child: FirstPassFoodItemCard(
                               foodItem: state.gibsonsForm.foodItems[index],
-                              foodItemName: changedName)),
-                      onTimePeriodChanged: (changedTimePeriod) => context
-                          .read<CollectionBloc>()
-                          .add(FoodItemTimePeriodChanged(
-                              foodItem: state.gibsonsForm.foodItems[index],
-                              foodItemTimePeriod: changedTimePeriod)),
-                      onDeleted: () => showDialog<String>(
-                          context: context,
-                          builder: (BuildContext context) =>
-                              DeleteFoodItemDialog(
-                                  foodItem:
-                                      state.gibsonsForm.foodItems[index])));
-                }),
+                              onNameChanged: (changedName) => context
+                                  .read<CollectionBloc>()
+                                  .add(FoodItemNameChanged(
+                                      // TODO: change methods of FirstPassFoodItemCard
+                                      // to return changed value and the foodItem
+                                      // (or its uuid) that was passed to the widget
+                                      // rather than to always have to pass
+                                      // state.foodItems[index] to each method
+                                      foodItem:
+                                          state.gibsonsForm.foodItems[index],
+                                      foodItemName: changedName)),
+                              onTimePeriodChanged: (changedTimePeriod) => context
+                                  .read<CollectionBloc>()
+                                  .add(FoodItemTimePeriodChanged(
+                                      foodItem:
+                                          state.gibsonsForm.foodItems[index],
+                                      foodItemTimePeriod: changedTimePeriod)),
+                              onDeleted: () => showDialog<String>(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      DeleteFoodItemDialog(
+                                          foodItem: state
+                                              .gibsonsForm.foodItems[index]))),
+                        );
+                      }),
+                ),
+              ],
+            ),
             floatingActionButton: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
-                  FloatingActionButton.extended(
-                      heroTag: null,
-                      label: const Text("New Food"),
-                      icon: const Icon(Icons.add),
-                      onPressed: () =>
-                          context.read<CollectionBloc>().add(FoodItemAdded()))
+                  Visibility(
+                    visible: !state.gibsonsForm.finished,
+                    child: FloatingActionButton.extended(
+                        heroTag: null,
+                        label: const Text("New Food"),
+                        icon: const Icon(Icons.add),
+                        onPressed: () => context
+                            .read<CollectionBloc>()
+                            .add(FoodItemAdded())),
+                  )
                 ]));
       },
     );

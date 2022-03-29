@@ -18,30 +18,42 @@ class SecondPassScreen extends StatelessWidget {
                     Navigator.pushNamed(context, PageRouter.secondPassHelp),
                 icon: const Icon(Icons.help))
           ]),
-          body: ListView.builder(
-              padding: const EdgeInsets.all(2.0),
-              itemCount: state.gibsonsForm.foodItems.length,
-              itemBuilder: (context, index) {
-                return SecondPassFoodItemCard(
-                  foodItem: state.gibsonsForm.foodItems[index],
-                  onSourceChanged: (changedSource) => context
-                      .read<CollectionBloc>()
-                      .add(FoodItemSourceChanged(
+          body: Column(
+            children: [
+              const CollectionFinishedTile(),
+              Expanded(
+                child: ListView.builder(
+                    padding: const EdgeInsets.all(2.0),
+                    itemCount: state.gibsonsForm.foodItems.length,
+                    itemBuilder: (context, index) {
+                      return AbsorbPointer(
+                        absorbing: state.gibsonsForm.finished,
+                        child: SecondPassFoodItemCard(
                           foodItem: state.gibsonsForm.foodItems[index],
-                          foodItemSource: changedSource)),
-                  onDescriptionChanged: (changedDescription) => context
-                      .read<CollectionBloc>()
-                      .add(FoodItemDescriptionChanged(
-                          foodItem: state.gibsonsForm.foodItems[index],
-                          foodItemDescription: changedDescription)),
-                  onPreparationMethodChanged: (changedPreparationMethod) =>
-                      context.read<CollectionBloc>().add(
-                          FoodItemPreparationMethodChanged(
-                              foodItem: state.gibsonsForm.foodItems[index],
-                              foodItemPreparationMethod:
-                                  changedPreparationMethod)),
-                );
-              }),
+                          onSourceChanged: (changedSource) => context
+                              .read<CollectionBloc>()
+                              .add(FoodItemSourceChanged(
+                                  foodItem: state.gibsonsForm.foodItems[index],
+                                  foodItemSource: changedSource)),
+                          onDescriptionChanged: (changedDescription) => context
+                              .read<CollectionBloc>()
+                              .add(FoodItemDescriptionChanged(
+                                  foodItem: state.gibsonsForm.foodItems[index],
+                                  foodItemDescription: changedDescription)),
+                          onPreparationMethodChanged:
+                              (changedPreparationMethod) => context
+                                  .read<CollectionBloc>()
+                                  .add(FoodItemPreparationMethodChanged(
+                                      foodItem:
+                                          state.gibsonsForm.foodItems[index],
+                                      foodItemPreparationMethod:
+                                          changedPreparationMethod)),
+                        ),
+                      );
+                    }),
+              ),
+            ],
+          ),
         );
       },
     );

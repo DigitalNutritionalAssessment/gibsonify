@@ -18,23 +18,37 @@ class FinishCollectionPage extends StatelessWidget {
             appBar: AppBar(
               title: const Text('Finish Collection'),
             ),
-            body: const SingleChildScrollView(child: FinishCollectionForm()),
+            body: Column(
+              children: const [
+                CollectionFinishedTile(),
+                Expanded(
+                    child:
+                        SingleChildScrollView(child: FinishCollectionForm())),
+              ],
+            ),
             floatingActionButton: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
                   FloatingActionButton.extended(
                       heroTag: null,
-                      label: const Text("Finish Collection"),
+                      label: state.gibsonsForm.finished
+                          ? const Text("Back to Collections")
+                          : const Text("Finish Collection"),
                       icon: const Icon(Icons.check),
-                      onPressed: () => showDialog<String>(
-                          context: context,
-                          builder: (BuildContext context) =>
-                              FinishCollectionDialog(
-                                  gibsonsForm: state.gibsonsForm))
-                      // TODO: only allow to finish if all required fields are filled
-
-                      )
+                      onPressed: () {
+                        if (state.gibsonsForm.finished) {
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        } else {
+                          showDialog<String>(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  FinishCollectionDialog(
+                                      gibsonsForm: state.gibsonsForm));
+                        }
+                        // TODO: only allow to finish if all required fields are filled
+                      })
                 ]));
       },
     );
@@ -48,18 +62,27 @@ class FinishCollectionForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: const <Widget>[
-          PictureChartCollectedInput(),
-          PictureChartNotCollectedReason(),
-          InterviewEndTimeInput(),
-          InterviewFinishedInOneVisitInput(),
-          SecondInterviewVisitDateInput(),
-          SecondVisitReasonInput(),
-          InterviewOutcomeInput(),
-          InterviewOutcomeNotCompletedReason(),
-          CommentsInput()
-        ],
+      // TODO: investigate BlocBuilder nesting, probably not best practice, so
+      // maybe rewrite children widgets without BlocBuilders
+      child: BlocBuilder<CollectionBloc, CollectionState>(
+        builder: (context, state) {
+          return AbsorbPointer(
+            absorbing: state.gibsonsForm.finished,
+            child: Column(
+              children: const <Widget>[
+                PictureChartCollectedInput(),
+                PictureChartNotCollectedReason(),
+                InterviewEndTimeInput(),
+                InterviewFinishedInOneVisitInput(),
+                SecondInterviewVisitDateInput(),
+                SecondVisitReasonInput(),
+                InterviewOutcomeInput(),
+                InterviewOutcomeNotCompletedReason(),
+                CommentsInput()
+              ],
+            ),
+          );
+        },
       ),
     );
   }

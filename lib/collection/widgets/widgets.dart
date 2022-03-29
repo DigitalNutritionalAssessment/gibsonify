@@ -8,3 +8,4 @@ export 'second_pass_food_item_card.dart';
 export 'third_pass_food_item_card.dart';
 export 'fourth_pass_food_item_card.dart';
 export 'delete_food_item_dialog.dart';
+export 'collection_finished_tile.dart';
