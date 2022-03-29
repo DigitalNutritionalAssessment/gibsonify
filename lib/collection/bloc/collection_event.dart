@@ -139,6 +139,15 @@ class SecondInterviewVisitDateChanged extends CollectionEvent {
   List<Object> get props => [secondInterviewVisitDate];
 }
 
+class SecondVisitReasonChanged extends CollectionEvent {
+  final String secondVisitReason;
+
+  const SecondVisitReasonChanged({required this.secondVisitReason});
+
+  @override
+  List<Object> get props => [secondVisitReason];
+}
+
 class InterviewOutcomeChanged extends CollectionEvent {
   final String interviewOutcome;
 

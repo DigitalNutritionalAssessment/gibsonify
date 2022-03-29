@@ -56,6 +56,7 @@ class FinishCollectionForm extends StatelessWidget {
           InterviewEndTimeInput(),
           InterviewFinishedInOneVisitInput(),
           SecondInterviewVisitDateInput(),
+          SecondVisitReasonInput(),
           InterviewOutcomeInput(),
           InterviewOutcomeNotCompletedReason(),
           CommentsInput()
@@ -247,6 +248,40 @@ class SecondInterviewVisitDateInput extends StatelessWidget {
             },
           ),
         );
+      },
+    );
+  }
+}
+
+class SecondVisitReasonInput extends StatelessWidget {
+  const SecondVisitReasonInput({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CollectionBloc, CollectionState>(
+      builder: (context, state) {
+        return Visibility(
+            visible: isFieldNotNullAndNotEmpty(
+                    state.gibsonsForm.interviewFinishedInOneVisit) &&
+                !state.gibsonsForm.isInterviewFinishedInOneVisit(),
+            child: TextFormField(
+              initialValue: state.gibsonsForm.secondVisitReason,
+              decoration: InputDecoration(
+                icon: const Icon(Icons.device_unknown_outlined),
+                labelText: 'Reason for second visit',
+                helperText: 'Why did you need to conduct a second visit',
+                errorText: isFieldModifiedAndInvalid(
+                        state.gibsonsForm.secondVisitReason,
+                        state.gibsonsForm.isSecondVisitReasonValid)
+                    ? 'Please state the reason'
+                    : null,
+              ),
+              onChanged: (value) {
+                context
+                    .read<CollectionBloc>()
+                    .add(SecondVisitReasonChanged(secondVisitReason: value));
+              },
+            ));
       },
     );
   }

@@ -23,6 +23,7 @@ class GibsonsForm extends Equatable {
       this.interviewEndTime,
       this.interviewFinishedInOneVisit,
       this.secondInterviewVisitDate,
+      this.secondVisitReason,
       this.interviewOutcome,
       this.interviewOutcomeNotCompletedReason,
       this.comments,
@@ -47,16 +48,12 @@ class GibsonsForm extends Equatable {
   final String? interviewEndTime;
   final String? interviewFinishedInOneVisit; // TODO: change to a bool
   final String? secondInterviewVisitDate;
-  // TODO: Reason for second visit
+  final String? secondVisitReason;
   final String? interviewOutcome; // TODO: change to an enum
   final String? interviewOutcomeNotCompletedReason;
   final String? comments;
   final bool finished;
   final List<FoodItem> foodItems;
-
-  // TODO: add other fields from physical Gibson's form:
-  // end of interview, did complete interview in one visit? (bool),
-  // date of second visit, reason for second visit...
 
   // TODO: implement code generation JSON serialization using json_serializable
   // and/or json_annotation
@@ -79,6 +76,7 @@ class GibsonsForm extends Equatable {
         interviewEndTime = json['interviewEndTime'],
         interviewFinishedInOneVisit = json['interviewFinishedInOneVisit'],
         secondInterviewVisitDate = json['secondInterviewVisitDate'],
+        secondVisitReason = json['secondVisitReason'],
         interviewOutcome = json['interviewOutcome'],
         interviewOutcomeNotCompletedReason =
             json['interviewOutcomeNotCompletedReason'],
@@ -105,6 +103,7 @@ class GibsonsForm extends Equatable {
     data['interviewEndTime'] = interviewEndTime;
     data['interviewFinishedInOneVisit'] = interviewFinishedInOneVisit;
     data['secondInterviewVisitDate'] = secondInterviewVisitDate;
+    data['secondVisitReason'] = secondVisitReason;
     data['interviewOutcome'] = interviewOutcome;
     data['interviewOutcomeNotCompletedReason'] =
         interviewOutcomeNotCompletedReason;
@@ -132,6 +131,7 @@ class GibsonsForm extends Equatable {
       String? interviewEndTime,
       String? interviewFinishedInOneVisit,
       String? secondInterviewVisitDate,
+      String? secondVisitReason,
       String? interviewOutcome,
       String? interviewOutcomeNotCompletedReason,
       String? comments,
@@ -161,6 +161,7 @@ class GibsonsForm extends Equatable {
             interviewFinishedInOneVisit ?? this.interviewFinishedInOneVisit,
         secondInterviewVisitDate:
             secondInterviewVisitDate ?? this.secondInterviewVisitDate,
+        secondVisitReason: secondVisitReason ?? this.secondVisitReason,
         interviewOutcome: interviewOutcome ?? this.interviewOutcome,
         interviewOutcomeNotCompletedReason:
             interviewOutcomeNotCompletedReason ??
@@ -188,8 +189,9 @@ class GibsonsForm extends Equatable {
         'Picture Chart Collected: $pictureChartCollected\n'
         'Picture Chart Not Collected Reason: $pictureChartNotCollectedReason\n'
         'Interview End Time: $interviewEndTime\n'
-        'Interview finished in one visit: $interviewFinishedInOneVisit'
-        'Second interview visit date: $secondInterviewVisitDate'
+        'Interview finished in one visit: $interviewFinishedInOneVisit\n'
+        'Second interview visit date: $secondInterviewVisitDate\n'
+        'Second visit reason: $secondVisitReason\n'
         'Interview Outcome: $interviewOutcome\n'
         'Interview Outcome Not Completed Reason: '
         '$interviewOutcomeNotCompletedReason\n'
@@ -218,6 +220,7 @@ class GibsonsForm extends Equatable {
         interviewEndTime,
         interviewFinishedInOneVisit,
         secondInterviewVisitDate,
+        secondVisitReason,
         interviewOutcome,
         interviewOutcomeNotCompletedReason,
         comments,
@@ -319,6 +322,10 @@ class GibsonsForm extends Equatable {
   bool isSecondInterviewVisitDateValid() {
     // TODO: add parsing checks to ensure it is after first interview date
     return isFieldNotNullAndNotEmpty(secondInterviewVisitDate);
+  }
+
+  bool isSecondVisitReasonValid() {
+    return isFieldNotNullAndNotEmpty(secondVisitReason);
   }
 
   bool isInterviewOutcomeValid() {

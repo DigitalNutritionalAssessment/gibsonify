@@ -31,6 +31,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     on<InterviewFinishedInOneVisitChanged>(
         _onInterviewFinishedInOneVisitChanged);
     on<SecondInterviewVisitDateChanged>(_onSecondInterviewVisitDateChanged);
+    on<SecondVisitReasonChanged>(_onSecondVisitReasonChanged);
     on<InterviewOutcomeChanged>(_onInterviewOutcomeChanged);
     on<InterviewOutcomeNotCompletedReasonChanged>(
         _onInterviewOutcomeNotCompletedReasonChanged);
@@ -223,6 +224,14 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
       SecondInterviewVisitDateChanged event, Emitter<CollectionState> emit) {
     GibsonsForm changedGibsonsForm = state.gibsonsForm
         .copyWith(secondInterviewVisitDate: event.secondInterviewVisitDate);
+
+    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+  }
+
+  void _onSecondVisitReasonChanged(
+      SecondVisitReasonChanged event, Emitter<CollectionState> emit) {
+    GibsonsForm changedGibsonsForm =
+        state.gibsonsForm.copyWith(secondVisitReason: event.secondVisitReason);
 
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }
