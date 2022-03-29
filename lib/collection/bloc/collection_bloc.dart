@@ -587,7 +587,8 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     GibsonsForm gibsonsFormDuplicated = event.gibsonsForm.copyWith(
         id: const Uuid().v4(),
         employeeNumber: event.employeeNumber,
-        respondentName: respondentNameAndCopyText);
+        respondentName: respondentNameAndCopyText,
+        finished: false);
 
     emit(state.copyWith(
         gibsonsForm: gibsonsFormDuplicated,
