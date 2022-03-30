@@ -49,6 +49,16 @@ class Measurement extends Equatable {
   }
 
   @override
+  String toString() {
+    return '\n *** \Measurement:\n'
+        'UUID: $id\n'
+        'Method: $measurementMethod\n'
+        'Unit: $measurementUnit\n'
+        'Value: $measurementValue\n'
+        '\n *** \n';
+  }
+
+  @override
   List<Object?> get props =>
       [measurementMethod, measurementUnit, measurementValue, id];
 

@@ -12,7 +12,7 @@ class FoodItem extends Equatable {
       this.name,
       this.timePeriod,
       this.source,
-      this.description,  // TODO: rename to ingredientsDescription
+      this.description, // TODO: rename to ingredientsDescription
       this.preparationMethod,
       List<Measurement>? measurements,
       this.recipe,
@@ -83,7 +83,20 @@ class FoodItem extends Equatable {
         confirmed: confirmed ?? this.confirmed);
   }
 
-  // TODO: override and implement toString() method
+  @override
+  String toString() {
+    return '\n *** \Food Item:\n'
+        'UUID: $id\n'
+        'Name: $name\n'
+        'Time Period: $timePeriod\n'
+        'Source: $source\n'
+        'Ingredients Description: $description\n'
+        'Preparation Method: $preparationMethod\n'
+        'Measurements: $measurements\n'
+        'Recipe: $recipe\n'
+        'Confirmed: $confirmed\n'
+        '\n *** \n';
+  }
 
   @override
   List<Object?> get props => [
