@@ -14,7 +14,7 @@ class GibsonsForm extends Equatable {
       this.respondentTelNumberPrefix,
       this.respondentTelNumber,
       this.sensitizationDate,
-      this.recallDay,
+      this.recallDay, // TODO: rename to recallDayType
       this.interviewDate,
       this.interviewStartTime,
       this.geoLocation,

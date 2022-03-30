@@ -12,7 +12,7 @@ class FoodItem extends Equatable {
       this.name,
       this.timePeriod,
       this.source,
-      this.description,
+      this.description,  // TODO: rename to ingredientsDescription
       this.preparationMethod,
       List<Measurement>? measurements,
       this.recipe,
