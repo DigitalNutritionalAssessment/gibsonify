@@ -16,6 +16,7 @@ class SyncScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: remove blocbuilders, change for bloclisteners
     return BlocBuilder<HomeBloc, HomeState>(builder: (context, homeState) {
       return BlocBuilder<RecipeBloc, RecipeState>(
           builder: (context, recipeState) {
@@ -24,83 +25,138 @@ class SyncScreen extends StatelessWidget {
           'collections':
               homeState.gibsonsForms.map((x) => x!.toJson()).toList(),
         });
-        return Scaffold(
-          appBar: AppBar(title: const Text('Import & Export Data')),
-          floatingActionButton: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: <Widget>[
-                FloatingActionButton.extended(
+        return BlocListener<HomeBloc, HomeState>(
+          listener: (context, state) async {
+            if (state.gibsonsFormsExportStatus ==
+                GibsonsFormsExportStatus.externalSaveSuccess) {
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                  SnackBar(
+                      content: Text(
+                          'Successfully saved ${state.exportedGibsonsFormsNumber} collections to: ${state.lastExternalExportPath}')),
+                );
+            }
+
+            if (state.gibsonsFormsExportStatus ==
+                GibsonsFormsExportStatus.internalSaveSuccess) {
+              await Share.shareFiles([state.lastInternalExportPath!])
+                  .then((value) => ScaffoldMessenger.of(context)
+                    ..hideCurrentSnackBar()
+                    ..showSnackBar(
+                      SnackBar(
+                          content: Text(
+                              'Successfully exported ${state.exportedGibsonsFormsNumber} collections')),
+                    ));
+            }
+          },
+          child: Scaffold(
+            appBar: AppBar(title: const Text('Import & Export Data')),
+            floatingActionButton: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  FloatingActionButton.extended(
+                      heroTag: null,
+                      label: const Text("Save data to files"),
+                      icon: const Icon(Icons.save),
+                      onPressed: () {
+                        context
+                            .read<HomeBloc>()
+                            .add(const FinishedGibsonsFormsSavedToFile());
+
+                        // try {
+                        //   final directory = await getExternalStorageDirectory();
+
+                        //   if (directory == null) {
+                        //     ScaffoldMessenger.of(context)
+                        //       ..hideCurrentSnackBar()
+                        //       ..showSnackBar(
+                        //         const SnackBar(
+                        //             content: Text(
+                        //                 'No permission to save data to file!')),
+                        //       );
+                        //   } else {
+                        //     final path = directory.path;
+
+                        //     final _recipefilePath = '$path/recipe_data.txt';
+                        //     final _recipefile = File(_recipefilePath);
+                        //     _recipefile.writeAsString(recipeJson);
+
+                        //     // TODO: revamp
+
+                        //     void printWrapped(String text) {
+                        //       final pattern = RegExp(
+                        //           '.{1,800}'); // 800 is the size of each chunk
+                        //       pattern
+                        //           .allMatches(text)
+                        //           .forEach((match) => print(match.group(0)));
+                        //     }
+
+                        //     context
+                        //         .read<HomeBloc>()
+                        //         .add(const FinishedGibsonsFormsConvertedToCsv());
+
+                        //     printWrapped(
+                        //         homeState.finishedGibsonsFormsCsv ?? 'empty');
+
+                        //     // printWrapped(homeState.gibsonsForms[index]!.toCsv());
+
+                        //     final _collectionfilePath =
+                        //         '/collection_data.txt';
+                        //     final _collectionfile = File(_collectionfilePath);
+                        //     _collectionfile.writeAsString(collectionJson);
+
+                        //     ScaffoldMessenger.of(context)
+                        //       ..hideCurrentSnackBar()
+                        //       ..showSnackBar(
+                        //         SnackBar(
+                        //             content: Text(
+                        //                 'Data successfully saved to: ' + path)),
+                        //       );
+                        //   }
+                        // } catch (e) {
+                        //   ScaffoldMessenger.of(context)
+                        //     ..hideCurrentSnackBar()
+                        //     ..showSnackBar(
+                        //       const SnackBar(
+                        //           content: Text('Error, cannot save data!')),
+                        //     );
+                        // }
+                      }),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  FloatingActionButton.extended(
                     heroTag: null,
-                    label: const Text("Save data to file"),
-                    icon: const Icon(Icons.save),
-                    onPressed: () async {
-                      try {
-                        final directory = await getExternalStorageDirectory();
+                    label: const Text("Share data as JSON"),
+                    icon: const Icon(Icons.share),
+                    onPressed: () {
+                      context
+                          .read<HomeBloc>()
+                          .add(const FinishedGibsonsFormsShared());
 
-                        if (directory == null) {
-                          ScaffoldMessenger.of(context)
-                            ..hideCurrentSnackBar()
-                            ..showSnackBar(
-                              const SnackBar(
-                                  content: Text(
-                                      'No permission to save data to file!')),
-                            );
-                        } else {
-                          final path = directory.path;
+                      // final directory = await getApplicationDocumentsDirectory();
+                      // final path = directory.path;
 
-                          final _recipefilePath = '$path/recipe_data.txt';
-                          final _recipefile = File(_recipefilePath);
-                          _recipefile.writeAsString(recipeJson);
+                      // final _recipefilePath = '/recipe_data.txt';
+                      // final _recipefile = File(_recipefilePath);
+                      // _recipefile.writeAsString(recipeJson);
 
-                          final _collectionfilePath =
-                              '$path/collection_data.txt';
-                          final _collectionfile = File(_collectionfilePath);
-                          _collectionfile.writeAsString(collectionJson);
+                      // final _collectionfilePath = '/collection_data.txt';
+                      // final _collectionfile = File(_collectionfilePath);
+                      // _collectionfile.writeAsString(collectionJson);
 
-                          ScaffoldMessenger.of(context)
-                            ..hideCurrentSnackBar()
-                            ..showSnackBar(
-                              SnackBar(
-                                  content: Text(
-                                      'Data successfully saved to: ' + path)),
-                            );
-                        }
-                      } catch (e) {
-                        ScaffoldMessenger.of(context)
-                          ..hideCurrentSnackBar()
-                          ..showSnackBar(
-                            const SnackBar(
-                                content: Text('Error, cannot save data!')),
-                          );
-                      }
-                    }),
-                const SizedBox(
-                  height: 10,
-                ),
-                FloatingActionButton.extended(
-                  heroTag: null,
-                  label: const Text("Share data as JSON"),
-                  icon: const Icon(Icons.share),
-                  onPressed: () async {
-                    final directory = await getApplicationDocumentsDirectory();
-                    final path = directory.path;
+                      // // await Share.share(text)
 
-                    final _recipefilePath = '$path/recipe_data.txt';
-                    final _recipefile = File(_recipefilePath);
-                    _recipefile.writeAsString(recipeJson);
-
-                    final _collectionfilePath = '$path/collection_data.txt';
-                    final _collectionfile = File(_collectionfilePath);
-                    _collectionfile.writeAsString(collectionJson);
-
-                    await Share.shareFiles(
-                        [_recipefilePath, _collectionfilePath],
-                        subject: _exportSubject, text: _exportText);
-                  },
-                )
-              ]),
-          body: const RecipeImport(),
+                      // await Share.shareFiles(
+                      //     [_recipefilePath, _collectionfilePath],
+                      //     subject: _exportSubject, text: _exportText);
+                    },
+                  )
+                ]),
+            body: const RecipeImport(),
+          ),
         );
       });
     });

@@ -1,5 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
+import 'package:intl/intl.dart';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:gibsonify_repository/gibsonify_repository.dart';
@@ -12,11 +15,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   HomeBloc({required GibsonifyRepository gibsonifyRepository})
       : _gibsonifyRepository = gibsonifyRepository,
-        super(HomeState()) {
+        super(const HomeState()) {
     // TODO: implement a subscription to a stream of GibsonsForms
     on<GibsonsFormsLoaded>(_onGibsonsFormsLoaded);
     on<GibsonsFormDeleted>(_onGibsonsFormDeleted);
     on<CollectionDuplicationModeToggled>(_onCollectionDuplicationModeToggled);
+    on<FinishedGibsonsFormsSavedToFile>(_onFinishedGibsonsFormsSavedToFile);
+    on<FinishedGibsonsFormsShared>(_onFinishedGibsonsFormsShared);
   }
 
   void _onGibsonsFormsLoaded(
@@ -38,4 +43,109 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emit(state.copyWith(
         collectionDuplicationMode: !state.collectionDuplicationMode));
   }
+
+  void _onFinishedGibsonsFormsSavedToFile(
+      FinishedGibsonsFormsSavedToFile event, Emitter<HomeState> emit) async {
+    int savedGibsonsFormsNumber = state.gibsonsForms
+        .where((gibsonsForm) => gibsonsForm != null && gibsonsForm.finished)
+        .length;
+
+    if (savedGibsonsFormsNumber == 0) {
+      emit(state.copyWith(
+          gibsonsFormsExportStatus: GibsonsFormsExportStatus.noCsvForms,
+          exportedGibsonsFormsNumber: savedGibsonsFormsNumber));
+      return;
+    }
+
+    String finishedGibsonsFormsCsv =
+        _convertFinishedGibsonsFormsToCsv(state.gibsonsForms);
+
+    try {
+      final externalStorageDirectory = await getExternalStorageDirectory();
+
+      if (externalStorageDirectory == null) {
+        emit(state.copyWith(
+            gibsonsFormsExportStatus:
+                GibsonsFormsExportStatus.noPermissionToSaveFile,
+            exportedGibsonsFormsNumber: savedGibsonsFormsNumber));
+      } else {
+        String currentDateTime =
+            DateFormat("yyyy-MM-dd-HH-mm-ss").format(DateTime.now());
+        final collectionfilePath = '${externalStorageDirectory.path}'
+            '/collection-data-$currentDateTime.csv';
+        final collectionfile = File(collectionfilePath);
+        collectionfile.writeAsString(finishedGibsonsFormsCsv);
+
+        emit(state.copyWith(
+            gibsonsFormsExportStatus:
+                GibsonsFormsExportStatus.externalSaveSuccess,
+            exportedGibsonsFormsNumber: savedGibsonsFormsNumber,
+            lastExternalExportPath: collectionfilePath));
+      }
+    } catch (e) {
+      emit(state.copyWith(
+          gibsonsFormsExportStatus: GibsonsFormsExportStatus.error,
+          exportedGibsonsFormsNumber: savedGibsonsFormsNumber));
+    }
+  }
+
+  void _onFinishedGibsonsFormsShared(
+      FinishedGibsonsFormsShared event, Emitter<HomeState> emit) async {
+    int sharedGibsonsFormsNumber = state.gibsonsForms
+        .where((gibsonsForm) => gibsonsForm != null && gibsonsForm.finished)
+        .length;
+
+    if (sharedGibsonsFormsNumber == 0) {
+      emit(state.copyWith(
+          gibsonsFormsExportStatus: GibsonsFormsExportStatus.noCsvForms,
+          exportedGibsonsFormsNumber: sharedGibsonsFormsNumber));
+      return;
+    }
+
+    String finishedGibsonsFormsCsv =
+        _convertFinishedGibsonsFormsToCsv(state.gibsonsForms);
+
+    try {
+      final applicationDocumentsDirectory =
+          await getApplicationDocumentsDirectory();
+
+      String currentDateTime =
+          DateFormat("yyyy-MM-dd-HH-mm-ss").format(DateTime.now());
+      final collectionfilePath = '${applicationDocumentsDirectory.path}'
+          '/collection-data-$currentDateTime.csv';
+      final collectionfile = File(collectionfilePath);
+      collectionfile.writeAsString(finishedGibsonsFormsCsv);
+
+      emit(state.copyWith(
+          gibsonsFormsExportStatus:
+              GibsonsFormsExportStatus.internalSaveSuccess,
+          exportedGibsonsFormsNumber: sharedGibsonsFormsNumber,
+          lastInternalExportPath: collectionfilePath));
+    } catch (e) {
+      emit(state.copyWith(
+          gibsonsFormsExportStatus: GibsonsFormsExportStatus.error,
+          exportedGibsonsFormsNumber: sharedGibsonsFormsNumber));
+    }
+  }
+}
+
+String _convertFinishedGibsonsFormsToCsv(List<GibsonsForm?> gibsonsForms) {
+  String finishedGibsonsFormsCsv =
+      'Collection ID, Employee Number, Household ID, Respondent Name, '
+      'Respondent Country Code, Respondent Tel Number Prefix, '
+      'Respondent Tel Number, Sensitization Date, Recall Day, '
+      'Interview Date, Interview Start Time, GPS Location, '
+      'Picture Chart Collected, Picture Chart Not Collection Reason, '
+      'Interview End Time, Interview Finished In One Visit, '
+      'Second Interview Visit Date, Second Visit Reason, Interview Outcome, '
+      'Interview Not Completed Reason, Comments, Is Finished, Food Item ID, '
+      'Food Item Name, Food Item Time Period, Food Item Source, '
+      'Ingredients Description, Preparation Method, Confirmed, '
+      'Recipe Number, Recipe Date, Recipe Name, Measurements\n';
+  for (GibsonsForm? gibsonsForm in gibsonsForms) {
+    if (gibsonsForm != null && gibsonsForm.finished) {
+      finishedGibsonsFormsCsv = finishedGibsonsFormsCsv + gibsonsForm.toCsv();
+    }
+  }
+  return finishedGibsonsFormsCsv;
 }

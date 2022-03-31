@@ -28,3 +28,17 @@ class CollectionDuplicationModeToggled extends HomeEvent {
   @override
   List<Object> get props => [];
 }
+
+class FinishedGibsonsFormsSavedToFile extends HomeEvent {
+  const FinishedGibsonsFormsSavedToFile();
+
+  @override
+  List<Object> get props => [];
+}
+
+class FinishedGibsonsFormsShared extends HomeEvent {
+  const FinishedGibsonsFormsShared();
+
+  @override
+  List<Object> get props => [];
+}
