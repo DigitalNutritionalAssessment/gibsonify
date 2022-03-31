@@ -81,7 +81,7 @@ class SecondPassFoodItemCard extends StatelessWidget {
                 showSearchBox: false,
                 items: foodSources,
                 onChanged: (String? foodSource) =>
-                    onSourceChanged!(foodSource ?? ''),
+                    onSourceChanged!(foodSource!),
                 selectedItem: foodItem.source),
             TextFormField(
               initialValue: foodItem.description,
@@ -115,7 +115,7 @@ class SecondPassFoodItemCard extends StatelessWidget {
                 showSearchBox: false,
                 items: preparationMethods,
                 onChanged: (String? preparationMethod) =>
-                    onPreparationMethodChanged!(preparationMethod ?? ''),
+                    onPreparationMethodChanged!(preparationMethod!),
                 selectedItem: foodItem.preparationMethod),
             TextFormField(
               initialValue: foodItem.recipe?.recipeName ?? '',
