@@ -16,7 +16,7 @@ class SyncScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: remove blocbuilders, change for bloclisteners
+    // TODO: remove blocbuilders, change for multibloclistener
     return BlocBuilder<HomeBloc, HomeState>(builder: (context, homeState) {
       return BlocBuilder<RecipeBloc, RecipeState>(
           builder: (context, recipeState) {
@@ -34,7 +34,7 @@ class SyncScreen extends StatelessWidget {
                 ..showSnackBar(
                   SnackBar(
                       content: Text(
-                          'Successfully saved ${state.exportedGibsonsFormsNumber} collections to: ${state.lastExternalExportPath}')),
+                          'Successfully saved ${state.exportedGibsonsFormsNumber} collection(s) to downloads folder')),
                 );
             }
 
@@ -45,8 +45,9 @@ class SyncScreen extends StatelessWidget {
                     ..hideCurrentSnackBar()
                     ..showSnackBar(
                       SnackBar(
+                          duration: const Duration(seconds: 10),
                           content: Text(
-                              'Successfully exported ${state.exportedGibsonsFormsNumber} collections')),
+                              'Successfully shared ${state.exportedGibsonsFormsNumber} collection(s)')),
                     ));
             }
           },
@@ -58,7 +59,7 @@ class SyncScreen extends StatelessWidget {
                 children: <Widget>[
                   FloatingActionButton.extended(
                       heroTag: null,
-                      label: const Text("Save data to files"),
+                      label: const Text("Save data to device"),
                       icon: const Icon(Icons.save),
                       onPressed: () {
                         context
@@ -129,7 +130,7 @@ class SyncScreen extends StatelessWidget {
                   ),
                   FloatingActionButton.extended(
                     heroTag: null,
-                    label: const Text("Share data as JSON"),
+                    label: const Text("Share data as csv files"),
                     icon: const Icon(Icons.share),
                     onPressed: () {
                       context

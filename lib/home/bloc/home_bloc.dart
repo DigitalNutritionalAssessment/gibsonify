@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'dart:io';
 import 'package:intl/intl.dart';
 
@@ -61,18 +62,16 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         _convertFinishedGibsonsFormsToCsv(state.gibsonsForms);
 
     try {
-      final externalStorageDirectory = await getExternalStorageDirectory();
-
-      if (externalStorageDirectory == null) {
+      if (!await Permission.storage.request().isGranted) {
         emit(state.copyWith(
             gibsonsFormsExportStatus:
                 GibsonsFormsExportStatus.noPermissionToSaveFile,
-            exportedGibsonsFormsNumber: savedGibsonsFormsNumber));
+            exportedGibsonsFormsNumber: 0));
       } else {
         String currentDateTime =
             DateFormat("yyyy-MM-dd-HH-mm-ss").format(DateTime.now());
-        final collectionfilePath = '${externalStorageDirectory.path}'
-            '/collection-data-$currentDateTime.csv';
+        final collectionfilePath = '/storage/emulated/0/Download/'
+            'collection-data-$currentDateTime.csv';
         final collectionfile = File(collectionfilePath);
         collectionfile.writeAsString(finishedGibsonsFormsCsv);
 
@@ -85,7 +84,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     } catch (e) {
       emit(state.copyWith(
           gibsonsFormsExportStatus: GibsonsFormsExportStatus.error,
-          exportedGibsonsFormsNumber: savedGibsonsFormsNumber));
+          exportedGibsonsFormsNumber: 0));
     }
   }
 
