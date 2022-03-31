@@ -57,8 +57,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
   }
 
   void _onRecipeAdded(RecipeAdded event, Emitter<RecipeState> emit) {
-    final recipe = Recipe(
-        employeeNumber: event.employeeNumber, recipeType: event.recipeType);
+    final recipe =
+        Recipe(employeeNumber: event.employeeNumber, type: event.type);
 
     List<Recipe> recipes = List.from(state.recipes);
     recipes.add(recipe);
@@ -85,8 +85,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
 
     int changedRecipeIndex = recipes.indexOf(event.recipe);
 
-    Recipe recipe = recipes[changedRecipeIndex].copyWith(
-        recipeName: event.recipeName, date: _getCurrentDate(), saved: false);
+    Recipe recipe = recipes[changedRecipeIndex]
+        .copyWith(name: event.name, date: _getCurrentDate(), saved: false);
 
     recipes.removeAt(changedRecipeIndex);
     recipes.insert(changedRecipeIndex, recipe);
@@ -484,21 +484,22 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
         List.from(recipes[changedRecipeIndex].ingredients);
     ingredients.add(ingredient);
 
-    Recipe recipe = (event.recipe.saved == true &&
-            event.recipe.recipeType == "Standard Recipe")
-        ? recipes[changedRecipeIndex].copyWith(
-            ingredients: ingredients,
-            saved: false,
-            recipeType: "Modified Recipe",
-            recipeNumber: const Uuid().v4(),
-            date: _getCurrentDate())
-        : recipes[changedRecipeIndex].copyWith(
-            ingredients: ingredients, saved: false, date: _getCurrentDate());
+    Recipe recipe =
+        (event.recipe.saved == true && event.recipe.type == "Standard Recipe")
+            ? recipes[changedRecipeIndex].copyWith(
+                ingredients: ingredients,
+                saved: false,
+                type: "Modified Recipe",
+                number: const Uuid().v4(),
+                date: _getCurrentDate())
+            : recipes[changedRecipeIndex].copyWith(
+                ingredients: ingredients,
+                saved: false,
+                date: _getCurrentDate());
 
     recipes.removeAt(changedRecipeIndex);
 
-    if (event.recipe.saved == true &&
-        event.recipe.recipeType == "Standard Recipe") {
+    if (event.recipe.saved == true && event.recipe.type == "Standard Recipe") {
       recipes.insert(changedRecipeIndex, standardRecipe);
     }
     recipes.insert(changedRecipeIndex, recipe);
@@ -516,21 +517,22 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     int changedIngredientIndex = ingredients.indexOf(event.ingredient);
     ingredients.removeAt(changedIngredientIndex);
 
-    Recipe recipe = (event.recipe.saved == true &&
-            event.recipe.recipeType == "Standard Recipe")
-        ? recipes[changedRecipeIndex].copyWith(
-            ingredients: ingredients,
-            saved: false,
-            recipeType: "Modified Recipe",
-            recipeNumber: const Uuid().v4(),
-            date: _getCurrentDate())
-        : recipes[changedRecipeIndex].copyWith(
-            ingredients: ingredients, saved: false, date: _getCurrentDate());
+    Recipe recipe =
+        (event.recipe.saved == true && event.recipe.type == "Standard Recipe")
+            ? recipes[changedRecipeIndex].copyWith(
+                ingredients: ingredients,
+                saved: false,
+                type: "Modified Recipe",
+                number: const Uuid().v4(),
+                date: _getCurrentDate())
+            : recipes[changedRecipeIndex].copyWith(
+                ingredients: ingredients,
+                saved: false,
+                date: _getCurrentDate());
 
     recipes.removeAt(changedRecipeIndex);
 
-    if (event.recipe.saved == true &&
-        event.recipe.recipeType == "Standard Recipe") {
+    if (event.recipe.saved == true && event.recipe.type == "Standard Recipe") {
       recipes.insert(changedRecipeIndex, standardRecipe);
     }
     recipes.insert(changedRecipeIndex, recipe);
@@ -858,7 +860,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
   Recipe? _getRecipeIfAlreadyExists(recipeNumber) {
     List<Recipe> deviceRecipes = List<Recipe>.from(state.recipes);
     for (Recipe recipe in deviceRecipes) {
-      if (recipe.recipeNumber == recipeNumber) {
+      if (recipe.number == recipeNumber) {
         return recipe;
       }
     }
@@ -928,15 +930,15 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
 
       Recipe recipe = Recipe(
           employeeNumber: employeeNumber,
-          recipeNumber: recipeNumber,
+          number: recipeNumber,
           date: date,
-          recipeName: recipeName,
-          recipeType: recipeType + ' Recipe',
+          name: recipeName,
+          type: recipeType + ' Recipe',
           measurements: const [],
           saved: true);
 
       for (Recipe existingRecipe in newRecipes) {
-        if (existingRecipe.recipeNumber == recipeNumber) {
+        if (existingRecipe.number == recipeNumber) {
           recipe = existingRecipe;
           newRecipes.remove(existingRecipe);
           break;

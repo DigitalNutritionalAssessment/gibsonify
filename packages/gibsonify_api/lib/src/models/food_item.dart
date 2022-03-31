@@ -75,8 +75,8 @@ class FoodItem extends Equatable {
         0, measurementsCombined.length - ' + '.length);
 
     return '"$id","$name","$timePeriod","$source","$description",'
-        '"$preparationMethod","$confirmed","${recipe?.recipeNumber}","${recipe?.date}",'
-        '"${recipe?.recipeName}","$measurementsCombined"';
+        '"$preparationMethod","$confirmed","${recipe?.number}","${recipe?.date}",'
+        '"${recipe?.name}","$measurementsCombined"';
   }
 
   FoodItem copyWith(

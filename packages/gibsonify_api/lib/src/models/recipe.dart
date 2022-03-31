@@ -9,26 +9,26 @@ import 'recipe_probe.dart';
 
 class Recipe extends Equatable {
   Recipe({
-    this.recipeName,
+    this.name,
     this.employeeNumber,
-    String? recipeNumber,
+    String? number, // TODO: change this to `id` since its alphanumeric?
     String? date,
-    this.recipeType = "",
+    this.type = "",
     List<Measurement>? measurements,
     this.ingredients = const <Ingredient>[],
     this.probes = const <Probe>[],
     this.allProbeAnswersStandard = true,
     this.allProbesChecked = false,
     this.saved = false,
-  })  : recipeNumber = recipeNumber ?? const Uuid().v4(),
+  })  : number = number ?? const Uuid().v4(),
         date = date ?? DateFormat('yyyy-MM-dd').format(DateTime.now()),
         measurements = measurements ?? [Measurement()];
 
-  final String? recipeName;
+  final String? name;
   final String? employeeNumber;
-  final String recipeNumber;
+  final String number;
   final String date;
-  final String recipeType;
+  final String type;
   final List<Measurement> measurements;
   final List<Ingredient> ingredients;
   final List<Probe> probes;
@@ -37,11 +37,11 @@ class Recipe extends Equatable {
   final bool saved;
 
   Recipe copyWith({
-    String? recipeName,
+    String? name,
     String? employeeNumber,
-    String? recipeNumber,
+    String? number,
     String? date,
-    String? recipeType,
+    String? type,
     List<Measurement>? measurements,
     List<Ingredient>? ingredients,
     List<Probe>? probes,
@@ -50,11 +50,11 @@ class Recipe extends Equatable {
     bool? saved,
   }) {
     return Recipe(
-      recipeName: recipeName ?? this.recipeName,
+      name: name ?? this.name,
       employeeNumber: employeeNumber ?? this.employeeNumber,
-      recipeNumber: recipeNumber ?? this.recipeNumber,
+      number: number ?? this.number,
       date: date ?? this.date,
-      recipeType: recipeType ?? this.recipeType,
+      type: type ?? this.type,
       measurements: measurements ?? this.measurements,
       ingredients: ingredients ?? this.ingredients,
       probes: probes ?? this.probes,
@@ -67,11 +67,11 @@ class Recipe extends Equatable {
 
   @override
   List<Object?> get props => [
-        recipeName,
+        name,
         employeeNumber,
-        recipeNumber,
+        number,
         date,
-        recipeType,
+        type,
         measurements,
         ingredients,
         probes,
@@ -81,11 +81,11 @@ class Recipe extends Equatable {
       ];
 
   Recipe.fromJson(Map<String, dynamic> json)
-      : recipeName = json['recipeName'],
+      : name = json['name'],
         employeeNumber = json['employeeNumber'],
-        recipeNumber = json['recipeNumber'],
+        number = json['number'],
         date = json['date'],
-        recipeType = json['recipeType'],
+        type = json['type'],
         measurements = Measurement.jsonDecodeMeasurements(json['measurements']),
         ingredients = _jsonDecodeIngredients(json['ingredients']),
         probes = _jsonDecodeProbes(json['probes']),
@@ -96,11 +96,11 @@ class Recipe extends Equatable {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['recipeName'] = recipeName;
+    data['name'] = name;
     data['employeeNumber'] = employeeNumber;
-    data['recipeNumber'] = recipeNumber;
+    data['number'] = number;
     data['date'] = date;
-    data['recipeType'] = recipeType;
+    data['type'] = type;
     data['measurements'] = jsonEncode(measurements);
     data['ingredients'] = jsonEncode(ingredients);
     data['probes'] = jsonEncode(probes);

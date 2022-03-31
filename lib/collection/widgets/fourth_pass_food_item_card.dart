@@ -101,7 +101,7 @@ class FourthPassFoodItemCard extends StatelessWidget {
                 readOnly: true,
                 onTap: () =>
                     onSelectedScreenChanged!(SelectedScreen.secondPass),
-                initialValue: foodItem.recipe?.recipeName ?? '',
+                initialValue: foodItem.recipe?.name ?? '',
                 decoration: InputDecoration(
                   icon: const Icon(Icons.bookmark),
                   labelText: 'Food recipe',

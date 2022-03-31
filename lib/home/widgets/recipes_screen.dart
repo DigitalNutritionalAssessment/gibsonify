@@ -47,8 +47,8 @@ class RecipesScreen extends StatelessWidget {
                     ),
                     child: Card(
                         child: ListTile(
-                      title: Text(recipeState.recipes[index].recipeName ?? ''),
-                      subtitle: Text(recipeState.recipes[index].recipeType),
+                      title: Text(recipeState.recipes[index].name ?? ''),
+                      subtitle: Text(recipeState.recipes[index].type),
                       trailing: recipeState.recipes[index].saved
                           ? const Icon(Icons.done)
                           : const Icon(Icons.rotate_left_rounded),
@@ -58,7 +58,7 @@ class RecipesScreen extends StatelessWidget {
                         Navigator.pushNamed(context, PageRouter.recipe,
                             arguments: (assignedFoodItemId == null ||
                                     recipeState.recipes[index].probes.isEmpty ||
-                                    recipeState.recipes[index].recipeType !=
+                                    recipeState.recipes[index].type !=
                                         'Standard Recipe')
                                 ? {
                                     'recipeIndex': index,
@@ -94,7 +94,7 @@ class RecipesScreen extends StatelessWidget {
                             context.read<RecipeBloc>().add(RecipeAdded(
                                 employeeNumber:
                                     loginState.loginInfo.employeeId!,
-                                recipeType: "Standard Recipe")),
+                                type: "Standard Recipe")),
                             Navigator.pushNamed(context, PageRouter.recipe,
                                 arguments: {
                                   'recipeIndex': recipeState.recipes.length,
@@ -115,7 +115,7 @@ class RecipesScreen extends StatelessWidget {
                             context.read<RecipeBloc>().add(RecipeAdded(
                                 employeeNumber:
                                     loginState.loginInfo.employeeId!,
-                                recipeType: "Non-standard Recipe")),
+                                type: "Non-standard Recipe")),
                             Navigator.pushNamed(context, PageRouter.recipe,
                                 arguments: {
                                   'recipeIndex': recipeState.recipes.length,
@@ -138,11 +138,10 @@ class DeleteRecipeDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String? recipeName = recipe.recipeName;
     return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
       return AlertDialog(
         title: const Text('Delete recipe'),
-        content: Text('Would you like to delete the $recipeName recipe?'),
+        content: Text('Would you like to delete the ${recipe.name} recipe?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, 'Cancel'),
