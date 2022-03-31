@@ -112,6 +112,29 @@ class GibsonsForm extends Equatable {
     data['foodItems'] = jsonEncode(foodItems); // This calls toJson on each one
     return data;
   }
+  // TODO: add a fromCsv constructor
+
+  String toCsv() {
+    // List<List<dynamic>> myListOfLists = [];
+    // String csv = const ListToCsvConverter().convert(myListOfLists);
+
+    // String csv = id + ',' + employeeNumber + ',';
+    String gibsonsFormInfo =
+        '"$id","$employeeNumber","$householdId","$respondentName",'
+        '"$respondentCountryCode","$respondentTelNumberPrefix","$respondentTelNumber",'
+        '"$sensitizationDate","$recallDay","$interviewDate","$interviewStartTime",'
+        '"$geoLocation","$pictureChartCollected","$pictureChartNotCollectedReason",'
+        '"$interviewEndTime","$interviewFinishedInOneVisit","$secondInterviewVisitDate",'
+        '"$secondVisitReason","$interviewOutcome","$interviewOutcomeNotCompletedReason",'
+        '"$comments","${finished.toString()}",';
+    // maybe just have this as a list of strings and then use the csv lib
+    // iterate over all food items and construct a to csv of each, then create the csv
+    String csv = '';
+    for (FoodItem foodItem in foodItems) {
+      csv = csv + gibsonsFormInfo + foodItem.toCsv() + '\n';
+    }
+    return csv;
+  }
 
   GibsonsForm copyWith(
       {String? id,

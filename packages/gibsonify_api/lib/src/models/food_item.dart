@@ -61,6 +61,24 @@ class FoodItem extends Equatable {
     return data;
   }
 
+  // TODO: add a fromCsv constructor
+
+  String toCsv() {
+    String measurementsCombined = '';
+    for (Measurement measurement in measurements) {
+      measurementsCombined = measurementsCombined +
+          '${measurement.measurementMethod}_'
+              '${measurement.measurementUnit}_${measurement.measurementValue} + ';
+    }
+
+    measurementsCombined = measurementsCombined.substring(
+        0, measurementsCombined.length - ' + '.length);
+
+    return '"$id","$name","$timePeriod","$source","$description",'
+        '"$preparationMethod","$confirmed","${recipe?.recipeNumber}","${recipe?.date}",'
+        '"${recipe?.recipeName}","$measurementsCombined"';
+  }
+
   FoodItem copyWith(
       {String? id,
       String? name,
