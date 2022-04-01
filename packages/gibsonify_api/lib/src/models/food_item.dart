@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
-import 'package:formz/formz.dart';
 import 'package:uuid/uuid.dart';
 
 import 'recipe.dart';
@@ -10,11 +9,11 @@ import 'measurement.dart';
 class FoodItem extends Equatable {
   FoodItem(
       {String? id,
-      this.name = const Name.pure(),
-      this.timePeriod = const TimePeriod.pure(),
-      this.source = const Source.pure(),
-      this.description = const Description.pure(),
-      this.preparationMethod = const PreparationMethod.pure(),
+      this.name,
+      this.timePeriod,
+      this.source,
+      this.description,
+      this.preparationMethod,
       List<Measurement>? measurements,
       this.recipe,
       this.confirmed = false})
@@ -22,11 +21,13 @@ class FoodItem extends Equatable {
         measurements = measurements ?? [Measurement()];
 
   final String id;
-  final Name name;
-  final TimePeriod timePeriod;
-  final Source source;
-  final Description description;
-  final PreparationMethod preparationMethod;
+  final String? name;
+  // TODO: change to timePeriod, source and preparationMethod to enums with maps
+  // to Strings and back to enums for serialization (toJson and fromJson)
+  final String? timePeriod;
+  final String? source;
+  final String? description;
+  final String? preparationMethod;
   final List<Measurement> measurements;
   final Recipe? recipe;
   // TODO: Add Form validation bool field to check if all fields are valid
@@ -37,24 +38,23 @@ class FoodItem extends Equatable {
 
   FoodItem.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        name = Name.fromJson(json['name']),
-        timePeriod = TimePeriod.fromJson(json['timePeriod']),
-        source = Source.fromJson(json['source']),
-        description = Description.fromJson(json['description']),
-        preparationMethod =
-            PreparationMethod.fromJson(json['preparationMethod']),
+        name = json['name'],
+        timePeriod = json['timePeriod'],
+        source = json['source'],
+        description = json['description'],
+        preparationMethod = json['preparationMethod'],
         measurements = Measurement.jsonDecodeMeasurements(json['measurements']),
         recipe = json['recipe'] == '' ? null : Recipe.fromJson(json['recipe']),
         confirmed = json['confirmed'] == 'true' ? true : false;
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
-    data['name'] = name.toJson();
-    data['timePeriod'] = timePeriod.toJson();
-    data['source'] = source.toJson();
-    data['description'] = description.toJson();
-    data['preparationMethod'] = preparationMethod.toJson();
+    data['name'] = name;
+    data['timePeriod'] = timePeriod;
+    data['source'] = source;
+    data['description'] = description;
+    data['preparationMethod'] = preparationMethod;
     data['measurements'] = jsonEncode(measurements);
     data['recipe'] = recipe?.toJson() ?? '';
     data['confirmed'] = confirmed.toString();
@@ -63,11 +63,11 @@ class FoodItem extends Equatable {
 
   FoodItem copyWith(
       {String? id,
-      Name? name,
-      TimePeriod? timePeriod,
-      Source? source,
-      Description? description,
-      PreparationMethod? preparationMethod,
+      String? name,
+      String? timePeriod,
+      String? source,
+      String? description,
+      String? preparationMethod,
       List<Measurement>? measurements,
       Recipe? recipe,
       bool? confirmed}) {
@@ -97,167 +97,4 @@ class FoodItem extends Equatable {
         recipe,
         confirmed
       ];
-}
-// TODO: The most sensible fix to this is probably getting rid of all Formz and
-// replacing them by strings only, as in 90% of the cases the only validation
-// is checking if it is not empty, and the rest can be added as custom
-// validation methods
-
-enum NameValidationError { invalid }
-
-// TODO: Investigate changing classes to be private (with leading underscore)
-
-class Name extends FormzInput<String, NameValidationError> {
-  const Name.pure() : super.pure('');
-  const Name.dirty([String value = '']) : super.dirty(value);
-
-  // TODO: Figure out a way to use the pure attribute or maybe drop
-  // Formz completely. It might be easier to just have all these values
-  // as strings and implement a couple of validator methods
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['value'] = value;
-    data['pure'] = pure.toString();
-    return data;
-  }
-
-  Name.fromJson(Map<String, dynamic> json) : super.dirty(json['value']);
-
-  @override
-  NameValidationError? validator(String? value) {
-    return value?.isNotEmpty == true ? null : NameValidationError.invalid;
-  }
-}
-
-enum TimePeriodValidationError { invalid }
-
-class TimePeriod extends FormzInput<String, TimePeriodValidationError> {
-  const TimePeriod.pure() : super.pure('');
-  const TimePeriod.dirty([String value = '']) : super.dirty(value);
-
-  final _allowedTimePeriod = const ['morning', 'afternoon', 'evening', 'night'];
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['value'] = value;
-    data['pure'] = pure.toString();
-    return data;
-  }
-
-  TimePeriod.fromJson(Map<String, dynamic> json) : super.dirty(json['value']);
-
-  @override
-  TimePeriodValidationError? validator(String? value) {
-    final _lowerCaseValue = (value ?? '').toLowerCase();
-    // TODO: refactor with a better null check
-    return _allowedTimePeriod.contains(_lowerCaseValue)
-        ? null
-        : TimePeriodValidationError.invalid;
-  }
-}
-
-enum SourceValidationError { invalid }
-
-class Source extends FormzInput<String, SourceValidationError> {
-  const Source.pure() : super.pure('');
-  const Source.dirty([String value = '']) : super.dirty(value);
-
-  // TODO: update when accepting custom strings for 'other'
-  final _allowedSource = const [
-    'home made',
-    'purchased',
-    'gift/given by neighbor',
-    'home garden/farm',
-    'leftover',
-    'wild food',
-    'food aid',
-    'other'
-  ];
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['value'] = value;
-    data['pure'] = pure.toString();
-    return data;
-  }
-
-  Source.fromJson(Map<String, dynamic> json) : super.dirty(json['value']);
-
-  @override
-  SourceValidationError? validator(String? value) {
-    final _lowerCaseValue = (value ?? '').toLowerCase();
-    // TODO: refactor with a better null check
-    return _allowedSource.contains(_lowerCaseValue)
-        ? null
-        : SourceValidationError.invalid;
-  }
-}
-
-enum DescriptionValidationError { invalid }
-
-class Description extends FormzInput<String, DescriptionValidationError> {
-  const Description.pure() : super.pure('');
-  const Description.dirty([String value = '']) : super.dirty(value);
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['value'] = value;
-    data['pure'] = pure.toString();
-    return data;
-  }
-
-  Description.fromJson(Map<String, dynamic> json) : super.dirty(json['value']);
-
-  @override
-  DescriptionValidationError? validator(String? value) {
-    return value?.isNotEmpty == true
-        ? null
-        : DescriptionValidationError.invalid;
-  }
-}
-
-enum PreparationMethodValidationError { invalid }
-
-class PreparationMethod
-    extends FormzInput<String, PreparationMethodValidationError> {
-  const PreparationMethod.pure() : super.pure('');
-  const PreparationMethod.dirty([String value = '']) : super.dirty(value);
-
-  // TODO: update when accepting custom strings for 'other'
-  final _allowedPreparationMethod = const [
-    'raw',
-    'boiled',
-    'boiled in water but retained water',
-    'boiled in water but removed water',
-    'steamed',
-    'roasted with oil',
-    'roasted without oil',
-    'fried',
-    'stir-fried',
-    'soaking and stir-fried',
-    'boiled and fried',
-    'boiled and stir-fried',
-    'steamed and fried',
-    'roasted and boiled',
-    'other'
-  ];
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['value'] = value;
-    data['pure'] = pure.toString();
-    return data;
-  }
-
-  PreparationMethod.fromJson(Map<String, dynamic> json)
-      : super.dirty(json['value']);
-
-  @override
-  PreparationMethodValidationError? validator(String? value) {
-    final _lowerCaseValue = (value ?? '').toLowerCase();
-    // TODO: refactor with a better null check
-    return _allowedPreparationMethod.contains(_lowerCaseValue)
-        ? null
-        : PreparationMethodValidationError.invalid;
-  }
 }

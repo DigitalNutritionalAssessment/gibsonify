@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:uuid/uuid.dart';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:gibsonify_repository/gibsonify_repository.dart';
@@ -22,10 +23,15 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     on<RecallDayChanged>(_onRecallDayChanged);
     on<InterviewDateChanged>(_onInterviewDateChanged);
     on<InterviewStartTimeChanged>(_onInterviewStartTimeChanged);
+    on<GeoLocationRequested>(_onGeoLocationRequested);
     on<PictureChartCollectedChanged>(_onPictureChartCollectedChanged);
     on<PictureChartNotCollectedReasonChanged>(
         _onPictureChartNotCollectedReasonChanged);
     on<InterviewEndTimeChanged>(_onInterviewEndTimeChanged);
+    on<InterviewFinishedInOneVisitChanged>(
+        _onInterviewFinishedInOneVisitChanged);
+    on<SecondInterviewVisitDateChanged>(_onSecondInterviewVisitDateChanged);
+    on<SecondVisitReasonChanged>(_onSecondVisitReasonChanged);
     on<InterviewOutcomeChanged>(_onInterviewOutcomeChanged);
     on<InterviewOutcomeNotCompletedReasonChanged>(
         _onInterviewOutcomeNotCompletedReasonChanged);
@@ -47,7 +53,8 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     on<GibsonsFormSaved>(_onGibsonsFormSaved);
     on<GibsonsFormProvided>(_onGibsonsFormProvided);
     on<GibsonsFormCreated>(_onGibsonsFormCreated);
-    on<GeoLocationRequested>(_onGeoLocationRequested);
+    on<GibsonsFormDuplicated>(_onGibsonsFormDuplicated);
+    on<CollectionFinished>(_onCollectionFinished);
   }
 
   void _onSelectedScreenChanged(
@@ -57,77 +64,133 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
   void _onHouseholdIdChanged(
       HouseholdIdChanged event, Emitter<CollectionState> emit) {
-    final householdId = HouseholdId.dirty(event.householdId);
     GibsonsForm changedGibsonsForm =
-        state.gibsonsForm.copyWith(householdId: householdId);
+        state.gibsonsForm.copyWith(householdId: event.householdId);
 
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }
 
   void _onRespondentNameChanged(
       RespondentNameChanged event, Emitter<CollectionState> emit) {
-    final respondentName = RespondentName.dirty(event.respondentName);
     GibsonsForm changedGibsonsForm =
-        state.gibsonsForm.copyWith(respondentName: respondentName);
+        state.gibsonsForm.copyWith(respondentName: event.respondentName);
 
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }
 
   void _onRespondentTelInfoChanged(
       RespondentTelInfoChanged event, Emitter<CollectionState> emit) {
-    final respondentTelNumber =
-        RespondentTelNumber.dirty(event.respondentTelNumber);
     GibsonsForm changedGibsonsForm = state.gibsonsForm.copyWith(
         respondentCountryCode: event.respondentCountryCode,
         respondentTelNumberPrefix: event.respondentTelNumberPrefix,
-        respondentTelNumber: respondentTelNumber);
+        respondentTelNumber: event.respondentTelNumber);
 
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }
 
   void _onSensitizationDateChanged(
       SensitizationDateChanged event, Emitter<CollectionState> emit) {
-    final sensitizationDate = SensitizationDate.dirty(event.sensitizationDate);
     GibsonsForm changedGibsonsForm =
-        state.gibsonsForm.copyWith(sensitizationDate: sensitizationDate);
+        state.gibsonsForm.copyWith(sensitizationDate: event.sensitizationDate);
 
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }
 
   void _onRecallDayChanged(
       RecallDayChanged event, Emitter<CollectionState> emit) {
-    final recallDay = RecallDay.dirty(event.recallDay);
     GibsonsForm changedGibsonsForm =
-        state.gibsonsForm.copyWith(recallDay: recallDay);
+        state.gibsonsForm.copyWith(recallDay: event.recallDay);
 
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }
 
   void _onInterviewDateChanged(
       InterviewDateChanged event, Emitter<CollectionState> emit) {
-    final interviewDate = InterviewDate.dirty(event.interviewDate);
     GibsonsForm changedGibsonsForm =
-        state.gibsonsForm.copyWith(interviewDate: interviewDate);
+        state.gibsonsForm.copyWith(interviewDate: event.interviewDate);
 
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }
 
   void _onInterviewStartTimeChanged(
       InterviewStartTimeChanged event, Emitter<CollectionState> emit) {
-    final interviewStartTime =
-        InterviewStartTime.dirty(event.interviewStartTime);
-    GibsonsForm changedGibsonsForm =
-        state.gibsonsForm.copyWith(interviewStartTime: interviewStartTime);
+    GibsonsForm changedGibsonsForm = state.gibsonsForm
+        .copyWith(interviewStartTime: event.interviewStartTime);
 
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }
 
+  Future<void> _onGeoLocationRequested(
+      GeoLocationRequested event, Emitter<CollectionState> emit) async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      emit(state.copyWith(
+          geoLocationStatus: GeoLocationStatus.locationDisabled));
+      return;
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        emit(state.copyWith(
+            geoLocationStatus: GeoLocationStatus.locationDenied));
+        return;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      emit(state.copyWith(
+          geoLocationStatus: GeoLocationStatus.locationPermanentlyDenied));
+      return;
+    }
+
+    emit(
+        state.copyWith(geoLocationStatus: GeoLocationStatus.locationRequested));
+
+    String? geoLocationFormatted;
+
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+          timeLimit: const Duration(seconds: 45));
+
+      geoLocationFormatted =
+          position.latitude.toString() + ', ' + position.longitude.toString();
+    } catch (e) {
+      emit(state.copyWith(
+          geoLocationStatus: GeoLocationStatus.locationTimedOut));
+
+      geoLocationFormatted = 'Undetermined';
+    }
+
+    GibsonsForm changedGibsonsForm =
+        state.gibsonsForm.copyWith(geoLocation: geoLocationFormatted);
+
+    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+
+    if (geoLocationFormatted != 'Undetermined') {
+      emit(state.copyWith(
+          geoLocationStatus: GeoLocationStatus.locationDetermined));
+    }
+  }
+
   void _onPictureChartCollectedChanged(
       PictureChartCollectedChanged event, Emitter<CollectionState> emit) {
-    final pictureChartCollected =
-        PictureChartCollected.dirty(event.pictureChartCollected);
     GibsonsForm changedGibsonsForm = state.gibsonsForm
-        .copyWith(pictureChartCollected: pictureChartCollected);
+        .copyWith(pictureChartCollected: event.pictureChartCollected);
 
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }
@@ -143,18 +206,40 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
   void _onInterviewEndTimeChanged(
       InterviewEndTimeChanged event, Emitter<CollectionState> emit) {
-    final interviewEndTime = InterviewEndTime.dirty(event.interviewEndTime);
     GibsonsForm changedGibsonsForm =
-        state.gibsonsForm.copyWith(interviewEndTime: interviewEndTime);
+        state.gibsonsForm.copyWith(interviewEndTime: event.interviewEndTime);
+
+    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+  }
+
+  void _onInterviewFinishedInOneVisitChanged(
+      InterviewFinishedInOneVisitChanged event, Emitter<CollectionState> emit) {
+    GibsonsForm changedGibsonsForm = state.gibsonsForm.copyWith(
+        interviewFinishedInOneVisit: event.interviewFinishedInOneVisit);
+
+    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+  }
+
+  void _onSecondInterviewVisitDateChanged(
+      SecondInterviewVisitDateChanged event, Emitter<CollectionState> emit) {
+    GibsonsForm changedGibsonsForm = state.gibsonsForm
+        .copyWith(secondInterviewVisitDate: event.secondInterviewVisitDate);
+
+    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+  }
+
+  void _onSecondVisitReasonChanged(
+      SecondVisitReasonChanged event, Emitter<CollectionState> emit) {
+    GibsonsForm changedGibsonsForm =
+        state.gibsonsForm.copyWith(secondVisitReason: event.secondVisitReason);
 
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }
 
   void _onInterviewOutcomeChanged(
       InterviewOutcomeChanged event, Emitter<CollectionState> emit) {
-    final interviewOutcome = InterviewOutcome.dirty(event.interviewOutcome);
     GibsonsForm changedGibsonsForm =
-        state.gibsonsForm.copyWith(interviewOutcome: interviewOutcome);
+        state.gibsonsForm.copyWith(interviewOutcome: event.interviewOutcome);
 
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }
@@ -171,9 +256,8 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
   void _onCommentsChanged(
       CommentsChanged event, Emitter<CollectionState> emit) {
-    final comments = Comments.dirty(event.comments);
     GibsonsForm changedGibsonsForm =
-        state.gibsonsForm.copyWith(comments: comments);
+        state.gibsonsForm.copyWith(comments: event.comments);
 
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }
@@ -210,7 +294,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     int changedFoodItemIndex = foodItems.indexOf(event.foodItem);
 
     FoodItem foodItem = foodItems[changedFoodItemIndex].copyWith(
-        name: Name.dirty(event.foodItemName),
+        name: event.foodItemName,
         confirmed: false); // any change to FoodItem unconfirms it
 
     foodItems.removeAt(changedFoodItemIndex);
@@ -229,9 +313,8 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     // TODO: change into UUID-based indexing
     int changedFoodItemIndex = foodItems.indexOf(event.foodItem);
 
-    FoodItem foodItem = foodItems[changedFoodItemIndex].copyWith(
-        timePeriod: TimePeriod.dirty(event.foodItemTimePeriod),
-        confirmed: false);
+    FoodItem foodItem = foodItems[changedFoodItemIndex]
+        .copyWith(timePeriod: event.foodItemTimePeriod, confirmed: false);
 
     foodItems.removeAt(changedFoodItemIndex);
     foodItems.insert(changedFoodItemIndex, foodItem);
@@ -250,7 +333,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     int changedFoodItemIndex = foodItems.indexOf(event.foodItem);
 
     FoodItem foodItem = foodItems[changedFoodItemIndex]
-        .copyWith(source: Source.dirty(event.foodItemSource), confirmed: false);
+        .copyWith(source: event.foodItemSource, confirmed: false);
 
     foodItems.removeAt(changedFoodItemIndex);
     foodItems.insert(changedFoodItemIndex, foodItem);
@@ -268,9 +351,8 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     // TODO: change into UUID-based indexing
     int changedFoodItemIndex = foodItems.indexOf(event.foodItem);
 
-    FoodItem foodItem = foodItems[changedFoodItemIndex].copyWith(
-        description: Description.dirty(event.foodItemDescription),
-        confirmed: false);
+    FoodItem foodItem = foodItems[changedFoodItemIndex]
+        .copyWith(description: event.foodItemDescription, confirmed: false);
 
     foodItems.removeAt(changedFoodItemIndex);
     foodItems.insert(changedFoodItemIndex, foodItem);
@@ -289,9 +371,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     int changedFoodItemIndex = foodItems.indexOf(event.foodItem);
 
     FoodItem foodItem = foodItems[changedFoodItemIndex].copyWith(
-        preparationMethod:
-            PreparationMethod.dirty(event.foodItemPreparationMethod),
-        confirmed: false);
+        preparationMethod: event.foodItemPreparationMethod, confirmed: false);
 
     foodItems.removeAt(changedFoodItemIndex);
     foodItems.insert(changedFoodItemIndex, foodItem);
@@ -527,72 +607,31 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
         geoLocationStatus: GeoLocationStatus.none));
   }
 
-  Future<void> _onGeoLocationRequested(
-      GeoLocationRequested event, Emitter<CollectionState> emit) async {
-    bool serviceEnabled;
-    LocationPermission permission;
+  void _onGibsonsFormDuplicated(
+      GibsonsFormDuplicated event, Emitter<CollectionState> emit) async {
+    final respondentNameAndCopyText = event.gibsonsForm.respondentName == null
+        ? 'Unnamed respondent copy'
+        : event.gibsonsForm.respondentName! + ' copy';
+    GibsonsForm gibsonsFormDuplicated = event.gibsonsForm.copyWith(
+        id: const Uuid().v4(),
+        employeeNumber: event.employeeNumber,
+        respondentName: respondentNameAndCopyText,
+        finished: false);
 
-    // Test if location services are enabled.
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      // Location services are not enabled don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
-      emit(state.copyWith(
-          geoLocationStatus: GeoLocationStatus.locationDisabled));
-      return;
-    }
+    emit(state.copyWith(
+        gibsonsForm: gibsonsFormDuplicated,
+        selectedScreen: SelectedScreen.sensitization,
+        geoLocationStatus: GeoLocationStatus.none));
 
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        // Permissions are denied, next time you could try
-        // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale
-        // returned true. According to Android guidelines
-        // your App should show an explanatory UI now.
-        emit(state.copyWith(
-            geoLocationStatus: GeoLocationStatus.locationDenied));
-        return;
-      }
-    }
+    // TODO: Move saving of collections to HomeBloc to avoid race conditions
+    await _gibsonifyRepository.saveForm(state.gibsonsForm);
+  }
 
-    if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
-      emit(state.copyWith(
-          geoLocationStatus: GeoLocationStatus.locationPermanentlyDenied));
-      return;
-    }
-
-    emit(
-        state.copyWith(geoLocationStatus: GeoLocationStatus.locationRequested));
-
-    String? geoLocationFormatted;
-
-    try {
-      Position position = await Geolocator.getCurrentPosition(
-          timeLimit: const Duration(seconds: 45));
-
-      geoLocationFormatted =
-          position.latitude.toString() + ', ' + position.longitude.toString();
-    } catch (e) {
-      emit(state.copyWith(
-          geoLocationStatus: GeoLocationStatus.locationTimedOut));
-
-      geoLocationFormatted = 'Undetermined';
-    }
-
-    GeoLocation geoLocation = GeoLocation.dirty(geoLocationFormatted);
-
-    GibsonsForm changedGibsonsForm =
-        state.gibsonsForm.copyWith(geoLocation: geoLocation);
-
+  void _onCollectionFinished(
+      CollectionFinished event, Emitter<CollectionState> emit) async {
+    GibsonsForm changedGibsonsForm = state.gibsonsForm.copyWith(finished: true);
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
-
-    if (geoLocationFormatted != 'Undetermined') {
-      emit(state.copyWith(
-          geoLocationStatus: GeoLocationStatus.locationDetermined));
-    }
+    // TODO: Move saving of collections to HomeBloc to avoid race conditions
+    await _gibsonifyRepository.saveForm(state.gibsonsForm);
   }
 }

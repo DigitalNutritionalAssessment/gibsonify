@@ -21,3 +21,10 @@ class GibsonsFormDeleted extends HomeEvent {
   @override
   List<Object> get props => [id];
 }
+
+class CollectionDuplicationModeToggled extends HomeEvent {
+  const CollectionDuplicationModeToggled();
+
+  @override
+  List<Object> get props => [];
+}

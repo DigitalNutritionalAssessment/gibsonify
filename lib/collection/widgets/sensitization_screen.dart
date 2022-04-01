@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 
 import 'package:gibsonify/collection/collection.dart';
 import 'package:gibsonify/navigation/navigation.dart';
+import 'package:gibsonify_api/gibsonify_api.dart';
 
 class SensitizationScreen extends StatelessWidget {
   const SensitizationScreen({Key? key}) : super(key: key);
@@ -21,8 +23,12 @@ class SensitizationScreen extends StatelessWidget {
                 icon: const Icon(Icons.help))
           ],
         ),
-        resizeToAvoidBottomInset: false,
-        body: const SingleChildScrollView(child: SensitizationForm()));
+        body: Column(
+          children: const [
+            CollectionFinishedTile(),
+            Expanded(child: SingleChildScrollView(child: SensitizationForm())),
+          ],
+        ));
   }
 }
 
@@ -33,17 +39,26 @@ class SensitizationForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: const <Widget>[
-          HouseholdIdInput(),
-          RespondentNameInput(),
-          RespondentTelInfoInput(),
-          SensitizationDateInput(),
-          RecallDayInput(),
-          InterviewDateInput(),
-          InterviewStartTimeInput(),
-          GeoLocationInput()
-        ],
+      // TODO: investigate BlocBuilder nesting, probably not best practice, so
+      // maybe rewrite children widgets without BlocBuilders
+      child: BlocBuilder<CollectionBloc, CollectionState>(
+        builder: (context, state) {
+          return AbsorbPointer(
+            absorbing: state.gibsonsForm.finished,
+            child: Column(
+              children: const <Widget>[
+                HouseholdIdInput(),
+                RespondentNameInput(),
+                RespondentTelInfoInput(),
+                SensitizationDateInput(),
+                RecallDayInput(),
+                InterviewDateInput(),
+                InterviewStartTimeInput(),
+                GeoLocationInput()
+              ],
+            ),
+          );
+        },
       ),
     );
   }
@@ -60,13 +75,15 @@ class HouseholdIdInput extends StatelessWidget {
     return BlocBuilder<CollectionBloc, CollectionState>(
       builder: (context, state) {
         return TextFormField(
-          initialValue: state.gibsonsForm.householdId.value,
+          initialValue: state.gibsonsForm.householdId,
           decoration: InputDecoration(
             icon: const Icon(Icons.house),
             labelText: 'Household ID',
             helperText: 'A valid Household ID e.g. IMH13D0303',
-            errorText: state.gibsonsForm.householdId.invalid
-                ? 'Enter a valid Household ID e.g. IMH13D0303'
+            // Only show errorText if modified, i.e. if not null, and invalid
+            errorText: isFieldModifiedAndInvalid(state.gibsonsForm.householdId,
+                    state.gibsonsForm.isHouseholdIdValid)
+                ? 'Enter a valid Household ID with 10 to 15 digits'
                 : null,
           ),
           onChanged: (value) {
@@ -89,12 +106,14 @@ class RespondentNameInput extends StatelessWidget {
     return BlocBuilder<CollectionBloc, CollectionState>(
       builder: (context, state) {
         return TextFormField(
-          initialValue: state.gibsonsForm.respondentName.value,
+          initialValue: state.gibsonsForm.respondentName,
           decoration: InputDecoration(
             icon: const Icon(Icons.person),
             labelText: 'Respondent Name',
             helperText: 'Full name of respondent e.g. Keira Brown',
-            errorText: state.gibsonsForm.respondentName.invalid
+            errorText: isFieldModifiedAndInvalid(
+                    state.gibsonsForm.respondentName,
+                    state.gibsonsForm.isRespondentNameValid)
                 ? 'Enter respondent name'
                 : null,
           ),
@@ -118,17 +137,15 @@ class RespondentTelInfoInput extends StatelessWidget {
     return BlocBuilder<CollectionBloc, CollectionState>(
       builder: (context, state) {
         return IntlPhoneField(
+          initialValue: state.gibsonsForm.respondentTelNumber,
+          readOnly: state.gibsonsForm.finished,
+          initialCountryCode: state.gibsonsForm.respondentCountryCode ?? 'IN',
           invalidNumberMessage: 'Enter a valid tel. number',
           decoration: const InputDecoration(
             labelText: 'Respondent Tel. Number',
             icon: Icon(Icons.phone),
             helperText: 'Full tel. number of respondent e.g. +447448238123',
           ),
-          initialValue: state.gibsonsForm.respondentTelNumber.value,
-          initialCountryCode:
-              state.gibsonsForm.respondentTelNumber.value.isEmpty
-                  ? 'IN'
-                  : state.gibsonsForm.respondentCountryCode,
           onChanged: (phoneNumber) {
             context.read<CollectionBloc>().add(RespondentTelInfoChanged(
                 respondentCountryCode: phoneNumber.countryISOCode,
@@ -151,12 +168,14 @@ class SensitizationDateInput extends StatelessWidget {
         return TextFormField(
           readOnly: true,
           key: UniqueKey(),
-          initialValue: state.gibsonsForm.sensitizationDate.value,
+          initialValue: state.gibsonsForm.sensitizationDate,
           decoration: InputDecoration(
             icon: const Icon(Icons.calendar_today),
             labelText: 'Sensitization Date',
             helperText: 'Date of sensitization visit',
-            errorText: state.gibsonsForm.sensitizationDate.invalid
+            errorText: isFieldModifiedAndInvalid(
+                    state.gibsonsForm.sensitizationDate,
+                    state.gibsonsForm.isSensitizationDateValid)
                 ? 'Choose the sensitization date'
                 : null,
           ),
@@ -182,37 +201,41 @@ class RecallDayInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const List<DropdownMenuItem<String>> dropdownMenuItems = [
-      DropdownMenuItem(child: Text(''), value: ''),
-      DropdownMenuItem(child: Text('Normal day'), value: 'Normal day'),
-      DropdownMenuItem(child: Text('Sick day'), value: 'Sick day'),
-      DropdownMenuItem(child: Text('Fasting day'), value: 'Fasting day'),
-      DropdownMenuItem(
-          child: Text('Festival/religious day'),
-          value: 'Festival/religious day'),
-      DropdownMenuItem(
-          child: Text('Parties/functions day'), value: 'Parties/functions day'),
-      DropdownMenuItem(
-          child: Text('Visitors/relatives'), value: 'Visitors/relatives'),
-      DropdownMenuItem(child: Text('Other'), value: 'Other'),
+    const List<String> recallDayTypes = [
+      'Normal day',
+      'Sick day',
+      'Fasting day',
+      'Festival/religious day',
+      'Parties/functions day',
+      'Visitors/relatives',
+      'Other'
     ];
+
     return BlocBuilder<CollectionBloc, CollectionState>(
       builder: (context, state) {
-        return DropdownButtonFormField(
-            value: state.gibsonsForm.recallDay.value,
-            decoration: InputDecoration(
+        return DropdownSearch<String>(
+            maxHeight: 395.0,
+            dropdownSearchDecoration: InputDecoration(
                 icon: const Icon(Icons.food_bank_outlined),
-                labelText: 'Recall Day',
+                labelText: "Recall Day",
                 helperText: 'Type of the recall day',
-                errorText: state.gibsonsForm.recallDay.invalid
+                // TODO: the errorText should be displayed if nothing is chosen
+                // so investigate how this can be achieved with focusnodes or
+                // maybe send an empty string (although that would not work all
+                // the time), currently the errorText is never shown
+                errorText: isFieldModifiedAndInvalid(
+                        state.gibsonsForm.recallDay,
+                        state.gibsonsForm.isRecallDayValid)
                     ? 'Select recall day type'
                     : null),
-            items: dropdownMenuItems,
-            onChanged: (String? value) {
-              context
-                  .read<CollectionBloc>()
-                  .add(RecallDayChanged(recallDay: value ?? ''));
-            });
+            mode: Mode.MENU,
+            showSelectedItems: true,
+            showSearchBox: false,
+            items: recallDayTypes,
+            onChanged: (String? recallDayType) => context
+                .read<CollectionBloc>()
+                .add(RecallDayChanged(recallDay: recallDayType ?? '')),
+            selectedItem: state.gibsonsForm.recallDay);
       },
     );
   }
@@ -228,12 +251,14 @@ class InterviewDateInput extends StatelessWidget {
         return TextFormField(
           readOnly: true,
           key: UniqueKey(),
-          initialValue: state.gibsonsForm.interviewDate.value,
+          initialValue: state.gibsonsForm.interviewDate,
           decoration: InputDecoration(
             icon: const Icon(Icons.calendar_today),
             labelText: 'Interview Date',
             helperText: 'Date of interview start',
-            errorText: !state.gibsonsForm.isInterviewDateValid()
+            errorText: isFieldModifiedAndInvalid(
+                    state.gibsonsForm.interviewDate,
+                    state.gibsonsForm.isInterviewDateValid)
                 ? 'Interview date needs to be at '
                     'least two days after sensitization date'
                 : null,
@@ -266,12 +291,14 @@ class InterviewStartTimeInput extends StatelessWidget {
         return TextFormField(
           readOnly: true,
           key: UniqueKey(),
-          initialValue: state.gibsonsForm.interviewStartTime.value,
+          initialValue: state.gibsonsForm.interviewStartTime,
           decoration: InputDecoration(
             icon: const Icon(Icons.access_time),
             labelText: 'Interview Start Time',
             helperText: 'Time at the start of the interview',
-            errorText: state.gibsonsForm.interviewStartTime.invalid
+            errorText: isFieldModifiedAndInvalid(
+                    state.gibsonsForm.interviewStartTime,
+                    state.gibsonsForm.isInterviewStartTimeValid)
                 ? 'Choose the start time of the interview'
                 : null,
           ),
@@ -359,7 +386,7 @@ class GeoLocationInput extends StatelessWidget {
           return TextFormField(
             readOnly: true,
             key: UniqueKey(),
-            initialValue: state.gibsonsForm.geoLocation.value,
+            initialValue: state.gibsonsForm.geoLocation,
             onTap: () => context
                 .read<CollectionBloc>()
                 .add(const GeoLocationRequested()),
@@ -371,7 +398,9 @@ class GeoLocationInput extends StatelessWidget {
               icon: const Icon(Icons.location_on_outlined),
               labelText: 'GPS Location',
               helperText: 'GPS Coordinates',
-              errorText: state.gibsonsForm.geoLocation.invalid
+              errorText: isFieldModifiedAndInvalid(
+                      state.gibsonsForm.geoLocation,
+                      state.gibsonsForm.isGeoLocationValid)
                   ? 'Request the GPS location'
                   : null,
             ),
@@ -381,6 +410,3 @@ class GeoLocationInput extends StatelessWidget {
     );
   }
 }
-
-// Or perhaps make the bottom navigation bar be a part of the state and only 
-// allow to pass to next one if previous one is complete

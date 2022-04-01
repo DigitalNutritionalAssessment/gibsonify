@@ -84,6 +84,13 @@ class InterviewStartTimeChanged extends CollectionEvent {
   List<Object> get props => [interviewStartTime];
 }
 
+class GeoLocationRequested extends CollectionEvent {
+  const GeoLocationRequested();
+
+  @override
+  List<Object> get props => [];
+}
+
 class PictureChartCollectedChanged extends CollectionEvent {
   final String pictureChartCollected;
 
@@ -110,6 +117,35 @@ class InterviewEndTimeChanged extends CollectionEvent {
 
   @override
   List<Object> get props => [interviewEndTime];
+}
+
+class InterviewFinishedInOneVisitChanged extends CollectionEvent {
+  final String interviewFinishedInOneVisit;
+
+  const InterviewFinishedInOneVisitChanged(
+      {required this.interviewFinishedInOneVisit});
+
+  @override
+  List<Object> get props => [interviewFinishedInOneVisit];
+}
+
+class SecondInterviewVisitDateChanged extends CollectionEvent {
+  final String secondInterviewVisitDate;
+
+  const SecondInterviewVisitDateChanged(
+      {required this.secondInterviewVisitDate});
+
+  @override
+  List<Object> get props => [secondInterviewVisitDate];
+}
+
+class SecondVisitReasonChanged extends CollectionEvent {
+  final String secondVisitReason;
+
+  const SecondVisitReasonChanged({required this.secondVisitReason});
+
+  @override
+  List<Object> get props => [secondVisitReason];
 }
 
 class InterviewOutcomeChanged extends CollectionEvent {
@@ -355,8 +391,18 @@ class GibsonsFormCreated extends CollectionEvent {
   List<Object> get props => [employeeNumber];
 }
 
-class GeoLocationRequested extends CollectionEvent {
-  const GeoLocationRequested();
+class GibsonsFormDuplicated extends CollectionEvent {
+  final String employeeNumber;
+  final GibsonsForm gibsonsForm;
+  const GibsonsFormDuplicated(
+      {required this.employeeNumber, required this.gibsonsForm});
+
+  @override
+  List<Object> get props => [employeeNumber, gibsonsForm];
+}
+
+class CollectionFinished extends CollectionEvent {
+  const CollectionFinished();
 
   @override
   List<Object> get props => [];

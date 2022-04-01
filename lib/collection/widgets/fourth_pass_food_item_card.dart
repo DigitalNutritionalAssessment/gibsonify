@@ -20,6 +20,13 @@ class FourthPassFoodItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String foodItemDisplayName = isFieldUnmodifiedOrEmpty(foodItem.name)
+        ? 'Unnamed food'
+        : foodItem.name!;
+    String foodItemDisplayTimePeriod =
+        isFieldUnmodifiedOrEmpty(foodItem.timePeriod)
+            ? 'unspecified period'
+            : foodItem.timePeriod!;
     return Slidable(
       key: Key(foodItem.id),
       endActionPane: ActionPane(
@@ -43,33 +50,34 @@ class FourthPassFoodItemCard extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              Text(foodItem.name.value +
+              Text(foodItemDisplayName +
                   ' consumed in the ' +
-                  foodItem.timePeriod.value),
+                  foodItemDisplayTimePeriod),
               TextFormField(
                 readOnly: true,
                 // TODO add snackbar confirmation and scroll in the given page
                 onTap: () =>
                     onSelectedScreenChanged!(SelectedScreen.secondPass),
-                initialValue: foodItem.source.value,
+                initialValue: foodItem.source,
                 decoration: InputDecoration(
                   icon: const Icon(Icons.kitchen),
                   labelText: 'Food source',
                   helperText: 'Where does the food come from',
-                  errorText:
-                      foodItem.source.invalid ? 'Select the food source' : null,
+                  errorText: isFieldUnmodifiedOrEmpty(foodItem.source)
+                      ? 'Select the food source'
+                      : null,
                 ),
               ),
               TextFormField(
                 readOnly: true,
                 onTap: () =>
                     onSelectedScreenChanged!(SelectedScreen.secondPass),
-                initialValue: foodItem.description.value,
+                initialValue: foodItem.description,
                 decoration: InputDecoration(
                   icon: const Icon(Icons.info),
                   labelText: 'Food description',
                   helperText: 'Detailed dish description',
-                  errorText: foodItem.description.invalid
+                  errorText: isFieldUnmodifiedOrEmpty(foodItem.description)
                       ? 'Enter the dish description'
                       : null,
                 ),
@@ -78,14 +86,15 @@ class FourthPassFoodItemCard extends StatelessWidget {
                 readOnly: true,
                 onTap: () =>
                     onSelectedScreenChanged!(SelectedScreen.secondPass),
-                initialValue: foodItem.preparationMethod.value,
+                initialValue: foodItem.preparationMethod,
                 decoration: InputDecoration(
                   icon: const Icon(Icons.coffee_maker_outlined),
                   labelText: 'Form when eaten',
                   helperText: 'The preparation method of the food',
-                  errorText: foodItem.preparationMethod.invalid
-                      ? 'Select the food\'s preparation method'
-                      : null,
+                  errorText:
+                      isFieldUnmodifiedOrEmpty(foodItem.preparationMethod)
+                          ? 'Select the food\'s preparation method'
+                          : null,
                 ),
               ),
               TextFormField(
@@ -93,14 +102,13 @@ class FourthPassFoodItemCard extends StatelessWidget {
                 onTap: () =>
                     onSelectedScreenChanged!(SelectedScreen.secondPass),
                 initialValue: foodItem.recipe?.recipeName ?? '',
-                decoration: const InputDecoration(
-                  icon: Icon(Icons.bookmark),
+                decoration: InputDecoration(
+                  icon: const Icon(Icons.bookmark),
                   labelText: 'Food recipe',
                   helperText: 'What is the recipe of this food',
-                  // TODO:
-                  // errorText: foodItem.preparationMethod.invalid
-                  //     ? 'Select the food\'s preparation method'
-                  //     : null,
+                  errorText: foodItem.recipe == null
+                      ? 'Select the food\'s recipe'
+                      : null,
                 ),
               ),
               Column(
@@ -130,27 +138,13 @@ class FourthPassFoodItemCard extends StatelessWidget {
                                   labelText: 'Measurement method',
                                   helperText:
                                       'The method used to estimate food quantity',
+                                  // TODO: refactor to something nicer
                                   errorText: !foodItem.measurements[index]
-                                          .isMethodValid()
+                                              .isMethodValid() ||
+                                          foodItem.measurements[index]
+                                                  .measurementMethod ==
+                                              null
                                       ? 'Select the measurement method'
-                                      : null,
-                                ),
-                              ),
-                              TextFormField(
-                                readOnly: true,
-                                onTap: () => onSelectedScreenChanged!(
-                                    SelectedScreen.thirdPass),
-                                initialValue: foodItem
-                                    .measurements[index].measurementValue,
-                                decoration: InputDecoration(
-                                  icon: const Icon(
-                                      Icons.drive_file_rename_outline_rounded),
-                                  labelText: 'Measurement value',
-                                  helperText:
-                                      'The amount or number you measured',
-                                  errorText: !foodItem.measurements[index]
-                                          .isValueValid()
-                                      ? 'Enter the dish measurement'
                                       : null,
                                 ),
                               ),
@@ -166,9 +160,35 @@ class FourthPassFoodItemCard extends StatelessWidget {
                                   labelText: 'Measurement unit',
                                   helperText:
                                       'The size of each measurement value',
+                                  // TODO: refactor to something nicer
                                   errorText: !foodItem.measurements[index]
-                                          .isUnitValid()
+                                              .isUnitValid() ||
+                                          foodItem.measurements[index]
+                                                  .measurementUnit ==
+                                              null
                                       ? 'Select the measurement unit'
+                                      : null,
+                                ),
+                              ),
+                              TextFormField(
+                                readOnly: true,
+                                onTap: () => onSelectedScreenChanged!(
+                                    SelectedScreen.thirdPass),
+                                initialValue: foodItem
+                                    .measurements[index].measurementValue,
+                                decoration: InputDecoration(
+                                  icon: const Icon(
+                                      Icons.drive_file_rename_outline_rounded),
+                                  labelText: 'Measurement value',
+                                  helperText:
+                                      'The amount or number you measured',
+                                  // TODO: refactor to something nicer
+                                  errorText: !foodItem.measurements[index]
+                                              .isValueValid() ||
+                                          foodItem.measurements[index]
+                                                  .measurementValue ==
+                                              null
+                                      ? 'Enter the measured value in 1 to 4 digits'
                                       : null,
                                 ),
                               ),
@@ -178,17 +198,17 @@ class FourthPassFoodItemCard extends StatelessWidget {
                       })
                 ],
               ),
-              TextButton(
-                  // TODO: set style property to be
-                  // opposite color of Card
-                  // TODO: make each fooditem change from confirmed
-                  // to unconfirmed if some field of it changes
-                  // TODO: only allow to confirm if all fields are
-                  // validated by Formz
-                  onPressed: () => onConfirmationChanged!(!foodItem.confirmed),
-                  child: foodItem.confirmed
+              ListTile(
+                  title: foodItem.confirmed
                       ? const Text('Unconfirm')
-                      : const Text('Confirm')),
+                      : const Text('Confirm'),
+                  subtitle: Text(foodItemDisplayName),
+                  leading: Checkbox(
+                    value: foodItem.confirmed,
+                    onChanged: (bool? value) =>
+                        onConfirmationChanged!(!foodItem.confirmed),
+                  ),
+                  onTap: () => onConfirmationChanged!(!foodItem.confirmed)),
             ],
           ),
         ),

@@ -33,14 +33,21 @@ class ThirdPassFoodItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String foodItemDisplayName = isFieldUnmodifiedOrEmpty(foodItem.name)
+        ? 'Unnamed food'
+        : foodItem.name!;
+    String foodItemDisplayTimePeriod =
+        isFieldUnmodifiedOrEmpty(foodItem.timePeriod)
+            ? 'unspecified period'
+            : foodItem.timePeriod!;
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            Text(foodItem.name.value +
+            Text(foodItemDisplayName +
                 ' consumed in the ' +
-                foodItem.timePeriod.value),
+                foodItemDisplayTimePeriod),
             ListView.builder(
                 // required to avoid Vertical viewport unbounded height error
                 shrinkWrap: true,
@@ -67,6 +74,7 @@ class ThirdPassFoodItemCard extends StatelessWidget {
                       child: Column(
                         children: [
                           DropdownSearch<String>(
+                              maxHeight: 336.0,
                               dropdownSearchDecoration: InputDecoration(
                                 icon: const Icon(Icons.monitor_weight_outlined),
                                 labelText: "Measurement method",
@@ -91,29 +99,8 @@ class ThirdPassFoodItemCard extends StatelessWidget {
                                   }),
                               selectedItem: foodItem
                                   .measurements[index].measurementMethod),
-                          TextFormField(
-                            initialValue:
-                                foodItem.measurements[index].measurementValue,
-                            decoration: InputDecoration(
-                              icon: const Icon(
-                                  Icons.drive_file_rename_outline_rounded),
-                              labelText: 'Measurement value',
-                              helperText: 'The amount or number you measured',
-                              errorText: !foodItem.measurements[index]
-                                      .isValueValid()
-                                  // TODO: the errorText should be displayed if nothing is typed
-                                  // so investigate how this can be achieved with focusnodes
-                                  ? 'Enter the measured value in 1 to 4 digits'
-                                  : null,
-                            ),
-                            onChanged: (measurementValue) =>
-                                onMeasurementValueChanged!({
-                              'index': index,
-                              'value': measurementValue
-                            }),
-                            textInputAction: TextInputAction.next,
-                          ),
                           DropdownSearch<String>(
+                              maxHeight: 448.0,
                               dropdownSearchDecoration: InputDecoration(
                                 icon: const Icon(
                                     Icons.radio_button_unchecked_outlined),
@@ -140,6 +127,29 @@ class ThirdPassFoodItemCard extends StatelessWidget {
                                   }),
                               selectedItem:
                                   foodItem.measurements[index].measurementUnit),
+                          TextFormField(
+                            initialValue:
+                                foodItem.measurements[index].measurementValue,
+                            decoration: InputDecoration(
+                              icon: const Icon(
+                                  Icons.drive_file_rename_outline_rounded),
+                              labelText: 'Measurement value',
+                              helperText: 'The amount or number you measured',
+                              errorText: !foodItem.measurements[index]
+                                      .isValueValid()
+                                  // TODO: the errorText should be displayed if nothing is typed
+                                  // so investigate how this can be achieved with focusnodes
+                                  ? 'Enter the measured value in 1 to 4 digits'
+                                  : null,
+                            ),
+                            onChanged: (measurementValue) =>
+                                onMeasurementValueChanged!({
+                              'index': index,
+                              'value': measurementValue
+                            }),
+                            textInputAction: TextInputAction.next,
+                            keyboardType: TextInputType.number,
+                          ),
                         ],
                       ),
                     ),

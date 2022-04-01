@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:gibsonify/navigation/navigation.dart';
@@ -19,51 +20,39 @@ class SecondPassFoodItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: research how to handle empty string as
-    // the selected value other than a blank menu item
-    const List<DropdownMenuItem<String>> sourceDropdownMenuItems = [
-      DropdownMenuItem(child: Text(''), value: ''),
-      DropdownMenuItem(child: Text('Home made'), value: 'Home made'),
-      DropdownMenuItem(child: Text('Purchased'), value: 'Purchased'),
-      DropdownMenuItem(
-          child: Text('Gift/given by neighbor'),
-          value: 'Gift/given by neighbor'),
-      DropdownMenuItem(
-          child: Text('Home garden/farm'), value: 'Home garden/farm'),
-      DropdownMenuItem(child: Text('Leftover'), value: 'Leftover'),
-      DropdownMenuItem(child: Text('Wild food'), value: 'Wild food'),
-      DropdownMenuItem(child: Text('Food aid'), value: 'Food aid'),
-      DropdownMenuItem(child: Text('Other'), value: 'Other'),
+    String foodItemDisplayName = isFieldUnmodifiedOrEmpty(foodItem.name)
+        ? 'Unnamed food'
+        : foodItem.name!;
+    String foodItemDisplayTimePeriod =
+        isFieldUnmodifiedOrEmpty(foodItem.timePeriod)
+            ? 'unspecified period'
+            : foodItem.timePeriod!;
+    const List<String> foodSources = [
+      'Home made',
+      'Purchased',
+      'Gift/given by neighbor',
+      'Home garden/farm',
+      'Leftover',
+      'Wild food',
+      'Food aid',
+      'Other'
     ];
-    const List<DropdownMenuItem<String>> preparationMethodDropdownMenuItems = [
-      DropdownMenuItem(child: Text(''), value: ''),
-      DropdownMenuItem(child: Text('Raw'), value: 'Raw'),
-      DropdownMenuItem(child: Text('Boiled'), value: 'Boiled'),
-      DropdownMenuItem(
-          child: Text('Boiled in water but retained water'),
-          value: 'Boiled in water but retained water'),
-      DropdownMenuItem(
-          child: Text('Boiled in water but removed water'),
-          value: 'Boiled in water but removed water'),
-      DropdownMenuItem(child: Text('Steamed'), value: 'Steamed'),
-      DropdownMenuItem(
-          child: Text('Roasted with oil'), value: 'Roasted with oil'),
-      DropdownMenuItem(
-          child: Text('Roasted without oil'), value: 'Roasted without oil'),
-      DropdownMenuItem(child: Text('Fried'), value: 'Fried'),
-      DropdownMenuItem(child: Text('Stir-fried'), value: 'Stir-fried'),
-      DropdownMenuItem(
-          child: Text('Soaking and stir-fried'),
-          value: 'Soaking and stir-fried'),
-      DropdownMenuItem(
-          child: Text('Boiled and fried'), value: 'Boiled and fried'),
-      DropdownMenuItem(
-          child: Text('Boiled and stir-fried'), value: 'Boiled and stir-fried'),
-      DropdownMenuItem(
-          child: Text('Steamed and fried'), value: 'Steamed and fried'),
-      DropdownMenuItem(
-          child: Text('Roasted and boiled'), value: 'Roasted and boiled'),
-      DropdownMenuItem(child: Text('Other'), value: 'Other')
+    const List<String> preparationMethods = [
+      'Raw',
+      'Boiled',
+      'Boiled in water but retained water',
+      'Boiled in water but removed water',
+      'Steamed',
+      'Roasted with oil',
+      'Roasted without oil',
+      'Fried',
+      'Stir-fried',
+      'Soaking and stir-fried',
+      'Boiled and fried',
+      'Boiled and stir-fried',
+      'Steamed and fried',
+      'Roasted and boiled',
+      'Other'
     ];
 
     return Card(
@@ -71,49 +60,63 @@ class SecondPassFoodItemCard extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            Text(foodItem.name.value +
+            Text(foodItemDisplayName +
                 ' consumed in the ' +
-                foodItem.timePeriod.value),
-            // TODO: fix RenderFlex overflow
-            DropdownButtonFormField(
-              value: foodItem.source.value,
-              decoration: InputDecoration(
-                icon: const Icon(Icons.kitchen),
-                labelText: 'Food source',
-                helperText: 'Where does the food come from',
-                errorText:
-                    foodItem.source.invalid ? 'Select the food source' : null,
-              ),
-              items: sourceDropdownMenuItems,
-              onChanged: (String? value) => onSourceChanged!(value ?? ''),
-            ),
+                foodItemDisplayTimePeriod),
+            DropdownSearch<String>(
+                maxHeight: 448.0,
+                dropdownSearchDecoration: InputDecoration(
+                    icon: const Icon(Icons.kitchen),
+                    labelText: 'Food source',
+                    helperText: 'Where does the food come from',
+                    // TODO: the errorText should be displayed if nothing is chosen
+                    // so investigate how this can be achieved with focusnodes or
+                    // maybe send an empty string (although that would not work all
+                    // the time), currently errorText is never displayed
+                    errorText: isFieldModifiedAndEmpty(foodItem.source)
+                        ? 'Select the food source'
+                        : null),
+                mode: Mode.MENU,
+                showSelectedItems: true,
+                showSearchBox: false,
+                items: foodSources,
+                onChanged: (String? foodSource) =>
+                    onSourceChanged!(foodSource!),
+                selectedItem: foodItem.source),
             TextFormField(
-              initialValue: foodItem.description.value,
+              initialValue: foodItem.description,
               decoration: InputDecoration(
                 icon: const Icon(Icons.info),
-                labelText: 'Food description',
-                helperText: 'Detailed dish description',
-                errorText: foodItem.description.invalid
-                    ? 'Enter the dish description'
+                labelText: 'Food ingredients',
+                helperText: 'Detailed list of ingredients',
+                errorText: isFieldModifiedAndEmpty(foodItem.description)
+                    ? 'Write down the full list of ingredients'
                     : null,
               ),
               onChanged: (value) => onDescriptionChanged!(value),
               textInputAction: TextInputAction.next,
             ),
-            DropdownButtonFormField(
-              value: foodItem.preparationMethod.value,
-              decoration: InputDecoration(
-                icon: const Icon(Icons.coffee_maker_outlined),
-                labelText: 'Form when eaten',
-                helperText: 'The preparation method of the food',
-                errorText: foodItem.preparationMethod.invalid
-                    ? 'Select the food\'s preparation method'
-                    : null,
-              ),
-              items: preparationMethodDropdownMenuItems,
-              onChanged: (String? value) =>
-                  onPreparationMethodChanged!(value ?? ''),
-            ),
+            DropdownSearch<String>(
+                maxHeight: 645.0,
+                dropdownSearchDecoration: InputDecoration(
+                    icon: const Icon(Icons.coffee_maker_outlined),
+                    labelText: 'Form when eaten',
+                    helperText: 'The preparation method of the food',
+                    // TODO: the errorText should be displayed if nothing is chosen
+                    // so investigate how this can be achieved with focusnodes or
+                    // maybe send an empty string (although that would not work all
+                    // the time), currently errorText is never displayed
+                    errorText:
+                        isFieldModifiedAndEmpty(foodItem.preparationMethod)
+                            ? 'Select the food\'s preparation method'
+                            : null),
+                mode: Mode.MENU,
+                showSelectedItems: true,
+                showSearchBox: false,
+                items: preparationMethods,
+                onChanged: (String? preparationMethod) =>
+                    onPreparationMethodChanged!(preparationMethod!),
+                selectedItem: foodItem.preparationMethod),
             TextFormField(
               initialValue: foodItem.recipe?.recipeName ?? '',
               readOnly: true,
@@ -122,16 +125,17 @@ class SecondPassFoodItemCard extends StatelessWidget {
                 icon: const Icon(Icons.bookmark),
                 labelText: 'Food recipe',
                 helperText: 'What is the recipe of this food',
-                // TODO:
+                // TODO: implement errorText if user has clicked to add a recipe
+                // but has not added any recipe (if recipe is still null)
                 // errorText: foodItem.recipe == null
-                //     ? 'Enter the food recipe'
+                //     ? 'Select the food recipe'
                 //     : null,
               ),
               onTap: () {
                 Navigator.pushNamed(context, PageRouter.chooseRecipe,
                     arguments: {
                       'assignedFoodItemId': foodItem.id,
-                      'foodItemDescription': foodItem.description.value,
+                      'foodItemDescription': foodItem.description,
                     });
               },
               textInputAction: TextInputAction.next,
