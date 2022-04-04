@@ -3,13 +3,63 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Refactor
+
+- **collection**: remove null check from second pass
+- rename collection completed to finished
+- change comments to nullable string
+- make interview outcome not completed reason nullable
+- change interview outcome to nullable string
+- change interview end time to nullable string
+- make picture chart not collected reason nullable
+- change picturechartcollected to nullable string
+- improve sensitization validators readability
+- change geolocation to nullable string
+- change interview start time to nullable string
+- change recall day to nullable string
+- change sensitization and interview dates to nullable strings
+- change respondent tel number to nullable string
+- change respondent name to nullable string
+- change household id to nullable string
+- change food item preparationmethod to nullable string
+- change food item description to nullable string
+- change food item source to nullable string
+- change food item timeperiod to nullable string
+- **gibsonify_api**: change to collection literals
+- **collection**: remove unused variable in third pass
+- change food item name to nullable string
+- **recipe**: simplify import logic
+- **recipe**: reorder recipe import logic for readability
+- **recipe**: rename variables for readability
+- **recipe**: rearrange measurement fields and clean up error handling
+- **gibsonify_api**: rename validators to plural
+- **collection**: move and rename pop function
+- **collection**: move food item deletion dialog class
+- rename delete recipe to delete recipe dialog
+- remove second ingredients source
+- **recipe**: improve code readability
+- **recipe**: rename bloc private functions
+- **recipe**: standardise ingredients json fields
+- **recipe**: remove unused dependency
+- **recipe**: use named strings for page navigation
+- **recipe**: refactor ingredient loading into bloc and store in state
+- **recipe**: add helper functions to refactor bloc functions
+- **recipe**: use maps instead of lists for arg passing
+
 ### Fix
 
+- **collection**: typo in finish page
+- **collection**: keyboard covers bottom text input fields
+- **collection**: change to unfinished upon duplication
 - **recipe**: fix ingredient measurement field bug in recipe import
 - **recipe**: fix date fields in import csv
 - **recipe**: fix measurement field bug in recipe import
+- **collection**: fourth pass validation and order
 - **login**: use pushReplacementNamed instead of pushNamed for login page
 - **login**: fix login page navigation
+- **gibsonify_api**: update time period validator
+- **collection**: measurement unit dropdown height
+- **collection**: fourth pass last item confirmation
 - saving using native back button or swipe
 - **recipe**: override back button/swipe to save
 - **collection**: override back button/swipe to save
@@ -18,12 +68,23 @@ All notable changes to this project will be documented in this file.
 
 ### Feat
 
+- add read-only mode to collection
+- add second visit reason field
+- add second interview visit date field
+- add interview finished in one visit field
+- improve collection status and outcome view
+- **collection**: add finish confirmation dialog
+- enable collection duplication
+- **collection**: add finished and unfinished text
+- implement login screen and info
 - **login**: integrate employee number logic to collections
 - **login**: add employee number field to gibsons form model
 - **login**: add verification of login fields for submission
 - **login**: add employee number field logic to import
 - **login**: add employee number to recipe model
 - **login**: add employee number field to recipe csvs
+- add collection completed functionality
+- validate sensitization before moving on
 - **login**: add login button on settings page
 - **login**: add gibsonify logo to login screen
 - **login**: format login page
@@ -35,6 +96,19 @@ All notable changes to this project will be documented in this file.
 - **recipe**: add logic for replacing old recipes with new ones
 - **recipe**: add logic to modify date upon recipe modification
 - **recipe**: add date field for recipe list version control
+- **collection**: change interview outcome to dropdownsearch
+- **collection**: change picture chart input to dropdownsearch
+- **collection**: change to dropdownsearch in preparation method
+- **collection**: change to dropdownsearch in food source
+- **collection**: change to dropdownsearch in time period
+- **collection**: change to dropdownsearch in recall day
+- **collection**: change food ingredients wording
+- **collection**: change fourth pass snackbar text
+- rename food description to food ingredients
+- **collection**: set dropdown heights for measurements
+- **collection**: reverse measurement unit and value order
+- **collection**: add check boxes to fourth pass items
+- **collection**: add number keyboard for measurement value
 - **recipe**: add prompts to notiy user on recipe import status
 - **recipe**: handle duplicate recipe imports
 - **recipe**: implement basic recipe import
@@ -58,25 +132,6 @@ All notable changes to this project will be documented in this file.
 - reverse slide to delete direction
 - trim ingredient list and add generating script
 - add script for generating ingredient list
-
-### Refactor
-
-- **recipe**: simplify import logic
-- **recipe**: reorder recipe import logic for readability
-- **recipe**: rename variables for readability
-- **recipe**: rearrange measurement fields and clean up error handling
-- **collection**: move and rename pop function
-- **collection**: move food item deletion dialog class
-- rename delete recipe to delete recipe dialog
-- remove second ingredients source
-- **recipe**: improve code readability
-- **recipe**: rename bloc private functions
-- **recipe**: standardise ingredients json fields
-- **recipe**: remove unused dependency
-- **recipe**: use named strings for page navigation
-- **recipe**: refactor ingredient loading into bloc and store in state
-- **recipe**: add helper functions to refactor bloc functions
-- **recipe**: use maps instead of lists for arg passing
 
 ## 1.1.0 (2022-02-21)
 

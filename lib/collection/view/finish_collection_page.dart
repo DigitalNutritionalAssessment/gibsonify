@@ -251,7 +251,7 @@ class SecondInterviewVisitDateInput extends StatelessWidget {
               errorText: isFieldModifiedAndInvalid(
                       state.gibsonsForm.secondInterviewVisitDate,
                       state.gibsonsForm.isSecondInterviewVisitDateValid)
-                  ? 'Second nterview date needs to be after '
+                  ? 'Second interview date needs to be after '
                       'the first interview date'
                   : null,
             ),
