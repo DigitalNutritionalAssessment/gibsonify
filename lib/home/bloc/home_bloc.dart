@@ -129,18 +129,19 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 }
 
 String _convertFinishedGibsonsFormsToCsv(List<GibsonsForm?> gibsonsForms) {
+  // TODO: move this string to the API and rename to GibsonsFormsCsvHeaders
   String finishedGibsonsFormsCsv =
-      'Collection ID, Employee Number, Household ID, Respondent Name, '
-      'Respondent Country Code, Respondent Tel Number Prefix, '
-      'Respondent Tel Number, Sensitization Date, Recall Day, '
-      'Interview Date, Interview Start Time, GPS Location, '
-      'Picture Chart Collected, Picture Chart Not Collection Reason, '
-      'Interview End Time, Interview Finished In One Visit, '
-      'Second Interview Visit Date, Second Visit Reason, Interview Outcome, '
-      'Interview Not Completed Reason, Comments, Is Finished, Food Item ID, '
-      'Food Item Name, Food Item Time Period, Food Item Source, '
-      'Ingredients Description, Preparation Method, Confirmed, '
-      'Recipe Number, Recipe Date, Recipe Name, Measurements\n';
+      'Collection ID,Employee Number,Household ID,Respondent Name,'
+      'Respondent Country Code,Respondent Tel Number Prefix,'
+      'Respondent Tel Number,Sensitization Date,Recall Day,'
+      'Interview Date,Interview Start Time,GPS Location,'
+      'Picture Chart Collected,Picture Chart Not Collected Reason,'
+      'Interview End Time,Interview Finished In One Visit,'
+      'Second Interview Visit Date,Second Visit Reason,Interview Outcome,'
+      'Interview Not Completed Reason,Comments,Is Finished,Food Item ID,'
+      'Food Item Name,Food Item Time Period,Food Item Source,'
+      'Ingredients Description,Preparation Method,Confirmed,'
+      'Recipe Number,Recipe Date,Recipe Name,Measurements\n';
   for (GibsonsForm? gibsonsForm in gibsonsForms) {
     if (gibsonsForm != null && gibsonsForm.finished) {
       finishedGibsonsFormsCsv = finishedGibsonsFormsCsv + gibsonsForm.toCsv();
