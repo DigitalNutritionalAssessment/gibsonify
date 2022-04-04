@@ -1,47 +1,48 @@
 part of 'recipe_bloc.dart';
 
+enum RecipesExportStatus {
+  notRequested,
+  noRecipes,
+  noPermissionToSaveFile,
+  externalSaveSuccess,
+  error
+}
+
 class RecipeState extends Equatable {
   final List<Recipe> recipes;
   final String? ingredientsJson;
   final String? recipeImportStatus;
+  final int? exportedRecipesNumber;
+  final RecipesExportStatus recipesExportStatus;
 
-  const RecipeState({
-    this.recipes = const <Recipe>[],
-    this.ingredientsJson,
-    this.recipeImportStatus,
-  });
+  const RecipeState(
+      {this.recipes = const <Recipe>[],
+      this.ingredientsJson,
+      this.recipeImportStatus,
+      this.exportedRecipesNumber,
+      this.recipesExportStatus = RecipesExportStatus.notRequested});
 
-  RecipeState copyWith({
-    List<Recipe>? recipes,
-    String? ingredientsJson,
-    String? recipeImportStatus,
-  }) {
+  RecipeState copyWith(
+      {List<Recipe>? recipes,
+      String? ingredientsJson,
+      String? recipeImportStatus,
+      int? exportedRecipesNumber,
+      RecipesExportStatus? recipesExportStatus}) {
     return RecipeState(
-      recipes: recipes ?? this.recipes,
-      ingredientsJson: ingredientsJson ?? this.ingredientsJson,
-      recipeImportStatus: recipeImportStatus ?? this.recipeImportStatus,
-    );
+        recipes: recipes ?? this.recipes,
+        ingredientsJson: ingredientsJson ?? this.ingredientsJson,
+        recipeImportStatus: recipeImportStatus ?? this.recipeImportStatus,
+        exportedRecipesNumber:
+            exportedRecipesNumber ?? this.exportedRecipesNumber,
+        recipesExportStatus: recipesExportStatus ?? this.recipesExportStatus);
   }
 
   @override
-  List<Object?> get props => [recipes, ingredientsJson, recipeImportStatus];
-
-  // TODO: These methods should be deleted and moved to the API if needed
-  Map<String, dynamic> toMap() {
-    return {
-      'recipes': recipes.map((x) => x.toJson()).toList(),
-    };
-  }
-
-  factory RecipeState.fromMap(Map<String, dynamic> map) {
-    return RecipeState(
-      recipes:
-          List<Recipe>.from(map['recipes']?.map((x) => Recipe.fromJson(x))),
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory RecipeState.fromJson(String source) =>
-      RecipeState.fromMap(json.decode(source));
+  List<Object?> get props => [
+        recipes,
+        ingredientsJson,
+        recipeImportStatus,
+        exportedRecipesNumber,
+        recipesExportStatus
+      ];
 }

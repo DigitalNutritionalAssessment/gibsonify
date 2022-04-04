@@ -3,8 +3,7 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 import 'package:uuid/uuid.dart';
 
-import 'recipe.dart';
-import 'measurement.dart';
+import 'package:gibsonify_api/gibsonify_api.dart';
 
 class FoodItem extends Equatable {
   FoodItem(
@@ -64,15 +63,7 @@ class FoodItem extends Equatable {
   // TODO: add a fromCsv constructor
 
   String toCsv() {
-    String measurementsCombined = '';
-    for (Measurement measurement in measurements) {
-      measurementsCombined = measurementsCombined +
-          '${measurement.measurementMethod}_'
-              '${measurement.measurementUnit}_${measurement.measurementValue} + ';
-    }
-
-    measurementsCombined = measurementsCombined.substring(
-        0, measurementsCombined.length - ' + '.length);
+    String measurementsCombined = combineMeasurements(measurements);
 
     return '"$id","$name","$timePeriod","$source","$description",'
         '"$preparationMethod","$confirmed","${recipe?.number}","${recipe?.date}",'

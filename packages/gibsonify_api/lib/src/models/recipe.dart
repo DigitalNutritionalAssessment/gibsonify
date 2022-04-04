@@ -3,9 +3,7 @@ import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert';
 
-import 'measurement.dart';
-import 'recipe_ingredient.dart';
-import 'recipe_probe.dart';
+import 'package:gibsonify_api/gibsonify_api.dart';
 
 class Recipe extends Equatable {
   Recipe({
@@ -108,6 +106,43 @@ class Recipe extends Equatable {
     data['allProbeAnswersStandard'] = allProbeAnswersStandard.toString();
     data['saved'] = saved.toString();
     return data;
+  }
+
+  String toCsv() {
+    String recipeInfo = '"$employeeNumber","$number","$date","$name","$type",';
+    String csv = '';
+
+    String measurementsCombined = combineMeasurements(measurements);
+    var blankFieldsAfterMeasurements = ',,,,,,';
+    csv = csv +
+        recipeInfo +
+        '"Measurement",' +
+        measurementsCombined +
+        blankFieldsAfterMeasurements +
+        '\n';
+
+    var blankFieldsBeforeIngredient = ',,,';
+    for (Ingredient ingredient in ingredients) {
+      csv = csv +
+          recipeInfo +
+          '"Ingredient",' +
+          blankFieldsBeforeIngredient +
+          ingredient.toCsv() +
+          '\n';
+    }
+
+    var blankFieldsBeforeProbe = ',';
+    var blankFieldsAfterProbe = ',,,,';
+    for (Probe probe in probes) {
+      csv = csv +
+          recipeInfo +
+          '"Probe",' +
+          blankFieldsBeforeProbe +
+          probe.toCsv() +
+          blankFieldsAfterProbe +
+          '\n';
+    }
+    return csv;
   }
 }
 

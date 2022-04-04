@@ -1,8 +1,8 @@
 import 'dart:convert';
-
 import 'package:equatable/equatable.dart';
-import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:uuid/uuid.dart';
+
+import 'package:gibsonify_api/gibsonify_api.dart';
 
 class GibsonsForm extends Equatable {
   GibsonsForm(
@@ -115,10 +115,6 @@ class GibsonsForm extends Equatable {
   // TODO: add a fromCsv constructor
 
   String toCsv() {
-    // List<List<dynamic>> myListOfLists = [];
-    // String csv = const ListToCsvConverter().convert(myListOfLists);
-
-    // String csv = id + ',' + employeeNumber + ',';
     String gibsonsFormInfo =
         '"$id","$employeeNumber","$householdId","$respondentName",'
         '"$respondentCountryCode","$respondentTelNumberPrefix","$respondentTelNumber",'
@@ -127,8 +123,6 @@ class GibsonsForm extends Equatable {
         '"$interviewEndTime","$interviewFinishedInOneVisit","$secondInterviewVisitDate",'
         '"$secondVisitReason","$interviewOutcome","$interviewOutcomeNotCompletedReason",'
         '"$comments","${finished.toString()}",';
-    // maybe just have this as a list of strings and then use the csv lib
-    // iterate over all food items and construct a to csv of each, then create the csv
     String csv = '';
     for (FoodItem foodItem in foodItems) {
       csv = csv + gibsonsFormInfo + foodItem.toCsv() + '\n';

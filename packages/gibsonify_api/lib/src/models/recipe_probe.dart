@@ -4,10 +4,11 @@ import 'package:uuid/uuid.dart';
 
 class Probe extends Equatable {
   Probe(
-      {this.probeName,
+      {this.probeName, // TODO: rename to `name`
       this.checked = false,
       this.answer,
-      List<Map<String, dynamic>>? probeOptions})
+      // TODO: why does this need to be a dictionary with uuids?
+      List<Map<String, dynamic>>? probeOptions}) // TODO: rename to `options`
       : probeOptions = probeOptions ??
             [
               {'option': 'Yes', 'id': const Uuid().v4()},
@@ -48,6 +49,18 @@ class Probe extends Equatable {
     data['answer'] = answer;
     data['probeOptions'] = jsonEncode(probeOptions);
     return data;
+  }
+
+  String toCsv() {
+    // TODO: these are actually probe options, the import/export format is wrong
+    String probeAnswers = '';
+    for (String probeOption in optionsList()) {
+      probeAnswers += probeOption + ' + ';
+    }
+    probeAnswers =
+        probeAnswers.substring(0, probeAnswers.length - ' + '.length);
+
+    return '"$probeName","$probeAnswers"';
   }
 
   Probe copyWith(

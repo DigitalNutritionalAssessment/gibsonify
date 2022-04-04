@@ -1,3 +1,5 @@
+import 'measurement.dart';
+
 /// Checks whether the `String` field is not null and not an empty string, which,
 /// in a user input form field case, indicates that the user has modified the
 /// input and left it empty. In many cases this is used as a validator to check
@@ -42,4 +44,22 @@ bool isFieldModifiedAndInvalid(String? field, bool Function() fieldValidator) {
     return true;
   }
   return false;
+}
+
+/// Returns a `String` representation of a combination of measurements in the
+/// current format specified by the import/export Gibsonify templates.
+/// Measurement fields are separated by `_` (underscore) and measurements are
+/// separated by `+` (plus).
+String combineMeasurements(List<Measurement> measurements) {
+  // TODO: think of a different measurement format than this _ + one
+  String measurementsCombined = '';
+  for (Measurement measurement in measurements) {
+    measurementsCombined = measurementsCombined +
+        '${measurement.measurementMethod}_'
+            '${measurement.measurementUnit}_${measurement.measurementValue} + ';
+  }
+
+  measurementsCombined = measurementsCombined.substring(
+      0, measurementsCombined.length - ' + '.length);
+  return measurementsCombined;
 }

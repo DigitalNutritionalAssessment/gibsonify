@@ -3,7 +3,7 @@ import 'package:uuid/uuid.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:convert';
 
-import 'measurement.dart';
+import 'package:gibsonify_api/gibsonify_api.dart';
 
 class Ingredient extends Equatable {
   Ingredient(
@@ -59,6 +59,7 @@ class Ingredient extends Equatable {
         id
       ];
 
+  // TODO: move this to the main app, this shouldn't be a method of this class
   static Future<String> getIngredients() {
     return rootBundle.loadString('assets/ingredients/ingredients.json');
   }
@@ -85,5 +86,13 @@ class Ingredient extends Equatable {
     data['saved'] = saved.toString();
     data['id'] = id;
     return data;
+  }
+
+  String toCsv() {
+    String measurementsCombined = combineMeasurements(measurements);
+
+    // TODO: how should customName be handled?
+    return '"${name ?? customName}","$description",'
+        '"$cookingState","$measurementsCombined"';
   }
 }

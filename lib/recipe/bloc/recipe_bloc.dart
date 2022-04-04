@@ -6,6 +6,7 @@ import 'package:uuid/uuid.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:csv/csv.dart';
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:gibsonify_repository/gibsonify_repository.dart';
@@ -54,6 +55,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     on<RecipesLoaded>(_onRecipesLoaded);
     on<IngredientsLoaded>(_onIngredientsLoaded);
     on<RecipesImported>(_onRecipesImported);
+    on<RecipesSavedToFile>(_onRecipesSavedToFile);
   }
 
   void _onRecipeAdded(RecipeAdded event, Emitter<RecipeState> emit) {
@@ -1019,5 +1021,52 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
         recipes: recipes,
         recipeImportStatus:
             'Imported ${newRecipes.length} recipe(s) successfully'));
+  }
+
+  void _onRecipesSavedToFile(
+      RecipesSavedToFile event, Emitter<RecipeState> emit) async {
+    // TODO: move this string to the API and rename to recipesCsvHeaders
+    String recipesCsv =
+        'Employee Number,Recipe Number,Date,Recipe Name,Recipe Type,'
+        'Recipe attribute,Recipe Measurement,Recipe Probe Name,'
+        'Recipe Probe Answers,Ingredient Name,Ingredient Description,'
+        'Cooking State,Ingredient Measurement\n';
+
+    var recipesNumber = state.recipes.length;
+
+    if (state.recipes.isEmpty) {
+      emit(state.copyWith(
+          recipesExportStatus: RecipesExportStatus.noRecipes,
+          exportedRecipesNumber: 0));
+      return;
+    }
+
+    for (Recipe recipe in state.recipes) {
+      recipesCsv += recipe.toCsv();
+    }
+
+    try {
+      if (!await Permission.storage.request().isGranted) {
+        emit(state.copyWith(
+            recipesExportStatus: RecipesExportStatus.noPermissionToSaveFile,
+            exportedRecipesNumber: 0));
+      } else {
+        String currentDateTime =
+            DateFormat("yyyy-MM-dd-HH-mm-ss").format(DateTime.now());
+        final collectionfilePath = '/storage/emulated/0/Download/'
+            'recipe-data-$currentDateTime.csv';
+        final collectionfile = File(collectionfilePath);
+        collectionfile.writeAsString(recipesCsv);
+
+        emit(state.copyWith(
+          recipesExportStatus: RecipesExportStatus.externalSaveSuccess,
+          exportedRecipesNumber: recipesNumber,
+        ));
+      }
+    } catch (e) {
+      emit(state.copyWith(
+          recipesExportStatus: RecipesExportStatus.error,
+          exportedRecipesNumber: 0));
+    }
   }
 }
