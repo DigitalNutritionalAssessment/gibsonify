@@ -1,40 +1,23 @@
 part of 'recipe_bloc.dart';
 
-enum RecipesExportStatus {
-  notRequested,
-  noRecipes,
-  noPermissionToSaveFile,
-  externalSaveSuccess,
-  error
-}
-
 class RecipeState extends Equatable {
   final List<Recipe> recipes;
   final String? ingredientsJson;
   final String? recipeImportStatus;
-  final int? exportedRecipesNumber;
-  final RecipesExportStatus recipesExportStatus;
 
   const RecipeState(
       {this.recipes = const <Recipe>[],
       this.ingredientsJson,
-      this.recipeImportStatus,
-      this.exportedRecipesNumber,
-      this.recipesExportStatus = RecipesExportStatus.notRequested});
+      this.recipeImportStatus});
 
   RecipeState copyWith(
       {List<Recipe>? recipes,
       String? ingredientsJson,
-      String? recipeImportStatus,
-      int? exportedRecipesNumber,
-      RecipesExportStatus? recipesExportStatus}) {
+      String? recipeImportStatus}) {
     return RecipeState(
         recipes: recipes ?? this.recipes,
         ingredientsJson: ingredientsJson ?? this.ingredientsJson,
-        recipeImportStatus: recipeImportStatus ?? this.recipeImportStatus,
-        exportedRecipesNumber:
-            exportedRecipesNumber ?? this.exportedRecipesNumber,
-        recipesExportStatus: recipesExportStatus ?? this.recipesExportStatus);
+        recipeImportStatus: recipeImportStatus ?? this.recipeImportStatus);
   }
 
   @override
@@ -42,7 +25,5 @@ class RecipeState extends Equatable {
         recipes,
         ingredientsJson,
         recipeImportStatus,
-        exportedRecipesNumber,
-        recipesExportStatus
       ];
 }

@@ -411,10 +411,3 @@ class RecipesImported extends RecipeEvent {
   @override
   List<Object> get props => [];
 }
-
-class RecipesSavedToFile extends RecipeEvent {
-  const RecipesSavedToFile();
-
-  @override
-  List<Object> get props => [];
-}
