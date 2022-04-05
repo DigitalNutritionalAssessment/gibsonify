@@ -24,10 +24,6 @@ class App extends StatelessWidget {
               create: (context) =>
                   LoginBloc(gibsonifyRepository: gibsonifyRepository)
                     ..add(const LoginInfoLoaded())),
-          BlocProvider(
-              create: (context) =>
-                  HomeBloc(gibsonifyRepository: gibsonifyRepository)
-                    ..add(const GibsonsFormsLoaded())),
           // TODO: Refactor and move Collection and Recipe BlocProviders further
           // down the widget tree
           // Or another possibility is to get rid of HomeBloc and move its
@@ -39,7 +35,12 @@ class App extends StatelessWidget {
               lazy: false,
               create: (context) =>
                   RecipeBloc(gibsonifyRepository: gibsonifyRepository)
-                    ..add(const RecipesLoaded()))
+                    ..add(const RecipesLoaded())),
+          BlocProvider(
+              create: (context) => HomeBloc(
+                  gibsonifyRepository: gibsonifyRepository,
+                  recipeBloc: BlocProvider.of<RecipeBloc>(context))
+                ..add(const GibsonsFormsLoaded())),
         ],
         child: MaterialApp(
           title: 'Gibsonify',

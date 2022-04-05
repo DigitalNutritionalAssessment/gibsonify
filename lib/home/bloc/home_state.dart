@@ -14,36 +14,47 @@ class HomeState extends Equatable {
       {this.gibsonsForms = const [],
       this.collectionDuplicationMode = false,
       this.exportedGibsonsFormsNumber,
-      this.lastInternalExportPath,
-      this.lastExternalExportPath,
-      this.gibsonsFormsExportStatus = GibsonsFormsExportStatus.notRequested});
+      this.exportedRecipesNumber,
+      this.lastInternalExportPath, // TODO: delete
+      this.lastExternalExportPath, // TODO: delete
+      this.gibsonsFormsExportStatus = GibsonsFormsExportStatus.notRequested,
+      this.recipesExportStatus = RecipesExportStatus.notRequested});
 
   final List<GibsonsForm?> gibsonsForms;
   final bool collectionDuplicationMode;
   final int? exportedGibsonsFormsNumber;
+  // TODO: exportedRecipesNumber is needed to display snackbars with both
+  // recipe and gibsonsforms exported numbers while listening to only one bloc
+  final int? exportedRecipesNumber;
   final String? lastExternalExportPath;
   final String? lastInternalExportPath;
   final GibsonsFormsExportStatus gibsonsFormsExportStatus;
+  final RecipesExportStatus recipesExportStatus; // same here
 
   HomeState copyWith(
       {List<GibsonsForm?>? gibsonsForms,
       bool? collectionDuplicationMode,
       int? exportedGibsonsFormsNumber,
+      int? exportedRecipesNumber,
       String? lastExternalExportPath,
       String? lastInternalExportPath,
-      GibsonsFormsExportStatus? gibsonsFormsExportStatus}) {
+      GibsonsFormsExportStatus? gibsonsFormsExportStatus,
+      RecipesExportStatus? recipesExportStatus}) {
     return HomeState(
         gibsonsForms: gibsonsForms ?? this.gibsonsForms,
         collectionDuplicationMode:
             collectionDuplicationMode ?? this.collectionDuplicationMode,
         exportedGibsonsFormsNumber:
             exportedGibsonsFormsNumber ?? this.exportedGibsonsFormsNumber,
+        exportedRecipesNumber:
+            exportedRecipesNumber ?? this.exportedRecipesNumber,
         lastExternalExportPath:
             lastExternalExportPath ?? this.lastExternalExportPath,
         lastInternalExportPath:
             lastInternalExportPath ?? this.lastInternalExportPath,
         gibsonsFormsExportStatus:
-            gibsonsFormsExportStatus ?? this.gibsonsFormsExportStatus);
+            gibsonsFormsExportStatus ?? this.gibsonsFormsExportStatus,
+        recipesExportStatus: recipesExportStatus ?? this.recipesExportStatus);
   }
 
   @override
@@ -51,8 +62,10 @@ class HomeState extends Equatable {
         gibsonsForms,
         collectionDuplicationMode,
         exportedGibsonsFormsNumber,
+        exportedRecipesNumber,
         lastExternalExportPath,
         lastInternalExportPath,
-        gibsonsFormsExportStatus
+        gibsonsFormsExportStatus,
+        recipesExportStatus
       ];
 }

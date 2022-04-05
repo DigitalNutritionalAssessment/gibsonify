@@ -19,7 +19,8 @@ class SyncScreen extends StatelessWidget {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                     content: Text('Successfully saved '
-                        '${state.exportedGibsonsFormsNumber} collection(s) '
+                        '${state.exportedGibsonsFormsNumber} collection(s) and '
+                        '${state.exportedRecipesNumber} recipe(s) '
                         'to downloads folder')),
               );
             }
@@ -57,13 +58,14 @@ class SyncScreen extends StatelessWidget {
           // number of exported collections and recipes
           // Probably rather implement a StreamSubscription of HomeBloc on
           // RecipeBloc and use a single Listener here
-          if (state.recipesExportStatus ==
-              RecipesExportStatus.externalSaveSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text('Successfully saved '
-                    '${state.exportedRecipesNumber} recipe(s) '
-                    'to downloads folder')));
-          }
+
+          // if (state.recipesExportStatus ==
+          //     RecipesExportStatus.externalSaveSuccess) {
+          //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          //       content: Text('Successfully saved '
+          //           '${state.exportedRecipesNumber} recipe(s) '
+          //           'to downloads folder')));
+          // }
         }),
       ],
       child: Scaffold(
@@ -77,9 +79,8 @@ class SyncScreen extends StatelessWidget {
                   label: const Text("Save data to device"),
                   icon: const Icon(Icons.save),
                   onPressed: () {
-                    context
-                        .read<HomeBloc>()
-                        .add(const FinishedGibsonsFormsSavedToFile());
+                    // TODO: this event currently triggers saving of
+                    // GibsonsForms as well, find a simpler option later
                     context.read<RecipeBloc>().add(const RecipesSavedToFile());
                   }),
               const SizedBox(
