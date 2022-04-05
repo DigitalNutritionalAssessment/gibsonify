@@ -15,38 +15,17 @@ part 'home_event.dart';
 part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  // TODO: change the BLoC architecture of the app - maybe a save/load bloc
-  // that handles api saving/loading and also exporting/importing from files
-  // would work better
   final GibsonifyRepository _gibsonifyRepository;
-  final RecipeBloc recipeBloc;
-  late final StreamSubscription recipeBlocSubscription;
 
-  HomeBloc(
-      {required GibsonifyRepository gibsonifyRepository,
-      required this.recipeBloc})
-      : _gibsonifyRepository = gibsonifyRepository,
+  HomeBloc({
+    required GibsonifyRepository gibsonifyRepository,
+  })  : _gibsonifyRepository = gibsonifyRepository,
         super(const HomeState()) {
-    recipeBlocSubscription = recipeBloc.stream.listen((recipeState) {
-      if (recipeState.recipesExportStatus ==
-          RecipesExportStatus.externalSaveSuccess) {
-        add(FinishedGibsonsFormsSavedToFile(
-            recipesExportStatus: recipeState.recipesExportStatus,
-            exportedRecipesNumber: recipeState.exportedRecipesNumber!));
-      }
-    });
     // TODO: implement a subscription to a stream of GibsonsForms
     on<GibsonsFormsLoaded>(_onGibsonsFormsLoaded);
     on<GibsonsFormDeleted>(_onGibsonsFormDeleted);
     on<CollectionDuplicationModeToggled>(_onCollectionDuplicationModeToggled);
-    on<FinishedGibsonsFormsSavedToFile>(_onFinishedGibsonsFormsSavedToFile);
     on<FinishedGibsonsFormsShared>(_onFinishedGibsonsFormsShared);
-  }
-
-  @override
-  Future<void> close() {
-    recipeBlocSubscription.cancel();
-    return super.close();
   }
 
   void _onGibsonsFormsLoaded(
@@ -67,56 +46,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       CollectionDuplicationModeToggled event, Emitter<HomeState> emit) {
     emit(state.copyWith(
         collectionDuplicationMode: !state.collectionDuplicationMode));
-  }
-
-  void _onFinishedGibsonsFormsSavedToFile(
-      FinishedGibsonsFormsSavedToFile event, Emitter<HomeState> emit) async {
-    int savedGibsonsFormsNumber = state.gibsonsForms
-        .where((gibsonsForm) => gibsonsForm != null && gibsonsForm.finished)
-        .length;
-
-    if (savedGibsonsFormsNumber == 0) {
-      emit(state.copyWith(
-          gibsonsFormsExportStatus: GibsonsFormsExportStatus.noCsvForms,
-          exportedGibsonsFormsNumber: savedGibsonsFormsNumber,
-          recipesExportStatus: event.recipesExportStatus,
-          exportedRecipesNumber: event.exportedRecipesNumber));
-      return;
-    }
-
-    String finishedGibsonsFormsCsv =
-        _convertFinishedGibsonsFormsToCsv(state.gibsonsForms);
-
-    try {
-      if (!await Permission.storage.request().isGranted) {
-        emit(state.copyWith(
-            gibsonsFormsExportStatus:
-                GibsonsFormsExportStatus.noPermissionToSaveFile,
-            exportedGibsonsFormsNumber: 0,
-            recipesExportStatus: event.recipesExportStatus,
-            exportedRecipesNumber: event.exportedRecipesNumber));
-      } else {
-        String currentDateTime =
-            DateFormat("yyyy-MM-dd-HH-mm-ss").format(DateTime.now());
-        final collectionfilePath = '/storage/emulated/0/Download/'
-            'collection-data-$currentDateTime.csv';
-        final collectionfile = File(collectionfilePath);
-        collectionfile.writeAsString(finishedGibsonsFormsCsv);
-
-        emit(state.copyWith(
-            gibsonsFormsExportStatus:
-                GibsonsFormsExportStatus.externalSaveSuccess,
-            exportedGibsonsFormsNumber: savedGibsonsFormsNumber,
-            recipesExportStatus: event.recipesExportStatus,
-            exportedRecipesNumber: event.exportedRecipesNumber));
-      }
-    } catch (e) {
-      emit(state.copyWith(
-          gibsonsFormsExportStatus: GibsonsFormsExportStatus.error,
-          exportedGibsonsFormsNumber: 0,
-          recipesExportStatus: event.recipesExportStatus,
-          exportedRecipesNumber: event.exportedRecipesNumber));
-    }
   }
 
   void _onFinishedGibsonsFormsShared(

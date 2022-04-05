@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gibsonify/recipe/recipe.dart';
 import 'package:gibsonify/home/home.dart';
+import 'package:gibsonify/import_export/import_export.dart';
 
 class SyncScreen extends StatelessWidget {
   const SyncScreen({Key? key}) : super(key: key);
@@ -13,29 +14,6 @@ class SyncScreen extends StatelessWidget {
       listeners: [
         BlocListener<HomeBloc, HomeState>(
           listener: (context, state) async {
-            // TODO: add conditions for failure and other statuses
-            if (state.gibsonsFormsExportStatus ==
-                GibsonsFormsExportStatus.externalSaveSuccess) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                    content: Text('Successfully saved '
-                        '${state.exportedGibsonsFormsNumber} collection(s) and '
-                        '${state.exportedRecipesNumber} recipe(s) '
-                        'to downloads folder')),
-              );
-            }
-
-            if (state.gibsonsFormsExportStatus ==
-                GibsonsFormsExportStatus.noCsvForms) {
-              ScaffoldMessenger.of(context)
-                ..hideCurrentSnackBar()
-                ..showSnackBar(
-                  const SnackBar(
-                      content:
-                          Text('There are no finished collections to save!')),
-                );
-            }
-
             if (state.gibsonsFormsExportStatus ==
                 GibsonsFormsExportStatus.internalSaveSuccess) {
               // TODO: move share into BLoC
@@ -52,20 +30,47 @@ class SyncScreen extends StatelessWidget {
             }
           },
         ),
-        BlocListener<RecipeBloc, RecipeState>(listener: (context, state) {
-          // TODO: add conditions for failure and other statuses
-          // TODO: Figure out a way to use only one snackbar to display
-          // number of exported collections and recipes
-          // Probably rather implement a StreamSubscription of HomeBloc on
-          // RecipeBloc and use a single Listener here
+        // TODO: remove multibloc listener and only listen to ImportExportBloc
+        BlocListener<ImportExportBloc, ImportExportState>(
+            listener: (context, state) {
+          if (state.dataSaveStatus == DataSaveStatus.success) {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(
+                    content: Text('Successfully saved '
+                        '${state.exportedGibsonsFormsNumber} collection(s) and '
+                        '${state.exportedRecipesNumber} recipe(s) '
+                        'to downloads folder')),
+              );
+          }
+          if (state.dataSaveStatus == DataSaveStatus.error) {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                const SnackBar(content: Text('Error: data could not be saved')),
+              );
+          }
 
-          // if (state.recipesExportStatus ==
-          //     RecipesExportStatus.externalSaveSuccess) {
-          //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          //       content: Text('Successfully saved '
-          //           '${state.exportedRecipesNumber} recipe(s) '
-          //           'to downloads folder')));
-          // }
+          if (state.dataSaveStatus == DataSaveStatus.noData) {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                const SnackBar(
+                    content: Text(
+                        'There are no collections or recipes to be saved')),
+              );
+          }
+
+          if (state.dataSaveStatus == DataSaveStatus.noPermissionToSaveFiles) {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                const SnackBar(
+                    content: Text('No permission to save data: '
+                        'please allow data access in settings')),
+              );
+          }
         }),
       ],
       child: Scaffold(
@@ -79,9 +84,9 @@ class SyncScreen extends StatelessWidget {
                   label: const Text("Save data to device"),
                   icon: const Icon(Icons.save),
                   onPressed: () {
-                    // TODO: this event currently triggers saving of
-                    // GibsonsForms as well, find a simpler option later
-                    context.read<RecipeBloc>().add(const RecipesSavedToFile());
+                    context
+                        .read<ImportExportBloc>()
+                        .add(const DataSavedToFiles());
                   }),
               const SizedBox(
                 height: 10,

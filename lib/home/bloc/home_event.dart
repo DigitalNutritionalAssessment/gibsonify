@@ -29,16 +29,6 @@ class CollectionDuplicationModeToggled extends HomeEvent {
   List<Object> get props => [];
 }
 
-class FinishedGibsonsFormsSavedToFile extends HomeEvent {
-  final RecipesExportStatus recipesExportStatus;
-  final int exportedRecipesNumber;
-  const FinishedGibsonsFormsSavedToFile(
-      {required this.recipesExportStatus, required this.exportedRecipesNumber});
-
-  @override
-  List<Object> get props => [recipesExportStatus, exportedRecipesNumber];
-}
-
 class FinishedGibsonsFormsShared extends HomeEvent {
   const FinishedGibsonsFormsShared();
 
