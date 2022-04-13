@@ -18,12 +18,12 @@ class ImportExportBloc extends Bloc<ImportExportEvent, ImportExportState> {
   ImportExportBloc({required GibsonifyRepository gibsonifyRepository})
       : _gibsonifyRepository = gibsonifyRepository,
         super(const ImportExportState()) {
-    on<DataSavedToFiles>(_onDataSavedToFiles);
+    on<DataSavedToDevice>(_onDataSavedToDevice);
     on<DataShared>(_onDataShared);
   }
 
-  void _onDataSavedToFiles(
-      DataSavedToFiles event, Emitter<ImportExportState> emit) async {
+  void _onDataSavedToDevice(
+      DataSavedToDevice event, Emitter<ImportExportState> emit) async {
     List<GibsonsForm?> gibsonsForms = _gibsonifyRepository.loadForms();
     List<Recipe> recipes = _gibsonifyRepository.loadRecipes();
 

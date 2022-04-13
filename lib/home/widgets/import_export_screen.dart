@@ -95,7 +95,7 @@ class SyncScreen extends StatelessWidget {
                   onPressed: () {
                     context
                         .read<ImportExportBloc>()
-                        .add(const DataSavedToFiles());
+                        .add(const DataSavedToDevice());
                   }),
               const SizedBox(
                 height: 10,

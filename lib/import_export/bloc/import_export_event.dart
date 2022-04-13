@@ -7,8 +7,8 @@ abstract class ImportExportEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class DataSavedToFiles extends ImportExportEvent {
-  const DataSavedToFiles();
+class DataSavedToDevice extends ImportExportEvent {
+  const DataSavedToDevice();
 
   @override
   List<Object> get props => [];
