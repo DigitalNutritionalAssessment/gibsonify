@@ -109,7 +109,11 @@ class Recipe extends Equatable {
   }
 
   String toCsv() {
-    String recipeInfo = '"$employeeNumber","$number","$date","$name","$type",';
+    // TODO: think if we shouldn't change the type to enum or strings that
+    // don't have " Recipe" in the end.
+    String prunedType = type.replaceAll(' Recipe', '');
+    String recipeInfo =
+        '"$employeeNumber","$number","$date","$name","$prunedType",';
     String csv = '';
 
     String measurementsCombined = combineMeasurements(measurements);
