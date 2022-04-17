@@ -125,7 +125,7 @@ class GibsonsForm extends Equatable {
         '"$comments","${finished.toString()}",';
     String csv = '';
     for (FoodItem foodItem in foodItems) {
-      csv = csv + gibsonsFormInfo + foodItem.toCsv() + '\n';
+      csv += gibsonsFormInfo + foodItem.toCsv() + '\n';
     }
     return csv;
   }

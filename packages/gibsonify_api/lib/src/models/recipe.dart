@@ -114,8 +114,7 @@ class Recipe extends Equatable {
 
     String measurementsCombined = combineMeasurements(measurements);
     var blankFieldsAfterMeasurements = ',,,,,,';
-    csv = csv +
-        recipeInfo +
+    csv += recipeInfo +
         '"Measurement",' +
         measurementsCombined +
         blankFieldsAfterMeasurements +
@@ -123,8 +122,7 @@ class Recipe extends Equatable {
 
     var blankFieldsBeforeIngredient = ',,,';
     for (Ingredient ingredient in ingredients) {
-      csv = csv +
-          recipeInfo +
+      csv += recipeInfo +
           '"Ingredient",' +
           blankFieldsBeforeIngredient +
           ingredient.toCsv() +
@@ -134,8 +132,7 @@ class Recipe extends Equatable {
     var blankFieldsBeforeProbe = ',';
     var blankFieldsAfterProbe = ',,,,';
     for (Probe probe in probes) {
-      csv = csv +
-          recipeInfo +
+      csv += recipeInfo +
           '"Probe",' +
           blankFieldsBeforeProbe +
           probe.toCsv() +
