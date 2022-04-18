@@ -1,7 +1,82 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## 1.2.0 (2022-04-18)
+
+### Feat
+
+- add export of collections and recipes
+- add recipe sharing functionality
+- add preliminary recipe export
+- add collection feature requests
+- implement data saving to downloads folder
+- add preliminary collection export
+- **gibsonify_api**: add csv conversion for gibsons forms
+- **gibsonify_api**: add string representations
+- add read-only mode to collection
+- add second visit reason field
+- add second interview visit date field
+- add interview finished in one visit field
+- improve collection status and outcome view
+- **collection**: add finish confirmation dialog
+- enable collection duplication
+- **collection**: add finished and unfinished text
+- implement login screen and info
+- **login**: integrate employee number logic to collections
+- **login**: add employee number field to gibsons form model
+- **login**: add verification of login fields for submission
+- **login**: add employee number field logic to import
+- **login**: add employee number to recipe model
+- **login**: add employee number field to recipe csvs
+- add collection completed functionality
+- validate sensitization before moving on
+- **login**: add login button on settings page
+- **login**: add gibsonify logo to login screen
+- **login**: format login page
+- **login**: add MVP login page
+- **login**: add local storage logic for login
+- **login**: add login bloc
+- **login**: add login model
+- **recipe**: implement feedback on features
+- **recipe**: add logic for replacing old recipes with new ones
+- **recipe**: add logic to modify date upon recipe modification
+- **recipe**: add date field for recipe list version control
+- **collection**: change interview outcome to dropdownsearch
+- **collection**: change picture chart input to dropdownsearch
+- **collection**: change to dropdownsearch in preparation method
+- **collection**: change to dropdownsearch in food source
+- **collection**: change to dropdownsearch in time period
+- **collection**: change to dropdownsearch in recall day
+- **collection**: change food ingredients wording
+- **collection**: change fourth pass snackbar text
+- rename food description to food ingredients
+- **collection**: set dropdown heights for measurements
+- **collection**: reverse measurement unit and value order
+- **collection**: add check boxes to fourth pass items
+- **collection**: add number keyboard for measurement value
+- **recipe**: add prompts to notiy user on recipe import status
+- **recipe**: handle duplicate recipe imports
+- **recipe**: implement basic recipe import
+- add settings help page with app information
+- **settings**: add source code link to settings help page
+- **settings**: show copyright in settings help page
+- add settings help page with app version
+- update and simplify settings screen
+- update item deletion
+- add delete dialog to fourth pass
+- simplify slidable background red color
+- add long-press-to-delete option to third pass
+- add delete dialog to third pass
+- add long-press-to-delete option to first pass
+- add delete dialog to first pass
+- add long-press-to-delete recipe option
+- standardize delete dialogs
+- add long-press-to-delete collection option
+- change collection form fields to tiles
+- add deletion dialog to collections screen
+- reverse slide to delete direction
+- trim ingredient list and add generating script
+- add script for generating ingredient list
 
 ### Fix
 
@@ -80,80 +155,6 @@ All notable changes to this project will be documented in this file.
 - **recipe**: refactor ingredient loading into bloc and store in state
 - **recipe**: add helper functions to refactor bloc functions
 - **recipe**: use maps instead of lists for arg passing
-
-### Feat
-
-- add recipe sharing functionality
-- add preliminary recipe export
-- add collection feature requests
-- implement data saving to downloads folder
-- add preliminary collection export
-- **gibsonify_api**: add csv conversion for gibsons forms
-- **gibsonify_api**: add string representations
-- add read-only mode to collection
-- add second visit reason field
-- add second interview visit date field
-- add interview finished in one visit field
-- improve collection status and outcome view
-- **collection**: add finish confirmation dialog
-- enable collection duplication
-- **collection**: add finished and unfinished text
-- implement login screen and info
-- **login**: integrate employee number logic to collections
-- **login**: add employee number field to gibsons form model
-- **login**: add verification of login fields for submission
-- **login**: add employee number field logic to import
-- **login**: add employee number to recipe model
-- **login**: add employee number field to recipe csvs
-- add collection completed functionality
-- validate sensitization before moving on
-- **login**: add login button on settings page
-- **login**: add gibsonify logo to login screen
-- **login**: format login page
-- **login**: add MVP login page
-- **login**: add local storage logic for login
-- **login**: add login bloc
-- **login**: add login model
-- **recipe**: implement feedback on features
-- **recipe**: add logic for replacing old recipes with new ones
-- **recipe**: add logic to modify date upon recipe modification
-- **recipe**: add date field for recipe list version control
-- **collection**: change interview outcome to dropdownsearch
-- **collection**: change picture chart input to dropdownsearch
-- **collection**: change to dropdownsearch in preparation method
-- **collection**: change to dropdownsearch in food source
-- **collection**: change to dropdownsearch in time period
-- **collection**: change to dropdownsearch in recall day
-- **collection**: change food ingredients wording
-- **collection**: change fourth pass snackbar text
-- rename food description to food ingredients
-- **collection**: set dropdown heights for measurements
-- **collection**: reverse measurement unit and value order
-- **collection**: add check boxes to fourth pass items
-- **collection**: add number keyboard for measurement value
-- **recipe**: add prompts to notiy user on recipe import status
-- **recipe**: handle duplicate recipe imports
-- **recipe**: implement basic recipe import
-- add settings help page with app information
-- **settings**: add source code link to settings help page
-- **settings**: show copyright in settings help page
-- add settings help page with app version
-- update and simplify settings screen
-- update item deletion
-- add delete dialog to fourth pass
-- simplify slidable background red color
-- add long-press-to-delete option to third pass
-- add delete dialog to third pass
-- add long-press-to-delete option to first pass
-- add delete dialog to first pass
-- add long-press-to-delete recipe option
-- standardize delete dialogs
-- add long-press-to-delete collection option
-- change collection form fields to tiles
-- add deletion dialog to collections screen
-- reverse slide to delete direction
-- trim ingredient list and add generating script
-- add script for generating ingredient list
 
 ## 1.1.0 (2022-02-21)
 
