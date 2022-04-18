@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:bloc/bloc.dart';
+import 'package:csv/csv_settings_autodetection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:uuid/uuid.dart';
 import 'package:file_picker/file_picker.dart';
@@ -882,9 +883,11 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
       return;
     }
     final input = File(result.files.single.path!).openRead();
+    var lineEndSetting = FirstOccurrenceSettingsDetector(eols: ['\r\n', '\n']);
+
     List data = await input
         .transform(utf8.decoder)
-        .transform(const CsvToListConverter())
+        .transform(CsvToListConverter(csvSettingsDetector: lineEndSetting))
         .toList();
 
     int headingLinePosition = 0;
