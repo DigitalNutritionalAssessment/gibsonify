@@ -1,8 +1,8 @@
 import 'dart:convert';
-
 import 'package:equatable/equatable.dart';
-import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:uuid/uuid.dart';
+
+import 'package:gibsonify_api/gibsonify_api.dart';
 
 class GibsonsForm extends Equatable {
   GibsonsForm(
@@ -14,7 +14,7 @@ class GibsonsForm extends Equatable {
       this.respondentTelNumberPrefix,
       this.respondentTelNumber,
       this.sensitizationDate,
-      this.recallDay,
+      this.recallDay, // TODO: rename to recallDayType
       this.interviewDate,
       this.interviewStartTime,
       this.geoLocation,
@@ -81,7 +81,7 @@ class GibsonsForm extends Equatable {
         interviewOutcomeNotCompletedReason =
             json['interviewOutcomeNotCompletedReason'],
         comments = json['comments'],
-        finished = json['completed'] == 'true' ? true : false,
+        finished = json['finished'] == 'true' ? true : false,
         foodItems = _jsonDecodeFoodItems(json['foodItems']);
 
   Map<String, dynamic> toJson() {
@@ -108,9 +108,26 @@ class GibsonsForm extends Equatable {
     data['interviewOutcomeNotCompletedReason'] =
         interviewOutcomeNotCompletedReason;
     data['comments'] = comments;
-    data['completed'] = finished.toString();
+    data['finished'] = finished.toString();
     data['foodItems'] = jsonEncode(foodItems); // This calls toJson on each one
     return data;
+  }
+  // TODO: add a fromCsv constructor
+
+  String toCsv() {
+    String gibsonsFormInfo =
+        '"$id","$employeeNumber","$householdId","$respondentName",'
+        '"$respondentCountryCode","$respondentTelNumberPrefix","$respondentTelNumber",'
+        '"$sensitizationDate","$recallDay","$interviewDate","$interviewStartTime",'
+        '"$geoLocation","$pictureChartCollected","$pictureChartNotCollectedReason",'
+        '"$interviewEndTime","$interviewFinishedInOneVisit","$secondInterviewVisitDate",'
+        '"$secondVisitReason","$interviewOutcome","$interviewOutcomeNotCompletedReason",'
+        '"$comments","${finished.toString()}",';
+    String csv = '';
+    for (FoodItem foodItem in foodItems) {
+      csv += gibsonsFormInfo + foodItem.toCsv() + '\n';
+    }
+    return csv;
   }
 
   GibsonsForm copyWith(
@@ -196,7 +213,7 @@ class GibsonsForm extends Equatable {
         'Interview Outcome Not Completed Reason: '
         '$interviewOutcomeNotCompletedReason\n'
         'Comments: $comments\n'
-        'Completed: $finished\n'
+        'Finished: $finished\n'
         'Food Items: $foodItems'
         '\n *** \n';
   }

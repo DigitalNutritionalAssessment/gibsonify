@@ -10,9 +10,10 @@ part 'home_state.dart';
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final GibsonifyRepository _gibsonifyRepository;
 
-  HomeBloc({required GibsonifyRepository gibsonifyRepository})
-      : _gibsonifyRepository = gibsonifyRepository,
-        super(HomeState()) {
+  HomeBloc({
+    required GibsonifyRepository gibsonifyRepository,
+  })  : _gibsonifyRepository = gibsonifyRepository,
+        super(const HomeState()) {
     // TODO: implement a subscription to a stream of GibsonsForms
     on<GibsonsFormsLoaded>(_onGibsonsFormsLoaded);
     on<GibsonsFormDeleted>(_onGibsonsFormDeleted);

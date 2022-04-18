@@ -3,9 +3,44 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Fix
+
+- **recipe**: add EOL detection setting for csv import
+- **gibsonify_api**: export recipe type according to template
+- measurement export format ordering
+- use single snack bar upon saving data
+- correct export data tab to include import
+- gibsons forms csv header whitespace
+- **gibsonify_api**: change completed fields to finished
+- **collection**: typo in finish page
+- **collection**: keyboard covers bottom text input fields
+- **collection**: change to unfinished upon duplication
+- **recipe**: fix ingredient measurement field bug in recipe import
+- **recipe**: fix date fields in import csv
+- **recipe**: fix measurement field bug in recipe import
+- **collection**: fourth pass validation and order
+- **login**: use pushReplacementNamed instead of pushNamed for login page
+- **login**: fix login page navigation
+- **gibsonify_api**: update time period validator
+- **collection**: measurement unit dropdown height
+- **collection**: fourth pass last item confirmation
+- saving using native back button or swipe
+- **recipe**: override back button/swipe to save
+- **collection**: override back button/swipe to save
+- **collection**: temporarily remove long-press-to-delete
+- fix wrongly named map key for argument passing for page navigation
+
 ### Refactor
 
+- **gibsonify_api**: clean up helper functions structure
+- **gibsonify_api**: simplify csv string updating
+- improve naming of local saving of data
+- move csv convertor functions to api
+- remove deprecated functionality from blocs
+- move data file export to standalone bloc
 - **collection**: remove null check from second pass
+- simplify recipe field names
+- rename sync screen to import export
 - rename collection completed to finished
 - change comments to nullable string
 - make interview outcome not completed reason nullable
@@ -46,28 +81,15 @@ All notable changes to this project will be documented in this file.
 - **recipe**: add helper functions to refactor bloc functions
 - **recipe**: use maps instead of lists for arg passing
 
-### Fix
-
-- **collection**: typo in finish page
-- **collection**: keyboard covers bottom text input fields
-- **collection**: change to unfinished upon duplication
-- **recipe**: fix ingredient measurement field bug in recipe import
-- **recipe**: fix date fields in import csv
-- **recipe**: fix measurement field bug in recipe import
-- **collection**: fourth pass validation and order
-- **login**: use pushReplacementNamed instead of pushNamed for login page
-- **login**: fix login page navigation
-- **gibsonify_api**: update time period validator
-- **collection**: measurement unit dropdown height
-- **collection**: fourth pass last item confirmation
-- saving using native back button or swipe
-- **recipe**: override back button/swipe to save
-- **collection**: override back button/swipe to save
-- **collection**: temporarily remove long-press-to-delete
-- fix wrongly named map key for argument passing for page navigation
-
 ### Feat
 
+- add recipe sharing functionality
+- add preliminary recipe export
+- add collection feature requests
+- implement data saving to downloads folder
+- add preliminary collection export
+- **gibsonify_api**: add csv conversion for gibsons forms
+- **gibsonify_api**: add string representations
 - add read-only mode to collection
 - add second visit reason field
 - add second interview visit date field

@@ -1,7 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:uuid/uuid.dart';
-import 'package:gibsonify_api/gibsonify_api.dart';
 import 'dart:convert';
+
+import 'package:gibsonify_api/gibsonify_api.dart';
 
 class Measurement extends Equatable {
   Measurement(
@@ -16,7 +17,7 @@ class Measurement extends Equatable {
   final String? measurementMethod;
   final String? measurementUnit;
   final String? measurementValue;
-  final String id;
+  final String id; // TODO: investigate whether the id is needed
   static final List<String> measurementMethods = [
     "Direct weight",
     "Volume of water",
@@ -46,6 +47,16 @@ class Measurement extends Equatable {
         measurementUnit: measurementUnit ?? this.measurementUnit,
         measurementValue: measurementValue ?? this.measurementValue,
         id: id ?? this.id);
+  }
+
+  @override
+  String toString() {
+    return '\n *** \Measurement:\n'
+        'UUID: $id\n'
+        'Method: $measurementMethod\n'
+        'Unit: $measurementUnit\n'
+        'Value: $measurementValue\n'
+        '\n *** \n';
   }
 
   @override

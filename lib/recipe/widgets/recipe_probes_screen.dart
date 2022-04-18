@@ -20,9 +20,8 @@ class RecipeProbesScreen extends StatelessWidget {
       return Scaffold(
           appBar: AppBar(title: const Text('Recipe probes list')),
           floatingActionButton: Visibility(
-            visible:
-                (state.recipes[recipeIndex].recipeType == 'Standard Recipe' &&
-                    assignedFoodItemId == null),
+            visible: (state.recipes[recipeIndex].type == 'Standard Recipe' &&
+                assignedFoodItemId == null),
             child: FloatingActionButton.extended(
                 label: const Text("Add probe"),
                 icon: const Icon(Icons.add),
@@ -67,9 +66,8 @@ class ProbeList extends StatelessWidget {
           ProbesPrompt(
               recipeIndex: recipeIndex, assignedFoodItemId: assignedFoodItemId),
           Visibility(
-            visible:
-                (state.recipes[recipeIndex].recipeType == 'Standard Recipe' &&
-                    assignedFoodItemId != null),
+            visible: (state.recipes[recipeIndex].type == 'Standard Recipe' &&
+                assignedFoodItemId != null),
             child: ListTile(
               title: const Text('Food ingredients'),
               subtitle: Text(foodItemDescription ?? ''),
@@ -77,8 +75,7 @@ class ProbeList extends StatelessWidget {
             ),
           ),
           Visibility(
-            visible:
-                (state.recipes[recipeIndex].recipeType == 'Standard Recipe'),
+            visible: (state.recipes[recipeIndex].type == 'Standard Recipe'),
             child: Expanded(
               child: ListView.builder(
                   padding: const EdgeInsets.all(2.0),
@@ -187,7 +184,7 @@ class ProbesPrompt extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
-      if (state.recipes[recipeIndex].recipeType != 'Standard Recipe') {
+      if (state.recipes[recipeIndex].type != 'Standard Recipe') {
         return const ListTile(
           title: Text('Probes are only a feature of Standard recipes'),
           subtitle: Text('Use a standard recipe to add probes'),
@@ -196,7 +193,7 @@ class ProbesPrompt extends StatelessWidget {
       } else if (assignedFoodItemId != null &&
           state.recipes[recipeIndex].allProbesChecked &&
           state.recipes[recipeIndex].allProbeAnswersStandard &&
-          state.recipes[recipeIndex].recipeType == 'Standard Recipe' &&
+          state.recipes[recipeIndex].type == 'Standard Recipe' &&
           state.recipes[recipeIndex].probes.isNotEmpty) {
         return const ListTile(
           title: Text('This is a standard recipe.'),
@@ -206,7 +203,7 @@ class ProbesPrompt extends StatelessWidget {
       } else if (assignedFoodItemId != null &&
           state.recipes[recipeIndex].allProbesChecked &&
           !state.recipes[recipeIndex].allProbeAnswersStandard &&
-          state.recipes[recipeIndex].recipeType == 'Standard Recipe' &&
+          state.recipes[recipeIndex].type == 'Standard Recipe' &&
           state.recipes[recipeIndex].probes.isNotEmpty) {
         return const ListTile(
           title: Text('This is a modified recipe.'),
