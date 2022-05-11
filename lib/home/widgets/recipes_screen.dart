@@ -82,26 +82,37 @@ class RecipesScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
-                  FloatingActionButton.extended(
-                      heroTag: null,
-                      label: const Text("Standard Recipe"),
-                      icon: const Icon(Icons.add),
-                      onPressed: () => {
-                            context.read<RecipeBloc>().add(RecipeAdded(
-                                employeeNumber:
-                                    loginState.loginInfo.employeeId!,
-                                type: "Standard Recipe")),
-                            Navigator.pushNamed(context, PageRouter.recipe,
-                                arguments: {
-                                  'recipeIndex': recipeState.recipes.length,
-                                  'assignedFoodItemId': assignedFoodItemId,
-                                  'foodItemDescription': foodItemDescription,
-                                  'selectedScreen':
-                                      SelectedRecipeScreen.probeScreen
+                  Visibility(
+                    visible: assignedFoodItemId == null,
+                    child: Column(
+                      children: [
+                        FloatingActionButton.extended(
+                            heroTag: null,
+                            label: const Text("Standard Recipe"),
+                            icon: const Icon(Icons.add),
+                            onPressed: () => {
+                                  context.read<RecipeBloc>().add(RecipeAdded(
+                                      employeeNumber:
+                                          loginState.loginInfo.employeeId!,
+                                      type: "Standard Recipe")),
+                                  Navigator.pushNamed(
+                                      context, PageRouter.recipe,
+                                      arguments: {
+                                        'recipeIndex':
+                                            recipeState.recipes.length,
+                                        'assignedFoodItemId':
+                                            assignedFoodItemId,
+                                        'foodItemDescription':
+                                            foodItemDescription,
+                                        'selectedScreen':
+                                            SelectedRecipeScreen.probeScreen
+                                      }),
                                 }),
-                          }),
-                  const SizedBox(
-                    height: 10,
+                        const SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    ),
                   ),
                   FloatingActionButton.extended(
                       heroTag: null,
