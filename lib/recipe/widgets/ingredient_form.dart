@@ -97,13 +97,8 @@ class IngredientForm extends StatelessWidget {
                 icon: const Icon(Icons.description_rounded),
                 labelText: 'Ingredient description',
                 helperText: 'Ingredient description e.g. Big, dry, ripe etc.',
-                // TODO: Refactor the error condition into a reusable method
-                errorText: (state.recipes[recipeIndex]
-                                .ingredients[ingredientIndex].description !=
-                            null &&
-                        state.recipes[recipeIndex].ingredients[ingredientIndex]
-                                .description ==
-                            '')
+                errorText: (isFieldModifiedAndEmpty(state.recipes[recipeIndex]
+                        .ingredients[ingredientIndex].description))
                     ? 'Enter an ingredient description e.g. Ripe'
                     : null,
               ),

@@ -75,11 +75,10 @@ class RecipeNameInput extends StatelessWidget {
             icon: const Icon(Icons.assignment_rounded),
             labelText: 'Recipe Name',
             helperText: 'A valid recipe name, e.g. Aloo bandhgobhi',
-            // TODO: Refactor the error condition into a reusable method
-            errorText: (state.recipes[recipeIndex].name != null &&
-                    state.recipes[recipeIndex].name == '')
-                ? 'Enter a valid recipe name, e.g. Aloo bandhgobhi'
-                : null,
+            errorText:
+                (isFieldModifiedAndEmpty(state.recipes[recipeIndex].name))
+                    ? 'Enter a valid recipe name, e.g. Aloo bandhgobhi'
+                    : null,
           ),
           onChanged: (value) {
             context.read<RecipeBloc>().add(RecipeNameChanged(
