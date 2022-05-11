@@ -22,6 +22,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
         super(const RecipeState()) {
     on<RecipeAdded>(_onRecipeAdded);
     on<RecipeDuplicated>(_onRecipeDuplicated);
+    on<RecipeModified>(_onRecipeModified);
     on<RecipeDeleted>(_onRecipeDeleted);
     on<RecipeNameChanged>(_recipeNameChanged);
     on<RecipeMeasurementAdded>(_onRecipeMeasurementAdded);
@@ -58,6 +59,10 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     on<RecipesImported>(_onRecipesImported);
   }
 
+  String _getCurrentDate() {
+    return DateFormat('yyyy-MM-dd').format(DateTime.now());
+  }
+
   void _onRecipeAdded(RecipeAdded event, Emitter<RecipeState> emit) {
     final recipe =
         Recipe(employeeNumber: event.employeeNumber, type: event.type);
@@ -73,10 +78,30 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
 
     int changedRecipeIndex = recipes.indexOf(event.recipe);
 
-    Recipe duplicatedRecipe = recipes[changedRecipeIndex]
-        .copyWith(number: const Uuid().v4(), saved: false);
+    Recipe duplicatedRecipe = recipes[changedRecipeIndex].copyWith(
+        employeeNumber: event.employeeNumber,
+        number: const Uuid().v4(),
+        saved: false,
+        date: _getCurrentDate());
 
     recipes.insert(changedRecipeIndex + 1, duplicatedRecipe);
+
+    emit(state.copyWith(recipes: recipes));
+  }
+
+  void _onRecipeModified(RecipeModified event, Emitter<RecipeState> emit) {
+    List<Recipe> recipes = List.from(state.recipes);
+
+    int changedRecipeIndex = recipes.indexOf(event.recipe);
+
+    Recipe modifiedRecipe = recipes[changedRecipeIndex].copyWith(
+        employeeNumber: event.employeeNumber,
+        type: "Modified Recipe",
+        number: const Uuid().v4(),
+        saved: false,
+        date: _getCurrentDate());
+
+    recipes.insert(changedRecipeIndex + 1, modifiedRecipe);
 
     emit(state.copyWith(recipes: recipes));
   }
@@ -89,10 +114,6 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     recipes.removeAt(changedRecipeIndex);
 
     emit(state.copyWith(recipes: recipes));
-  }
-
-  String _getCurrentDate() {
-    return DateFormat('yyyy-MM-dd').format(DateTime.now());
   }
 
   void _recipeNameChanged(RecipeNameChanged event, Emitter<RecipeState> emit) {

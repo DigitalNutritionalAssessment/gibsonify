@@ -58,7 +58,7 @@ class RecipesScreen extends StatelessWidget {
                                     .ingredientNamesString()),
                             trailing: recipeState.recipes[index].saved
                                 ? const Icon(Icons.done)
-                                : const Icon(Icons.rotate_left_rounded),
+                                : const Icon(Icons.new_releases),
                             onTap: () => {
                                   context.read<RecipeBloc>().add(
                                       RecipeProbesCleared(
@@ -93,7 +93,9 @@ class RecipesScreen extends StatelessWidget {
                                 context: context,
                                 builder: (context) {
                                   return RecipeOptions(
-                                      recipe: recipeState.recipes[index]);
+                                      recipe: recipeState.recipes[index],
+                                      employeeNumber:
+                                          loginState.loginInfo.employeeId!);
                                 }))),
                   );
                 }),
@@ -178,8 +180,11 @@ class DeleteRecipeDialog extends StatelessWidget {
 
 class RecipeOptions extends StatelessWidget {
   final Recipe recipe;
+  final String employeeNumber;
 
-  const RecipeOptions({Key? key, required this.recipe}) : super(key: key);
+  const RecipeOptions(
+      {Key? key, required this.recipe, required this.employeeNumber})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -191,7 +196,8 @@ class RecipeOptions extends StatelessWidget {
           leading: const Icon(Icons.copy),
           title: const Text('Duplicate'),
           onTap: () => {
-            context.read<RecipeBloc>().add(RecipeDuplicated(recipe: recipe)),
+            context.read<RecipeBloc>().add(RecipeDuplicated(
+                recipe: recipe, employeeNumber: employeeNumber)),
             context.read<RecipeBloc>().add(const RecipesSaved()),
             Navigator.pop(context, 'Duplicate')
           },
@@ -206,17 +212,18 @@ class RecipeOptions extends StatelessWidget {
           },
         )
       ];
-      // if (recipe.type == "Standard Recipe") {
-      //   options.add(ListTile(
-      //     leading: const Icon(Icons.edit),
-      //     title: const Text('Create modified recipe'),
-      //     onTap: () => {
-      //       context.read<RecipeBloc>().add(RecipeDeleted(recipe: recipe)),
-      //       context.read<RecipeBloc>().add(const RecipesSaved()),
-      //       Navigator.pop(context, 'Delete')
-      //     },
-      //   ));
-      // }
+      if (recipe.type == "Standard Recipe") {
+        options.add(ListTile(
+          leading: const Icon(Icons.edit),
+          title: const Text('Create modified recipe'),
+          onTap: () => {
+            context.read<RecipeBloc>().add(
+                RecipeModified(recipe: recipe, employeeNumber: employeeNumber)),
+            context.read<RecipeBloc>().add(const RecipesSaved()),
+            Navigator.pop(context, 'Modified')
+          },
+        ));
+      }
       return Wrap(children: options);
     });
   }

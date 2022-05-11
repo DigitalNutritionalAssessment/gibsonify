@@ -145,7 +145,7 @@ class Ingredients extends StatelessWidget {
                     trailing:
                         state.recipes[recipeIndex].ingredients[index].saved
                             ? const Icon(Icons.done)
-                            : const Icon(Icons.rotate_left_rounded),
+                            : const Icon(Icons.new_releases),
                     onTap: () => {
                       Navigator.pushNamed(context, PageRouter.ingredient,
                           arguments: {
