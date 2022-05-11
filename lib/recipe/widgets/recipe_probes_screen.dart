@@ -67,9 +67,10 @@ class ProbeList extends StatelessWidget {
               recipeIndex: recipeIndex, assignedFoodItemId: assignedFoodItemId),
           Visibility(
             visible: (state.recipes[recipeIndex].type == 'Standard Recipe' &&
-                assignedFoodItemId != null),
+                assignedFoodItemId != null &&
+                isFieldNotNullAndNotEmpty(foodItemDescription)),
             child: ListTile(
-              title: const Text('Food ingredients'),
+              title: const Text('Comments:'),
               subtitle: Text(foodItemDescription ?? ''),
               leading: const Icon(Icons.description),
             ),
