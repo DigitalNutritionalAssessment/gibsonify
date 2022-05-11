@@ -17,6 +17,15 @@ class RecipeAdded extends RecipeEvent {
   List<Object> get props => [employeeNumber, type];
 }
 
+class RecipeDuplicated extends RecipeEvent {
+  final Recipe recipe;
+
+  const RecipeDuplicated({required this.recipe});
+
+  @override
+  List<Object> get props => [recipe];
+}
+
 class RecipeDeleted extends RecipeEvent {
   final Recipe recipe;
 

@@ -21,6 +21,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
       : _gibsonifyRepository = gibsonifyRepository,
         super(const RecipeState()) {
     on<RecipeAdded>(_onRecipeAdded);
+    on<RecipeDuplicated>(_onRecipeDuplicated);
     on<RecipeDeleted>(_onRecipeDeleted);
     on<RecipeNameChanged>(_recipeNameChanged);
     on<RecipeMeasurementAdded>(_onRecipeMeasurementAdded);
@@ -63,6 +64,19 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
 
     List<Recipe> recipes = List.from(state.recipes);
     recipes.add(recipe);
+
+    emit(state.copyWith(recipes: recipes));
+  }
+
+  void _onRecipeDuplicated(RecipeDuplicated event, Emitter<RecipeState> emit) {
+    List<Recipe> recipes = List.from(state.recipes);
+
+    int changedRecipeIndex = recipes.indexOf(event.recipe);
+
+    Recipe duplicatedRecipe = recipes[changedRecipeIndex]
+        .copyWith(number: const Uuid().v4(), saved: false);
+
+    recipes.insert(changedRecipeIndex + 1, duplicatedRecipe);
 
     emit(state.copyWith(recipes: recipes));
   }

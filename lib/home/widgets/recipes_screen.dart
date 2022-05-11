@@ -47,43 +47,54 @@ class RecipesScreen extends StatelessWidget {
                     ),
                     child: Card(
                         child: ListTile(
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 8.0, horizontal: 10.0),
-                      title: isFieldNotNullAndNotEmpty(
-                              recipeState.recipes[index].name)
-                          ? Text(recipeState.recipes[index].name!)
-                          : const Text('Unnamed Recipe'),
-                      subtitle: Text(recipeState.recipes[index].type +
-                          recipeState.recipes[index].ingredientNamesString()),
-                      trailing: recipeState.recipes[index].saved
-                          ? const Icon(Icons.done)
-                          : const Icon(Icons.rotate_left_rounded),
-                      onTap: () => {
-                        context.read<RecipeBloc>().add(RecipeProbesCleared(
-                            recipe: recipeState.recipes[index])),
-                        Navigator.pushNamed(context, PageRouter.recipe,
-                            arguments: (recipeState.recipes[index].type !=
-                                    'Standard Recipe')
-                                ? {
-                                    'recipeIndex': index,
-                                    'assignedFoodItemId': assignedFoodItemId,
-                                    'foodItemDescription': foodItemDescription,
-                                    'selectedScreen':
-                                        SelectedRecipeScreen.ingredientScreen
-                                  }
-                                : {
-                                    'recipeIndex': index,
-                                    'assignedFoodItemId': assignedFoodItemId,
-                                    'foodItemDescription': foodItemDescription,
-                                    'selectedScreen':
-                                        SelectedRecipeScreen.probeScreen
-                                  })
-                      },
-                      onLongPress: () => showDialog<String>(
-                          context: context,
-                          builder: (BuildContext context) => DeleteRecipeDialog(
-                              recipe: recipeState.recipes[index])),
-                    )),
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 8.0, horizontal: 10.0),
+                            title: isFieldNotNullAndNotEmpty(
+                                    recipeState.recipes[index].name)
+                                ? Text(recipeState.recipes[index].name!)
+                                : const Text('Unnamed Recipe'),
+                            subtitle: Text(recipeState.recipes[index].type +
+                                recipeState.recipes[index]
+                                    .ingredientNamesString()),
+                            trailing: recipeState.recipes[index].saved
+                                ? const Icon(Icons.done)
+                                : const Icon(Icons.rotate_left_rounded),
+                            onTap: () => {
+                                  context.read<RecipeBloc>().add(
+                                      RecipeProbesCleared(
+                                          recipe: recipeState.recipes[index])),
+                                  Navigator.pushNamed(
+                                      context, PageRouter.recipe,
+                                      arguments:
+                                          (recipeState.recipes[index].type !=
+                                                  'Standard Recipe')
+                                              ? {
+                                                  'recipeIndex': index,
+                                                  'assignedFoodItemId':
+                                                      assignedFoodItemId,
+                                                  'foodItemDescription':
+                                                      foodItemDescription,
+                                                  'selectedScreen':
+                                                      SelectedRecipeScreen
+                                                          .ingredientScreen
+                                                }
+                                              : {
+                                                  'recipeIndex': index,
+                                                  'assignedFoodItemId':
+                                                      assignedFoodItemId,
+                                                  'foodItemDescription':
+                                                      foodItemDescription,
+                                                  'selectedScreen':
+                                                      SelectedRecipeScreen
+                                                          .probeScreen
+                                                })
+                                },
+                            onLongPress: () => showModalBottomSheet(
+                                context: context,
+                                builder: (context) {
+                                  return RecipeOptions(
+                                      recipe: recipeState.recipes[index]);
+                                }))),
                   );
                 }),
             floatingActionButton: Column(
@@ -161,6 +172,52 @@ class DeleteRecipeDialog extends StatelessWidget {
           ),
         ],
       );
+    });
+  }
+}
+
+class RecipeOptions extends StatelessWidget {
+  final Recipe recipe;
+
+  const RecipeOptions({Key? key, required this.recipe}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
+      final List<Widget> options = [
+        ListTile(title: Text((recipe.name ?? '') + ' recipe options')),
+        const Divider(),
+        ListTile(
+          leading: const Icon(Icons.copy),
+          title: const Text('Duplicate'),
+          onTap: () => {
+            context.read<RecipeBloc>().add(RecipeDuplicated(recipe: recipe)),
+            context.read<RecipeBloc>().add(const RecipesSaved()),
+            Navigator.pop(context, 'Duplicate')
+          },
+        ),
+        ListTile(
+          leading: const Icon(Icons.delete),
+          title: const Text('Delete'),
+          onTap: () => {
+            context.read<RecipeBloc>().add(RecipeDeleted(recipe: recipe)),
+            context.read<RecipeBloc>().add(const RecipesSaved()),
+            Navigator.pop(context, 'Delete')
+          },
+        )
+      ];
+      // if (recipe.type == "Standard Recipe") {
+      //   options.add(ListTile(
+      //     leading: const Icon(Icons.edit),
+      //     title: const Text('Create modified recipe'),
+      //     onTap: () => {
+      //       context.read<RecipeBloc>().add(RecipeDeleted(recipe: recipe)),
+      //       context.read<RecipeBloc>().add(const RecipesSaved()),
+      //       Navigator.pop(context, 'Delete')
+      //     },
+      //   ));
+      // }
+      return Wrap(children: options);
     });
   }
 }
