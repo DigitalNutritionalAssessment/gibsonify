@@ -47,8 +47,14 @@ class RecipesScreen extends StatelessWidget {
                     ),
                     child: Card(
                         child: ListTile(
-                      title: Text(recipeState.recipes[index].name ?? ''),
-                      subtitle: Text(recipeState.recipes[index].type),
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 8.0, horizontal: 10.0),
+                      title: isFieldNotNullAndNotEmpty(
+                              recipeState.recipes[index].name)
+                          ? Text(recipeState.recipes[index].name!)
+                          : const Text('Unnamed Recipe'),
+                      subtitle: Text(recipeState.recipes[index].type +
+                          recipeState.recipes[index].ingredientNamesString()),
                       trailing: recipeState.recipes[index].saved
                           ? const Icon(Icons.done)
                           : const Icon(Icons.rotate_left_rounded),

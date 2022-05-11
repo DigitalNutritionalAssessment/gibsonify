@@ -34,6 +34,18 @@ class Recipe extends Equatable {
   final bool allProbeAnswersStandard;
   final bool saved;
 
+  String ingredientNamesString() {
+    final List<String?> ingredientNames = [];
+    for (Ingredient ingredient in ingredients) {
+      ingredientNames.add(ingredient.name);
+    }
+    String joinedNames = ingredientNames.join(', ');
+    if (joinedNames.isNotEmpty) {
+      return '\n\nIngredients: ' + joinedNames;
+    }
+    return '';
+  }
+
   Recipe copyWith({
     String? name,
     String? employeeNumber,
