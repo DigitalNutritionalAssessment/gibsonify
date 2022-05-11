@@ -52,7 +52,7 @@ class RecipeForm extends StatelessWidget {
             ListTile(
                 title: (state.recipes[recipeIndex].ingredients.isNotEmpty)
                     ? const Text('Ingredients:')
-                    : null),
+                    : const Text('Recipe has no ingredients currently')),
             Ingredients(recipeIndex),
           ],
         ),
