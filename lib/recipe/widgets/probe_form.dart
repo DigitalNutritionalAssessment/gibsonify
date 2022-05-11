@@ -17,31 +17,39 @@ class ProbeForm extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              TextFormField(
-                initialValue:
-                    state.recipes[recipeIndex].probes[probeIndex].probeName,
-                decoration: InputDecoration(
-                    icon: const Icon(Icons.live_help),
-                    labelText: 'Probe ${probeIndex + 1}',
-                    helperText:
-                        'Recipe probe - e.g. Which flour did you use to make roti?',
-                    errorText: (state.recipes[recipeIndex].probes[probeIndex]
-                                    .probeName !=
-                                null &&
-                            state.recipes[recipeIndex].probes[probeIndex]
-                                .probeName!.isEmpty)
-                        ? 'Probes cannot be empty'
-                        : null),
-                onChanged: (value) {
-                  context.read<RecipeBloc>().add(ProbeChanged(
-                      recipe: state.recipes[recipeIndex],
-                      probeName: value,
-                      probeIndex: probeIndex));
-                },
-                textCapitalization: TextCapitalization.sentences,
-                textInputAction: TextInputAction.next,
+              AbsorbPointer(
+                absorbing: state.recipes[recipeIndex].saved,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      initialValue: state
+                          .recipes[recipeIndex].probes[probeIndex].probeName,
+                      decoration: InputDecoration(
+                          icon: const Icon(Icons.live_help),
+                          labelText: 'Probe ${probeIndex + 1}',
+                          helperText:
+                              'Recipe probe - e.g. Which flour did you use to make roti?',
+                          errorText: (state.recipes[recipeIndex]
+                                          .probes[probeIndex].probeName !=
+                                      null &&
+                                  state.recipes[recipeIndex].probes[probeIndex]
+                                      .probeName!.isEmpty)
+                              ? 'Probes cannot be empty'
+                              : null),
+                      onChanged: (value) {
+                        context.read<RecipeBloc>().add(ProbeChanged(
+                            recipe: state.recipes[recipeIndex],
+                            probeName: value,
+                            probeIndex: probeIndex));
+                      },
+                      textCapitalization: TextCapitalization.sentences,
+                      textInputAction: TextInputAction.next,
+                    ),
+                    const SizedBox(height: 10),
+                    const ListTile(title: Text('Probe options:')),
+                  ],
+                ),
               ),
-              const ListTile(title: Text('Edit probe options:')),
               Expanded(
                 child: ListView.builder(
                     padding: const EdgeInsets.all(2.0),
@@ -82,38 +90,42 @@ class ProbeForm extends StatelessWidget {
                               )
                             ],
                           ),
-                          child: Card(
-                              child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextFormField(
-                              key: Key(state
-                                  .recipes[recipeIndex]
-                                  .probes[probeIndex]
-                                  .probeOptions[index]['id']!),
-                              initialValue: state
-                                  .recipes[recipeIndex]
-                                  .probes[probeIndex]
-                                  .probeOptions[index]['option'],
-                              decoration: InputDecoration(
-                                icon: const Icon(Icons.edit),
-                                labelText: (index == 0)
-                                    ? 'Default option'
-                                    : 'Option ${index + 1}',
-                                helperText:
-                                    'Probe response option - e.g. Yes/No or a type of ingredient like wheat flour',
+                          child: AbsorbPointer(
+                            absorbing: state.recipes[recipeIndex].saved,
+                            child: Card(
+                                child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextFormField(
+                                key: Key(state
+                                    .recipes[recipeIndex]
+                                    .probes[probeIndex]
+                                    .probeOptions[index]['id']!),
+                                initialValue: state
+                                    .recipes[recipeIndex]
+                                    .probes[probeIndex]
+                                    .probeOptions[index]['option'],
+                                decoration: InputDecoration(
+                                  icon: const Icon(Icons.edit),
+                                  labelText: (index == 0)
+                                      ? 'Default option'
+                                      : 'Option ${index + 1}',
+                                  helperText:
+                                      'Probe response option - e.g. Yes/No or a type of ingredient like wheat flour',
+                                ),
+                                onChanged: (value) {
+                                  context.read<RecipeBloc>().add(
+                                      ProbeOptionChanged(
+                                          recipe: state.recipes[recipeIndex],
+                                          probeIndex: probeIndex,
+                                          probeOptionIndex: index,
+                                          probeOptionName: value));
+                                },
+                                textCapitalization:
+                                    TextCapitalization.sentences,
+                                textInputAction: TextInputAction.next,
                               ),
-                              onChanged: (value) {
-                                context.read<RecipeBloc>().add(
-                                    ProbeOptionChanged(
-                                        recipe: state.recipes[recipeIndex],
-                                        probeIndex: probeIndex,
-                                        probeOptionIndex: index,
-                                        probeOptionName: value));
-                              },
-                              textCapitalization: TextCapitalization.sentences,
-                              textInputAction: TextInputAction.next,
-                            ),
-                          )));
+                            )),
+                          ));
                     }),
               )
             ],

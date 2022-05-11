@@ -39,97 +39,111 @@ class IngredientForm extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            DropdownSearch<String>(
-                dropdownSearchDecoration: const InputDecoration(
-                  icon: Icon(Icons.food_bank_rounded),
-                  labelText: 'Ingredient name',
-                  helperText: 'Ingredient name e.g. Potato',
-                ),
-                mode: Mode.MENU,
-                showSelectedItems: true,
-                showSearchBox: true,
-                enabled: (state.ingredientsJson != null),
-                items: (state.ingredientsJson != null)
-                    ? json.decode(state.ingredientsJson!).keys.toList()
-                    : [],
-                onChanged: (String? answer) => context.read<RecipeBloc>().add(
-                    IngredientNameChanged(
-                        ingredient: state
-                            .recipes[recipeIndex].ingredients[ingredientIndex],
-                        ingredientName: answer!,
-                        recipe: state.recipes[recipeIndex])),
-                selectedItem: state
-                    .recipes[recipeIndex].ingredients[ingredientIndex].name),
-            Visibility(
-              visible: (state
-                      .recipes[recipeIndex].ingredients[ingredientIndex].name ==
-                  "Other (please specify)"),
-              // TODO: Implement a better implementation for this check
-              // possibly a flag to show customName is chosen
-              child: TextFormField(
-                initialValue: state.recipes[recipeIndex]
-                    .ingredients[ingredientIndex].customName,
-                decoration: InputDecoration(
-                  icon: const Icon(Icons.set_meal_rounded),
-                  labelText: 'Specify ingredient',
-                  helperText: 'Ingredient name e.g. Black rice',
-                  errorText: (state.recipes[recipeIndex]
-                              .ingredients[ingredientIndex].customName ==
-                          null)
-                      ? 'Enter an ingredient name e.g. Black rice'
-                      : null,
-                ),
-                onChanged: (value) {
-                  context.read<RecipeBloc>().add(IngredientCustomNameChanged(
-                      ingredient: state
-                          .recipes[recipeIndex].ingredients[ingredientIndex],
-                      ingredientCustomName: value,
-                      recipe: state.recipes[recipeIndex]));
-                },
-                textInputAction: TextInputAction.next,
-                textCapitalization: TextCapitalization.sentences,
+            AbsorbPointer(
+              absorbing: state.recipes[recipeIndex].saved,
+              child: Column(
+                children: [
+                  DropdownSearch<String>(
+                      dropdownSearchDecoration: const InputDecoration(
+                        icon: Icon(Icons.food_bank_rounded),
+                        labelText: 'Ingredient name',
+                        helperText: 'Ingredient name e.g. Potato',
+                      ),
+                      mode: Mode.MENU,
+                      showSelectedItems: true,
+                      showSearchBox: true,
+                      enabled: (state.ingredientsJson != null),
+                      items: (state.ingredientsJson != null)
+                          ? json.decode(state.ingredientsJson!).keys.toList()
+                          : [],
+                      onChanged: (String? answer) => context
+                          .read<RecipeBloc>()
+                          .add(IngredientNameChanged(
+                              ingredient: state.recipes[recipeIndex]
+                                  .ingredients[ingredientIndex],
+                              ingredientName: answer!,
+                              recipe: state.recipes[recipeIndex])),
+                      selectedItem: state.recipes[recipeIndex]
+                          .ingredients[ingredientIndex].name),
+                  Visibility(
+                    visible: (state.recipes[recipeIndex]
+                            .ingredients[ingredientIndex].name ==
+                        "Other (please specify)"),
+                    // TODO: Implement a better implementation for this check
+                    // possibly a flag to show customName is chosen
+                    child: TextFormField(
+                      initialValue: state.recipes[recipeIndex]
+                          .ingredients[ingredientIndex].customName,
+                      decoration: InputDecoration(
+                        icon: const Icon(Icons.set_meal_rounded),
+                        labelText: 'Specify ingredient',
+                        helperText: 'Ingredient name e.g. Black rice',
+                        errorText: (state.recipes[recipeIndex]
+                                    .ingredients[ingredientIndex].customName ==
+                                null)
+                            ? 'Enter an ingredient name e.g. Black rice'
+                            : null,
+                      ),
+                      onChanged: (value) {
+                        context.read<RecipeBloc>().add(
+                            IngredientCustomNameChanged(
+                                ingredient: state.recipes[recipeIndex]
+                                    .ingredients[ingredientIndex],
+                                ingredientCustomName: value,
+                                recipe: state.recipes[recipeIndex]));
+                      },
+                      textInputAction: TextInputAction.next,
+                      textCapitalization: TextCapitalization.sentences,
+                    ),
+                  ),
+                  TextFormField(
+                    initialValue: state.recipes[recipeIndex]
+                        .ingredients[ingredientIndex].description,
+                    decoration: InputDecoration(
+                      icon: const Icon(Icons.description_rounded),
+                      labelText: 'Ingredient description',
+                      helperText:
+                          'Ingredient description e.g. Big, dry, ripe etc.',
+                      errorText: (isFieldModifiedAndEmpty(state
+                              .recipes[recipeIndex]
+                              .ingredients[ingredientIndex]
+                              .description))
+                          ? 'Enter an ingredient description e.g. Ripe'
+                          : null,
+                    ),
+                    onChanged: (value) {
+                      context.read<RecipeBloc>().add(
+                          IngredientDescriptionChanged(
+                              ingredient: state.recipes[recipeIndex]
+                                  .ingredients[ingredientIndex],
+                              ingredientDescription: value,
+                              recipe: state.recipes[recipeIndex]));
+                    },
+                    textCapitalization: TextCapitalization.sentences,
+                    textInputAction: TextInputAction.next,
+                  ),
+                  DropdownSearch<String>(
+                      dropdownSearchDecoration: const InputDecoration(
+                        icon: Icon(Icons.food_bank_rounded),
+                        labelText: "Cooking state",
+                        helperText: 'How the ingredient is prepared',
+                      ),
+                      mode: Mode.MENU,
+                      showSelectedItems: true,
+                      showSearchBox: true,
+                      items: cookingStates,
+                      onChanged: (String? answer) => context
+                          .read<RecipeBloc>()
+                          .add(IngredientCookingStateChanged(
+                              ingredient: state.recipes[recipeIndex]
+                                  .ingredients[ingredientIndex],
+                              cookingState: answer!,
+                              recipe: state.recipes[recipeIndex])),
+                      selectedItem: state.recipes[recipeIndex]
+                          .ingredients[ingredientIndex].cookingState),
+                ],
               ),
             ),
-            TextFormField(
-              initialValue: state.recipes[recipeIndex]
-                  .ingredients[ingredientIndex].description,
-              decoration: InputDecoration(
-                icon: const Icon(Icons.description_rounded),
-                labelText: 'Ingredient description',
-                helperText: 'Ingredient description e.g. Big, dry, ripe etc.',
-                errorText: (isFieldModifiedAndEmpty(state.recipes[recipeIndex]
-                        .ingredients[ingredientIndex].description))
-                    ? 'Enter an ingredient description e.g. Ripe'
-                    : null,
-              ),
-              onChanged: (value) {
-                context.read<RecipeBloc>().add(IngredientDescriptionChanged(
-                    ingredient:
-                        state.recipes[recipeIndex].ingredients[ingredientIndex],
-                    ingredientDescription: value,
-                    recipe: state.recipes[recipeIndex]));
-              },
-              textCapitalization: TextCapitalization.sentences,
-              textInputAction: TextInputAction.next,
-            ),
-            DropdownSearch<String>(
-                dropdownSearchDecoration: const InputDecoration(
-                  icon: Icon(Icons.food_bank_rounded),
-                  labelText: "Cooking state",
-                  helperText: 'How the ingredient is prepared',
-                ),
-                mode: Mode.MENU,
-                showSelectedItems: true,
-                showSearchBox: true,
-                items: cookingStates,
-                onChanged: (String? answer) => context.read<RecipeBloc>().add(
-                    IngredientCookingStateChanged(
-                        ingredient: state
-                            .recipes[recipeIndex].ingredients[ingredientIndex],
-                        cookingState: answer!,
-                        recipe: state.recipes[recipeIndex])),
-                selectedItem: state.recipes[recipeIndex]
-                    .ingredients[ingredientIndex].cookingState),
             const SizedBox(height: 10),
             IngredientMeasurements(recipeIndex, ingredientIndex)
           ],
@@ -190,100 +204,107 @@ class IngredientMeasurements extends StatelessWidget {
                     )
                   ],
                 ),
-                child: Card(
-                    child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      DropdownSearch<String>(
-                          dropdownSearchDecoration: const InputDecoration(
-                            icon: Icon(Icons.food_bank_rounded),
-                            labelText: "Measurement method",
-                            helperText: 'How the measurement is measured',
-                          ),
-                          mode: Mode.MENU,
-                          showSelectedItems: true,
-                          showSearchBox: true,
-                          items: Measurement.measurementMethods,
-                          onChanged: (String? answer) => context
-                              .read<RecipeBloc>()
-                              .add(IngredientMeasurementMethodChanged(
-                                  measurementIndex: index,
-                                  ingredient: state.recipes[recipeIndex]
-                                      .ingredients[ingredientIndex],
-                                  measurementMethod: answer!,
-                                  recipe: state.recipes[recipeIndex])),
-                          selectedItem: state
+                child: AbsorbPointer(
+                  absorbing: state.recipes[recipeIndex].saved,
+                  child: Card(
+                      child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        DropdownSearch<String>(
+                            dropdownSearchDecoration: const InputDecoration(
+                              icon: Icon(Icons.food_bank_rounded),
+                              labelText: "Measurement method",
+                              helperText: 'How the measurement is measured',
+                            ),
+                            mode: Mode.MENU,
+                            showSelectedItems: true,
+                            showSearchBox: true,
+                            items: Measurement.measurementMethods,
+                            onChanged: (String? answer) => context
+                                .read<RecipeBloc>()
+                                .add(IngredientMeasurementMethodChanged(
+                                    measurementIndex: index,
+                                    ingredient: state.recipes[recipeIndex]
+                                        .ingredients[ingredientIndex],
+                                    measurementMethod: answer!,
+                                    recipe: state.recipes[recipeIndex])),
+                            selectedItem: state
+                                .recipes[recipeIndex]
+                                .ingredients[ingredientIndex]
+                                .measurements[index]
+                                .measurementMethod),
+                        DropdownSearch<String>(
+                            dropdownSearchDecoration: const InputDecoration(
+                              icon: Icon(Icons.local_dining_rounded),
+                              labelText: "Measurement unit",
+                              helperText: 'The unit of each measurement value',
+                            ),
+                            mode: Mode.MENU,
+                            showSelectedItems: true,
+                            showSearchBox: true,
+                            items: Measurement.measurementUnits,
+                            onChanged: (String? answer) => context
+                                .read<RecipeBloc>()
+                                .add(IngredientMeasurementUnitChanged(
+                                    measurementIndex: index,
+                                    ingredient: state.recipes[recipeIndex]
+                                        .ingredients[ingredientIndex],
+                                    measurementUnit: answer!,
+                                    recipe: state.recipes[recipeIndex])),
+                            selectedItem: state
+                                .recipes[recipeIndex]
+                                .ingredients[ingredientIndex]
+                                .measurements[index]
+                                .measurementUnit),
+                        TextFormField(
+                          initialValue: state
                               .recipes[recipeIndex]
                               .ingredients[ingredientIndex]
                               .measurements[index]
-                              .measurementMethod),
-                      DropdownSearch<String>(
-                          dropdownSearchDecoration: const InputDecoration(
-                            icon: Icon(Icons.local_dining_rounded),
-                            labelText: "Measurement unit",
-                            helperText: 'The unit of each measurement value',
+                              .measurementValue,
+                          decoration: InputDecoration(
+                            icon:
+                                const Icon(Icons.format_list_numbered_rounded),
+                            labelText: 'Measurement value',
+                            helperText: 'Input measurement value',
+                            errorText: !state
+                                    .recipes[recipeIndex]
+                                    .ingredients[ingredientIndex]
+                                    .measurements[index]
+                                    .isValueValid()
+                                ? 'Enter the measured value in 1 to 4 digits'
+                                : null,
                           ),
-                          mode: Mode.MENU,
-                          showSelectedItems: true,
-                          showSearchBox: true,
-                          items: Measurement.measurementUnits,
-                          onChanged: (String? answer) => context
-                              .read<RecipeBloc>()
-                              .add(IngredientMeasurementUnitChanged(
-                                  measurementIndex: index,
-                                  ingredient: state.recipes[recipeIndex]
-                                      .ingredients[ingredientIndex],
-                                  measurementUnit: answer!,
-                                  recipe: state.recipes[recipeIndex])),
-                          selectedItem: state
-                              .recipes[recipeIndex]
-                              .ingredients[ingredientIndex]
-                              .measurements[index]
-                              .measurementUnit),
-                      TextFormField(
-                        initialValue: state
-                            .recipes[recipeIndex]
-                            .ingredients[ingredientIndex]
-                            .measurements[index]
-                            .measurementValue,
-                        decoration: InputDecoration(
-                          icon: const Icon(Icons.format_list_numbered_rounded),
-                          labelText: 'Measurement value',
-                          helperText: 'Input measurement value',
-                          errorText: !state
-                                  .recipes[recipeIndex]
-                                  .ingredients[ingredientIndex]
-                                  .measurements[index]
-                                  .isValueValid()
-                              ? 'Enter the measured value in 1 to 4 digits'
-                              : null,
+                          onChanged: (value) {
+                            context.read<RecipeBloc>().add(
+                                IngredientMeasurementValueChanged(
+                                    measurementIndex: index,
+                                    ingredient: state.recipes[recipeIndex]
+                                        .ingredients[ingredientIndex],
+                                    measurementValue: value,
+                                    recipe: state.recipes[recipeIndex]));
+                          },
+                          textInputAction: TextInputAction.next,
+                          keyboardType: TextInputType.number,
                         ),
-                        onChanged: (value) {
-                          context.read<RecipeBloc>().add(
-                              IngredientMeasurementValueChanged(
-                                  measurementIndex: index,
-                                  ingredient: state.recipes[recipeIndex]
-                                      .ingredients[ingredientIndex],
-                                  measurementValue: value,
-                                  recipe: state.recipes[recipeIndex]));
-                        },
-                        textInputAction: TextInputAction.next,
-                        keyboardType: TextInputType.number,
-                      ),
-                      const Divider(),
-                      ListTile(
-                        title: const Text('Add measurement'),
-                        leading: const Icon(Icons.add),
-                        onTap: () => context.read<RecipeBloc>().add(
-                            IngredientMeasurementAdded(
-                                ingredient: state.recipes[recipeIndex]
-                                    .ingredients[ingredientIndex],
-                                recipe: state.recipes[recipeIndex])),
-                      ),
-                    ],
-                  ),
-                )),
+                        const Divider(),
+                        Visibility(
+                          visible: !state.recipes[recipeIndex].saved,
+                          child: ListTile(
+                            title: const Text('Add measurement'),
+                            leading: const Icon(Icons.add),
+                            onTap: () => context.read<RecipeBloc>().add(
+                                IngredientMeasurementAdded(
+                                    ingredient: state.recipes[recipeIndex]
+                                        .ingredients[ingredientIndex],
+                                    recipe: state.recipes[recipeIndex])),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )),
+                ),
               );
             }),
       );

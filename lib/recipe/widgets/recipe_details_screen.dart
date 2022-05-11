@@ -20,29 +20,33 @@ class RecipeDetailsScreen extends StatelessWidget {
       return Scaffold(
         appBar: AppBar(title: const Text('Recipe details')),
         body: RecipeDetails(recipeIndex),
-        floatingActionButton: FloatingActionButton.extended(
-            heroTag: null,
-            label: assignedFoodItemId == null
-                ? const Text("Save Recipe")
-                : const Text("Choose Recipe"),
-            icon: assignedFoodItemId == null
-                ? const Icon(Icons.save_sharp)
-                : const Icon(Icons.check),
-            onPressed: () {
-              if (assignedFoodItemId == null) {
-                context.read<RecipeBloc>().add(RecipeStatusChanged(
-                    recipe: state.recipes[recipeIndex], recipeSaved: true));
-                context.read<RecipeBloc>().add(const RecipesSaved());
-                Navigator.pop(context);
-              } else {
-                context.read<CollectionBloc>().add(FoodItemRecipeChanged(
-                    foodItemId: assignedFoodItemId!,
-                    foodItemRecipe: state.recipes[recipeIndex]));
-                context.read<RecipeBloc>().add(const RecipesSaved());
-                Navigator.pop(context);
-                Navigator.pop(context);
-              }
-            }),
+        floatingActionButton: Visibility(
+          visible:
+              !state.recipes[recipeIndex].saved || assignedFoodItemId != null,
+          child: FloatingActionButton.extended(
+              heroTag: null,
+              label: assignedFoodItemId == null
+                  ? const Text("Save Recipe")
+                  : const Text("Choose Recipe"),
+              icon: assignedFoodItemId == null
+                  ? const Icon(Icons.save_sharp)
+                  : const Icon(Icons.check),
+              onPressed: () {
+                if (assignedFoodItemId == null) {
+                  context.read<RecipeBloc>().add(RecipeStatusChanged(
+                      recipe: state.recipes[recipeIndex], recipeSaved: true));
+                  context.read<RecipeBloc>().add(const RecipesSaved());
+                  Navigator.pop(context);
+                } else {
+                  context.read<CollectionBloc>().add(FoodItemRecipeChanged(
+                      foodItemId: assignedFoodItemId!,
+                      foodItemRecipe: state.recipes[recipeIndex]));
+                  context.read<RecipeBloc>().add(const RecipesSaved());
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                }
+              }),
+        ),
       );
     });
   }
@@ -54,17 +58,21 @@ class RecipeDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: <Widget>[
-          RecipeNameInput(recipeIndex),
-          RecipeNumberInput(recipeIndex),
-          const SizedBox(height: 10),
-          RecipeMeasurements(recipeIndex),
-        ],
-      ),
-    );
+    return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: <Widget>[
+            AbsorbPointer(
+                absorbing: state.recipes[recipeIndex].saved,
+                child: RecipeNameInput(recipeIndex)),
+            RecipeNumberInput(recipeIndex),
+            const SizedBox(height: 10),
+            RecipeMeasurements(recipeIndex),
+          ],
+        ),
+      );
+    });
   }
 }
 
@@ -132,82 +140,89 @@ class RecipeMeasurements extends StatelessWidget {
                     )
                   ],
                 ),
-                child: Card(
-                    child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      DropdownSearch<String>(
-                          dropdownSearchDecoration: const InputDecoration(
-                            icon: Icon(Icons.food_bank_rounded),
-                            labelText: "Measurement method",
-                            helperText: 'How the measurement is measured',
+                child: AbsorbPointer(
+                  absorbing: state.recipes[recipeIndex].saved,
+                  child: Card(
+                      child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        DropdownSearch<String>(
+                            dropdownSearchDecoration: const InputDecoration(
+                              icon: Icon(Icons.food_bank_rounded),
+                              labelText: "Measurement method",
+                              helperText: 'How the measurement is measured',
+                            ),
+                            mode: Mode.MENU,
+                            showSelectedItems: true,
+                            showSearchBox: true,
+                            items: Measurement.measurementMethods,
+                            onChanged: (String? answer) => context
+                                .read<RecipeBloc>()
+                                .add(RecipeMeasurementMethodChanged(
+                                    measurementIndex: index,
+                                    measurementMethod: answer!,
+                                    recipe: state.recipes[recipeIndex])),
+                            selectedItem: state.recipes[recipeIndex]
+                                .measurements[index].measurementMethod),
+                        DropdownSearch<String>(
+                            dropdownSearchDecoration: const InputDecoration(
+                              icon: Icon(Icons.local_dining_rounded),
+                              labelText: "Measurement unit",
+                              helperText: 'The unit of each measurement value',
+                            ),
+                            mode: Mode.MENU,
+                            showSelectedItems: true,
+                            showSearchBox: true,
+                            items: Measurement.measurementUnits,
+                            onChanged: (String? answer) => context
+                                .read<RecipeBloc>()
+                                .add(RecipeMeasurementUnitChanged(
+                                    measurementIndex: index,
+                                    measurementUnit: answer!,
+                                    recipe: state.recipes[recipeIndex])),
+                            selectedItem: state.recipes[recipeIndex]
+                                .measurements[index].measurementUnit),
+                        TextFormField(
+                          initialValue: state.recipes[recipeIndex]
+                              .measurements[index].measurementValue,
+                          decoration: InputDecoration(
+                            icon:
+                                const Icon(Icons.format_list_numbered_rounded),
+                            labelText: 'Measurement value',
+                            helperText: 'Input measurement value',
+                            errorText: !state
+                                    .recipes[recipeIndex].measurements[index]
+                                    .isValueValid()
+                                ? 'Enter the measured value in 1 to 4 digits'
+                                : null,
                           ),
-                          mode: Mode.MENU,
-                          showSelectedItems: true,
-                          showSearchBox: true,
-                          items: Measurement.measurementMethods,
-                          onChanged: (String? answer) => context
-                              .read<RecipeBloc>()
-                              .add(RecipeMeasurementMethodChanged(
-                                  measurementIndex: index,
-                                  measurementMethod: answer!,
-                                  recipe: state.recipes[recipeIndex])),
-                          selectedItem: state.recipes[recipeIndex]
-                              .measurements[index].measurementMethod),
-                      DropdownSearch<String>(
-                          dropdownSearchDecoration: const InputDecoration(
-                            icon: Icon(Icons.local_dining_rounded),
-                            labelText: "Measurement unit",
-                            helperText: 'The unit of each measurement value',
-                          ),
-                          mode: Mode.MENU,
-                          showSelectedItems: true,
-                          showSearchBox: true,
-                          items: Measurement.measurementUnits,
-                          onChanged: (String? answer) => context
-                              .read<RecipeBloc>()
-                              .add(RecipeMeasurementUnitChanged(
-                                  measurementIndex: index,
-                                  measurementUnit: answer!,
-                                  recipe: state.recipes[recipeIndex])),
-                          selectedItem: state.recipes[recipeIndex]
-                              .measurements[index].measurementUnit),
-                      TextFormField(
-                        initialValue: state.recipes[recipeIndex]
-                            .measurements[index].measurementValue,
-                        decoration: InputDecoration(
-                          icon: const Icon(Icons.format_list_numbered_rounded),
-                          labelText: 'Measurement value',
-                          helperText: 'Input measurement value',
-                          errorText: !state
-                                  .recipes[recipeIndex].measurements[index]
-                                  .isValueValid()
-                              ? 'Enter the measured value in 1 to 4 digits'
-                              : null,
+                          onChanged: (value) {
+                            context.read<RecipeBloc>().add(
+                                RecipeMeasurementValueChanged(
+                                    measurementIndex: index,
+                                    measurementValue: value,
+                                    recipe: state.recipes[recipeIndex]));
+                          },
+                          textCapitalization: TextCapitalization.sentences,
+                          textInputAction: TextInputAction.next,
+                          keyboardType: TextInputType.number,
                         ),
-                        onChanged: (value) {
-                          context.read<RecipeBloc>().add(
-                              RecipeMeasurementValueChanged(
-                                  measurementIndex: index,
-                                  measurementValue: value,
-                                  recipe: state.recipes[recipeIndex]));
-                        },
-                        textCapitalization: TextCapitalization.sentences,
-                        textInputAction: TextInputAction.next,
-                        keyboardType: TextInputType.number,
-                      ),
-                      const Divider(),
-                      ListTile(
-                        title: const Text('Add measurement'),
-                        leading: const Icon(Icons.add),
-                        onTap: () => context.read<RecipeBloc>().add(
-                            RecipeMeasurementAdded(
-                                recipe: state.recipes[recipeIndex])),
-                      ),
-                    ],
-                  ),
-                )),
+                        const Divider(),
+                        Visibility(
+                          visible: !state.recipes[recipeIndex].saved,
+                          child: ListTile(
+                            title: const Text('Add measurement'),
+                            leading: const Icon(Icons.add),
+                            onTap: () => context.read<RecipeBloc>().add(
+                                RecipeMeasurementAdded(
+                                    recipe: state.recipes[recipeIndex])),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )),
+                ),
               );
             }),
       );

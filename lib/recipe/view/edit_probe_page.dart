@@ -12,29 +12,32 @@ class EditProbePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
       return Scaffold(
-          appBar: AppBar(title: const Text('Edit Probe')),
-          floatingActionButton: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: <Widget>[
-                FloatingActionButton.extended(
-                    heroTag: null,
-                    label: const Text("Add probe response"),
-                    icon: const Icon(Icons.add),
-                    onPressed: () => {
-                          context.read<RecipeBloc>().add(ProbeOptionAdded(
-                              recipe: state.recipes[recipeIndex],
-                              probeIndex: probeIndex)),
-                        }),
-                const SizedBox(
-                  height: 10,
-                ),
-                FloatingActionButton.extended(
-                    heroTag: null,
-                    label: const Text("Save Probe"),
-                    icon: const Icon(Icons.save_sharp),
-                    onPressed: () => {Navigator.pop(context)})
-              ]),
+          appBar: AppBar(title: const Text('View Probe')),
+          floatingActionButton: Visibility(
+            visible: !state.recipes[recipeIndex].saved,
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  FloatingActionButton.extended(
+                      heroTag: null,
+                      label: const Text("Add probe response"),
+                      icon: const Icon(Icons.add),
+                      onPressed: () => {
+                            context.read<RecipeBloc>().add(ProbeOptionAdded(
+                                recipe: state.recipes[recipeIndex],
+                                probeIndex: probeIndex)),
+                          }),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  FloatingActionButton.extended(
+                      heroTag: null,
+                      label: const Text("Save Probe"),
+                      icon: const Icon(Icons.save_sharp),
+                      onPressed: () => {Navigator.pop(context)})
+                ]),
+          ),
           body: ProbeForm(recipeIndex, probeIndex));
     });
   }

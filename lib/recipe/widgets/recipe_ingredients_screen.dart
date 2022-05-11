@@ -18,20 +18,23 @@ class RecipeIngredientsScreen extends StatelessWidget {
       return Scaffold(
           appBar: AppBar(title: const Text('Recipe ingredients')),
           body: RecipeForm(recipeIndex),
-          floatingActionButton: FloatingActionButton.extended(
-              heroTag: null,
-              label: const Text("New Ingredient"),
-              icon: const Icon(Icons.add),
-              onPressed: () => {
-                    context.read<RecipeBloc>().add(
-                        IngredientAdded(recipe: state.recipes[recipeIndex])),
-                    Navigator.pushNamed(context, PageRouter.ingredient,
-                        arguments: {
-                          'recipeIndex': recipeIndex,
-                          'ingredientIndex':
-                              state.recipes[recipeIndex].ingredients.length,
-                        }),
-                  }));
+          floatingActionButton: Visibility(
+            visible: !state.recipes[recipeIndex].saved,
+            child: FloatingActionButton.extended(
+                heroTag: null,
+                label: const Text("New Ingredient"),
+                icon: const Icon(Icons.add),
+                onPressed: () => {
+                      context.read<RecipeBloc>().add(
+                          IngredientAdded(recipe: state.recipes[recipeIndex])),
+                      Navigator.pushNamed(context, PageRouter.ingredient,
+                          arguments: {
+                            'recipeIndex': recipeIndex,
+                            'ingredientIndex':
+                                state.recipes[recipeIndex].ingredients.length,
+                          }),
+                    }),
+          ));
     });
   }
 }
@@ -47,7 +50,9 @@ class RecipeForm extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: <Widget>[
-            RecipeNameInput(recipeIndex),
+            AbsorbPointer(
+                absorbing: state.recipes[recipeIndex].saved,
+                child: RecipeNameInput(recipeIndex)),
             const SizedBox(height: 10),
             ListTile(
                 title: (state.recipes[recipeIndex].ingredients.isNotEmpty)

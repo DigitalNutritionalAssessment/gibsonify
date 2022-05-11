@@ -21,7 +21,8 @@ class RecipeProbesScreen extends StatelessWidget {
           appBar: AppBar(title: const Text('Recipe probes list')),
           floatingActionButton: Visibility(
             visible: (state.recipes[recipeIndex].type == 'Standard Recipe' &&
-                assignedFoodItemId == null),
+                assignedFoodItemId == null &&
+                !state.recipes[recipeIndex].saved),
             child: FloatingActionButton.extended(
                 label: const Text("Add probe"),
                 icon: const Icon(Icons.add),
@@ -72,7 +73,9 @@ class ProbeList extends StatelessWidget {
                 visible: (state.recipes[recipeIndex].type == 'Standard Recipe'),
                 child: Expanded(
                   child: Column(children: [
-                    RecipeNameInput(recipeIndex),
+                    AbsorbPointer(
+                        absorbing: state.recipes[recipeIndex].saved,
+                        child: RecipeNameInput(recipeIndex)),
                     Visibility(
                         visible: (assignedFoodItemId != null &&
                             isFieldNotNullAndNotEmpty(foodItemDescription)),
