@@ -27,6 +27,16 @@ class Ingredient extends Equatable {
   final bool saved;
   final String id;
 
+  String ingredientNameDisplay() {
+    if (isFieldNotNullAndNotEmpty(name)) {
+      if (name == 'Other (please specify)') {
+        return customName ?? 'Unspecified Ingredient';
+      }
+      return name!;
+    }
+    return 'Unnamed ingredient';
+  }
+
   Ingredient copyWith(
       {String? name,
       String? customName,
@@ -92,7 +102,7 @@ class Ingredient extends Equatable {
     String measurementsCombined = combineMeasurements(measurements);
 
     // TODO: how should customName be handled?
-    return '"${name ?? customName}","$description",'
+    return '"${ingredientNameDisplay()}","$description",'
         '"$cookingState","$measurementsCombined"';
   }
 }

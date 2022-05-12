@@ -110,17 +110,9 @@ class Ingredients extends StatelessWidget {
               itemBuilder: (context, index) {
                 return Card(
                     child: ListTile(
-                        title: (state.recipes[recipeIndex].ingredients[index]
-                                    .name ==
-                                "Other (please specify)")
-                            // TODO: Implement a better implementation for this check
-                            // possibly a flag to show customName is chosen
-                            ? Text(state.recipes[recipeIndex].ingredients[index]
-                                    .customName ??
-                                '')
-                            : Text(state.recipes[recipeIndex].ingredients[index]
-                                    .name ??
-                                ''),
+                        title: Text(state
+                            .recipes[recipeIndex].ingredients[index]
+                            .ingredientNameDisplay()),
                         subtitle: Text(state.recipes[recipeIndex]
                                 .ingredients[index].description ??
                             ''),

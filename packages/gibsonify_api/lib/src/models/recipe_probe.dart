@@ -26,7 +26,7 @@ class Probe extends Equatable {
     if (isFieldNotNullAndNotEmpty(name)) {
       return name!;
     }
-    return 'Unnamed Probe';
+    return 'Unnamed probe';
   }
 
   List<String> optionsList() {

@@ -44,7 +44,7 @@ class Recipe extends Equatable {
   String ingredientNamesDisplay() {
     final List<String?> ingredientNames = [];
     for (Ingredient ingredient in ingredients) {
-      ingredientNames.add(ingredient.name);
+      ingredientNames.add(ingredient.ingredientNameDisplay());
     }
     String joinedNames = ingredientNames.join(', ');
     if (joinedNames.isNotEmpty) {
