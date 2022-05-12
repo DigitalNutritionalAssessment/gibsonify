@@ -114,6 +114,7 @@ class RecipeMeasurements extends StatelessWidget {
             itemBuilder: (context, index) {
               return Slidable(
                 key: Key(state.recipes[recipeIndex].measurements[index].id),
+                enabled: !state.recipes[recipeIndex].saved,
                 endActionPane: ActionPane(
                   motion: const ScrollMotion(),
                   children: [

@@ -57,6 +57,7 @@ class ProbeForm extends StatelessWidget {
                         .probeOptions.length,
                     itemBuilder: (context, index) {
                       return Slidable(
+                          enabled: !state.recipes[recipeIndex].saved,
                           endActionPane: ActionPane(
                             motion: const ScrollMotion(),
                             children: [
