@@ -248,8 +248,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
 
     int changedRecipeIndex = recipes.indexOf(event.recipe);
 
-    Recipe recipe =
-        recipes[changedRecipeIndex].copyWith(saved: event.recipeSaved);
+    Recipe recipe = recipes[changedRecipeIndex]
+        .copyWith(saved: event.recipeSaved, date: _getCurrentDate());
 
     recipes.removeAt(changedRecipeIndex);
     recipes.insert(changedRecipeIndex, recipe);
@@ -512,7 +512,6 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
 
   void _onIngredientAdded(IngredientAdded event, Emitter<RecipeState> emit) {
     List<Recipe> recipes = List.from(state.recipes);
-    Recipe standardRecipe = event.recipe;
     int changedRecipeIndex = recipes.indexOf(event.recipe);
 
     final ingredient = Ingredient();
@@ -520,32 +519,18 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
         List.from(recipes[changedRecipeIndex].ingredients);
     ingredients.add(ingredient);
 
-    Recipe recipe =
-        (event.recipe.saved == true && event.recipe.type == "Standard Recipe")
-            ? recipes[changedRecipeIndex].copyWith(
-                ingredients: ingredients,
-                saved: false,
-                type: "Modified Recipe",
-                number: const Uuid().v4(),
-                date: _getCurrentDate())
-            : recipes[changedRecipeIndex].copyWith(
-                ingredients: ingredients,
-                saved: false,
-                date: _getCurrentDate());
+    Recipe recipe = recipes[changedRecipeIndex]
+        .copyWith(ingredients: ingredients, date: _getCurrentDate());
 
     recipes.removeAt(changedRecipeIndex);
-
-    if (event.recipe.saved == true && event.recipe.type == "Standard Recipe") {
-      recipes.insert(changedRecipeIndex, standardRecipe);
-    }
     recipes.insert(changedRecipeIndex, recipe);
+
     emit(state.copyWith(recipes: recipes));
   }
 
   void _onIngredientDeleted(
       IngredientDeleted event, Emitter<RecipeState> emit) {
     List<Recipe> recipes = List.from(state.recipes);
-    Recipe standardRecipe = event.recipe;
     int changedRecipeIndex = recipes.indexOf(event.recipe);
 
     List<Ingredient> ingredients =
@@ -553,25 +538,12 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     int changedIngredientIndex = ingredients.indexOf(event.ingredient);
     ingredients.removeAt(changedIngredientIndex);
 
-    Recipe recipe =
-        (event.recipe.saved == true && event.recipe.type == "Standard Recipe")
-            ? recipes[changedRecipeIndex].copyWith(
-                ingredients: ingredients,
-                saved: false,
-                type: "Modified Recipe",
-                number: const Uuid().v4(),
-                date: _getCurrentDate())
-            : recipes[changedRecipeIndex].copyWith(
-                ingredients: ingredients,
-                saved: false,
-                date: _getCurrentDate());
+    Recipe recipe = recipes[changedRecipeIndex]
+        .copyWith(ingredients: ingredients, date: _getCurrentDate());
 
     recipes.removeAt(changedRecipeIndex);
-
-    if (event.recipe.saved == true && event.recipe.type == "Standard Recipe") {
-      recipes.insert(changedRecipeIndex, standardRecipe);
-    }
     recipes.insert(changedRecipeIndex, recipe);
+
     emit(state.copyWith(recipes: recipes));
   }
 
@@ -591,7 +563,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     ingredients.insert(changedIngredientIndex, ingredient);
 
     Recipe recipe = recipes[changedRecipeIndex]
-        .copyWith(ingredients: ingredients, saved: false);
+        .copyWith(ingredients: ingredients, date: _getCurrentDate());
 
     recipes.removeAt(changedRecipeIndex);
     recipes.insert(changedRecipeIndex, recipe);
@@ -619,8 +591,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     ingredients.removeAt(changedIngredientIndex);
     ingredients.insert(changedIngredientIndex, ingredient);
 
-    Recipe recipe = recipes[changedRecipeIndex].copyWith(
-        ingredients: ingredients, saved: false, date: _getCurrentDate());
+    Recipe recipe = recipes[changedRecipeIndex]
+        .copyWith(ingredients: ingredients, date: _getCurrentDate());
 
     recipes.removeAt(changedRecipeIndex);
     recipes.insert(changedRecipeIndex, recipe);
@@ -643,8 +615,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     ingredients.removeAt(changedIngredientIndex);
     ingredients.insert(changedIngredientIndex, ingredient);
 
-    Recipe recipe = recipes[changedRecipeIndex].copyWith(
-        ingredients: ingredients, saved: false, date: _getCurrentDate());
+    Recipe recipe = recipes[changedRecipeIndex]
+        .copyWith(ingredients: ingredients, date: _getCurrentDate());
 
     recipes.removeAt(changedRecipeIndex);
     recipes.insert(changedRecipeIndex, recipe);
@@ -667,8 +639,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     ingredients.removeAt(changedIngredientIndex);
     ingredients.insert(changedIngredientIndex, ingredient);
 
-    Recipe recipe = recipes[changedRecipeIndex].copyWith(
-        ingredients: ingredients, saved: false, date: _getCurrentDate());
+    Recipe recipe = recipes[changedRecipeIndex]
+        .copyWith(ingredients: ingredients, date: _getCurrentDate());
 
     recipes.removeAt(changedRecipeIndex);
     recipes.insert(changedRecipeIndex, recipe);
@@ -691,8 +663,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     ingredients.removeAt(changedIngredientIndex);
     ingredients.insert(changedIngredientIndex, ingredient);
 
-    Recipe recipe = recipes[changedRecipeIndex].copyWith(
-        ingredients: ingredients, saved: false, date: _getCurrentDate());
+    Recipe recipe = recipes[changedRecipeIndex]
+        .copyWith(ingredients: ingredients, date: _getCurrentDate());
 
     recipes.removeAt(changedRecipeIndex);
     recipes.insert(changedRecipeIndex, recipe);
@@ -717,7 +689,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     measurements.add(measurement);
 
     Ingredient ingredient = ingredients[changedIngredientIndex]
-        .copyWith(measurements: measurements);
+        .copyWith(measurements: measurements, saved: false);
 
     ingredients.removeAt(changedIngredientIndex);
     ingredients.insert(changedIngredientIndex, ingredient);
@@ -748,7 +720,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     measurements.removeAt(changedmeasurementIndex);
 
     Ingredient ingredient = ingredients[changedIngredientIndex]
-        .copyWith(measurements: measurements);
+        .copyWith(measurements: measurements, saved: false);
 
     ingredients.removeAt(changedIngredientIndex);
     ingredients.insert(changedIngredientIndex, ingredient);
@@ -783,7 +755,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     measurements.insert(changedmeasurementIndex, measurement);
 
     Ingredient ingredient = ingredients[changedIngredientIndex]
-        .copyWith(measurements: measurements);
+        .copyWith(measurements: measurements, saved: false);
 
     ingredients.removeAt(changedIngredientIndex);
     ingredients.insert(changedIngredientIndex, ingredient);
@@ -818,7 +790,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     measurements.insert(changedmeasurementIndex, measurement);
 
     Ingredient ingredient = ingredients[changedIngredientIndex]
-        .copyWith(measurements: measurements);
+        .copyWith(measurements: measurements, saved: false);
 
     ingredients.removeAt(changedIngredientIndex);
     ingredients.insert(changedIngredientIndex, ingredient);
@@ -853,7 +825,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     measurements.insert(changedmeasurementIndex, measurement);
 
     Ingredient ingredient = ingredients[changedIngredientIndex]
-        .copyWith(measurements: measurements);
+        .copyWith(measurements: measurements, saved: false);
 
     ingredients.removeAt(changedIngredientIndex);
     ingredients.insert(changedIngredientIndex, ingredient);
@@ -918,7 +890,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
       return;
     }
     final input = File(result.files.single.path!).openRead();
-    var lineEndSetting = FirstOccurrenceSettingsDetector(eols: ['\r\n', '\n']);
+    var lineEndSetting =
+        const FirstOccurrenceSettingsDetector(eols: ['\r\n', '\n']);
 
     List data = await input
         .transform(utf8.decoder)
