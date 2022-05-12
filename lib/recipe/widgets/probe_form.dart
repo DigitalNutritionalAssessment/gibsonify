@@ -110,7 +110,7 @@ class ProbeForm extends StatelessWidget {
                                       ? 'Default option'
                                       : 'Option ${index + 1}',
                                   helperText:
-                                      'Probe response option - e.g. Yes/No or a type of ingredient like wheat flour',
+                                      'Probe response - e.g. Yes/No or an ingredient',
                                 ),
                                 onChanged: (value) {
                                   context.read<RecipeBloc>().add(

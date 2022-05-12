@@ -137,6 +137,16 @@ class ProbeAdded extends RecipeEvent {
   List<Object> get props => [recipe];
 }
 
+class ProbeDuplicated extends RecipeEvent {
+  final Recipe recipe;
+  final Probe probe;
+
+  const ProbeDuplicated({required this.recipe, required this.probe});
+
+  @override
+  List<Object> get props => [recipe, probe];
+}
+
 class ProbeChanged extends RecipeEvent {
   final Recipe recipe;
   final String probeName;

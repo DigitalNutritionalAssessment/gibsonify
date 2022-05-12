@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gibsonify/recipe/recipe.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gibsonify/navigation/navigation.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 
@@ -97,35 +96,12 @@ class ProbeList extends StatelessWidget {
                           padding: const EdgeInsets.all(2.0),
                           itemCount: state.recipes[recipeIndex].probes.length,
                           itemBuilder: (context, index) {
-                            return Slidable(
-                              endActionPane: ActionPane(
-                                motion: const ScrollMotion(),
+                            return Card(
+                                child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
                                 children: [
-                                  SlidableAction(
-                                    onPressed: (context) {
-                                      showDialog<String>(
-                                          context: context,
-                                          builder: (BuildContext context) =>
-                                              DeleteProbeDialog(
-                                                  recipe: state
-                                                      .recipes[recipeIndex],
-                                                  probe: state
-                                                      .recipes[recipeIndex]
-                                                      .probes[index]));
-                                    },
-                                    backgroundColor: Colors.red,
-                                    foregroundColor: Colors.white,
-                                    icon: Icons.delete,
-                                    label: 'Delete',
-                                  )
-                                ],
-                              ),
-                              child: Card(
-                                  child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  children: [
-                                    ListTile(
+                                  ListTile(
                                       title: Text(state.recipes[recipeIndex]
                                               .probes[index].probeName ??
                                           ''),
@@ -146,47 +122,59 @@ class ProbeList extends StatelessWidget {
                                         ),
                                       ),
                                       onTap: () => {
-                                        if (assignedFoodItemId == null)
-                                          {
-                                            Navigator.pushNamed(
-                                                context, PageRouter.editProbe,
-                                                arguments: {
-                                                  'recipeIndex': recipeIndex,
-                                                  'probeIndex': index,
-                                                })
-                                          }
-                                      },
-                                    ),
-                                    Visibility(
-                                      visible: (assignedFoodItemId != null),
-                                      child: DropdownSearch<String>(
-                                          mode: Mode.MENU,
-                                          showSelectedItems: true,
-                                          showSearchBox: true,
-                                          items: state.recipes[recipeIndex]
-                                              .probes[index]
-                                              .optionsList(),
-                                          onChanged: (String? answer) => context
-                                              .read<RecipeBloc>()
-                                              .add(ProbeOptionSelected(
-                                                  recipe: state
-                                                      .recipes[recipeIndex],
-                                                  probeIndex: index,
-                                                  answer: answer!)),
-                                          selectedItem: (state.recipes[recipeIndex].probes[index].answer == null ||
-                                                  state
-                                                          .recipes[recipeIndex]
-                                                          .probes[index]
-                                                          .answer ==
-                                                      '')
-                                              ? state.recipes[recipeIndex].probes[index]
-                                                  .optionsList()[0]
-                                              : state.recipes[recipeIndex].probes[index].answer),
-                                    )
-                                  ],
-                                ),
-                              )),
-                            );
+                                            if (assignedFoodItemId == null)
+                                              {
+                                                Navigator.pushNamed(context,
+                                                    PageRouter.editProbe,
+                                                    arguments: {
+                                                      'recipeIndex':
+                                                          recipeIndex,
+                                                      'probeIndex': index,
+                                                    })
+                                              }
+                                          },
+                                      onLongPress: state
+                                              .recipes[recipeIndex].saved
+                                          ? null
+                                          : () => showModalBottomSheet(
+                                              context: context,
+                                              builder: (context) {
+                                                return ProbeOptions(
+                                                    recipe: state
+                                                        .recipes[recipeIndex],
+                                                    probe: state
+                                                        .recipes[recipeIndex]
+                                                        .probes[index]);
+                                              })),
+                                  Visibility(
+                                    visible: (assignedFoodItemId != null),
+                                    child: DropdownSearch<String>(
+                                        mode: Mode.MENU,
+                                        showSelectedItems: true,
+                                        showSearchBox: true,
+                                        items: state.recipes[recipeIndex].probes[index]
+                                            .optionsList(),
+                                        onChanged: (String? answer) => context
+                                            .read<RecipeBloc>()
+                                            .add(ProbeOptionSelected(
+                                                recipe:
+                                                    state.recipes[recipeIndex],
+                                                probeIndex: index,
+                                                answer: answer!)),
+                                        selectedItem: (state
+                                                        .recipes[recipeIndex]
+                                                        .probes[index]
+                                                        .answer ==
+                                                    null ||
+                                                state.recipes[recipeIndex]
+                                                        .probes[index].answer ==
+                                                    '')
+                                            ? state.recipes[recipeIndex].probes[index].optionsList()[0]
+                                            : state.recipes[recipeIndex].probes[index].answer),
+                                  )
+                                ],
+                              ),
+                            ));
                           }),
                     ),
                   ]),
@@ -242,35 +230,41 @@ class ProbesPrompt extends StatelessWidget {
   }
 }
 
-class DeleteProbeDialog extends StatelessWidget {
+class ProbeOptions extends StatelessWidget {
   final Recipe recipe;
   final Probe probe;
 
-  const DeleteProbeDialog({Key? key, required this.recipe, required this.probe})
+  const ProbeOptions({Key? key, required this.recipe, required this.probe})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
-      return AlertDialog(
-        title: const Text('Delete probe'),
-        content: Text('Would you like to delete the ${probe.probeName} probe?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, 'Cancel'),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () => {
-              context
-                  .read<RecipeBloc>()
-                  .add(ProbeDeleted(recipe: recipe, probe: probe)),
-              Navigator.pop(context, 'Delete')
-            },
-            child: const Text('Delete'),
-          ),
-        ],
-      );
+      final List<Widget> options = [
+        const ListTile(title: Text('Probe options')),
+        const Divider(),
+        ListTile(
+          leading: const Icon(Icons.copy),
+          title: const Text('Duplicate'),
+          onTap: () => {
+            context
+                .read<RecipeBloc>()
+                .add(ProbeDuplicated(recipe: recipe, probe: probe)),
+            Navigator.pop(context, 'Duplicate')
+          },
+        ),
+        ListTile(
+          leading: const Icon(Icons.delete),
+          title: const Text('Delete'),
+          onTap: () => {
+            context
+                .read<RecipeBloc>()
+                .add(ProbeDeleted(recipe: recipe, probe: probe)),
+            Navigator.pop(context, 'Delete')
+          },
+        )
+      ];
+      return Wrap(children: options);
     });
   }
 }
