@@ -102,9 +102,9 @@ class ProbeList extends StatelessWidget {
                               child: Column(
                                 children: [
                                   ListTile(
-                                      title: Text(state.recipes[recipeIndex]
-                                              .probes[index].probeName ??
-                                          ''),
+                                      title: Text(state
+                                          .recipes[recipeIndex].probes[index]
+                                          .probeNameDisplay()),
                                       leading: const Icon(Icons.live_help),
                                       trailing: Visibility(
                                         visible: (assignedFoodItemId != null),

@@ -34,7 +34,14 @@ class Recipe extends Equatable {
   final bool allProbeAnswersStandard;
   final bool saved;
 
-  String ingredientNamesString() {
+  String recipeNameDisplay() {
+    if (isFieldNotNullAndNotEmpty(name)) {
+      return name!;
+    }
+    return 'Unnamed recipe';
+  }
+
+  String ingredientNamesDisplay() {
     final List<String?> ingredientNames = [];
     for (Ingredient ingredient in ingredients) {
       ingredientNames.add(ingredient.name);

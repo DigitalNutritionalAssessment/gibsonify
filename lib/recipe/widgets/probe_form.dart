@@ -22,18 +22,17 @@ class ProbeForm extends StatelessWidget {
                 child: Column(
                   children: [
                     TextFormField(
-                      initialValue: state
-                          .recipes[recipeIndex].probes[probeIndex].probeName,
+                      initialValue:
+                          state.recipes[recipeIndex].probes[probeIndex].name,
                       decoration: InputDecoration(
                           icon: const Icon(Icons.live_help),
                           labelText: 'Probe ${probeIndex + 1}',
                           helperText:
                               'Recipe probe - e.g. Which flour did you use to make roti?',
-                          errorText: (state.recipes[recipeIndex]
-                                          .probes[probeIndex].probeName !=
-                                      null &&
-                                  state.recipes[recipeIndex].probes[probeIndex]
-                                      .probeName!.isEmpty)
+                          errorText: (isFieldModifiedAndEmpty(state
+                                  .recipes[recipeIndex]
+                                  .probes[probeIndex]
+                                  .name))
                               ? 'Probes cannot be empty'
                               : null),
                       onChanged: (value) {

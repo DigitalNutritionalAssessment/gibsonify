@@ -31,13 +31,11 @@ class RecipesScreen extends StatelessWidget {
                       child: ListTile(
                           contentPadding: const EdgeInsets.symmetric(
                               vertical: 8.0, horizontal: 10.0),
-                          title: isFieldNotNullAndNotEmpty(
-                                  recipeState.recipes[index].name)
-                              ? Text(recipeState.recipes[index].name!)
-                              : const Text('Unnamed Recipe'),
+                          title: Text(
+                              recipeState.recipes[index].recipeNameDisplay()),
                           subtitle: Text(recipeState.recipes[index].type +
                               recipeState.recipes[index]
-                                  .ingredientNamesString()),
+                                  .ingredientNamesDisplay()),
                           trailing: recipeState.recipes[index].saved
                               ? const Icon(Icons.done)
                               : const Icon(Icons.new_releases),
@@ -150,7 +148,7 @@ class RecipeOptions extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
       final List<Widget> options = [
-        ListTile(title: Text((recipe.name ?? '') + ' recipe options')),
+        ListTile(title: Text((recipe.recipeNameDisplay()) + ' options')),
         const Divider(),
         ListTile(
           leading: const Icon(Icons.copy),

@@ -319,8 +319,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     List<Probe> probes = List.from(recipes[changedRecipeIndex].probes);
     int changedProbeIndex = event.probeIndex;
 
-    Probe probe =
-        probes[changedProbeIndex].copyWith(probeName: event.probeName);
+    Probe probe = probes[changedProbeIndex].copyWith(name: event.probeName);
 
     probes.removeAt(changedProbeIndex);
     probes.insert(changedProbeIndex, probe);
@@ -1023,8 +1022,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
         for (String answer in probeAnswers) {
           probeOptions.add({'option': answer.trim(), 'id': const Uuid().v4()});
         }
-        final probe =
-            Probe(probeName: recipeProbeName, probeOptions: probeOptions);
+        final probe = Probe(name: recipeProbeName, probeOptions: probeOptions);
         probes.add(probe);
 
         recipe = recipe.copyWith(probes: probes);
