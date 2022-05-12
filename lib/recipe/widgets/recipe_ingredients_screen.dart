@@ -152,41 +152,6 @@ class Ingredients extends StatelessWidget {
   }
 }
 
-class DeleteIngredientDialog extends StatelessWidget {
-  final Recipe recipe;
-  final Ingredient ingredient;
-
-  const DeleteIngredientDialog(
-      {Key? key, required this.recipe, required this.ingredient})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    String? ingredientName = ingredient.name;
-    return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
-      return AlertDialog(
-        title: const Text('Delete ingredient'),
-        content:
-            Text('Would you like to delete the $ingredientName ingredient?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, 'Cancel'),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () => {
-              context.read<RecipeBloc>().add(
-                  IngredientDeleted(recipe: recipe, ingredient: ingredient)),
-              Navigator.pop(context, 'Delete')
-            },
-            child: const Text('Delete'),
-          ),
-        ],
-      );
-    });
-  }
-}
-
 class IngredientOptions extends StatelessWidget {
   final Recipe recipe;
   final Ingredient ingredient;
