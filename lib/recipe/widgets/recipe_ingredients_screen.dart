@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gibsonify/recipe/recipe.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:gibsonify/navigation/navigation.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 
 class RecipeIngredientsScreen extends StatelessWidget {
   final int recipeIndex;
@@ -109,57 +108,45 @@ class Ingredients extends StatelessWidget {
               padding: const EdgeInsets.all(2.0),
               itemCount: state.recipes[recipeIndex].ingredients.length,
               itemBuilder: (context, index) {
-                return Slidable(
-                  endActionPane: ActionPane(
-                    motion: const ScrollMotion(),
-                    children: [
-                      SlidableAction(
-                        onPressed: (context) {
-                          showDialog<String>(
-                              context: context,
-                              builder: (BuildContext context) =>
-                                  DeleteIngredientDialog(
+                return Card(
+                    child: ListTile(
+                        title: (state.recipes[recipeIndex].ingredients[index]
+                                    .name ==
+                                "Other (please specify)")
+                            // TODO: Implement a better implementation for this check
+                            // possibly a flag to show customName is chosen
+                            ? Text(state.recipes[recipeIndex].ingredients[index]
+                                    .customName ??
+                                '')
+                            : Text(state.recipes[recipeIndex].ingredients[index]
+                                    .name ??
+                                ''),
+                        subtitle: Text(state.recipes[recipeIndex]
+                                .ingredients[index].description ??
+                            ''),
+                        leading: const Icon(Icons.food_bank),
+                        trailing:
+                            state.recipes[recipeIndex].ingredients[index].saved
+                                ? const Icon(Icons.done)
+                                : const Icon(Icons.new_releases),
+                        onTap: () => {
+                              Navigator.pushNamed(
+                                  context, PageRouter.ingredient,
+                                  arguments: {
+                                    'recipeIndex': recipeIndex,
+                                    'ingredientIndex': index,
+                                  })
+                            },
+                        onLongPress: state.recipes[recipeIndex].saved
+                            ? null
+                            : () => showModalBottomSheet(
+                                context: context,
+                                builder: (context) {
+                                  return IngredientOptions(
                                       recipe: state.recipes[recipeIndex],
                                       ingredient: state.recipes[recipeIndex]
-                                          .ingredients[index]));
-                        },
-                        backgroundColor: Colors.red,
-                        foregroundColor: Colors.white,
-                        icon: Icons.delete,
-                        label: 'Delete',
-                      )
-                    ],
-                  ),
-                  child: Card(
-                      child: ListTile(
-                    title: (state
-                                .recipes[recipeIndex].ingredients[index].name ==
-                            "Other (please specify)")
-                        // TODO: Implement a better implementation for this check
-                        // possibly a flag to show customName is chosen
-                        ? Text(state.recipes[recipeIndex].ingredients[index]
-                                .customName ??
-                            '')
-                        : Text(state
-                                .recipes[recipeIndex].ingredients[index].name ??
-                            ''),
-                    subtitle: Text(state.recipes[recipeIndex].ingredients[index]
-                            .description ??
-                        ''),
-                    leading: const Icon(Icons.food_bank),
-                    trailing:
-                        state.recipes[recipeIndex].ingredients[index].saved
-                            ? const Icon(Icons.done)
-                            : const Icon(Icons.new_releases),
-                    onTap: () => {
-                      Navigator.pushNamed(context, PageRouter.ingredient,
-                          arguments: {
-                            'recipeIndex': recipeIndex,
-                            'ingredientIndex': index,
-                          })
-                    },
-                  )),
-                );
+                                          .ingredients[index]);
+                                })));
               }));
     });
   }
@@ -196,6 +183,46 @@ class DeleteIngredientDialog extends StatelessWidget {
           ),
         ],
       );
+    });
+  }
+}
+
+class IngredientOptions extends StatelessWidget {
+  final Recipe recipe;
+  final Ingredient ingredient;
+
+  const IngredientOptions(
+      {Key? key, required this.recipe, required this.ingredient})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
+      final List<Widget> options = [
+        const ListTile(title: Text('Ingredient options')),
+        const Divider(),
+        // ListTile(
+        //   leading: const Icon(Icons.copy),
+        //   title: const Text('Duplicate'),
+        //   onTap: () => {
+        //     context.read<RecipeBloc>().add(RecipeDuplicated(
+        //         recipe: recipe, employeeNumber: employeeNumber)),
+        //     context.read<RecipeBloc>().add(const RecipesSaved()),
+        //     Navigator.pop(context, 'Duplicate')
+        //   },
+        // ),
+        ListTile(
+          leading: const Icon(Icons.delete),
+          title: const Text('Delete'),
+          onTap: () => {
+            context
+                .read<RecipeBloc>()
+                .add(IngredientDeleted(recipe: recipe, ingredient: ingredient)),
+            Navigator.pop(context, 'Delete')
+          },
+        )
+      ];
+      return Wrap(children: options);
     });
   }
 }
