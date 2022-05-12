@@ -133,8 +133,9 @@ class ProbeList extends StatelessWidget {
                                                     })
                                               }
                                           },
-                                      onLongPress: state
-                                              .recipes[recipeIndex].saved
+                                      onLongPress: (state
+                                                  .recipes[recipeIndex].saved ||
+                                              assignedFoodItemId != null)
                                           ? null
                                           : () => showModalBottomSheet(
                                               context: context,
