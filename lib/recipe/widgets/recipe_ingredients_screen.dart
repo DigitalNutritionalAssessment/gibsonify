@@ -166,16 +166,15 @@ class IngredientOptions extends StatelessWidget {
       final List<Widget> options = [
         const ListTile(title: Text('Ingredient options')),
         const Divider(),
-        // ListTile(
-        //   leading: const Icon(Icons.copy),
-        //   title: const Text('Duplicate'),
-        //   onTap: () => {
-        //     context.read<RecipeBloc>().add(RecipeDuplicated(
-        //         recipe: recipe, employeeNumber: employeeNumber)),
-        //     context.read<RecipeBloc>().add(const RecipesSaved()),
-        //     Navigator.pop(context, 'Duplicate')
-        //   },
-        // ),
+        ListTile(
+          leading: const Icon(Icons.copy),
+          title: const Text('Duplicate'),
+          onTap: () => {
+            context.read<RecipeBloc>().add(
+                IngredientDuplicated(recipe: recipe, ingredient: ingredient)),
+            Navigator.pop(context, 'Duplicate')
+          },
+        ),
         ListTile(
           leading: const Icon(Icons.delete),
           title: const Text('Delete'),

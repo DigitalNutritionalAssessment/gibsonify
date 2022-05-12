@@ -246,6 +246,16 @@ class IngredientAdded extends RecipeEvent {
   List<Object> get props => [recipe];
 }
 
+class IngredientDuplicated extends RecipeEvent {
+  final Recipe recipe;
+  final Ingredient ingredient;
+
+  const IngredientDuplicated({required this.recipe, required this.ingredient});
+
+  @override
+  List<Object> get props => [recipe, ingredient];
+}
+
 class IngredientDeleted extends RecipeEvent {
   final Recipe recipe;
   final Ingredient ingredient;
