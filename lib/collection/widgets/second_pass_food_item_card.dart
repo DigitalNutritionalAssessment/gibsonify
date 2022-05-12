@@ -106,13 +106,10 @@ class SecondPassFoodItemCard extends StatelessWidget {
                 selectedItem: foodItem.preparationMethod),
             TextFormField(
               initialValue: foodItem.description,
-              decoration: InputDecoration(
-                icon: const Icon(Icons.info),
+              decoration: const InputDecoration(
+                icon: Icon(Icons.info),
                 labelText: 'Comments',
                 helperText: 'Optional comments about the food item',
-                errorText: isFieldModifiedAndEmpty(foodItem.description)
-                    ? 'Write down the full list of ingredients'
-                    : null,
               ),
               onChanged: (value) => onDescriptionChanged!(value),
               textInputAction: TextInputAction.next,
