@@ -77,8 +77,9 @@ class RecipeDetails extends StatelessWidget {
                 onTap: () => {
                       context.read<RecipeBloc>().add(
                           RecipeShowMeasurementsChanged(
-                              setShowMeasurements: 'Toggle',
-                              recipe: state.recipes[recipeIndex])),
+                              showMeasurements:
+                                  !state.recipes[recipeIndex].showMeasurements,
+                              recipeIndex: recipeIndex)),
                     },
                 title: (state.recipes[recipeIndex].showMeasurements)
                     ? const Text('Hide measurements')

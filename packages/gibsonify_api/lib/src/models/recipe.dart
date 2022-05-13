@@ -18,8 +18,8 @@ class Recipe extends Equatable {
     this.allProbeAnswersStandard = true,
     this.allProbesChecked = false,
     this.saved = false,
-    this.showMeasurements = false,
-    this.showIngredients = false,
+    this.showMeasurements = true,
+    this.showIngredients = true,
   })  : number = number ?? const Uuid().v4(),
         date = date ?? DateFormat('yyyy-MM-dd').format(DateTime.now()),
         measurements = measurements ?? [Measurement()];

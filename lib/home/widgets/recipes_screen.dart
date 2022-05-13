@@ -43,6 +43,19 @@ class RecipesScreen extends StatelessWidget {
                                 context.read<RecipeBloc>().add(
                                     RecipeProbesCleared(
                                         recipe: recipeState.recipes[index])),
+                                if (assignedFoodItemId != null &&
+                                    recipeState.recipes[index].type ==
+                                        'Standard Recipe')
+                                  {
+                                    context.read<RecipeBloc>().add(
+                                        RecipeShowMeasurementsChanged(
+                                            showMeasurements: false,
+                                            recipeIndex: index)),
+                                    context.read<RecipeBloc>().add(
+                                        RecipeShowIngredientsChanged(
+                                            showIngredients: false,
+                                            recipeIndex: index)),
+                                  },
                                 Navigator.pushNamed(context, PageRouter.recipe,
                                     arguments: (recipeState
                                                 .recipes[index].type !=

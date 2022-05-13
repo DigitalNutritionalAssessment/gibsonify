@@ -264,17 +264,10 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
   void _onRecipeShowMeasurementsChanged(
       RecipeShowMeasurementsChanged event, Emitter<RecipeState> emit) {
     List<Recipe> recipes = List.from(state.recipes);
-    int changedRecipeIndex = recipes.indexOf(event.recipe);
+    int changedRecipeIndex = event.recipeIndex;
 
-    bool newStatus = true;
-    if (event.setShowMeasurements == 'Toggle') {
-      newStatus = !recipes[changedRecipeIndex].showMeasurements;
-    } else if (event.setShowMeasurements == 'False') {
-      newStatus = false;
-    }
-
-    Recipe recipe =
-        recipes[changedRecipeIndex].copyWith(showMeasurements: newStatus);
+    Recipe recipe = recipes[changedRecipeIndex]
+        .copyWith(showMeasurements: event.showMeasurements);
     recipes.removeAt(changedRecipeIndex);
     recipes.insert(changedRecipeIndex, recipe);
 
@@ -284,17 +277,10 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
   void _onRecipeShowIngredientsChanged(
       RecipeShowIngredientsChanged event, Emitter<RecipeState> emit) {
     List<Recipe> recipes = List.from(state.recipes);
-    int changedRecipeIndex = recipes.indexOf(event.recipe);
+    int changedRecipeIndex = event.recipeIndex;
 
-    bool newStatus = true;
-    if (event.setShowIngredients == 'Toggle') {
-      newStatus = !recipes[changedRecipeIndex].showIngredients;
-    } else if (event.setShowIngredients == 'False') {
-      newStatus = false;
-    }
-
-    Recipe recipe =
-        recipes[changedRecipeIndex].copyWith(showIngredients: newStatus);
+    Recipe recipe = recipes[changedRecipeIndex]
+        .copyWith(showIngredients: event.showIngredients);
     recipes.removeAt(changedRecipeIndex);
     recipes.insert(changedRecipeIndex, recipe);
 
