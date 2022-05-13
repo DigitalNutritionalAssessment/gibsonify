@@ -49,6 +49,9 @@ class RecipeForm extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: <Widget>[
+            Visibility(
+                visible: state.recipes[recipeIndex].saved,
+                child: const SavedRecipeListTile()),
             AbsorbPointer(
                 absorbing: state.recipes[recipeIndex].saved,
                 child: RecipeNameInput(recipeIndex)),

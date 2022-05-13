@@ -74,6 +74,9 @@ class RecipeDetails extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: <Widget>[
+            Visibility(
+                visible: state.recipes[recipeIndex].saved,
+                child: const SavedRecipeListTile()),
             AbsorbPointer(
                 absorbing: state.recipes[recipeIndex].saved,
                 child: RecipeNameInput(recipeIndex)),
@@ -97,6 +100,20 @@ class RecipeDetails extends StatelessWidget {
         ),
       );
     });
+  }
+}
+
+class SavedRecipeListTile extends StatelessWidget {
+  const SavedRecipeListTile({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const ListTile(
+      title: Text('This recipe is saved'),
+      subtitle: Text(
+          'Saved recipes can no longer be edited. Duplicate this recipe to edit it.'),
+      tileColor: Colors.teal,
+    );
   }
 }
 

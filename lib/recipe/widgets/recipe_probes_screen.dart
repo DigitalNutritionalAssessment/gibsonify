@@ -65,6 +65,9 @@ class ProbeList extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
+            Visibility(
+                visible: state.recipes[recipeIndex].saved,
+                child: const SavedRecipeListTile()),
             ProbesPrompt(
                 recipeIndex: recipeIndex,
                 assignedFoodItemId: assignedFoodItemId),
