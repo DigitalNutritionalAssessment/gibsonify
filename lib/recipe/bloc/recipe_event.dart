@@ -368,6 +368,20 @@ class IngredientCookingStateChanged extends RecipeEvent {
   List<Object> get props => [cookingState, ingredient, recipe];
 }
 
+class IngredientCustomCookingStateChanged extends RecipeEvent {
+  final String customCookingState;
+  final Ingredient ingredient;
+  final Recipe recipe;
+
+  const IngredientCustomCookingStateChanged(
+      {required this.customCookingState,
+      required this.ingredient,
+      required this.recipe});
+
+  @override
+  List<Object> get props => [customCookingState, ingredient, recipe];
+}
+
 class IngredientMeasurementAdded extends RecipeEvent {
   final Recipe recipe;
   final Ingredient ingredient;

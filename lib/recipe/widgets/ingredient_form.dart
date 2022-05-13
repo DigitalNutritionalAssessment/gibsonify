@@ -28,7 +28,7 @@ class IngredientForm extends StatelessWidget {
     "Boiled and stir-fried",
     "Steamed and fried",
     "Roasted and boiled",
-    "Other"
+    "Other (please specify)"
   ];
 
   @override
@@ -69,8 +69,6 @@ class IngredientForm extends StatelessWidget {
                     visible: (state.recipes[recipeIndex]
                             .ingredients[ingredientIndex].name ==
                         "Other (please specify)"),
-                    // TODO: Implement a better implementation for this check
-                    // possibly a flag to show customName is chosen
                     child: TextFormField(
                       initialValue: state.recipes[recipeIndex]
                           .ingredients[ingredientIndex].customName,
@@ -141,6 +139,35 @@ class IngredientForm extends StatelessWidget {
                               recipe: state.recipes[recipeIndex])),
                       selectedItem: state.recipes[recipeIndex]
                           .ingredients[ingredientIndex].cookingState),
+                  Visibility(
+                    visible: (state.recipes[recipeIndex]
+                            .ingredients[ingredientIndex].cookingState ==
+                        "Other (please specify)"),
+                    child: TextFormField(
+                      initialValue: state.recipes[recipeIndex]
+                          .ingredients[ingredientIndex].customCookingState,
+                      decoration: InputDecoration(
+                        icon: const Icon(Icons.set_meal_rounded),
+                        labelText: 'Specify cooking state',
+                        helperText: 'Cooking state e.g. Barbequed',
+                        errorText: (state.recipes[recipeIndex]
+                                    .ingredients[ingredientIndex].customName ==
+                                null)
+                            ? 'Enter a cooking state e.g. Barbequed'
+                            : null,
+                      ),
+                      onChanged: (value) {
+                        context.read<RecipeBloc>().add(
+                            IngredientCustomCookingStateChanged(
+                                ingredient: state.recipes[recipeIndex]
+                                    .ingredients[ingredientIndex],
+                                customCookingState: value,
+                                recipe: state.recipes[recipeIndex]));
+                      },
+                      textInputAction: TextInputAction.next,
+                      textCapitalization: TextCapitalization.sentences,
+                    ),
+                  ),
                 ],
               ),
             ),
