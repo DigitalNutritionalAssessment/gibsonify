@@ -33,18 +33,24 @@ class RecipeDetailsScreen extends StatelessWidget {
                   ? const Icon(Icons.save_sharp)
                   : const Icon(Icons.check),
               onPressed: () {
-                if (assignedFoodItemId == null) {
-                  context.read<RecipeBloc>().add(RecipeStatusChanged(
-                      recipe: state.recipes[recipeIndex], recipeSaved: true));
-                  context.read<RecipeBloc>().add(const RecipesSaved());
-                  Navigator.pop(context);
+                if (state.recipes[recipeIndex].areMeasurementsFilled() ||
+                    state.recipes[recipeIndex].type == 'Standard Recipe') {
+                  if (assignedFoodItemId == null) {
+                    context.read<RecipeBloc>().add(RecipeStatusChanged(
+                        recipe: state.recipes[recipeIndex], recipeSaved: true));
+                    context.read<RecipeBloc>().add(const RecipesSaved());
+                    Navigator.pop(context);
+                  } else {
+                    context.read<CollectionBloc>().add(FoodItemRecipeChanged(
+                        foodItemId: assignedFoodItemId!,
+                        foodItemRecipe: state.recipes[recipeIndex]));
+                    context.read<RecipeBloc>().add(const RecipesSaved());
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  }
                 } else {
-                  context.read<CollectionBloc>().add(FoodItemRecipeChanged(
-                      foodItemId: assignedFoodItemId!,
-                      foodItemRecipe: state.recipes[recipeIndex]));
-                  context.read<RecipeBloc>().add(const RecipesSaved());
-                  Navigator.pop(context);
-                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text('Each measurement must be filled')));
                 }
               }),
         ),

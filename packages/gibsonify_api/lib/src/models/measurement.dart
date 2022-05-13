@@ -115,11 +115,11 @@ class Measurement extends Equatable {
   }
 
   bool isMeasurementFilled() {
-    // TODO: Valid methods should only check for error criteria, not null
-    // checks. Once this is changed, include valid checks as AND addition to
-    // result of this function.
     return (isFieldNotNullAndNotEmpty(measurementMethod) &&
+        isMethodValid() &&
         isFieldNotNullAndNotEmpty(measurementUnit) &&
-        isFieldNotNullAndNotEmpty(measurementValue));
+        isUnitValid() &&
+        isFieldNotNullAndNotEmpty(measurementValue) &&
+        isValueValid());
   }
 }

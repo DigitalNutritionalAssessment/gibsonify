@@ -19,12 +19,26 @@ class IngredientPage extends StatelessWidget {
                 label: const Text("Save"),
                 icon: const Icon(Icons.save_sharp),
                 onPressed: () => {
-                      context.read<RecipeBloc>().add(IngredientStatusChanged(
-                          recipe: state.recipes[recipeIndex],
-                          ingredient: state.recipes[recipeIndex]
-                              .ingredients[ingredientIndex],
-                          ingredientSaved: true)),
-                      Navigator.pop(context)
+                      if (state
+                              .recipes[recipeIndex].ingredients[ingredientIndex]
+                              .areMeasurementsFilled() ||
+                          state.recipes[recipeIndex].type == 'Standard Recipe')
+                        {
+                          context.read<RecipeBloc>().add(
+                              IngredientStatusChanged(
+                                  recipe: state.recipes[recipeIndex],
+                                  ingredient: state.recipes[recipeIndex]
+                                      .ingredients[ingredientIndex],
+                                  ingredientSaved: true)),
+                          Navigator.pop(context)
+                        }
+                      else
+                        {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content:
+                                      Text('Each measurement must be filled')))
+                        }
                     }),
           ),
           body: IngredientForm(recipeIndex, ingredientIndex));

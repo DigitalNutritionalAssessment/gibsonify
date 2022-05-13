@@ -37,6 +37,16 @@ class Ingredient extends Equatable {
     return 'Unnamed ingredient';
   }
 
+  bool areMeasurementsFilled() {
+    bool result = true;
+    for (Measurement measurement in measurements) {
+      if (!measurement.isMeasurementFilled()) {
+        result = false;
+      }
+    }
+    return result;
+  }
+
   Ingredient copyWith(
       {String? name,
       String? customName,
