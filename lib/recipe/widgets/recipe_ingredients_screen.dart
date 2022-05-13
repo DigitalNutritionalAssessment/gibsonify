@@ -53,11 +53,22 @@ class RecipeForm extends StatelessWidget {
                 absorbing: state.recipes[recipeIndex].saved,
                 child: RecipeNameInput(recipeIndex)),
             const SizedBox(height: 10),
-            ListTile(
-                title: (state.recipes[recipeIndex].ingredients.isNotEmpty)
-                    ? const Text('Ingredients:')
-                    : const Text('Recipe has no ingredients currently')),
-            Ingredients(recipeIndex),
+            Visibility(
+              visible: state.recipes[recipeIndex].ingredients.isNotEmpty,
+              child: ListTile(
+                  onTap: () => {
+                        context.read<RecipeBloc>().add(
+                            RecipeShowIngredientsChanged(
+                                setShowIngredients: 'Toggle',
+                                recipe: state.recipes[recipeIndex])),
+                      },
+                  title: (state.recipes[recipeIndex].showIngredients)
+                      ? const Text('Hide ingredients')
+                      : const Text('Show ingredients')),
+            ),
+            Visibility(
+                visible: state.recipes[recipeIndex].showIngredients,
+                child: Ingredients(recipeIndex)),
           ],
         ),
       );

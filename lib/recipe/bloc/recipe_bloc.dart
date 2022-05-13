@@ -288,7 +288,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
 
     bool newStatus = true;
     if (event.setShowIngredients == 'Toggle') {
-      newStatus = !recipes[changedRecipeIndex].showMeasurements;
+      newStatus = !recipes[changedRecipeIndex].showIngredients;
     } else if (event.setShowIngredients == 'False') {
       newStatus = false;
     }
