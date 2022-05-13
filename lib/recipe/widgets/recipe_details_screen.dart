@@ -19,7 +19,8 @@ class RecipeDetailsScreen extends StatelessWidget {
     return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
       return Scaffold(
         appBar: AppBar(title: const Text('Recipe details')),
-        body: RecipeDetails(recipeIndex),
+        body:
+            RecipeDetails(recipeIndex, assignedFoodItemId: assignedFoodItemId),
         floatingActionButton: Visibility(
           visible:
               !state.recipes[recipeIndex].saved || assignedFoodItemId != null,
@@ -54,7 +55,11 @@ class RecipeDetailsScreen extends StatelessWidget {
 
 class RecipeDetails extends StatelessWidget {
   final int recipeIndex;
-  const RecipeDetails(this.recipeIndex, {Key? key}) : super(key: key);
+  final String? assignedFoodItemId;
+
+  const RecipeDetails(this.recipeIndex,
+      {Key? key, required this.assignedFoodItemId})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +73,19 @@ class RecipeDetails extends StatelessWidget {
                 child: RecipeNameInput(recipeIndex)),
             RecipeNumberInput(recipeIndex),
             const SizedBox(height: 10),
-            RecipeMeasurements(recipeIndex),
+            ListTile(
+                onTap: () => {
+                      context.read<RecipeBloc>().add(
+                          RecipeShowMeasurementsChanged(
+                              setShowMeasurements: 'Toggle',
+                              recipe: state.recipes[recipeIndex])),
+                    },
+                title: (state.recipes[recipeIndex].showMeasurements)
+                    ? const Text('Hide measurements')
+                    : const Text('Show measurements')),
+            Visibility(
+                visible: state.recipes[recipeIndex].showMeasurements,
+                child: RecipeMeasurements(recipeIndex)),
           ],
         ),
       );

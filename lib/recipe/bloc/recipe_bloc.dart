@@ -31,6 +31,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     on<RecipeMeasurementUnitChanged>(_onRecipeMeasurementUnitChanged);
     on<RecipeMeasurementValueChanged>(_onRecipeMeasurementValueChanged);
     on<RecipeStatusChanged>(_onRecipeStatusChanged);
+    on<RecipeShowMeasurementsChanged>(_onRecipeShowMeasurementsChanged);
+    on<RecipeShowIngredientsChanged>(_onRecipeShowIngredientsChanged);
     on<ProbeAdded>(_onProbeAdded);
     on<ProbeDuplicated>(_onProbeDuplicated);
     on<ProbeChanged>(_onProbeChanged);
@@ -253,6 +255,46 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     Recipe recipe = recipes[changedRecipeIndex]
         .copyWith(saved: event.recipeSaved, date: _getCurrentDate());
 
+    recipes.removeAt(changedRecipeIndex);
+    recipes.insert(changedRecipeIndex, recipe);
+
+    emit(state.copyWith(recipes: recipes));
+  }
+
+  void _onRecipeShowMeasurementsChanged(
+      RecipeShowMeasurementsChanged event, Emitter<RecipeState> emit) {
+    List<Recipe> recipes = List.from(state.recipes);
+    int changedRecipeIndex = recipes.indexOf(event.recipe);
+
+    bool newStatus = true;
+    if (event.setShowMeasurements == 'Toggle') {
+      newStatus = !recipes[changedRecipeIndex].showMeasurements;
+    } else if (event.setShowMeasurements == 'False') {
+      newStatus = false;
+    }
+
+    Recipe recipe =
+        recipes[changedRecipeIndex].copyWith(showMeasurements: newStatus);
+    recipes.removeAt(changedRecipeIndex);
+    recipes.insert(changedRecipeIndex, recipe);
+
+    emit(state.copyWith(recipes: recipes));
+  }
+
+  void _onRecipeShowIngredientsChanged(
+      RecipeShowIngredientsChanged event, Emitter<RecipeState> emit) {
+    List<Recipe> recipes = List.from(state.recipes);
+    int changedRecipeIndex = recipes.indexOf(event.recipe);
+
+    bool newStatus = true;
+    if (event.setShowIngredients == 'Toggle') {
+      newStatus = !recipes[changedRecipeIndex].showMeasurements;
+    } else if (event.setShowIngredients == 'False') {
+      newStatus = false;
+    }
+
+    Recipe recipe =
+        recipes[changedRecipeIndex].copyWith(showIngredients: newStatus);
     recipes.removeAt(changedRecipeIndex);
     recipes.insert(changedRecipeIndex, recipe);
 

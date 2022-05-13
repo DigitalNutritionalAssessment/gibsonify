@@ -128,6 +128,28 @@ class RecipeStatusChanged extends RecipeEvent {
   List<Object> get props => [recipeSaved, recipe];
 }
 
+class RecipeShowMeasurementsChanged extends RecipeEvent {
+  final String setShowMeasurements;
+  final Recipe recipe;
+
+  const RecipeShowMeasurementsChanged(
+      {required this.setShowMeasurements, required this.recipe});
+
+  @override
+  List<Object> get props => [setShowMeasurements, recipe];
+}
+
+class RecipeShowIngredientsChanged extends RecipeEvent {
+  final String setShowIngredients;
+  final Recipe recipe;
+
+  const RecipeShowIngredientsChanged(
+      {required this.setShowIngredients, required this.recipe});
+
+  @override
+  List<Object> get props => [setShowIngredients, recipe];
+}
+
 class ProbeAdded extends RecipeEvent {
   final Recipe recipe;
 
