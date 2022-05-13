@@ -57,6 +57,16 @@ class Recipe extends Equatable {
     return '';
   }
 
+  bool areMeasurementsFilled() {
+    bool result = true;
+    for (Measurement measurement in measurements) {
+      if (!measurement.isMeasurementFilled()) {
+        result = false;
+      }
+    }
+    return result;
+  }
+
   Recipe copyWith({
     String? name,
     String? employeeNumber,
