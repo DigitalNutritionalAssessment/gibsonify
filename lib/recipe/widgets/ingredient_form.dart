@@ -40,14 +40,15 @@ class IngredientForm extends StatelessWidget {
         child: Column(
           children: [
             DropdownSearch<String>(
+                popupProps: const PopupProps.menu(
+                  showSelectedItems: true,
+                  showSearchBox: true,
+                ),
                 dropdownSearchDecoration: const InputDecoration(
                   icon: Icon(Icons.food_bank_rounded),
                   labelText: 'Ingredient name',
                   helperText: 'Ingredient name e.g. Potato',
                 ),
-                mode: Mode.MENU,
-                showSelectedItems: true,
-                showSearchBox: true,
                 enabled: (state.ingredientsJson != null),
                 items: (state.ingredientsJson != null)
                     ? json.decode(state.ingredientsJson!).keys.toList()
@@ -118,14 +119,15 @@ class IngredientForm extends StatelessWidget {
               textInputAction: TextInputAction.next,
             ),
             DropdownSearch<String>(
+                popupProps: const PopupProps.menu(
+                    showSelectedItems: true,
+                    menuProps: MenuProps(
+                        constraints: BoxConstraints(maxHeight: 645.0))),
                 dropdownSearchDecoration: const InputDecoration(
                   icon: Icon(Icons.food_bank_rounded),
                   labelText: "Cooking state",
                   helperText: 'How the ingredient is prepared',
                 ),
-                mode: Mode.MENU,
-                showSelectedItems: true,
-                showSearchBox: true,
                 items: cookingStates,
                 onChanged: (String? answer) => context.read<RecipeBloc>().add(
                     IngredientCookingStateChanged(
@@ -201,14 +203,16 @@ class IngredientMeasurements extends StatelessWidget {
                   child: Column(
                     children: [
                       DropdownSearch<String>(
+                          popupProps: const PopupProps.menu(
+                              showSelectedItems: true,
+                              menuProps: MenuProps(
+                                  constraints:
+                                      BoxConstraints(maxHeight: 336.0))),
                           dropdownSearchDecoration: const InputDecoration(
                             icon: Icon(Icons.food_bank_rounded),
                             labelText: "Measurement method",
                             helperText: 'How the measurement is measured',
                           ),
-                          mode: Mode.MENU,
-                          showSelectedItems: true,
-                          showSearchBox: true,
                           items: Measurement.measurementMethods,
                           onChanged: (String? answer) => context
                               .read<RecipeBloc>()
@@ -224,14 +228,16 @@ class IngredientMeasurements extends StatelessWidget {
                               .measurements[index]
                               .measurementMethod),
                       DropdownSearch<String>(
+                          popupProps: const PopupProps.menu(
+                              showSelectedItems: true,
+                              menuProps: MenuProps(
+                                  constraints:
+                                      BoxConstraints(maxHeight: 448.0))),
                           dropdownSearchDecoration: const InputDecoration(
                             icon: Icon(Icons.local_dining_rounded),
                             labelText: "Measurement unit",
                             helperText: 'The unit of each measurement value',
                           ),
-                          mode: Mode.MENU,
-                          showSelectedItems: true,
-                          showSearchBox: true,
                           items: Measurement.measurementUnits,
                           onChanged: (String? answer) => context
                               .read<RecipeBloc>()

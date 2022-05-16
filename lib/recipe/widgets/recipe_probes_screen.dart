@@ -140,9 +140,9 @@ class ProbeList extends StatelessWidget {
                             Visibility(
                               visible: (assignedFoodItemId != null),
                               child: DropdownSearch<String>(
-                                  mode: Mode.MENU,
-                                  showSelectedItems: true,
-                                  showSearchBox: true,
+                                  popupProps: const PopupProps.menu(
+                                      showSelectedItems: true,
+                                      showSearchBox: true),
                                   items: state.recipes[recipeIndex].probes[index]
                                       .optionsList(),
                                   onChanged: (String? answer) => context
@@ -154,8 +154,7 @@ class ProbeList extends StatelessWidget {
                                   selectedItem: (state.recipes[recipeIndex]
                                                   .probes[index].answer ==
                                               null ||
-                                          state.recipes[recipeIndex]
-                                                  .probes[index].answer ==
+                                          state.recipes[recipeIndex].probes[index].answer ==
                                               '')
                                       ? state.recipes[recipeIndex].probes[index]
                                           .optionsList()[0]
