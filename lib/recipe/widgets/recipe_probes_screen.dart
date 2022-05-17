@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gibsonify/recipe/recipe.dart';
+import 'package:gibsonify/login/login.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:gibsonify/navigation/navigation.dart';
 import 'package:dropdown_search/dropdown_search.dart';
@@ -69,8 +70,10 @@ class ProbeList extends StatelessWidget {
                 visible: state.recipes[recipeIndex].saved,
                 child: const SavedRecipeListTile()),
             ProbesPrompt(
-                recipeIndex: recipeIndex,
-                assignedFoodItemId: assignedFoodItemId),
+              recipeIndex: recipeIndex,
+              assignedFoodItemId: assignedFoodItemId,
+              foodItemDescription: foodItemDescription,
+            ),
             Visibility(
                 visible: (state.recipes[recipeIndex].type == 'Standard Recipe'),
                 child: Expanded(
@@ -193,43 +196,63 @@ class ProbeList extends StatelessWidget {
 class ProbesPrompt extends StatelessWidget {
   final int recipeIndex;
   final String? assignedFoodItemId;
+  final String? foodItemDescription;
   const ProbesPrompt(
-      {Key? key, required this.recipeIndex, this.assignedFoodItemId})
+      {Key? key,
+      required this.recipeIndex,
+      this.assignedFoodItemId,
+      this.foodItemDescription})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
-      if (state.recipes[recipeIndex].type != 'Standard Recipe') {
-        return const ListTile(
-          title: Text('Probes are only a feature of Standard recipes'),
-          subtitle: Text('Use a standard recipe to add probes'),
-          tileColor: Colors.blue,
-        );
-      } else if (assignedFoodItemId != null &&
-          state.recipes[recipeIndex].allProbesChecked &&
-          state.recipes[recipeIndex].allProbeAnswersStandard &&
-          state.recipes[recipeIndex].type == 'Standard Recipe' &&
-          state.recipes[recipeIndex].probes.isNotEmpty) {
-        return const ListTile(
-          title: Text('This is a standard recipe.'),
-          subtitle: Text('Confirm recipe volume on Recipe Details page'),
-          tileColor: Colors.green,
-        );
-      } else if (assignedFoodItemId != null &&
-          state.recipes[recipeIndex].allProbesChecked &&
-          !state.recipes[recipeIndex].allProbeAnswersStandard &&
-          state.recipes[recipeIndex].type == 'Standard Recipe' &&
-          state.recipes[recipeIndex].probes.isNotEmpty) {
-        return const ListTile(
-          title: Text('This is a modified recipe.'),
-          subtitle: Text('Add or remove ingredients on the ingredients page'),
-          tileColor: Colors.red,
-        );
-      } else {
-        return const SizedBox
-            .shrink(); // Empty widget used in official Material codebase
-      }
+    return BlocBuilder<LoginBloc, LoginState>(builder: (context, loginState) {
+      return BlocBuilder<RecipeBloc, RecipeState>(
+          builder: (context, recipeState) {
+        if (recipeState.recipes[recipeIndex].type != 'Standard Recipe') {
+          return const ListTile(
+            title: Text('Probes are only a feature of Standard recipes'),
+            subtitle: Text('Use a standard recipe to add probes'),
+            tileColor: Colors.blue,
+          );
+        } else if (assignedFoodItemId != null &&
+            recipeState.recipes[recipeIndex].allProbesChecked &&
+            recipeState.recipes[recipeIndex].allProbeAnswersStandard &&
+            recipeState.recipes[recipeIndex].type == 'Standard Recipe' &&
+            recipeState.recipes[recipeIndex].probes.isNotEmpty) {
+          return const ListTile(
+            title: Text('This is a standard recipe.'),
+            subtitle: Text('Confirm recipe volume on Recipe Details page'),
+            tileColor: Colors.green,
+          );
+        } else if (assignedFoodItemId != null &&
+            recipeState.recipes[recipeIndex].allProbesChecked &&
+            !recipeState.recipes[recipeIndex].allProbeAnswersStandard &&
+            recipeState.recipes[recipeIndex].type == 'Standard Recipe' &&
+            recipeState.recipes[recipeIndex].probes.isNotEmpty) {
+          return ListTile(
+            title: const Text('This is a modified recipe.'),
+            subtitle: const Text('Tap here to create a modified recipe'),
+            tileColor: Colors.red,
+            onTap: () => {
+              context.read<RecipeBloc>().add(RecipeModified(
+                  recipe: recipeState.recipes[recipeIndex],
+                  employeeNumber: loginState.loginInfo.employeeId!)),
+              context.read<RecipeBloc>().add(const RecipesSaved()),
+              Navigator.pop(context),
+              Navigator.pushNamed(context, PageRouter.recipe, arguments: {
+                'recipeIndex': recipeIndex + 1,
+                'assignedFoodItemId': assignedFoodItemId,
+                'foodItemDescription': foodItemDescription,
+                'selectedScreen': SelectedRecipeScreen.ingredientScreen
+              })
+            },
+          );
+        } else {
+          return const SizedBox
+              .shrink(); // Empty widget used in official Material codebase
+        }
+      });
     });
   }
 }
