@@ -21,6 +21,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
       : _gibsonifyRepository = gibsonifyRepository,
         super(const RecipeState()) {
     on<RecipeAdded>(_onRecipeAdded);
+    on<RecipeDuplicated>(_onRecipeDuplicated);
+    on<ModifiedRecipeCreated>(_onModifiedRecipeCreated);
     on<RecipeDeleted>(_onRecipeDeleted);
     on<RecipeNameChanged>(_recipeNameChanged);
     on<RecipeMeasurementAdded>(_onRecipeMeasurementAdded);
@@ -29,7 +31,10 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     on<RecipeMeasurementUnitChanged>(_onRecipeMeasurementUnitChanged);
     on<RecipeMeasurementValueChanged>(_onRecipeMeasurementValueChanged);
     on<RecipeStatusChanged>(_onRecipeStatusChanged);
+    on<RecipeShowMeasurementsChanged>(_onRecipeShowMeasurementsChanged);
+    on<RecipeShowIngredientsChanged>(_onRecipeShowIngredientsChanged);
     on<ProbeAdded>(_onProbeAdded);
+    on<ProbeDuplicated>(_onProbeDuplicated);
     on<ProbeChanged>(_onProbeChanged);
     on<ProbeChecked>(_onProbeChecked);
     on<ProbeDeleted>(_onProbeDeleted);
@@ -39,12 +44,15 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     on<ProbeOptionSelected>(_onProbeOptionSelected);
     on<RecipeProbesCleared>(_onRecipeProbesCleared);
     on<IngredientAdded>(_onIngredientAdded);
+    on<IngredientDuplicated>(_onIngredientDuplicated);
     on<IngredientDeleted>(_onIngredientDeleted);
     on<IngredientStatusChanged>(_onIngredientStatusChanged);
     on<IngredientNameChanged>(_onIngredientNameChanged);
     on<IngredientCustomNameChanged>(_onIngredientCustomNameChanged);
     on<IngredientDescriptionChanged>(_onIngredientDescriptionChanged);
     on<IngredientCookingStateChanged>(_onIngredientCookingStateChanged);
+    on<IngredientCustomCookingStateChanged>(
+        _onIngredientCustomCookingStateChanged);
     on<IngredientMeasurementAdded>(_onIngredientMeasurementAdded);
     on<IngredientMeasurementDeleted>(_onIngredientMeasurementDeleted);
     on<IngredientMeasurementMethodChanged>(
@@ -57,12 +65,50 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     on<RecipesImported>(_onRecipesImported);
   }
 
+  String _getCurrentDate() {
+    return DateFormat('yyyy-MM-dd').format(DateTime.now());
+  }
+
   void _onRecipeAdded(RecipeAdded event, Emitter<RecipeState> emit) {
     final recipe =
         Recipe(employeeNumber: event.employeeNumber, type: event.type);
 
     List<Recipe> recipes = List.from(state.recipes);
     recipes.add(recipe);
+
+    emit(state.copyWith(recipes: recipes));
+  }
+
+  void _onRecipeDuplicated(RecipeDuplicated event, Emitter<RecipeState> emit) {
+    List<Recipe> recipes = List.from(state.recipes);
+
+    int changedRecipeIndex = recipes.indexOf(event.recipe);
+
+    Recipe duplicatedRecipe = recipes[changedRecipeIndex].copyWith(
+        employeeNumber: event.employeeNumber,
+        number: const Uuid().v4(),
+        saved: false,
+        date: _getCurrentDate());
+
+    recipes.insert(changedRecipeIndex + 1, duplicatedRecipe);
+
+    emit(state.copyWith(recipes: recipes));
+  }
+
+  void _onModifiedRecipeCreated(
+      ModifiedRecipeCreated event, Emitter<RecipeState> emit) {
+    List<Recipe> recipes = List.from(state.recipes);
+
+    int changedRecipeIndex = recipes.indexOf(event.recipe);
+
+    Recipe modifiedRecipe = recipes[changedRecipeIndex].copyWith(
+        employeeNumber: event.employeeNumber,
+        type: "Modified Recipe",
+        number: const Uuid().v4(),
+        saved: false,
+        date: _getCurrentDate());
+
+    recipes.insert(changedRecipeIndex + 1, modifiedRecipe);
 
     emit(state.copyWith(recipes: recipes));
   }
@@ -75,10 +121,6 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     recipes.removeAt(changedRecipeIndex);
 
     emit(state.copyWith(recipes: recipes));
-  }
-
-  String _getCurrentDate() {
-    return DateFormat('yyyy-MM-dd').format(DateTime.now());
   }
 
   void _recipeNameChanged(RecipeNameChanged event, Emitter<RecipeState> emit) {
@@ -213,13 +255,23 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
 
     int changedRecipeIndex = recipes.indexOf(event.recipe);
 
-    Recipe recipe =
-        recipes[changedRecipeIndex].copyWith(saved: event.recipeSaved);
+    Recipe recipe = recipes[changedRecipeIndex]
+        .copyWith(saved: event.recipeSaved, date: _getCurrentDate());
 
     recipes.removeAt(changedRecipeIndex);
     recipes.insert(changedRecipeIndex, recipe);
 
     emit(state.copyWith(recipes: recipes));
+  }
+
+  void _onRecipeShowMeasurementsChanged(
+      RecipeShowMeasurementsChanged event, Emitter<RecipeState> emit) {
+    emit(state.copyWith(showMeasurements: event.showMeasurements));
+  }
+
+  void _onRecipeShowIngredientsChanged(
+      RecipeShowIngredientsChanged event, Emitter<RecipeState> emit) {
+    emit(state.copyWith(showIngredients: event.showIngredients));
   }
 
   bool _areAllProbesChecked(List<Probe> probes) {
@@ -255,6 +307,26 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     emit(state.copyWith(recipes: recipes));
   }
 
+  void _onProbeDuplicated(ProbeDuplicated event, Emitter<RecipeState> emit) {
+    List<Recipe> recipes = List.from(state.recipes);
+    int changedRecipeIndex = recipes.indexOf(event.recipe);
+
+    List<Probe> probes = List.from(recipes[changedRecipeIndex].probes);
+    int changedProbeIndex = probes.indexOf(event.probe);
+
+    Probe probe = probes[changedProbeIndex].copyWith(id: const Uuid().v4());
+
+    probes.insert(changedProbeIndex + 1, probe);
+
+    Recipe recipe = recipes[changedRecipeIndex]
+        .copyWith(probes: probes, date: _getCurrentDate());
+
+    recipes.removeAt(changedRecipeIndex);
+    recipes.insert(changedRecipeIndex, recipe);
+
+    emit(state.copyWith(recipes: recipes));
+  }
+
   void _onProbeChanged(ProbeChanged event, Emitter<RecipeState> emit) {
     List<Recipe> recipes = List.from(state.recipes);
     int changedRecipeIndex = recipes.indexOf(event.recipe);
@@ -262,8 +334,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     List<Probe> probes = List.from(recipes[changedRecipeIndex].probes);
     int changedProbeIndex = event.probeIndex;
 
-    Probe probe =
-        probes[changedProbeIndex].copyWith(probeName: event.probeName);
+    Probe probe = probes[changedProbeIndex].copyWith(name: event.probeName);
 
     probes.removeAt(changedProbeIndex);
     probes.insert(changedProbeIndex, probe);
@@ -477,7 +548,6 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
 
   void _onIngredientAdded(IngredientAdded event, Emitter<RecipeState> emit) {
     List<Recipe> recipes = List.from(state.recipes);
-    Recipe standardRecipe = event.recipe;
     int changedRecipeIndex = recipes.indexOf(event.recipe);
 
     final ingredient = Ingredient();
@@ -485,32 +555,41 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
         List.from(recipes[changedRecipeIndex].ingredients);
     ingredients.add(ingredient);
 
-    Recipe recipe =
-        (event.recipe.saved == true && event.recipe.type == "Standard Recipe")
-            ? recipes[changedRecipeIndex].copyWith(
-                ingredients: ingredients,
-                saved: false,
-                type: "Modified Recipe",
-                number: const Uuid().v4(),
-                date: _getCurrentDate())
-            : recipes[changedRecipeIndex].copyWith(
-                ingredients: ingredients,
-                saved: false,
-                date: _getCurrentDate());
+    Recipe recipe = recipes[changedRecipeIndex]
+        .copyWith(ingredients: ingredients, date: _getCurrentDate());
 
     recipes.removeAt(changedRecipeIndex);
-
-    if (event.recipe.saved == true && event.recipe.type == "Standard Recipe") {
-      recipes.insert(changedRecipeIndex, standardRecipe);
-    }
     recipes.insert(changedRecipeIndex, recipe);
+
+    emit(state.copyWith(recipes: recipes));
+  }
+
+  void _onIngredientDuplicated(
+      IngredientDuplicated event, Emitter<RecipeState> emit) {
+    List<Recipe> recipes = List.from(state.recipes);
+
+    int changedRecipeIndex = recipes.indexOf(event.recipe);
+    List<Ingredient> ingredients =
+        List.from(recipes[changedRecipeIndex].ingredients);
+    int changedIngredientIndex = ingredients.indexOf(event.ingredient);
+
+    Ingredient ingredient = ingredients[changedIngredientIndex]
+        .copyWith(id: const Uuid().v4(), saved: false);
+
+    ingredients.insert(changedIngredientIndex + 1, ingredient);
+
+    Recipe recipe = recipes[changedRecipeIndex]
+        .copyWith(ingredients: ingredients, date: _getCurrentDate());
+
+    recipes.removeAt(changedRecipeIndex);
+    recipes.insert(changedRecipeIndex, recipe);
+
     emit(state.copyWith(recipes: recipes));
   }
 
   void _onIngredientDeleted(
       IngredientDeleted event, Emitter<RecipeState> emit) {
     List<Recipe> recipes = List.from(state.recipes);
-    Recipe standardRecipe = event.recipe;
     int changedRecipeIndex = recipes.indexOf(event.recipe);
 
     List<Ingredient> ingredients =
@@ -518,25 +597,12 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     int changedIngredientIndex = ingredients.indexOf(event.ingredient);
     ingredients.removeAt(changedIngredientIndex);
 
-    Recipe recipe =
-        (event.recipe.saved == true && event.recipe.type == "Standard Recipe")
-            ? recipes[changedRecipeIndex].copyWith(
-                ingredients: ingredients,
-                saved: false,
-                type: "Modified Recipe",
-                number: const Uuid().v4(),
-                date: _getCurrentDate())
-            : recipes[changedRecipeIndex].copyWith(
-                ingredients: ingredients,
-                saved: false,
-                date: _getCurrentDate());
+    Recipe recipe = recipes[changedRecipeIndex]
+        .copyWith(ingredients: ingredients, date: _getCurrentDate());
 
     recipes.removeAt(changedRecipeIndex);
-
-    if (event.recipe.saved == true && event.recipe.type == "Standard Recipe") {
-      recipes.insert(changedRecipeIndex, standardRecipe);
-    }
     recipes.insert(changedRecipeIndex, recipe);
+
     emit(state.copyWith(recipes: recipes));
   }
 
@@ -556,7 +622,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     ingredients.insert(changedIngredientIndex, ingredient);
 
     Recipe recipe = recipes[changedRecipeIndex]
-        .copyWith(ingredients: ingredients, saved: false);
+        .copyWith(ingredients: ingredients, date: _getCurrentDate());
 
     recipes.removeAt(changedRecipeIndex);
     recipes.insert(changedRecipeIndex, recipe);
@@ -584,8 +650,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     ingredients.removeAt(changedIngredientIndex);
     ingredients.insert(changedIngredientIndex, ingredient);
 
-    Recipe recipe = recipes[changedRecipeIndex].copyWith(
-        ingredients: ingredients, saved: false, date: _getCurrentDate());
+    Recipe recipe = recipes[changedRecipeIndex]
+        .copyWith(ingredients: ingredients, date: _getCurrentDate());
 
     recipes.removeAt(changedRecipeIndex);
     recipes.insert(changedRecipeIndex, recipe);
@@ -608,8 +674,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     ingredients.removeAt(changedIngredientIndex);
     ingredients.insert(changedIngredientIndex, ingredient);
 
-    Recipe recipe = recipes[changedRecipeIndex].copyWith(
-        ingredients: ingredients, saved: false, date: _getCurrentDate());
+    Recipe recipe = recipes[changedRecipeIndex]
+        .copyWith(ingredients: ingredients, date: _getCurrentDate());
 
     recipes.removeAt(changedRecipeIndex);
     recipes.insert(changedRecipeIndex, recipe);
@@ -632,8 +698,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     ingredients.removeAt(changedIngredientIndex);
     ingredients.insert(changedIngredientIndex, ingredient);
 
-    Recipe recipe = recipes[changedRecipeIndex].copyWith(
-        ingredients: ingredients, saved: false, date: _getCurrentDate());
+    Recipe recipe = recipes[changedRecipeIndex]
+        .copyWith(ingredients: ingredients, date: _getCurrentDate());
 
     recipes.removeAt(changedRecipeIndex);
     recipes.insert(changedRecipeIndex, recipe);
@@ -656,8 +722,32 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     ingredients.removeAt(changedIngredientIndex);
     ingredients.insert(changedIngredientIndex, ingredient);
 
-    Recipe recipe = recipes[changedRecipeIndex].copyWith(
-        ingredients: ingredients, saved: false, date: _getCurrentDate());
+    Recipe recipe = recipes[changedRecipeIndex]
+        .copyWith(ingredients: ingredients, date: _getCurrentDate());
+
+    recipes.removeAt(changedRecipeIndex);
+    recipes.insert(changedRecipeIndex, recipe);
+
+    emit(state.copyWith(recipes: recipes));
+  }
+
+  void _onIngredientCustomCookingStateChanged(
+      IngredientCustomCookingStateChanged event, Emitter<RecipeState> emit) {
+    List<Recipe> recipes = List.from(state.recipes);
+
+    int changedRecipeIndex = recipes.indexOf(event.recipe);
+    List<Ingredient> ingredients =
+        List.from(recipes[changedRecipeIndex].ingredients);
+    int changedIngredientIndex = ingredients.indexOf(event.ingredient);
+
+    Ingredient ingredient = ingredients[changedIngredientIndex]
+        .copyWith(customCookingState: event.customCookingState, saved: false);
+
+    ingredients.removeAt(changedIngredientIndex);
+    ingredients.insert(changedIngredientIndex, ingredient);
+
+    Recipe recipe = recipes[changedRecipeIndex]
+        .copyWith(ingredients: ingredients, date: _getCurrentDate());
 
     recipes.removeAt(changedRecipeIndex);
     recipes.insert(changedRecipeIndex, recipe);
@@ -682,7 +772,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     measurements.add(measurement);
 
     Ingredient ingredient = ingredients[changedIngredientIndex]
-        .copyWith(measurements: measurements);
+        .copyWith(measurements: measurements, saved: false);
 
     ingredients.removeAt(changedIngredientIndex);
     ingredients.insert(changedIngredientIndex, ingredient);
@@ -713,7 +803,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     measurements.removeAt(changedmeasurementIndex);
 
     Ingredient ingredient = ingredients[changedIngredientIndex]
-        .copyWith(measurements: measurements);
+        .copyWith(measurements: measurements, saved: false);
 
     ingredients.removeAt(changedIngredientIndex);
     ingredients.insert(changedIngredientIndex, ingredient);
@@ -748,7 +838,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     measurements.insert(changedmeasurementIndex, measurement);
 
     Ingredient ingredient = ingredients[changedIngredientIndex]
-        .copyWith(measurements: measurements);
+        .copyWith(measurements: measurements, saved: false);
 
     ingredients.removeAt(changedIngredientIndex);
     ingredients.insert(changedIngredientIndex, ingredient);
@@ -783,7 +873,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     measurements.insert(changedmeasurementIndex, measurement);
 
     Ingredient ingredient = ingredients[changedIngredientIndex]
-        .copyWith(measurements: measurements);
+        .copyWith(measurements: measurements, saved: false);
 
     ingredients.removeAt(changedIngredientIndex);
     ingredients.insert(changedIngredientIndex, ingredient);
@@ -818,7 +908,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     measurements.insert(changedmeasurementIndex, measurement);
 
     Ingredient ingredient = ingredients[changedIngredientIndex]
-        .copyWith(measurements: measurements);
+        .copyWith(measurements: measurements, saved: false);
 
     ingredients.removeAt(changedIngredientIndex);
     ingredients.insert(changedIngredientIndex, ingredient);
@@ -883,7 +973,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
       return;
     }
     final input = File(result.files.single.path!).openRead();
-    var lineEndSetting = FirstOccurrenceSettingsDetector(eols: ['\r\n', '\n']);
+    var lineEndSetting =
+        const FirstOccurrenceSettingsDetector(eols: ['\r\n', '\n']);
 
     List data = await input
         .transform(utf8.decoder)
@@ -970,8 +1061,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
         for (String answer in probeAnswers) {
           probeOptions.add({'option': answer.trim(), 'id': const Uuid().v4()});
         }
-        final probe =
-            Probe(probeName: recipeProbeName, probeOptions: probeOptions);
+        final probe = Probe(name: recipeProbeName, probeOptions: probeOptions);
         probes.add(probe);
 
         recipe = recipe.copyWith(probes: probes);

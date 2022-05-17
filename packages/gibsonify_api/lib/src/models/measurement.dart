@@ -113,4 +113,13 @@ class Measurement extends Equatable {
     // TODO: add checks for different options
     return !isFieldModifiedAndEmpty(measurementUnit);
   }
+
+  bool isMeasurementFilled() {
+    return (isFieldNotNullAndNotEmpty(measurementMethod) &&
+        isMethodValid() &&
+        isFieldNotNullAndNotEmpty(measurementUnit) &&
+        isUnitValid() &&
+        isFieldNotNullAndNotEmpty(measurementValue) &&
+        isValueValid());
+  }
 }

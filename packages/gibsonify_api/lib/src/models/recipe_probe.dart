@@ -2,9 +2,11 @@ import 'package:equatable/equatable.dart';
 import 'dart:convert';
 import 'package:uuid/uuid.dart';
 
+import 'package:gibsonify_api/gibsonify_api.dart';
+
 class Probe extends Equatable {
   Probe(
-      {this.probeName, // TODO: rename to `name`
+      {this.name,
       this.checked = false,
       this.answer,
       // TODO: why does this need to be a dictionary with uuids?
@@ -15,10 +17,17 @@ class Probe extends Equatable {
               {'option': 'No', 'id': const Uuid().v4()}
             ];
 
-  final String? probeName;
+  final String? name;
   final bool checked;
   final String? answer;
   final List<Map<String, dynamic>> probeOptions;
+
+  String probeNameDisplay() {
+    if (isFieldNotNullAndNotEmpty(name)) {
+      return name!;
+    }
+    return 'Unnamed probe';
+  }
 
   List<String> optionsList() {
     final List<String> options = [];
@@ -36,7 +45,7 @@ class Probe extends Equatable {
   }
 
   Probe.fromJson(Map<String, dynamic> json)
-      : probeName = json['probeName'],
+      : name = json['name'],
         checked = json['checked'] == 'true' ? true : false,
         answer = json['answer'],
         probeOptions =
@@ -44,7 +53,7 @@ class Probe extends Equatable {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['probeName'] = probeName;
+    data['name'] = name;
     data['checked'] = checked.toString();
     data['answer'] = answer;
     data['probeOptions'] = jsonEncode(probeOptions);
@@ -60,22 +69,22 @@ class Probe extends Equatable {
     probeAnswers =
         probeAnswers.substring(0, probeAnswers.length - ' + '.length);
 
-    return '"$probeName","$probeAnswers"';
+    return '"$name","$probeAnswers"';
   }
 
   Probe copyWith(
-      {String? probeName,
+      {String? name,
       bool? checked,
       String? answer,
       List<Map<String, dynamic>>? probeOptions,
       String? id}) {
     return Probe(
-        probeName: probeName ?? this.probeName,
+        name: name ?? this.name,
         checked: checked ?? this.checked,
         answer: answer ?? this.answer,
         probeOptions: probeOptions ?? this.probeOptions);
   }
 
   @override
-  List<Object?> get props => [probeName, checked, answer, probeOptions];
+  List<Object?> get props => [name, checked, answer, probeOptions];
 }

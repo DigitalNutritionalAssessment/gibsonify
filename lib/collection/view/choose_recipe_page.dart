@@ -14,6 +14,7 @@ class ChooseRecipePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: RecipesScreen(
+          viewedFromCollection: true,
           assignedFoodItemId: assignedFoodItemId,
           foodItemDescription: foodItemDescription),
     );
