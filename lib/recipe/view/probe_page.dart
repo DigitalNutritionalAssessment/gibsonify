@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gibsonify/recipe/recipe.dart';
 
-class EditProbePage extends StatelessWidget {
+class ProbePage extends StatelessWidget {
   final int recipeIndex;
   final int probeIndex;
-  const EditProbePage(this.recipeIndex, this.probeIndex, {Key? key})
+  const ProbePage(this.recipeIndex, this.probeIndex, {Key? key})
       : super(key: key);
 
   @override

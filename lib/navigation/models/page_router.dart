@@ -46,8 +46,7 @@ class PageRouter {
       case editProbe:
         Map<String, dynamic> args =
             routeSettings.arguments as Map<String, dynamic>;
-        return _buildRoute(
-            EditProbePage(args['recipeIndex'], args['probeIndex']));
+        return _buildRoute(ProbePage(args['recipeIndex'], args['probeIndex']));
       case sensitizationHelp:
         return _buildRoute(const SensitizationHelpPage());
       case firstPassHelp:
