@@ -8,10 +8,14 @@ import 'package:dropdown_search/dropdown_search.dart';
 
 class RecipeProbesScreen extends StatelessWidget {
   final int recipeIndex;
+  final bool viewedFromCollection;
   final String? assignedFoodItemId;
   final String? foodItemDescription;
   const RecipeProbesScreen(this.recipeIndex,
-      {Key? key, this.assignedFoodItemId, this.foodItemDescription})
+      {Key? key,
+      required this.viewedFromCollection,
+      this.assignedFoodItemId,
+      this.foodItemDescription})
       : super(key: key);
 
   @override
@@ -21,7 +25,7 @@ class RecipeProbesScreen extends StatelessWidget {
           appBar: AppBar(title: const Text('Recipe probes list')),
           floatingActionButton: Visibility(
             visible: (state.recipes[recipeIndex].type == 'Standard Recipe' &&
-                assignedFoodItemId == null &&
+                !viewedFromCollection &&
                 !state.recipes[recipeIndex].saved),
             child: FloatingActionButton.extended(
                 label: const Text("Add probe"),
@@ -40,6 +44,7 @@ class RecipeProbesScreen extends StatelessWidget {
           ),
           body: ProbeList(
             recipeIndex: recipeIndex,
+            viewedFromCollection: viewedFromCollection,
             assignedFoodItemId: assignedFoodItemId,
             foodItemDescription: foodItemDescription,
           ));
@@ -49,12 +54,14 @@ class RecipeProbesScreen extends StatelessWidget {
 
 class ProbeList extends StatelessWidget {
   final int recipeIndex;
+  final bool viewedFromCollection;
   final String? assignedFoodItemId;
   final String? foodItemDescription;
 
   const ProbeList(
       {Key? key,
       required this.recipeIndex,
+      required this.viewedFromCollection,
       this.assignedFoodItemId,
       this.foodItemDescription})
       : super(key: key);
@@ -71,6 +78,7 @@ class ProbeList extends StatelessWidget {
                 child: const SavedRecipeListTile()),
             ProbesPrompt(
               recipeIndex: recipeIndex,
+              viewedFromCollection: viewedFromCollection,
               assignedFoodItemId: assignedFoodItemId,
               foodItemDescription: foodItemDescription,
             ),
@@ -82,7 +90,7 @@ class ProbeList extends StatelessWidget {
                         absorbing: state.recipes[recipeIndex].saved,
                         child: RecipeNameInput(recipeIndex)),
                     Visibility(
-                        visible: (assignedFoodItemId != null &&
+                        visible: (viewedFromCollection &&
                             isFieldNotNullAndNotEmpty(foodItemDescription)),
                         child: TextFormField(
                           initialValue: foodItemDescription,
@@ -113,7 +121,7 @@ class ProbeList extends StatelessWidget {
                                           .probeNameDisplay()),
                                       leading: const Icon(Icons.live_help),
                                       trailing: Visibility(
-                                        visible: (assignedFoodItemId != null),
+                                        visible: viewedFromCollection,
                                         child: Checkbox(
                                           value: state.recipes[recipeIndex]
                                               .probes[index].checked,
@@ -128,7 +136,7 @@ class ProbeList extends StatelessWidget {
                                         ),
                                       ),
                                       onTap: () => {
-                                            if (assignedFoodItemId == null)
+                                            if (!viewedFromCollection)
                                               {
                                                 Navigator.pushNamed(context,
                                                     PageRouter.editProbe,
@@ -141,7 +149,7 @@ class ProbeList extends StatelessWidget {
                                           },
                                       onLongPress: (state
                                                   .recipes[recipeIndex].saved ||
-                                              assignedFoodItemId != null)
+                                              viewedFromCollection)
                                           ? null
                                           : () => showModalBottomSheet(
                                               context: context,
@@ -154,7 +162,7 @@ class ProbeList extends StatelessWidget {
                                                         .probes[index]);
                                               })),
                                   Visibility(
-                                    visible: (assignedFoodItemId != null),
+                                    visible: (viewedFromCollection),
                                     child: DropdownSearch<String>(
                                         mode: Mode.MENU,
                                         showSelectedItems: true,
@@ -195,11 +203,13 @@ class ProbeList extends StatelessWidget {
 
 class ProbesPrompt extends StatelessWidget {
   final int recipeIndex;
+  final bool viewedFromCollection;
   final String? assignedFoodItemId;
   final String? foodItemDescription;
   const ProbesPrompt(
       {Key? key,
       required this.recipeIndex,
+      required this.viewedFromCollection,
       this.assignedFoodItemId,
       this.foodItemDescription})
       : super(key: key);
@@ -215,7 +225,7 @@ class ProbesPrompt extends StatelessWidget {
             subtitle: Text('Use a standard recipe to add probes'),
             tileColor: Colors.blue,
           );
-        } else if (assignedFoodItemId != null &&
+        } else if (viewedFromCollection &&
             recipeState.recipes[recipeIndex].allProbesChecked &&
             recipeState.recipes[recipeIndex].allProbeAnswersStandard &&
             recipeState.recipes[recipeIndex].type == 'Standard Recipe' &&
@@ -225,7 +235,7 @@ class ProbesPrompt extends StatelessWidget {
             subtitle: Text('Confirm recipe volume on Recipe Details page'),
             tileColor: Colors.green,
           );
-        } else if (assignedFoodItemId != null &&
+        } else if (viewedFromCollection &&
             recipeState.recipes[recipeIndex].allProbesChecked &&
             !recipeState.recipes[recipeIndex].allProbeAnswersStandard &&
             recipeState.recipes[recipeIndex].type == 'Standard Recipe' &&
@@ -242,6 +252,7 @@ class ProbesPrompt extends StatelessWidget {
               Navigator.pop(context),
               Navigator.pushNamed(context, PageRouter.recipe, arguments: {
                 'recipeIndex': recipeIndex + 1,
+                'viewedFromCollection': viewedFromCollection,
                 'assignedFoodItemId': assignedFoodItemId,
                 'foodItemDescription': foodItemDescription,
                 'selectedScreen': SelectedRecipeScreen.ingredientScreen

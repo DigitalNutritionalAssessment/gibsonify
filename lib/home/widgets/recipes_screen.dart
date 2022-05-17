@@ -6,11 +6,15 @@ import 'package:gibsonify/login/login.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
 
 class RecipesScreen extends StatelessWidget {
+  final bool viewedFromCollection;
   final String? assignedFoodItemId;
   final String? foodItemDescription;
 
   const RecipesScreen(
-      {Key? key, this.assignedFoodItemId, this.foodItemDescription})
+      {Key? key,
+      required this.viewedFromCollection,
+      this.assignedFoodItemId,
+      this.foodItemDescription})
       : super(key: key);
 
   @override
@@ -20,7 +24,7 @@ class RecipesScreen extends StatelessWidget {
           builder: (context, recipeState) {
         return Scaffold(
             appBar: AppBar(
-                title: assignedFoodItemId == null
+                title: !viewedFromCollection
                     ? const Text('Recipes')
                     : const Text('Choose a Recipe')),
             body: ListView.builder(
@@ -43,7 +47,7 @@ class RecipesScreen extends StatelessWidget {
                                 context.read<RecipeBloc>().add(
                                     RecipeProbesCleared(
                                         recipe: recipeState.recipes[index])),
-                                if (assignedFoodItemId != null &&
+                                if (viewedFromCollection &&
                                     recipeState.recipes[index].type ==
                                         'Standard Recipe')
                                   {
@@ -69,6 +73,8 @@ class RecipesScreen extends StatelessWidget {
                                             'Standard Recipe')
                                         ? {
                                             'recipeIndex': index,
+                                            'viewedFromCollection':
+                                                viewedFromCollection,
                                             'assignedFoodItemId':
                                                 assignedFoodItemId,
                                             'foodItemDescription':
@@ -79,6 +85,8 @@ class RecipesScreen extends StatelessWidget {
                                           }
                                         : {
                                             'recipeIndex': index,
+                                            'viewedFromCollection':
+                                                viewedFromCollection,
                                             'assignedFoodItemId':
                                                 assignedFoodItemId,
                                             'foodItemDescription':
@@ -101,7 +109,7 @@ class RecipesScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
                   Visibility(
-                    visible: assignedFoodItemId == null,
+                    visible: !viewedFromCollection,
                     child: Column(
                       children: [
                         FloatingActionButton.extended(
@@ -118,6 +126,8 @@ class RecipesScreen extends StatelessWidget {
                                       arguments: {
                                         'recipeIndex':
                                             recipeState.recipes.length,
+                                        'viewedFromCollection':
+                                            viewedFromCollection,
                                         'assignedFoodItemId':
                                             assignedFoodItemId,
                                         'foodItemDescription':
@@ -144,6 +154,7 @@ class RecipesScreen extends StatelessWidget {
                             Navigator.pushNamed(context, PageRouter.recipe,
                                 arguments: {
                                   'recipeIndex': recipeState.recipes.length,
+                                  'viewedFromCollection': viewedFromCollection,
                                   'assignedFoodItemId': assignedFoodItemId,
                                   'foodItemDescription': foodItemDescription,
                                   'selectedScreen':

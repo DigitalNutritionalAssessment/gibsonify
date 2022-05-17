@@ -6,10 +6,7 @@ import 'package:gibsonify/navigation/navigation.dart';
 
 class RecipeIngredientsScreen extends StatelessWidget {
   final int recipeIndex;
-  final String? assignedFoodItemId;
-  const RecipeIngredientsScreen(this.recipeIndex,
-      {Key? key, this.assignedFoodItemId})
-      : super(key: key);
+  const RecipeIngredientsScreen(this.recipeIndex, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

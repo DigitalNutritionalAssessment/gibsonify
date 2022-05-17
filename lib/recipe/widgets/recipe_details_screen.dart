@@ -9,9 +9,10 @@ import 'package:gibsonify_api/gibsonify_api.dart';
 
 class RecipeDetailsScreen extends StatelessWidget {
   final int recipeIndex;
+  final bool viewedFromCollection;
   final String? assignedFoodItemId;
   const RecipeDetailsScreen(this.recipeIndex,
-      {Key? key, this.assignedFoodItemId})
+      {Key? key, required this.viewedFromCollection, this.assignedFoodItemId})
       : super(key: key);
 
   @override
@@ -19,23 +20,21 @@ class RecipeDetailsScreen extends StatelessWidget {
     return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
       return Scaffold(
         appBar: AppBar(title: const Text('Recipe details')),
-        body:
-            RecipeDetails(recipeIndex, assignedFoodItemId: assignedFoodItemId),
+        body: RecipeDetails(recipeIndex),
         floatingActionButton: Visibility(
-          visible:
-              !state.recipes[recipeIndex].saved || assignedFoodItemId != null,
+          visible: !state.recipes[recipeIndex].saved || viewedFromCollection,
           child: FloatingActionButton.extended(
               heroTag: null,
-              label: assignedFoodItemId == null
+              label: !viewedFromCollection
                   ? const Text("Save Recipe")
                   : const Text("Choose Recipe"),
-              icon: assignedFoodItemId == null
+              icon: !viewedFromCollection
                   ? const Icon(Icons.save_sharp)
                   : const Icon(Icons.check),
               onPressed: () {
                 if (state.recipes[recipeIndex].areMeasurementsFilled() ||
                     state.recipes[recipeIndex].type == 'Standard Recipe') {
-                  if (assignedFoodItemId == null) {
+                  if (!viewedFromCollection) {
                     context.read<RecipeBloc>().add(RecipeStatusChanged(
                         recipe: state.recipes[recipeIndex], recipeSaved: true));
                     context.read<RecipeBloc>().add(const RecipesSaved());
@@ -61,11 +60,8 @@ class RecipeDetailsScreen extends StatelessWidget {
 
 class RecipeDetails extends StatelessWidget {
   final int recipeIndex;
-  final String? assignedFoodItemId;
 
-  const RecipeDetails(this.recipeIndex,
-      {Key? key, required this.assignedFoodItemId})
-      : super(key: key);
+  const RecipeDetails(this.recipeIndex, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

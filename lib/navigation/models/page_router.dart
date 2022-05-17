@@ -34,6 +34,7 @@ class PageRouter {
             routeSettings.arguments as Map<String, dynamic>;
         return _buildRoute(RecipePage(
           args['recipeIndex'],
+          viewedFromCollection: args['viewedFromCollection'],
           assignedFoodItemId: args['assignedFoodItemId'],
           foodItemDescription: args['foodItemDescription'],
           selectedScreen: args['selectedScreen'],
