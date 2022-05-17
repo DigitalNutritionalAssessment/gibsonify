@@ -286,14 +286,14 @@ class DeleteRecipeMeasurementDialog extends StatelessWidget {
         content: const Text('Would you like to delete the measurement?'),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context, 'Cancel'),
+            onPressed: () => Navigator.pop(context),
             child: const Text('Cancel'),
           ),
           TextButton(
             onPressed: () => {
               context.read<RecipeBloc>().add(RecipeMeasurementDeleted(
                   recipe: recipe, measurementIndex: measurementIndex)),
-              Navigator.pop(context, 'Delete'),
+              Navigator.pop(context),
             },
             child: const Text('Delete'),
           ),

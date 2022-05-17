@@ -177,7 +177,7 @@ class RecipeOptions extends StatelessWidget {
             context.read<RecipeBloc>().add(RecipeDuplicated(
                 recipe: recipe, employeeNumber: employeeNumber)),
             context.read<RecipeBloc>().add(const RecipesSaved()),
-            Navigator.pop(context, 'Duplicate')
+            Navigator.pop(context)
           },
         ),
         ListTile(
@@ -186,7 +186,7 @@ class RecipeOptions extends StatelessWidget {
           onTap: () => {
             context.read<RecipeBloc>().add(RecipeDeleted(recipe: recipe)),
             context.read<RecipeBloc>().add(const RecipesSaved()),
-            Navigator.pop(context, 'Delete')
+            Navigator.pop(context)
           },
         )
       ];
@@ -198,7 +198,7 @@ class RecipeOptions extends StatelessWidget {
             context.read<RecipeBloc>().add(ModifiedRecipeCreated(
                 recipe: recipe, employeeNumber: employeeNumber)),
             context.read<RecipeBloc>().add(const RecipesSaved()),
-            Navigator.pop(context, 'Modified')
+            Navigator.pop(context)
           },
         ));
       }

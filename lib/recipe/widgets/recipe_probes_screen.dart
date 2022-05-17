@@ -277,7 +277,7 @@ class ProbeOptions extends StatelessWidget {
             context
                 .read<RecipeBloc>()
                 .add(ProbeDuplicated(recipe: recipe, probe: probe)),
-            Navigator.pop(context, 'Duplicate')
+            Navigator.pop(context)
           },
         ),
         ListTile(
@@ -287,7 +287,7 @@ class ProbeOptions extends StatelessWidget {
             context
                 .read<RecipeBloc>()
                 .add(ProbeDeleted(recipe: recipe, probe: probe)),
-            Navigator.pop(context, 'Delete')
+            Navigator.pop(context)
           },
         )
       ];

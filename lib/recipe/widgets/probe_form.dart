@@ -155,7 +155,7 @@ class DeleteProbeOptionDialog extends StatelessWidget {
             'Would you like to delete the ${recipe.probes[probeIndex].probeOptions[probeOptionIndex]['option'] ?? ''} response?'),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context, 'Cancel'),
+            onPressed: () => Navigator.pop(context),
             child: const Text('Cancel'),
           ),
           TextButton(
@@ -164,7 +164,7 @@ class DeleteProbeOptionDialog extends StatelessWidget {
                   recipe: recipe,
                   probeIndex: probeIndex,
                   probeOptionIndex: probeOptionIndex)),
-              Navigator.pop(context, 'Delete'),
+              Navigator.pop(context),
             },
             child: const Text('Delete'),
           ),

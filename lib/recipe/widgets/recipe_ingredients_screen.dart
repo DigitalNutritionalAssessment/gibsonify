@@ -177,7 +177,7 @@ class IngredientOptions extends StatelessWidget {
           onTap: () => {
             context.read<RecipeBloc>().add(
                 IngredientDuplicated(recipe: recipe, ingredient: ingredient)),
-            Navigator.pop(context, 'Duplicate')
+            Navigator.pop(context)
           },
         ),
         ListTile(
@@ -187,7 +187,7 @@ class IngredientOptions extends StatelessWidget {
             context
                 .read<RecipeBloc>()
                 .add(IngredientDeleted(recipe: recipe, ingredient: ingredient)),
-            Navigator.pop(context, 'Delete')
+            Navigator.pop(context)
           },
         )
       ];
