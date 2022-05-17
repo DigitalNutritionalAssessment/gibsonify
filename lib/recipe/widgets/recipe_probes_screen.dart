@@ -235,7 +235,7 @@ class ProbesPrompt extends StatelessWidget {
             subtitle: const Text('Tap here to create a modified recipe'),
             tileColor: Colors.red,
             onTap: () => {
-              context.read<RecipeBloc>().add(RecipeModified(
+              context.read<RecipeBloc>().add(ModifiedRecipeCreated(
                   recipe: recipeState.recipes[recipeIndex],
                   employeeNumber: loginState.loginInfo.employeeId!)),
               context.read<RecipeBloc>().add(const RecipesSaved()),

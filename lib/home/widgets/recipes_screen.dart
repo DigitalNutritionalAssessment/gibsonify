@@ -188,8 +188,8 @@ class RecipeOptions extends StatelessWidget {
           leading: const Icon(Icons.edit),
           title: const Text('Create modified recipe'),
           onTap: () => {
-            context.read<RecipeBloc>().add(
-                RecipeModified(recipe: recipe, employeeNumber: employeeNumber)),
+            context.read<RecipeBloc>().add(ModifiedRecipeCreated(
+                recipe: recipe, employeeNumber: employeeNumber)),
             context.read<RecipeBloc>().add(const RecipesSaved()),
             Navigator.pop(context, 'Modified')
           },
