@@ -131,24 +131,20 @@ class RecipeStatusChanged extends RecipeEvent {
 
 class RecipeShowMeasurementsChanged extends RecipeEvent {
   final bool showMeasurements;
-  final int recipeIndex;
 
-  const RecipeShowMeasurementsChanged(
-      {required this.showMeasurements, required this.recipeIndex});
+  const RecipeShowMeasurementsChanged({required this.showMeasurements});
 
   @override
-  List<Object> get props => [showMeasurements, recipeIndex];
+  List<Object> get props => [showMeasurements];
 }
 
 class RecipeShowIngredientsChanged extends RecipeEvent {
   final bool showIngredients;
-  final int recipeIndex;
 
-  const RecipeShowIngredientsChanged(
-      {required this.showIngredients, required this.recipeIndex});
+  const RecipeShowIngredientsChanged({required this.showIngredients});
 
   @override
-  List<Object> get props => [showIngredients, recipeIndex];
+  List<Object> get props => [showIngredients];
 }
 
 class ProbeAdded extends RecipeEvent {

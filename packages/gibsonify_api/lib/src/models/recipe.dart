@@ -18,8 +18,6 @@ class Recipe extends Equatable {
     this.allProbeAnswersStandard = true,
     this.allProbesChecked = false,
     this.saved = false,
-    this.showMeasurements = true,
-    this.showIngredients = true,
   })  : number = number ?? const Uuid().v4(),
         date = date ?? DateFormat('yyyy-MM-dd').format(DateTime.now()),
         measurements = measurements ?? [Measurement()];
@@ -35,8 +33,6 @@ class Recipe extends Equatable {
   final bool allProbesChecked;
   final bool allProbeAnswersStandard;
   final bool saved;
-  final bool showMeasurements;
-  final bool showIngredients;
 
   String recipeNameDisplay() {
     if (isFieldNotNullAndNotEmpty(name)) {
@@ -79,8 +75,6 @@ class Recipe extends Equatable {
     bool? allProbesChecked,
     bool? allProbeAnswersStandard,
     bool? saved,
-    bool? showMeasurements,
-    bool? showIngredients,
   }) {
     return Recipe(
       name: name ?? this.name,
@@ -95,8 +89,6 @@ class Recipe extends Equatable {
       allProbeAnswersStandard:
           allProbeAnswersStandard ?? this.allProbeAnswersStandard,
       saved: saved ?? this.saved,
-      showMeasurements: showMeasurements ?? this.showMeasurements,
-      showIngredients: showIngredients ?? this.showIngredients,
     );
   }
 
@@ -113,8 +105,6 @@ class Recipe extends Equatable {
         allProbesChecked,
         allProbeAnswersStandard,
         saved,
-        showMeasurements,
-        showIngredients
       ];
 
   Recipe.fromJson(Map<String, dynamic> json)
@@ -129,9 +119,7 @@ class Recipe extends Equatable {
         allProbesChecked = json['allProbesChecked'] == 'true' ? true : false,
         allProbeAnswersStandard =
             json['allProbeAnswersStandard'] == 'true' ? true : false,
-        saved = json['saved'] == 'true' ? true : false,
-        showMeasurements = json['showMeasurements'] == 'true' ? true : false,
-        showIngredients = json['showIngredients'] == 'true' ? true : false;
+        saved = json['saved'] == 'true' ? true : false;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -146,8 +134,6 @@ class Recipe extends Equatable {
     data['allProbesChecked'] = allProbesChecked.toString();
     data['allProbeAnswersStandard'] = allProbeAnswersStandard.toString();
     data['saved'] = saved.toString();
-    data['showMeasurements'] = showMeasurements.toString();
-    data['showIngredients'] = showIngredients.toString();
     return data;
   }
 

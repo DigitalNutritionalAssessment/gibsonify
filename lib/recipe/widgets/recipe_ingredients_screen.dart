@@ -62,16 +62,14 @@ class RecipeForm extends StatelessWidget {
                   onTap: () => {
                         context.read<RecipeBloc>().add(
                             RecipeShowIngredientsChanged(
-                                showIngredients:
-                                    !state.recipes[recipeIndex].showIngredients,
-                                recipeIndex: recipeIndex)),
+                                showIngredients: !state.showIngredients)),
                       },
-                  title: (state.recipes[recipeIndex].showIngredients)
+                  title: (state.showIngredients)
                       ? const Text('Hide ingredients')
                       : const Text('Show ingredients')),
             ),
             Visibility(
-                visible: state.recipes[recipeIndex].showIngredients,
+                visible: state.showIngredients,
                 child: Ingredients(recipeIndex)),
           ],
         ),

@@ -48,13 +48,20 @@ class RecipesScreen extends StatelessWidget {
                                         'Standard Recipe')
                                   {
                                     context.read<RecipeBloc>().add(
-                                        RecipeShowMeasurementsChanged(
-                                            showMeasurements: false,
-                                            recipeIndex: index)),
+                                        const RecipeShowMeasurementsChanged(
+                                            showMeasurements: false)),
                                     context.read<RecipeBloc>().add(
-                                        RecipeShowIngredientsChanged(
-                                            showIngredients: false,
-                                            recipeIndex: index)),
+                                        const RecipeShowIngredientsChanged(
+                                            showIngredients: false)),
+                                  }
+                                else
+                                  {
+                                    context.read<RecipeBloc>().add(
+                                        const RecipeShowMeasurementsChanged(
+                                            showMeasurements: true)),
+                                    context.read<RecipeBloc>().add(
+                                        const RecipeShowIngredientsChanged(
+                                            showIngredients: true)),
                                   },
                                 Navigator.pushNamed(context, PageRouter.recipe,
                                     arguments: (recipeState

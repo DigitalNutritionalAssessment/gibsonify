@@ -266,28 +266,12 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
 
   void _onRecipeShowMeasurementsChanged(
       RecipeShowMeasurementsChanged event, Emitter<RecipeState> emit) {
-    List<Recipe> recipes = List.from(state.recipes);
-    int changedRecipeIndex = event.recipeIndex;
-
-    Recipe recipe = recipes[changedRecipeIndex]
-        .copyWith(showMeasurements: event.showMeasurements);
-    recipes.removeAt(changedRecipeIndex);
-    recipes.insert(changedRecipeIndex, recipe);
-
-    emit(state.copyWith(recipes: recipes));
+    emit(state.copyWith(showMeasurements: event.showMeasurements));
   }
 
   void _onRecipeShowIngredientsChanged(
       RecipeShowIngredientsChanged event, Emitter<RecipeState> emit) {
-    List<Recipe> recipes = List.from(state.recipes);
-    int changedRecipeIndex = event.recipeIndex;
-
-    Recipe recipe = recipes[changedRecipeIndex]
-        .copyWith(showIngredients: event.showIngredients);
-    recipes.removeAt(changedRecipeIndex);
-    recipes.insert(changedRecipeIndex, recipe);
-
-    emit(state.copyWith(recipes: recipes));
+    emit(state.copyWith(showIngredients: event.showIngredients));
   }
 
   bool _areAllProbesChecked(List<Probe> probes) {

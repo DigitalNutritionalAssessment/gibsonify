@@ -86,15 +86,13 @@ class RecipeDetails extends StatelessWidget {
                 onTap: () => {
                       context.read<RecipeBloc>().add(
                           RecipeShowMeasurementsChanged(
-                              showMeasurements:
-                                  !state.recipes[recipeIndex].showMeasurements,
-                              recipeIndex: recipeIndex)),
+                              showMeasurements: !state.showMeasurements)),
                     },
-                title: (state.recipes[recipeIndex].showMeasurements)
+                title: (state.showMeasurements)
                     ? const Text('Hide measurements')
                     : const Text('Show measurements')),
             Visibility(
-                visible: state.recipes[recipeIndex].showMeasurements,
+                visible: state.showMeasurements,
                 child: RecipeMeasurements(recipeIndex)),
           ],
         ),
