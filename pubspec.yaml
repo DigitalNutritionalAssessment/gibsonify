@@ -19,7 +19,7 @@ dependencies:
   gibsonify_repository:
     path: packages/gibsonify_repository
   geolocator: ^8.0.5
-  dropdown_search: ^4.0.0
+  dropdown_search: ^4.0.1
   intl_phone_field: ^3.0.1
   share_plus: ^4.0.4
   path_provider: ^2.0.9
