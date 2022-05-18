@@ -575,8 +575,9 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
           state.gibsonsForm.copyWith(foodItems: foodItems);
       emit(state.copyWith(gibsonsForm: changedGibsonsForm));
     } else {
-      // TODO: handle item not found case
-      print('food item not found!'); // TODO: delete
+      // TODO: refactor this
+      addError(
+          Exception('No food item with given ID found!'), StackTrace.current);
       emit(state);
     }
   }
