@@ -1027,7 +1027,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
           number: recipeNumber,
           date: date,
           name: recipeName,
-          type: recipeType + ' Recipe',
+          type: '$recipeType Recipe',
           measurements: const [],
           saved: true);
 

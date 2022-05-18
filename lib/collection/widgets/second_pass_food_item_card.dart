@@ -60,9 +60,8 @@ class SecondPassFoodItemCard extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            Text(foodItemDisplayName +
-                ' consumed in the ' +
-                foodItemDisplayTimePeriod),
+            Text(
+                '$foodItemDisplayName consumed in the $foodItemDisplayTimePeriod'),
             DropdownSearch<String>(
                 popupProps: const PopupProps.menu(
                     showSelectedItems: true,

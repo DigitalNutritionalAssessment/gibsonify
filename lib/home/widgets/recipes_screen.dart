@@ -179,7 +179,7 @@ class RecipeOptions extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
       final List<Widget> options = [
-        ListTile(title: Text((recipe.recipeNameDisplay()) + ' options')),
+        ListTile(title: Text('${recipe.recipeNameDisplay()} options')),
         const Divider(),
         ListTile(
           leading: const Icon(Icons.copy),

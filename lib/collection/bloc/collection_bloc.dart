@@ -168,7 +168,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
           timeLimit: const Duration(seconds: 45));
 
       geoLocationFormatted =
-          position.latitude.toString() + ', ' + position.longitude.toString();
+          '${position.latitude.toString()}, ${position.longitude.toString()}';
     } catch (e) {
       emit(state.copyWith(
           geoLocationStatus: GeoLocationStatus.locationTimedOut));
@@ -611,7 +611,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
       GibsonsFormDuplicated event, Emitter<CollectionState> emit) async {
     final respondentNameAndCopyText = event.gibsonsForm.respondentName == null
         ? 'Unnamed respondent copy'
-        : event.gibsonsForm.respondentName! + ' copy';
+        : '${event.gibsonsForm.respondentName!} copy';
     GibsonsForm gibsonsFormDuplicated = event.gibsonsForm.copyWith(
         id: const Uuid().v4(),
         employeeNumber: event.employeeNumber,
