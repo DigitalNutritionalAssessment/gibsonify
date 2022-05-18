@@ -20,6 +20,10 @@ class FourthPassFoodItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String? selectedOrCustomPreparationMethod =
+        (foodItem.preparationMethod != "Other (please specify)")
+            ? foodItem.preparationMethod
+            : foodItem.customPreparationMethod;
     String foodItemDisplayName = isFieldUnmodifiedOrEmpty(foodItem.name)
         ? 'Unnamed food'
         : foodItem.name!;
@@ -82,35 +86,15 @@ class FourthPassFoodItemCard extends StatelessWidget {
                 readOnly: true,
                 onTap: () =>
                     onSelectedScreenChanged!(SelectedScreen.secondPass),
-                initialValue: foodItem.preparationMethod,
+                initialValue: selectedOrCustomPreparationMethod,
                 decoration: InputDecoration(
                   icon: const Icon(Icons.food_bank_rounded),
                   labelText: 'Form when eaten',
                   helperText: 'The preparation method of the food',
-                  errorText:
-                      isFieldUnmodifiedOrEmpty(foodItem.preparationMethod)
-                          ? 'Select the food\'s preparation method'
-                          : null,
-                ),
-              ),
-              // TODO: maybe merge with the above ?
-              Visibility(
-                visible:
-                    (foodItem.preparationMethod == "Other (please specify)"),
-                child: TextFormField(
-                  readOnly: true,
-                  onTap: () =>
-                      onSelectedScreenChanged!(SelectedScreen.secondPass),
-                  initialValue: foodItem.customPreparationMethod,
-                  decoration: InputDecoration(
-                    icon: const Icon(Icons.food_bank_rounded),
-                    labelText: 'Form when eaten',
-                    helperText: 'The preparation method of the food',
-                    errorText: isFieldUnmodifiedOrEmpty(
-                            foodItem.customPreparationMethod)
-                        ? 'Specify the food\'s preparation method'
-                        : null,
-                  ),
+                  errorText: isFieldUnmodifiedOrEmpty(
+                          selectedOrCustomPreparationMethod)
+                      ? 'Select/specify the food\'s preparation method'
+                      : null,
                 ),
               ),
               TextFormField(
