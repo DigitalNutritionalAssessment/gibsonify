@@ -115,7 +115,6 @@ class SecondPassFoodItemCard extends StatelessWidget {
               child: TextFormField(
                 initialValue: foodItem.customPreparationMethod,
                 decoration: InputDecoration(
-                  // TODO: standardize icon across app
                   icon: const Icon(Icons.food_bank_rounded),
                   labelText: 'Specify form when eaten',
                   helperText: 'The preparation method of the food',
