@@ -152,8 +152,10 @@ class IngredientForm extends StatelessWidget {
                         icon: const Icon(Icons.food_bank_rounded),
                         labelText: 'Specify cooking state',
                         helperText: 'Cooking state e.g. Barbequed',
-                        errorText: (state.recipes[recipeIndex]
-                                    .ingredients[ingredientIndex].customName ==
+                        errorText: (state
+                                    .recipes[recipeIndex]
+                                    .ingredients[ingredientIndex]
+                                    .customCookingState ==
                                 null)
                             ? 'Enter a cooking state e.g. Barbequed'
                             : null,
