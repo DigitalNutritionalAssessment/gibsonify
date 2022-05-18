@@ -76,9 +76,9 @@ class ThirdPassFoodItemCard extends StatelessWidget {
                           DropdownSearch<String>(
                               popupProps: const PopupProps.menu(
                                   showSelectedItems: true,
+                                  fit: FlexFit.loose,
                                   menuProps: MenuProps(
-                                      constraints:
-                                          BoxConstraints(maxHeight: 336.0))),
+                                      constraints: BoxConstraints.tightFor())),
                               dropdownSearchDecoration: InputDecoration(
                                 icon: const Icon(Icons.monitor_weight_outlined),
                                 labelText: "Measurement method",
@@ -103,9 +103,9 @@ class ThirdPassFoodItemCard extends StatelessWidget {
                           DropdownSearch<String>(
                               popupProps: const PopupProps.menu(
                                   showSelectedItems: true,
+                                  fit: FlexFit.loose,
                                   menuProps: MenuProps(
-                                      constraints:
-                                          BoxConstraints(maxHeight: 448.0))),
+                                      constraints: BoxConstraints.tightFor())),
                               dropdownSearchDecoration: InputDecoration(
                                 icon: const Icon(
                                     Icons.radio_button_unchecked_outlined),

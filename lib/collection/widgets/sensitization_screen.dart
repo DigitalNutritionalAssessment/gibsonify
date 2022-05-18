@@ -216,8 +216,9 @@ class RecallDayInput extends StatelessWidget {
         return DropdownSearch<String>(
             popupProps: const PopupProps.menu(
                 showSelectedItems: true,
-                menuProps:
-                    MenuProps(constraints: BoxConstraints(maxHeight: 395.0))),
+                // FlexFit.loose and BoxConstraints.tightFor() give dynamic size
+                fit: FlexFit.loose,
+                menuProps: MenuProps(constraints: BoxConstraints.tightFor())),
             dropdownSearchDecoration: InputDecoration(
                 icon: const Icon(Icons.food_bank_outlined),
                 labelText: "Recall Day",
