@@ -49,7 +49,7 @@ class IngredientForm extends StatelessWidget {
                         showSearchBox: true,
                       ),
                       dropdownSearchDecoration: const InputDecoration(
-                        icon: Icon(Icons.food_bank_rounded),
+                        icon: Icon(Icons.set_meal_rounded),
                         labelText: 'Ingredient name',
                         helperText: 'Ingredient name e.g. Potato',
                       ),
@@ -149,7 +149,7 @@ class IngredientForm extends StatelessWidget {
                       initialValue: state.recipes[recipeIndex]
                           .ingredients[ingredientIndex].customCookingState,
                       decoration: InputDecoration(
-                        icon: const Icon(Icons.set_meal_rounded),
+                        icon: const Icon(Icons.food_bank_rounded),
                         labelText: 'Specify cooking state',
                         helperText: 'Cooking state e.g. Barbequed',
                         errorText: (state.recipes[recipeIndex]
