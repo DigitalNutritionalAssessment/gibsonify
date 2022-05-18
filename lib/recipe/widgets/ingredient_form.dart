@@ -242,12 +242,14 @@ class IngredientMeasurements extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
                     children: [
+                      // TODO: Make one reausable measurement widget across
+                      // collection and recipe modules
                       DropdownSearch<String>(
                           popupProps: const PopupProps.menu(
                               showSelectedItems: true,
+                              fit: FlexFit.loose,
                               menuProps: MenuProps(
-                                  constraints:
-                                      BoxConstraints(maxHeight: 336.0))),
+                                  constraints: BoxConstraints.tightFor())),
                           dropdownSearchDecoration: const InputDecoration(
                             icon: Icon(Icons.food_bank_rounded),
                             labelText: "Measurement method",
@@ -270,9 +272,9 @@ class IngredientMeasurements extends StatelessWidget {
                       DropdownSearch<String>(
                           popupProps: const PopupProps.menu(
                               showSelectedItems: true,
+                              fit: FlexFit.loose,
                               menuProps: MenuProps(
-                                  constraints:
-                                      BoxConstraints(maxHeight: 448.0))),
+                                  constraints: BoxConstraints.tightFor())),
                           dropdownSearchDecoration: const InputDecoration(
                             icon: Icon(Icons.local_dining_rounded),
                             labelText: "Measurement unit",

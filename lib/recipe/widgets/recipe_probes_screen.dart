@@ -166,7 +166,10 @@ class ProbeList extends StatelessWidget {
                                     child: DropdownSearch<String>(
                                         popupProps: const PopupProps.menu(
                                             showSelectedItems: true,
-                                            showSearchBox: true),
+                                            fit: FlexFit.loose,
+                                            menuProps: MenuProps(
+                                                constraints:
+                                                    BoxConstraints.tightFor())),
                                         items: state
                                             .recipes[recipeIndex].probes[index]
                                             .optionsList(),
@@ -177,13 +180,12 @@ class ProbeList extends StatelessWidget {
                                                     state.recipes[recipeIndex],
                                                 probeIndex: index,
                                                 answer: answer!)),
-                                        selectedItem: (state
-                                                        .recipes[recipeIndex]
-                                                        .probes[index]
-                                                        .answer ==
-                                                    null ||
-                                                state.recipes[recipeIndex].probes[index].answer == '')
-                                            ? state.recipes[recipeIndex].probes[index].optionsList()[0]
+                                        selectedItem: (state.recipes[recipeIndex].probes[index].answer == null ||
+                                                state.recipes[recipeIndex]
+                                                        .probes[index].answer ==
+                                                    '')
+                                            ? state.recipes[recipeIndex].probes[index]
+                                                .optionsList()[0]
                                             : state.recipes[recipeIndex].probes[index].answer),
                                   )
                                 ],
