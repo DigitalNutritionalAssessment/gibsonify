@@ -13,6 +13,7 @@ class FoodItem extends Equatable {
       this.source,
       this.description, // TODO: rename to ingredientsDescription
       this.preparationMethod,
+      this.customPreparationMethod,
       List<Measurement>? measurements,
       this.recipe,
       this.confirmed = false})
@@ -27,6 +28,7 @@ class FoodItem extends Equatable {
   final String? source;
   final String? description;
   final String? preparationMethod;
+  final String? customPreparationMethod;
   final List<Measurement> measurements;
   final Recipe? recipe;
   // TODO: Add Form validation bool field to check if all fields are valid
@@ -42,6 +44,7 @@ class FoodItem extends Equatable {
         source = json['source'],
         description = json['description'],
         preparationMethod = json['preparationMethod'],
+        customPreparationMethod = json['customPreparationMethod'],
         measurements = Measurement.jsonDecodeMeasurements(json['measurements']),
         recipe = json['recipe'] == '' ? null : Recipe.fromJson(json['recipe']),
         confirmed = json['confirmed'] == 'true' ? true : false;
@@ -54,6 +57,7 @@ class FoodItem extends Equatable {
     data['source'] = source;
     data['description'] = description;
     data['preparationMethod'] = preparationMethod;
+    data['customPreparationMethod'] = customPreparationMethod;
     data['measurements'] = jsonEncode(measurements);
     data['recipe'] = recipe?.toJson() ?? '';
     data['confirmed'] = confirmed.toString();
@@ -62,12 +66,22 @@ class FoodItem extends Equatable {
 
   // TODO: add a fromCsv constructor
 
+  String preparationMethodDisplay() {
+    if (isFieldNotNullAndNotEmpty(preparationMethod)) {
+      if (preparationMethod == 'Other (please specify)') {
+        return customPreparationMethod ?? 'Unspecified preparation method';
+      }
+      return preparationMethod!;
+    }
+    return 'Unnamed preparation method';
+  }
+
   String toCsv() {
     String measurementsCombined = combineMeasurements(measurements);
 
     return '"$id","$name","$timePeriod","$source","$description",'
-        '"$preparationMethod","$confirmed","${recipe?.number}","${recipe?.date}",'
-        '"${recipe?.name}","$measurementsCombined"';
+        '"${preparationMethodDisplay()}","$confirmed","${recipe?.number}",'
+        '"${recipe?.date}","${recipe?.name}","$measurementsCombined"';
   }
 
   FoodItem copyWith(
@@ -77,6 +91,7 @@ class FoodItem extends Equatable {
       String? source,
       String? description,
       String? preparationMethod,
+      String? customPreparationMethod,
       List<Measurement>? measurements,
       Recipe? recipe,
       bool? confirmed}) {
@@ -87,6 +102,8 @@ class FoodItem extends Equatable {
         source: source ?? this.source,
         description: description ?? this.description,
         preparationMethod: preparationMethod ?? this.preparationMethod,
+        customPreparationMethod:
+            customPreparationMethod ?? this.customPreparationMethod,
         measurements: measurements ?? this.measurements,
         recipe: recipe ?? this.recipe,
         confirmed: confirmed ?? this.confirmed);
@@ -100,7 +117,7 @@ class FoodItem extends Equatable {
         'Time Period: $timePeriod\n'
         'Source: $source\n'
         'Ingredients Description: $description\n'
-        'Preparation Method: $preparationMethod\n'
+        'Preparation Method: ${preparationMethodDisplay()}\n'
         'Measurements: $measurements\n'
         'Recipe: $recipe\n'
         'Confirmed: $confirmed\n'
@@ -115,6 +132,7 @@ class FoodItem extends Equatable {
         source,
         description,
         preparationMethod,
+        customPreparationMethod,
         measurements,
         recipe,
         confirmed
