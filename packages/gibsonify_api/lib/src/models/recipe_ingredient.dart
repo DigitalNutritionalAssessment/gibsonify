@@ -11,6 +11,7 @@ class Ingredient extends Equatable {
       this.customName,
       this.description,
       this.cookingState,
+      this.customCookingState,
       List<Measurement>? measurements,
       this.foodComposition,
       this.saved = false,
@@ -22,16 +23,48 @@ class Ingredient extends Equatable {
   final String? customName;
   final String? description;
   final String? cookingState;
+  final String? customCookingState;
   final List<Measurement> measurements;
   final Map<String, dynamic>? foodComposition;
   final bool saved;
   final String id;
+
+  String ingredientNameDisplay() {
+    if (isFieldNotNullAndNotEmpty(name)) {
+      if (name == 'Other (please specify)') {
+        return customName ?? 'Unspecified Ingredient';
+      }
+      return name!;
+    }
+    return 'Unnamed ingredient';
+  }
+
+  String cookingStateDisplay() {
+    if (isFieldNotNullAndNotEmpty(cookingState)) {
+      if (cookingState == 'Other (please specify)') {
+        return customCookingState ?? 'Unspecified cooking state';
+      }
+      return cookingState!;
+    }
+    return 'Unnamed cooking state';
+  }
+
+  bool areMeasurementsFilled() {
+    bool result = true;
+    for (Measurement measurement in measurements) {
+      if (!measurement.isMeasurementFilled()) {
+        result = false;
+      }
+    }
+    return result;
+  }
 
   Ingredient copyWith(
       {String? name,
       String? customName,
       String? description,
       String? cookingState,
+      String? customCookingState,
       List<Measurement>? measurements,
       Map<String, dynamic>? foodComposition,
       bool? saved,
@@ -41,6 +74,7 @@ class Ingredient extends Equatable {
         customName: customName ?? this.customName,
         description: description ?? this.description,
         cookingState: cookingState ?? this.cookingState,
+        customCookingState: customCookingState ?? this.customCookingState,
         measurements: measurements ?? this.measurements,
         foodComposition: foodComposition ?? this.foodComposition,
         saved: saved ?? this.saved,
@@ -53,6 +87,7 @@ class Ingredient extends Equatable {
         customName,
         description,
         cookingState,
+        customCookingState,
         measurements,
         foodComposition,
         saved,
@@ -69,6 +104,7 @@ class Ingredient extends Equatable {
         customName = json['customName'],
         description = json['description'],
         cookingState = json['cookingState'],
+        customCookingState = json['customCookingState'],
         measurements = Measurement.jsonDecodeMeasurements(json['measurements']),
         foodComposition = jsonDecode(json['foodComposition']),
         saved = json['saved'] == 'true' ? true : false,
@@ -81,6 +117,7 @@ class Ingredient extends Equatable {
     data['customName'] = customName;
     data['description'] = description;
     data['cookingState'] = cookingState;
+    data['customCookingState'] = customCookingState;
     data['measurements'] = jsonEncode(measurements);
     data['foodComposition'] = jsonEncode(foodComposition);
     data['saved'] = saved.toString();
@@ -92,7 +129,7 @@ class Ingredient extends Equatable {
     String measurementsCombined = combineMeasurements(measurements);
 
     // TODO: how should customName be handled?
-    return '"${name ?? customName}","$description",'
-        '"$cookingState","$measurementsCombined"';
+    return '"${ingredientNameDisplay()}","$description",'
+        '"${cookingStateDisplay()}","$measurementsCombined"';
   }
 }

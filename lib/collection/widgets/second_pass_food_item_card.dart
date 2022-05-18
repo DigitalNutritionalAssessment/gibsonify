@@ -83,19 +83,6 @@ class SecondPassFoodItemCard extends StatelessWidget {
                 onChanged: (String? foodSource) =>
                     onSourceChanged!(foodSource!),
                 selectedItem: foodItem.source),
-            TextFormField(
-              initialValue: foodItem.description,
-              decoration: InputDecoration(
-                icon: const Icon(Icons.info),
-                labelText: 'Food ingredients',
-                helperText: 'Detailed list of ingredients',
-                errorText: isFieldModifiedAndEmpty(foodItem.description)
-                    ? 'Write down the full list of ingredients'
-                    : null,
-              ),
-              onChanged: (value) => onDescriptionChanged!(value),
-              textInputAction: TextInputAction.next,
-            ),
             DropdownSearch<String>(
                 popupProps: const PopupProps.menu(
                     showSelectedItems: true,
@@ -117,6 +104,16 @@ class SecondPassFoodItemCard extends StatelessWidget {
                 onChanged: (String? preparationMethod) =>
                     onPreparationMethodChanged!(preparationMethod!),
                 selectedItem: foodItem.preparationMethod),
+            TextFormField(
+              initialValue: foodItem.description,
+              decoration: const InputDecoration(
+                icon: Icon(Icons.info),
+                labelText: 'Comments',
+                helperText: 'Optional comments about the food item',
+              ),
+              onChanged: (value) => onDescriptionChanged!(value),
+              textInputAction: TextInputAction.next,
+            ),
             TextFormField(
               initialValue: foodItem.recipe?.name ?? '',
               readOnly: true,

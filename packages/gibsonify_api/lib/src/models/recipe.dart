@@ -34,6 +34,35 @@ class Recipe extends Equatable {
   final bool allProbeAnswersStandard;
   final bool saved;
 
+  String recipeNameDisplay() {
+    if (isFieldNotNullAndNotEmpty(name)) {
+      return name!;
+    }
+    return 'Unnamed recipe';
+  }
+
+  String ingredientNamesDisplay() {
+    final List<String?> ingredientNames = [];
+    for (Ingredient ingredient in ingredients) {
+      ingredientNames.add(ingredient.ingredientNameDisplay());
+    }
+    String joinedNames = ingredientNames.join(', ');
+    if (joinedNames.isNotEmpty) {
+      return '\n\nIngredients: ' + joinedNames;
+    }
+    return '';
+  }
+
+  bool areMeasurementsFilled() {
+    bool result = true;
+    for (Measurement measurement in measurements) {
+      if (!measurement.isMeasurementFilled()) {
+        result = false;
+      }
+    }
+    return result;
+  }
+
   Recipe copyWith({
     String? name,
     String? employeeNumber,

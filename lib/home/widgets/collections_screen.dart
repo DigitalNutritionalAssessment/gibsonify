@@ -192,7 +192,7 @@ class DeleteCollectionDialog extends StatelessWidget {
               'Would you like to delete the collection of $displayRespondentName?'),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(context, 'Cancel'),
+              onPressed: () => Navigator.pop(context),
               child: const Text('Cancel'),
             ),
             TextButton(
@@ -200,7 +200,7 @@ class DeleteCollectionDialog extends StatelessWidget {
                 context
                     .read<HomeBloc>()
                     .add(GibsonsFormDeleted(id: gibsonsForm.id));
-                Navigator.pop(context, 'Delete');
+                Navigator.pop(context);
               },
               child: const Text('Delete'),
             ),

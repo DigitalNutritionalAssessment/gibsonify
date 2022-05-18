@@ -17,10 +17,11 @@ class DeleteFoodItemDialog extends StatelessWidget {
       builder: (context, state) {
         return AlertDialog(
           title: const Text('Delete food'),
-          content: Text('Would you like to delete the $foodItemDisplayName food?'),
+          content:
+              Text('Would you like to delete the $foodItemDisplayName food?'),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(context, 'Cancel'),
+              onPressed: () => Navigator.pop(context),
               child: const Text('Cancel'),
             ),
             TextButton(
@@ -28,7 +29,7 @@ class DeleteFoodItemDialog extends StatelessWidget {
                 context
                     .read<CollectionBloc>()
                     .add(FoodItemDeleted(foodItem: foodItem));
-                Navigator.pop(context, 'Delete');
+                Navigator.pop(context);
               },
               child: const Text('Delete'),
             ),

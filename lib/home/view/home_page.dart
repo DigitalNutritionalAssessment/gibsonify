@@ -14,7 +14,7 @@ class _HomePageState extends State<HomePage> {
 
   final List<Widget> _screens = [
     const CollectionsScreen(),
-    const RecipesScreen(),
+    const RecipesScreen(viewedFromCollection: false),
     const SyncScreen(),
     const SettingsScreen(),
   ];

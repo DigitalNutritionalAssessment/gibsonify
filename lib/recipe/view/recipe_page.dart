@@ -11,12 +11,14 @@ enum SelectedRecipeScreen {
 
 class RecipePage extends StatefulWidget {
   final int recipeIndex;
+  final bool viewedFromCollection;
   final String? assignedFoodItemId;
   final String? foodItemDescription;
   final SelectedRecipeScreen? selectedScreen;
 
   const RecipePage(this.recipeIndex,
       {Key? key,
+      required this.viewedFromCollection,
       this.assignedFoodItemId,
       this.foodItemDescription,
       this.selectedScreen})
@@ -47,11 +49,12 @@ class _RecipePageState extends State<RecipePage> {
   Widget build(BuildContext context) {
     final List<Widget> _screens = [
       RecipeProbesScreen(widget.recipeIndex,
+          viewedFromCollection: widget.viewedFromCollection,
           assignedFoodItemId: widget.assignedFoodItemId,
           foodItemDescription: widget.foodItemDescription),
-      RecipeIngredientsScreen(widget.recipeIndex,
-          assignedFoodItemId: widget.assignedFoodItemId),
+      RecipeIngredientsScreen(widget.recipeIndex),
       RecipeDetailsScreen(widget.recipeIndex,
+          viewedFromCollection: widget.viewedFromCollection,
           assignedFoodItemId: widget.assignedFoodItemId),
     ];
 

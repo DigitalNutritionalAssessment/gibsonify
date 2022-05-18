@@ -432,7 +432,7 @@ class FinishCollectionDialog extends StatelessWidget {
               'alternative, you can pause the collection.'),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(context, 'Cancel'),
+              onPressed: () => Navigator.pop(context),
               child: const Text('Cancel'),
             ),
             TextButton(

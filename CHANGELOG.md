@@ -1,6 +1,51 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### Refactor
+
+- add new viewedFromCollection parameter for code readability
+- remove unnecessary argument for context popping
+- rename edit probe page
+- **recipe**: move showIngredients and showMeasurements to recipe bloc state
+- **recipe**: rename modified recipe function for clarity
+- **recipe**: handle unnamed ingredients
+- **recipe**: handle unnamed recipes and probes
+- **recipe**: remove dialog ingredient deletion
+- **recipe**: remove ability to create standard recipe via collection
+- **recipe**: remove slidable usage from recipes screen
+- **recipe**: refactor error conditions using utils function
+- **recipe**: set probe screen as default page for standard recipes
+- change name of food item description field to comments
+
+### Fix
+
+- **recipe**: fix render overflow error for ingredient page
+- **recipe**: update modified recipe listtile
+- **recipe**: update food description field view
+- remove error text for comments field
+- **recipe**: restrict item deletion for standard recipes
+- **recipe**: remove old modified recipe logic and fix saved recipe/ingredient logic
+
+### Feat
+
+- **recipe**: add custom cooking state field
+- **recipe**: add helper text for saved recipes
+- **recipe**: restrict saving if measurements are not filled
+- **gibsonify_api**: add new measurement checks
+- **recipe**: finalise hide ingredients and measurements feature
+- **recipe**: add toggle to hide ingredients
+- **recipe**: add toggle to hide measurements
+- **recipe**: restrict probe editting when accessing via collection
+- **recipe**: add recipe duplication feat, use modal sheet instead of slidable for deletion
+- **recipe**: add ingredient duplication feature
+- **recipe**: restrict ingredient deletion when recipe is saved
+- **recipe**: add feature to restrict input if recipe is saved
+- **recipe**: add new modified recipe implementation
+- **recipe**: add recipe duplication
+- **recipe**: add ingredients as identifier for recipes
+
 ## 1.2.0 (2022-04-18)
 
 ### Feat
