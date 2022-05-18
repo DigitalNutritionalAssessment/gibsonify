@@ -48,6 +48,14 @@ class SecondPassScreen extends StatelessWidget {
                                           state.gibsonsForm.foodItems[index],
                                       foodItemPreparationMethod:
                                           changedPreparationMethod)),
+                          onCustomPreparationMethodChanged:
+                              (changedCustomPreparationMethod) => context
+                                  .read<CollectionBloc>()
+                                  .add(FoodItemCustomPreparationMethodChanged(
+                                      foodItem:
+                                          state.gibsonsForm.foodItems[index],
+                                      foodItemCustomPreparationMethod:
+                                          changedCustomPreparationMethod)),
                         ),
                       );
                     }),

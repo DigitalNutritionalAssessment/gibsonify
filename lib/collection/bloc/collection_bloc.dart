@@ -43,6 +43,8 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     on<FoodItemSourceChanged>(_onFoodItemSourceChanged);
     on<FoodItemDescriptionChanged>(_onFoodItemDescriptionChanged);
     on<FoodItemPreparationMethodChanged>(_onFoodItemPreparationMethodChanged);
+    on<FoodItemCustomPreparationMethodChanged>(
+        _onFoodItemCustomPreparationMethodChanged);
     on<FoodItemMeasurementAdded>(_onFoodItemMeasurementAdded);
     on<FoodItemMeasurementDeleted>(_onFoodItemMeasurementDeleted);
     on<FoodItemMeasurementMethodChanged>(_onFoodItemMeasurementMethodChanged);
@@ -372,6 +374,27 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
     FoodItem foodItem = foodItems[changedFoodItemIndex].copyWith(
         preparationMethod: event.foodItemPreparationMethod, confirmed: false);
+
+    foodItems.removeAt(changedFoodItemIndex);
+    foodItems.insert(changedFoodItemIndex, foodItem);
+
+    GibsonsForm changedGibsonsForm =
+        state.gibsonsForm.copyWith(foodItems: foodItems);
+
+    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+  }
+
+  void _onFoodItemCustomPreparationMethodChanged(
+      FoodItemCustomPreparationMethodChanged event,
+      Emitter<CollectionState> emit) {
+    List<FoodItem> foodItems = List.from(state.gibsonsForm.foodItems);
+
+    // TODO: change into UUID-based indexing
+    int changedFoodItemIndex = foodItems.indexOf(event.foodItem);
+
+    FoodItem foodItem = foodItems[changedFoodItemIndex].copyWith(
+        customPreparationMethod: event.foodItemCustomPreparationMethod,
+        confirmed: false);
 
     foodItems.removeAt(changedFoodItemIndex);
     foodItems.insert(changedFoodItemIndex, foodItem);

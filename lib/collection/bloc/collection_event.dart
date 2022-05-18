@@ -259,6 +259,20 @@ class FoodItemPreparationMethodChanged extends CollectionEvent {
   List<Object> get props => [foodItemPreparationMethod, foodItem];
 }
 
+class FoodItemCustomPreparationMethodChanged extends CollectionEvent {
+  final String foodItemCustomPreparationMethod;
+  // TODO: delete foodItem and pass only uuid instead
+  final FoodItem foodItem;
+  // TODO: implement
+  // final String foodItemUuid;
+
+  const FoodItemCustomPreparationMethodChanged(
+      {required this.foodItemCustomPreparationMethod, required this.foodItem});
+
+  @override
+  List<Object> get props => [foodItemCustomPreparationMethod, foodItem];
+}
+
 class FoodItemMeasurementAdded extends CollectionEvent {
   // TODO: delete foodItem and pass only uuid instead
   final FoodItem foodItem;
