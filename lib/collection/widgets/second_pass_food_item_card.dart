@@ -10,13 +10,15 @@ class SecondPassFoodItemCard extends StatelessWidget {
       required this.foodItem,
       this.onSourceChanged,
       this.onDescriptionChanged,
-      this.onPreparationMethodChanged})
+      this.onPreparationMethodChanged,
+      this.onCustomPreparationMethodChanged})
       : super(key: key);
 
   final FoodItem foodItem;
   final ValueChanged<String>? onSourceChanged;
   final ValueChanged<String>? onDescriptionChanged;
   final ValueChanged<String>? onPreparationMethodChanged;
+  final ValueChanged<String>? onCustomPreparationMethodChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +54,7 @@ class SecondPassFoodItemCard extends StatelessWidget {
       'Boiled and stir-fried',
       'Steamed and fried',
       'Roasted and boiled',
-      'Other'
+      'Other (please specify)'
     ];
 
     return Card(
@@ -92,7 +94,7 @@ class SecondPassFoodItemCard extends StatelessWidget {
                             // by cutting the last item in half
                             BoxConstraints(maxHeight: 645.0))),
                 dropdownSearchDecoration: InputDecoration(
-                    icon: const Icon(Icons.coffee_maker_outlined),
+                    icon: const Icon(Icons.food_bank_rounded),
                     labelText: 'Form when eaten',
                     helperText: 'The preparation method of the food',
                     // TODO: the errorText should be displayed if nothing is chosen
@@ -107,6 +109,25 @@ class SecondPassFoodItemCard extends StatelessWidget {
                 onChanged: (String? preparationMethod) =>
                     onPreparationMethodChanged!(preparationMethod!),
                 selectedItem: foodItem.preparationMethod),
+            Visibility(
+              visible: (foodItem.preparationMethod == "Other (please specify)"),
+              child: TextFormField(
+                initialValue: foodItem.customPreparationMethod,
+                decoration: InputDecoration(
+                  // TODO: standardize icon across app
+                  icon: const Icon(Icons.food_bank_rounded),
+                  labelText: 'Specify form when eaten',
+                  helperText: 'The preparation method of the food',
+                  errorText:
+                      isFieldModifiedAndEmpty(foodItem.customPreparationMethod)
+                          ? 'Enter the food\'s preparation method e.g. baked'
+                          : null,
+                ),
+                onChanged: (String? customPreparationMethod) =>
+                    onCustomPreparationMethodChanged!(customPreparationMethod!),
+                textInputAction: TextInputAction.next,
+              ),
+            ),
             TextFormField(
               initialValue: foodItem.description,
               decoration: const InputDecoration(
