@@ -98,8 +98,8 @@ class PictureChartCollectedInput extends StatelessWidget {
         return DropdownSearch<String>(
             popupProps: const PopupProps.menu(
                 showSelectedItems: true,
-                menuProps:
-                    MenuProps(constraints: BoxConstraints(maxHeight: 112.0))),
+                fit: FlexFit.loose,
+                menuProps: MenuProps(constraints: BoxConstraints.tightFor())),
             dropdownSearchDecoration: InputDecoration(
                 icon: const Icon(Icons.photo_size_select_actual_rounded),
                 labelText: 'Is picture chart collected',

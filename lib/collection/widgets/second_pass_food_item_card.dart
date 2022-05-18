@@ -66,8 +66,9 @@ class SecondPassFoodItemCard extends StatelessWidget {
             DropdownSearch<String>(
                 popupProps: const PopupProps.menu(
                     showSelectedItems: true,
-                    menuProps: MenuProps(
-                        constraints: BoxConstraints(maxHeight: 448.0))),
+                    fit: FlexFit.loose,
+                    menuProps:
+                        MenuProps(constraints: BoxConstraints.tightFor())),
                 dropdownSearchDecoration: InputDecoration(
                     icon: const Icon(Icons.kitchen),
                     labelText: 'Food source',
@@ -87,7 +88,10 @@ class SecondPassFoodItemCard extends StatelessWidget {
                 popupProps: const PopupProps.menu(
                     showSelectedItems: true,
                     menuProps: MenuProps(
-                        constraints: BoxConstraints(maxHeight: 645.0))),
+                        constraints:
+                            // Set maxHeight to 645 to indicate slidability
+                            // by cutting the last item in half
+                            BoxConstraints(maxHeight: 645.0))),
                 dropdownSearchDecoration: InputDecoration(
                     icon: const Icon(Icons.coffee_maker_outlined),
                     labelText: 'Form when eaten',
