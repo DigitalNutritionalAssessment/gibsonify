@@ -66,8 +66,9 @@ class FirstPassFoodItemCard extends StatelessWidget {
               DropdownSearch<String>(
                   popupProps: const PopupProps.menu(
                       showSelectedItems: true,
-                      menuProps: MenuProps(
-                          constraints: BoxConstraints(maxHeight: 225.0))),
+                      fit: FlexFit.loose,
+                      menuProps:
+                          MenuProps(constraints: BoxConstraints.tightFor())),
                   dropdownSearchDecoration: InputDecoration(
                       icon: const Icon(Icons.access_time),
                       labelText: 'Time period',
