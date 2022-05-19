@@ -64,7 +64,10 @@ class SecondPassFoodItemCard extends StatelessWidget {
                 ' consumed in the ' +
                 foodItemDisplayTimePeriod),
             DropdownSearch<String>(
-                maxHeight: 448.0,
+                popupProps: const PopupProps.menu(
+                    showSelectedItems: true,
+                    menuProps: MenuProps(
+                        constraints: BoxConstraints(maxHeight: 448.0))),
                 dropdownSearchDecoration: InputDecoration(
                     icon: const Icon(Icons.kitchen),
                     labelText: 'Food source',
@@ -76,15 +79,15 @@ class SecondPassFoodItemCard extends StatelessWidget {
                     errorText: isFieldModifiedAndEmpty(foodItem.source)
                         ? 'Select the food source'
                         : null),
-                mode: Mode.MENU,
-                showSelectedItems: true,
-                showSearchBox: false,
                 items: foodSources,
                 onChanged: (String? foodSource) =>
                     onSourceChanged!(foodSource!),
                 selectedItem: foodItem.source),
             DropdownSearch<String>(
-                maxHeight: 645.0,
+                popupProps: const PopupProps.menu(
+                    showSelectedItems: true,
+                    menuProps: MenuProps(
+                        constraints: BoxConstraints(maxHeight: 645.0))),
                 dropdownSearchDecoration: InputDecoration(
                     icon: const Icon(Icons.coffee_maker_outlined),
                     labelText: 'Form when eaten',
@@ -97,9 +100,6 @@ class SecondPassFoodItemCard extends StatelessWidget {
                         isFieldModifiedAndEmpty(foodItem.preparationMethod)
                             ? 'Select the food\'s preparation method'
                             : null),
-                mode: Mode.MENU,
-                showSelectedItems: true,
-                showSearchBox: false,
                 items: preparationMethods,
                 onChanged: (String? preparationMethod) =>
                     onPreparationMethodChanged!(preparationMethod!),

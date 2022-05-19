@@ -214,7 +214,10 @@ class RecallDayInput extends StatelessWidget {
     return BlocBuilder<CollectionBloc, CollectionState>(
       builder: (context, state) {
         return DropdownSearch<String>(
-            maxHeight: 395.0,
+            popupProps: const PopupProps.menu(
+                showSelectedItems: true,
+                menuProps:
+                    MenuProps(constraints: BoxConstraints(maxHeight: 395.0))),
             dropdownSearchDecoration: InputDecoration(
                 icon: const Icon(Icons.food_bank_outlined),
                 labelText: "Recall Day",
@@ -228,9 +231,6 @@ class RecallDayInput extends StatelessWidget {
                         state.gibsonsForm.isRecallDayValid)
                     ? 'Select recall day type'
                     : null),
-            mode: Mode.MENU,
-            showSelectedItems: true,
-            showSearchBox: false,
             items: recallDayTypes,
             onChanged: (String? recallDayType) => context
                 .read<CollectionBloc>()

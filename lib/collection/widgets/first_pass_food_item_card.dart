@@ -64,7 +64,10 @@ class FirstPassFoodItemCard extends StatelessWidget {
                   onChanged: (value) => onNameChanged!(value),
                   textInputAction: TextInputAction.next),
               DropdownSearch<String>(
-                  maxHeight: 225.0,
+                  popupProps: const PopupProps.menu(
+                      showSelectedItems: true,
+                      menuProps: MenuProps(
+                          constraints: BoxConstraints(maxHeight: 225.0))),
                   dropdownSearchDecoration: InputDecoration(
                       icon: const Icon(Icons.access_time),
                       labelText: 'Time period',
@@ -77,9 +80,6 @@ class FirstPassFoodItemCard extends StatelessWidget {
                       errorText: isFieldModifiedAndEmpty(foodItem.timePeriod)
                           ? 'Select a time period'
                           : null),
-                  mode: Mode.MENU,
-                  showSelectedItems: true,
-                  showSearchBox: false,
                   items: timePeriods,
                   onChanged: (String? timePeriod) =>
                       onTimePeriodChanged!(timePeriod ?? ''),

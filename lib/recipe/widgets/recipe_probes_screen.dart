@@ -164,10 +164,11 @@ class ProbeList extends StatelessWidget {
                                   Visibility(
                                     visible: (viewedFromCollection),
                                     child: DropdownSearch<String>(
-                                        mode: Mode.MENU,
-                                        showSelectedItems: true,
-                                        showSearchBox: true,
-                                        items: state.recipes[recipeIndex].probes[index]
+                                        popupProps: const PopupProps.menu(
+                                            showSelectedItems: true,
+                                            showSearchBox: true),
+                                        items: state
+                                            .recipes[recipeIndex].probes[index]
                                             .optionsList(),
                                         onChanged: (String? answer) => context
                                             .read<RecipeBloc>()
@@ -181,9 +182,7 @@ class ProbeList extends StatelessWidget {
                                                         .probes[index]
                                                         .answer ==
                                                     null ||
-                                                state.recipes[recipeIndex]
-                                                        .probes[index].answer ==
-                                                    '')
+                                                state.recipes[recipeIndex].probes[index].answer == '')
                                             ? state.recipes[recipeIndex].probes[index].optionsList()[0]
                                             : state.recipes[recipeIndex].probes[index].answer),
                                   )

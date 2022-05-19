@@ -74,7 +74,11 @@ class ThirdPassFoodItemCard extends StatelessWidget {
                       child: Column(
                         children: [
                           DropdownSearch<String>(
-                              maxHeight: 336.0,
+                              popupProps: const PopupProps.menu(
+                                  showSelectedItems: true,
+                                  menuProps: MenuProps(
+                                      constraints:
+                                          BoxConstraints(maxHeight: 336.0))),
                               dropdownSearchDecoration: InputDecoration(
                                 icon: const Icon(Icons.monitor_weight_outlined),
                                 labelText: "Measurement method",
@@ -88,9 +92,6 @@ class ThirdPassFoodItemCard extends StatelessWidget {
                                     ? 'Enter a measurement method'
                                     : null,
                               ),
-                              mode: Mode.MENU,
-                              showSelectedItems: true,
-                              showSearchBox: false,
                               items: Measurement.measurementMethods,
                               onChanged: (String? measurementMethod) =>
                                   onMeasurementMethodChanged!({
@@ -100,7 +101,11 @@ class ThirdPassFoodItemCard extends StatelessWidget {
                               selectedItem: foodItem
                                   .measurements[index].measurementMethod),
                           DropdownSearch<String>(
-                              maxHeight: 448.0,
+                              popupProps: const PopupProps.menu(
+                                  showSelectedItems: true,
+                                  menuProps: MenuProps(
+                                      constraints:
+                                          BoxConstraints(maxHeight: 448.0))),
                               dropdownSearchDecoration: InputDecoration(
                                 icon: const Icon(
                                     Icons.radio_button_unchecked_outlined),
@@ -116,9 +121,6 @@ class ThirdPassFoodItemCard extends StatelessWidget {
                                         ? 'Select the measurement unit'
                                         : null,
                               ),
-                              mode: Mode.MENU,
-                              showSelectedItems: true,
-                              showSearchBox: false,
                               items: Measurement.measurementUnits,
                               onChanged: (String? measurementUnit) =>
                                   onMeasurementUnitChanged!({

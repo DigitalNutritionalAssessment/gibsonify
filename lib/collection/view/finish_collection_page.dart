@@ -96,7 +96,10 @@ class PictureChartCollectedInput extends StatelessWidget {
     return BlocBuilder<CollectionBloc, CollectionState>(
       builder: (context, state) {
         return DropdownSearch<String>(
-            maxHeight: 112.0,
+            popupProps: const PopupProps.menu(
+                showSelectedItems: true,
+                menuProps:
+                    MenuProps(constraints: BoxConstraints(maxHeight: 112.0))),
             dropdownSearchDecoration: InputDecoration(
                 icon: const Icon(Icons.photo_size_select_actual_rounded),
                 labelText: 'Is picture chart collected',
@@ -110,9 +113,6 @@ class PictureChartCollectedInput extends StatelessWidget {
                         state.gibsonsForm.isPictureChartCollectedValid)
                     ? 'Select if you collected the picture chart'
                     : null),
-            mode: Mode.MENU,
-            showSelectedItems: true,
-            showSearchBox: false,
             items: const ['Yes', 'No'],
             onChanged: (String? pictureChartCollected) => context
                 .read<CollectionBloc>()
@@ -200,7 +200,10 @@ class InterviewFinishedInOneVisitInput extends StatelessWidget {
     return BlocBuilder<CollectionBloc, CollectionState>(
       builder: (context, state) {
         return DropdownSearch<String>(
-            maxHeight: 112.0,
+            popupProps: const PopupProps.menu(
+                showSelectedItems: true,
+                menuProps:
+                    MenuProps(constraints: BoxConstraints(maxHeight: 112.0))),
             dropdownSearchDecoration: InputDecoration(
                 icon: const Icon(Icons.calendar_today),
                 labelText: 'Was the interview finished in one visit',
@@ -214,9 +217,6 @@ class InterviewFinishedInOneVisitInput extends StatelessWidget {
                         state.gibsonsForm.isInterviewFinishedInOneVisitValid)
                     ? 'Select if you finished the interview in one visit'
                     : null),
-            mode: Mode.MENU,
-            showSelectedItems: true,
-            showSearchBox: false,
             items: const ['Yes', 'No'],
             onChanged: (String? interviewFinishedInOneVisit) => context
                 .read<CollectionBloc>()
@@ -323,7 +323,10 @@ class InterviewOutcomeInput extends StatelessWidget {
     return BlocBuilder<CollectionBloc, CollectionState>(
       builder: (context, state) {
         return DropdownSearch<String>(
-            maxHeight: 280.0,
+            popupProps: const PopupProps.menu(
+                showSelectedItems: true,
+                menuProps:
+                    MenuProps(constraints: BoxConstraints(maxHeight: 280.0))),
             dropdownSearchDecoration: InputDecoration(
                 icon: const Icon(Icons.format_indent_increase_sharp),
                 labelText: 'Interview outcome',
@@ -337,9 +340,6 @@ class InterviewOutcomeInput extends StatelessWidget {
                         state.gibsonsForm.isInterviewOutcomeValid)
                     ? 'Select interview outcome'
                     : null),
-            mode: Mode.MENU,
-            showSelectedItems: true,
-            showSearchBox: false,
             items: interviewOutcomes,
             onChanged: (String? interviewOutcome) => context
                 .read<CollectionBloc>()
