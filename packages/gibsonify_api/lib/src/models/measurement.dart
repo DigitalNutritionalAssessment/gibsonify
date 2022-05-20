@@ -19,22 +19,60 @@ class Measurement extends Equatable {
   final String? measurementValue;
   final String id; // TODO: investigate whether the id is needed
   static final List<String> measurementMethods = [
-    "Direct weight",
-    "Volume of water",
-    "Volume of food",
-    "Play dough",
-    "Number",
-    "Size (photo)"
+    'Direct weight',
+    'Volume of water',
+    'Volume of food',
+    'Play dough',
+    'Number',
+    'Size number (from photo)'
   ];
+
+  static final Map<String, List<String>> measurementUnitsOfMethod = {
+    'Direct weight': ['Grams'],
+    'Volume of water': [
+      'Millilitres',
+      'Small Spoon',
+      'Big spoon',
+      'Small standard cup',
+      'Medium standard cup',
+      'Large standard cup',
+    ],
+    'Volume of food': [
+      'Millilitres',
+      'Small Spoon',
+      'Big spoon',
+      'Small standard cup',
+      'Medium standard cup',
+      'Large standard cup',
+    ],
+    // TODO: Confirm play dough units with ICRISAT
+    'Play dough': [
+      'Small Spoon',
+      'Big spoon',
+      'Small standard cup',
+      'Medium standard cup',
+      'Large standard cup',
+    ],
+    'Number': ['Quantity'],
+    'Size number (from photo)': [
+      'Size 1',
+      'Size 2',
+      'Size 3',
+      'Size 4',
+      'Size 5',
+      'Size 6'
+    ]
+  };
+
   static final List<String> measurementUnits = [
-    "Small Spoon",
-    "Big spoon",
-    "Small standard cup",
-    "Medium standard cup",
-    "Large standard cup",
-    "Size number (photo)",
-    "Grams",
-    "Millilitres"
+    'Small Spoon',
+    'Big spoon',
+    'Small standard cup',
+    'Medium standard cup',
+    'Large standard cup',
+    'Size number (photo)',
+    'Grams',
+    'Millilitres'
   ];
 
   Measurement copyWith(
@@ -90,6 +128,15 @@ class Measurement extends Equatable {
     r'^\d+$', // numeric only
   );
 
+  List<String> getMeasurementUnitsForMethod() {
+    if (measurementMethod == null) {
+      return ['Choose a measurement method first'];
+    } else {
+      return Measurement.measurementUnitsOfMethod[measurementMethod] ??
+          ['No units for given method'];
+    }
+  }
+
   bool isMethodValid() {
     // TODO: add checks for different options
     return !isFieldModifiedAndEmpty(measurementMethod);
@@ -110,8 +157,12 @@ class Measurement extends Equatable {
   }
 
   bool isUnitValid() {
-    // TODO: add checks for different options
-    return !isFieldModifiedAndEmpty(measurementUnit);
+    if (['Choose a measurement method first', 'No units for given method']
+        .contains(measurementUnit)) {
+      return false;
+    } else {
+      return !isFieldModifiedAndEmpty(measurementUnit);
+    }
   }
 
   bool isMeasurementFilled() {
