@@ -1,7 +1,25 @@
-# Changelog
-All notable changes to this project will be documented in this file.
-
 ## Unreleased
+
+### Feat
+
+- **recipe**: add dynamic dropdown sizing
+- **collection**: add dynamic dropdown sizing
+- implement recipe and collection feedback
+- **recipe**: add custom cooking state field
+- **recipe**: add helper text for saved recipes
+- **recipe**: restrict saving if measurements are not filled
+- **gibsonify_api**: add new measurement checks
+- **recipe**: finalise hide ingredients and measurements feature
+- **recipe**: add toggle to hide ingredients
+- **recipe**: add toggle to hide measurements
+- **recipe**: restrict probe editting when accessing via collection
+- **recipe**: add recipe duplication feat, use modal sheet instead of slidable for deletion
+- **recipe**: add ingredient duplication feature
+- **recipe**: restrict ingredient deletion when recipe is saved
+- **recipe**: add feature to restrict input if recipe is saved
+- **recipe**: add new modified recipe implementation
+- **recipe**: add recipe duplication
+- **recipe**: add ingredients as identifier for recipes
 
 ### Refactor
 
@@ -24,27 +42,11 @@ All notable changes to this project will be documented in this file.
 - **recipe**: fix render overflow error for ingredient page
 - **recipe**: update modified recipe listtile
 - **recipe**: update food description field view
+- **recipe**: dropdownsearch api change after version bump
+- **collection**: dropdownsearch api change after version bump
 - remove error text for comments field
 - **recipe**: restrict item deletion for standard recipes
 - **recipe**: remove old modified recipe logic and fix saved recipe/ingredient logic
-
-### Feat
-
-- **recipe**: add custom cooking state field
-- **recipe**: add helper text for saved recipes
-- **recipe**: restrict saving if measurements are not filled
-- **gibsonify_api**: add new measurement checks
-- **recipe**: finalise hide ingredients and measurements feature
-- **recipe**: add toggle to hide ingredients
-- **recipe**: add toggle to hide measurements
-- **recipe**: restrict probe editting when accessing via collection
-- **recipe**: add recipe duplication feat, use modal sheet instead of slidable for deletion
-- **recipe**: add ingredient duplication feature
-- **recipe**: restrict ingredient deletion when recipe is saved
-- **recipe**: add feature to restrict input if recipe is saved
-- **recipe**: add new modified recipe implementation
-- **recipe**: add recipe duplication
-- **recipe**: add ingredients as identifier for recipes
 
 ## 1.2.0 (2022-04-18)
 
