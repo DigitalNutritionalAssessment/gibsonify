@@ -46,7 +46,7 @@ class MeasurementCard extends StatelessWidget {
                     measurementMethod ?? '');
                 // TODO: if only one unit for the given method, send an event to select it
               },
-              selectedItem: measurement.measurementMethod),
+              selectedItem: measurement.method),
           DropdownSearch<String>(
               key: UniqueKey(),
               // TODO: Make measurement unit read only if no measurement method is
@@ -70,11 +70,11 @@ class MeasurementCard extends StatelessWidget {
               items: measurement.getMeasurementUnitsForMethod(),
               onChanged: (String? measurementUnit) =>
                   onMeasurementUnitChanged!(measurementUnit ?? ''),
-              selectedItem: measurement.measurementUnit),
+              selectedItem: measurement.unit),
           TextFormField(
             // set Key to value of method to rebuild widget after method changes
-            key: ValueKey(measurement.measurementMethod),
-            initialValue: measurement.measurementValue,
+            key: ValueKey(measurement.method),
+            initialValue: measurement.value,
             decoration: InputDecoration(
               icon: const Icon(Icons.drive_file_rename_outline_rounded),
               labelText: 'Measurement value or quantity',

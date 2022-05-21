@@ -5,18 +5,12 @@ import 'dart:convert';
 import 'package:gibsonify_api/gibsonify_api.dart';
 
 class Measurement extends Equatable {
-  Measurement(
-      // TODO: refactor to just `method`, `unit`, and `value` as these are fields
-      // of `Measurement` already
-      {this.measurementMethod,
-      this.measurementUnit,
-      this.measurementValue,
-      String? id})
+  Measurement({this.method, this.unit, this.value, String? id})
       : id = id ?? const Uuid().v4();
 
-  final String? measurementMethod;
-  final String? measurementUnit;
-  final String? measurementValue;
+  final String? method;
+  final String? unit;
+  final String? value;
   final String id; // TODO: investigate whether the id is needed
   static final List<String> measurementMethods = [
     'Direct weight',
@@ -64,6 +58,8 @@ class Measurement extends Equatable {
     ]
   };
 
+  // TODO: delete measurementUnits (if not needed, or use values of
+  // measurementUnitsOfMethod)
   static final List<String> measurementUnits = [
     'Small Spoon',
     'Big spoon',
@@ -81,9 +77,9 @@ class Measurement extends Equatable {
       String? measurementValue,
       String? id}) {
     return Measurement(
-        measurementMethod: measurementMethod ?? this.measurementMethod,
-        measurementUnit: measurementUnit ?? this.measurementUnit,
-        measurementValue: measurementValue ?? this.measurementValue,
+        method: measurementMethod ?? this.method,
+        unit: measurementUnit ?? this.unit,
+        value: measurementValue ?? this.value,
         id: id ?? this.id);
   }
 
@@ -91,27 +87,26 @@ class Measurement extends Equatable {
   String toString() {
     return '\n *** \Measurement:\n'
         'UUID: $id\n'
-        'Method: $measurementMethod\n'
-        'Unit: $measurementUnit\n'
-        'Value: $measurementValue\n'
+        'Method: $method\n'
+        'Unit: $unit\n'
+        'Value: $value\n'
         '\n *** \n';
   }
 
   @override
-  List<Object?> get props =>
-      [measurementMethod, measurementUnit, measurementValue, id];
+  List<Object?> get props => [method, unit, value, id];
 
   Measurement.fromJson(Map<String, dynamic> json)
-      : measurementMethod = json['measurementMethod'],
-        measurementUnit = json['measurementUnit'],
-        measurementValue = json['measurementValue'],
+      : method = json['measurementMethod'],
+        unit = json['measurementUnit'],
+        value = json['measurementValue'],
         id = json['id'];
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['measurementMethod'] = measurementMethod;
-    data['measurementUnit'] = measurementUnit;
-    data['measurementValue'] = measurementValue;
+    data['measurementMethod'] = method;
+    data['measurementUnit'] = unit;
+    data['measurementValue'] = value;
     data['id'] = id;
     return data;
   }
@@ -129,27 +124,27 @@ class Measurement extends Equatable {
   );
 
   List<String> getMeasurementUnitsForMethod() {
-    if (measurementMethod == null) {
+    if (method == null) {
       return ['Choose a measurement method first'];
     } else {
-      return Measurement.measurementUnitsOfMethod[measurementMethod] ??
+      return Measurement.measurementUnitsOfMethod[method] ??
           ['No units for given method'];
     }
   }
 
   bool isMethodValid() {
     // TODO: add checks for different options
-    return !isFieldModifiedAndEmpty(measurementMethod);
+    return !isFieldModifiedAndEmpty(method);
   }
 
   bool isValueValid() {
     // TODO: refactor null checks to something nicer
-    if (measurementValue == null) {
+    if (value == null) {
       return true; // currently meaning that it is untouched, change to a
       // separate method later
-    } else if ((measurementValue ?? '').isNotEmpty &&
-        (measurementValue ?? '').length <= 4 &&
-        _measurementValueRegex.hasMatch(measurementValue ?? '')) {
+    } else if ((value ?? '').isNotEmpty &&
+        (value ?? '').length <= 4 &&
+        _measurementValueRegex.hasMatch(value ?? '')) {
       return true;
     } else {
       return false;
@@ -158,19 +153,19 @@ class Measurement extends Equatable {
 
   bool isUnitValid() {
     if (['Choose a measurement method first', 'No units for given method']
-        .contains(measurementUnit)) {
+        .contains(unit)) {
       return false;
     } else {
-      return !isFieldModifiedAndEmpty(measurementUnit);
+      return !isFieldModifiedAndEmpty(unit);
     }
   }
 
   bool isMeasurementFilled() {
-    return (isFieldNotNullAndNotEmpty(measurementMethod) &&
+    return (isFieldNotNullAndNotEmpty(method) &&
         isMethodValid() &&
-        isFieldNotNullAndNotEmpty(measurementUnit) &&
+        isFieldNotNullAndNotEmpty(unit) &&
         isUnitValid() &&
-        isFieldNotNullAndNotEmpty(measurementValue) &&
+        isFieldNotNullAndNotEmpty(value) &&
         isValueValid());
   }
 }
