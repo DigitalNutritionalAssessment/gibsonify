@@ -28,7 +28,7 @@ class DeleteFoodItemDialog extends StatelessWidget {
               onPressed: () {
                 context
                     .read<CollectionBloc>()
-                    .add(FoodItemDeleted(foodItem: foodItem));
+                    .add(FoodItemDeleted(foodItemId: foodItem.id));
                 Navigator.pop(context);
               },
               child: const Text('Delete'),
