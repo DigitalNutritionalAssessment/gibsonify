@@ -41,14 +41,14 @@ class FirstPassScreen extends StatelessWidget {
                                       // (or its uuid) that was passed to the widget
                                       // rather than to always have to pass
                                       // state.foodItems[index] to each method
-                                      foodItem:
-                                          state.gibsonsForm.foodItems[index],
+                                      foodItemId:
+                                          state.gibsonsForm.foodItems[index].id,
                                       foodItemName: changedName)),
                               onTimePeriodChanged: (changedTimePeriod) => context
                                   .read<CollectionBloc>()
                                   .add(FoodItemTimePeriodChanged(
-                                      foodItem:
-                                          state.gibsonsForm.foodItems[index],
+                                      foodItemId:
+                                          state.gibsonsForm.foodItems[index].id,
                                       foodItemTimePeriod: changedTimePeriod)),
                               onDeleted: () => showDialog<String>(
                                   context: context,

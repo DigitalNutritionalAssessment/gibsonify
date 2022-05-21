@@ -35,43 +35,43 @@ class ThirdPassScreen extends StatelessWidget {
                                 (changedMeasurementIndexAndMethod) => context
                                     .read<CollectionBloc>()
                                     .add(FoodItemMeasurementMethodChangedOthersNulled(
-                                        foodItem:
-                                            state.gibsonsForm.foodItems[index],
+                                        foodItemId: state
+                                            .gibsonsForm.foodItems[index].id,
                                         measurementIndex:
                                             changedMeasurementIndexAndMethod[
                                                 'index'],
-                                        foodItemMeasurementMethod:
+                                        measurementMethod:
                                             changedMeasurementIndexAndMethod[
                                                 'method'])),
                             onMeasurementUnitChanged:
                                 (changedMeasurementIndexAndUnit) => context
                                     .read<CollectionBloc>()
                                     .add(FoodItemMeasurementUnitChanged(
-                                        foodItem:
-                                            state.gibsonsForm.foodItems[index],
+                                        foodItemId: state
+                                            .gibsonsForm.foodItems[index].id,
                                         measurementIndex:
                                             changedMeasurementIndexAndUnit[
                                                 'index'],
-                                        foodItemMeasurementUnit:
+                                        measurementUnit:
                                             changedMeasurementIndexAndUnit[
                                                 'unit'])),
                             onMeasurementValueChanged:
                                 (changedMeasurementIndexAndValue) => context
                                     .read<CollectionBloc>()
                                     .add(FoodItemMeasurementValueChanged(
-                                        foodItem:
-                                            state.gibsonsForm.foodItems[index],
+                                        foodItemId: state
+                                            .gibsonsForm.foodItems[index].id,
                                         measurementIndex:
                                             changedMeasurementIndexAndValue[
                                                 'index'],
-                                        foodItemMeasurementValue:
+                                        measurementValue:
                                             changedMeasurementIndexAndValue[
                                                 'value'])),
                             onMeasurementAdded: () => context
                                 .read<CollectionBloc>()
                                 .add(FoodItemMeasurementAdded(
-                                    foodItem:
-                                        state.gibsonsForm.foodItems[index])),
+                                    foodItemId:
+                                        state.gibsonsForm.foodItems[index].id)),
                             onMeasurementDeleted: (deletedMeasurementIndex) =>
                                 showDialog<String>(
                                     context: context,
@@ -115,7 +115,8 @@ class DeleteFoodItemMeasurementDialog extends StatelessWidget {
             TextButton(
               onPressed: () {
                 context.read<CollectionBloc>().add(FoodItemMeasurementDeleted(
-                    foodItem: foodItem, measurementIndex: measurementIndex));
+                    measurementIndex: measurementIndex,
+                    foodItemId: foodItem.id));
                 Navigator.pop(context);
               },
               child: const Text('Delete'),

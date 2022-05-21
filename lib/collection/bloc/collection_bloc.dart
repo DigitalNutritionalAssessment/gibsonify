@@ -308,8 +308,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
       FoodItemDeleted event, Emitter<CollectionState> emit) {
     List<FoodItem> foodItems = List.from(state.gibsonsForm.foodItems);
 
-    // TODO: event.foodItemId
-    foodItems.removeWhere((item) => item.id == event.foodItem.id);
+    foodItems.removeWhere((item) => item.id == event.foodItemId);
 
     GibsonsForm changedGibsonsForm =
         state.gibsonsForm.copyWith(foodItems: foodItems);
@@ -319,7 +318,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
   void _onFoodItemNameChanged(
       FoodItemNameChanged event, Emitter<CollectionState> emit) {
-    FoodItem foodItem = _getFoodItemById(event.foodItem.id); // TODO: foodItemId
+    FoodItem foodItem = _getFoodItemById(event.foodItemId);
 
     FoodItem changedFoodItem = foodItem.copyWith(
         name: event.foodItemName,
@@ -331,7 +330,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
   void _onFoodItemTimePeriodChanged(
       FoodItemTimePeriodChanged event, Emitter<CollectionState> emit) {
-    FoodItem foodItem = _getFoodItemById(event.foodItem.id); // TODO: foodItemId
+    FoodItem foodItem = _getFoodItemById(event.foodItemId);
 
     FoodItem changedFoodItem = foodItem.copyWith(
         timePeriod: event.foodItemTimePeriod, confirmed: false);
@@ -342,7 +341,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
   void _onFoodItemSourceChanged(
       FoodItemSourceChanged event, Emitter<CollectionState> emit) {
-    FoodItem foodItem = _getFoodItemById(event.foodItem.id); // TODO: foodItemId
+    FoodItem foodItem = _getFoodItemById(event.foodItemId);
 
     FoodItem changedFoodItem =
         foodItem.copyWith(source: event.foodItemSource, confirmed: false);
@@ -353,7 +352,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
   void _onFoodItemPreparationMethodChanged(
       FoodItemPreparationMethodChanged event, Emitter<CollectionState> emit) {
-    FoodItem foodItem = _getFoodItemById(event.foodItem.id); // TODO: foodItemId
+    FoodItem foodItem = _getFoodItemById(event.foodItemId);
 
     FoodItem changedFoodItem = foodItem.copyWith(
         preparationMethod: event.foodItemPreparationMethod, confirmed: false);
@@ -365,7 +364,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
   void _onFoodItemCustomPreparationMethodChanged(
       FoodItemCustomPreparationMethodChanged event,
       Emitter<CollectionState> emit) {
-    FoodItem foodItem = _getFoodItemById(event.foodItem.id); // TODO: foodItemId
+    FoodItem foodItem = _getFoodItemById(event.foodItemId);
 
     FoodItem changedFoodItem = foodItem.copyWith(
         customPreparationMethod: event.foodItemCustomPreparationMethod,
@@ -378,7 +377,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
   // TODO: rename to comments
   void _onFoodItemDescriptionChanged(
       FoodItemDescriptionChanged event, Emitter<CollectionState> emit) {
-    FoodItem foodItem = _getFoodItemById(event.foodItem.id); // TODO: foodItemId
+    FoodItem foodItem = _getFoodItemById(event.foodItemId);
 
     FoodItem changedFoodItem = foodItem.copyWith(
         description: event.foodItemDescription, confirmed: false);
@@ -400,7 +399,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
   void _onFoodItemMeasurementAdded(
       FoodItemMeasurementAdded event, Emitter<CollectionState> emit) {
-    FoodItem foodItem = _getFoodItemById(event.foodItem.id); // TODO: foodItemId
+    FoodItem foodItem = _getFoodItemById(event.foodItemId);
 
     List<Measurement> measurements = List.from(foodItem.measurements);
 
@@ -415,7 +414,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
   void _onFoodItemMeasurementDeleted(
       FoodItemMeasurementDeleted event, Emitter<CollectionState> emit) {
-    FoodItem foodItem = _getFoodItemById(event.foodItem.id); // TODO: foodItemId
+    FoodItem foodItem = _getFoodItemById(event.foodItemId);
 
     List<Measurement> measurements = List.from(foodItem.measurements);
 
@@ -435,7 +434,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
   void _onFoodItemMeasurementMethodChangedOthersNulled(
       FoodItemMeasurementMethodChangedOthersNulled event,
       Emitter<CollectionState> emit) {
-    FoodItem foodItem = _getFoodItemById(event.foodItem.id); // TODO: foodItemId
+    FoodItem foodItem = _getFoodItemById(event.foodItemId);
 
     List<Measurement> measurements = List.from(foodItem.measurements);
 
@@ -448,7 +447,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
     measurement = measurement.copyWith(
         id: measurements[changedmeasurementIndex].id,
-        measurementMethod: event.foodItemMeasurementMethod);
+        measurementMethod: event.measurementMethod);
 
     measurements.removeAt(changedmeasurementIndex);
     measurements.insert(changedmeasurementIndex, measurement);
@@ -462,14 +461,14 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
   void _onFoodItemMeasurementUnitChanged(
       FoodItemMeasurementUnitChanged event, Emitter<CollectionState> emit) {
-    FoodItem foodItem = _getFoodItemById(event.foodItem.id); // TODO: foodItemId
+    FoodItem foodItem = _getFoodItemById(event.foodItemId);
 
     List<Measurement> measurements = List.from(foodItem.measurements);
 
     int changedmeasurementIndex = event.measurementIndex;
 
     Measurement measurement = measurements[changedmeasurementIndex]
-        .copyWith(measurementUnit: event.foodItemMeasurementUnit);
+        .copyWith(measurementUnit: event.measurementUnit);
 
     measurements.removeAt(changedmeasurementIndex);
     measurements.insert(changedmeasurementIndex, measurement);
@@ -483,14 +482,14 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
   void _onFoodItemMeasurementValueChanged(
       FoodItemMeasurementValueChanged event, Emitter<CollectionState> emit) {
-    FoodItem foodItem = _getFoodItemById(event.foodItem.id); // TODO: foodItemId
+    FoodItem foodItem = _getFoodItemById(event.foodItemId);
 
     List<Measurement> measurements = List.from(foodItem.measurements);
 
     int changedmeasurementIndex = event.measurementIndex;
 
     Measurement measurement = measurements[changedmeasurementIndex]
-        .copyWith(measurementValue: event.foodItemMeasurementValue);
+        .copyWith(measurementValue: event.measurementValue);
 
     measurements.removeAt(changedmeasurementIndex);
     measurements.insert(changedmeasurementIndex, measurement);
@@ -504,7 +503,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
   void _onFoodItemConfirmationChanged(
       FoodItemConfirmationChanged event, Emitter<CollectionState> emit) {
-    FoodItem foodItem = _getFoodItemById(event.foodItem.id); // TODO: foodItemId
+    FoodItem foodItem = _getFoodItemById(event.foodItemId);
 
     FoodItem changedFoodItem =
         foodItem.copyWith(confirmed: event.foodItemConfirmed);
