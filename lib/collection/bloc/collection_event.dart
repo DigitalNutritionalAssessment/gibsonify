@@ -231,20 +231,6 @@ class FoodItemSourceChanged extends CollectionEvent {
   List<Object> get props => [foodItemSource, foodItem];
 }
 
-class FoodItemDescriptionChanged extends CollectionEvent {
-  final String foodItemDescription;
-  // TODO: delete foodItem and pass only uuid instead
-  final FoodItem foodItem;
-  // TODO: implement
-  // final String foodItemUuid;
-
-  const FoodItemDescriptionChanged(
-      {required this.foodItemDescription, required this.foodItem});
-
-  @override
-  List<Object> get props => [foodItemDescription, foodItem];
-}
-
 class FoodItemPreparationMethodChanged extends CollectionEvent {
   final String foodItemPreparationMethod; // TODO: change to an enum?
   // TODO: delete foodItem and pass only uuid instead
@@ -271,6 +257,31 @@ class FoodItemCustomPreparationMethodChanged extends CollectionEvent {
 
   @override
   List<Object> get props => [foodItemCustomPreparationMethod, foodItem];
+}
+
+class FoodItemDescriptionChanged extends CollectionEvent {
+  final String foodItemDescription;
+  // TODO: delete foodItem and pass only uuid instead
+  final FoodItem foodItem;
+  // TODO: implement
+  // final String foodItemUuid;
+
+  const FoodItemDescriptionChanged(
+      {required this.foodItemDescription, required this.foodItem});
+
+  @override
+  List<Object> get props => [foodItemDescription, foodItem];
+}
+
+class FoodItemRecipeChanged extends CollectionEvent {
+  final Recipe foodItemRecipe;
+  final String foodItemId;
+
+  const FoodItemRecipeChanged(
+      {required this.foodItemId, required this.foodItemRecipe});
+
+  @override
+  List<Object> get props => [foodItemId, foodItemRecipe];
 }
 
 class FoodItemMeasurementAdded extends CollectionEvent {
@@ -366,17 +377,6 @@ class FoodItemConfirmationChanged extends CollectionEvent {
 
   @override
   List<Object> get props => [foodItemConfirmed, foodItem];
-}
-
-class FoodItemRecipeChanged extends CollectionEvent {
-  final Recipe foodItemRecipe;
-  final String foodItemId;
-
-  const FoodItemRecipeChanged(
-      {required this.foodItemId, required this.foodItemRecipe});
-
-  @override
-  List<Object> get props => [foodItemId, foodItemRecipe];
 }
 
 class GibsonsFormSaved extends CollectionEvent {

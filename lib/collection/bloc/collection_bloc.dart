@@ -41,10 +41,11 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     on<FoodItemNameChanged>(_onFoodItemNameChanged);
     on<FoodItemTimePeriodChanged>(_onFoodItemTimePeriodChanged);
     on<FoodItemSourceChanged>(_onFoodItemSourceChanged);
-    on<FoodItemDescriptionChanged>(_onFoodItemDescriptionChanged);
     on<FoodItemPreparationMethodChanged>(_onFoodItemPreparationMethodChanged);
     on<FoodItemCustomPreparationMethodChanged>(
         _onFoodItemCustomPreparationMethodChanged);
+    on<FoodItemDescriptionChanged>(_onFoodItemDescriptionChanged);
+    on<FoodItemRecipeChanged>(_onFoodItemRecipeChanged);
     on<FoodItemMeasurementAdded>(_onFoodItemMeasurementAdded);
     on<FoodItemMeasurementDeleted>(_onFoodItemMeasurementDeleted);
     on<FoodItemMeasurementMethodChangedOthersNulled>(
@@ -52,7 +53,6 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     on<FoodItemMeasurementUnitChanged>(_onFoodItemMeasurementUnitChanged);
     on<FoodItemMeasurementValueChanged>(_onFoodItemMeasurementValueChanged);
     on<FoodItemConfirmationChanged>(_onFoodItemConfirmationChanged);
-    on<FoodItemRecipeChanged>(_onFoodItemRecipeChanged);
     on<GibsonsFormSaved>(_onGibsonsFormSaved);
     on<GibsonsFormProvided>(_onGibsonsFormProvided);
     on<GibsonsFormCreated>(_onGibsonsFormCreated);
@@ -351,19 +351,6 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
         gibsonsForm: _replaceFoodItemInGibsonsForm(changedFoodItem)));
   }
 
-  void _onFoodItemDescriptionChanged(
-      // TODO: change to comments and move down
-      FoodItemDescriptionChanged event,
-      Emitter<CollectionState> emit) {
-    FoodItem foodItem = _getFoodItemById(event.foodItem.id); // TODO: foodItemId
-
-    FoodItem changedFoodItem = foodItem.copyWith(
-        description: event.foodItemDescription, confirmed: false);
-
-    emit(state.copyWith(
-        gibsonsForm: _replaceFoodItemInGibsonsForm(changedFoodItem)));
-  }
-
   void _onFoodItemPreparationMethodChanged(
       FoodItemPreparationMethodChanged event, Emitter<CollectionState> emit) {
     FoodItem foodItem = _getFoodItemById(event.foodItem.id); // TODO: foodItemId
@@ -383,6 +370,29 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     FoodItem changedFoodItem = foodItem.copyWith(
         customPreparationMethod: event.foodItemCustomPreparationMethod,
         confirmed: false);
+
+    emit(state.copyWith(
+        gibsonsForm: _replaceFoodItemInGibsonsForm(changedFoodItem)));
+  }
+
+  // TODO: rename to comments
+  void _onFoodItemDescriptionChanged(
+      FoodItemDescriptionChanged event, Emitter<CollectionState> emit) {
+    FoodItem foodItem = _getFoodItemById(event.foodItem.id); // TODO: foodItemId
+
+    FoodItem changedFoodItem = foodItem.copyWith(
+        description: event.foodItemDescription, confirmed: false);
+
+    emit(state.copyWith(
+        gibsonsForm: _replaceFoodItemInGibsonsForm(changedFoodItem)));
+  }
+
+  void _onFoodItemRecipeChanged(
+      FoodItemRecipeChanged event, Emitter<CollectionState> emit) {
+    FoodItem foodItem = _getFoodItemById(event.foodItemId);
+
+    FoodItem changedFoodItem =
+        foodItem.copyWith(recipe: event.foodItemRecipe, confirmed: false);
 
     emit(state.copyWith(
         gibsonsForm: _replaceFoodItemInGibsonsForm(changedFoodItem)));
@@ -498,18 +508,6 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
     FoodItem changedFoodItem =
         foodItem.copyWith(confirmed: event.foodItemConfirmed);
-
-    emit(state.copyWith(
-        gibsonsForm: _replaceFoodItemInGibsonsForm(changedFoodItem)));
-  }
-
-  // TODO: reorder (move up)
-  void _onFoodItemRecipeChanged(
-      FoodItemRecipeChanged event, Emitter<CollectionState> emit) {
-    FoodItem foodItem = _getFoodItemById(event.foodItemId);
-
-    FoodItem changedFoodItem =
-        foodItem.copyWith(recipe: event.foodItemRecipe, confirmed: false);
 
     emit(state.copyWith(
         gibsonsForm: _replaceFoodItemInGibsonsForm(changedFoodItem)));
