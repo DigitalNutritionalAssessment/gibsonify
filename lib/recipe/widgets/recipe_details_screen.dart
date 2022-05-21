@@ -203,7 +203,7 @@ class RecipeMeasurements extends StatelessWidget {
                                     measurementMethod: answer!,
                                     recipe: state.recipes[recipeIndex])),
                             selectedItem: state.recipes[recipeIndex]
-                                .measurements[index].measurementMethod),
+                                .measurements[index].method),
                         DropdownSearch<String>(
                             popupProps: const PopupProps.menu(
                                 showSelectedItems: true,
@@ -222,11 +222,11 @@ class RecipeMeasurements extends StatelessWidget {
                                     measurementIndex: index,
                                     measurementUnit: answer!,
                                     recipe: state.recipes[recipeIndex])),
-                            selectedItem: state.recipes[recipeIndex]
-                                .measurements[index].measurementUnit),
+                            selectedItem: state
+                                .recipes[recipeIndex].measurements[index].unit),
                         TextFormField(
-                          initialValue: state.recipes[recipeIndex]
-                              .measurements[index].measurementValue,
+                          initialValue: state
+                              .recipes[recipeIndex].measurements[index].value,
                           decoration: InputDecoration(
                             icon:
                                 const Icon(Icons.format_list_numbered_rounded),

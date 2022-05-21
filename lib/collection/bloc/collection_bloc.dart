@@ -442,7 +442,6 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
     // since copyWith does not allow to null attributes, create new instance and
     // copy the original id and changed method (thus nulling value and unit)
-
     Measurement measurement = Measurement();
 
     measurement = measurement.copyWith(

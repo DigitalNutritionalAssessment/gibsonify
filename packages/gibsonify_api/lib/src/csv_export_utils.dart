@@ -9,8 +9,8 @@ String combineMeasurements(List<Measurement> measurements) {
   String measurementsCombined = '';
   for (Measurement measurement in measurements) {
     measurementsCombined = measurementsCombined +
-        '${measurement.measurementMethod}_'
-            '${measurement.measurementValue}_${measurement.measurementUnit} + ';
+        '${measurement.method}_'
+            '${measurement.value}_${measurement.unit} + ';
   }
 
   measurementsCombined = measurementsCombined.substring(
