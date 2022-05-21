@@ -60,6 +60,35 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     on<CollectionFinished>(_onCollectionFinished);
   }
 
+  /// Returns index of `FoodItem` with matching `id` in a list of `foodItems`.
+  /// Adds Error to the Bloc if no `FoodItem` with matching `id` found.
+  int _getFoodItemIndexById(List<FoodItem> foodItems, String id) {
+    int foodItemIndex = foodItems.indexWhere((item) => item.id == id);
+    if (foodItemIndex == -1) {
+      addError(
+          Exception('No food item with given ID found!'), StackTrace.current);
+    }
+    return foodItemIndex;
+  }
+
+  /// Returns `FoodItem` of matching `id` in the `GibsonsForm` in the `state`.
+  FoodItem _getFoodItemById(String id) {
+    List<FoodItem> foodItems = List.from(state.gibsonsForm.foodItems);
+    return foodItems[_getFoodItemIndexById(foodItems, id)];
+  }
+
+  /// Finds a `FoodItem` with matching `id` in the `GibsonsForm` in the
+  /// `state` and replaces it with the provided one.
+  GibsonsForm _replaceFoodItemInGibsonsForm(FoodItem changedFoodItem) {
+    List<FoodItem> foodItems = List.from(state.gibsonsForm.foodItems);
+    int changedFoodItemIndex =
+        _getFoodItemIndexById(foodItems, changedFoodItem.id);
+    foodItems.removeAt(changedFoodItemIndex);
+    foodItems.insert(changedFoodItemIndex, changedFoodItem);
+
+    return state.gibsonsForm.copyWith(foodItems: foodItems);
+  }
+
   void _onSelectedScreenChanged(
       SelectedScreenChanged event, Emitter<CollectionState> emit) {
     emit(state.copyWith(selectedScreen: event.changedSelectedScreen));
@@ -266,9 +295,8 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
   }
 
   void _onFoodItemAdded(FoodItemAdded event, Emitter<CollectionState> emit) {
-    final foodItem = FoodItem();
     List<FoodItem> foodItems = List.from(state.gibsonsForm.foodItems);
-    foodItems.add(foodItem);
+    foodItems.add(FoodItem());
 
     GibsonsForm changedGibsonsForm =
         state.gibsonsForm.copyWith(foodItems: foodItems);
@@ -280,8 +308,8 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
       FoodItemDeleted event, Emitter<CollectionState> emit) {
     List<FoodItem> foodItems = List.from(state.gibsonsForm.foodItems);
 
-    // TODO: change into UUID-based indexing
-    foodItems.remove(event.foodItem);
+    // TODO: event.foodItemId
+    foodItems.removeWhere((item) => item.id == event.foodItem.id);
 
     GibsonsForm changedGibsonsForm =
         state.gibsonsForm.copyWith(foodItems: foodItems);
@@ -291,197 +319,115 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
   void _onFoodItemNameChanged(
       FoodItemNameChanged event, Emitter<CollectionState> emit) {
-    List<FoodItem> foodItems = List.from(state.gibsonsForm.foodItems);
+    FoodItem foodItem = _getFoodItemById(event.foodItem.id); // TODO: foodItemId
 
-    // TODO: change into UUID-based indexing
-    int changedFoodItemIndex = foodItems.indexOf(event.foodItem);
-
-    FoodItem foodItem = foodItems[changedFoodItemIndex].copyWith(
+    FoodItem changedFoodItem = foodItem.copyWith(
         name: event.foodItemName,
         confirmed: false); // any change to FoodItem unconfirms it
 
-    foodItems.removeAt(changedFoodItemIndex);
-    foodItems.insert(changedFoodItemIndex, foodItem);
-
-    GibsonsForm changedGibsonsForm =
-        state.gibsonsForm.copyWith(foodItems: foodItems);
-
-    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+    emit(state.copyWith(
+        gibsonsForm: _replaceFoodItemInGibsonsForm(changedFoodItem)));
   }
 
   void _onFoodItemTimePeriodChanged(
       FoodItemTimePeriodChanged event, Emitter<CollectionState> emit) {
-    List<FoodItem> foodItems = List.from(state.gibsonsForm.foodItems);
+    FoodItem foodItem = _getFoodItemById(event.foodItem.id); // TODO: foodItemId
 
-    // TODO: change into UUID-based indexing
-    int changedFoodItemIndex = foodItems.indexOf(event.foodItem);
+    FoodItem changedFoodItem = foodItem.copyWith(
+        timePeriod: event.foodItemTimePeriod, confirmed: false);
 
-    FoodItem foodItem = foodItems[changedFoodItemIndex]
-        .copyWith(timePeriod: event.foodItemTimePeriod, confirmed: false);
-
-    foodItems.removeAt(changedFoodItemIndex);
-    foodItems.insert(changedFoodItemIndex, foodItem);
-
-    GibsonsForm changedGibsonsForm =
-        state.gibsonsForm.copyWith(foodItems: foodItems);
-
-    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+    emit(state.copyWith(
+        gibsonsForm: _replaceFoodItemInGibsonsForm(changedFoodItem)));
   }
 
   void _onFoodItemSourceChanged(
       FoodItemSourceChanged event, Emitter<CollectionState> emit) {
-    List<FoodItem> foodItems = List.from(state.gibsonsForm.foodItems);
+    FoodItem foodItem = _getFoodItemById(event.foodItem.id); // TODO: foodItemId
 
-    // TODO: change into UUID-based indexing
-    int changedFoodItemIndex = foodItems.indexOf(event.foodItem);
+    FoodItem changedFoodItem =
+        foodItem.copyWith(source: event.foodItemSource, confirmed: false);
 
-    FoodItem foodItem = foodItems[changedFoodItemIndex]
-        .copyWith(source: event.foodItemSource, confirmed: false);
-
-    foodItems.removeAt(changedFoodItemIndex);
-    foodItems.insert(changedFoodItemIndex, foodItem);
-
-    GibsonsForm changedGibsonsForm =
-        state.gibsonsForm.copyWith(foodItems: foodItems);
-
-    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+    emit(state.copyWith(
+        gibsonsForm: _replaceFoodItemInGibsonsForm(changedFoodItem)));
   }
 
   void _onFoodItemDescriptionChanged(
-      FoodItemDescriptionChanged event, Emitter<CollectionState> emit) {
-    List<FoodItem> foodItems = List.from(state.gibsonsForm.foodItems);
+      // TODO: change to comments and move down
+      FoodItemDescriptionChanged event,
+      Emitter<CollectionState> emit) {
+    FoodItem foodItem = _getFoodItemById(event.foodItem.id); // TODO: foodItemId
 
-    // TODO: change into UUID-based indexing
-    int changedFoodItemIndex = foodItems.indexOf(event.foodItem);
+    FoodItem changedFoodItem = foodItem.copyWith(
+        description: event.foodItemDescription, confirmed: false);
 
-    FoodItem foodItem = foodItems[changedFoodItemIndex]
-        .copyWith(description: event.foodItemDescription, confirmed: false);
-
-    foodItems.removeAt(changedFoodItemIndex);
-    foodItems.insert(changedFoodItemIndex, foodItem);
-
-    GibsonsForm changedGibsonsForm =
-        state.gibsonsForm.copyWith(foodItems: foodItems);
-
-    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+    emit(state.copyWith(
+        gibsonsForm: _replaceFoodItemInGibsonsForm(changedFoodItem)));
   }
 
   void _onFoodItemPreparationMethodChanged(
       FoodItemPreparationMethodChanged event, Emitter<CollectionState> emit) {
-    List<FoodItem> foodItems = List.from(state.gibsonsForm.foodItems);
+    FoodItem foodItem = _getFoodItemById(event.foodItem.id); // TODO: foodItemId
 
-    // TODO: change into UUID-based indexing
-    int changedFoodItemIndex = foodItems.indexOf(event.foodItem);
-
-    FoodItem foodItem = foodItems[changedFoodItemIndex].copyWith(
+    FoodItem changedFoodItem = foodItem.copyWith(
         preparationMethod: event.foodItemPreparationMethod, confirmed: false);
 
-    foodItems.removeAt(changedFoodItemIndex);
-    foodItems.insert(changedFoodItemIndex, foodItem);
-
-    GibsonsForm changedGibsonsForm =
-        state.gibsonsForm.copyWith(foodItems: foodItems);
-
-    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+    emit(state.copyWith(
+        gibsonsForm: _replaceFoodItemInGibsonsForm(changedFoodItem)));
   }
 
   void _onFoodItemCustomPreparationMethodChanged(
       FoodItemCustomPreparationMethodChanged event,
       Emitter<CollectionState> emit) {
-    List<FoodItem> foodItems = List.from(state.gibsonsForm.foodItems);
+    FoodItem foodItem = _getFoodItemById(event.foodItem.id); // TODO: foodItemId
 
-    // TODO: change into UUID-based indexing
-    int changedFoodItemIndex = foodItems.indexOf(event.foodItem);
-
-    FoodItem foodItem = foodItems[changedFoodItemIndex].copyWith(
+    FoodItem changedFoodItem = foodItem.copyWith(
         customPreparationMethod: event.foodItemCustomPreparationMethod,
         confirmed: false);
 
-    foodItems.removeAt(changedFoodItemIndex);
-    foodItems.insert(changedFoodItemIndex, foodItem);
-
-    GibsonsForm changedGibsonsForm =
-        state.gibsonsForm.copyWith(foodItems: foodItems);
-
-    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+    emit(state.copyWith(
+        gibsonsForm: _replaceFoodItemInGibsonsForm(changedFoodItem)));
   }
 
   void _onFoodItemMeasurementAdded(
       FoodItemMeasurementAdded event, Emitter<CollectionState> emit) {
-    // TODO: refactor all of this finding an item and changing
-    // it logic to one reusable function, probably a method of the GibsonsForm
-    // class
-    List<FoodItem> foodItems = List.from(state.gibsonsForm.foodItems);
+    FoodItem foodItem = _getFoodItemById(event.foodItem.id); // TODO: foodItemId
 
-    // TODO: change into UUID-based indexing
-    int changedFoodItemIndex = foodItems.indexOf(event.foodItem);
+    List<Measurement> measurements = List.from(foodItem.measurements);
 
-    List<Measurement> measurements =
-        List.from(foodItems[changedFoodItemIndex].measurements);
+    measurements.add(Measurement());
 
-    final measurement = Measurement();
+    FoodItem changedFoodItem =
+        foodItem.copyWith(measurements: measurements, confirmed: false);
 
-    measurements.add(measurement);
-
-    FoodItem foodItem = foodItems[changedFoodItemIndex]
-        .copyWith(measurements: measurements, confirmed: false);
-
-    foodItems.removeAt(changedFoodItemIndex);
-    foodItems.insert(changedFoodItemIndex, foodItem);
-
-    GibsonsForm changedGibsonsForm =
-        state.gibsonsForm.copyWith(foodItems: foodItems);
-
-    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+    emit(state.copyWith(
+        gibsonsForm: _replaceFoodItemInGibsonsForm(changedFoodItem)));
   }
 
   void _onFoodItemMeasurementDeleted(
       FoodItemMeasurementDeleted event, Emitter<CollectionState> emit) {
-    // TODO: refactor all of this finding an item and changing
-    // it logic to one reusable function, probably a method of the GibsonsForm
-    // class
-    List<FoodItem> foodItems = List.from(state.gibsonsForm.foodItems);
+    FoodItem foodItem = _getFoodItemById(event.foodItem.id); // TODO: foodItemId
 
-    // TODO: change into UUID-based indexing
-    int changedFoodItemIndex = foodItems.indexOf(event.foodItem);
+    List<Measurement> measurements = List.from(foodItem.measurements);
 
-    List<Measurement> measurements =
-        List.from(foodItems[changedFoodItemIndex].measurements);
-
-    // TODO: refactor to UUID based indexing of measurements
+    // TODO: refactor to UUID based indexing of measurements (hmm, not sure yet)
+    // but definitely refactor changing of measurement later on
     int changedmeasurementIndex = event.measurementIndex;
 
     measurements.removeAt(changedmeasurementIndex);
 
-    FoodItem foodItem = foodItems[changedFoodItemIndex]
-        .copyWith(measurements: measurements, confirmed: false);
+    FoodItem changedFoodItem =
+        foodItem.copyWith(measurements: measurements, confirmed: false);
 
-    foodItems.removeAt(changedFoodItemIndex);
-    foodItems.insert(changedFoodItemIndex, foodItem);
-
-    GibsonsForm changedGibsonsForm =
-        state.gibsonsForm.copyWith(foodItems: foodItems);
-
-    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+    emit(state.copyWith(
+        gibsonsForm: _replaceFoodItemInGibsonsForm(changedFoodItem)));
   }
 
   void _onFoodItemMeasurementMethodChangedOthersNulled(
       FoodItemMeasurementMethodChangedOthersNulled event,
       Emitter<CollectionState> emit) {
-    // TODO: refactor all of this finding an item and changing
-    // it logic to one reusable function, probably a method of the GibsonsForm
-    // class
-    List<FoodItem> foodItems = List.from(state.gibsonsForm.foodItems);
+    FoodItem foodItem = _getFoodItemById(event.foodItem.id); // TODO: foodItemId
 
-    // TODO: change into UUID-based indexing
-    // TODO: refactor into a reusable method
-    int changedFoodItemIndex =
-        foodItems.indexWhere((item) => item.id == event.foodItem.id);
-
-    // TODO: add if (changedFoodItemIndex == -1) {//handle exception}
-
-    List<Measurement> measurements =
-        List.from(foodItems[changedFoodItemIndex].measurements);
+    List<Measurement> measurements = List.from(foodItem.measurements);
 
     int changedmeasurementIndex = event.measurementIndex;
 
@@ -497,35 +443,19 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     measurements.removeAt(changedmeasurementIndex);
     measurements.insert(changedmeasurementIndex, measurement);
 
-    FoodItem foodItem = foodItems[changedFoodItemIndex]
-        .copyWith(measurements: measurements, confirmed: false);
+    FoodItem changedFoodItem =
+        foodItem.copyWith(measurements: measurements, confirmed: false);
 
-    foodItems.removeAt(changedFoodItemIndex);
-    foodItems.insert(changedFoodItemIndex, foodItem);
-
-    GibsonsForm changedGibsonsForm =
-        state.gibsonsForm.copyWith(foodItems: foodItems);
-
-    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+    emit(state.copyWith(
+        gibsonsForm: _replaceFoodItemInGibsonsForm(changedFoodItem)));
   }
 
   void _onFoodItemMeasurementUnitChanged(
       FoodItemMeasurementUnitChanged event, Emitter<CollectionState> emit) {
-    // TODO: refactor all of this finding an item and changing
-    // it logic to one reusable function, probably a method of the GibsonsForm
-    // class
-    List<FoodItem> foodItems = List.from(state.gibsonsForm.foodItems);
+    FoodItem foodItem = _getFoodItemById(event.foodItem.id); // TODO: foodItemId
 
-    // TODO: change into UUID-based indexing
-    // TODO: refactor into a reusable method
+    List<Measurement> measurements = List.from(foodItem.measurements);
 
-    int changedFoodItemIndex =
-        foodItems.indexWhere((item) => item.id == event.foodItem.id);
-
-    // TODO: add if (changedFoodItemIndex == -1) {//handle exception}
-
-    List<Measurement> measurements =
-        List.from(foodItems[changedFoodItemIndex].measurements);
     int changedmeasurementIndex = event.measurementIndex;
 
     Measurement measurement = measurements[changedmeasurementIndex]
@@ -534,35 +464,19 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     measurements.removeAt(changedmeasurementIndex);
     measurements.insert(changedmeasurementIndex, measurement);
 
-    FoodItem foodItem = foodItems[changedFoodItemIndex]
-        .copyWith(measurements: measurements, confirmed: false);
+    FoodItem changedFoodItem =
+        foodItem.copyWith(measurements: measurements, confirmed: false);
 
-    foodItems.removeAt(changedFoodItemIndex);
-    foodItems.insert(changedFoodItemIndex, foodItem);
-
-    GibsonsForm changedGibsonsForm =
-        state.gibsonsForm.copyWith(foodItems: foodItems);
-
-    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+    emit(state.copyWith(
+        gibsonsForm: _replaceFoodItemInGibsonsForm(changedFoodItem)));
   }
 
   void _onFoodItemMeasurementValueChanged(
       FoodItemMeasurementValueChanged event, Emitter<CollectionState> emit) {
-    // TODO: refactor all of this finding an item and changing
-    // it logic to one reusable function, probably a method of the GibsonsForm
-    // class
-    List<FoodItem> foodItems = List.from(state.gibsonsForm.foodItems);
+    FoodItem foodItem = _getFoodItemById(event.foodItem.id); // TODO: foodItemId
 
-    // TODO: change into UUID-based indexing
-    // TODO: refactor into a reusable method
+    List<Measurement> measurements = List.from(foodItem.measurements);
 
-    int changedFoodItemIndex =
-        foodItems.indexWhere((item) => item.id == event.foodItem.id);
-
-    // TODO: add if (changedFoodItemIndex == -1) {//handle exception}
-
-    List<Measurement> measurements =
-        List.from(foodItems[changedFoodItemIndex].measurements);
     int changedmeasurementIndex = event.measurementIndex;
 
     Measurement measurement = measurements[changedmeasurementIndex]
@@ -571,62 +485,34 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     measurements.removeAt(changedmeasurementIndex);
     measurements.insert(changedmeasurementIndex, measurement);
 
-    FoodItem foodItem = foodItems[changedFoodItemIndex]
-        .copyWith(measurements: measurements, confirmed: false);
+    FoodItem changedFoodItem =
+        foodItem.copyWith(measurements: measurements, confirmed: false);
 
-    foodItems.removeAt(changedFoodItemIndex);
-    foodItems.insert(changedFoodItemIndex, foodItem);
-
-    GibsonsForm changedGibsonsForm =
-        state.gibsonsForm.copyWith(foodItems: foodItems);
-
-    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+    emit(state.copyWith(
+        gibsonsForm: _replaceFoodItemInGibsonsForm(changedFoodItem)));
   }
 
   void _onFoodItemConfirmationChanged(
       FoodItemConfirmationChanged event, Emitter<CollectionState> emit) {
-    // TODO: refactor all of this finding an item and changing
-    // it logic to one reusable function, probably a method of the GibsonsForm
-    // class
-    List<FoodItem> foodItems = List.from(state.gibsonsForm.foodItems);
+    FoodItem foodItem = _getFoodItemById(event.foodItem.id); // TODO: foodItemId
 
-    // TODO: change into UUID-based indexing
-    int changedFoodItemIndex = foodItems.indexOf(event.foodItem);
+    FoodItem changedFoodItem =
+        foodItem.copyWith(confirmed: event.foodItemConfirmed);
 
-    FoodItem foodItem = foodItems[changedFoodItemIndex]
-        .copyWith(confirmed: event.foodItemConfirmed);
-
-    foodItems.removeAt(changedFoodItemIndex);
-    foodItems.insert(changedFoodItemIndex, foodItem);
-
-    GibsonsForm changedGibsonsForm =
-        state.gibsonsForm.copyWith(foodItems: foodItems);
-
-    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+    emit(state.copyWith(
+        gibsonsForm: _replaceFoodItemInGibsonsForm(changedFoodItem)));
   }
 
+  // TODO: reorder (move up)
   void _onFoodItemRecipeChanged(
       FoodItemRecipeChanged event, Emitter<CollectionState> emit) {
-    List<FoodItem> foodItems = List.from(state.gibsonsForm.foodItems);
+    FoodItem foodItem = _getFoodItemById(event.foodItemId);
 
-    int changedFoodItemIndex =
-        foodItems.indexWhere((item) => item.id == event.foodItemId);
+    FoodItem changedFoodItem =
+        foodItem.copyWith(recipe: event.foodItemRecipe, confirmed: false);
 
-    // TODO change to if (changedFoodItemIndex == -1) {//handle exception}
-    if (changedFoodItemIndex >= 0) {
-      FoodItem foodItem = foodItems[changedFoodItemIndex]
-          .copyWith(recipe: event.foodItemRecipe, confirmed: false);
-      foodItems.removeAt(changedFoodItemIndex);
-      foodItems.insert(changedFoodItemIndex, foodItem);
-      GibsonsForm changedGibsonsForm =
-          state.gibsonsForm.copyWith(foodItems: foodItems);
-      emit(state.copyWith(gibsonsForm: changedGibsonsForm));
-    } else {
-      // TODO: refactor this
-      addError(
-          Exception('No food item with given ID found!'), StackTrace.current);
-      emit(state);
-    }
+    emit(state.copyWith(
+        gibsonsForm: _replaceFoodItemInGibsonsForm(changedFoodItem)));
   }
 
   // or Future<void> ?
