@@ -29,31 +29,34 @@ class SecondPassScreen extends StatelessWidget {
                       return AbsorbPointer(
                         absorbing: state.gibsonsForm.finished,
                         child: SecondPassFoodItemCard(
+                          // TODO: change arguments ordering to match UI
                           foodItem: state.gibsonsForm.foodItems[index],
                           onSourceChanged: (changedSource) => context
                               .read<CollectionBloc>()
                               .add(FoodItemSourceChanged(
-                                  foodItem: state.gibsonsForm.foodItems[index],
+                                  foodItemId:
+                                      state.gibsonsForm.foodItems[index].id,
                                   foodItemSource: changedSource)),
                           onDescriptionChanged: (changedDescription) => context
                               .read<CollectionBloc>()
                               .add(FoodItemDescriptionChanged(
-                                  foodItem: state.gibsonsForm.foodItems[index],
+                                  foodItemId:
+                                      state.gibsonsForm.foodItems[index].id,
                                   foodItemDescription: changedDescription)),
                           onPreparationMethodChanged:
                               (changedPreparationMethod) => context
                                   .read<CollectionBloc>()
                                   .add(FoodItemPreparationMethodChanged(
-                                      foodItem:
-                                          state.gibsonsForm.foodItems[index],
+                                      foodItemId:
+                                          state.gibsonsForm.foodItems[index].id,
                                       foodItemPreparationMethod:
                                           changedPreparationMethod)),
                           onCustomPreparationMethodChanged:
                               (changedCustomPreparationMethod) => context
                                   .read<CollectionBloc>()
                                   .add(FoodItemCustomPreparationMethodChanged(
-                                      foodItem:
-                                          state.gibsonsForm.foodItems[index],
+                                      foodItemId:
+                                          state.gibsonsForm.foodItems[index].id,
                                       foodItemCustomPreparationMethod:
                                           changedCustomPreparationMethod)),
                         ),
