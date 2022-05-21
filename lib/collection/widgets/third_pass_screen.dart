@@ -31,10 +31,10 @@ class ThirdPassScreen extends StatelessWidget {
                           absorbing: state.gibsonsForm.finished,
                           child: ThirdPassFoodItemCard(
                             foodItem: state.gibsonsForm.foodItems[index],
-                            onMeasurementMethodChanged:
+                            onMeasurementMethodChangedOthersNulled:
                                 (changedMeasurementIndexAndMethod) => context
                                     .read<CollectionBloc>()
-                                    .add(FoodItemMeasurementMethodChanged(
+                                    .add(FoodItemMeasurementMethodChangedOthersNulled(
                                         foodItem:
                                             state.gibsonsForm.foodItems[index],
                                         measurementIndex:
@@ -43,18 +43,6 @@ class ThirdPassScreen extends StatelessWidget {
                                         foodItemMeasurementMethod:
                                             changedMeasurementIndexAndMethod[
                                                 'method'])),
-                            onMeasurementValueChanged:
-                                (changedMeasurementIndexAndValue) => context
-                                    .read<CollectionBloc>()
-                                    .add(FoodItemMeasurementValueChanged(
-                                        foodItem:
-                                            state.gibsonsForm.foodItems[index],
-                                        measurementIndex:
-                                            changedMeasurementIndexAndValue[
-                                                'index'],
-                                        foodItemMeasurementValue:
-                                            changedMeasurementIndexAndValue[
-                                                'value'])),
                             onMeasurementUnitChanged:
                                 (changedMeasurementIndexAndUnit) => context
                                     .read<CollectionBloc>()
@@ -67,6 +55,18 @@ class ThirdPassScreen extends StatelessWidget {
                                         foodItemMeasurementUnit:
                                             changedMeasurementIndexAndUnit[
                                                 'unit'])),
+                            onMeasurementValueChanged:
+                                (changedMeasurementIndexAndValue) => context
+                                    .read<CollectionBloc>()
+                                    .add(FoodItemMeasurementValueChanged(
+                                        foodItem:
+                                            state.gibsonsForm.foodItems[index],
+                                        measurementIndex:
+                                            changedMeasurementIndexAndValue[
+                                                'index'],
+                                        foodItemMeasurementValue:
+                                            changedMeasurementIndexAndValue[
+                                                'value'])),
                             onMeasurementAdded: () => context
                                 .read<CollectionBloc>()
                                 .add(FoodItemMeasurementAdded(

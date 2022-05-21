@@ -7,14 +7,13 @@ class MeasurementCard extends StatelessWidget {
   const MeasurementCard(
       {Key? key,
       required this.measurement,
-      required this.onMeasurementMethodChanged,
+      required this.onMeasurementMethodChangedOthersNulled,
       required this.onMeasurementUnitChanged,
       required this.onMeasurementValueChanged})
       : super(key: key);
 
   final Measurement measurement;
-  // TODO: make signatures accept String? to be able to clear values
-  final ValueChanged<String>? onMeasurementMethodChanged;
+  final ValueChanged<String>? onMeasurementMethodChangedOthersNulled;
   final ValueChanged<String>? onMeasurementUnitChanged;
   final ValueChanged<String>? onMeasurementValueChanged;
 
@@ -42,16 +41,10 @@ class MeasurementCard extends StatelessWidget {
                     : null,
               ),
               items: Measurement.measurementMethods,
-              // TODO: clear measurement unit and value when
-              // measurement method is changed
               onChanged: (String? measurementMethod) {
-                // TODO: make signature accept null to be able to clear values
-                onMeasurementMethodChanged!(measurementMethod ?? '');
-                // clear unit and value after method change
-                // onMeasurementUnitChanged!(
-                //     {'index': index, 'unit': ''});
-                // onMeasurementValueChanged!(
-                //     {'index': index, 'value': ''});
+                onMeasurementMethodChangedOthersNulled!(
+                    measurementMethod ?? '');
+                // TODO: if only one unit for the given method, send an event to select it
               },
               selectedItem: measurement.measurementMethod),
           DropdownSearch<String>(
@@ -79,8 +72,8 @@ class MeasurementCard extends StatelessWidget {
                   onMeasurementUnitChanged!(measurementUnit ?? ''),
               selectedItem: measurement.measurementUnit),
           TextFormField(
-            // this cannot be UniqueKey as keyboard hides after each press
-            // key: UniqueKey(),
+            // set Key to value of method to rebuild widget after method changes
+            key: ValueKey(measurement.measurementMethod),
             initialValue: measurement.measurementValue,
             decoration: InputDecoration(
               icon: const Icon(Icons.drive_file_rename_outline_rounded),
