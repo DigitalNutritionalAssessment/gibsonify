@@ -1045,10 +1045,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
         List<String> newMeasurements = recipeMeasurement.split('+');
         for (String newMeasurement in newMeasurements) {
           List<String> fields = newMeasurement.trim().split('_');
-          final measurement = Measurement(
-              measurementMethod: fields[0],
-              measurementValue: fields[1],
-              measurementUnit: fields[2]);
+          final measurement =
+              Measurement(method: fields[0], value: fields[1], unit: fields[2]);
           measurements.add(measurement);
         }
 
@@ -1072,10 +1070,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
         List<String> newMeasurements = ingredientMeasurement.split('+');
         for (String newMeasurement in newMeasurements) {
           List<String> fields = newMeasurement.trim().split('_');
-          final measurement = Measurement(
-              measurementMethod: fields[0],
-              measurementValue: fields[1],
-              measurementUnit: fields[2]);
+          final measurement =
+              Measurement(method: fields[0], value: fields[1], unit: fields[2]);
           measurements.add(measurement);
         }
         final ingredient = Ingredient(

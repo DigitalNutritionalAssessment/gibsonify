@@ -270,7 +270,7 @@ class IngredientMeasurements extends StatelessWidget {
                               .recipes[recipeIndex]
                               .ingredients[ingredientIndex]
                               .measurements[index]
-                              .measurementMethod),
+                              .method),
                       DropdownSearch<String>(
                           popupProps: const PopupProps.menu(
                               showSelectedItems: true,
@@ -295,13 +295,13 @@ class IngredientMeasurements extends StatelessWidget {
                               .recipes[recipeIndex]
                               .ingredients[ingredientIndex]
                               .measurements[index]
-                              .measurementUnit),
+                              .unit),
                       TextFormField(
                         initialValue: state
                             .recipes[recipeIndex]
                             .ingredients[ingredientIndex]
                             .measurements[index]
-                            .measurementValue,
+                            .value,
                         decoration: InputDecoration(
                           icon: const Icon(Icons.format_list_numbered_rounded),
                           labelText: 'Measurement value',
