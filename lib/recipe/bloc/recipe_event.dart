@@ -77,12 +77,13 @@ class RecipeMeasurementDeleted extends RecipeEvent {
   List<Object> get props => [measurementIndex, recipe];
 }
 
-class RecipeMeasurementMethodChanged extends RecipeEvent {
+/// Changes the measurement method and nulls unit and value.
+class RecipeMeasurementMethodChangedOthersNulled extends RecipeEvent {
   final String measurementMethod;
   final int measurementIndex;
   final Recipe recipe;
 
-  const RecipeMeasurementMethodChanged(
+  const RecipeMeasurementMethodChangedOthersNulled(
       {required this.measurementMethod,
       required this.measurementIndex,
       required this.recipe});
