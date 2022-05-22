@@ -16,7 +16,15 @@ class CollectionsScreen extends StatelessWidget {
       return BlocBuilder<HomeBloc, HomeState>(
         builder: (context, homeState) {
           return Scaffold(
-              appBar: AppBar(title: const Text('Collections')),
+              appBar: AppBar(
+                title: const Text('Collections'),
+                actions: [
+                  IconButton(
+                      onPressed: () => Navigator.pushNamed(
+                          context, PageRouter.collectionsHelp),
+                      icon: const Icon(Icons.help))
+                ],
+              ),
               body: Column(
                 children: [
                   Expanded(
