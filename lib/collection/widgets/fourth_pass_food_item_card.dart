@@ -50,9 +50,8 @@ class FourthPassFoodItemCard extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              Text(foodItemDisplayName +
-                  ' consumed in the ' +
-                  foodItemDisplayTimePeriod),
+              Text(
+                  '$foodItemDisplayName consumed in the $foodItemDisplayTimePeriod'),
               TextFormField(
                 readOnly: true,
                 // TODO add snackbar confirmation and scroll in the given page

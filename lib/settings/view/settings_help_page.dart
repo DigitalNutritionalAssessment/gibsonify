@@ -20,8 +20,8 @@ class _SettingsHelpPageState extends State<SettingsHelpPage> {
     buildSignature: 'Unknown',
   );
 
-  final String _gibsonifyRepositoryUrl =
-      'https://github.com/DigitalNutritionalAssessment/gibsonify';
+  final Uri _gibsonifyRepositoryUrl =
+      Uri.https('github.com', '/DigitalNutritionalAssessment/gibsonify');
 
   @override
   void initState() {
@@ -38,7 +38,7 @@ class _SettingsHelpPageState extends State<SettingsHelpPage> {
 
   void _launchUrl() async {
     try {
-      await launch(_gibsonifyRepositoryUrl);
+      await launchUrl(_gibsonifyRepositoryUrl);
     } catch (e) {
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()

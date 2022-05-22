@@ -45,9 +45,8 @@ class ThirdPassFoodItemCard extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            Text(foodItemDisplayName +
-                ' consumed in the ' +
-                foodItemDisplayTimePeriod),
+            Text(
+                '$foodItemDisplayName consumed in the $foodItemDisplayTimePeriod'),
             ListView.builder(
                 // required to avoid Vertical viewport unbounded height error
                 shrinkWrap: true,
