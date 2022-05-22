@@ -5,6 +5,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'dart:convert';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
+import 'package:gibsonify/collection/collection.dart';
 import 'package:gibsonify/recipe/recipe.dart';
 
 class IngredientForm extends StatelessWidget {
@@ -244,89 +245,30 @@ class IngredientMeasurements extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
                     children: [
-                      // TODO: Make one reausable measurement widget across
-                      // collection and recipe modules
-                      DropdownSearch<String>(
-                          popupProps: const PopupProps.menu(
-                              showSelectedItems: true,
-                              fit: FlexFit.loose,
-                              menuProps: MenuProps(
-                                  constraints: BoxConstraints.tightFor())),
-                          dropdownSearchDecoration: const InputDecoration(
-                            icon: Icon(Icons.food_bank_rounded),
-                            labelText: "Measurement method",
-                            helperText: 'How the measurement is measured',
-                          ),
-                          items: Measurement.measurementMethods,
-                          onChanged: (String? answer) => context
+                      MeasurementCard(
+                          measurement: state.recipes[recipeIndex]
+                              .ingredients[ingredientIndex].measurements[index],
+                          onMeasurementMethodChangedOthersNulled: (measurementMethod) => context
                               .read<RecipeBloc>()
-                              .add(IngredientMeasurementMethodChanged(
+                              .add(IngredientMeasurementMethodChangedOthersNulled(
                                   measurementIndex: index,
                                   ingredient: state.recipes[recipeIndex]
                                       .ingredients[ingredientIndex],
-                                  measurementMethod: answer!,
+                                  measurementMethod: measurementMethod,
                                   recipe: state.recipes[recipeIndex])),
-                          selectedItem: state
-                              .recipes[recipeIndex]
-                              .ingredients[ingredientIndex]
-                              .measurements[index]
-                              .method),
-                      DropdownSearch<String>(
-                          popupProps: const PopupProps.menu(
-                              showSelectedItems: true,
-                              fit: FlexFit.loose,
-                              menuProps: MenuProps(
-                                  constraints: BoxConstraints.tightFor())),
-                          dropdownSearchDecoration: const InputDecoration(
-                            icon: Icon(Icons.local_dining_rounded),
-                            labelText: "Measurement unit",
-                            helperText: 'The unit of each measurement value',
-                          ),
-                          items: Measurement.measurementUnits,
-                          onChanged: (String? answer) => context
+                          onMeasurementUnitChanged: (measurementUnit) => context
                               .read<RecipeBloc>()
                               .add(IngredientMeasurementUnitChanged(
                                   measurementIndex: index,
                                   ingredient: state.recipes[recipeIndex]
                                       .ingredients[ingredientIndex],
-                                  measurementUnit: answer!,
+                                  measurementUnit: measurementUnit,
                                   recipe: state.recipes[recipeIndex])),
-                          selectedItem: state
-                              .recipes[recipeIndex]
-                              .ingredients[ingredientIndex]
-                              .measurements[index]
-                              .unit),
-                      TextFormField(
-                        initialValue: state
-                            .recipes[recipeIndex]
-                            .ingredients[ingredientIndex]
-                            .measurements[index]
-                            .value,
-                        decoration: InputDecoration(
-                          icon: const Icon(Icons.format_list_numbered_rounded),
-                          labelText: 'Measurement value',
-                          helperText: 'Input measurement value',
-                          errorText: !state
-                                  .recipes[recipeIndex]
-                                  .ingredients[ingredientIndex]
-                                  .measurements[index]
-                                  .isValueValid()
-                              ? 'Enter the measured value in 1 to 4 digits'
-                              : null,
-                        ),
-                        onChanged: (value) {
-                          context.read<RecipeBloc>().add(
-                              IngredientMeasurementValueChanged(
-                                  measurementIndex: index,
-                                  ingredient: state.recipes[recipeIndex]
-                                      .ingredients[ingredientIndex],
-                                  measurementValue: value,
-                                  recipe: state.recipes[recipeIndex]));
-                        },
-                        textInputAction: TextInputAction.next,
-                        keyboardType: TextInputType.number,
-                      ),
-                      const Divider(),
+                          onMeasurementValueChanged: (measurementValue) =>
+                              context.read<RecipeBloc>().add(IngredientMeasurementValueChanged(measurementIndex: index, ingredient: state.recipes[recipeIndex].ingredients[ingredientIndex], measurementValue: measurementValue, recipe: state.recipes[recipeIndex]))),
+                      // TODO: Move the Add Measurement Visibility ListTile
+                      // out of the ListView.builder() so that it is not
+                      // repeated after each measurement (fix bottom overflow)
                       Visibility(
                         visible: !state.recipes[recipeIndex].saved,
                         child: ListTile(

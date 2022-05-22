@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 import 'package:gibsonify/recipe/recipe.dart';
