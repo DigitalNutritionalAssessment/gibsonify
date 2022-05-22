@@ -26,7 +26,16 @@ class RecipesScreen extends StatelessWidget {
             appBar: AppBar(
                 title: !viewedFromCollection
                     ? const Text('Recipes')
-                    : const Text('Choose a Recipe')),
+                    : const Text('Choose a Recipe'),
+                actions: !viewedFromCollection
+                    ? [
+                        IconButton(
+                            onPressed: () => Navigator.pushNamed(
+                                context, PageRouter.recipesHelp),
+                            icon: const Icon(Icons.help))
+                      ]
+                    // TODO: add help page when viewed from Collection
+                    : []),
             body: ListView.builder(
                 padding: const EdgeInsets.all(2.0),
                 itemCount: recipeState.recipes.length,
