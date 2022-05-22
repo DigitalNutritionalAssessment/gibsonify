@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 
 import 'package:gibsonify/home/home.dart';
 import 'package:gibsonify/login/login.dart';
@@ -20,42 +19,14 @@ class CollectionsScreen extends StatelessWidget {
               appBar: AppBar(title: const Text('Collections')),
               body: Column(
                 children: [
-                  homeState.collectionDuplicationMode
-                      ? const ListTile(
-                          title: Text(
-                              'Please choose the collection for duplication'),
-                          subtitle:
-                              Text('Tap on the collection to be duplicated'),
-                          tileColor: Colors.blue,
-                        )
-                      : const SizedBox.shrink(),
                   Expanded(
                     child: ListView.builder(
                         padding: const EdgeInsets.all(2.0),
                         itemCount: homeState.gibsonsForms.length,
                         itemBuilder: (context, index) {
                           // TODO: Refactor to a standalone widget
-                          return Slidable(
-                            key: Key(homeState.gibsonsForms[index]!.id),
-                            endActionPane: ActionPane(
-                              motion: const ScrollMotion(),
-                              children: [
-                                SlidableAction(
-                                  onPressed: (context) => showDialog<String>(
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                          DeleteCollectionDialog(
-                                              gibsonsForm: homeState
-                                                  .gibsonsForms[index]!)),
-                                  backgroundColor: Colors.red,
-                                  foregroundColor: Colors.white,
-                                  icon: Icons.delete,
-                                  label: 'Delete',
-                                )
-                              ],
-                            ),
-                            child: Card(
-                              child: ListTile(
+                          return Card(
+                            child: ListTile(
                                 title: Text(
                                     // TODO: refactor
                                     isFieldUnmodifiedOrEmpty(homeState
@@ -88,42 +59,22 @@ class CollectionsScreen extends StatelessWidget {
                                   ],
                                 ),
                                 onTap: () {
-                                  const collectionDuplicatedSnackBar = SnackBar(
-                                      content: Text(
-                                          'Selected collection has been '
-                                          'duplicated, use it as a template '
-                                          'and rewrite appropriate fields'));
-                                  if (homeState.collectionDuplicationMode) {
-                                    context.read<CollectionBloc>().add(
-                                        GibsonsFormDuplicated(
-                                            employeeNumber: loginState
-                                                .loginInfo.employeeId!,
-                                            gibsonsForm: homeState
-                                                .gibsonsForms[index]!));
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        collectionDuplicatedSnackBar);
-                                    context
-                                        .read<HomeBloc>()
-                                        .add(const GibsonsFormsLoaded());
-                                    context.read<HomeBloc>().add(
-                                        const CollectionDuplicationModeToggled());
-                                  } else {
-                                    context.read<CollectionBloc>().add(
-                                        GibsonsFormProvided(
-                                            gibsonsForm: homeState
-                                                .gibsonsForms[index]!));
-                                    Navigator.pushNamed(
-                                        context, PageRouter.collection);
-                                  }
+                                  context.read<CollectionBloc>().add(
+                                      GibsonsFormProvided(
+                                          gibsonsForm:
+                                              homeState.gibsonsForms[index]!));
+                                  Navigator.pushNamed(
+                                      context, PageRouter.collection);
                                 },
-                                onLongPress: () => showDialog<String>(
+                                onLongPress: () => showModalBottomSheet(
                                     context: context,
-                                    builder: (BuildContext context) =>
-                                        DeleteCollectionDialog(
-                                            gibsonsForm: homeState
-                                                .gibsonsForms[index]!)),
-                              ),
-                            ),
+                                    builder: (context) {
+                                      return CollectionOptions(
+                                          gibsonsForm:
+                                              homeState.gibsonsForms[index]!,
+                                          employeeNumber:
+                                              loginState.loginInfo.employeeId!);
+                                    })),
                           );
                         }),
                   ),
@@ -133,39 +84,20 @@ class CollectionsScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: <Widget>[
-                    Visibility(
-                      visible: !homeState.collectionDuplicationMode,
-                      child: FloatingActionButton.extended(
-                          heroTag: null,
-                          label: const Text("New Collection"),
-                          icon: const Icon(Icons.add),
-                          onPressed: () {
-                            // TODO: Refactor into the Collection Page accepting a
-                            // nullable instance of GibsonsForm as argument.
-                            // In this case it will be null so a new GibsonsForm
-                            // will be initialized
-                            context.read<CollectionBloc>().add(
-                                GibsonsFormCreated(
-                                    employeeNumber:
-                                        loginState.loginInfo.employeeId!));
-                            Navigator.pushNamed(context, PageRouter.collection);
-                          }),
-                    ),
-                    const SizedBox(height: 10),
                     FloatingActionButton.extended(
                         heroTag: null,
-                        backgroundColor: homeState.collectionDuplicationMode
-                            ? Colors.red
-                            : null,
-                        label: homeState.collectionDuplicationMode
-                            ? const Text("Cancel Duplication Mode")
-                            : const Text("Duplicate Collection"),
-                        icon: homeState.collectionDuplicationMode
-                            ? const Icon(Icons.cancel_outlined)
-                            : const Icon(Icons.control_point_duplicate),
-                        onPressed: () => context
-                            .read<HomeBloc>()
-                            .add(const CollectionDuplicationModeToggled())),
+                        label: const Text("New Collection"),
+                        icon: const Icon(Icons.add),
+                        onPressed: () {
+                          // TODO: Refactor into the Collection Page accepting a
+                          // nullable instance of GibsonsForm as argument.
+                          // In this case it will be null so a new GibsonsForm
+                          // will be initialized
+                          context.read<CollectionBloc>().add(GibsonsFormCreated(
+                              employeeNumber:
+                                  loginState.loginInfo.employeeId!));
+                          Navigator.pushNamed(context, PageRouter.collection);
+                        }),
                   ]));
         },
       );
@@ -173,10 +105,13 @@ class CollectionsScreen extends StatelessWidget {
   }
 }
 
-class DeleteCollectionDialog extends StatelessWidget {
-  final GibsonsForm gibsonsForm;
-  const DeleteCollectionDialog({Key? key, required this.gibsonsForm})
+class CollectionOptions extends StatelessWidget {
+  const CollectionOptions(
+      {Key? key, required this.gibsonsForm, required this.employeeNumber})
       : super(key: key);
+
+  final GibsonsForm gibsonsForm;
+  final String employeeNumber;
 
   @override
   Widget build(BuildContext context) {
@@ -184,28 +119,46 @@ class DeleteCollectionDialog extends StatelessWidget {
         isFieldUnmodifiedOrEmpty(gibsonsForm.respondentName)
             ? 'unnamed respondent'
             : gibsonsForm.respondentName!;
+    SnackBar collectionDuplicatedSnackBar = SnackBar(
+        content: Text('Collection of $displayRespondentName has been '
+            'duplicated, use it as a template '
+            'and rewrite appropriate fields'));
+    SnackBar collectionDeletedSnackBar = SnackBar(
+        content: Text('Collection of $displayRespondentName has been deleted'));
     return BlocBuilder<CollectionBloc, CollectionState>(
       builder: (context, state) {
-        return AlertDialog(
-          title: const Text('Delete collection'),
-          content: Text(
-              'Would you like to delete the collection of $displayRespondentName?'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                context
-                    .read<HomeBloc>()
-                    .add(GibsonsFormDeleted(id: gibsonsForm.id));
-                Navigator.pop(context);
-              },
-              child: const Text('Delete'),
-            ),
-          ],
-        );
+        final List<Widget> options = [
+          ListTile(
+              title: Text(('Options of $displayRespondentName collection'))),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.copy),
+            title: const Text('Duplicate'),
+            onTap: () {
+              // TODO: Place the duplicated collection under the original
+              // This requires modifying how collections are saved
+              context.read<CollectionBloc>().add(GibsonsFormDuplicated(
+                  employeeNumber: employeeNumber, gibsonsForm: gibsonsForm));
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(collectionDuplicatedSnackBar);
+              context.read<HomeBloc>().add(const GibsonsFormsLoaded());
+              Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.delete),
+            title: const Text('Delete'),
+            onTap: () {
+              context
+                  .read<HomeBloc>()
+                  .add(GibsonsFormDeleted(id: gibsonsForm.id));
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(collectionDeletedSnackBar);
+              Navigator.pop(context);
+            },
+          )
+        ];
+        return Wrap(children: options);
       },
     );
   }
