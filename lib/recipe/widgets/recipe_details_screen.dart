@@ -183,73 +183,31 @@ class RecipeMeasurements extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
                       children: [
-                        // TODO: Reuse Measurement widget
-                        DropdownSearch<String>(
-                            popupProps: const PopupProps.menu(
-                                showSelectedItems: true,
-                                fit: FlexFit.loose,
-                                menuProps: MenuProps(
-                                    constraints: BoxConstraints.tightFor())),
-                            dropdownSearchDecoration: const InputDecoration(
-                              icon: Icon(Icons.food_bank_rounded),
-                              labelText: "Measurement method",
-                              helperText: 'How the measurement is measured',
-                            ),
-                            items: Measurement.measurementMethods,
-                            onChanged: (String? answer) => context
-                                .read<RecipeBloc>()
-                                .add(RecipeMeasurementMethodChanged(
-                                    measurementIndex: index,
-                                    measurementMethod: answer!,
-                                    recipe: state.recipes[recipeIndex])),
-                            selectedItem: state.recipes[recipeIndex]
-                                .measurements[index].method),
-                        DropdownSearch<String>(
-                            popupProps: const PopupProps.menu(
-                                showSelectedItems: true,
-                                fit: FlexFit.loose,
-                                menuProps: MenuProps(
-                                    constraints: BoxConstraints.tightFor())),
-                            dropdownSearchDecoration: const InputDecoration(
-                              icon: Icon(Icons.local_dining_rounded),
-                              labelText: "Measurement unit",
-                              helperText: 'The unit of each measurement value',
-                            ),
-                            items: Measurement.measurementUnits,
-                            onChanged: (String? answer) => context
-                                .read<RecipeBloc>()
-                                .add(RecipeMeasurementUnitChanged(
-                                    measurementIndex: index,
-                                    measurementUnit: answer!,
-                                    recipe: state.recipes[recipeIndex])),
-                            selectedItem: state
-                                .recipes[recipeIndex].measurements[index].unit),
-                        TextFormField(
-                          initialValue: state
-                              .recipes[recipeIndex].measurements[index].value,
-                          decoration: InputDecoration(
-                            icon:
-                                const Icon(Icons.format_list_numbered_rounded),
-                            labelText: 'Measurement value',
-                            helperText: 'Input measurement value',
-                            errorText: !state
-                                    .recipes[recipeIndex].measurements[index]
-                                    .isValueValid()
-                                ? 'Enter the measured value in 1 to 4 digits'
-                                : null,
-                          ),
-                          onChanged: (value) {
-                            context.read<RecipeBloc>().add(
-                                RecipeMeasurementValueChanged(
-                                    measurementIndex: index,
-                                    measurementValue: value,
-                                    recipe: state.recipes[recipeIndex]));
-                          },
-                          textCapitalization: TextCapitalization.sentences,
-                          textInputAction: TextInputAction.next,
-                          keyboardType: TextInputType.number,
-                        ),
-                        const Divider(),
+                        MeasurementCard(
+                            measurement:
+                                state.recipes[recipeIndex].measurements[index],
+                            onMeasurementMethodChangedOthersNulled:
+                                (measurementMethod) => context
+                                    .read<RecipeBloc>()
+                                    .add(RecipeMeasurementMethodChangedOthersNulled(
+                                        measurementIndex: index,
+                                        measurementMethod: measurementMethod,
+                                        recipe: state.recipes[recipeIndex])),
+                            onMeasurementUnitChanged: (measurementUnit) =>
+                                context.read<RecipeBloc>().add(
+                                    RecipeMeasurementUnitChanged(
+                                        measurementIndex: index,
+                                        measurementUnit: measurementUnit,
+                                        recipe: state.recipes[recipeIndex])),
+                            onMeasurementValueChanged: (measurementValue) =>
+                                context.read<RecipeBloc>().add(
+                                    RecipeMeasurementValueChanged(
+                                        measurementIndex: index,
+                                        measurementValue: measurementValue,
+                                        recipe: state.recipes[recipeIndex]))),
+                        // TODO: Move the Add Measurement Visibility ListTile
+                        // out of the ListView.builder() so that it is not
+                        // repeated after each measurement (fix bottom overflow)
                         Visibility(
                           visible: !state.recipes[recipeIndex].saved,
                           child: ListTile(
