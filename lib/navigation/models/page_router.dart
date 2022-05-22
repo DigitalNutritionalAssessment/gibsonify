@@ -19,6 +19,7 @@ class PageRouter {
   static const thirdPassHelp = '/thirdpasshelp';
   static const chooseRecipe = '/chooserecipe';
   static const finishCollection = '/finishcollection';
+  static const collectionsHelp = '/collectionshelp';
   static const settingsHelp = '/settingshelp';
 
   static Route route(RouteSettings routeSettings) {
@@ -66,6 +67,8 @@ class PageRouter {
         return _buildRoute(const FinishCollectionPage());
       case settingsHelp:
         return _buildRoute(const SettingsHelpPage());
+      case collectionsHelp:
+        return _buildRoute(const CollectionsHelpPage());
       default:
         throw Exception('Page does not exist!');
     }
