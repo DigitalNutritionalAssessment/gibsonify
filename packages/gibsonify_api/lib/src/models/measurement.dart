@@ -58,19 +58,6 @@ class Measurement extends Equatable {
     ]
   };
 
-  // TODO: delete measurementUnits (if not needed, or use values of
-  // measurementUnitsOfMethod)
-  static final List<String> measurementUnits = [
-    'Small Spoon',
-    'Big spoon',
-    'Small standard cup',
-    'Medium standard cup',
-    'Large standard cup',
-    'Size number (photo)',
-    'Grams',
-    'Millilitres'
-  ];
-
   Measurement copyWith(
       {String? measurementMethod,
       String? measurementUnit,
