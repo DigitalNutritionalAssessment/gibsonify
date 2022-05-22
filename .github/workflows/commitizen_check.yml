@@ -1,4 +1,4 @@
-name: commitizen-check-commits
+name: commitizen_check_commits
 
 on:
   pull_request:
