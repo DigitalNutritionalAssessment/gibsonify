@@ -20,6 +20,10 @@ class FourthPassFoodItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String? selectedOrCustomPreparationMethod =
+        (foodItem.preparationMethod != "Other (please specify)")
+            ? foodItem.preparationMethod
+            : foodItem.customPreparationMethod;
     String foodItemDisplayName = isFieldUnmodifiedOrEmpty(foodItem.name)
         ? 'Unnamed food'
         : foodItem.name!;
@@ -83,15 +87,15 @@ class FourthPassFoodItemCard extends StatelessWidget {
                 readOnly: true,
                 onTap: () =>
                     onSelectedScreenChanged!(SelectedScreen.secondPass),
-                initialValue: foodItem.preparationMethod,
+                initialValue: selectedOrCustomPreparationMethod,
                 decoration: InputDecoration(
-                  icon: const Icon(Icons.coffee_maker_outlined),
+                  icon: const Icon(Icons.food_bank_rounded),
                   labelText: 'Form when eaten',
                   helperText: 'The preparation method of the food',
-                  errorText:
-                      isFieldUnmodifiedOrEmpty(foodItem.preparationMethod)
-                          ? 'Select the food\'s preparation method'
-                          : null,
+                  errorText: isFieldUnmodifiedOrEmpty(
+                          selectedOrCustomPreparationMethod)
+                      ? 'Select/specify the food\'s preparation method'
+                      : null,
                 ),
               ),
               TextFormField(
@@ -127,8 +131,8 @@ class FourthPassFoodItemCard extends StatelessWidget {
                                 readOnly: true,
                                 onTap: () => onSelectedScreenChanged!(
                                     SelectedScreen.thirdPass),
-                                initialValue: foodItem
-                                    .measurements[index].measurementMethod,
+                                initialValue:
+                                    foodItem.measurements[index].method,
                                 decoration: InputDecoration(
                                   icon:
                                       const Icon(Icons.monitor_weight_outlined),
@@ -138,8 +142,7 @@ class FourthPassFoodItemCard extends StatelessWidget {
                                   // TODO: refactor to something nicer
                                   errorText: !foodItem.measurements[index]
                                               .isMethodValid() ||
-                                          foodItem.measurements[index]
-                                                  .measurementMethod ==
+                                          foodItem.measurements[index].method ==
                                               null
                                       ? 'Select the measurement method'
                                       : null,
@@ -149,8 +152,7 @@ class FourthPassFoodItemCard extends StatelessWidget {
                                 readOnly: true,
                                 onTap: () => onSelectedScreenChanged!(
                                     SelectedScreen.thirdPass),
-                                initialValue: foodItem
-                                    .measurements[index].measurementUnit,
+                                initialValue: foodItem.measurements[index].unit,
                                 decoration: InputDecoration(
                                   icon: const Icon(
                                       Icons.radio_button_unchecked_outlined),
@@ -160,8 +162,7 @@ class FourthPassFoodItemCard extends StatelessWidget {
                                   // TODO: refactor to something nicer
                                   errorText: !foodItem.measurements[index]
                                               .isUnitValid() ||
-                                          foodItem.measurements[index]
-                                                  .measurementUnit ==
+                                          foodItem.measurements[index].unit ==
                                               null
                                       ? 'Select the measurement unit'
                                       : null,
@@ -171,8 +172,8 @@ class FourthPassFoodItemCard extends StatelessWidget {
                                 readOnly: true,
                                 onTap: () => onSelectedScreenChanged!(
                                     SelectedScreen.thirdPass),
-                                initialValue: foodItem
-                                    .measurements[index].measurementValue,
+                                initialValue:
+                                    foodItem.measurements[index].value,
                                 decoration: InputDecoration(
                                   icon: const Icon(
                                       Icons.drive_file_rename_outline_rounded),
@@ -182,8 +183,7 @@ class FourthPassFoodItemCard extends StatelessWidget {
                                   // TODO: refactor to something nicer
                                   errorText: !foodItem.measurements[index]
                                               .isValueValid() ||
-                                          foodItem.measurements[index]
-                                                  .measurementValue ==
+                                          foodItem.measurements[index].value ==
                                               null
                                       ? 'Enter the measured value in 1 to 4 digits'
                                       : null,

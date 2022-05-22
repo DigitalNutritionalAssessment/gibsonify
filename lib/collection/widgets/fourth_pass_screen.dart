@@ -28,8 +28,8 @@ class FourthPassScreen extends StatelessWidget {
                             onConfirmationChanged: (negatedConfirmation) =>
                                 context.read<CollectionBloc>().add(
                                     FoodItemConfirmationChanged(
-                                        foodItem:
-                                            state.gibsonsForm.foodItems[index],
+                                        foodItemId: state
+                                            .gibsonsForm.foodItems[index].id,
                                         foodItemConfirmed:
                                             negatedConfirmation)),
                             onDeleted: () => showDialog<String>(
