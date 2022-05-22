@@ -18,7 +18,16 @@ The app follows the structure of the four passes of Gibson's methodology. It has
 
 ## Installation
 
-The latest stable Android version of Gibsonify can be downloaded as an `.apk` file [here](https://github.com/DigitalNutritionalAssessment/gibsonify/releases/latest/download/app-release.apk). Instructions for verifying that you've downloaded the correct file are in [docs/release_verification.md](docs/release_verification.md). After downloading the `apk` file to your Android smartphone, you need to [allow installation of apps from unknown sources](https://www.maketecheasier.com/install-apps-from-unknown-sources-android/), and then tap on the `apk` file, and allow all other prompts to install it.
+The latest stable Android version of Gibsonify can be downloaded as an `.apk` file by clicking the button below:
+
+<p align='left'>
+    <a href="https://github.com/DigitalNutritionalAssessment/gibsonify/releases/latest/download/app-release.apk">
+        <img src="docs/images/download_button.png" width="32%"/>
+    </a>
+</p>
+
+
+Instructions for verifying that you've downloaded the correct file are in [docs/release_verification.md](docs/release_verification.md). After downloading the `apk` file to your Android smartphone, you need to [allow installation of apps from unknown sources](https://www.maketecheasier.com/install-apps-from-unknown-sources-android/), and then tap on the `apk` file, and allow all other prompts to install it.
 
 Releases on platforms other than Android are currently not officially supported, although they can be built by following the development instructions outlined in the section below.
 
@@ -32,7 +41,7 @@ Instructions for developing Gibsonify are in [docs/development.md](docs/developm
 
 ## Authors and Acknowledgements
 
-Gibsonify is being developed by [Shazril Suhail](https://github.com/sshazril) and [Adam Sroka](https://adamsroka.io), who have taken on the previous work of [Greg Chu](https://github.com/gregchu6), [Juan Rodgers](https://github.com/rodgersjuan), and [Choon Kiat Lee](https://github.com/choonkiatlee).
+Gibsonify is being developed by [Shazril Suhail](https://github.com/sshazril) and [Adam Sroka](https://adam.sr), who have taken on the previous work of [Greg Chu](https://github.com/gregchu6), [Juan Rodgers](https://github.com/rodgersjuan), and [Choon Kiat Lee](https://github.com/choonkiatlee).
 
 The development of the project is supervised by Alexandre Kabla ([University of Cambridge](https://www.cam.ac.uk), [Engineering Department](http://www.eng.cam.ac.uk/)) and Lara Allen ([Centre for Global Equality](https://centreforglobalequality.org)), in collaboration with Padmaja Ravula and Kavitha Kasala ([ICRISAT](https://www.icrisat.org/)). The project received support from [TIGR2ESS](https://www.globalfood.cam.ac.uk/keyprogs/TIGR2ESS).
 
