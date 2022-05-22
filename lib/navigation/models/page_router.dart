@@ -20,6 +20,7 @@ class PageRouter {
   static const chooseRecipe = '/chooserecipe';
   static const finishCollection = '/finishcollection';
   static const collectionsHelp = '/collectionshelp';
+  static const recipesHelp = '/recipeshelp';
   static const settingsHelp = '/settingshelp';
 
   static Route route(RouteSettings routeSettings) {
@@ -65,10 +66,12 @@ class PageRouter {
             foodItemDescription: args['foodItemDescription']));
       case finishCollection:
         return _buildRoute(const FinishCollectionPage());
-      case settingsHelp:
-        return _buildRoute(const SettingsHelpPage());
       case collectionsHelp:
         return _buildRoute(const CollectionsHelpPage());
+      case recipesHelp:
+        return _buildRoute(const RecipesHelpPage());
+      case settingsHelp:
+        return _buildRoute(const SettingsHelpPage());
       default:
         throw Exception('Page does not exist!');
     }
