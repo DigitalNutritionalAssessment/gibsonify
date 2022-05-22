@@ -56,8 +56,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
         _onIngredientCustomCookingStateChanged);
     on<IngredientMeasurementAdded>(_onIngredientMeasurementAdded);
     on<IngredientMeasurementDeleted>(_onIngredientMeasurementDeleted);
-    on<IngredientMeasurementMethodChanged>(
-        _onIngredientMeasurementMethodChanged);
+    on<IngredientMeasurementMethodChangedOthersNulled>(
+        _onIngredientMeasurementMethodChangedOthersNulled);
     on<IngredientMeasurementUnitChanged>(_onIngredientMeasurementUnitChanged);
     on<IngredientMeasurementValueChanged>(_onIngredientMeasurementValueChanged);
     on<RecipesSaved>(_onRecipesSaved);
@@ -824,8 +824,9 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     emit(state.copyWith(recipes: recipes));
   }
 
-  void _onIngredientMeasurementMethodChanged(
-      IngredientMeasurementMethodChanged event, Emitter<RecipeState> emit) {
+  void _onIngredientMeasurementMethodChangedOthersNulled(
+      IngredientMeasurementMethodChangedOthersNulled event,
+      Emitter<RecipeState> emit) {
     List<Recipe> recipes = List.from(state.recipes);
     int changedRecipeIndex = recipes.indexOf(event.recipe);
 
@@ -838,8 +839,13 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
         .measurements);
     int changedmeasurementIndex = event.measurementIndex;
 
-    Measurement measurement = measurements[changedmeasurementIndex]
-        .copyWith(measurementMethod: event.measurementMethod);
+    // since copyWith does not allow to null attributes, create new instance and
+    // copy the original id and changed method (thus nulling value and unit)
+    Measurement measurement = Measurement();
+
+    measurement = measurement.copyWith(
+        id: measurements[changedmeasurementIndex].id,
+        measurementMethod: event.measurementMethod);
 
     measurements.removeAt(changedmeasurementIndex);
     measurements.insert(changedmeasurementIndex, measurement);
