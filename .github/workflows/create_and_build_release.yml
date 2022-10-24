@@ -1,0 +1,40 @@
+name: create_and_build_release
+on:
+  push:
+    tags:
+      - "*" # Will trigger for every tag, alternative: 'v*'
+
+jobs:
+  build-release-apk:
+    runs-on: ubuntu-latest
+    name: "Build signed APK and release"
+    steps:
+      - name: Check out
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Prepare signing key
+        run: |
+          echo "$UPLOAD_KEYSTORE" | base64 --decode > android/upload-keystore.jks
+          echo -e "storePassword=${UPLOAD_KEYSTORE_PASSWORD}\nkeyPassword=${UPLOAD_KEYSTORE_PASSWORD}\nkeyAlias=upload\nstoreFile=android/upload-keystore.jks>" > android/key.properties
+        with:
+          upload_keystore: ${{ secrets.ANDROID_UPLOAD_KEYSTORE }}
+          upload_keystore_password: ${{ secrets.ANDROID_UPLOAD_KEYSTORE_PASSWORD }}
+      - name: Build APK
+        - uses: subosito/flutter-action@v2
+          with:
+            flutter-version: '3.0.0'
+            channel: 'stable'
+        - run: flutter pub get
+        - run: flutter test
+        - run: flutter build apk --release
+      - name: Generate APK checksum
+        run: |
+          sha256sum -a 256 build\app\outputs\apk\release\app-release.apk > app-release-checksum.txt
+      - name: Create release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            build\app\outputs\apk\release\app-release.apk
+            app-release-checksum.txt
+        
