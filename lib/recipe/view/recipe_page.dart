@@ -47,7 +47,7 @@ class _RecipePageState extends State<RecipePage> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> _screens = [
+    final List<Widget> screens = [
       RecipeProbesScreen(widget.recipeIndex,
           viewedFromCollection: widget.viewedFromCollection,
           assignedFoodItemId: widget.assignedFoodItemId,
@@ -67,7 +67,7 @@ class _RecipePageState extends State<RecipePage> {
     return WillPopScope(
       onWillPop: () => _popRecipePage(context),
       child: Scaffold(
-        body: _screens[selectedScreenIndex()],
+        body: screens[selectedScreenIndex()],
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           currentIndex: selectedScreenIndex(),

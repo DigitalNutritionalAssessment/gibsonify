@@ -158,9 +158,15 @@ class RespondentTelInfoInput extends StatelessWidget {
   }
 }
 
-class SensitizationDateInput extends StatelessWidget {
+// Needs to be a StatefulWidget to check `mounted` property
+class SensitizationDateInput extends StatefulWidget {
   const SensitizationDateInput({Key? key}) : super(key: key);
 
+  @override
+  State<SensitizationDateInput> createState() => _SensitizationDateInputState();
+}
+
+class _SensitizationDateInputState extends State<SensitizationDateInput> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CollectionBloc, CollectionState>(
@@ -187,6 +193,7 @@ class SensitizationDateInput extends StatelessWidget {
                 lastDate: DateTime.now());
             var formattedDate =
                 date == null ? '' : DateFormat('yyyy-MM-dd').format(date);
+            if (!mounted) return; // to avoid using BuildContext asynchronously
             context.read<CollectionBloc>().add(
                 SensitizationDateChanged(sensitizationDate: formattedDate));
           },
@@ -242,9 +249,14 @@ class RecallDayInput extends StatelessWidget {
   }
 }
 
-class InterviewDateInput extends StatelessWidget {
+class InterviewDateInput extends StatefulWidget {
   const InterviewDateInput({Key? key}) : super(key: key);
 
+  @override
+  State<InterviewDateInput> createState() => _InterviewDateInputState();
+}
+
+class _InterviewDateInputState extends State<InterviewDateInput> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CollectionBloc, CollectionState>(
@@ -270,6 +282,7 @@ class InterviewDateInput extends StatelessWidget {
                 initialDate: DateTime.now(),
                 firstDate: DateTime(1900),
                 lastDate: DateTime.now());
+            if (!mounted) return;
             var formattedDate =
                 date == null ? '' : DateFormat('yyyy-MM-dd').format(date);
             context
@@ -282,9 +295,15 @@ class InterviewDateInput extends StatelessWidget {
   }
 }
 
-class InterviewStartTimeInput extends StatelessWidget {
+class InterviewStartTimeInput extends StatefulWidget {
   const InterviewStartTimeInput({Key? key}) : super(key: key);
 
+  @override
+  State<InterviewStartTimeInput> createState() =>
+      _InterviewStartTimeInputState();
+}
+
+class _InterviewStartTimeInputState extends State<InterviewStartTimeInput> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CollectionBloc, CollectionState>(
@@ -306,6 +325,7 @@ class InterviewStartTimeInput extends StatelessWidget {
           onTap: () async {
             var time = await showTimePicker(
                 context: context, initialTime: TimeOfDay.now());
+            if (!mounted) return;
             var formattedTime = time?.format(context);
             context.read<CollectionBloc>().add(InterviewStartTimeChanged(
                 interviewStartTime: formattedTime ?? ''));

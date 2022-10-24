@@ -9,7 +9,7 @@ class CollectionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> _screens = [
+    final List<Widget> screens = [
       const SensitizationScreen(),
       const FirstPassScreen(),
       const SecondPassScreen(),
@@ -32,7 +32,7 @@ class CollectionPage extends StatelessWidget {
       child: BlocBuilder<CollectionBloc, CollectionState>(
         builder: (context, state) {
           return Scaffold(
-            body: _screens[state.selectedScreenIndex()],
+            body: screens[state.selectedScreenIndex()],
             bottomNavigationBar: BottomNavigationBar(
               type: BottomNavigationBarType.fixed,
               currentIndex: state.selectedScreenIndex(),

@@ -158,9 +158,14 @@ class PictureChartNotCollectedReason extends StatelessWidget {
   }
 }
 
-class InterviewEndTimeInput extends StatelessWidget {
+class InterviewEndTimeInput extends StatefulWidget {
   const InterviewEndTimeInput({Key? key}) : super(key: key);
 
+  @override
+  State<InterviewEndTimeInput> createState() => _InterviewEndTimeInputState();
+}
+
+class _InterviewEndTimeInputState extends State<InterviewEndTimeInput> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CollectionBloc, CollectionState>(
@@ -182,6 +187,7 @@ class InterviewEndTimeInput extends StatelessWidget {
           onTap: () async {
             var time = await showTimePicker(
                 context: context, initialTime: TimeOfDay.now());
+            if (!mounted) return;
             var formattedTime = time?.format(context);
             context.read<CollectionBloc>().add(
                 InterviewEndTimeChanged(interviewEndTime: formattedTime ?? ''));
@@ -229,9 +235,16 @@ class InterviewFinishedInOneVisitInput extends StatelessWidget {
   }
 }
 
-class SecondInterviewVisitDateInput extends StatelessWidget {
+class SecondInterviewVisitDateInput extends StatefulWidget {
   const SecondInterviewVisitDateInput({Key? key}) : super(key: key);
 
+  @override
+  State<SecondInterviewVisitDateInput> createState() =>
+      _SecondInterviewVisitDateInputState();
+}
+
+class _SecondInterviewVisitDateInputState
+    extends State<SecondInterviewVisitDateInput> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CollectionBloc, CollectionState>(
@@ -261,6 +274,7 @@ class SecondInterviewVisitDateInput extends StatelessWidget {
                   initialDate: DateTime.now(),
                   firstDate: DateTime(1900),
                   lastDate: DateTime.now());
+              if (!mounted) return;
               var formattedDate =
                   date == null ? '' : DateFormat('yyyy-MM-dd').format(date);
               context.read<CollectionBloc>().add(

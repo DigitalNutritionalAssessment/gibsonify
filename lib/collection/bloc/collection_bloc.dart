@@ -168,7 +168,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
           timeLimit: const Duration(seconds: 45));
 
       geoLocationFormatted =
-          position.latitude.toString() + ', ' + position.longitude.toString();
+          '${position.latitude.toString()}, ${position.longitude.toString()}';
     } catch (e) {
       emit(state.copyWith(
           geoLocationStatus: GeoLocationStatus.locationTimedOut));
@@ -575,8 +575,9 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
           state.gibsonsForm.copyWith(foodItems: foodItems);
       emit(state.copyWith(gibsonsForm: changedGibsonsForm));
     } else {
-      // TODO: handle item not found case
-      print('food item not found!'); // TODO: delete
+      // TODO: refactor this
+      addError(
+          Exception('No food item with given ID found!'), StackTrace.current);
       emit(state);
     }
   }
@@ -611,7 +612,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
       GibsonsFormDuplicated event, Emitter<CollectionState> emit) async {
     final respondentNameAndCopyText = event.gibsonsForm.respondentName == null
         ? 'Unnamed respondent copy'
-        : event.gibsonsForm.respondentName! + ' copy';
+        : '${event.gibsonsForm.respondentName!} copy';
     GibsonsForm gibsonsFormDuplicated = event.gibsonsForm.copyWith(
         id: const Uuid().v4(),
         employeeNumber: event.employeeNumber,

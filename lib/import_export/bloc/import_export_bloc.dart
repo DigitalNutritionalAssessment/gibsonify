@@ -57,10 +57,9 @@ class ImportExportBloc extends Bloc<ImportExportEvent, ImportExportState> {
         String downloadsPath = '/storage/emulated/0/Download';
 
         var collectionFilePath =
-            downloadsPath + '/collection-data-$currentDateTime.csv';
+            '$downloadsPath/collection-data-$currentDateTime.csv';
 
-        var recipeFilePath =
-            downloadsPath + '/recipe-data-$currentDateTime.csv';
+        var recipeFilePath = '$downloadsPath/recipe-data-$currentDateTime.csv';
 
         var collectionFile = File(collectionFilePath);
         collectionFile.writeAsString(finishedGibsonsFormsCsv);
@@ -113,11 +112,11 @@ class ImportExportBloc extends Bloc<ImportExportEvent, ImportExportState> {
       String currentDateTime =
           DateFormat("yyyy-MM-dd-HH-mm-ss").format(DateTime.now());
 
-      var collectionFilePath = applicationDocumentsDirectory.path +
-          '/collection-data-$currentDateTime.csv';
+      var collectionFilePath =
+          '${applicationDocumentsDirectory.path}/collection-data-$currentDateTime.csv';
 
-      var recipeFilePath = applicationDocumentsDirectory.path +
-          '/recipe-data-$currentDateTime.csv';
+      var recipeFilePath =
+          '${applicationDocumentsDirectory.path}/recipe-data-$currentDateTime.csv';
 
       var collectionFile = File(collectionFilePath);
       collectionFile.writeAsString(finishedGibsonsFormsCsv);
