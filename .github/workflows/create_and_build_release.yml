@@ -19,15 +19,16 @@ jobs:
           UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_UPLOAD_KEYSTORE_PASSWORD }}
         run: |
           echo "$UPLOAD_KEYSTORE" | base64 --decode > android/upload-keystore.jks
-          echo -e "storePassword=${UPLOAD_KEYSTORE_PASSWORD}\nkeyPassword=${UPLOAD_KEYSTORE_PASSWORD}\nkeyAlias=upload\nstoreFile=android/upload-keystore.jks>" > android/key.properties
+          echo -e "storePassword=${UPLOAD_KEYSTORE_PASSWORD}\nkeyPassword=${UPLOAD_KEYSTORE_PASSWORD}\nkeyAlias=upload\nstoreFile=android/upload-keystore.jks" > android/key.properties
       - name: Build APK
-        - uses: subosito/flutter-action@v2
-          with:
-            flutter-version: '3.0.0'
-            channel: 'stable'
-        - run: flutter pub get
-        - run: flutter test
-        - run: flutter build apk --release
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.0.0'
+          channel: 'stable'
+        run: |
+          flutter pub get
+          flutter test
+          flutter build apk --release
       - name: Generate APK checksum
         run: |
           sha256sum -a 256 build\app\outputs\apk\release\app-release.apk > app-release-checksum.txt
