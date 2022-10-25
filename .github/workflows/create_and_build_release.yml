@@ -17,7 +17,7 @@ jobs:
         run: |
           echo "$UPLOAD_KEYSTORE" | base64 --decode > android/upload-keystore.jks
           echo -e "storePassword=${UPLOAD_KEYSTORE_PASSWORD}\nkeyPassword=${UPLOAD_KEYSTORE_PASSWORD}\nkeyAlias=upload\nstoreFile=android/upload-keystore.jks>" > android/key.properties
-        with:
+        env:
           upload_keystore: ${{ secrets.ANDROID_UPLOAD_KEYSTORE }}
           upload_keystore_password: ${{ secrets.ANDROID_UPLOAD_KEYSTORE_PASSWORD }}
       - name: Build APK
