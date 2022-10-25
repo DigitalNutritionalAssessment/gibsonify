@@ -1,5 +1,7 @@
 name: bump_release_version
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    branches: main
 
 jobs:
   bump-version-commitizen:
