@@ -20,11 +20,12 @@ jobs:
         run: |
           echo "$UPLOAD_KEYSTORE" | base64 --decode > android/upload-keystore.jks
           echo -e "storePassword=${UPLOAD_KEYSTORE_PASSWORD}\nkeyPassword=${UPLOAD_KEYSTORE_PASSWORD}\nkeyAlias=upload\nstoreFile=android/upload-keystore.jks" > android/key.properties
-      - name: Build APK
+      - name: Setup Flutter environment
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.0.0'
           channel: 'stable'
+      - name: Build release APK
         run: |
           flutter pub get
           flutter test
