@@ -20,7 +20,7 @@ class CollectionPage extends StatelessWidget {
     /// Custom pop function used in `WillPopScope`'s `onWillPop` argument in
     /// `CollectionPage` to override the Android Back button and swipe gesture
     /// to save current Collection and reload all Collections to `HomeBloc`.
-    Future<bool> _popCollectionPage(BuildContext context) async {
+    Future<bool> popCollectionPage(BuildContext context) async {
       context.read<CollectionBloc>().add(const GibsonsFormSaved());
       context.read<HomeBloc>().add(const GibsonsFormsLoaded());
       Navigator.of(context).pop(true);
@@ -28,7 +28,7 @@ class CollectionPage extends StatelessWidget {
     }
 
     return WillPopScope(
-      onWillPop: () => _popCollectionPage(context),
+      onWillPop: () => popCollectionPage(context),
       child: BlocBuilder<CollectionBloc, CollectionState>(
         builder: (context, state) {
           return Scaffold(
