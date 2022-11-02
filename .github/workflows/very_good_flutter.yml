@@ -1,9 +1,9 @@
-name: gibsonify_very_good
+name: very_good_flutter
 on: pull_request
 
 jobs:
-  build:
+  very_good_flutter:
     uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
     with:
-      flutter_version: 3.0.0 # defaults to latest version
+      flutter_version: 3.3.7 # defaults to latest version
       min_coverage: 1 # test coverage in percent
