@@ -1,0 +1,53 @@
+name: create_and_build_release
+on:
+  create:
+    tags:
+      - "*" # Will trigger for every tag, alternative: 'v*'
+
+jobs:
+  build-release-apk:
+    runs-on: ubuntu-latest
+    name: "Build signed APK and release"
+    steps:
+      - name: Check out
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Setup Flutter environment
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.0.0'
+          channel: 'stable'
+      - name: Set up Python
+        uses: actions/setup-python@v2
+      - name: Install Commitizen
+        run: |
+          python -m pip install Commitizen
+      - name: Prepare signing key
+        env:
+          UPLOAD_KEYSTORE: ${{ secrets.ANDROID_UPLOAD_KEYSTORE }}
+          UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_UPLOAD_KEYSTORE_PASSWORD }}
+        run: |
+          echo "$UPLOAD_KEYSTORE" | base64 --decode > android/app/upload-keystore.jks
+          echo -e "storePassword=${UPLOAD_KEYSTORE_PASSWORD}\nkeyPassword=${UPLOAD_KEYSTORE_PASSWORD}\nkeyAlias=gibsonify_key\nstoreFile=upload-keystore.jks" > android/key.properties
+      - name: Build release APK
+        run: |
+          flutter build apk --release --build-number $(git tag | wc -l)
+      - name: Build release app bundle
+        run: |
+          flutter build appbundle --release --build-number $(git tag | wc -l)
+      - name: Generate checksums
+        run: |
+          sha256sum build/app/outputs/apk/release/app-release.apk build/app/outputs/bundle/release/app-release.aab > checksums.txt
+      - name: Generate incremental changelog
+        run: |
+          cz changelog --dry-run --start-rev $(git tag --sort=creatordate | sed -n 'x;$p') > INCREMENTAL.md
+      - name: Create release
+        uses: softprops/action-gh-release@v1
+        with:
+          body_path: INCREMENTAL.md
+          files: |
+            build/app/outputs/apk/release/app-release.apk
+            build/app/outputs/bundle/release/app-release.aab
+            checksums.txt
+        
