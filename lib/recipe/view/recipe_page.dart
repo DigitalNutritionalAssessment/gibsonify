@@ -58,14 +58,14 @@ class _RecipePageState extends State<RecipePage> {
           assignedFoodItemId: widget.assignedFoodItemId),
     ];
 
-    Future<bool> _popRecipePage(BuildContext context) async {
+    Future<bool> popRecipePage(BuildContext context) async {
       context.read<RecipeBloc>().add(const RecipesSaved());
       Navigator.of(context).pop(true);
       return true;
     }
 
     return WillPopScope(
-      onWillPop: () => _popRecipePage(context),
+      onWillPop: () => popRecipePage(context),
       child: Scaffold(
         body: screens[selectedScreenIndex()],
         bottomNavigationBar: BottomNavigationBar(

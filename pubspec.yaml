@@ -29,6 +29,7 @@ dependencies:
   file_picker: ^4.4.0
   csv: ^5.0.1
   permission_handler: ^9.2.0
+  cross_file: ^0.3.3
 
 dev_dependencies:
   test: ^1.21.1

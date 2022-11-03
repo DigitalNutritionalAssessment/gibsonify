@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:cross_file/cross_file.dart';
 import 'package:equatable/equatable.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart';
@@ -123,7 +124,8 @@ class ImportExportBloc extends Bloc<ImportExportEvent, ImportExportState> {
 
       var recipeFile = File(recipeFilePath);
       recipeFile.writeAsString(recipesCsv);
-      await Share.shareFiles([collectionFilePath, recipeFilePath])
+      await Share.shareXFiles(
+              [XFile(collectionFilePath), XFile(recipeFilePath)])
           // TODO: fix the then() block being executed before share dialog closes
           // maybe with a whenComplete() ???
           .then((value) {
