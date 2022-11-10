@@ -166,10 +166,9 @@ class ProbeList extends StatelessWidget {
                                     child: DropdownSearch<String>(
                                         popupProps: const PopupProps.menu(
                                             showSelectedItems: true,
-                                            fit: FlexFit.loose,
-                                            menuProps: MenuProps(
-                                                constraints:
-                                                    BoxConstraints.tightFor())),
+                                            fit: FlexFit.loose,constraints:
+                                                    BoxConstraints.tightFor(),
+                                            ),
                                         items: state
                                             .recipes[recipeIndex].probes[index]
                                             .optionsList(),

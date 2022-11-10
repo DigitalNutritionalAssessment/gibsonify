@@ -65,22 +65,24 @@ class FirstPassFoodItemCard extends StatelessWidget {
                   textInputAction: TextInputAction.next),
               DropdownSearch<String>(
                   popupProps: const PopupProps.menu(
-                      showSelectedItems: true,
-                      fit: FlexFit.loose,
-                      menuProps:
-                          MenuProps(constraints: BoxConstraints.tightFor())),
-                  dropdownSearchDecoration: InputDecoration(
-                      icon: const Icon(Icons.access_time),
-                      labelText: 'Time period',
-                      helperText:
-                          'Time period of consuming the food e.g. Morning',
-                      // TODO: the errorText should be displayed if nothing is chosen
-                      // so investigate how this can be achieved with focusnodes or
-                      // maybe send an empty string (although that would not work all
-                      // the time), currently errorText is never displayed
-                      errorText: isFieldModifiedAndEmpty(foodItem.timePeriod)
-                          ? 'Select a time period'
-                          : null),
+                    showSelectedItems: true,
+                    fit: FlexFit.loose,
+                    constraints: BoxConstraints.tightFor(),
+                  ),
+                  dropdownDecoratorProps: DropDownDecoratorProps(
+                    dropdownSearchDecoration: InputDecoration(
+                        icon: const Icon(Icons.access_time),
+                        labelText: 'Time period',
+                        helperText:
+                            'Time period of consuming the food e.g. Morning',
+                        // TODO: the errorText should be displayed if nothing is chosen
+                        // so investigate how this can be achieved with focusnodes or
+                        // maybe send an empty string (although that would not work all
+                        // the time), currently errorText is never displayed
+                        errorText: isFieldModifiedAndEmpty(foodItem.timePeriod)
+                            ? 'Select a time period'
+                            : null),
+                  ),
                   items: timePeriods,
                   onChanged: (String? timePeriod) =>
                       onTimePeriodChanged!(timePeriod ?? ''),

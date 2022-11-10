@@ -225,20 +225,22 @@ class RecallDayInput extends StatelessWidget {
                 showSelectedItems: true,
                 // FlexFit.loose and BoxConstraints.tightFor() give dynamic size
                 fit: FlexFit.loose,
-                menuProps: MenuProps(constraints: BoxConstraints.tightFor())),
-            dropdownSearchDecoration: InputDecoration(
-                icon: const Icon(Icons.food_bank_outlined),
-                labelText: "Recall Day",
-                helperText: 'Type of the recall day',
-                // TODO: the errorText should be displayed if nothing is chosen
-                // so investigate how this can be achieved with focusnodes or
-                // maybe send an empty string (although that would not work all
-                // the time), currently the errorText is never shown
-                errorText: isFieldModifiedAndInvalid(
-                        state.gibsonsForm.recallDay,
-                        state.gibsonsForm.isRecallDayValid)
-                    ? 'Select recall day type'
-                    : null),
+                constraints: BoxConstraints.tightFor()),
+            dropdownDecoratorProps: DropDownDecoratorProps(
+              dropdownSearchDecoration: InputDecoration(
+                  icon: const Icon(Icons.food_bank_outlined),
+                  labelText: "Recall Day",
+                  helperText: 'Type of the recall day',
+                  // TODO: the errorText should be displayed if nothing is chosen
+                  // so investigate how this can be achieved with focusnodes or
+                  // maybe send an empty string (although that would not work all
+                  // the time), currently the errorText is never shown
+                  errorText: isFieldModifiedAndInvalid(
+                          state.gibsonsForm.recallDay,
+                          state.gibsonsForm.isRecallDayValid)
+                      ? 'Select recall day type'
+                      : null),
+            ),
             items: recallDayTypes,
             onChanged: (String? recallDayType) => context
                 .read<CollectionBloc>()

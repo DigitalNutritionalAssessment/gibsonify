@@ -27,18 +27,20 @@ class MeasurementCard extends StatelessWidget {
               popupProps: const PopupProps.menu(
                   showSelectedItems: true,
                   fit: FlexFit.loose,
-                  menuProps: MenuProps(constraints: BoxConstraints.tightFor())),
-              dropdownSearchDecoration: InputDecoration(
-                icon: const Icon(Icons.monitor_weight_outlined),
-                labelText: "Measurement method",
-                helperText: 'How the measurement is measured',
-                // TODO: the errorText should be displayed if nothing is chosen
-                // so investigate how this can be achieved with focusnodes or
-                // mayge send an empty string (although that would not work all
-                // the time)
-                errorText: !measurement.isMethodValid()
-                    ? 'Enter a measurement method'
-                    : null,
+                  constraints: BoxConstraints.tightFor()),
+              dropdownDecoratorProps: DropDownDecoratorProps(
+                dropdownSearchDecoration: InputDecoration(
+                  icon: const Icon(Icons.monitor_weight_outlined),
+                  labelText: "Measurement method",
+                  helperText: 'How the measurement is measured',
+                  // TODO: the errorText should be displayed if nothing is chosen
+                  // so investigate how this can be achieved with focusnodes or
+                  // mayge send an empty string (although that would not work all
+                  // the time)
+                  errorText: !measurement.isMethodValid()
+                      ? 'Enter a measurement method'
+                      : null,
+                ),
               ),
               items: Measurement.measurementMethods,
               onChanged: (String? measurementMethod) {
@@ -54,18 +56,20 @@ class MeasurementCard extends StatelessWidget {
               popupProps: const PopupProps.menu(
                   showSelectedItems: true,
                   fit: FlexFit.loose,
-                  menuProps: MenuProps(constraints: BoxConstraints.tightFor())),
-              dropdownSearchDecoration: InputDecoration(
-                icon: const Icon(Icons.radio_button_unchecked_outlined),
-                labelText: "Measurement unit",
-                helperText: 'The size of each measurement value',
-                // TODO: the errorText should be displayed if nothing is chosen
-                // so investigate how this can be achieved with focusnodes or
-                // mayge send an empty string (although that would not work all
-                // the time)
-                errorText: !measurement.isUnitValid()
-                    ? 'Select the measurement unit'
-                    : null,
+                  constraints: BoxConstraints.tightFor()),
+              dropdownDecoratorProps: DropDownDecoratorProps(
+                dropdownSearchDecoration: InputDecoration(
+                  icon: const Icon(Icons.radio_button_unchecked_outlined),
+                  labelText: "Measurement unit",
+                  helperText: 'The size of each measurement value',
+                  // TODO: the errorText should be displayed if nothing is chosen
+                  // so investigate how this can be achieved with focusnodes or
+                  // mayge send an empty string (although that would not work all
+                  // the time)
+                  errorText: !measurement.isUnitValid()
+                      ? 'Select the measurement unit'
+                      : null,
+                ),
               ),
               items: measurement.getMeasurementUnitsForMethod(),
               onChanged: (String? measurementUnit) =>
