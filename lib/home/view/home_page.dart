@@ -13,7 +13,7 @@ class HomePageState extends State<HomePage> {
   int _selectedScreenIndex = 0;
 
   final List<Widget> _screens = [
-    const CollectionsScreen(),
+    const HouseholdsScreen(),
     const RecipesScreen(viewedFromCollection: false),
     const SyncScreen(),
     const SettingsScreen(),
@@ -29,8 +29,8 @@ class HomePageState extends State<HomePage> {
         onTap: _onScreenSelected,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.description),
-            label: 'Collections',
+            icon: Icon(Icons.cottage),
+            label: 'Households',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.menu_book),

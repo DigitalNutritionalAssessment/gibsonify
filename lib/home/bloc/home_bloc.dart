@@ -9,10 +9,13 @@ part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final GibsonifyRepository _gibsonifyRepository;
+  final IsarRepository _isarRepository;
 
   HomeBloc({
     required GibsonifyRepository gibsonifyRepository,
+    required IsarRepository isarRepository,
   })  : _gibsonifyRepository = gibsonifyRepository,
+        _isarRepository = isarRepository,
         super(const HomeState()) {
     // TODO: implement a subscription to a stream of GibsonsForms
     on<GibsonsFormsLoaded>(_onGibsonsFormsLoaded);
@@ -22,7 +25,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   void _onGibsonsFormsLoaded(
       GibsonsFormsLoaded event, Emitter<HomeState> emit) async {
     List<GibsonsForm?> gibsonsFormsLoaded = _gibsonifyRepository.loadForms();
-    emit(state.copyWith(gibsonsForms: gibsonsFormsLoaded));
+    final households = await _isarRepository.readHouseholds();
+    emit(state.copyWith(
+        gibsonsForms: gibsonsFormsLoaded, households: households));
   }
 
   void _onGibsonsFormDeleted(

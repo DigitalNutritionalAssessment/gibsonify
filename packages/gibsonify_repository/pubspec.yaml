@@ -10,6 +10,8 @@ environment:
 dependencies:
   gibsonify_api:
     path: ../gibsonify_api
+  isar: ^3.0.4
+  isar_flutter_libs: ^3.0.4
 #   path: ^1.8.0
 
 dev_dependencies:

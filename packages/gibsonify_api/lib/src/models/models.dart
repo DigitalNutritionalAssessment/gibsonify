@@ -5,3 +5,5 @@ export 'recipe_ingredient.dart';
 export 'recipe_probe.dart';
 export 'recipe.dart';
 export 'login_info.dart';
+export 'household.dart';
+export 'respondent.dart';

@@ -12,13 +12,22 @@ import 'package:gibsonify/import_export/import_export.dart';
 
 class App extends StatelessWidget {
   final GibsonifyRepository gibsonifyRepository;
+  final IsarRepository isarRepository;
 
-  const App({Key? key, required this.gibsonifyRepository}) : super(key: key);
+  const App(
+      {Key? key,
+      required this.gibsonifyRepository,
+      required this.isarRepository})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider.value(
-      value: gibsonifyRepository,
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<GibsonifyRepository>(
+            create: (context) => gibsonifyRepository),
+        RepositoryProvider<IsarRepository>(create: (context) => isarRepository)
+      ],
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
@@ -40,6 +49,7 @@ class App extends StatelessWidget {
           BlocProvider(
               create: (context) => HomeBloc(
                     gibsonifyRepository: gibsonifyRepository,
+                    isarRepository: isarRepository,
                   )..add(const GibsonsFormsLoaded())),
           BlocProvider(
               create: (context) =>

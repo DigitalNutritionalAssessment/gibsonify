@@ -14,6 +14,9 @@ void main() async {
       GibsonifyApi(sharedPreferences: await SharedPreferences.getInstance());
 
   final gibsonifyRepository = GibsonifyRepository(gibsonifyApi: gibsonifyApi);
+  final isarRepository = await IsarRepository.create();
 
-  runApp(App(gibsonifyRepository: gibsonifyRepository));
+  runApp(App(
+      gibsonifyRepository: gibsonifyRepository,
+      isarRepository: isarRepository));
 }
