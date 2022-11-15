@@ -32,6 +32,7 @@ dependencies:
   cross_file: ^0.3.3
   isar: ^3.0.4
   isar_flutter_libs: ^3.0.4
+  flutter_form_builder: ^7.7.0
 
 dev_dependencies:
   test: ^1.21.1
