@@ -165,12 +165,12 @@ class ProbeList extends StatelessWidget {
                                     visible: (viewedFromCollection),
                                     child: DropdownSearch<String>(
                                         popupProps: const PopupProps.menu(
-                                            showSelectedItems: true,
-                                            fit: FlexFit.loose,constraints:
-                                                    BoxConstraints.tightFor(),
-                                            ),
-                                        items: state
-                                            .recipes[recipeIndex].probes[index]
+                                          showSelectedItems: true,
+                                          fit: FlexFit.loose,
+                                          constraints:
+                                              BoxConstraints.tightFor(),
+                                        ),
+                                        items: state.recipes[recipeIndex].probes[index]
                                             .optionsList(),
                                         onChanged: (String? answer) => context
                                             .read<RecipeBloc>()
@@ -179,7 +179,11 @@ class ProbeList extends StatelessWidget {
                                                     state.recipes[recipeIndex],
                                                 probeIndex: index,
                                                 answer: answer!)),
-                                        selectedItem: (state.recipes[recipeIndex].probes[index].answer == null ||
+                                        selectedItem: (state
+                                                        .recipes[recipeIndex]
+                                                        .probes[index]
+                                                        .answer ==
+                                                    null ||
                                                 state.recipes[recipeIndex]
                                                         .probes[index].answer ==
                                                     '')
