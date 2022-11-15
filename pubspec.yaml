@@ -4,7 +4,7 @@ publish_to: 'none'
 version: 1.2.0
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.15.0 <3.0.0"
 
 dependencies:
   equatable: ^2.0.3
@@ -14,21 +14,21 @@ dependencies:
   flutter_bloc: ^8.0.1
   intl: ^0.17.0
   uuid: ^3.0.5
-  flutter_slidable: ^1.2.0
+  flutter_slidable: ^2.0.0
   gibsonify_api:
     path: packages/gibsonify_api
   gibsonify_repository:
     path: packages/gibsonify_repository
-  geolocator: ^8.0.5
-  dropdown_search: ^4.0.1
+  geolocator: ^9.0.2
+  dropdown_search: ^5.0.3
   intl_phone_field: ^3.0.1
-  share_plus: ^4.0.4
+  share_plus: ^6.2.0
   path_provider: ^2.0.9
-  package_info_plus: ^1.4.0
+  package_info_plus: ^3.0.1
   url_launcher: ^6.0.20
-  file_picker: ^4.4.0
+  file_picker: ^5.2.2
   csv: ^5.0.1
-  permission_handler: ^9.2.0
+  permission_handler: ^10.2.0
   cross_file: ^0.3.3
 
 dev_dependencies:
@@ -36,7 +36,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   change_app_package_name: ^1.0.0
-  flutter_launcher_icons: ^0.9.2
+  flutter_launcher_icons: ^0.10.0
   bloc_test: ^9.0.2
   mocktail: ^0.3.0
   # TODO mocktail: ^0.1.4 or mockito???

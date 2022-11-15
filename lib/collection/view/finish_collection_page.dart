@@ -97,22 +97,25 @@ class PictureChartCollectedInput extends StatelessWidget {
       builder: (context, state) {
         return DropdownSearch<String>(
             popupProps: const PopupProps.menu(
-                showSelectedItems: true,
-                fit: FlexFit.loose,
-                menuProps: MenuProps(constraints: BoxConstraints.tightFor())),
-            dropdownSearchDecoration: InputDecoration(
-                icon: const Icon(Icons.photo_size_select_actual_rounded),
-                labelText: 'Is picture chart collected',
-                helperText: 'Have you collected the picture chart?',
-                // TODO: the errorText should be displayed if nothing is chosen
-                // so investigate how this can be achieved with focusnodes or
-                // maybe send an empty string (although that would not work all
-                // the time), currently no errorText is shown
-                errorText: isFieldModifiedAndInvalid(
-                        state.gibsonsForm.pictureChartCollected,
-                        state.gibsonsForm.isPictureChartCollectedValid)
-                    ? 'Select if you collected the picture chart'
-                    : null),
+              showSelectedItems: true,
+              fit: FlexFit.loose,
+              constraints: BoxConstraints.tightFor(),
+            ),
+            dropdownDecoratorProps: DropDownDecoratorProps(
+              dropdownSearchDecoration: InputDecoration(
+                  icon: const Icon(Icons.photo_size_select_actual_rounded),
+                  labelText: 'Is picture chart collected',
+                  helperText: 'Have you collected the picture chart?',
+                  // TODO: the errorText should be displayed if nothing is chosen
+                  // so investigate how this can be achieved with focusnodes or
+                  // maybe send an empty string (although that would not work all
+                  // the time), currently no errorText is shown
+                  errorText: isFieldModifiedAndInvalid(
+                          state.gibsonsForm.pictureChartCollected,
+                          state.gibsonsForm.isPictureChartCollectedValid)
+                      ? 'Select if you collected the picture chart'
+                      : null),
+            ),
             items: const ['Yes', 'No'],
             onChanged: (String? pictureChartCollected) => context
                 .read<CollectionBloc>()
@@ -208,21 +211,23 @@ class InterviewFinishedInOneVisitInput extends StatelessWidget {
         return DropdownSearch<String>(
             popupProps: const PopupProps.menu(
                 showSelectedItems: true,
-                menuProps:
-                    MenuProps(constraints: BoxConstraints(maxHeight: 112.0))),
-            dropdownSearchDecoration: InputDecoration(
-                icon: const Icon(Icons.calendar_today),
-                labelText: 'Was the interview finished in one visit',
-                helperText: 'Have you finished the interview in a single visit',
-                // TODO: the errorText should be displayed if nothing is chosen
-                // so investigate how this can be achieved with focusnodes or
-                // maybe send an empty string (although that would not work all
-                // the time), currently no errorText is shown
-                errorText: isFieldModifiedAndInvalid(
-                        state.gibsonsForm.interviewFinishedInOneVisit,
-                        state.gibsonsForm.isInterviewFinishedInOneVisitValid)
-                    ? 'Select if you finished the interview in one visit'
-                    : null),
+                constraints: BoxConstraints(maxHeight: 112.0)),
+            dropdownDecoratorProps: DropDownDecoratorProps(
+              dropdownSearchDecoration: InputDecoration(
+                  icon: const Icon(Icons.calendar_today),
+                  labelText: 'Was the interview finished in one visit',
+                  helperText:
+                      'Have you finished the interview in a single visit',
+                  // TODO: the errorText should be displayed if nothing is chosen
+                  // so investigate how this can be achieved with focusnodes or
+                  // maybe send an empty string (although that would not work all
+                  // the time), currently no errorText is shown
+                  errorText: isFieldModifiedAndInvalid(
+                          state.gibsonsForm.interviewFinishedInOneVisit,
+                          state.gibsonsForm.isInterviewFinishedInOneVisitValid)
+                      ? 'Select if you finished the interview in one visit'
+                      : null),
+            ),
             items: const ['Yes', 'No'],
             onChanged: (String? interviewFinishedInOneVisit) => context
                 .read<CollectionBloc>()
@@ -339,21 +344,21 @@ class InterviewOutcomeInput extends StatelessWidget {
         return DropdownSearch<String>(
             popupProps: const PopupProps.menu(
                 showSelectedItems: true,
-                menuProps:
-                    MenuProps(constraints: BoxConstraints(maxHeight: 280.0))),
-            dropdownSearchDecoration: InputDecoration(
-                icon: const Icon(Icons.format_indent_increase_sharp),
-                labelText: 'Interview outcome',
-                helperText: 'Final result of the interview',
-                // TODO: the errorText should be displayed if nothing is chosen
-                // so investigate how this can be achieved with focusnodes or
-                // maybe send an empty string (although that would not work all
-                // the time), currently errorText is never shown
-                errorText: isFieldModifiedAndInvalid(
-                        state.gibsonsForm.interviewOutcome,
-                        state.gibsonsForm.isInterviewOutcomeValid)
-                    ? 'Select interview outcome'
-                    : null),
+                constraints: BoxConstraints(maxHeight: 280.0)),
+            dropdownDecoratorProps: DropDownDecoratorProps(
+                dropdownSearchDecoration: InputDecoration(
+                    icon: const Icon(Icons.format_indent_increase_sharp),
+                    labelText: 'Interview outcome',
+                    helperText: 'Final result of the interview',
+                    // TODO: the errorText should be displayed if nothing is chosen
+                    // so investigate how this can be achieved with focusnodes or
+                    // maybe send an empty string (although that would not work all
+                    // the time), currently errorText is never shown
+                    errorText: isFieldModifiedAndInvalid(
+                            state.gibsonsForm.interviewOutcome,
+                            state.gibsonsForm.isInterviewOutcomeValid)
+                        ? 'Select interview outcome'
+                        : null)),
             items: interviewOutcomes,
             onChanged: (String? interviewOutcome) => context
                 .read<CollectionBloc>()

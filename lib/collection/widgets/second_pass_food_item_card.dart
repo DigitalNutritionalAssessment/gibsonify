@@ -66,21 +66,23 @@ class SecondPassFoodItemCard extends StatelessWidget {
                 '$foodItemDisplayName consumed in the $foodItemDisplayTimePeriod'),
             DropdownSearch<String>(
                 popupProps: const PopupProps.menu(
-                    showSelectedItems: true,
-                    fit: FlexFit.loose,
-                    menuProps:
-                        MenuProps(constraints: BoxConstraints.tightFor())),
-                dropdownSearchDecoration: InputDecoration(
-                    icon: const Icon(Icons.kitchen),
-                    labelText: 'Food source',
-                    helperText: 'Where does the food come from',
-                    // TODO: the errorText should be displayed if nothing is chosen
-                    // so investigate how this can be achieved with focusnodes or
-                    // maybe send an empty string (although that would not work all
-                    // the time), currently errorText is never displayed
-                    errorText: isFieldModifiedAndEmpty(foodItem.source)
-                        ? 'Select the food source'
-                        : null),
+                  showSelectedItems: true,
+                  fit: FlexFit.loose,
+                  constraints: BoxConstraints.tightFor(),
+                ),
+                dropdownDecoratorProps: DropDownDecoratorProps(
+                  dropdownSearchDecoration: InputDecoration(
+                      icon: const Icon(Icons.kitchen),
+                      labelText: 'Food source',
+                      helperText: 'Where does the food come from',
+                      // TODO: the errorText should be displayed if nothing is chosen
+                      // so investigate how this can be achieved with focusnodes or
+                      // maybe send an empty string (although that would not work all
+                      // the time), currently errorText is never displayed
+                      errorText: isFieldModifiedAndEmpty(foodItem.source)
+                          ? 'Select the food source'
+                          : null),
+                ),
                 items: foodSources,
                 onChanged: (String? foodSource) =>
                     onSourceChanged!(foodSource!),
@@ -88,23 +90,23 @@ class SecondPassFoodItemCard extends StatelessWidget {
             DropdownSearch<String>(
                 popupProps: const PopupProps.menu(
                     showSelectedItems: true,
-                    menuProps: MenuProps(
-                        constraints:
-                            // Set maxHeight to 645 to indicate slidability
-                            // by cutting the last item in half
-                            BoxConstraints(maxHeight: 645.0))),
-                dropdownSearchDecoration: InputDecoration(
-                    icon: const Icon(Icons.food_bank_rounded),
-                    labelText: 'Form when eaten',
-                    helperText: 'The preparation method of the food',
-                    // TODO: the errorText should be displayed if nothing is chosen
-                    // so investigate how this can be achieved with focusnodes or
-                    // maybe send an empty string (although that would not work all
-                    // the time), currently errorText is never displayed
-                    errorText:
-                        isFieldModifiedAndEmpty(foodItem.preparationMethod)
-                            ? 'Select the food\'s preparation method'
-                            : null),
+                    constraints:
+                        // Set maxHeight to 645 to indicate slidability
+                        // by cutting the last item in half
+                        BoxConstraints(maxHeight: 645.0)),
+                dropdownDecoratorProps: DropDownDecoratorProps(
+                    dropdownSearchDecoration: InputDecoration(
+                        icon: const Icon(Icons.food_bank_rounded),
+                        labelText: 'Form when eaten',
+                        helperText: 'The preparation method of the food',
+                        // TODO: the errorText should be displayed if nothing is chosen
+                        // so investigate how this can be achieved with focusnodes or
+                        // maybe send an empty string (although that would not work all
+                        // the time), currently errorText is never displayed
+                        errorText:
+                            isFieldModifiedAndEmpty(foodItem.preparationMethod)
+                                ? 'Select the food\'s preparation method'
+                                : null)),
                 items: preparationMethods,
                 onChanged: (String? preparationMethod) =>
                     onPreparationMethodChanged!(preparationMethod!),

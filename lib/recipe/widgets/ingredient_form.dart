@@ -49,10 +49,12 @@ class IngredientForm extends StatelessWidget {
                         showSelectedItems: true,
                         showSearchBox: true,
                       ),
-                      dropdownSearchDecoration: const InputDecoration(
-                        icon: Icon(Icons.set_meal_rounded),
-                        labelText: 'Ingredient name',
-                        helperText: 'Ingredient name e.g. Potato',
+                      dropdownDecoratorProps: const DropDownDecoratorProps(
+                        dropdownSearchDecoration: InputDecoration(
+                          icon: Icon(Icons.set_meal_rounded),
+                          labelText: 'Ingredient name',
+                          helperText: 'Ingredient name e.g. Potato',
+                        ),
                       ),
                       enabled: (state.ingredientsJson != null),
                       items: (state.ingredientsJson != null)
@@ -124,13 +126,15 @@ class IngredientForm extends StatelessWidget {
                   ),
                   DropdownSearch<String>(
                       popupProps: const PopupProps.menu(
-                          showSelectedItems: true,
-                          menuProps: MenuProps(
-                              constraints: BoxConstraints(maxHeight: 645.0))),
-                      dropdownSearchDecoration: const InputDecoration(
-                        icon: Icon(Icons.food_bank_rounded),
-                        labelText: "Cooking state",
-                        helperText: 'How the ingredient is prepared',
+                        showSelectedItems: true,
+                        constraints: BoxConstraints(maxHeight: 645.0),
+                      ),
+                      dropdownDecoratorProps: const DropDownDecoratorProps(
+                        dropdownSearchDecoration: InputDecoration(
+                          icon: Icon(Icons.food_bank_rounded),
+                          labelText: "Cooking state",
+                          helperText: 'How the ingredient is prepared',
+                        ),
                       ),
                       items: cookingStates,
                       onChanged: (String? answer) => context
