@@ -49,7 +49,10 @@ class HouseholdsScreen extends StatelessWidget {
                         heroTag: null,
                         label: const Text("New household"),
                         icon: const Icon(Icons.add),
-                        onPressed: () {}),
+                        onPressed: () {
+                          Navigator.pushNamed(
+                              context, PageRouter.createHousehold);
+                        }),
                   ]));
         },
       );

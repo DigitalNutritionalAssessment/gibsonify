@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:gibsonify/home/home.dart';
 import 'package:gibsonify/collection/collection.dart';
+import 'package:gibsonify/home/widgets/create_household.dart';
 import 'package:gibsonify/recipe/recipe.dart';
 import 'package:gibsonify/settings/settings.dart';
 import 'package:gibsonify/login/login.dart';
@@ -22,6 +23,7 @@ class PageRouter {
   static const collectionsHelp = '/collectionshelp';
   static const recipesHelp = '/recipeshelp';
   static const settingsHelp = '/settingshelp';
+  static const createHousehold = '/createhousehold';
 
   static Route route(RouteSettings routeSettings) {
     switch (routeSettings.name) {
@@ -72,6 +74,8 @@ class PageRouter {
         return _buildRoute(const RecipesHelpPage());
       case settingsHelp:
         return _buildRoute(const SettingsHelpPage());
+      case createHousehold:
+        return _buildRoute(const CreateHouseholdScreen());
       default:
         throw Exception('Page does not exist!');
     }
