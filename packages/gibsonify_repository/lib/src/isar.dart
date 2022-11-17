@@ -14,4 +14,16 @@ class IsarRepository {
   Future<List<Household>> readHouseholds() async {
     return await isar.households.where().findAll();
   }
+
+  Future<void> saveNewHousehold(Household household) async {
+    await isar.writeTxn(() async {
+      isar.households.put(household);
+    });
+  }
+
+  Future<void> deleteHousehold(int id) async {
+    await isar.writeTxn(() async {
+      isar.households.delete(id);
+    });
+  }
 }

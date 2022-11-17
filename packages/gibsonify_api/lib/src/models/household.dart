@@ -6,9 +6,17 @@ part 'household.g.dart';
 @Collection()
 class Household {
   Id id = Isar.autoIncrement;
-  String householdId = "";
-  String sensitizationDate = "";
-  String geoLocation = "";
-  String comments = "";
-  List<Respondent> respondents = [];
+  @Index(unique: true)
+  final String householdId;
+  final DateTime sensitizationDate;
+  final String geoLocation;
+  final String comments;
+  final List<Respondent> respondents = [];
+
+  Household({
+    required this.householdId,
+    required this.sensitizationDate,
+    required this.geoLocation,
+    required this.comments,
+  });
 }

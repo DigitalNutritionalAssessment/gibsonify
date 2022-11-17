@@ -41,7 +41,7 @@ const HouseholdSchema = CollectionSchema(
     r'sensitizationDate': PropertySchema(
       id: 4,
       name: r'sensitizationDate',
-      type: IsarType.string,
+      type: IsarType.dateTime,
     )
   },
   estimateSize: _householdEstimateSize,
@@ -49,7 +49,21 @@ const HouseholdSchema = CollectionSchema(
   deserialize: _householdDeserialize,
   deserializeProp: _householdDeserializeProp,
   idName: r'id',
-  indexes: {},
+  indexes: {
+    r'householdId': IndexSchema(
+      id: 8941485815717012049,
+      name: r'householdId',
+      unique: true,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'householdId',
+          type: IndexType.hash,
+          caseSensitive: true,
+        )
+      ],
+    )
+  },
   links: {},
   embeddedSchemas: {r'Respondent': RespondentSchema},
   getId: _householdGetId,
@@ -75,7 +89,6 @@ int _householdEstimateSize(
       bytesCount += RespondentSchema.estimateSize(value, offsets, allOffsets);
     }
   }
-  bytesCount += 3 + object.sensitizationDate.length * 3;
   return bytesCount;
 }
 
@@ -94,7 +107,7 @@ void _householdSerialize(
     RespondentSchema.serialize,
     object.respondents,
   );
-  writer.writeString(offsets[4], object.sensitizationDate);
+  writer.writeDateTime(offsets[4], object.sensitizationDate);
 }
 
 Household _householdDeserialize(
@@ -103,19 +116,13 @@ Household _householdDeserialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  final object = Household();
-  object.comments = reader.readString(offsets[0]);
-  object.geoLocation = reader.readString(offsets[1]);
-  object.householdId = reader.readString(offsets[2]);
+  final object = Household(
+    comments: reader.readString(offsets[0]),
+    geoLocation: reader.readString(offsets[1]),
+    householdId: reader.readString(offsets[2]),
+    sensitizationDate: reader.readDateTime(offsets[4]),
+  );
   object.id = id;
-  object.respondents = reader.readObjectList<Respondent>(
-        offsets[3],
-        RespondentSchema.deserialize,
-        allOffsets,
-        Respondent(),
-      ) ??
-      [];
-  object.sensitizationDate = reader.readString(offsets[4]);
   return object;
 }
 
@@ -141,7 +148,7 @@ P _householdDeserializeProp<P>(
           ) ??
           []) as P;
     case 4:
-      return (reader.readString(offset)) as P;
+      return (reader.readDateTime(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -157,6 +164,61 @@ List<IsarLinkBase<dynamic>> _householdGetLinks(Household object) {
 
 void _householdAttach(IsarCollection<dynamic> col, Id id, Household object) {
   object.id = id;
+}
+
+extension HouseholdByIndex on IsarCollection<Household> {
+  Future<Household?> getByHouseholdId(String householdId) {
+    return getByIndex(r'householdId', [householdId]);
+  }
+
+  Household? getByHouseholdIdSync(String householdId) {
+    return getByIndexSync(r'householdId', [householdId]);
+  }
+
+  Future<bool> deleteByHouseholdId(String householdId) {
+    return deleteByIndex(r'householdId', [householdId]);
+  }
+
+  bool deleteByHouseholdIdSync(String householdId) {
+    return deleteByIndexSync(r'householdId', [householdId]);
+  }
+
+  Future<List<Household?>> getAllByHouseholdId(List<String> householdIdValues) {
+    final values = householdIdValues.map((e) => [e]).toList();
+    return getAllByIndex(r'householdId', values);
+  }
+
+  List<Household?> getAllByHouseholdIdSync(List<String> householdIdValues) {
+    final values = householdIdValues.map((e) => [e]).toList();
+    return getAllByIndexSync(r'householdId', values);
+  }
+
+  Future<int> deleteAllByHouseholdId(List<String> householdIdValues) {
+    final values = householdIdValues.map((e) => [e]).toList();
+    return deleteAllByIndex(r'householdId', values);
+  }
+
+  int deleteAllByHouseholdIdSync(List<String> householdIdValues) {
+    final values = householdIdValues.map((e) => [e]).toList();
+    return deleteAllByIndexSync(r'householdId', values);
+  }
+
+  Future<Id> putByHouseholdId(Household object) {
+    return putByIndex(r'householdId', object);
+  }
+
+  Id putByHouseholdIdSync(Household object, {bool saveLinks = true}) {
+    return putByIndexSync(r'householdId', object, saveLinks: saveLinks);
+  }
+
+  Future<List<Id>> putAllByHouseholdId(List<Household> objects) {
+    return putAllByIndex(r'householdId', objects);
+  }
+
+  List<Id> putAllByHouseholdIdSync(List<Household> objects,
+      {bool saveLinks = true}) {
+    return putAllByIndexSync(r'householdId', objects, saveLinks: saveLinks);
+  }
 }
 
 extension HouseholdQueryWhereSort
@@ -232,6 +294,51 @@ extension HouseholdQueryWhere
         upper: upperId,
         includeUpper: includeUpper,
       ));
+    });
+  }
+
+  QueryBuilder<Household, Household, QAfterWhereClause> householdIdEqualTo(
+      String householdId) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'householdId',
+        value: [householdId],
+      ));
+    });
+  }
+
+  QueryBuilder<Household, Household, QAfterWhereClause> householdIdNotEqualTo(
+      String householdId) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'householdId',
+              lower: [],
+              upper: [householdId],
+              includeUpper: false,
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'householdId',
+              lower: [householdId],
+              includeLower: false,
+              upper: [],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'householdId',
+              lower: [householdId],
+              includeLower: false,
+              upper: [],
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'householdId',
+              lower: [],
+              upper: [householdId],
+              includeUpper: false,
+            ));
+      }
     });
   }
 }
@@ -780,58 +887,49 @@ extension HouseholdQueryFilter
   }
 
   QueryBuilder<Household, Household, QAfterFilterCondition>
-      sensitizationDateEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+      sensitizationDateEqualTo(DateTime value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'sensitizationDate',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<Household, Household, QAfterFilterCondition>
       sensitizationDateGreaterThan(
-    String value, {
+    DateTime value, {
     bool include = false,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
         property: r'sensitizationDate',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<Household, Household, QAfterFilterCondition>
       sensitizationDateLessThan(
-    String value, {
+    DateTime value, {
     bool include = false,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
         property: r'sensitizationDate',
         value: value,
-        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<Household, Household, QAfterFilterCondition>
       sensitizationDateBetween(
-    String lower,
-    String upper, {
+    DateTime lower,
+    DateTime upper, {
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -840,77 +938,6 @@ extension HouseholdQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Household, Household, QAfterFilterCondition>
-      sensitizationDateStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'sensitizationDate',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Household, Household, QAfterFilterCondition>
-      sensitizationDateEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'sensitizationDate',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Household, Household, QAfterFilterCondition>
-      sensitizationDateContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'sensitizationDate',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Household, Household, QAfterFilterCondition>
-      sensitizationDateMatches(String pattern, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'sensitizationDate',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Household, Household, QAfterFilterCondition>
-      sensitizationDateIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'sensitizationDate',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Household, Household, QAfterFilterCondition>
-      sensitizationDateIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'sensitizationDate',
-        value: '',
       ));
     });
   }
@@ -1067,11 +1094,9 @@ extension HouseholdQueryWhereDistinct
     });
   }
 
-  QueryBuilder<Household, Household, QDistinct> distinctBySensitizationDate(
-      {bool caseSensitive = true}) {
+  QueryBuilder<Household, Household, QDistinct> distinctBySensitizationDate() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'sensitizationDate',
-          caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'sensitizationDate');
     });
   }
 }
@@ -1109,7 +1134,7 @@ extension HouseholdQueryProperty
     });
   }
 
-  QueryBuilder<Household, String, QQueryOperations>
+  QueryBuilder<Household, DateTime, QQueryOperations>
       sensitizationDateProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'sensitizationDate');

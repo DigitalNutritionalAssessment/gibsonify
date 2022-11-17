@@ -20,6 +20,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     // TODO: implement a subscription to a stream of GibsonsForms
     on<GibsonsFormsLoaded>(_onGibsonsFormsLoaded);
     on<GibsonsFormDeleted>(_onGibsonsFormDeleted);
+    on<SaveNewHousehold>(_onSaveNewHousehold);
+    on<DeleteHousehold>(_onDeleteHousehold);
   }
 
   void _onGibsonsFormsLoaded(
@@ -36,5 +38,24 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     // TODO: Find a more efficient implementation
     List<GibsonsForm?> gibsonsFormsLoaded = _gibsonifyRepository.loadForms();
     emit(state.copyWith(gibsonsForms: gibsonsFormsLoaded));
+  }
+
+  void _onSaveNewHousehold(
+      SaveNewHousehold event, Emitter<HomeState> emit) async {
+    final household = Household(
+      householdId: event.householdId,
+      sensitizationDate: event.sensitizationDate,
+      geoLocation: event.geoLocation,
+      comments: event.comments,
+    );
+
+    await _isarRepository.saveNewHousehold(household);
+    add(const GibsonsFormsLoaded());
+  }
+
+  void _onDeleteHousehold(
+      DeleteHousehold event, Emitter<HomeState> emit) async {
+    await _isarRepository.deleteHousehold(event.id);
+    add(const GibsonsFormsLoaded());
   }
 }
