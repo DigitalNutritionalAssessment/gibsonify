@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gibsonify/home/bloc/home_bloc.dart';
+import 'package:gibsonify/households/bloc/household_bloc.dart';
 
 import 'package:gibsonify_repository/gibsonify_repository.dart';
 
@@ -38,6 +39,9 @@ class App extends StatelessWidget {
           // down the widget tree
           // Or another possibility is to get rid of HomeBloc and move its
           // functionality to CollectionBloc
+          BlocProvider(
+              create: (context) =>
+                  HouseholdBloc(isarRepository: isarRepository)),
           BlocProvider(
               create: (context) =>
                   CollectionBloc(gibsonifyRepository: gibsonifyRepository)),

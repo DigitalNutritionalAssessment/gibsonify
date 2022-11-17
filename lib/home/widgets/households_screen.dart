@@ -38,6 +38,10 @@ class HouseholdsScreen extends StatelessWidget {
                           title: Text(homeState.households[index].householdId),
                           subtitle: Text(formatter.format(
                               homeState.households[index].sensitizationDate)),
+                          onTap: () => Navigator.pushNamed(
+                              context, PageRouter.viewHousehold, arguments: {
+                            'id': homeState.households[index].id
+                          }),
                           onLongPress: () => showModalBottomSheet(
                               context: context,
                               builder: (context) {
