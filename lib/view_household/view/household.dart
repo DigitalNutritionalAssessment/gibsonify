@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gibsonify/household/bloc/household_bloc.dart';
+import 'package:gibsonify/view_household/bloc/household_bloc.dart';
 import 'package:gibsonify_repository/gibsonify_repository.dart';
 import 'package:intl/intl.dart';
 
