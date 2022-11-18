@@ -30,8 +30,8 @@ dependencies:
   csv: ^5.0.1
   permission_handler: ^10.2.0
   cross_file: ^0.3.3
-  isar: ^3.0.4
-  isar_flutter_libs: ^3.0.4
+  isar: ^3.0.5
+  isar_flutter_libs: ^3.0.5
   flutter_form_builder: ^7.7.0
   form_builder_validators: ^8.4.0
 

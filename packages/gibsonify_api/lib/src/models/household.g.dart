@@ -69,7 +69,7 @@ const HouseholdSchema = CollectionSchema(
   getId: _householdGetId,
   getLinks: _householdGetLinks,
   attach: _householdAttach,
-  version: '3.0.4',
+  version: '3.0.5',
 );
 
 int _householdEstimateSize(
