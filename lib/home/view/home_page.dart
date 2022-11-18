@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:gibsonify/home/widgets/widgets.dart';
 
+import '../../households/view/households.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 

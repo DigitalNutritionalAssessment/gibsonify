@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gibsonify/households/bloc/household_bloc.dart';
+import 'package:gibsonify/household/bloc/household_bloc.dart';
 import 'package:intl/intl.dart';
 
 class ViewHouseholdPage extends StatelessWidget {
