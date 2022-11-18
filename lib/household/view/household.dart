@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gibsonify/household/bloc/household_bloc.dart';
+import 'package:gibsonify_repository/gibsonify_repository.dart';
 import 'package:intl/intl.dart';
 
 class ViewHouseholdPage extends StatelessWidget {
@@ -10,27 +11,31 @@ class ViewHouseholdPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HouseholdBloc, HouseholdState>(
-      builder: (context, state) {
-        if (state is HouseholdInitial) {
-          context.read<HouseholdBloc>().add(HouseholdOpened(id: id));
-        }
+    return BlocProvider(
+      create: (context) =>
+          HouseholdBloc(isarRepository: context.read<IsarRepository>()),
+      child: BlocBuilder<HouseholdBloc, HouseholdState>(
+        builder: (context, state) {
+          if (state is HouseholdInitial) {
+            context.read<HouseholdBloc>().add(HouseholdOpened(id: id));
+          }
 
-        return Scaffold(
-          appBar: AppBar(
-            title: state is HouseholdLoaded
-                ? Text(state.household.householdId)
-                : const Text('Household'),
-            actions: [
-              IconButton(onPressed: () => {}, icon: const Icon(Icons.edit))
-            ],
-          ),
-          body: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: householdView(context, state),
-          ),
-        );
-      },
+          return Scaffold(
+            appBar: AppBar(
+              title: state is HouseholdLoaded
+                  ? Text(state.household.householdId)
+                  : const Text('Household'),
+              actions: [
+                IconButton(onPressed: () => {}, icon: const Icon(Icons.edit))
+              ],
+            ),
+            body: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: householdView(context, state),
+            ),
+          );
+        },
+      ),
     );
   }
 }
