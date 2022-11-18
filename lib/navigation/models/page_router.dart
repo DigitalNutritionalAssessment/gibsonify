@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'package:gibsonify/home/home.dart';
 import 'package:gibsonify/collection/collection.dart';
-import 'package:gibsonify/home/widgets/create_household.dart';
 import 'package:gibsonify/household/view/household.dart';
 import 'package:gibsonify/recipe/recipe.dart';
 import 'package:gibsonify/settings/settings.dart';
 import 'package:gibsonify/login/login.dart';
+import 'package:gibsonify/create_household/view/create_household.dart';
 
 class PageRouter {
   static const login = '/';
