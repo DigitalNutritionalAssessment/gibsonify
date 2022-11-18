@@ -19,4 +19,18 @@ class Household {
     required this.geoLocation,
     required this.comments,
   });
+
+  copyWith({
+    String? householdId,
+    DateTime? sensitizationDate,
+    String? geoLocation,
+    String? comments,
+  }) {
+    return Household(
+      householdId: householdId ?? this.householdId,
+      sensitizationDate: sensitizationDate ?? this.sensitizationDate,
+      geoLocation: geoLocation ?? this.geoLocation,
+      comments: comments ?? this.comments,
+    );
+  }
 }

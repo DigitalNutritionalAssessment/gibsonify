@@ -7,6 +7,7 @@ import 'package:gibsonify/recipe/recipe.dart';
 import 'package:gibsonify/settings/settings.dart';
 import 'package:gibsonify/login/login.dart';
 import 'package:gibsonify/create_household/view/create_household.dart';
+import 'package:gibsonify/edit_household/view/edit_household.dart';
 
 class PageRouter {
   static const login = '/';
@@ -27,6 +28,7 @@ class PageRouter {
 
   static const createHousehold = '/createhousehold';
   static const viewHousehold = '/viewhousehold';
+  static const editHousehold = '/edithousehold';
 
   static Route route(RouteSettings routeSettings) {
     switch (routeSettings.name) {
@@ -83,6 +85,10 @@ class PageRouter {
         Map<String, dynamic> args =
             routeSettings.arguments as Map<String, dynamic>;
         return _buildRoute(ViewHouseholdPage(args['id']));
+      case editHousehold:
+        Map<String, dynamic> args =
+            routeSettings.arguments as Map<String, dynamic>;
+        return _buildRoute(EditHouseholdPage(args['id']));
       default:
         throw Exception('Page does not exist!');
     }

@@ -4,6 +4,8 @@ import 'package:gibsonify/view_household/bloc/household_bloc.dart';
 import 'package:gibsonify_repository/gibsonify_repository.dart';
 import 'package:intl/intl.dart';
 
+import '../../navigation/models/page_router.dart';
+
 class ViewHouseholdPage extends StatelessWidget {
   final int id;
 
@@ -13,21 +15,26 @@ class ViewHouseholdPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) =>
-          HouseholdBloc(isarRepository: context.read<IsarRepository>()),
+          HouseholdBloc(isarRepository: context.read<IsarRepository>())
+            ..add(HouseholdOpened(id: id)),
       child: BlocBuilder<HouseholdBloc, HouseholdState>(
         builder: (context, state) {
-          if (state is HouseholdInitial) {
-            context.read<HouseholdBloc>().add(HouseholdOpened(id: id));
-          }
-
           return Scaffold(
             appBar: AppBar(
               title: state is HouseholdLoaded
                   ? Text(state.household.householdId)
                   : const Text('Household'),
-              actions: [
-                IconButton(onPressed: () => {}, icon: const Icon(Icons.edit))
-              ],
+              actions: state is HouseholdLoaded
+                  ? [
+                      IconButton(
+                          onPressed: () => {
+                                Navigator.pushNamed(
+                                    context, PageRouter.editHousehold,
+                                    arguments: {'id': state.household.id})
+                              },
+                          icon: const Icon(Icons.edit))
+                    ]
+                  : [],
             ),
             body: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -57,7 +64,8 @@ Widget householdView(context, state) {
         TextFormField(
           readOnly: true,
           decoration: const InputDecoration(
-              labelText: 'Sensitization Date', icon: Icon(Icons.date_range)),
+              labelText: 'Sensitization Date',
+              icon: Icon(Icons.calendar_today)),
           initialValue: formatter.format(state.household.sensitizationDate),
         ),
         TextFormField(
