@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gibsonify/home/bloc/home_bloc.dart';
-import 'package:gibsonify/households/bloc/household_bloc.dart';
 
 import 'package:gibsonify_repository/gibsonify_repository.dart';
 
@@ -41,20 +39,12 @@ class App extends StatelessWidget {
           // functionality to CollectionBloc
           BlocProvider(
               create: (context) =>
-                  HouseholdBloc(isarRepository: isarRepository)),
-          BlocProvider(
-              create: (context) =>
                   CollectionBloc(gibsonifyRepository: gibsonifyRepository)),
           BlocProvider(
               lazy: false,
               create: (context) =>
                   RecipeBloc(gibsonifyRepository: gibsonifyRepository)
                     ..add(const RecipesLoaded())),
-          BlocProvider(
-              create: (context) => HomeBloc(
-                    gibsonifyRepository: gibsonifyRepository,
-                    isarRepository: isarRepository,
-                  )..add(const GibsonsFormsLoaded())),
           BlocProvider(
               create: (context) =>
                   ImportExportBloc(gibsonifyRepository: gibsonifyRepository)),
