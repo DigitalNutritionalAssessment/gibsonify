@@ -15,6 +15,10 @@ class IsarRepository {
     return await isar.households.where().findAll();
   }
 
+  Stream<void> watchHouseholds() {
+    return isar.households.watchLazy(fireImmediately: true);
+  }
+
   Future<Household?> readHousehold(int id) async {
     return await isar.households.get(id);
   }

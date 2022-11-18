@@ -14,7 +14,8 @@ class HouseholdsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) =>
-          HouseholdsBloc(isarRepository: context.read<IsarRepository>()),
+          HouseholdsBloc(isarRepository: context.read<IsarRepository>())
+            ..add(const HouseholdsPageOpened()),
       child: const HouseholdsView(),
     );
   }

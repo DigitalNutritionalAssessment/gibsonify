@@ -7,8 +7,8 @@ abstract class HouseholdsEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class HouseholdsRequested extends HouseholdsEvent {
-  const HouseholdsRequested();
+class HouseholdsPageOpened extends HouseholdsEvent {
+  const HouseholdsPageOpened();
 
   @override
   List<Object> get props => [];
@@ -20,4 +20,11 @@ class HouseholdDeleteRequested extends HouseholdsEvent {
 
   @override
   List<Object> get props => [id];
+}
+
+class HouseholdsUpdateRequested extends HouseholdsEvent {
+  const HouseholdsUpdateRequested();
+
+  @override
+  List<Object> get props => [];
 }
