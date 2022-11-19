@@ -18,24 +18,14 @@ const RespondentSchema = Schema(
       name: r'comments',
       type: IsarType.string,
     ),
-    r'respondentCountryCode': PropertySchema(
+    r'name': PropertySchema(
       id: 1,
-      name: r'respondentCountryCode',
+      name: r'name',
       type: IsarType.string,
     ),
-    r'respondentName': PropertySchema(
+    r'phoneNumber': PropertySchema(
       id: 2,
-      name: r'respondentName',
-      type: IsarType.string,
-    ),
-    r'respondentTelNumber': PropertySchema(
-      id: 3,
-      name: r'respondentTelNumber',
-      type: IsarType.string,
-    ),
-    r'respondentTelNumberPrefix': PropertySchema(
-      id: 4,
-      name: r'respondentTelNumberPrefix',
+      name: r'phoneNumber',
       type: IsarType.string,
     )
   },
@@ -51,36 +41,9 @@ int _respondentEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
-  {
-    final value = object.comments;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
-  {
-    final value = object.respondentCountryCode;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
-  {
-    final value = object.respondentName;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
-  {
-    final value = object.respondentTelNumber;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
-  {
-    final value = object.respondentTelNumberPrefix;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
+  bytesCount += 3 + object.comments.length * 3;
+  bytesCount += 3 + object.name.length * 3;
+  bytesCount += 3 + object.phoneNumber.length * 3;
   return bytesCount;
 }
 
@@ -91,10 +54,8 @@ void _respondentSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeString(offsets[0], object.comments);
-  writer.writeString(offsets[1], object.respondentCountryCode);
-  writer.writeString(offsets[2], object.respondentName);
-  writer.writeString(offsets[3], object.respondentTelNumber);
-  writer.writeString(offsets[4], object.respondentTelNumberPrefix);
+  writer.writeString(offsets[1], object.name);
+  writer.writeString(offsets[2], object.phoneNumber);
 }
 
 Respondent _respondentDeserialize(
@@ -103,12 +64,11 @@ Respondent _respondentDeserialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  final object = Respondent();
-  object.comments = reader.readStringOrNull(offsets[0]);
-  object.respondentCountryCode = reader.readStringOrNull(offsets[1]);
-  object.respondentName = reader.readStringOrNull(offsets[2]);
-  object.respondentTelNumber = reader.readStringOrNull(offsets[3]);
-  object.respondentTelNumberPrefix = reader.readStringOrNull(offsets[4]);
+  final object = Respondent(
+    comments: reader.readStringOrNull(offsets[0]) ?? "",
+    name: reader.readStringOrNull(offsets[1]) ?? "",
+    phoneNumber: reader.readStringOrNull(offsets[2]) ?? "",
+  );
   return object;
 }
 
@@ -120,15 +80,11 @@ P _respondentDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readStringOrNull(offset) ?? "") as P;
     case 1:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readStringOrNull(offset) ?? "") as P;
     case 2:
-      return (reader.readStringOrNull(offset)) as P;
-    case 3:
-      return (reader.readStringOrNull(offset)) as P;
-    case 4:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readStringOrNull(offset) ?? "") as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -136,25 +92,8 @@ P _respondentDeserializeProp<P>(
 
 extension RespondentQueryFilter
     on QueryBuilder<Respondent, Respondent, QFilterCondition> {
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition> commentsIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'comments',
-      ));
-    });
-  }
-
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      commentsIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'comments',
-      ));
-    });
-  }
-
   QueryBuilder<Respondent, Respondent, QAfterFilterCondition> commentsEqualTo(
-    String? value, {
+    String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -168,7 +107,7 @@ extension RespondentQueryFilter
 
   QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
       commentsGreaterThan(
-    String? value, {
+    String value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
@@ -183,7 +122,7 @@ extension RespondentQueryFilter
   }
 
   QueryBuilder<Respondent, Respondent, QAfterFilterCondition> commentsLessThan(
-    String? value, {
+    String value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
@@ -198,8 +137,8 @@ extension RespondentQueryFilter
   }
 
   QueryBuilder<Respondent, Respondent, QAfterFilterCondition> commentsBetween(
-    String? lower,
-    String? upper, {
+    String lower,
+    String upper, {
     bool includeLower = true,
     bool includeUpper = true,
     bool caseSensitive = true,
@@ -287,64 +226,144 @@ extension RespondentQueryFilter
     });
   }
 
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentCountryCodeIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'respondentCountryCode',
-      ));
-    });
-  }
-
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentCountryCodeIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'respondentCountryCode',
-      ));
-    });
-  }
-
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentCountryCodeEqualTo(
-    String? value, {
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition> nameEqualTo(
+    String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'respondentCountryCode',
+        property: r'name',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentCountryCodeGreaterThan(
-    String? value, {
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition> nameGreaterThan(
+    String value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: r'respondentCountryCode',
+        property: r'name',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentCountryCodeLessThan(
-    String? value, {
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition> nameLessThan(
+    String value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: r'respondentCountryCode',
+        property: r'name',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition> nameBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'name',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition> nameStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'name',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition> nameEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'name',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition> nameContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'name',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition> nameMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'name',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition> nameIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'name',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition> nameIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'name',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
+      phoneNumberEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'phoneNumber',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -352,16 +371,48 @@ extension RespondentQueryFilter
   }
 
   QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentCountryCodeBetween(
-    String? lower,
-    String? upper, {
+      phoneNumberGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'phoneNumber',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
+      phoneNumberLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'phoneNumber',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
+      phoneNumberBetween(
+    String lower,
+    String upper, {
     bool includeLower = true,
     bool includeUpper = true,
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: r'respondentCountryCode',
+        property: r'phoneNumber',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -372,13 +423,13 @@ extension RespondentQueryFilter
   }
 
   QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentCountryCodeStartsWith(
+      phoneNumberStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'respondentCountryCode',
+        property: r'phoneNumber',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -386,13 +437,13 @@ extension RespondentQueryFilter
   }
 
   QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentCountryCodeEndsWith(
+      phoneNumberEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'respondentCountryCode',
+        property: r'phoneNumber',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -400,10 +451,10 @@ extension RespondentQueryFilter
   }
 
   QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentCountryCodeContains(String value, {bool caseSensitive = true}) {
+      phoneNumberContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
-        property: r'respondentCountryCode',
+        property: r'phoneNumber',
         value: value,
         caseSensitive: caseSensitive,
       ));
@@ -411,11 +462,10 @@ extension RespondentQueryFilter
   }
 
   QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentCountryCodeMatches(String pattern,
-          {bool caseSensitive = true}) {
+      phoneNumberMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
-        property: r'respondentCountryCode',
+        property: r'phoneNumber',
         wildcard: pattern,
         caseSensitive: caseSensitive,
       ));
@@ -423,484 +473,20 @@ extension RespondentQueryFilter
   }
 
   QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentCountryCodeIsEmpty() {
+      phoneNumberIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'respondentCountryCode',
+        property: r'phoneNumber',
         value: '',
       ));
     });
   }
 
   QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentCountryCodeIsNotEmpty() {
+      phoneNumberIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'respondentCountryCode',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentNameIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'respondentName',
-      ));
-    });
-  }
-
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentNameIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'respondentName',
-      ));
-    });
-  }
-
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentNameEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'respondentName',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentNameGreaterThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'respondentName',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentNameLessThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'respondentName',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentNameBetween(
-    String? lower,
-    String? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'respondentName',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentNameStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'respondentName',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentNameEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'respondentName',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentNameContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'respondentName',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentNameMatches(String pattern, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'respondentName',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentNameIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'respondentName',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentNameIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'respondentName',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentTelNumberIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'respondentTelNumber',
-      ));
-    });
-  }
-
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentTelNumberIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'respondentTelNumber',
-      ));
-    });
-  }
-
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentTelNumberEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'respondentTelNumber',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentTelNumberGreaterThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'respondentTelNumber',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentTelNumberLessThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'respondentTelNumber',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentTelNumberBetween(
-    String? lower,
-    String? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'respondentTelNumber',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentTelNumberStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'respondentTelNumber',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentTelNumberEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'respondentTelNumber',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentTelNumberContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'respondentTelNumber',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentTelNumberMatches(String pattern, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'respondentTelNumber',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentTelNumberIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'respondentTelNumber',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentTelNumberIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'respondentTelNumber',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentTelNumberPrefixIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'respondentTelNumberPrefix',
-      ));
-    });
-  }
-
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentTelNumberPrefixIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'respondentTelNumberPrefix',
-      ));
-    });
-  }
-
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentTelNumberPrefixEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'respondentTelNumberPrefix',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentTelNumberPrefixGreaterThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'respondentTelNumberPrefix',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentTelNumberPrefixLessThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'respondentTelNumberPrefix',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentTelNumberPrefixBetween(
-    String? lower,
-    String? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'respondentTelNumberPrefix',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentTelNumberPrefixStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'respondentTelNumberPrefix',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentTelNumberPrefixEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'respondentTelNumberPrefix',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentTelNumberPrefixContains(String value,
-          {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'respondentTelNumberPrefix',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentTelNumberPrefixMatches(String pattern,
-          {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'respondentTelNumberPrefix',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentTelNumberPrefixIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'respondentTelNumberPrefix',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
-      respondentTelNumberPrefixIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'respondentTelNumberPrefix',
+        property: r'phoneNumber',
         value: '',
       ));
     });

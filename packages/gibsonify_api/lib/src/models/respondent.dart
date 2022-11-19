@@ -4,9 +4,13 @@ part 'respondent.g.dart';
 
 @Embedded()
 class Respondent {
-  String? respondentName;
-  String? respondentCountryCode;
-  String? respondentTelNumberPrefix;
-  String? respondentTelNumber;
-  String? comments;
+  final String name;
+  final String phoneNumber;
+  final String comments;
+
+  Respondent({
+    this.name = "",
+    this.phoneNumber = "",
+    this.comments = "",
+  });
 }

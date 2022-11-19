@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 
 import 'package:gibsonify/home/home.dart';
 import 'package:gibsonify/collection/collection.dart';
-import 'package:gibsonify/view_household/view/household.dart';
 import 'package:gibsonify/recipe/recipe.dart';
 import 'package:gibsonify/settings/settings.dart';
 import 'package:gibsonify/login/login.dart';
 import 'package:gibsonify/create_household/view/create_household.dart';
+import 'package:gibsonify/view_household/view/household.dart';
 import 'package:gibsonify/edit_household/view/edit_household.dart';
+import 'package:gibsonify/create_respondent/view/create_respondent.dart';
 
 class PageRouter {
   static const login = '/';
@@ -29,6 +30,7 @@ class PageRouter {
   static const createHousehold = '/createhousehold';
   static const viewHousehold = '/viewhousehold';
   static const editHousehold = '/edithousehold';
+  static const createRespondent = '/createrespondent';
 
   static Route route(RouteSettings routeSettings) {
     switch (routeSettings.name) {
@@ -89,6 +91,10 @@ class PageRouter {
         Map<String, dynamic> args =
             routeSettings.arguments as Map<String, dynamic>;
         return _buildRoute(EditHouseholdPage(args['id']));
+      case createRespondent:
+        Map<String, dynamic> args =
+            routeSettings.arguments as Map<String, dynamic>;
+        return _buildRoute(CreateRespondentPage(args['id']));
       default:
         throw Exception('Page does not exist!');
     }

@@ -76,6 +76,25 @@ Widget householdView(context, state) {
           minLines: 1,
           maxLines: null,
         ),
+        const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Divider(),
+        ),
+        Row(
+          children: [
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Icon(Icons.people),
+            ),
+            Text('Respondents', style: Theme.of(context).textTheme.headline6),
+            const Spacer(),
+            IconButton(
+                onPressed: () => Navigator.pushNamed(
+                    context, PageRouter.createRespondent,
+                    arguments: {'id': state.household.id}),
+                icon: const Icon(Icons.add))
+          ],
+        ),
       ],
     );
   } else {

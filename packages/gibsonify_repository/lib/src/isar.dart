@@ -34,4 +34,12 @@ class IsarRepository {
       isar.households.delete(id);
     });
   }
+
+  Future<void> saveNewRespondent(int id, Respondent respondent) async {
+    await isar.writeTxn(() async {
+      final household = await isar.households.get(id);
+      household!.respondents.add(respondent);
+      isar.households.put(household);
+    });
+  }
 }
