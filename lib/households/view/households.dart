@@ -101,24 +101,28 @@ class HouseholdOptions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HouseholdsBloc, HouseholdsState>(
-      builder: (context, state) {
-        final List<Widget> options = [
-          ListTile(title: Text(householdId)),
-          const Divider(),
-          ListTile(
-            leading: const Icon(Icons.delete),
-            title: const Text('Delete'),
-            onTap: () {
-              context
-                  .read<HouseholdsBloc>()
-                  .add(HouseholdDeleteRequested(id: id));
-              Navigator.pop(context);
-            },
-          )
-        ];
-        return Wrap(children: options);
-      },
+    return BlocProvider(
+      create: (context) =>
+          HouseholdsBloc(isarRepository: context.read<IsarRepository>()),
+      child: BlocBuilder<HouseholdsBloc, HouseholdsState>(
+        builder: (context, state) {
+          final List<Widget> options = [
+            ListTile(title: Text(householdId)),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.delete),
+              title: const Text('Delete'),
+              onTap: () {
+                context
+                    .read<HouseholdsBloc>()
+                    .add(HouseholdDeleteRequested(id: id));
+                Navigator.pop(context);
+              },
+            )
+          ];
+          return Wrap(children: options);
+        },
+      ),
     );
   }
 }

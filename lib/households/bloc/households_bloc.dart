@@ -31,7 +31,6 @@ class HouseholdsBloc extends Bloc<HouseholdsEvent, HouseholdsState> {
   void _onHouseholdDeleteRequested(
       HouseholdDeleteRequested event, Emitter<HouseholdsState> emit) async {
     await _isarRepository.deleteHousehold(event.id);
-    add(const HouseholdsPageOpened());
   }
 
   void _onHouseholdsUpdateRequested(
