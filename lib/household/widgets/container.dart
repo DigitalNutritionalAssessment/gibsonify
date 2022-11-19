@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gibsonify/household/view/create_respondent.dart';
-import 'package:gibsonify/household/view/edit_household.dart';
-import 'package:gibsonify/household/view/view_respondent.dart';
 import 'package:gibsonify/navigation/models/page_router.dart';
-import 'package:gibsonify/household/bloc/household_bloc.dart';
-import 'package:gibsonify/household/view/view_household.dart';
 import 'package:gibsonify_repository/gibsonify_repository.dart';
+
+import 'package:gibsonify/household/household.dart';
 
 class HouseholdContainer extends StatelessWidget {
   final int id;

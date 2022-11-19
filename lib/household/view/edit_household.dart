@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:gibsonify/household/bloc/household_bloc.dart';
+import 'package:gibsonify/household/household.dart';
 import 'package:intl/intl.dart';
 
 class EditHouseholdPage extends StatelessWidget {

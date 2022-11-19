@@ -6,7 +6,7 @@ import 'package:gibsonify/recipe/recipe.dart';
 import 'package:gibsonify/settings/settings.dart';
 import 'package:gibsonify/login/login.dart';
 import 'package:gibsonify/create_household/view/create_household.dart';
-import 'package:gibsonify/household/widgets/household.dart';
+import 'package:gibsonify/household/household.dart';
 
 class PageRouter {
   static const login = '/';
