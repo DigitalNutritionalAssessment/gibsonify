@@ -5,6 +5,7 @@ import 'package:gibsonify/collection/collection.dart';
 import 'package:gibsonify/recipe/recipe.dart';
 import 'package:gibsonify/settings/settings.dart';
 import 'package:gibsonify/login/login.dart';
+import 'package:gibsonify/create_household/view/create_household.dart';
 import 'package:gibsonify/household/widgets/household.dart';
 
 class PageRouter {
@@ -80,6 +81,8 @@ class PageRouter {
         return _buildRoute(const RecipesHelpPage());
       case settingsHelp:
         return _buildRoute(const SettingsHelpPage());
+      case createHousehold:
+        return _buildRoute(const CreateHouseholdPage());
       default:
         final route = routeSettings.name!;
         if (route.startsWith(householdPrefix)) {

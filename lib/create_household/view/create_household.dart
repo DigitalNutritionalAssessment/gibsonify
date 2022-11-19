@@ -8,8 +8,8 @@ import 'package:gibsonify_repository/gibsonify_repository.dart';
 
 import '../bloc/create_household_bloc.dart';
 
-class CreateHouseholdScreen extends StatelessWidget {
-  const CreateHouseholdScreen({Key? key}) : super(key: key);
+class CreateHouseholdPage extends StatelessWidget {
+  const CreateHouseholdPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, [bool mounted = true]) {
