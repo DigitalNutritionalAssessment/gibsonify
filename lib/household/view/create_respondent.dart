@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_phone_field/form_builder_phone_field.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-import 'package:gibsonify/view_household/bloc/household_bloc.dart';
+import 'package:gibsonify/household/bloc/household_bloc.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
 
 class CreateRespondentPage extends StatelessWidget {

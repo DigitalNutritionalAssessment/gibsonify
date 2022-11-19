@@ -5,11 +5,7 @@ import 'package:gibsonify/collection/collection.dart';
 import 'package:gibsonify/recipe/recipe.dart';
 import 'package:gibsonify/settings/settings.dart';
 import 'package:gibsonify/login/login.dart';
-import 'package:gibsonify/create_household/view/create_household.dart';
-import 'package:gibsonify/view_household/view/household.dart';
-import 'package:gibsonify/edit_household/view/edit_household.dart';
-import 'package:gibsonify/create_respondent/view/create_respondent.dart';
-import 'package:gibsonify/view_household/widgets/household.dart';
+import 'package:gibsonify/household/widgets/household.dart';
 
 class PageRouter {
   static const login = '/';
