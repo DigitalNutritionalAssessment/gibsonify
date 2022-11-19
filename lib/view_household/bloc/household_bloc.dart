@@ -13,6 +13,8 @@ class HouseholdBloc extends Bloc<HouseholdEvent, HouseholdState> {
   })  : _isarRepository = isarRepository,
         super(const HouseholdInitial()) {
     on<HouseholdOpened>(_onHouseholdOpened);
+    on<EditHouseholdSaveRequested>(_onEditHouseholdSaveRequested);
+    on<NewRespondentSaveRequested>(_onNewRespondentSaveRequested);
   }
 
   void _onHouseholdOpened(event, emit) async {
@@ -22,5 +24,23 @@ class HouseholdBloc extends Bloc<HouseholdEvent, HouseholdState> {
     } else {
       emit(const HouseholdNotFound());
     }
+  }
+
+  void _onEditHouseholdSaveRequested(
+      EditHouseholdSaveRequested event, Emitter<HouseholdState> emit) async {
+    Household household = state.household!.copyWith(
+        geoLocation: event.geoLocation,
+        sensitizationDate: event.sensitizationDate,
+        comments: event.comments);
+    await _isarRepository.saveNewHousehold(household);
+    emit(HouseholdLoaded(household));
+  }
+
+  void _onNewRespondentSaveRequested(
+      NewRespondentSaveRequested event, Emitter<HouseholdState> emit) async {
+    final household = state.household!.copyWith(
+        respondents: [...state.household!.respondents, event.respondent]);
+    await _isarRepository.saveNewHousehold(household);
+    emit(HouseholdLoaded(household));
   }
 }

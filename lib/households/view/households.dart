@@ -55,7 +55,9 @@ class HouseholdsView extends StatelessWidget {
                         subtitle: Text(formatter
                             .format(state.households[index].sensitizationDate)),
                         onTap: () => Navigator.pushNamed(
-                            context, PageRouter.viewHousehold,
+                            context,
+                            PageRouter.householdPrefix +
+                                PageRouter.viewHousehold,
                             arguments: {'id': state.households[index].id}),
                         onLongPress: () => showModalBottomSheet(
                             context: context,

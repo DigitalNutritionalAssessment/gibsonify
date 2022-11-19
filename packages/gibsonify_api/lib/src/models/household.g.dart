@@ -120,9 +120,16 @@ Household _householdDeserialize(
     comments: reader.readString(offsets[0]),
     geoLocation: reader.readString(offsets[1]),
     householdId: reader.readString(offsets[2]),
+    id: id,
+    respondents: reader.readObjectList<Respondent>(
+          offsets[3],
+          RespondentSchema.deserialize,
+          allOffsets,
+          Respondent(),
+        ) ??
+        const [],
     sensitizationDate: reader.readDateTime(offsets[4]),
   );
-  object.id = id;
   return object;
 }
 
@@ -146,7 +153,7 @@ P _householdDeserializeProp<P>(
             allOffsets,
             Respondent(),
           ) ??
-          []) as P;
+          const []) as P;
     case 4:
       return (reader.readDateTime(offset)) as P;
     default:
@@ -162,9 +169,7 @@ List<IsarLinkBase<dynamic>> _householdGetLinks(Household object) {
   return [];
 }
 
-void _householdAttach(IsarCollection<dynamic> col, Id id, Household object) {
-  object.id = id;
-}
+void _householdAttach(IsarCollection<dynamic> col, Id id, Household object) {}
 
 extension HouseholdByIndex on IsarCollection<Household> {
   Future<Household?> getByHouseholdId(String householdId) {

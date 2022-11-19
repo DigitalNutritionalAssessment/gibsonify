@@ -7,42 +7,36 @@ import 'package:intl/intl.dart';
 import '../../navigation/models/page_router.dart';
 
 class ViewHouseholdPage extends StatelessWidget {
-  final int id;
-
-  const ViewHouseholdPage(this.id, {Key? key}) : super(key: key);
+  const ViewHouseholdPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) =>
-          HouseholdBloc(isarRepository: context.read<IsarRepository>())
-            ..add(HouseholdOpened(id: id)),
-      child: BlocBuilder<HouseholdBloc, HouseholdState>(
-        builder: (context, state) {
-          return Scaffold(
-            appBar: AppBar(
-              title: state is HouseholdLoaded
-                  ? Text(state.household.householdId)
-                  : const Text('Household'),
-              actions: state is HouseholdLoaded
-                  ? [
-                      IconButton(
-                          onPressed: () => {
-                                Navigator.pushNamed(
-                                    context, PageRouter.editHousehold,
-                                    arguments: {'id': state.household.id})
-                              },
-                          icon: const Icon(Icons.edit))
-                    ]
-                  : [],
-            ),
-            body: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: householdView(context, state),
-            ),
-          );
-        },
-      ),
+    return BlocBuilder<HouseholdBloc, HouseholdState>(
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(
+            title: state is HouseholdLoaded
+                ? Text(state.household!.householdId)
+                : const Text('Household'),
+            actions: state is HouseholdLoaded
+                ? [
+                    IconButton(
+                        onPressed: () => {
+                              Navigator.pushNamed(
+                                context,
+                                PageRouter.editHousehold,
+                              )
+                            },
+                        icon: const Icon(Icons.edit))
+                  ]
+                : [],
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: householdView(context, state),
+          ),
+        );
+      },
     );
   }
 }
@@ -59,20 +53,20 @@ Widget householdView(context, state) {
           readOnly: true,
           decoration: const InputDecoration(
               labelText: 'Location', icon: Icon(Icons.location_on_outlined)),
-          initialValue: state.household.geoLocation,
+          initialValue: state.household!.geoLocation,
         ),
         TextFormField(
           readOnly: true,
           decoration: const InputDecoration(
               labelText: 'Sensitization Date',
               icon: Icon(Icons.calendar_today)),
-          initialValue: formatter.format(state.household.sensitizationDate),
+          initialValue: formatter.format(state.household!.sensitizationDate),
         ),
         TextFormField(
           readOnly: true,
           decoration: const InputDecoration(
               labelText: 'Comments', icon: Icon(Icons.comment)),
-          initialValue: state.household.comments,
+          initialValue: state.household!.comments,
           minLines: 1,
           maxLines: null,
         ),
@@ -89,9 +83,8 @@ Widget householdView(context, state) {
             Text('Respondents', style: Theme.of(context).textTheme.headline6),
             const Spacer(),
             IconButton(
-                onPressed: () => Navigator.pushNamed(
-                    context, PageRouter.createRespondent,
-                    arguments: {'id': state.household.id}),
+                onPressed: () =>
+                    Navigator.pushNamed(context, PageRouter.createRespondent),
                 icon: const Icon(Icons.add))
           ],
         ),

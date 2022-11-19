@@ -9,6 +9,7 @@ import 'package:gibsonify/create_household/view/create_household.dart';
 import 'package:gibsonify/view_household/view/household.dart';
 import 'package:gibsonify/edit_household/view/edit_household.dart';
 import 'package:gibsonify/create_respondent/view/create_respondent.dart';
+import 'package:gibsonify/view_household/widgets/household.dart';
 
 class PageRouter {
   static const login = '/';
@@ -26,11 +27,13 @@ class PageRouter {
   static const collectionsHelp = '/collectionshelp';
   static const recipesHelp = '/recipeshelp';
   static const settingsHelp = '/settingshelp';
+  static const createHousehold = 'createhousehold';
 
-  static const createHousehold = '/createhousehold';
-  static const viewHousehold = '/viewhousehold';
-  static const editHousehold = '/edithousehold';
-  static const createRespondent = '/createrespondent';
+  static const householdPrefix = '/household';
+  static const householdInitialRoute = '/household/$viewHousehold';
+  static const viewHousehold = 'viewhousehold';
+  static const editHousehold = 'edithousehold';
+  static const createRespondent = 'createrespondent';
 
   static Route route(RouteSettings routeSettings) {
     switch (routeSettings.name) {
@@ -81,22 +84,17 @@ class PageRouter {
         return _buildRoute(const RecipesHelpPage());
       case settingsHelp:
         return _buildRoute(const SettingsHelpPage());
-      case createHousehold:
-        return _buildRoute(const CreateHouseholdScreen());
-      case viewHousehold:
-        Map<String, dynamic> args =
-            routeSettings.arguments as Map<String, dynamic>;
-        return _buildRoute(ViewHouseholdPage(args['id']));
-      case editHousehold:
-        Map<String, dynamic> args =
-            routeSettings.arguments as Map<String, dynamic>;
-        return _buildRoute(EditHouseholdPage(args['id']));
-      case createRespondent:
-        Map<String, dynamic> args =
-            routeSettings.arguments as Map<String, dynamic>;
-        return _buildRoute(CreateRespondentPage(args['id']));
       default:
-        throw Exception('Page does not exist!');
+        final route = routeSettings.name!;
+        if (route.startsWith(householdPrefix)) {
+          final subRoute = route.substring(householdPrefix.length);
+          Map<String, dynamic> args =
+              routeSettings.arguments as Map<String, dynamic>;
+          return _buildRoute(
+              HouseholdContainer(id: args['id'], subRoute: subRoute));
+        } else {
+          throw Exception('Page does not exist!');
+        }
     }
   }
 
