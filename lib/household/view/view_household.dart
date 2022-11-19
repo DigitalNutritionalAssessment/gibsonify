@@ -97,7 +97,13 @@ Widget householdView(context, state) {
                 title: Text(state.household!.respondents[index].name),
                 subtitle: Text("ID: ${index + 1}"),
                 onTap: () => {},
-                onLongPress: () => {},
+                onLongPress: () => showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return RespondentOptions(
+                          index: index,
+                          name: state.household!.respondents[index].name);
+                    }),
               ));
             },
           ),
@@ -106,5 +112,35 @@ Widget householdView(context, state) {
     );
   } else {
     return const Center(child: Text('Error'));
+  }
+}
+
+class RespondentOptions extends StatelessWidget {
+  final int index;
+  final String name;
+
+  const RespondentOptions({Key? key, required this.index, required this.name})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<HouseholdBloc, HouseholdState>(
+        builder: (context, state) {
+      final List<Widget> options = [
+        ListTile(title: Text(name)),
+        const Divider(),
+        ListTile(
+          leading: const Icon(Icons.delete),
+          title: const Text('Delete'),
+          onTap: () {
+            context
+                .read<HouseholdBloc>()
+                .add(DeleteRespondentRequested(index: index));
+            Navigator.pop(context);
+          },
+        )
+      ];
+      return Wrap(children: options);
+    });
   }
 }
