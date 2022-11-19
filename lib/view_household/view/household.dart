@@ -88,6 +88,21 @@ Widget householdView(context, state) {
                 icon: const Icon(Icons.add))
           ],
         ),
+        Expanded(
+          child: ListView.builder(
+            padding: const EdgeInsets.all(2.0),
+            itemCount: state.household!.respondents.length,
+            itemBuilder: (context, index) {
+              return Card(
+                  child: ListTile(
+                title: Text(state.household!.respondents[index].name),
+                subtitle: Text("ID: ${index + 1}"),
+                onTap: () => {},
+                onLongPress: () => {},
+              ));
+            },
+          ),
+        )
       ],
     );
   } else {
