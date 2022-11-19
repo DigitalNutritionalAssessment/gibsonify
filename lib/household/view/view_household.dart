@@ -14,6 +14,11 @@ class ViewHouseholdPage extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
+            leading: IconButton(
+                onPressed: () {
+                  Navigator.of(context, rootNavigator: true).pop();
+                },
+                icon: const Icon(Icons.arrow_back)),
             title: state is HouseholdLoaded
                 ? Text(state.household!.householdId)
                 : const Text('Household'),

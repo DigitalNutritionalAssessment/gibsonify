@@ -6,10 +6,11 @@ import 'package:gibsonify_repository/gibsonify_repository.dart';
 import 'package:gibsonify/household/household.dart';
 
 class HouseholdContainer extends StatelessWidget {
+  final _navigatorKey = GlobalKey<NavigatorState>();
   final int id;
   final String subRoute;
 
-  const HouseholdContainer({required this.id, required this.subRoute, Key? key})
+  HouseholdContainer({required this.id, required this.subRoute, Key? key})
       : super(key: key);
 
   @override
@@ -18,9 +19,20 @@ class HouseholdContainer extends StatelessWidget {
         create: (BuildContext context) =>
             HouseholdBloc(isarRepository: context.read<IsarRepository>())
               ..add(HouseholdOpened(id: id)),
-        child: Navigator(
-          initialRoute: subRoute,
-          onGenerateRoute: _onGenerateRoute,
+        child: WillPopScope(
+          onWillPop: () async {
+            if (_navigatorKey.currentState != null) {
+              _navigatorKey.currentState!.maybePop();
+              return false;
+            }
+
+            return true;
+          },
+          child: Navigator(
+            key: _navigatorKey,
+            initialRoute: subRoute,
+            onGenerateRoute: _onGenerateRoute,
+          ),
         ));
   }
 }
