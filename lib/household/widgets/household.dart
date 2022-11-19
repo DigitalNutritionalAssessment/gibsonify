@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gibsonify/household/view/create_respondent.dart';
 import 'package:gibsonify/household/view/edit_household.dart';
+import 'package:gibsonify/household/view/view_respondent.dart';
 import 'package:gibsonify/navigation/models/page_router.dart';
 import 'package:gibsonify/household/bloc/household_bloc.dart';
 import 'package:gibsonify/household/view/view_household.dart';
@@ -29,6 +30,7 @@ class HouseholdContainer extends StatelessWidget {
 
 Route _onGenerateRoute(RouteSettings settings) {
   late Widget page;
+
   switch (settings.name) {
     case PageRouter.viewHousehold:
       page = const ViewHouseholdPage();
@@ -38,6 +40,10 @@ Route _onGenerateRoute(RouteSettings settings) {
       break;
     case PageRouter.createRespondent:
       page = const CreateRespondentPage();
+      break;
+    case PageRouter.viewRespondent:
+      final args = settings.arguments as Map<String, dynamic>;
+      page = ViewRespondentPage(index: args['index']);
       break;
     default:
       throw Exception('Invalid route: ${settings.name}');

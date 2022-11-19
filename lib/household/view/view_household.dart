@@ -96,7 +96,10 @@ Widget householdView(context, state) {
                   child: ListTile(
                 title: Text(state.household!.respondents[index].name),
                 subtitle: Text("ID: ${index + 1}"),
-                onTap: () => {},
+                onTap: () => {
+                  Navigator.pushNamed(context, PageRouter.viewRespondent,
+                      arguments: {'index': index})
+                },
                 onLongPress: () => showModalBottomSheet(
                     context: context,
                     builder: (context) {
