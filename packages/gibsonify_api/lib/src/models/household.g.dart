@@ -65,7 +65,10 @@ const HouseholdSchema = CollectionSchema(
     )
   },
   links: {},
-  embeddedSchemas: {r'Respondent': RespondentSchema},
+  embeddedSchemas: {
+    r'Respondent': RespondentSchema,
+    r'GibsonsForm': GibsonsFormSchema
+  },
   getId: _householdGetId,
   getLinks: _householdGetLinks,
   attach: _householdAttach,

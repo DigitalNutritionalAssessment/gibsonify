@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gibsonify/household/household.dart';
 import 'package:intl/intl.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 
 import 'package:gibsonify/collection/collection.dart';
@@ -15,7 +15,7 @@ class SensitizationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Sensitization'),
+          title: const Text('Information'),
           actions: [
             IconButton(
                 onPressed: () =>
@@ -47,14 +47,9 @@ class SensitizationForm extends StatelessWidget {
             absorbing: state.gibsonsForm.finished,
             child: Column(
               children: const <Widget>[
-                HouseholdIdInput(),
-                RespondentNameInput(),
-                RespondentTelInfoInput(),
-                SensitizationDateInput(),
                 RecallDayInput(),
                 InterviewDateInput(),
                 InterviewStartTimeInput(),
-                GeoLocationInput()
               ],
             ),
           );
@@ -66,142 +61,6 @@ class SensitizationForm extends StatelessWidget {
 
 // TODO: refactor input forms into one reusable widget, and/or move to separate
 // files
-
-class HouseholdIdInput extends StatelessWidget {
-  const HouseholdIdInput({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<CollectionBloc, CollectionState>(
-      builder: (context, state) {
-        return TextFormField(
-          initialValue: state.gibsonsForm.householdId,
-          decoration: InputDecoration(
-            icon: const Icon(Icons.house),
-            labelText: 'Household ID',
-            helperText: 'A valid Household ID e.g. IMH13D0303',
-            // Only show errorText if modified, i.e. if not null, and invalid
-            errorText: isFieldModifiedAndInvalid(state.gibsonsForm.householdId,
-                    state.gibsonsForm.isHouseholdIdValid)
-                ? 'Enter a valid Household ID with 10 to 15 digits'
-                : null,
-          ),
-          onChanged: (value) {
-            context
-                .read<CollectionBloc>()
-                .add(HouseholdIdChanged(householdId: value));
-          },
-          textInputAction: TextInputAction.next,
-        );
-      },
-    );
-  }
-}
-
-class RespondentNameInput extends StatelessWidget {
-  const RespondentNameInput({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<CollectionBloc, CollectionState>(
-      builder: (context, state) {
-        return TextFormField(
-          initialValue: state.gibsonsForm.respondentName,
-          decoration: InputDecoration(
-            icon: const Icon(Icons.person),
-            labelText: 'Respondent Name',
-            helperText: 'Full name of respondent e.g. Keira Brown',
-            errorText: isFieldModifiedAndInvalid(
-                    state.gibsonsForm.respondentName,
-                    state.gibsonsForm.isRespondentNameValid)
-                ? 'Enter respondent name'
-                : null,
-          ),
-          onChanged: (value) {
-            context
-                .read<CollectionBloc>()
-                .add(RespondentNameChanged(respondentName: value));
-          },
-          textInputAction: TextInputAction.next,
-        );
-      },
-    );
-  }
-}
-
-class RespondentTelInfoInput extends StatelessWidget {
-  const RespondentTelInfoInput({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<CollectionBloc, CollectionState>(
-      builder: (context, state) {
-        return IntlPhoneField(
-          initialValue: state.gibsonsForm.respondentTelNumber,
-          readOnly: state.gibsonsForm.finished,
-          initialCountryCode: state.gibsonsForm.respondentCountryCode ?? 'IN',
-          invalidNumberMessage: 'Enter a valid tel. number',
-          decoration: const InputDecoration(
-            labelText: 'Respondent Tel. Number',
-            icon: Icon(Icons.phone),
-            helperText: 'Full tel. number of respondent e.g. +447448238123',
-          ),
-          onChanged: (phoneNumber) {
-            context.read<CollectionBloc>().add(RespondentTelInfoChanged(
-                respondentCountryCode: phoneNumber.countryISOCode,
-                respondentTelNumberPrefix: phoneNumber.countryCode,
-                respondentTelNumber: phoneNumber.number));
-          },
-        );
-      },
-    );
-  }
-}
-
-// Needs to be a StatefulWidget to check `mounted` property
-class SensitizationDateInput extends StatefulWidget {
-  const SensitizationDateInput({Key? key}) : super(key: key);
-
-  @override
-  State<SensitizationDateInput> createState() => _SensitizationDateInputState();
-}
-
-class _SensitizationDateInputState extends State<SensitizationDateInput> {
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<CollectionBloc, CollectionState>(
-      builder: (context, state) {
-        return TextFormField(
-          readOnly: true,
-          key: UniqueKey(),
-          initialValue: state.gibsonsForm.sensitizationDate,
-          decoration: InputDecoration(
-            icon: const Icon(Icons.calendar_today),
-            labelText: 'Sensitization Date',
-            helperText: 'Date of sensitization visit',
-            errorText: isFieldModifiedAndInvalid(
-                    state.gibsonsForm.sensitizationDate,
-                    state.gibsonsForm.isSensitizationDateValid)
-                ? 'Choose the sensitization date'
-                : null,
-          ),
-          onTap: () async {
-            var date = await showDatePicker(
-                context: context,
-                initialDate: DateTime.now(),
-                firstDate: DateTime(1900),
-                lastDate: DateTime.now());
-            var formattedDate =
-                date == null ? '' : DateFormat('yyyy-MM-dd').format(date);
-            if (!mounted) return; // to avoid using BuildContext asynchronously
-            context.read<CollectionBloc>().add(
-                SensitizationDateChanged(sensitizationDate: formattedDate));
-          },
-        );
-      },
-    );
-  }
-}
 
 class RecallDayInput extends StatelessWidget {
   const RecallDayInput({Key? key}) : super(key: key);
@@ -261,35 +120,39 @@ class InterviewDateInput extends StatefulWidget {
 class _InterviewDateInputState extends State<InterviewDateInput> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CollectionBloc, CollectionState>(
-      builder: (context, state) {
-        return TextFormField(
-          readOnly: true,
-          key: UniqueKey(),
-          initialValue: state.gibsonsForm.interviewDate,
-          decoration: InputDecoration(
-            icon: const Icon(Icons.calendar_today),
-            labelText: 'Interview Date',
-            helperText: 'Date of interview start',
-            errorText: isFieldModifiedAndInvalid(
-                    state.gibsonsForm.interviewDate,
-                    state.gibsonsForm.isInterviewDateValid)
-                ? 'Interview date needs to be at '
-                    'least two days after sensitization date'
-                : null,
-          ),
-          onTap: () async {
-            var date = await showDatePicker(
-                context: context,
-                initialDate: DateTime.now(),
-                firstDate: DateTime(1900),
-                lastDate: DateTime.now());
-            if (!mounted) return;
-            var formattedDate =
-                date == null ? '' : DateFormat('yyyy-MM-dd').format(date);
-            context
-                .read<CollectionBloc>()
-                .add(InterviewDateChanged(interviewDate: formattedDate));
+    return BlocBuilder<HouseholdBloc, HouseholdState>(
+      builder: (context, householdState) {
+        return BlocBuilder<CollectionBloc, CollectionState>(
+          builder: (context, state) {
+            return TextFormField(
+              readOnly: true,
+              key: UniqueKey(),
+              initialValue: state.gibsonsForm.interviewDate,
+              decoration: InputDecoration(
+                icon: const Icon(Icons.calendar_today),
+                labelText: 'Interview Date',
+                helperText: 'Date of interview start',
+                errorText: isFieldModifiedAndInvalid(
+                        state.gibsonsForm.interviewDate, () => true)
+                    ? 'Interview date needs to be at '
+                        'least two days after sensitization date'
+                    : null,
+              ),
+              onTap: () async {
+                var date = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: householdState.household!.sensitizationDate
+                        .add(const Duration(days: 1)),
+                    lastDate: DateTime.now());
+                if (!mounted) return;
+                var formattedDate =
+                    date == null ? '' : DateFormat('yyyy-MM-dd').format(date);
+                context
+                    .read<CollectionBloc>()
+                    .add(InterviewDateChanged(interviewDate: formattedDate));
+              },
+            );
           },
         );
       },
@@ -334,102 +197,6 @@ class _InterviewStartTimeInputState extends State<InterviewStartTimeInput> {
           },
         );
       },
-    );
-  }
-}
-
-class GeoLocationInput extends StatelessWidget {
-  const GeoLocationInput({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocListener<CollectionBloc, CollectionState>(
-      listenWhen: (previous, current) =>
-          previous.geoLocationStatus != current.geoLocationStatus,
-      listener: (context, state) {
-        if (state.geoLocationStatus == GeoLocationStatus.locationRequested) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              const SnackBar(
-                  content: Text('Requested device location, please wait.')),
-            );
-        }
-        if (state.geoLocationStatus == GeoLocationStatus.locationDetermined) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              const SnackBar(
-                  content: Text('Location successfully determined!')),
-            );
-        }
-        if (state.geoLocationStatus == GeoLocationStatus.locationDisabled) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              const SnackBar(
-                  content: Text('Location services are disabled. '
-                      'Please enable location services first and restart '
-                      'the app.')),
-            );
-        }
-        if (state.geoLocationStatus == GeoLocationStatus.locationDenied) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              const SnackBar(
-                  content: Text('Location services are denied. '
-                      'Please allow location access for Gibsonify.')),
-            );
-        }
-        if (state.geoLocationStatus ==
-            GeoLocationStatus.locationPermanentlyDenied) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              const SnackBar(
-                  content: Text('Location services are permanently denied. '
-                      'Please allow location access for Gibsonify in device '
-                      'settings.')),
-            );
-        }
-        if (state.geoLocationStatus == GeoLocationStatus.locationTimedOut) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              const SnackBar(
-                  content: Text(
-                      'Location could not be determined in a reasonable time. '
-                      'Please ensure you have proper GPS signal reception.')),
-            );
-        }
-      },
-      child: BlocBuilder<CollectionBloc, CollectionState>(
-        builder: (context, state) {
-          return TextFormField(
-            readOnly: true,
-            key: UniqueKey(),
-            initialValue: state.gibsonsForm.geoLocation,
-            onTap: () => context
-                .read<CollectionBloc>()
-                .add(const GeoLocationRequested()),
-            decoration: InputDecoration(
-              suffixIcon:
-                  state.geoLocationStatus == GeoLocationStatus.locationRequested
-                      ? const CircularProgressIndicator()
-                      : null,
-              icon: const Icon(Icons.location_on_outlined),
-              labelText: 'GPS Location',
-              helperText: 'GPS Coordinates',
-              errorText: isFieldModifiedAndInvalid(
-                      state.gibsonsForm.geoLocation,
-                      state.gibsonsForm.isGeoLocationValid)
-                  ? 'Request the GPS location'
-                  : null,
-            ),
-          );
-        },
-      ),
     );
   }
 }

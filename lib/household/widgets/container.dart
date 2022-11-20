@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gibsonify/collection/collection.dart';
 import 'package:gibsonify/navigation/models/page_router.dart';
 import 'package:gibsonify_repository/gibsonify_repository.dart';
 
@@ -56,6 +57,9 @@ Route _onGenerateRoute(RouteSettings settings) {
       break;
     case PageRouter.editRespondent:
       page = const EditRespondentPage();
+      break;
+    case PageRouter.collection:
+      page = const CollectionPage();
       break;
     default:
       throw Exception('Invalid route: ${settings.name}');

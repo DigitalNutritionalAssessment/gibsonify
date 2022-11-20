@@ -18,6 +18,8 @@ class HouseholdBloc extends Bloc<HouseholdEvent, HouseholdState> {
     on<DeleteRespondentRequested>(_onDeleteRespondentRequested);
     on<RespondentOpened>(_onRespondentOpened);
     on<EditRespondentSaveRequested>(_onEditRespondentSaveRequested);
+    on<SaveCollectionRequested>(_onSaveCollectionRequested);
+    on<CollectionOpened>(_onCollectionOpened);
   }
 
   void _onHouseholdOpened(event, emit) async {
@@ -68,6 +70,40 @@ class HouseholdBloc extends Bloc<HouseholdEvent, HouseholdState> {
     respondents[state.selectedRespondentIndex!] = event.respondent;
     final household = state.household!.copyWith(respondents: respondents);
     await _isarRepository.saveNewHousehold(household);
+    emit(HouseholdLoaded(
+        household: household,
+        selectedRespondentIndex: state.selectedRespondentIndex!));
+  }
+
+  void _onCollectionOpened(
+      CollectionOpened event, Emitter<HouseholdState> emit) async {
+    emit(HouseholdLoaded(
+        household: state.household!,
+        selectedRespondentIndex: state.selectedRespondentIndex!,
+        selectedCollectionIndex: event.index));
+  }
+
+  void _onSaveCollectionRequested(
+      SaveCollectionRequested event, Emitter<HouseholdState> emit) {
+    final respondent =
+        state.household!.respondents[state.selectedRespondentIndex!];
+    late Respondent updatedRespondent;
+
+    if (state.selectedCollectionIndex == null) {
+      // New collection
+      updatedRespondent = respondent.copyWith(
+          collections: [...respondent.collections, event.gibsonsForm]);
+    } else {
+      // Modified collection
+      final collections = respondent.collections.toList();
+      collections[state.selectedCollectionIndex!] = event.gibsonsForm;
+      updatedRespondent = respondent.copyWith(collections: collections);
+    }
+
+    var respondents = state.household!.respondents.toList();
+    respondents[state.selectedRespondentIndex!] = updatedRespondent;
+    final household = state.household!.copyWith(respondents: respondents);
+    _isarRepository.saveNewHousehold(household);
     emit(HouseholdLoaded(
         household: household,
         selectedRespondentIndex: state.selectedRespondentIndex!));

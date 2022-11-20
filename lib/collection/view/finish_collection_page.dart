@@ -437,16 +437,12 @@ class FinishCollectionDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String displayRespondentName =
-        isFieldUnmodifiedOrEmpty(gibsonsForm.respondentName)
-            ? 'unnamed respondent'
-            : gibsonsForm.respondentName!;
     return BlocBuilder<CollectionBloc, CollectionState>(
       builder: (context, state) {
         return AlertDialog(
           title: const Text('Finish collection'),
-          content: Text('Would you like to finish the collection of '
-              '$displayRespondentName?\n\nOnce finished, the collection will '
+          content: const Text(
+              'Would you like to finish this collection?\n\nOnce finished, the collection will '
               'no longer be editable, even if it is not fully completed. As an '
               'alternative, you can pause the collection.'),
           actions: [

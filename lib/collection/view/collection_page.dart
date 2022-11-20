@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:gibsonify/collection/collection.dart';
-import 'package:gibsonify/home/home.dart';
+import 'package:gibsonify/household/household.dart';
+import 'package:gibsonify/login/login.dart';
+import 'package:gibsonify_repository/gibsonify_repository.dart';
 
 class CollectionPage extends StatelessWidget {
   const CollectionPage({Key? key}) : super(key: key);
@@ -17,65 +19,85 @@ class CollectionPage extends StatelessWidget {
       const FourthPassScreen(),
     ];
 
-    /// Custom pop function used in `WillPopScope`'s `onWillPop` argument in
-    /// `CollectionPage` to override the Android Back button and swipe gesture
-    /// to save current Collection and reload all Collections to `HomeBloc`.
-    Future<bool> popCollectionPage(BuildContext context) async {
-      context.read<CollectionBloc>().add(const GibsonsFormSaved());
-      context.read<HomeBloc>().add(const GibsonsFormsLoaded());
-      Navigator.of(context).pop(true);
-      return true;
-    }
-
-    return WillPopScope(
-      onWillPop: () => popCollectionPage(context),
-      child: BlocBuilder<CollectionBloc, CollectionState>(
-        builder: (context, state) {
-          return Scaffold(
-            body: screens[state.selectedScreenIndex()],
-            bottomNavigationBar: BottomNavigationBar(
-              type: BottomNavigationBarType.fixed,
-              currentIndex: state.selectedScreenIndex(),
-              onTap: (int index) {
-                const validlyCompleteSensitizationSnackBar = SnackBar(
-                    content: Text('Please complete all sensitization fields '
-                        'with valid values before moving on'));
-                if (state.gibsonsForm.isSensitizationValid()) {
-                  context.read<CollectionBloc>().add(SelectedScreenChanged(
-                      changedSelectedScreen:
-                          state.screenOfSelectedIndex(index)));
-                } else {
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(validlyCompleteSensitizationSnackBar);
-                }
-              },
-              items: const <BottomNavigationBarItem>[
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.description),
-                  label: 'Sensitization',
-                ),
-                BottomNavigationBarItem(
-                  // TODO: Change icons to just numbers
-                  icon: Icon(Icons.one_k),
-                  label: 'First',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.two_k),
-                  label: 'Second',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.three_k),
-                  label: 'Third',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.four_k),
-                  label: 'Fourth',
-                )
-              ],
-            ),
-          );
-        },
-      ),
+    return BlocBuilder<LoginBloc, LoginState>(
+      builder: (context, loginState) {
+        return BlocBuilder<HouseholdBloc, HouseholdState>(
+          builder: (context, householdState) {
+            return BlocProvider(
+              create: (context) => CollectionBloc(
+                  gibsonifyRepository: context.read<GibsonifyRepository>())
+                ..add(householdState.selectedCollectionIndex != null
+                    ? GibsonsFormProvided(
+                        gibsonsForm: householdState
+                                .household!
+                                .respondents[
+                                    householdState.selectedRespondentIndex!]
+                                .collections[
+                            householdState.selectedCollectionIndex!])
+                    : GibsonsFormCreated(
+                        employeeNumber: loginState.loginInfo.employeeId!)),
+              child: BlocBuilder<CollectionBloc, CollectionState>(
+                builder: (context, collectionState) {
+                  return WillPopScope(
+                    onWillPop: () async {
+                      context.read<HouseholdBloc>().add(SaveCollectionRequested(
+                          gibsonsForm: collectionState.gibsonsForm));
+                      Navigator.of(context).pop(true);
+                      return true;
+                    },
+                    child: Scaffold(
+                      body: screens[collectionState.selectedScreenIndex()],
+                      bottomNavigationBar: BottomNavigationBar(
+                        type: BottomNavigationBarType.fixed,
+                        currentIndex: collectionState.selectedScreenIndex(),
+                        onTap: (int index) {
+                          const validlyCompleteSensitizationSnackBar = SnackBar(
+                              content: Text(
+                                  'Please complete all sensitization fields '
+                                  'with valid values before moving on'));
+                          if (collectionState.gibsonsForm
+                              .isSensitizationValid()) {
+                            context.read<CollectionBloc>().add(
+                                SelectedScreenChanged(
+                                    changedSelectedScreen: collectionState
+                                        .screenOfSelectedIndex(index)));
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                validlyCompleteSensitizationSnackBar);
+                          }
+                        },
+                        items: const <BottomNavigationBarItem>[
+                          BottomNavigationBarItem(
+                            icon: Icon(Icons.info),
+                            label: 'Info',
+                          ),
+                          BottomNavigationBarItem(
+                            // TODO: Change icons to just numbers
+                            icon: Icon(Icons.one_k),
+                            label: 'First',
+                          ),
+                          BottomNavigationBarItem(
+                            icon: Icon(Icons.two_k),
+                            label: 'Second',
+                          ),
+                          BottomNavigationBarItem(
+                            icon: Icon(Icons.three_k),
+                            label: 'Third',
+                          ),
+                          BottomNavigationBarItem(
+                            icon: Icon(Icons.four_k),
+                            label: 'Fourth',
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }

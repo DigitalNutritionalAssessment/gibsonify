@@ -13,18 +13,24 @@ const RespondentSchema = Schema(
   name: r'Respondent',
   id: -2873524172455157742,
   properties: {
-    r'comments': PropertySchema(
+    r'collections': PropertySchema(
       id: 0,
+      name: r'collections',
+      type: IsarType.objectList,
+      target: r'GibsonsForm',
+    ),
+    r'comments': PropertySchema(
+      id: 1,
       name: r'comments',
       type: IsarType.string,
     ),
     r'name': PropertySchema(
-      id: 1,
+      id: 2,
       name: r'name',
       type: IsarType.string,
     ),
     r'phoneNumber': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'phoneNumber',
       type: IsarType.string,
     )
@@ -41,6 +47,14 @@ int _respondentEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
+  bytesCount += 3 + object.collections.length * 3;
+  {
+    final offsets = allOffsets[GibsonsForm]!;
+    for (var i = 0; i < object.collections.length; i++) {
+      final value = object.collections[i];
+      bytesCount += GibsonsFormSchema.estimateSize(value, offsets, allOffsets);
+    }
+  }
   bytesCount += 3 + object.comments.length * 3;
   bytesCount += 3 + object.name.length * 3;
   bytesCount += 3 + object.phoneNumber.length * 3;
@@ -53,9 +67,15 @@ void _respondentSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeString(offsets[0], object.comments);
-  writer.writeString(offsets[1], object.name);
-  writer.writeString(offsets[2], object.phoneNumber);
+  writer.writeObjectList<GibsonsForm>(
+    offsets[0],
+    allOffsets,
+    GibsonsFormSchema.serialize,
+    object.collections,
+  );
+  writer.writeString(offsets[1], object.comments);
+  writer.writeString(offsets[2], object.name);
+  writer.writeString(offsets[3], object.phoneNumber);
 }
 
 Respondent _respondentDeserialize(
@@ -65,9 +85,16 @@ Respondent _respondentDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = Respondent(
-    comments: reader.readStringOrNull(offsets[0]) ?? "",
-    name: reader.readStringOrNull(offsets[1]) ?? "",
-    phoneNumber: reader.readStringOrNull(offsets[2]) ?? "",
+    collections: reader.readObjectList<GibsonsForm>(
+          offsets[0],
+          GibsonsFormSchema.deserialize,
+          allOffsets,
+          GibsonsForm(),
+        ) ??
+        const [],
+    comments: reader.readStringOrNull(offsets[1]) ?? "",
+    name: reader.readStringOrNull(offsets[2]) ?? "",
+    phoneNumber: reader.readStringOrNull(offsets[3]) ?? "",
   );
   return object;
 }
@@ -80,10 +107,18 @@ P _respondentDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readStringOrNull(offset) ?? "") as P;
+      return (reader.readObjectList<GibsonsForm>(
+            offset,
+            GibsonsFormSchema.deserialize,
+            allOffsets,
+            GibsonsForm(),
+          ) ??
+          const []) as P;
     case 1:
       return (reader.readStringOrNull(offset) ?? "") as P;
     case 2:
+      return (reader.readStringOrNull(offset) ?? "") as P;
+    case 3:
       return (reader.readStringOrNull(offset) ?? "") as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -92,6 +127,95 @@ P _respondentDeserializeProp<P>(
 
 extension RespondentQueryFilter
     on QueryBuilder<Respondent, Respondent, QFilterCondition> {
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
+      collectionsLengthEqualTo(int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'collections',
+        length,
+        true,
+        length,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
+      collectionsIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'collections',
+        0,
+        true,
+        0,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
+      collectionsIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'collections',
+        0,
+        false,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
+      collectionsLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'collections',
+        0,
+        true,
+        length,
+        include,
+      );
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
+      collectionsLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'collections',
+        length,
+        include,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
+      collectionsLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'collections',
+        lower,
+        includeLower,
+        upper,
+        includeUpper,
+      );
+    });
+  }
+
   QueryBuilder<Respondent, Respondent, QAfterFilterCondition> commentsEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -494,4 +618,11 @@ extension RespondentQueryFilter
 }
 
 extension RespondentQueryObject
-    on QueryBuilder<Respondent, Respondent, QFilterCondition> {}
+    on QueryBuilder<Respondent, Respondent, QFilterCondition> {
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
+      collectionsElement(FilterQuery<GibsonsForm> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.object(q, r'collections');
+    });
+  }
+}

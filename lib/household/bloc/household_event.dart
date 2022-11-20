@@ -61,3 +61,21 @@ class EditRespondentSaveRequested extends HouseholdEvent {
   @override
   List<Object> get props => [respondent];
 }
+
+class CollectionOpened extends HouseholdEvent {
+  final int index;
+
+  const CollectionOpened({required this.index});
+
+  @override
+  List<Object> get props => [index];
+}
+
+class SaveCollectionRequested extends HouseholdEvent {
+  final GibsonsForm gibsonsForm;
+
+  const SaveCollectionRequested({required this.gibsonsForm});
+
+  @override
+  List<Object> get props => [gibsonsForm];
+}
