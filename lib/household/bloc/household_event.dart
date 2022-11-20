@@ -52,3 +52,12 @@ class RespondentOpened extends HouseholdEvent {
   @override
   List<Object> get props => [index];
 }
+
+class EditRespondentSaveRequested extends HouseholdEvent {
+  final Respondent respondent;
+
+  const EditRespondentSaveRequested({required this.respondent});
+
+  @override
+  List<Object> get props => [respondent];
+}

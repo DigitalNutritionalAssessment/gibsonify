@@ -54,6 +54,9 @@ Route _onGenerateRoute(RouteSettings settings) {
       final args = settings.arguments as Map<String, dynamic>;
       page = ViewRespondentPage(index: args['index']);
       break;
+    case PageRouter.editRespondent:
+      page = const EditRespondentPage();
+      break;
     default:
       throw Exception('Invalid route: ${settings.name}');
   }

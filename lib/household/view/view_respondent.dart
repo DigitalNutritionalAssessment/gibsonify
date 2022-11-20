@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gibsonify/household/household.dart';
+import 'package:gibsonify/navigation/models/page_router.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:intl/intl.dart';
 
@@ -19,7 +20,10 @@ class ViewRespondentPage extends StatelessWidget {
           appBar: AppBar(
             title: Text(respondent.name),
             actions: [
-              IconButton(onPressed: () => {}, icon: const Icon(Icons.edit))
+              IconButton(
+                  onPressed: () =>
+                      {Navigator.pushNamed(context, PageRouter.editRespondent)},
+                  icon: const Icon(Icons.edit))
             ],
           ),
           body: Padding(

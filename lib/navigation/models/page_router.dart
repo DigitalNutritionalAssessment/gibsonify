@@ -32,6 +32,7 @@ class PageRouter {
   static const editHousehold = 'edithousehold';
   static const createRespondent = 'createrespondent';
   static const viewRespondent = 'viewrespondent';
+  static const editRespondent = 'editrespondent';
 
   static Route route(RouteSettings routeSettings) {
     switch (routeSettings.name) {
