@@ -20,6 +20,7 @@ class HouseholdBloc extends Bloc<HouseholdEvent, HouseholdState> {
     on<EditRespondentSaveRequested>(_onEditRespondentSaveRequested);
     on<SaveCollectionRequested>(_onSaveCollectionRequested);
     on<CollectionOpened>(_onCollectionOpened);
+    on<DeleteCollectionRequested>(_onDeleteCollectionRequested);
   }
 
   void _onHouseholdOpened(event, emit) async {
@@ -104,6 +105,22 @@ class HouseholdBloc extends Bloc<HouseholdEvent, HouseholdState> {
     respondents[state.selectedRespondentIndex!] = updatedRespondent;
     final household = state.household!.copyWith(respondents: respondents);
     _isarRepository.saveNewHousehold(household);
+    emit(HouseholdLoaded(
+        household: household,
+        selectedRespondentIndex: state.selectedRespondentIndex!));
+  }
+
+  void _onDeleteCollectionRequested(
+      DeleteCollectionRequested event, Emitter<HouseholdState> emit) async {
+    final respondent =
+        state.household!.respondents[state.selectedRespondentIndex!];
+    final collections = respondent.collections.toList();
+    collections.removeAt(event.index);
+    final updatedRespondent = respondent.copyWith(collections: collections);
+    var respondents = state.household!.respondents.toList();
+    respondents[state.selectedRespondentIndex!] = updatedRespondent;
+    final household = state.household!.copyWith(respondents: respondents);
+    await _isarRepository.saveNewHousehold(household);
     emit(HouseholdLoaded(
         household: household,
         selectedRespondentIndex: state.selectedRespondentIndex!));
