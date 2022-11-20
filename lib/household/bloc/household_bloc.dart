@@ -16,12 +16,13 @@ class HouseholdBloc extends Bloc<HouseholdEvent, HouseholdState> {
     on<EditHouseholdSaveRequested>(_onEditHouseholdSaveRequested);
     on<NewRespondentSaveRequested>(_onNewRespondentSaveRequested);
     on<DeleteRespondentRequested>(_onDeleteRespondentRequested);
+    on<RespondentOpened>(_onRespondentOpened);
   }
 
   void _onHouseholdOpened(event, emit) async {
     final household = await _isarRepository.readHousehold(event.id);
     if (household != null) {
-      emit(HouseholdLoaded(household));
+      emit(HouseholdLoaded(household: household));
     } else {
       emit(const HouseholdNotFound());
     }
@@ -34,7 +35,7 @@ class HouseholdBloc extends Bloc<HouseholdEvent, HouseholdState> {
         sensitizationDate: event.sensitizationDate,
         comments: event.comments);
     await _isarRepository.saveNewHousehold(household);
-    emit(HouseholdLoaded(household));
+    emit(HouseholdLoaded(household: household));
   }
 
   void _onNewRespondentSaveRequested(
@@ -42,7 +43,7 @@ class HouseholdBloc extends Bloc<HouseholdEvent, HouseholdState> {
     final household = state.household!.copyWith(
         respondents: [...state.household!.respondents, event.respondent]);
     await _isarRepository.saveNewHousehold(household);
-    emit(HouseholdLoaded(household));
+    emit(HouseholdLoaded(household: household));
   }
 
   void _onDeleteRespondentRequested(
@@ -51,6 +52,12 @@ class HouseholdBloc extends Bloc<HouseholdEvent, HouseholdState> {
     final household = state.household!
         .copyWith(respondents: respondents..removeAt(event.index));
     await _isarRepository.saveNewHousehold(household);
-    emit(HouseholdLoaded(household));
+    emit(HouseholdLoaded(household: household));
+  }
+
+  void _onRespondentOpened(
+      RespondentOpened event, Emitter<HouseholdState> emit) async {
+    emit(HouseholdLoaded(
+        household: state.household!, selectedRespondentIndex: event.index));
   }
 }

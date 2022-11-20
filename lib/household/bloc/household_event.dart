@@ -43,3 +43,12 @@ class DeleteRespondentRequested extends HouseholdEvent {
   @override
   List<Object> get props => [index];
 }
+
+class RespondentOpened extends HouseholdEvent {
+  final int index;
+
+  const RespondentOpened({required this.index});
+
+  @override
+  List<Object> get props => [index];
+}

@@ -102,6 +102,9 @@ Widget householdView(context, state) {
                 title: Text(state.household!.respondents[index].name),
                 subtitle: Text("ID: ${index + 1}"),
                 onTap: () => {
+                  context
+                      .read<HouseholdBloc>()
+                      .add(RespondentOpened(index: index)),
                   Navigator.pushNamed(context, PageRouter.viewRespondent,
                       arguments: {'index': index})
                 },
