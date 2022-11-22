@@ -67,7 +67,13 @@ const HouseholdSchema = CollectionSchema(
   links: {},
   embeddedSchemas: {
     r'Respondent': RespondentSchema,
-    r'GibsonsForm': GibsonsFormSchema
+    r'GibsonsForm': GibsonsFormSchema,
+    r'FoodItem': FoodItemSchema,
+    r'Measurement': MeasurementSchema,
+    r'Recipe': RecipeSchema,
+    r'Ingredient': IngredientSchema,
+    r'Probe': ProbeSchema,
+    r'ProbeOption': ProbeOptionSchema
   },
   getId: _householdGetId,
   getLinks: _householdGetLinks,

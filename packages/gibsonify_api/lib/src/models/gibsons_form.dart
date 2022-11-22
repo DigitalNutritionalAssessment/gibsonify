@@ -43,7 +43,6 @@ class GibsonsForm extends Equatable {
   final String? interviewOutcomeNotCompletedReason;
   final String? comments;
   final bool finished;
-  @ignore
   final List<FoodItem> foodItems;
 
   // TODO: implement code generation JSON serialization using json_serializable

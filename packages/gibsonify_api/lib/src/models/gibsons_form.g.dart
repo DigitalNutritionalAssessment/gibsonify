@@ -28,63 +28,69 @@ const GibsonsFormSchema = Schema(
       name: r'finished',
       type: IsarType.bool,
     ),
-    r'id': PropertySchema(
+    r'foodItems': PropertySchema(
       id: 3,
+      name: r'foodItems',
+      type: IsarType.objectList,
+      target: r'FoodItem',
+    ),
+    r'id': PropertySchema(
+      id: 4,
       name: r'id',
       type: IsarType.string,
     ),
     r'interviewDate': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'interviewDate',
       type: IsarType.string,
     ),
     r'interviewEndTime': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'interviewEndTime',
       type: IsarType.string,
     ),
     r'interviewFinishedInOneVisit': PropertySchema(
-      id: 6,
+      id: 7,
       name: r'interviewFinishedInOneVisit',
       type: IsarType.string,
     ),
     r'interviewOutcome': PropertySchema(
-      id: 7,
+      id: 8,
       name: r'interviewOutcome',
       type: IsarType.string,
     ),
     r'interviewOutcomeNotCompletedReason': PropertySchema(
-      id: 8,
+      id: 9,
       name: r'interviewOutcomeNotCompletedReason',
       type: IsarType.string,
     ),
     r'interviewStartTime': PropertySchema(
-      id: 9,
+      id: 10,
       name: r'interviewStartTime',
       type: IsarType.string,
     ),
     r'pictureChartCollected': PropertySchema(
-      id: 10,
+      id: 11,
       name: r'pictureChartCollected',
       type: IsarType.string,
     ),
     r'pictureChartNotCollectedReason': PropertySchema(
-      id: 11,
+      id: 12,
       name: r'pictureChartNotCollectedReason',
       type: IsarType.string,
     ),
     r'recallDay': PropertySchema(
-      id: 12,
+      id: 13,
       name: r'recallDay',
       type: IsarType.string,
     ),
     r'secondInterviewVisitDate': PropertySchema(
-      id: 13,
+      id: 14,
       name: r'secondInterviewVisitDate',
       type: IsarType.string,
     ),
     r'secondVisitReason': PropertySchema(
-      id: 14,
+      id: 15,
       name: r'secondVisitReason',
       type: IsarType.string,
     )
@@ -111,6 +117,14 @@ int _gibsonsFormEstimateSize(
     final value = object.employeeNumber;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
+    }
+  }
+  bytesCount += 3 + object.foodItems.length * 3;
+  {
+    final offsets = allOffsets[FoodItem]!;
+    for (var i = 0; i < object.foodItems.length; i++) {
+      final value = object.foodItems[i];
+      bytesCount += FoodItemSchema.estimateSize(value, offsets, allOffsets);
     }
   }
   bytesCount += 3 + object.id.length * 3;
@@ -192,18 +206,24 @@ void _gibsonsFormSerialize(
   writer.writeString(offsets[0], object.comments);
   writer.writeString(offsets[1], object.employeeNumber);
   writer.writeBool(offsets[2], object.finished);
-  writer.writeString(offsets[3], object.id);
-  writer.writeString(offsets[4], object.interviewDate);
-  writer.writeString(offsets[5], object.interviewEndTime);
-  writer.writeString(offsets[6], object.interviewFinishedInOneVisit);
-  writer.writeString(offsets[7], object.interviewOutcome);
-  writer.writeString(offsets[8], object.interviewOutcomeNotCompletedReason);
-  writer.writeString(offsets[9], object.interviewStartTime);
-  writer.writeString(offsets[10], object.pictureChartCollected);
-  writer.writeString(offsets[11], object.pictureChartNotCollectedReason);
-  writer.writeString(offsets[12], object.recallDay);
-  writer.writeString(offsets[13], object.secondInterviewVisitDate);
-  writer.writeString(offsets[14], object.secondVisitReason);
+  writer.writeObjectList<FoodItem>(
+    offsets[3],
+    allOffsets,
+    FoodItemSchema.serialize,
+    object.foodItems,
+  );
+  writer.writeString(offsets[4], object.id);
+  writer.writeString(offsets[5], object.interviewDate);
+  writer.writeString(offsets[6], object.interviewEndTime);
+  writer.writeString(offsets[7], object.interviewFinishedInOneVisit);
+  writer.writeString(offsets[8], object.interviewOutcome);
+  writer.writeString(offsets[9], object.interviewOutcomeNotCompletedReason);
+  writer.writeString(offsets[10], object.interviewStartTime);
+  writer.writeString(offsets[11], object.pictureChartCollected);
+  writer.writeString(offsets[12], object.pictureChartNotCollectedReason);
+  writer.writeString(offsets[13], object.recallDay);
+  writer.writeString(offsets[14], object.secondInterviewVisitDate);
+  writer.writeString(offsets[15], object.secondVisitReason);
 }
 
 GibsonsForm _gibsonsFormDeserialize(
@@ -216,17 +236,24 @@ GibsonsForm _gibsonsFormDeserialize(
     comments: reader.readStringOrNull(offsets[0]),
     employeeNumber: reader.readStringOrNull(offsets[1]),
     finished: reader.readBoolOrNull(offsets[2]) ?? false,
-    interviewDate: reader.readStringOrNull(offsets[4]),
-    interviewEndTime: reader.readStringOrNull(offsets[5]),
-    interviewFinishedInOneVisit: reader.readStringOrNull(offsets[6]),
-    interviewOutcome: reader.readStringOrNull(offsets[7]),
-    interviewOutcomeNotCompletedReason: reader.readStringOrNull(offsets[8]),
-    interviewStartTime: reader.readStringOrNull(offsets[9]),
-    pictureChartCollected: reader.readStringOrNull(offsets[10]),
-    pictureChartNotCollectedReason: reader.readStringOrNull(offsets[11]),
-    recallDay: reader.readStringOrNull(offsets[12]),
-    secondInterviewVisitDate: reader.readStringOrNull(offsets[13]),
-    secondVisitReason: reader.readStringOrNull(offsets[14]),
+    foodItems: reader.readObjectList<FoodItem>(
+          offsets[3],
+          FoodItemSchema.deserialize,
+          allOffsets,
+          FoodItem(),
+        ) ??
+        const <FoodItem>[],
+    interviewDate: reader.readStringOrNull(offsets[5]),
+    interviewEndTime: reader.readStringOrNull(offsets[6]),
+    interviewFinishedInOneVisit: reader.readStringOrNull(offsets[7]),
+    interviewOutcome: reader.readStringOrNull(offsets[8]),
+    interviewOutcomeNotCompletedReason: reader.readStringOrNull(offsets[9]),
+    interviewStartTime: reader.readStringOrNull(offsets[10]),
+    pictureChartCollected: reader.readStringOrNull(offsets[11]),
+    pictureChartNotCollectedReason: reader.readStringOrNull(offsets[12]),
+    recallDay: reader.readStringOrNull(offsets[13]),
+    secondInterviewVisitDate: reader.readStringOrNull(offsets[14]),
+    secondVisitReason: reader.readStringOrNull(offsets[15]),
   );
   return object;
 }
@@ -245,9 +272,15 @@ P _gibsonsFormDeserializeProp<P>(
     case 2:
       return (reader.readBoolOrNull(offset) ?? false) as P;
     case 3:
-      return (reader.readString(offset)) as P;
+      return (reader.readObjectList<FoodItem>(
+            offset,
+            FoodItemSchema.deserialize,
+            allOffsets,
+            FoodItem(),
+          ) ??
+          const <FoodItem>[]) as P;
     case 4:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 5:
       return (reader.readStringOrNull(offset)) as P;
     case 6:
@@ -267,6 +300,8 @@ P _gibsonsFormDeserializeProp<P>(
     case 13:
       return (reader.readStringOrNull(offset)) as P;
     case 14:
+      return (reader.readStringOrNull(offset)) as P;
+    case 15:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -589,6 +624,95 @@ extension GibsonsFormQueryFilter
         property: r'finished',
         value: value,
       ));
+    });
+  }
+
+  QueryBuilder<GibsonsForm, GibsonsForm, QAfterFilterCondition>
+      foodItemsLengthEqualTo(int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'foodItems',
+        length,
+        true,
+        length,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<GibsonsForm, GibsonsForm, QAfterFilterCondition>
+      foodItemsIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'foodItems',
+        0,
+        true,
+        0,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<GibsonsForm, GibsonsForm, QAfterFilterCondition>
+      foodItemsIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'foodItems',
+        0,
+        false,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<GibsonsForm, GibsonsForm, QAfterFilterCondition>
+      foodItemsLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'foodItems',
+        0,
+        true,
+        length,
+        include,
+      );
+    });
+  }
+
+  QueryBuilder<GibsonsForm, GibsonsForm, QAfterFilterCondition>
+      foodItemsLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'foodItems',
+        length,
+        include,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<GibsonsForm, GibsonsForm, QAfterFilterCondition>
+      foodItemsLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'foodItems',
+        lower,
+        includeLower,
+        upper,
+        includeUpper,
+      );
     });
   }
 
@@ -2427,4 +2551,11 @@ extension GibsonsFormQueryFilter
 }
 
 extension GibsonsFormQueryObject
-    on QueryBuilder<GibsonsForm, GibsonsForm, QFilterCondition> {}
+    on QueryBuilder<GibsonsForm, GibsonsForm, QFilterCondition> {
+  QueryBuilder<GibsonsForm, GibsonsForm, QAfterFilterCondition>
+      foodItemsElement(FilterQuery<FoodItem> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.object(q, r'foodItems');
+    });
+  }
+}

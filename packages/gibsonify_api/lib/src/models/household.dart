@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:gibsonify_api/src/models/respondent.dart';
-import 'package:gibsonify_api/src/models/gibsons_form.dart';
+import 'package:gibsonify_api/src/models/models.dart';
 import 'package:isar/isar.dart';
 
 part 'household.g.dart';
