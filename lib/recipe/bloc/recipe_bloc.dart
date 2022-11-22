@@ -418,10 +418,10 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
 
     List<Probe> probes = List.from(recipes[changedRecipeIndex].probes);
     int changedProbeIndex = event.probeIndex;
-    List<Map<String, dynamic>> probeOptions =
+    List<ProbeOption> probeOptions =
         List.from(probes[changedProbeIndex].probeOptions);
 
-    probeOptions.add({'option': null, 'id': const Uuid().v4()});
+    probeOptions.add(ProbeOption(option: null, id: const Uuid().v4()));
     Probe probe =
         probes[changedProbeIndex].copyWith(probeOptions: probeOptions);
 
@@ -448,15 +448,13 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
 
     List<Probe> probes = List.from(recipes[changedRecipeIndex].probes);
     int changedProbeIndex = event.probeIndex;
-    List<Map<String, dynamic>> probeOptions =
+    List<ProbeOption> probeOptions =
         List.from(probes[changedProbeIndex].probeOptions);
     int changedProbeOptionIndex = event.probeOptionIndex;
 
     String probeOptionName = event.probeOptionName;
-    Map<String, String?> probeOption = {
-      'option': probeOptionName,
-      'id': probeOptions[changedProbeOptionIndex]['id']
-    };
+    ProbeOption probeOption = ProbeOption(
+        option: probeOptionName, id: probeOptions[changedProbeOptionIndex].id);
     probeOptions.removeAt(changedProbeOptionIndex);
     probeOptions.insert(changedProbeOptionIndex, probeOption);
 
@@ -482,7 +480,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
 
     List<Probe> probes = List.from(recipes[changedRecipeIndex].probes);
     int changedProbeIndex = event.probeIndex;
-    List<Map<String, dynamic>> probeOptions =
+    List<ProbeOption> probeOptions =
         List.from(probes[changedProbeIndex].probeOptions);
 
     probeOptions.removeAt(event.probeOptionIndex);
@@ -1068,9 +1066,10 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
         List<Probe> probes = List.from(recipe.probes);
 
         List<String> probeAnswers = recipeProbeAnswers.split('+');
-        List<Map<String, dynamic>> probeOptions = [];
+        List<ProbeOption> probeOptions = [];
         for (String answer in probeAnswers) {
-          probeOptions.add({'option': answer.trim(), 'id': const Uuid().v4()});
+          probeOptions
+              .add(ProbeOption(option: answer.trim(), id: const Uuid().v4()));
         }
         final probe = Probe(name: recipeProbeName, probeOptions: probeOptions);
         probes.add(probe);
