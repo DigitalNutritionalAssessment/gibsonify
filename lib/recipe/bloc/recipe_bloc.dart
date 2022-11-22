@@ -555,7 +555,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     List<Recipe> recipes = List.from(state.recipes);
     int changedRecipeIndex = recipes.indexOf(event.recipe);
 
-    final ingredient = Ingredient();
+    final ingredient = Ingredient(id: const Uuid().v4());
     List<Ingredient> ingredients =
         List.from(recipes[changedRecipeIndex].ingredients);
     ingredients.add(ingredient);
@@ -1093,6 +1093,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
           measurements.add(measurement);
         }
         final ingredient = Ingredient(
+            id: const Uuid().v4(),
             name: ingredientName,
             description: ingredientDescription,
             cookingState: ingredientCookingState,

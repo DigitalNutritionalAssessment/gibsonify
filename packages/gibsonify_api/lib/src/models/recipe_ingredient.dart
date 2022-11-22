@@ -1,10 +1,14 @@
 import 'package:equatable/equatable.dart';
+import 'package:isar/isar.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:convert';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
 
+part 'recipe_ingredient.g.dart';
+
+@Embedded(inheritance: false)
 class Ingredient extends Equatable {
   Ingredient(
       {this.name,
@@ -12,12 +16,12 @@ class Ingredient extends Equatable {
       this.description,
       this.cookingState,
       this.customCookingState,
-      List<Measurement>? measurements,
-      this.foodComposition,
+      this.measurements = const [],
+      // Food composition will be undergoing major changes so
+      // it can be left out until those are implemented
+      //this.foodComposition,
       this.saved = false,
-      String? id})
-      : id = id ?? const Uuid().v4(),
-        measurements = measurements ?? [Measurement()];
+      this.id = ""});
 
   final String? name;
   final String? customName;
@@ -25,7 +29,7 @@ class Ingredient extends Equatable {
   final String? cookingState;
   final String? customCookingState;
   final List<Measurement> measurements;
-  final Map<String, dynamic>? foodComposition;
+  //final Map<String, dynamic>? foodComposition;
   final bool saved;
   final String id;
 
@@ -76,12 +80,13 @@ class Ingredient extends Equatable {
         cookingState: cookingState ?? this.cookingState,
         customCookingState: customCookingState ?? this.customCookingState,
         measurements: measurements ?? this.measurements,
-        foodComposition: foodComposition ?? this.foodComposition,
+        //foodComposition: foodComposition ?? this.foodComposition,
         saved: saved ?? this.saved,
         id: id ?? this.id);
   }
 
   @override
+  @ignore
   List<Object?> get props => [
         name,
         customName,
@@ -89,7 +94,7 @@ class Ingredient extends Equatable {
         cookingState,
         customCookingState,
         measurements,
-        foodComposition,
+        //foodComposition,
         saved,
         id
       ];
@@ -106,7 +111,7 @@ class Ingredient extends Equatable {
         cookingState = json['cookingState'],
         customCookingState = json['customCookingState'],
         measurements = Measurement.jsonDecodeMeasurements(json['measurements']),
-        foodComposition = jsonDecode(json['foodComposition']),
+        //foodComposition = jsonDecode(json['foodComposition']),
         saved = json['saved'] == 'true' ? true : false,
         id = json['id'];
 
@@ -119,7 +124,7 @@ class Ingredient extends Equatable {
     data['cookingState'] = cookingState;
     data['customCookingState'] = customCookingState;
     data['measurements'] = jsonEncode(measurements);
-    data['foodComposition'] = jsonEncode(foodComposition);
+    //data['foodComposition'] = jsonEncode(foodComposition);
     data['saved'] = saved.toString();
     data['id'] = id;
     return data;
