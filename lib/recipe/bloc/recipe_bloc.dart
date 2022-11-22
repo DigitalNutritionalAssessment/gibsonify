@@ -71,8 +71,10 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
   }
 
   void _onRecipeAdded(RecipeAdded event, Emitter<RecipeState> emit) {
-    final recipe =
-        Recipe(employeeNumber: event.employeeNumber, type: event.type);
+    final recipe = Recipe(
+        number: const Uuid().v4(),
+        employeeNumber: event.employeeNumber,
+        type: event.type);
 
     List<Recipe> recipes = List.from(state.recipes);
     recipes.add(recipe);
@@ -1025,7 +1027,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
       if (newerRecipesRecipeIds.contains(recipeNumber)) {
         continue;
       } else if (recipeOnDevice != null) {
-        if (DateTime.parse(recipeOnDevice.date).isAfter(DateTime.parse(date))) {
+        if (DateTime.parse(recipeOnDevice.date!)
+            .isAfter(DateTime.parse(date))) {
           newerRecipesRecipeIds.add(recipeNumber);
           continue;
         } else {
