@@ -146,7 +146,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     List<Measurement> measurements =
         List.from(recipes[changedRecipeIndex].measurements);
 
-    final measurement = Measurement();
+    final measurement = Measurement(id: const Uuid().v4());
     measurements.add(measurement);
 
     Recipe recipe = recipes[changedRecipeIndex]
@@ -773,7 +773,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
         .ingredients[changedIngredientIndex]
         .measurements);
 
-    final measurement = Measurement();
+    final measurement = Measurement(id: const Uuid().v4());
     measurements.add(measurement);
 
     Ingredient ingredient = ingredients[changedIngredientIndex]
@@ -1056,8 +1056,11 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
         List<String> newMeasurements = recipeMeasurement.split('+');
         for (String newMeasurement in newMeasurements) {
           List<String> fields = newMeasurement.trim().split('_');
-          final measurement =
-              Measurement(method: fields[0], value: fields[1], unit: fields[2]);
+          final measurement = Measurement(
+              id: const Uuid().v4(),
+              method: fields[0],
+              value: fields[1],
+              unit: fields[2]);
           measurements.add(measurement);
         }
 
@@ -1082,8 +1085,11 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
         List<String> newMeasurements = ingredientMeasurement.split('+');
         for (String newMeasurement in newMeasurements) {
           List<String> fields = newMeasurement.trim().split('_');
-          final measurement =
-              Measurement(method: fields[0], value: fields[1], unit: fields[2]);
+          final measurement = Measurement(
+              id: const Uuid().v4(),
+              method: fields[0],
+              value: fields[1],
+              unit: fields[2]);
           measurements.add(measurement);
         }
         final ingredient = Ingredient(
@@ -1106,7 +1112,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
       if (recipe.measurements.isEmpty) {
         // Protect against recipes without Measurements
         Recipe recipeWithMeasurement =
-            recipe.copyWith(measurements: [Measurement()]);
+            recipe.copyWith(measurements: [Measurement(id: const Uuid().v4())]);
         newRecipes.remove(recipe);
         newRecipes.add(recipeWithMeasurement);
       }

@@ -305,7 +305,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
     List<Measurement> measurements = List.from(foodItem.measurements);
 
-    measurements.add(Measurement());
+    measurements.add(Measurement(id: const Uuid().v4()));
 
     FoodItem changedFoodItem =
         foodItem.copyWith(measurements: measurements, confirmed: false);
@@ -344,7 +344,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
     // since copyWith does not allow to null attributes, create new instance and
     // copy the original id and changed method (thus nulling value and unit)
-    Measurement measurement = Measurement();
+    Measurement measurement = Measurement(id: const Uuid().v4());
 
     measurement = measurement.copyWith(
         id: measurements[changedmeasurementIndex].id,
