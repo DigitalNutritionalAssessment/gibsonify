@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gibsonify/recipe/recipe.dart';
 import 'package:gibsonify/collection/collection.dart';
 import 'package:gibsonify/navigation/models/page_router.dart';
 import 'package:gibsonify_repository/gibsonify_repository.dart';
@@ -60,6 +61,25 @@ Route _onGenerateRoute(RouteSettings settings) {
       break;
     case PageRouter.collection:
       page = const CollectionPage();
+      break;
+    case PageRouter.chooseRecipe:
+      final args = settings.arguments as Map<String, dynamic>;
+      page = ChooseRecipePage(
+          assignedFoodItemId: args['assignedFoodItemId'],
+          foodItemDescription: args['foodItemDescription']);
+      break;
+    case PageRouter.recipe:
+      Map<String, dynamic> args = settings.arguments as Map<String, dynamic>;
+      page = RecipePage(
+        args['recipeIndex'],
+        viewedFromCollection: args['viewedFromCollection'],
+        assignedFoodItemId: args['assignedFoodItemId'],
+        foodItemDescription: args['foodItemDescription'],
+        selectedScreen: args['selectedScreen'],
+      );
+      break;
+    case PageRouter.finishCollection:
+      page = const FinishCollectionPage();
       break;
     default:
       throw Exception('Invalid route: ${settings.name}');

@@ -18,6 +18,13 @@ class ProbeOption extends Equatable {
       : option = json['option'],
         id = json['id'];
 
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['option'] = option;
+    data['id'] = id;
+    return data;
+  }
+
   ProbeOption copyWith({String? option, String? id}) {
     return ProbeOption(option: option ?? this.option, id: id ?? this.id);
   }

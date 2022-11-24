@@ -59,7 +59,10 @@ class _RecipePageState extends State<RecipePage> {
     ];
 
     Future<bool> popRecipePage(BuildContext context) async {
-      context.read<RecipeBloc>().add(const RecipesSaved());
+      if (!widget.viewedFromCollection) {
+        context.read<RecipeBloc>().add(const RecipesSaved());
+      }
+
       Navigator.of(context).pop(true);
       return true;
     }

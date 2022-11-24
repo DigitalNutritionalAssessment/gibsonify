@@ -23,7 +23,8 @@ class HouseholdBloc extends Bloc<HouseholdEvent, HouseholdState> {
     on<DeleteCollectionRequested>(_onDeleteCollectionRequested);
   }
 
-  void _onHouseholdOpened(event, emit) async {
+  void _onHouseholdOpened(
+      HouseholdOpened event, Emitter<HouseholdState> emit) async {
     final household = await _isarRepository.readHousehold(event.id);
     if (household != null) {
       emit(HouseholdLoaded(household: household));
