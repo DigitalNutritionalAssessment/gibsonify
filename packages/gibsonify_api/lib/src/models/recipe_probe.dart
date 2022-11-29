@@ -73,7 +73,7 @@ class Probe extends Equatable {
       : name = json['name'],
         checked = json['checked'] == 'true' ? true : false,
         answer = json['answer'],
-        probeOptions = jsonDecode(json['probeOptions']);
+        probeOptions = _jsonDecodeProbeOptions(json['probeOptions']);
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -112,4 +112,12 @@ class Probe extends Equatable {
   @override
   @ignore
   List<Object?> get props => [name, checked, answer, probeOptions];
+}
+
+List<ProbeOption> _jsonDecodeProbeOptions(jsonEncodedProbeOptions) {
+  List<dynamic> partiallyDecodedProbeOptions =
+      jsonDecode(jsonEncodedProbeOptions);
+  List<ProbeOption> fullyDecodedProbeOptions = List<ProbeOption>.from(
+      partiallyDecodedProbeOptions.map((x) => ProbeOption.fromJson(x)));
+  return fullyDecodedProbeOptions;
 }
