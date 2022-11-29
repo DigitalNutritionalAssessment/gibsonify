@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:gibsonify/household/household.dart';
 import 'package:intl/intl.dart';
 
 import 'package:gibsonify/collection/collection.dart';
@@ -43,6 +44,7 @@ class FinishCollectionPage extends StatelessWidget {
                         } else {
                           showDialog<String>(
                               context: context,
+                              useRootNavigator: false,
                               builder: (BuildContext context) =>
                                   FinishCollectionDialog(
                                       gibsonsForm: state.gibsonsForm));
@@ -452,8 +454,8 @@ class FinishCollectionDialog extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {
-                context.read<CollectionBloc>().add(const GibsonsFormSaved());
-                context.read<HomeBloc>().add(const GibsonsFormsLoaded());
+                context.read<HouseholdBloc>().add(
+                    SaveCollectionRequested(gibsonsForm: state.gibsonsForm));
                 Navigator.pop(context);
                 Navigator.pop(context);
                 Navigator.pop(context);
@@ -462,13 +464,9 @@ class FinishCollectionDialog extends StatelessWidget {
             ),
             TextButton(
               onPressed: () async {
-                // TODO: investigate concurrency bug when saving from
-                // one bloc and loading from another - if the
-                // CollectionCompleted event did not save, but the
-                // GibsonsFormSaved event was added after it, a bug will
-                // occur, hence, saving should be moved to HomeBloc
                 context.read<CollectionBloc>().add(const CollectionFinished());
-                context.read<HomeBloc>().add(const GibsonsFormsLoaded());
+                context.read<HouseholdBloc>().add(SaveCollectionRequested(
+                    gibsonsForm: state.gibsonsForm.copyWith(finished: true)));
                 Navigator.pop(context);
                 Navigator.pop(context);
                 Navigator.pop(context);

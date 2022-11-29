@@ -444,6 +444,6 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     GibsonsForm changedGibsonsForm = state.gibsonsForm.copyWith(finished: true);
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
     // TODO: Move saving of collections to HomeBloc to avoid race conditions
-    await _gibsonifyRepository.saveForm(state.gibsonsForm);
+    //await _gibsonifyRepository.saveForm(state.gibsonsForm);
   }
 }
