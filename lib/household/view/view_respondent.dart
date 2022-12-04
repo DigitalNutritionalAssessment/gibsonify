@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gibsonify/household/household.dart';
 import 'package:gibsonify/navigation/models/page_router.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
-import 'package:intl/intl.dart';
 
 class ViewRespondentPage extends StatelessWidget {
   final int index;
@@ -37,8 +36,6 @@ class ViewRespondentPage extends StatelessWidget {
 }
 
 Widget respondentView(BuildContext context, Respondent respondent) {
-  DateFormat formatter = DateFormat('yyyy-MM-dd');
-
   return Column(
     children: [
       TextFormField(

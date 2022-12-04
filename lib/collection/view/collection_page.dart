@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gibsonify/collection/collection.dart';
 import 'package:gibsonify/household/household.dart';
 import 'package:gibsonify/login/login.dart';
-import 'package:gibsonify_repository/gibsonify_repository.dart';
 
 class CollectionPage extends StatelessWidget {
   const CollectionPage({Key? key}) : super(key: key);

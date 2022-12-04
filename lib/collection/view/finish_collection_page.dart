@@ -5,7 +5,6 @@ import 'package:gibsonify/household/household.dart';
 import 'package:intl/intl.dart';
 
 import 'package:gibsonify/collection/collection.dart';
-import 'package:gibsonify/home/home.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
 
 class FinishCollectionPage extends StatelessWidget {
