@@ -78,8 +78,24 @@ Route _onGenerateRoute(RouteSettings settings) {
         selectedScreen: args['selectedScreen'],
       );
       break;
+    case PageRouter.ingredient:
+      Map<String, dynamic> args = settings.arguments as Map<String, dynamic>;
+      page = IngredientPage(args['recipeIndex'], args['ingredientIndex']);
+      break;
     case PageRouter.finishCollection:
       page = const FinishCollectionPage();
+      break;
+    case PageRouter.sensitizationHelp:
+      page = const SensitizationHelpPage();
+      break;
+    case PageRouter.firstPassHelp:
+      page = const FirstPassHelpPage();
+      break;
+    case PageRouter.secondPassHelp:
+      page = const SecondPassHelpPage();
+      break;
+    case PageRouter.thirdPassHelp:
+      page = const ThirdPassHelpPage();
       break;
     default:
       throw Exception('Invalid route: ${settings.name}');
