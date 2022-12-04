@@ -74,7 +74,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     final recipe = Recipe(
         number: const Uuid().v4(),
         employeeNumber: event.employeeNumber,
-        type: event.type);
+        type: event.type,
+        measurements: [Measurement()]);
 
     List<Recipe> recipes = List.from(state.recipes);
     recipes.add(recipe);
@@ -298,7 +299,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     List<Recipe> recipes = List.from(state.recipes);
     int changedRecipeIndex = recipes.indexOf(event.recipe);
 
-    final probe = Probe();
+    final probe = Probe(probeOptions: ProbeOption.defaults());
 
     List<Probe> probes = List.from(recipes[changedRecipeIndex].probes);
     probes.add(probe);
@@ -557,7 +558,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     List<Recipe> recipes = List.from(state.recipes);
     int changedRecipeIndex = recipes.indexOf(event.recipe);
 
-    final ingredient = Ingredient(id: const Uuid().v4());
+    final ingredient =
+        Ingredient(id: const Uuid().v4(), measurements: [Measurement()]);
     List<Ingredient> ingredients =
         List.from(recipes[changedRecipeIndex].ingredients);
     ingredients.add(ingredient);

@@ -18,6 +18,13 @@ class ProbeOption extends Equatable {
       : option = json['option'],
         id = json['id'];
 
+  static List<ProbeOption> defaults() {
+    final List<ProbeOption> options = [];
+    options.add(ProbeOption(option: 'Yes', id: Uuid().v4()));
+    options.add(ProbeOption(option: 'No', id: Uuid().v4()));
+    return options;
+  }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['option'] = option;
