@@ -90,10 +90,19 @@ class GibsonsForm extends Equatable {
   }
   // TODO: add a fromCsv constructor
 
-  String toCsv() {
+  String toCsv(
+      String householdId,
+      String respondentName,
+      String respondentCountryCode,
+      String respondentTelNumberPrefix,
+      String respondentTelNumber,
+      String sensitizationDate,
+      String geoLocation) {
     String gibsonsFormInfo =
-        '"$id","$employeeNumber","$recallDay","$interviewDate","$interviewStartTime",'
-        '"$pictureChartCollected","$pictureChartNotCollectedReason",'
+        '"$id","$employeeNumber","$householdId","$respondentName",'
+        '"$respondentCountryCode","$respondentTelNumberPrefix","$respondentTelNumber",'
+        '"$sensitizationDate","$recallDay","$interviewDate","$interviewStartTime",'
+        '"$geoLocation","$pictureChartCollected","$pictureChartNotCollectedReason",'
         '"$interviewEndTime","$interviewFinishedInOneVisit","$secondInterviewVisitDate",'
         '"$secondVisitReason","$interviewOutcome","$interviewOutcomeNotCompletedReason",'
         '"$comments","${finished.toString()}",';

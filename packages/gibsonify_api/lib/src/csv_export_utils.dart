@@ -6,23 +6,16 @@ import 'package:gibsonify_api/gibsonify_api.dart';
 /// separated by `+` (plus).
 String combineMeasurements(List<Measurement> measurements) {
   // TODO: think of a different measurement format than this _ + one
-  String measurementsCombined = '';
-  for (Measurement measurement in measurements) {
-    measurementsCombined = measurementsCombined +
-        '${measurement.method}_'
-            '${measurement.value}_${measurement.unit} + ';
-  }
-
-  measurementsCombined = measurementsCombined.substring(
-      0, measurementsCombined.length - ' + '.length);
-  return measurementsCombined;
+  return measurements
+      .map((measurement) =>
+          '${measurement.method}_${measurement.value}_${measurement.unit}')
+      .join(' + ');
 }
 
-/// Converts a `List` of nullable `GibsonsForm` elements into a csv-formatted
-/// `String`.
-String convertFinishedGibsonsFormsToCsv(List<GibsonsForm?> gibsonsForms) {
-  String finishedGibsonsFormsCsvHeader =
-      'Collection ID,Employee Number,Household ID,Respondent Name,'
+/// Converts a `List` of `Household` elements into the legacy CSV format
+/// for Gibsons forms export. See dev_tools/gibsons_form_example.csv.
+String householdsToLegacyCsvExport(List<Household> households) {
+  String csv = 'Collection ID,Employee Number,Household ID,Respondent Name,'
       'Respondent Country Code,Respondent Tel Number Prefix,'
       'Respondent Tel Number,Sensitization Date,Recall Day,'
       'Interview Date,Interview Start Time,GPS Location,'
@@ -34,14 +27,24 @@ String convertFinishedGibsonsFormsToCsv(List<GibsonsForm?> gibsonsForms) {
       'Ingredients Description,Preparation Method,Confirmed,'
       'Recipe Number,Recipe Date,Recipe Name,Measurements\n';
 
-  String finishedGibsonsFormsCsv = finishedGibsonsFormsCsvHeader;
-
-  for (GibsonsForm? gibsonsForm in gibsonsForms) {
-    if (gibsonsForm != null && gibsonsForm.finished) {
-      finishedGibsonsFormsCsv += gibsonsForm.toCsv();
+  for (Household household in households) {
+    for (Respondent respondent in household.respondents) {
+      for (GibsonsForm gibsonsForm in respondent.collections) {
+        if (gibsonsForm.finished) {
+          csv += gibsonsForm.toCsv(
+              household.householdId,
+              respondent.name,
+              "",
+              "",
+              respondent.phoneNumber,
+              household.sensitizationDate.toString(),
+              household.geoLocation);
+        }
+      }
     }
   }
-  return finishedGibsonsFormsCsv;
+
+  return csv;
 }
 
 /// Converts a `List` of nullable `Recipe` elements into a csv-formatted

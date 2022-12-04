@@ -46,8 +46,9 @@ class App extends StatelessWidget {
                   RecipeBloc(gibsonifyRepository: gibsonifyRepository)
                     ..add(const RecipesLoaded())),
           BlocProvider(
-              create: (context) =>
-                  ImportExportBloc(gibsonifyRepository: gibsonifyRepository)),
+              create: (context) => ImportExportBloc(
+                  gibsonifyRepository: gibsonifyRepository,
+                  isarRepository: isarRepository)),
         ],
         child: MaterialApp(
           title: 'Gibsonify',
