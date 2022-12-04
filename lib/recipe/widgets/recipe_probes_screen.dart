@@ -244,7 +244,7 @@ class ProbesPrompt extends StatelessWidget {
               context.read<RecipeBloc>().add(ModifiedRecipeCreated(
                   recipe: recipeState.recipes[recipeIndex],
                   employeeNumber: loginState.loginInfo.employeeId!)),
-              //context.read<RecipeBloc>().add(const RecipesSaved()),
+              context.read<RecipeBloc>().add(const RecipesSaved()),
               Navigator.pop(context),
               Navigator.pushNamed(context, PageRouter.recipe, arguments: {
                 'recipeIndex': recipeIndex + 1,
