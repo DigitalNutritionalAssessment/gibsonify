@@ -198,7 +198,8 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
   void _onFoodItemAdded(FoodItemAdded event, Emitter<CollectionState> emit) {
     List<FoodItem> foodItems = List.from(state.gibsonsForm.foodItems);
-    foodItems.add(FoodItem(id: const Uuid().v4()));
+    foodItems
+        .add(FoodItem(id: const Uuid().v4(), measurements: [Measurement()]));
 
     GibsonsForm changedGibsonsForm =
         state.gibsonsForm.copyWith(foodItems: foodItems);
