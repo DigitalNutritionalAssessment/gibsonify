@@ -4,3 +4,4 @@ export 'create_respondent.dart';
 export 'view_respondent.dart';
 export 'edit_respondent.dart';
 export 'create_anthropometrics.dart';
+export 'view_anthropometrics.dart';

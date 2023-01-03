@@ -64,6 +64,20 @@ class ViewRespondentPage extends StatelessWidget {
                             title: Text(anthropometrics.date != null
                                 ? anthropometrics.date.toString()
                                 : 'No date'),
+                            onTap: () => {
+                              Navigator.pushNamed(
+                                  context, PageRouter.viewAnthropometrics,
+                                  arguments: {'index': index})
+                            },
+                            onLongPress: () => showModalBottomSheet(
+                                context: context,
+                                builder: (context) {
+                                  return AnthropometricsOptions(
+                                      index: index,
+                                      date: anthropometrics.date != null
+                                          ? anthropometrics.date.toString()
+                                          : 'No date');
+                                }),
                           ),
                         );
                       })),

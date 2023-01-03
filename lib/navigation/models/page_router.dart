@@ -34,6 +34,7 @@ class PageRouter {
   static const viewRespondent = 'viewrespondent';
   static const editRespondent = 'editrespondent';
   static const createAnthropometrics = 'createanthropometrics';
+  static const viewAnthropometrics = 'viewanthropometrics';
 
   static Route route(RouteSettings routeSettings) {
     switch (routeSettings.name) {

@@ -100,6 +100,10 @@ Route _onGenerateRoute(RouteSettings settings) {
     case PageRouter.createAnthropometrics:
       page = const CreateAnthropometricsPage();
       break;
+    case PageRouter.viewAnthropometrics:
+      final args = settings.arguments as Map<String, dynamic>;
+      page = ViewAnthropometricsPage(index: args['index']);
+      break;
     default:
       throw Exception('Invalid route: ${settings.name}');
   }
