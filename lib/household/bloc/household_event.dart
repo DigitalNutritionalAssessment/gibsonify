@@ -97,3 +97,12 @@ class NewAnthropometricsSaveRequested extends HouseholdEvent {
   @override
   List<Object> get props => [anthropometrics];
 }
+
+class DeleteAnthropometricsRequested extends HouseholdEvent {
+  final int index;
+
+  const DeleteAnthropometricsRequested({required this.index});
+
+  @override
+  List<Object> get props => [index];
+}

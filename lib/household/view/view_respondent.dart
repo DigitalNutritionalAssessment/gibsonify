@@ -153,6 +153,37 @@ class ViewRespondentPage extends StatelessWidget {
   }
 }
 
+class AnthropometricsOptions extends StatelessWidget {
+  final int index;
+  final String date;
+
+  const AnthropometricsOptions(
+      {Key? key, required this.index, required this.date})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<HouseholdBloc, HouseholdState>(
+        builder: (context, state) {
+      final List<Widget> options = [
+        ListTile(title: Text(date)),
+        const Divider(),
+        ListTile(
+          leading: const Icon(Icons.delete),
+          title: const Text('Delete'),
+          onTap: () {
+            context
+                .read<HouseholdBloc>()
+                .add(DeleteAnthropometricsRequested(index: index));
+            Navigator.pop(context);
+          },
+        )
+      ];
+      return Wrap(children: options);
+    });
+  }
+}
+
 class CollectionOptions extends StatelessWidget {
   final int index;
   final String date;

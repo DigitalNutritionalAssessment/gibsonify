@@ -22,6 +22,7 @@ class HouseholdBloc extends Bloc<HouseholdEvent, HouseholdState> {
     on<CollectionOpened>(_onCollectionOpened);
     on<DeleteCollectionRequested>(_onDeleteCollectionRequested);
     on<NewAnthropometricsSaveRequested>(_onNewAnthropometricsSaveRequested);
+    on<DeleteAnthropometricsRequested>(_onDeleteAnthropometricsRequested);
   }
 
   void _onHouseholdOpened(
@@ -136,6 +137,23 @@ class HouseholdBloc extends Bloc<HouseholdEvent, HouseholdState> {
       ...respondent.anthropometrics,
       event.anthropometrics
     ]);
+    var respondents = state.household!.respondents.toList();
+    respondents[state.selectedRespondentIndex!] = updatedRespondent;
+    final household = state.household!.copyWith(respondents: respondents);
+    await _isarRepository.saveNewHousehold(household);
+    emit(HouseholdLoaded(
+        household: household,
+        selectedRespondentIndex: state.selectedRespondentIndex!));
+  }
+
+  void _onDeleteAnthropometricsRequested(DeleteAnthropometricsRequested event,
+      Emitter<HouseholdState> emit) async {
+    final respondent =
+        state.household!.respondents[state.selectedRespondentIndex!];
+    final anthropometrics = respondent.anthropometrics.toList();
+    anthropometrics.removeAt(event.index);
+    final updatedRespondent =
+        respondent.copyWith(anthropometrics: anthropometrics);
     var respondents = state.household!.respondents.toList();
     respondents[state.selectedRespondentIndex!] = updatedRespondent;
     final household = state.household!.copyWith(respondents: respondents);
