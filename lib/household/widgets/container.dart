@@ -97,6 +97,9 @@ Route _onGenerateRoute(RouteSettings settings) {
     case PageRouter.thirdPassHelp:
       page = const ThirdPassHelpPage();
       break;
+    case PageRouter.createAnthropometrics:
+      page = const CreateAnthropometricsPage();
+      break;
     default:
       throw Exception('Invalid route: ${settings.name}');
   }

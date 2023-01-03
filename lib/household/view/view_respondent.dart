@@ -39,6 +39,42 @@ class ViewRespondentPage extends StatelessWidget {
                 children: [
                   const Padding(
                     padding: EdgeInsets.all(8.0),
+                    child: Icon(Icons.straighten),
+                  ),
+                  Text('Anthropometrics',
+                      style: Theme.of(context).textTheme.headline6),
+                  const Spacer(),
+                  IconButton(
+                      onPressed: () => {
+                            Navigator.pushNamed(
+                                context, PageRouter.createAnthropometrics)
+                          },
+                      icon: const Icon(Icons.add))
+                ],
+              ),
+              SizedBox(
+                  height: 200,
+                  child: ListView.builder(
+                      itemCount: respondent.anthropometrics.length,
+                      itemBuilder: (context, index) {
+                        final anthropometrics =
+                            respondent.anthropometrics[index];
+                        return Card(
+                          child: ListTile(
+                            title: Text(anthropometrics.date != null
+                                ? anthropometrics.date.toString()
+                                : 'No date'),
+                          ),
+                        );
+                      })),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Divider(),
+              ),
+              Row(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
                     child: Icon(Icons.info),
                   ),
                   Text('Collections',
