@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gibsonify/household/household.dart';
 import 'package:gibsonify/navigation/models/page_router.dart';
+import 'package:intl/intl.dart';
 
 class ViewRespondentPage extends StatelessWidget {
   final int index;
@@ -10,6 +11,8 @@ class ViewRespondentPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final formatter = DateFormat('yyyy-MM-dd');
+
     return BlocBuilder<HouseholdBloc, HouseholdState>(
       builder: (context, state) {
         final respondent = state.household!.respondents[index];
@@ -59,11 +62,13 @@ class ViewRespondentPage extends StatelessWidget {
                       itemBuilder: (context, index) {
                         final anthropometrics =
                             respondent.anthropometrics[index];
+                        final date = anthropometrics.date != null
+                            ? formatter.format(anthropometrics.date!)
+                            : 'No date';
+
                         return Card(
                           child: ListTile(
-                            title: Text(anthropometrics.date != null
-                                ? anthropometrics.date.toString()
-                                : 'No date'),
+                            title: Text(date),
                             onTap: () => {
                               Navigator.pushNamed(
                                   context, PageRouter.viewAnthropometrics,
@@ -73,10 +78,7 @@ class ViewRespondentPage extends StatelessWidget {
                                 context: context,
                                 builder: (context) {
                                   return AnthropometricsOptions(
-                                      index: index,
-                                      date: anthropometrics.date != null
-                                          ? anthropometrics.date.toString()
-                                          : 'No date');
+                                      index: index, date: date);
                                 }),
                           ),
                         );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:intl/intl.dart';
 
 import '../bloc/household_bloc.dart';
 
@@ -12,6 +13,8 @@ class ViewAnthropometricsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context, [bool mounted = true]) {
+    final formatter = DateFormat('yyyy-MM-dd');
+
     return BlocBuilder<HouseholdBloc, HouseholdState>(
       builder: (context, state) {
         final record = state.household!
@@ -19,7 +22,7 @@ class ViewAnthropometricsPage extends StatelessWidget {
 
         return Scaffold(
           appBar: AppBar(
-            title: Text(record.date.toString()),
+            title: Text(formatter.format(record.date!)),
           ),
           body: Padding(
             padding: const EdgeInsets.all(8.0),
