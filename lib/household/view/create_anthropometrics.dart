@@ -14,6 +14,12 @@ class CreateAnthropometricsPage extends StatelessWidget {
     final formKey = GlobalKey<FormBuilderState>();
     bool changed = false;
 
+    final formValidators = FormBuilderValidators.compose([
+      FormBuilderValidators.numeric(),
+      FormBuilderValidators.min(0,
+          inclusive: false, errorText: 'Value must be greater than 0.')
+    ]);
+
     return BlocBuilder<HouseholdBloc, HouseholdState>(
       builder: (context, state) {
         return WillPopScope(
@@ -103,7 +109,7 @@ class CreateAnthropometricsPage extends StatelessWidget {
                       icon: Icon(Icons.scale),
                     ),
                     onChanged: (value) => changed = true,
-                    validator: FormBuilderValidators.numeric(),
+                    validator: formValidators,
                   ),
                   FormBuilderTextField(
                     name: 'height',
@@ -114,7 +120,7 @@ class CreateAnthropometricsPage extends StatelessWidget {
                       icon: Icon(Icons.height),
                     ),
                     onChanged: (value) => changed = true,
-                    validator: FormBuilderValidators.numeric(),
+                    validator: formValidators,
                   ),
                   FormBuilderTextField(
                     name: 'waist',
@@ -125,7 +131,7 @@ class CreateAnthropometricsPage extends StatelessWidget {
                       icon: Icon(Icons.storm),
                     ),
                     onChanged: (value) => changed = true,
-                    validator: FormBuilderValidators.numeric(),
+                    validator: formValidators,
                   ),
                   FormBuilderTextField(
                     name: 'armLength',
@@ -136,7 +142,7 @@ class CreateAnthropometricsPage extends StatelessWidget {
                       icon: Icon(Icons.emoji_people),
                     ),
                     onChanged: (value) => changed = true,
-                    validator: FormBuilderValidators.numeric(),
+                    validator: formValidators,
                   ),
                   FormBuilderTextField(
                     name: 'handSpan',
@@ -147,7 +153,7 @@ class CreateAnthropometricsPage extends StatelessWidget {
                       icon: Icon(Icons.front_hand),
                     ),
                     onChanged: (value) => changed = true,
-                    validator: FormBuilderValidators.numeric(),
+                    validator: formValidators,
                   ),
                 ]),
               ),
