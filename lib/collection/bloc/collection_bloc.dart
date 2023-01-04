@@ -3,17 +3,12 @@ import 'package:equatable/equatable.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
-import 'package:gibsonify_repository/gibsonify_repository.dart';
 
 part 'collection_event.dart';
 part 'collection_state.dart';
 
 class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
-  final GibsonifyRepository _gibsonifyRepository;
-
-  CollectionBloc({required GibsonifyRepository gibsonifyRepository})
-      : _gibsonifyRepository = gibsonifyRepository,
-        super(CollectionState()) {
+  CollectionBloc() : super(CollectionState()) {
     on<SelectedScreenChanged>(_onSelectedScreenChanged);
     on<HouseholdIdChanged>(_onHouseholdIdChanged);
     on<RecallDayChanged>(_onRecallDayChanged);
@@ -48,7 +43,6 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     on<FoodItemMeasurementUnitChanged>(_onFoodItemMeasurementUnitChanged);
     on<FoodItemMeasurementValueChanged>(_onFoodItemMeasurementValueChanged);
     on<FoodItemConfirmationChanged>(_onFoodItemConfirmationChanged);
-    on<GibsonsFormSaved>(_onGibsonsFormSaved);
     on<GibsonsFormProvided>(_onGibsonsFormProvided);
     on<GibsonsFormCreated>(_onGibsonsFormCreated);
     on<CollectionFinished>(_onCollectionFinished);
@@ -411,13 +405,6 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
     emit(state.copyWith(
         gibsonsForm: _replaceFoodItemInGibsonsForm(changedFoodItem)));
-  }
-
-  // or Future<void> ?
-  void _onGibsonsFormSaved(
-      GibsonsFormSaved event, Emitter<CollectionState> emit) async {
-    await _gibsonifyRepository.saveForm(state.gibsonsForm);
-    emit(state);
   }
 
   // TODO: Delete the async?
