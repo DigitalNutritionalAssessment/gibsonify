@@ -10,7 +10,6 @@ part 'collection_state.dart';
 class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
   CollectionBloc() : super(CollectionState()) {
     on<SelectedScreenChanged>(_onSelectedScreenChanged);
-    on<HouseholdIdChanged>(_onHouseholdIdChanged);
     on<RecallDayChanged>(_onRecallDayChanged);
     on<InterviewDateChanged>(_onInterviewDateChanged);
     on<InterviewStartTimeChanged>(_onInterviewStartTimeChanged);
@@ -80,14 +79,6 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
   void _onSelectedScreenChanged(
       SelectedScreenChanged event, Emitter<CollectionState> emit) {
     emit(state.copyWith(selectedScreen: event.changedSelectedScreen));
-  }
-
-  void _onHouseholdIdChanged(
-      HouseholdIdChanged event, Emitter<CollectionState> emit) {
-    GibsonsForm changedGibsonsForm =
-        state.gibsonsForm.copyWith(householdId: event.householdId);
-
-    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }
 
   void _onRecallDayChanged(
@@ -430,7 +421,5 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
       CollectionFinished event, Emitter<CollectionState> emit) async {
     GibsonsForm changedGibsonsForm = state.gibsonsForm.copyWith(finished: true);
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
-    // TODO: Move saving of collections to HomeBloc to avoid race conditions
-    //await _gibsonifyRepository.saveForm(state.gibsonsForm);
   }
 }

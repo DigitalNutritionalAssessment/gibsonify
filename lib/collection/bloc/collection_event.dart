@@ -15,15 +15,6 @@ class SelectedScreenChanged extends CollectionEvent {
   List<Object> get props => [changedSelectedScreen];
 }
 
-class HouseholdIdChanged extends CollectionEvent {
-  final String householdId;
-
-  const HouseholdIdChanged({required this.householdId});
-
-  @override
-  List<Object> get props => [householdId];
-}
-
 class RespondentNameChanged extends CollectionEvent {
   final String respondentName;
 
