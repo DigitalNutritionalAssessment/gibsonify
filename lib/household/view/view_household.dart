@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gibsonify/household/household.dart';
+import 'package:gibsonify/navigation/navigation.dart';
 import 'package:intl/intl.dart';
-
-import '../../navigation/models/page_router.dart';
 
 class ViewHouseholdPage extends StatelessWidget {
   const ViewHouseholdPage({Key? key}) : super(key: key);

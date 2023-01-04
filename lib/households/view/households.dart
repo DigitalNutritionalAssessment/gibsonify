@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gibsonify/households/households.dart';
 
 import 'package:gibsonify/navigation/navigation.dart';
 import 'package:gibsonify_repository/gibsonify_repository.dart';
 import 'package:intl/intl.dart';
-
-import '../bloc/households_bloc.dart';
 
 class HouseholdsScreen extends StatelessWidget {
   const HouseholdsScreen({Key? key}) : super(key: key);
