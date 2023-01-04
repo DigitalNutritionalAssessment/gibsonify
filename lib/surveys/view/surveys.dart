@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:gibsonify/navigation/navigation.dart';
+import 'package:gibsonify/surveys/view/create_survey.dart';
+import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:gibsonify_repository/gibsonify_repository.dart';
 import 'package:intl/intl.dart';
 
@@ -22,9 +23,7 @@ class SurveysView extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    DateFormat formatter = DateFormat('yyyy-MM-dd');
-
+  Widget build(BuildContext context, [bool mounted = false]) {
     return BlocBuilder<SurveysBloc, SurveysState>(
       builder: (context, state) {
         return Scaffold(
@@ -75,9 +74,17 @@ class SurveysView extends StatelessWidget {
                       heroTag: null,
                       label: const Text("New survey"),
                       icon: const Icon(Icons.add),
-                      onPressed: () {
-                        Navigator.pushNamed(
-                            context, PageRouter.createHousehold);
+                      onPressed: () async {
+                        final bloc = context.read<SurveysBloc>();
+                        Survey? survey = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const CreateSurveyScreen()));
+
+                        if (survey != null) {
+                          bloc.add(SurveySaveRequested(survey: survey));
+                        }
                       }),
                 ]));
       },

@@ -104,6 +104,7 @@ Survey _surveyDeserialize(
     comments: reader.readStringOrNull(offsets[0]),
     country: reader.readString(offsets[1]),
     description: reader.readStringOrNull(offsets[2]),
+    id: id,
     name: reader.readString(offsets[3]),
     surveyId: reader.readString(offsets[4]),
   );

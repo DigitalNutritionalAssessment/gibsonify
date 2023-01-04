@@ -36,7 +36,8 @@ class App extends StatelessWidget {
                   LoginBloc(gibsonifyRepository: gibsonifyRepository)
                     ..add(const LoginInfoLoaded())),
           BlocProvider(
-              create: (context) => SurveysBloc(isarRepository: isarRepository)),
+              create: (context) => SurveysBloc(isarRepository: isarRepository)
+                ..add(const SurveysPageOpened())),
           // TODO: Refactor and move Collection and Recipe BlocProviders further
           // down the widget tree
           // Or another possibility is to get rid of HomeBloc and move its
