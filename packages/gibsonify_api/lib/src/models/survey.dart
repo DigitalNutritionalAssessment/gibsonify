@@ -36,6 +36,25 @@ class Survey extends Equatable {
         comments: comments ?? this.comments);
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'surveyId': surveyId,
+      'name': name,
+      'country': country,
+      'description': description,
+      'comments': comments
+    };
+  }
+
+  factory Survey.fromJson(Map<String, dynamic> json) {
+    return Survey(
+        surveyId: json['surveyId'],
+        name: json['name'],
+        country: json['country'],
+        description: json['description'],
+        comments: json['comments']);
+  }
+
   @override
   @ignore
   List<Object?> get props =>

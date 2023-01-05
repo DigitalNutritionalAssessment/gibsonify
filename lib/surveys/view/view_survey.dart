@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:gibsonify/surveys/surveys.dart';
+import 'package:gibsonify_api/gibsonify_api.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class ViewSurveyScreen extends StatelessWidget {
   final int index;
@@ -18,7 +22,14 @@ class ViewSurveyScreen extends StatelessWidget {
             appBar: AppBar(
               title: Text(survey.surveyId),
               actions: [
-                IconButton(onPressed: () => {}, icon: const Icon(Icons.share))
+                IconButton(
+                    onPressed: () => {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  ShareSurvey(survey: survey))
+                        },
+                    icon: const Icon(Icons.share))
               ],
             ),
             body: Padding(
@@ -67,6 +78,41 @@ class ViewSurveyScreen extends StatelessWidget {
                   ),
                 )));
       },
+    );
+  }
+}
+
+class ShareSurvey extends StatelessWidget {
+  final Survey survey;
+
+  const ShareSurvey({Key? key, required this.survey}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Share survey'),
+      content: Column(
+        children: [
+          const Text(
+              'Import this survey on another device by scanning the QR code below from the Gibsonify app.'),
+          Padding(
+            padding: const EdgeInsets.only(top: 20.0),
+            child: SizedBox(
+                width: 200,
+                height: 200,
+                child: QrImage(
+                  data: jsonEncode(survey),
+                  version: QrVersions.auto,
+                  backgroundColor: Colors.white,
+                )),
+          )
+        ],
+      ),
+      actions: [
+        TextButton(
+            onPressed: () => {Navigator.pop(context)},
+            child: const Text('Close'))
+      ],
     );
   }
 }
