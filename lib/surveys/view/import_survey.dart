@@ -13,21 +13,42 @@ class ImportSurveyScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Import survey'),
       ),
-      body: MobileScanner(
-          allowDuplicates: false,
-          onDetect: (barcode, args) {
-            if (barcode.rawValue == null) {
-              Navigator.pop(context, 'ERROR');
-            } else {
-              final String code = barcode.rawValue!;
-              try {
-                final Survey survey = Survey.fromJson(jsonDecode(code));
-                Navigator.pop(context, survey);
-              } catch (e) {
-                Navigator.pop(context, 'ERROR');
-              }
-            }
-          }),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Center(
+          child: Column(
+            children: [
+              const Text(
+                'Import a survey by scanning a Gibsonify-generated QR code.',
+                style: TextStyle(fontSize: 18),
+                textAlign: TextAlign.center,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 24.0),
+                child: SizedBox(
+                  height: 400,
+                  child: MobileScanner(
+                      allowDuplicates: false,
+                      onDetect: (barcode, args) {
+                        if (barcode.rawValue == null) {
+                          Navigator.pop(context, 'ERROR');
+                        } else {
+                          final String code = barcode.rawValue!;
+                          try {
+                            final Survey survey =
+                                Survey.fromJson(jsonDecode(code));
+                            Navigator.pop(context, survey);
+                          } catch (e) {
+                            Navigator.pop(context, 'ERROR');
+                          }
+                        }
+                      }),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
