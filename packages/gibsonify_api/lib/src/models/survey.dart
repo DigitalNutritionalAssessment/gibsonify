@@ -6,6 +6,7 @@ part 'survey.g.dart';
 @Collection(inheritance: false)
 class Survey extends Equatable {
   final Id id;
+  @Index(unique: true, replace: true)
   final String surveyId;
   final String name;
   final String country;

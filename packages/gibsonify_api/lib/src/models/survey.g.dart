@@ -48,7 +48,21 @@ const SurveySchema = CollectionSchema(
   deserialize: _surveyDeserialize,
   deserializeProp: _surveyDeserializeProp,
   idName: r'id',
-  indexes: {},
+  indexes: {
+    r'surveyId': IndexSchema(
+      id: -618278257669670332,
+      name: r'surveyId',
+      unique: true,
+      replace: true,
+      properties: [
+        IndexPropertySchema(
+          name: r'surveyId',
+          type: IndexType.hash,
+          caseSensitive: true,
+        )
+      ],
+    )
+  },
   links: {},
   embeddedSchemas: {},
   getId: _surveyGetId,
@@ -143,6 +157,60 @@ List<IsarLinkBase<dynamic>> _surveyGetLinks(Survey object) {
 
 void _surveyAttach(IsarCollection<dynamic> col, Id id, Survey object) {}
 
+extension SurveyByIndex on IsarCollection<Survey> {
+  Future<Survey?> getBySurveyId(String surveyId) {
+    return getByIndex(r'surveyId', [surveyId]);
+  }
+
+  Survey? getBySurveyIdSync(String surveyId) {
+    return getByIndexSync(r'surveyId', [surveyId]);
+  }
+
+  Future<bool> deleteBySurveyId(String surveyId) {
+    return deleteByIndex(r'surveyId', [surveyId]);
+  }
+
+  bool deleteBySurveyIdSync(String surveyId) {
+    return deleteByIndexSync(r'surveyId', [surveyId]);
+  }
+
+  Future<List<Survey?>> getAllBySurveyId(List<String> surveyIdValues) {
+    final values = surveyIdValues.map((e) => [e]).toList();
+    return getAllByIndex(r'surveyId', values);
+  }
+
+  List<Survey?> getAllBySurveyIdSync(List<String> surveyIdValues) {
+    final values = surveyIdValues.map((e) => [e]).toList();
+    return getAllByIndexSync(r'surveyId', values);
+  }
+
+  Future<int> deleteAllBySurveyId(List<String> surveyIdValues) {
+    final values = surveyIdValues.map((e) => [e]).toList();
+    return deleteAllByIndex(r'surveyId', values);
+  }
+
+  int deleteAllBySurveyIdSync(List<String> surveyIdValues) {
+    final values = surveyIdValues.map((e) => [e]).toList();
+    return deleteAllByIndexSync(r'surveyId', values);
+  }
+
+  Future<Id> putBySurveyId(Survey object) {
+    return putByIndex(r'surveyId', object);
+  }
+
+  Id putBySurveyIdSync(Survey object, {bool saveLinks = true}) {
+    return putByIndexSync(r'surveyId', object, saveLinks: saveLinks);
+  }
+
+  Future<List<Id>> putAllBySurveyId(List<Survey> objects) {
+    return putAllByIndex(r'surveyId', objects);
+  }
+
+  List<Id> putAllBySurveyIdSync(List<Survey> objects, {bool saveLinks = true}) {
+    return putAllByIndexSync(r'surveyId', objects, saveLinks: saveLinks);
+  }
+}
+
 extension SurveyQueryWhereSort on QueryBuilder<Survey, Survey, QWhere> {
   QueryBuilder<Survey, Survey, QAfterWhere> anyId() {
     return QueryBuilder.apply(this, (query) {
@@ -214,6 +282,51 @@ extension SurveyQueryWhere on QueryBuilder<Survey, Survey, QWhereClause> {
         upper: upperId,
         includeUpper: includeUpper,
       ));
+    });
+  }
+
+  QueryBuilder<Survey, Survey, QAfterWhereClause> surveyIdEqualTo(
+      String surveyId) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'surveyId',
+        value: [surveyId],
+      ));
+    });
+  }
+
+  QueryBuilder<Survey, Survey, QAfterWhereClause> surveyIdNotEqualTo(
+      String surveyId) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'surveyId',
+              lower: [],
+              upper: [surveyId],
+              includeUpper: false,
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'surveyId',
+              lower: [surveyId],
+              includeLower: false,
+              upper: [],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'surveyId',
+              lower: [surveyId],
+              includeLower: false,
+              upper: [],
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'surveyId',
+              lower: [],
+              upper: [surveyId],
+              includeUpper: false,
+            ));
+      }
     });
   }
 }
