@@ -4,7 +4,10 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
 
 class CreateSurveyScreen extends StatelessWidget {
-  const CreateSurveyScreen({Key? key}) : super(key: key);
+  final List<String> surveyIds;
+
+  const CreateSurveyScreen({Key? key, required this.surveyIds})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +80,10 @@ class CreateSurveyScreen extends StatelessWidget {
                         validator: FormBuilderValidators.compose([
                           FormBuilderValidators.required(),
                           FormBuilderValidators.minLength(4,
-                              errorText: 'Must be at least 4 characters')
+                              errorText: 'Must be at least 4 characters'),
+                          (id) => surveyIds.contains(id)
+                              ? 'Survey with this ID already exists'
+                              : null
                         ])),
                     FormBuilderTextField(
                         name: 'name',

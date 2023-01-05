@@ -136,8 +136,10 @@ class SurveysView extends StatelessWidget {
                         Survey? survey = await Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    const CreateSurveyScreen()));
+                                builder: (context) => CreateSurveyScreen(
+                                    surveyIds: state.surveys
+                                        .map((s) => s.surveyId)
+                                        .toList())));
 
                         if (survey != null) {
                           bloc.add(SurveySaveRequested(survey: survey));
