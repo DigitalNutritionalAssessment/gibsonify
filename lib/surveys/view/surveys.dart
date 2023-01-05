@@ -19,7 +19,7 @@ class SurveysView extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, [bool mounted = false]) {
+  Widget build(BuildContext context, [bool mounted = true]) {
     return BlocBuilder<SurveysBloc, SurveysState>(
       builder: (context, state) {
         return Scaffold(
@@ -27,7 +27,32 @@ class SurveysView extends StatelessWidget {
               title: const Text('Surveys'),
               actions: [
                 IconButton(
-                    onPressed: () => {},
+                    onPressed: () async {
+                      final result = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const ImportSurveyScreen()));
+
+                      if (!mounted) return;
+
+                      if (result == 'ERROR') {
+                        ScaffoldMessenger.of(context)
+                          ..hideCurrentSnackBar()
+                          ..showSnackBar(const SnackBar(
+                              content: Text('Invalid QR code.')));
+                      } else {
+                        final survey = result as Survey;
+                        context
+                            .read<SurveysBloc>()
+                            .add(SurveySaveRequested(survey: survey));
+                        ScaffoldMessenger.of(context)
+                          ..hideCurrentSnackBar()
+                          ..showSnackBar(SnackBar(
+                              content: Text(
+                                  'Imported survey ${survey.surveyId}: ${survey.name}')));
+                      }
+                    },
                     icon: const Icon(Icons.qr_code_scanner)),
                 IconButton(onPressed: () => {}, icon: const Icon(Icons.help))
               ],
