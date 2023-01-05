@@ -43,14 +43,49 @@ class SurveysView extends StatelessWidget {
                               content: Text('Invalid QR code.')));
                       } else {
                         final survey = result as Survey;
-                        context
-                            .read<SurveysBloc>()
-                            .add(SurveySaveRequested(survey: survey));
-                        ScaffoldMessenger.of(context)
-                          ..hideCurrentSnackBar()
-                          ..showSnackBar(SnackBar(
+                        var overwrite = true;
+
+                        if (state.surveys
+                            .map((e) => e.surveyId)
+                            .contains(survey.surveyId)) {
+                          overwrite = await showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text('Overwrite survey?'),
                               content: Text(
-                                  'Imported survey ${survey.surveyId}: ${survey.name}')));
+                                  'A survey with ID ${survey.surveyId} already exists. Do you want to overwrite it?'),
+                              actions: [
+                                TextButton(
+                                    onPressed: () =>
+                                        Navigator.pop(context, false),
+                                    child: const Text('No')),
+                                TextButton(
+                                    onPressed: () =>
+                                        Navigator.pop(context, true),
+                                    child: const Text('Yes')),
+                              ],
+                            ),
+                          );
+                        }
+
+                        if (!mounted) return;
+
+                        if (overwrite) {
+                          context
+                              .read<SurveysBloc>()
+                              .add(SurveySaveRequested(survey: survey));
+                          ScaffoldMessenger.of(context)
+                            ..hideCurrentSnackBar()
+                            ..showSnackBar(SnackBar(
+                                content: Text(
+                                    'Imported survey ${survey.surveyId}: ${survey.name}')));
+                        } else {
+                          ScaffoldMessenger.of(context)
+                            ..hideCurrentSnackBar()
+                            ..showSnackBar(SnackBar(
+                                content: Text(
+                                    'Survey ${survey.surveyId} not imported.')));
+                        }
                       }
                     },
                     icon: const Icon(Icons.qr_code_scanner)),
