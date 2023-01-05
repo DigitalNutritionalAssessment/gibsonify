@@ -17,7 +17,6 @@ class SurveysBloc extends Bloc<SurveysEvent, SurveysState> {
     on<SurveysPageOpened>(_onSurveysPageOpened);
     on<SurveySaveRequested>(_onSurveySaveRequested);
     on<SurveyDeleteRequested>(_onSurveyDeleteRequested);
-    on<SurveyOpened>(_onSurveyOpened);
   }
 
   void _onSurveysPageOpened(
@@ -36,9 +35,5 @@ class SurveysBloc extends Bloc<SurveysEvent, SurveysState> {
       SurveyDeleteRequested event, Emitter<SurveysState> emit) async {
     await _isarRepository.deleteSurvey(event.id);
     add(const SurveysPageOpened());
-  }
-
-  void _onSurveyOpened(SurveyOpened event, Emitter<SurveysState> emit) async {
-    emit(state.copyWith(selectedSurveyIndex: event.index));
   }
 }

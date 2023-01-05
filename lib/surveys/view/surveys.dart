@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:gibsonify/surveys/view/create_survey.dart';
+import 'package:gibsonify/surveys/surveys.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:gibsonify_repository/gibsonify_repository.dart';
-import 'package:intl/intl.dart';
-
-import '../bloc/surveys_bloc.dart';
 
 class SurveysScreen extends StatelessWidget {
   const SurveysScreen({Key? key}) : super(key: key);
@@ -48,10 +44,11 @@ class SurveysView extends StatelessWidget {
                         title: Text(state.surveys[index].name),
                         subtitle: Text(state.surveys[index].surveyId),
                         onTap: () => {
-                          context
-                              .read<SurveysBloc>()
-                              .add(SurveyOpened(index: index)),
-                          // Navigator.pushNamed(context, PageRouter.viewSurvey)
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      ViewSurveyScreen(index: index)))
                         },
                         onLongPress: () => showModalBottomSheet(
                             context: context,

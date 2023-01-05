@@ -29,11 +29,3 @@ class SurveySaveRequested extends SurveysEvent {
   @override
   List<Object> get props => [];
 }
-
-class SurveyOpened extends SurveysEvent {
-  final int index;
-  const SurveyOpened({required this.index});
-
-  @override
-  List<Object> get props => [index];
-}
