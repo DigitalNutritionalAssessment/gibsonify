@@ -12,6 +12,7 @@ class GibsonsForm extends Equatable {
   GibsonsForm(
       {String? formId,
       this.employeeNumber,
+      this.surveyId,
       this.recallDay, // TODO: rename to recallDayType
       this.interviewDate,
       this.interviewStartTime,
@@ -30,6 +31,7 @@ class GibsonsForm extends Equatable {
 
   final String id;
   final String? employeeNumber;
+  final String? surveyId;
   final String? recallDay; // TODO: change to an enum
   final String? interviewDate;
   final String? interviewStartTime;
@@ -51,6 +53,7 @@ class GibsonsForm extends Equatable {
   GibsonsForm.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         employeeNumber = json['employeeNumber'],
+        surveyId = json['surveyId'],
         recallDay = json['recallDay'],
         interviewDate = json['interviewDate'],
         interviewStartTime = json['interviewStartTime'],
@@ -71,6 +74,7 @@ class GibsonsForm extends Equatable {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['employeeNumber'] = employeeNumber;
+    data['surveyId'] = surveyId;
     data['recallDay'] = recallDay;
     data['interviewDate'] = interviewDate;
     data['interviewStartTime'] = interviewStartTime;
@@ -117,6 +121,7 @@ class GibsonsForm extends Equatable {
       {String? id,
       String? employeeNumber,
       String? householdId,
+      String? surveyId,
       String? recallDay,
       String? interviewDate,
       String? interviewStartTime,
@@ -134,6 +139,7 @@ class GibsonsForm extends Equatable {
     return GibsonsForm(
         formId: id ?? this.id,
         employeeNumber: employeeNumber ?? this.employeeNumber,
+        surveyId: surveyId ?? this.surveyId,
         recallDay: recallDay ?? this.recallDay,
         interviewDate: interviewDate ?? this.interviewDate,
         interviewStartTime: interviewStartTime ?? this.interviewStartTime,
@@ -160,6 +166,7 @@ class GibsonsForm extends Equatable {
   String toString() {
     return '\n *** \nGibson\'s Form:\n'
         'UUID: $id\n'
+        'Survey ID: $surveyId\n'
         'Employee Number: $employeeNumber\n'
         'Recall Day: $recallDay\n'
         'Interview Date: $interviewDate\n'
@@ -183,6 +190,7 @@ class GibsonsForm extends Equatable {
   @ignore
   List<Object?> get props => [
         id,
+        surveyId,
         employeeNumber,
         recallDay,
         interviewDate,

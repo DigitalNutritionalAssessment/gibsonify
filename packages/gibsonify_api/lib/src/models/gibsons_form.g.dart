@@ -93,6 +93,11 @@ const GibsonsFormSchema = Schema(
       id: 15,
       name: r'secondVisitReason',
       type: IsarType.string,
+    ),
+    r'surveyId': PropertySchema(
+      id: 16,
+      name: r'surveyId',
+      type: IsarType.string,
     )
   },
   estimateSize: _gibsonsFormEstimateSize,
@@ -194,6 +199,12 @@ int _gibsonsFormEstimateSize(
       bytesCount += 3 + value.length * 3;
     }
   }
+  {
+    final value = object.surveyId;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
   return bytesCount;
 }
 
@@ -224,6 +235,7 @@ void _gibsonsFormSerialize(
   writer.writeString(offsets[13], object.recallDay);
   writer.writeString(offsets[14], object.secondInterviewVisitDate);
   writer.writeString(offsets[15], object.secondVisitReason);
+  writer.writeString(offsets[16], object.surveyId);
 }
 
 GibsonsForm _gibsonsFormDeserialize(
@@ -254,6 +266,7 @@ GibsonsForm _gibsonsFormDeserialize(
     recallDay: reader.readStringOrNull(offsets[13]),
     secondInterviewVisitDate: reader.readStringOrNull(offsets[14]),
     secondVisitReason: reader.readStringOrNull(offsets[15]),
+    surveyId: reader.readStringOrNull(offsets[16]),
   );
   return object;
 }
@@ -302,6 +315,8 @@ P _gibsonsFormDeserializeProp<P>(
     case 14:
       return (reader.readStringOrNull(offset)) as P;
     case 15:
+      return (reader.readStringOrNull(offset)) as P;
+    case 16:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -2544,6 +2559,159 @@ extension GibsonsFormQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'secondVisitReason',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<GibsonsForm, GibsonsForm, QAfterFilterCondition>
+      surveyIdIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'surveyId',
+      ));
+    });
+  }
+
+  QueryBuilder<GibsonsForm, GibsonsForm, QAfterFilterCondition>
+      surveyIdIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'surveyId',
+      ));
+    });
+  }
+
+  QueryBuilder<GibsonsForm, GibsonsForm, QAfterFilterCondition> surveyIdEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'surveyId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GibsonsForm, GibsonsForm, QAfterFilterCondition>
+      surveyIdGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'surveyId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GibsonsForm, GibsonsForm, QAfterFilterCondition>
+      surveyIdLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'surveyId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GibsonsForm, GibsonsForm, QAfterFilterCondition> surveyIdBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'surveyId',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GibsonsForm, GibsonsForm, QAfterFilterCondition>
+      surveyIdStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'surveyId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GibsonsForm, GibsonsForm, QAfterFilterCondition>
+      surveyIdEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'surveyId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GibsonsForm, GibsonsForm, QAfterFilterCondition>
+      surveyIdContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'surveyId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GibsonsForm, GibsonsForm, QAfterFilterCondition> surveyIdMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'surveyId',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<GibsonsForm, GibsonsForm, QAfterFilterCondition>
+      surveyIdIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'surveyId',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<GibsonsForm, GibsonsForm, QAfterFilterCondition>
+      surveyIdIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'surveyId',
         value: '',
       ));
     });
