@@ -208,6 +208,10 @@ class GibsonsForm extends Equatable {
         foodItems
       ];
 
+  bool isSurveyIdValid() {
+    return isFieldNotNullAndNotEmpty(surveyId);
+  }
+
   bool isRecallDayValid() {
     return isFieldNotNullAndNotEmpty(recallDay);
   }
@@ -217,7 +221,8 @@ class GibsonsForm extends Equatable {
   }
 
   bool isSensitizationValid() {
-    bool sensitizationValid = isRecallDayValid() && isInterviewStartTimeValid();
+    bool sensitizationValid =
+        isSurveyIdValid() && isRecallDayValid() && isInterviewStartTimeValid();
     return sensitizationValid;
   }
 
