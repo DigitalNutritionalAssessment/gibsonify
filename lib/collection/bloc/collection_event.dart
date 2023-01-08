@@ -57,6 +57,15 @@ class SensitizationDateChanged extends CollectionEvent {
   List<Object> get props => [sensitizationDate];
 }
 
+class SurveyChanged extends CollectionEvent {
+  final String surveyId;
+
+  const SurveyChanged({required this.surveyId});
+
+  @override
+  List<Object> get props => [surveyId];
+}
+
 class RecallDayChanged extends CollectionEvent {
   final String recallDay;
 

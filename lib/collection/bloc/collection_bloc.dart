@@ -16,6 +16,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
         super(CollectionState()) {
     on<SelectedScreenChanged>(_onSelectedScreenChanged);
     on<HouseholdIdChanged>(_onHouseholdIdChanged);
+    on<SurveyChanged>(_onSurveyChanged);
     on<RecallDayChanged>(_onRecallDayChanged);
     on<InterviewDateChanged>(_onInterviewDateChanged);
     on<InterviewStartTimeChanged>(_onInterviewStartTimeChanged);
@@ -92,6 +93,13 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
       HouseholdIdChanged event, Emitter<CollectionState> emit) {
     GibsonsForm changedGibsonsForm =
         state.gibsonsForm.copyWith(householdId: event.householdId);
+
+    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+  }
+
+  void _onSurveyChanged(SurveyChanged event, Emitter<CollectionState> emit) {
+    GibsonsForm changedGibsonsForm =
+        state.gibsonsForm.copyWith(surveyId: event.surveyId);
 
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }

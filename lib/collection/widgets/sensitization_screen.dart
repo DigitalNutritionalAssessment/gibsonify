@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gibsonify/household/household.dart';
+import 'package:gibsonify/surveys/surveys.dart';
 import 'package:intl/intl.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 
@@ -47,6 +48,7 @@ class SensitizationForm extends StatelessWidget {
             absorbing: state.gibsonsForm.finished,
             child: Column(
               children: const <Widget>[
+                SurveyInput(),
                 RecallDayInput(),
                 InterviewDateInput(),
                 InterviewStartTimeInput(),
@@ -61,6 +63,54 @@ class SensitizationForm extends StatelessWidget {
 
 // TODO: refactor input forms into one reusable widget, and/or move to separate
 // files
+
+class SurveyInput extends StatelessWidget {
+  const SurveyInput({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SurveysBloc, SurveysState>(
+      builder: (context, surveysState) {
+        return BlocBuilder<CollectionBloc, CollectionState>(
+          builder: (context, collectionState) {
+            return DropdownSearch<String>(
+              popupProps: const PopupProps.menu(
+                  showSelectedItems: true,
+                  fit: FlexFit.loose,
+                  constraints: BoxConstraints.tightFor()),
+              dropdownDecoratorProps: DropDownDecoratorProps(
+                dropdownSearchDecoration: InputDecoration(
+                    icon: const Icon(Icons.assignment),
+                    labelText: "Survey ID",
+                    helperText:
+                        'The survey under which this interview is being performed',
+                    // TODO: the errorText should be displayed if nothing is chosen
+                    // so investigate how this can be achieved with focusnodes or
+                    // maybe send an empty string (although that would not work all
+                    // the time), currently the errorText is never shown
+                    errorText: isFieldModifiedAndEmpty(
+                            collectionState.gibsonsForm.surveyId)
+                        ? 'Select survey'
+                        : null),
+              ),
+              items: surveysState.surveys
+                  .map((survey) => survey.surveyId)
+                  .toList(),
+              onChanged: (surveyId) {
+                if (surveyId != null) {
+                  context
+                      .read<CollectionBloc>()
+                      .add(SurveyChanged(surveyId: surveyId));
+                }
+              },
+              selectedItem: collectionState.gibsonsForm.surveyId,
+            );
+          },
+        );
+      },
+    );
+  }
+}
 
 class RecallDayInput extends StatelessWidget {
   const RecallDayInput({Key? key}) : super(key: key);
