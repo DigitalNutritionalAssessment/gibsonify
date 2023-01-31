@@ -1,6 +1,6 @@
 name: create_and_build_release
 on:
-  create:
+  push:
     tags:
       - "*" # Will trigger for every tag, alternative: 'v*'
 
