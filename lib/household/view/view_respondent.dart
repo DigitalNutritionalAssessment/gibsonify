@@ -15,6 +15,89 @@ class ViewRespondentPage extends StatelessWidget {
       builder: (context, state) {
         final respondent = state.household!.respondents[index];
 
+        Widget respondentView() {
+          return Column(
+            children: [
+              TextFormField(
+                readOnly: true,
+                decoration: const InputDecoration(
+                    labelText: 'Phone Number', icon: Icon(Icons.phone)),
+                initialValue: respondent.phoneNumber,
+              ),
+              TextFormField(
+                readOnly: true,
+                decoration: const InputDecoration(
+                    labelText: 'Comments', icon: Icon(Icons.comment)),
+                initialValue: respondent.comments,
+                minLines: 1,
+                maxLines: null,
+              ),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Divider(),
+              ),
+              Row(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Icon(Icons.info),
+                  ),
+                  Text('Collections',
+                      style: Theme.of(context).textTheme.headline6),
+                  const Spacer(),
+                  IconButton(
+                      onPressed: () =>
+                          {Navigator.pushNamed(context, PageRouter.collection)},
+                      icon: const Icon(Icons.add))
+                ],
+              ),
+              Expanded(
+                child: ListView.builder(
+                    padding: const EdgeInsets.all(2.0),
+                    itemCount: respondent.collections.length,
+                    itemBuilder: (context, index) {
+                      final collection = respondent.collections[index];
+                      return Card(
+                        child: ListTile(
+                            title: Text(collection.interviewDate ?? 'No date'),
+                            subtitle: Row(
+                              children: [
+                                Text(collection.interviewOutcome ??
+                                    'Unspecified outcome')
+                              ],
+                            ),
+                            trailing: Column(
+                              children: [
+                                collection.finished
+                                    ? const Icon(Icons.done)
+                                    : const Icon(Icons.pause),
+                                collection.finished
+                                    ? const Text('Finished')
+                                    : const Text('Paused'),
+                              ],
+                            ),
+                            onTap: () => {
+                                  context
+                                      .read<HouseholdBloc>()
+                                      .add(CollectionOpened(index: index)),
+                                  Navigator.pushNamed(
+                                      context, PageRouter.collection)
+                                },
+                            onLongPress: () => showModalBottomSheet(
+                                context: context,
+                                builder: (context) {
+                                  return CollectionOptions(
+                                      index: index,
+                                      date: collection.interviewDate ??
+                                          'No date');
+                                })),
+                      );
+                    }),
+              ),
+            ],
+          );
+        }
+
         return Scaffold(
           appBar: AppBar(
             title: Text(respondent.name),
@@ -27,92 +110,12 @@ class ViewRespondentPage extends StatelessWidget {
           ),
           body: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: respondentView(context, respondent),
+            child: respondentView(),
           ),
         );
       },
     );
   }
-}
-
-Widget respondentView(BuildContext context, Respondent respondent) {
-  return Column(
-    children: [
-      TextFormField(
-        readOnly: true,
-        decoration: const InputDecoration(
-            labelText: 'Phone Number', icon: Icon(Icons.phone)),
-        initialValue: respondent.phoneNumber,
-      ),
-      TextFormField(
-        readOnly: true,
-        decoration: const InputDecoration(
-            labelText: 'Comments', icon: Icon(Icons.comment)),
-        initialValue: respondent.comments,
-        minLines: 1,
-        maxLines: null,
-      ),
-      const Padding(
-        padding: EdgeInsets.all(8.0),
-        child: Divider(),
-      ),
-      Row(
-        children: [
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Icon(Icons.info),
-          ),
-          Text('Collections', style: Theme.of(context).textTheme.headline6),
-          const Spacer(),
-          IconButton(
-              onPressed: () =>
-                  {Navigator.pushNamed(context, PageRouter.collection)},
-              icon: const Icon(Icons.add))
-        ],
-      ),
-      Expanded(
-        child: ListView.builder(
-            padding: const EdgeInsets.all(2.0),
-            itemCount: respondent.collections.length,
-            itemBuilder: (context, index) {
-              final collection = respondent.collections[index];
-              return Card(
-                child: ListTile(
-                    title: Text(collection.interviewDate ?? 'No date'),
-                    subtitle: Row(
-                      children: [
-                        Text(collection.interviewOutcome ??
-                            'Unspecified outcome')
-                      ],
-                    ),
-                    trailing: Column(
-                      children: [
-                        collection.finished
-                            ? const Icon(Icons.done)
-                            : const Icon(Icons.pause),
-                        collection.finished
-                            ? const Text('Finished')
-                            : const Text('Paused'),
-                      ],
-                    ),
-                    onTap: () => {
-                          context
-                              .read<HouseholdBloc>()
-                              .add(CollectionOpened(index: index)),
-                          Navigator.pushNamed(context, PageRouter.collection)
-                        },
-                    onLongPress: () => showModalBottomSheet(
-                        context: context,
-                        builder: (context) {
-                          return CollectionOptions(
-                              index: index,
-                              date: collection.interviewDate ?? 'No date');
-                        })),
-              );
-            }),
-      ),
-    ],
-  );
 }
 
 class CollectionOptions extends StatelessWidget {
