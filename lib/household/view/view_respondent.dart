@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gibsonify/household/household.dart';
 import 'package:gibsonify/navigation/models/page_router.dart';
+import 'package:intl/intl.dart';
 
 class ViewRespondentPage extends StatelessWidget {
   final int index;
@@ -10,6 +11,8 @@ class ViewRespondentPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final formatter = DateFormat('yyyy-MM-dd');
+
     return BlocBuilder<HouseholdBloc, HouseholdState>(
       builder: (context, state) {
         final respondent = state.household!.respondents[index];
@@ -31,6 +34,55 @@ class ViewRespondentPage extends StatelessWidget {
                 minLines: 1,
                 maxLines: null,
               ),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Divider(),
+              ),
+              Row(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Icon(Icons.straighten),
+                  ),
+                  Text('Anthropometrics',
+                      style: Theme.of(context).textTheme.headline6),
+                  const Spacer(),
+                  IconButton(
+                      onPressed: () => {
+                            Navigator.pushNamed(
+                                context, PageRouter.createAnthropometrics)
+                          },
+                      icon: const Icon(Icons.add))
+                ],
+              ),
+              SizedBox(
+                  height: 200,
+                  child: ListView.builder(
+                      itemCount: respondent.anthropometrics.length,
+                      itemBuilder: (context, index) {
+                        final anthropometrics =
+                            respondent.anthropometrics[index];
+                        final date = anthropometrics.date != null
+                            ? formatter.format(anthropometrics.date!)
+                            : 'No date';
+
+                        return Card(
+                          child: ListTile(
+                            title: Text(date),
+                            onTap: () => {
+                              Navigator.pushNamed(
+                                  context, PageRouter.viewAnthropometrics,
+                                  arguments: {'index': index})
+                            },
+                            onLongPress: () => showModalBottomSheet(
+                                context: context,
+                                builder: (context) {
+                                  return AnthropometricsOptions(
+                                      index: index, date: date);
+                                }),
+                          ),
+                        );
+                      })),
               const Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Divider(),
@@ -114,6 +166,37 @@ class ViewRespondentPage extends StatelessWidget {
         );
       },
     );
+  }
+}
+
+class AnthropometricsOptions extends StatelessWidget {
+  final int index;
+  final String date;
+
+  const AnthropometricsOptions(
+      {Key? key, required this.index, required this.date})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<HouseholdBloc, HouseholdState>(
+        builder: (context, state) {
+      final List<Widget> options = [
+        ListTile(title: Text(date)),
+        const Divider(),
+        ListTile(
+          leading: const Icon(Icons.delete),
+          title: const Text('Delete'),
+          onTap: () {
+            context
+                .read<HouseholdBloc>()
+                .add(DeleteAnthropometricsRequested(index: index));
+            Navigator.pop(context);
+          },
+        )
+      ];
+      return Wrap(children: options);
+    });
   }
 }
 

@@ -73,7 +73,8 @@ const HouseholdSchema = CollectionSchema(
     r'Recipe': RecipeSchema,
     r'Ingredient': IngredientSchema,
     r'Probe': ProbeSchema,
-    r'ProbeOption': ProbeOptionSchema
+    r'ProbeOption': ProbeOptionSchema,
+    r'Anthropometrics': AnthropometricsSchema
   },
   getId: _householdGetId,
   getLinks: _householdGetLinks,
