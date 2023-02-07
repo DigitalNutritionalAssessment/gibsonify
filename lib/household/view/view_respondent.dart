@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gibsonify/household/household.dart';
 import 'package:gibsonify/navigation/models/page_router.dart';
-import 'package:gibsonify_api/gibsonify_api.dart';
 
 class ViewRespondentPage extends StatelessWidget {
   final int index;
