@@ -13,24 +13,30 @@ const RespondentSchema = Schema(
   name: r'Respondent',
   id: -2873524172455157742,
   properties: {
-    r'collections': PropertySchema(
+    r'anthropometrics': PropertySchema(
       id: 0,
+      name: r'anthropometrics',
+      type: IsarType.objectList,
+      target: r'Anthropometrics',
+    ),
+    r'collections': PropertySchema(
+      id: 1,
       name: r'collections',
       type: IsarType.objectList,
       target: r'GibsonsForm',
     ),
     r'comments': PropertySchema(
-      id: 1,
+      id: 2,
       name: r'comments',
       type: IsarType.string,
     ),
     r'name': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'name',
       type: IsarType.string,
     ),
     r'phoneNumber': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'phoneNumber',
       type: IsarType.string,
     )
@@ -47,6 +53,15 @@ int _respondentEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
+  bytesCount += 3 + object.anthropometrics.length * 3;
+  {
+    final offsets = allOffsets[Anthropometrics]!;
+    for (var i = 0; i < object.anthropometrics.length; i++) {
+      final value = object.anthropometrics[i];
+      bytesCount +=
+          AnthropometricsSchema.estimateSize(value, offsets, allOffsets);
+    }
+  }
   bytesCount += 3 + object.collections.length * 3;
   {
     final offsets = allOffsets[GibsonsForm]!;
@@ -67,15 +82,21 @@ void _respondentSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeObjectList<GibsonsForm>(
+  writer.writeObjectList<Anthropometrics>(
     offsets[0],
+    allOffsets,
+    AnthropometricsSchema.serialize,
+    object.anthropometrics,
+  );
+  writer.writeObjectList<GibsonsForm>(
+    offsets[1],
     allOffsets,
     GibsonsFormSchema.serialize,
     object.collections,
   );
-  writer.writeString(offsets[1], object.comments);
-  writer.writeString(offsets[2], object.name);
-  writer.writeString(offsets[3], object.phoneNumber);
+  writer.writeString(offsets[2], object.comments);
+  writer.writeString(offsets[3], object.name);
+  writer.writeString(offsets[4], object.phoneNumber);
 }
 
 Respondent _respondentDeserialize(
@@ -85,16 +106,23 @@ Respondent _respondentDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = Respondent(
-    collections: reader.readObjectList<GibsonsForm>(
+    anthropometrics: reader.readObjectList<Anthropometrics>(
           offsets[0],
+          AnthropometricsSchema.deserialize,
+          allOffsets,
+          Anthropometrics(),
+        ) ??
+        const [],
+    collections: reader.readObjectList<GibsonsForm>(
+          offsets[1],
           GibsonsFormSchema.deserialize,
           allOffsets,
           GibsonsForm(),
         ) ??
         const [],
-    comments: reader.readStringOrNull(offsets[1]) ?? "",
-    name: reader.readStringOrNull(offsets[2]) ?? "",
-    phoneNumber: reader.readStringOrNull(offsets[3]) ?? "",
+    comments: reader.readStringOrNull(offsets[2]) ?? "",
+    name: reader.readStringOrNull(offsets[3]) ?? "",
+    phoneNumber: reader.readStringOrNull(offsets[4]) ?? "",
   );
   return object;
 }
@@ -107,6 +135,14 @@ P _respondentDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
+      return (reader.readObjectList<Anthropometrics>(
+            offset,
+            AnthropometricsSchema.deserialize,
+            allOffsets,
+            Anthropometrics(),
+          ) ??
+          const []) as P;
+    case 1:
       return (reader.readObjectList<GibsonsForm>(
             offset,
             GibsonsFormSchema.deserialize,
@@ -114,11 +150,11 @@ P _respondentDeserializeProp<P>(
             GibsonsForm(),
           ) ??
           const []) as P;
-    case 1:
-      return (reader.readStringOrNull(offset) ?? "") as P;
     case 2:
       return (reader.readStringOrNull(offset) ?? "") as P;
     case 3:
+      return (reader.readStringOrNull(offset) ?? "") as P;
+    case 4:
       return (reader.readStringOrNull(offset) ?? "") as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -127,6 +163,95 @@ P _respondentDeserializeProp<P>(
 
 extension RespondentQueryFilter
     on QueryBuilder<Respondent, Respondent, QFilterCondition> {
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
+      anthropometricsLengthEqualTo(int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'anthropometrics',
+        length,
+        true,
+        length,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
+      anthropometricsIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'anthropometrics',
+        0,
+        true,
+        0,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
+      anthropometricsIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'anthropometrics',
+        0,
+        false,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
+      anthropometricsLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'anthropometrics',
+        0,
+        true,
+        length,
+        include,
+      );
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
+      anthropometricsLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'anthropometrics',
+        length,
+        include,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
+      anthropometricsLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'anthropometrics',
+        lower,
+        includeLower,
+        upper,
+        includeUpper,
+      );
+    });
+  }
+
   QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
       collectionsLengthEqualTo(int length) {
     return QueryBuilder.apply(this, (query) {
@@ -619,6 +744,13 @@ extension RespondentQueryFilter
 
 extension RespondentQueryObject
     on QueryBuilder<Respondent, Respondent, QFilterCondition> {
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
+      anthropometricsElement(FilterQuery<Anthropometrics> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.object(q, r'anthropometrics');
+    });
+  }
+
   QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
       collectionsElement(FilterQuery<GibsonsForm> q) {
     return QueryBuilder.apply(this, (query) {

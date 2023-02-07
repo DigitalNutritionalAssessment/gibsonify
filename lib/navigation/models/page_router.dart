@@ -32,6 +32,8 @@ class PageRouter {
   static const thirdPassHelp = 'thirdpasshelp';
   static const finishCollection = 'finishcollection';
   static const chooseRecipe = 'chooserecipe';
+  static const createAnthropometrics = 'createanthropometrics';
+  static const viewAnthropometrics = 'viewanthropometrics';
 
   static Route route(RouteSettings routeSettings) {
     switch (routeSettings.name) {
