@@ -18,7 +18,11 @@ The app follows the structure of the four passes of Gibson's methodology. It has
 
 ## Installation
 
-The latest stable Android version of Gibsonify can be downloaded as an `.apk` file by clicking the button below:
+Internal testers may install and update the app via the Google Play store:
+
+<a href='https://play.google.com/store/apps/details?id=org.gibsonify.gibsonify&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' width="40%" src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a>
+
+Alternatively, the latest stable Android version of Gibsonify can be downloaded as an `.apk` file by clicking the button below:
 
 <p align='left'>
     <a href="https://github.com/DigitalNutritionalAssessment/gibsonify/releases/latest/download/app-release.apk">
