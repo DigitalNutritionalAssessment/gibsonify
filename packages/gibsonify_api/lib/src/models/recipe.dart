@@ -1,31 +1,34 @@
 import 'package:equatable/equatable.dart';
 import 'package:uuid/uuid.dart';
+import 'package:isar/isar.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
 
+part 'recipe.g.dart';
+
+@Embedded(inheritance: false)
 class Recipe extends Equatable {
   Recipe({
     this.name,
     this.employeeNumber,
-    String? number, // TODO: change this to `id` since its alphanumeric?
+    // TODO: temp hack to make id field Isar compatible. Id field will eventually be removed
+    this.number = "", // TODO: change this to `id` since its alphanumeric?
     String? date,
     this.type = "",
-    List<Measurement>? measurements,
+    this.measurements = const [],
     this.ingredients = const <Ingredient>[],
     this.probes = const <Probe>[],
     this.allProbeAnswersStandard = true,
     this.allProbesChecked = false,
     this.saved = false,
-  })  : number = number ?? const Uuid().v4(),
-        date = date ?? DateFormat('yyyy-MM-dd').format(DateTime.now()),
-        measurements = measurements ?? [Measurement()];
+  }) : date = date ?? DateFormat('yyyy-MM-dd').format(DateTime.now());
 
   final String? name;
   final String? employeeNumber;
   final String number;
-  final String date;
+  final String? date;
   final String type;
   final List<Measurement> measurements;
   final List<Ingredient> ingredients;
@@ -93,6 +96,7 @@ class Recipe extends Equatable {
   }
 
   @override
+  @ignore
   List<Object?> get props => [
         name,
         employeeNumber,

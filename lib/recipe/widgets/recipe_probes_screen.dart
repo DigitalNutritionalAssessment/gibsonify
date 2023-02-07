@@ -170,7 +170,8 @@ class ProbeList extends StatelessWidget {
                                           constraints:
                                               BoxConstraints.tightFor(),
                                         ),
-                                        items: state.recipes[recipeIndex].probes[index]
+                                        items: state
+                                            .recipes[recipeIndex].probes[index]
                                             .optionsList(),
                                         onChanged: (String? answer) => context
                                             .read<RecipeBloc>()
@@ -179,17 +180,8 @@ class ProbeList extends StatelessWidget {
                                                     state.recipes[recipeIndex],
                                                 probeIndex: index,
                                                 answer: answer!)),
-                                        selectedItem: (state
-                                                        .recipes[recipeIndex]
-                                                        .probes[index]
-                                                        .answer ==
-                                                    null ||
-                                                state.recipes[recipeIndex]
-                                                        .probes[index].answer ==
-                                                    '')
-                                            ? state.recipes[recipeIndex].probes[index]
-                                                .optionsList()[0]
-                                            : state.recipes[recipeIndex].probes[index].answer),
+                                        selectedItem: state.recipes[recipeIndex]
+                                            .probes[index].answer),
                                   )
                                 ],
                               ),

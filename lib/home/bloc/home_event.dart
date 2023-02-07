@@ -21,3 +21,33 @@ class GibsonsFormDeleted extends HomeEvent {
   @override
   List<Object> get props => [id];
 }
+
+class SaveNewHousehold extends HomeEvent {
+  final String householdId;
+  final DateTime sensitizationDate;
+  final String geoLocation;
+  final String comments;
+
+  const SaveNewHousehold({
+    required this.householdId,
+    required this.sensitizationDate,
+    required this.geoLocation,
+    required this.comments,
+  });
+
+  @override
+  List<Object> get props => [
+        householdId,
+        sensitizationDate,
+        geoLocation,
+        comments,
+      ];
+}
+
+class DeleteHousehold extends HomeEvent {
+  final int id;
+  const DeleteHousehold({required this.id});
+
+  @override
+  List<Object> get props => [id];
+}

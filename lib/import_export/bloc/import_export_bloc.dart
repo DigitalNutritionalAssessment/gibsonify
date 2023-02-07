@@ -14,9 +14,13 @@ part 'import_export_state.dart';
 
 class ImportExportBloc extends Bloc<ImportExportEvent, ImportExportState> {
   final GibsonifyRepository _gibsonifyRepository;
+  final IsarRepository _isarRepository;
 
-  ImportExportBloc({required GibsonifyRepository gibsonifyRepository})
+  ImportExportBloc(
+      {required GibsonifyRepository gibsonifyRepository,
+      required IsarRepository isarRepository})
       : _gibsonifyRepository = gibsonifyRepository,
+        _isarRepository = isarRepository,
         super(const ImportExportState()) {
     on<DataSavedToDevice>(_onDataSavedToDevice);
     on<DataShared>(_onDataShared);
@@ -24,11 +28,13 @@ class ImportExportBloc extends Bloc<ImportExportEvent, ImportExportState> {
 
   void _onDataSavedToDevice(
       DataSavedToDevice event, Emitter<ImportExportState> emit) async {
-    List<GibsonsForm?> gibsonsForms = _gibsonifyRepository.loadForms();
+    List<Household> households = await _isarRepository.readHouseholds();
     List<Recipe> recipes = _gibsonifyRepository.loadRecipes();
 
-    int finishedGibsonsFormsNumber = gibsonsForms
-        .where((gibsonsForm) => gibsonsForm != null && gibsonsForm.finished)
+    int finishedGibsonsFormsNumber = households
+        .expand((household) => household.respondents
+            .expand((respondent) => respondent.collections))
+        .where((gibsonsForm) => gibsonsForm.finished)
         .length;
     int recipesNumber = recipes.length;
 
@@ -41,11 +47,11 @@ class ImportExportBloc extends Bloc<ImportExportEvent, ImportExportState> {
       return;
     }
 
-    String finishedGibsonsFormsCsv =
-        convertFinishedGibsonsFormsToCsv(gibsonsForms);
+    String finishedGibsonsFormsCsv = householdsToLegacyCsvExport(households);
     String recipesCsv = convertRecipesToCsv(recipes);
 
     try {
+      // TODO: Migrate to scoped storage (https://developer.android.com/training/data-storage/use-cases#handle-non-media-files)
       if (!await Permission.storage.request().isGranted) {
         emit(state.copyWith(
             dataSaveStatus: DataSaveStatus.noPermissionToSaveFiles,
@@ -84,11 +90,13 @@ class ImportExportBloc extends Bloc<ImportExportEvent, ImportExportState> {
   }
 
   void _onDataShared(DataShared event, Emitter<ImportExportState> emit) async {
-    List<GibsonsForm?> gibsonsForms = _gibsonifyRepository.loadForms();
+    List<Household> households = await _isarRepository.readHouseholds();
     List<Recipe> recipes = _gibsonifyRepository.loadRecipes();
 
-    int finishedGibsonsFormsNumber = gibsonsForms
-        .where((gibsonsForm) => gibsonsForm != null && gibsonsForm.finished)
+    int finishedGibsonsFormsNumber = households
+        .expand((household) => household.respondents
+            .expand((respondent) => respondent.collections))
+        .where((gibsonsForm) => gibsonsForm.finished)
         .length;
     int recipesNumber = recipes.length;
 
@@ -101,8 +109,7 @@ class ImportExportBloc extends Bloc<ImportExportEvent, ImportExportState> {
       return;
     }
 
-    String finishedGibsonsFormsCsv =
-        convertFinishedGibsonsFormsToCsv(gibsonsForms);
+    String finishedGibsonsFormsCsv = householdsToLegacyCsvExport(households);
     String recipesCsv = convertRecipesToCsv(recipes);
 
     try {

@@ -1,26 +1,58 @@
 import 'package:equatable/equatable.dart';
+import 'package:isar/isar.dart';
 import 'dart:convert';
 import 'package:uuid/uuid.dart';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
 
+part 'recipe_probe.g.dart';
+
+@Embedded(inheritance: false)
+class ProbeOption extends Equatable {
+  ProbeOption({this.option, this.id = ''});
+
+  final String? option;
+  final String id;
+
+  ProbeOption.fromJson(Map<String, dynamic> json)
+      : option = json['option'],
+        id = json['id'];
+
+  static List<ProbeOption> defaults() {
+    final List<ProbeOption> options = [];
+    options.add(ProbeOption(option: 'Yes', id: Uuid().v4()));
+    options.add(ProbeOption(option: 'No', id: Uuid().v4()));
+    return options;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['option'] = option;
+    data['id'] = id;
+    return data;
+  }
+
+  ProbeOption copyWith({String? option, String? id}) {
+    return ProbeOption(option: option ?? this.option, id: id ?? this.id);
+  }
+
+  @override
+  @ignore
+  List<Object?> get props => [option, id];
+}
+
+@Embedded(inheritance: false)
 class Probe extends Equatable {
   Probe(
       {this.name,
       this.checked = false,
       this.answer,
-      // TODO: why does this need to be a dictionary with uuids?
-      List<Map<String, dynamic>>? probeOptions}) // TODO: rename to `options`
-      : probeOptions = probeOptions ??
-            [
-              {'option': 'Yes', 'id': const Uuid().v4()},
-              {'option': 'No', 'id': const Uuid().v4()}
-            ];
+      this.probeOptions = const []});
 
   final String? name;
   final bool checked;
   final String? answer;
-  final List<Map<String, dynamic>> probeOptions;
+  final List<ProbeOption> probeOptions;
 
   String probeNameDisplay() {
     if (isFieldNotNullAndNotEmpty(name)) {
@@ -31,8 +63,8 @@ class Probe extends Equatable {
 
   List<String> optionsList() {
     final List<String> options = [];
-    for (Map<String, dynamic> option in probeOptions) {
-      options.add(option['option'] ?? '');
+    for (ProbeOption option in probeOptions) {
+      options.add(option.option ?? '');
     }
     return options;
   }
@@ -48,8 +80,7 @@ class Probe extends Equatable {
       : name = json['name'],
         checked = json['checked'] == 'true' ? true : false,
         answer = json['answer'],
-        probeOptions =
-            List<Map<String, dynamic>>.from(jsonDecode(json['probeOptions']));
+        probeOptions = _jsonDecodeProbeOptions(json['probeOptions']);
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -76,7 +107,7 @@ class Probe extends Equatable {
       {String? name,
       bool? checked,
       String? answer,
-      List<Map<String, dynamic>>? probeOptions,
+      List<ProbeOption>? probeOptions,
       String? id}) {
     return Probe(
         name: name ?? this.name,
@@ -86,5 +117,14 @@ class Probe extends Equatable {
   }
 
   @override
+  @ignore
   List<Object?> get props => [name, checked, answer, probeOptions];
+}
+
+List<ProbeOption> _jsonDecodeProbeOptions(jsonEncodedProbeOptions) {
+  List<dynamic> partiallyDecodedProbeOptions =
+      jsonDecode(jsonEncodedProbeOptions);
+  List<ProbeOption> fullyDecodedProbeOptions = List<ProbeOption>.from(
+      partiallyDecodedProbeOptions.map((x) => ProbeOption.fromJson(x)));
+  return fullyDecodedProbeOptions;
 }

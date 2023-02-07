@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gibsonify/home/bloc/home_bloc.dart';
 
 import 'package:gibsonify_repository/gibsonify_repository.dart';
 
@@ -12,13 +11,22 @@ import 'package:gibsonify/import_export/import_export.dart';
 
 class App extends StatelessWidget {
   final GibsonifyRepository gibsonifyRepository;
+  final IsarRepository isarRepository;
 
-  const App({Key? key, required this.gibsonifyRepository}) : super(key: key);
+  const App(
+      {Key? key,
+      required this.gibsonifyRepository,
+      required this.isarRepository})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider.value(
-      value: gibsonifyRepository,
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<GibsonifyRepository>(
+            create: (context) => gibsonifyRepository),
+        RepositoryProvider<IsarRepository>(create: (context) => isarRepository)
+      ],
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
@@ -38,12 +46,9 @@ class App extends StatelessWidget {
                   RecipeBloc(gibsonifyRepository: gibsonifyRepository)
                     ..add(const RecipesLoaded())),
           BlocProvider(
-              create: (context) => HomeBloc(
-                    gibsonifyRepository: gibsonifyRepository,
-                  )..add(const GibsonsFormsLoaded())),
-          BlocProvider(
-              create: (context) =>
-                  ImportExportBloc(gibsonifyRepository: gibsonifyRepository)),
+              create: (context) => ImportExportBloc(
+                  gibsonifyRepository: gibsonifyRepository,
+                  isarRepository: isarRepository)),
         ],
         child: MaterialApp(
           title: 'Gibsonify',

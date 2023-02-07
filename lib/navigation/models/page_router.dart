@@ -5,6 +5,8 @@ import 'package:gibsonify/collection/collection.dart';
 import 'package:gibsonify/recipe/recipe.dart';
 import 'package:gibsonify/settings/settings.dart';
 import 'package:gibsonify/login/login.dart';
+import 'package:gibsonify/create_household/view/create_household.dart';
+import 'package:gibsonify/household/household.dart';
 
 class PageRouter {
   static const login = '/';
@@ -22,6 +24,15 @@ class PageRouter {
   static const collectionsHelp = '/collectionshelp';
   static const recipesHelp = '/recipeshelp';
   static const settingsHelp = '/settingshelp';
+  static const createHousehold = 'createhousehold';
+
+  static const householdPrefix = '/household';
+  static const householdInitialRoute = '/household/$viewHousehold';
+  static const viewHousehold = 'viewhousehold';
+  static const editHousehold = 'edithousehold';
+  static const createRespondent = 'createrespondent';
+  static const viewRespondent = 'viewrespondent';
+  static const editRespondent = 'editrespondent';
 
   static Route route(RouteSettings routeSettings) {
     switch (routeSettings.name) {
@@ -72,8 +83,19 @@ class PageRouter {
         return _buildRoute(const RecipesHelpPage());
       case settingsHelp:
         return _buildRoute(const SettingsHelpPage());
+      case createHousehold:
+        return _buildRoute(const CreateHouseholdPage());
       default:
-        throw Exception('Page does not exist!');
+        final route = routeSettings.name!;
+        if (route.startsWith(householdPrefix)) {
+          final subRoute = route.substring(householdPrefix.length);
+          Map<String, dynamic> args =
+              routeSettings.arguments as Map<String, dynamic>;
+          return _buildRoute(
+              HouseholdContainer(id: args['id'], subRoute: subRoute));
+        } else {
+          throw Exception('Page does not exist!');
+        }
     }
   }
 

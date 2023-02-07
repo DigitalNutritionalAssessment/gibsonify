@@ -71,8 +71,11 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
   }
 
   void _onRecipeAdded(RecipeAdded event, Emitter<RecipeState> emit) {
-    final recipe =
-        Recipe(employeeNumber: event.employeeNumber, type: event.type);
+    final recipe = Recipe(
+        number: const Uuid().v4(),
+        employeeNumber: event.employeeNumber,
+        type: event.type,
+        measurements: [Measurement()]);
 
     List<Recipe> recipes = List.from(state.recipes);
     recipes.add(recipe);
@@ -146,7 +149,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     List<Measurement> measurements =
         List.from(recipes[changedRecipeIndex].measurements);
 
-    final measurement = Measurement();
+    final measurement = Measurement(id: const Uuid().v4());
     measurements.add(measurement);
 
     Recipe recipe = recipes[changedRecipeIndex]
@@ -296,7 +299,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     List<Recipe> recipes = List.from(state.recipes);
     int changedRecipeIndex = recipes.indexOf(event.recipe);
 
-    final probe = Probe();
+    final probe = Probe(probeOptions: ProbeOption.defaults());
 
     List<Probe> probes = List.from(recipes[changedRecipeIndex].probes);
     probes.add(probe);
@@ -418,10 +421,10 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
 
     List<Probe> probes = List.from(recipes[changedRecipeIndex].probes);
     int changedProbeIndex = event.probeIndex;
-    List<Map<String, dynamic>> probeOptions =
+    List<ProbeOption> probeOptions =
         List.from(probes[changedProbeIndex].probeOptions);
 
-    probeOptions.add({'option': null, 'id': const Uuid().v4()});
+    probeOptions.add(ProbeOption(option: null, id: const Uuid().v4()));
     Probe probe =
         probes[changedProbeIndex].copyWith(probeOptions: probeOptions);
 
@@ -448,15 +451,13 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
 
     List<Probe> probes = List.from(recipes[changedRecipeIndex].probes);
     int changedProbeIndex = event.probeIndex;
-    List<Map<String, dynamic>> probeOptions =
+    List<ProbeOption> probeOptions =
         List.from(probes[changedProbeIndex].probeOptions);
     int changedProbeOptionIndex = event.probeOptionIndex;
 
     String probeOptionName = event.probeOptionName;
-    Map<String, String?> probeOption = {
-      'option': probeOptionName,
-      'id': probeOptions[changedProbeOptionIndex]['id']
-    };
+    ProbeOption probeOption = ProbeOption(
+        option: probeOptionName, id: probeOptions[changedProbeOptionIndex].id);
     probeOptions.removeAt(changedProbeOptionIndex);
     probeOptions.insert(changedProbeOptionIndex, probeOption);
 
@@ -482,7 +483,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
 
     List<Probe> probes = List.from(recipes[changedRecipeIndex].probes);
     int changedProbeIndex = event.probeIndex;
-    List<Map<String, dynamic>> probeOptions =
+    List<ProbeOption> probeOptions =
         List.from(probes[changedProbeIndex].probeOptions);
 
     probeOptions.removeAt(event.probeOptionIndex);
@@ -557,7 +558,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     List<Recipe> recipes = List.from(state.recipes);
     int changedRecipeIndex = recipes.indexOf(event.recipe);
 
-    final ingredient = Ingredient();
+    final ingredient =
+        Ingredient(id: const Uuid().v4(), measurements: [Measurement()]);
     List<Ingredient> ingredients =
         List.from(recipes[changedRecipeIndex].ingredients);
     ingredients.add(ingredient);
@@ -775,7 +777,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
         .ingredients[changedIngredientIndex]
         .measurements);
 
-    final measurement = Measurement();
+    final measurement = Measurement(id: const Uuid().v4());
     measurements.add(measurement);
 
     Ingredient ingredient = ingredients[changedIngredientIndex]
@@ -1027,7 +1029,8 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
       if (newerRecipesRecipeIds.contains(recipeNumber)) {
         continue;
       } else if (recipeOnDevice != null) {
-        if (DateTime.parse(recipeOnDevice.date).isAfter(DateTime.parse(date))) {
+        if (DateTime.parse(recipeOnDevice.date!)
+            .isAfter(DateTime.parse(date))) {
           newerRecipesRecipeIds.add(recipeNumber);
           continue;
         } else {
@@ -1058,8 +1061,11 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
         List<String> newMeasurements = recipeMeasurement.split('+');
         for (String newMeasurement in newMeasurements) {
           List<String> fields = newMeasurement.trim().split('_');
-          final measurement =
-              Measurement(method: fields[0], value: fields[1], unit: fields[2]);
+          final measurement = Measurement(
+              id: const Uuid().v4(),
+              method: fields[0],
+              value: fields[1],
+              unit: fields[2]);
           measurements.add(measurement);
         }
 
@@ -1068,9 +1074,10 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
         List<Probe> probes = List.from(recipe.probes);
 
         List<String> probeAnswers = recipeProbeAnswers.split('+');
-        List<Map<String, dynamic>> probeOptions = [];
+        List<ProbeOption> probeOptions = [];
         for (String answer in probeAnswers) {
-          probeOptions.add({'option': answer.trim(), 'id': const Uuid().v4()});
+          probeOptions
+              .add(ProbeOption(option: answer.trim(), id: const Uuid().v4()));
         }
         final probe = Probe(name: recipeProbeName, probeOptions: probeOptions);
         probes.add(probe);
@@ -1083,11 +1090,15 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
         List<String> newMeasurements = ingredientMeasurement.split('+');
         for (String newMeasurement in newMeasurements) {
           List<String> fields = newMeasurement.trim().split('_');
-          final measurement =
-              Measurement(method: fields[0], value: fields[1], unit: fields[2]);
+          final measurement = Measurement(
+              id: const Uuid().v4(),
+              method: fields[0],
+              value: fields[1],
+              unit: fields[2]);
           measurements.add(measurement);
         }
         final ingredient = Ingredient(
+            id: const Uuid().v4(),
             name: ingredientName,
             description: ingredientDescription,
             cookingState: ingredientCookingState,
@@ -1107,7 +1118,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
       if (recipe.measurements.isEmpty) {
         // Protect against recipes without Measurements
         Recipe recipeWithMeasurement =
-            recipe.copyWith(measurements: [Measurement()]);
+            recipe.copyWith(measurements: [Measurement(id: const Uuid().v4())]);
         newRecipes.remove(recipe);
         newRecipes.add(recipeWithMeasurement);
       }

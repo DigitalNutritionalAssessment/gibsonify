@@ -96,14 +96,13 @@ class ProbeForm extends StatelessWidget {
                                 child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: TextFormField(
-                                key: Key(state
-                                    .recipes[recipeIndex]
-                                    .probes[probeIndex]
-                                    .probeOptions[index]['id']!),
+                                key: Key(state.recipes[recipeIndex]
+                                    .probes[probeIndex].probeOptions[index].id),
                                 initialValue: state
                                     .recipes[recipeIndex]
                                     .probes[probeIndex]
-                                    .probeOptions[index]['option'],
+                                    .probeOptions[index]
+                                    .option,
                                 decoration: InputDecoration(
                                   icon: const Icon(Icons.edit),
                                   labelText: (index == 0)
@@ -152,7 +151,7 @@ class DeleteProbeOptionDialog extends StatelessWidget {
       return AlertDialog(
         title: const Text('Delete probe response'),
         content: Text(
-            'Would you like to delete the ${recipe.probes[probeIndex].probeOptions[probeOptionIndex]['option'] ?? ''} response?'),
+            'Would you like to delete the ${recipe.probes[probeIndex].probeOptions[probeOptionIndex].option ?? ''} response?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),

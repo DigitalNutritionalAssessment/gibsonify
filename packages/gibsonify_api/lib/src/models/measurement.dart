@@ -1,12 +1,15 @@
 import 'package:equatable/equatable.dart';
+import 'package:isar/isar.dart';
 import 'package:uuid/uuid.dart';
 import 'dart:convert';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
 
+part 'measurement.g.dart';
+
+@Embedded(inheritance: false)
 class Measurement extends Equatable {
-  Measurement({this.method, this.unit, this.value, String? id})
-      : id = id ?? const Uuid().v4();
+  Measurement({this.method, this.unit, this.value, this.id = ""});
 
   final String? method;
   final String? unit;
@@ -81,7 +84,8 @@ class Measurement extends Equatable {
   }
 
   @override
-  List<Object?> get props => [method, unit, value, id];
+  @ignore
+  List<Object?> get props => [method, unit, value];
 
   Measurement.fromJson(Map<String, dynamic> json)
       : method = json['measurementMethod'],

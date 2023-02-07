@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
@@ -17,13 +16,9 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
         super(CollectionState()) {
     on<SelectedScreenChanged>(_onSelectedScreenChanged);
     on<HouseholdIdChanged>(_onHouseholdIdChanged);
-    on<RespondentNameChanged>(_onRespondentNameChanged);
-    on<RespondentTelInfoChanged>(_onRespondentTelInfoChanged);
-    on<SensitizationDateChanged>(_onSensitizationDateChanged);
     on<RecallDayChanged>(_onRecallDayChanged);
     on<InterviewDateChanged>(_onInterviewDateChanged);
     on<InterviewStartTimeChanged>(_onInterviewStartTimeChanged);
-    on<GeoLocationRequested>(_onGeoLocationRequested);
     on<PictureChartCollectedChanged>(_onPictureChartCollectedChanged);
     on<PictureChartNotCollectedReasonChanged>(
         _onPictureChartNotCollectedReasonChanged);
@@ -56,7 +51,6 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     on<GibsonsFormSaved>(_onGibsonsFormSaved);
     on<GibsonsFormProvided>(_onGibsonsFormProvided);
     on<GibsonsFormCreated>(_onGibsonsFormCreated);
-    on<GibsonsFormDuplicated>(_onGibsonsFormDuplicated);
     on<CollectionFinished>(_onCollectionFinished);
   }
 
@@ -102,32 +96,6 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }
 
-  void _onRespondentNameChanged(
-      RespondentNameChanged event, Emitter<CollectionState> emit) {
-    GibsonsForm changedGibsonsForm =
-        state.gibsonsForm.copyWith(respondentName: event.respondentName);
-
-    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
-  }
-
-  void _onRespondentTelInfoChanged(
-      RespondentTelInfoChanged event, Emitter<CollectionState> emit) {
-    GibsonsForm changedGibsonsForm = state.gibsonsForm.copyWith(
-        respondentCountryCode: event.respondentCountryCode,
-        respondentTelNumberPrefix: event.respondentTelNumberPrefix,
-        respondentTelNumber: event.respondentTelNumber);
-
-    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
-  }
-
-  void _onSensitizationDateChanged(
-      SensitizationDateChanged event, Emitter<CollectionState> emit) {
-    GibsonsForm changedGibsonsForm =
-        state.gibsonsForm.copyWith(sensitizationDate: event.sensitizationDate);
-
-    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
-  }
-
   void _onRecallDayChanged(
       RecallDayChanged event, Emitter<CollectionState> emit) {
     GibsonsForm changedGibsonsForm =
@@ -150,73 +118,6 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
         .copyWith(interviewStartTime: event.interviewStartTime);
 
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
-  }
-
-  Future<void> _onGeoLocationRequested(
-      GeoLocationRequested event, Emitter<CollectionState> emit) async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    // Test if location services are enabled.
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      // Location services are not enabled don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
-      emit(state.copyWith(
-          geoLocationStatus: GeoLocationStatus.locationDisabled));
-      return;
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        // Permissions are denied, next time you could try
-        // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale
-        // returned true. According to Android guidelines
-        // your App should show an explanatory UI now.
-        emit(state.copyWith(
-            geoLocationStatus: GeoLocationStatus.locationDenied));
-        return;
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
-      emit(state.copyWith(
-          geoLocationStatus: GeoLocationStatus.locationPermanentlyDenied));
-      return;
-    }
-
-    emit(
-        state.copyWith(geoLocationStatus: GeoLocationStatus.locationRequested));
-
-    String? geoLocationFormatted;
-
-    try {
-      Position position = await Geolocator.getCurrentPosition(
-          timeLimit: const Duration(seconds: 45));
-
-      geoLocationFormatted =
-          '${position.latitude.toString()}, ${position.longitude.toString()}';
-    } catch (e) {
-      emit(state.copyWith(
-          geoLocationStatus: GeoLocationStatus.locationTimedOut));
-
-      geoLocationFormatted = 'Undetermined';
-    }
-
-    GibsonsForm changedGibsonsForm =
-        state.gibsonsForm.copyWith(geoLocation: geoLocationFormatted);
-
-    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
-
-    if (geoLocationFormatted != 'Undetermined') {
-      emit(state.copyWith(
-          geoLocationStatus: GeoLocationStatus.locationDetermined));
-    }
   }
 
   void _onPictureChartCollectedChanged(
@@ -296,7 +197,8 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
   void _onFoodItemAdded(FoodItemAdded event, Emitter<CollectionState> emit) {
     List<FoodItem> foodItems = List.from(state.gibsonsForm.foodItems);
-    foodItems.add(FoodItem());
+    foodItems
+        .add(FoodItem(id: const Uuid().v4(), measurements: [Measurement()]));
 
     GibsonsForm changedGibsonsForm =
         state.gibsonsForm.copyWith(foodItems: foodItems);
@@ -403,7 +305,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
     List<Measurement> measurements = List.from(foodItem.measurements);
 
-    measurements.add(Measurement());
+    measurements.add(Measurement(id: const Uuid().v4()));
 
     FoodItem changedFoodItem =
         foodItem.copyWith(measurements: measurements, confirmed: false);
@@ -442,7 +344,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
     // since copyWith does not allow to null attributes, create new instance and
     // copy the original id and changed method (thus nulling value and unit)
-    Measurement measurement = Measurement();
+    Measurement measurement = Measurement(id: const Uuid().v4());
 
     measurement = measurement.copyWith(
         id: measurements[changedmeasurementIndex].id,
@@ -537,31 +439,11 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
         geoLocationStatus: GeoLocationStatus.none));
   }
 
-  void _onGibsonsFormDuplicated(
-      GibsonsFormDuplicated event, Emitter<CollectionState> emit) async {
-    final respondentNameAndCopyText = event.gibsonsForm.respondentName == null
-        ? 'Unnamed respondent copy'
-        : '${event.gibsonsForm.respondentName!} copy';
-    GibsonsForm gibsonsFormDuplicated = event.gibsonsForm.copyWith(
-        id: const Uuid().v4(),
-        employeeNumber: event.employeeNumber,
-        respondentName: respondentNameAndCopyText,
-        finished: false);
-
-    emit(state.copyWith(
-        gibsonsForm: gibsonsFormDuplicated,
-        selectedScreen: SelectedScreen.sensitization,
-        geoLocationStatus: GeoLocationStatus.none));
-
-    // TODO: Move saving of collections to HomeBloc to avoid race conditions
-    await _gibsonifyRepository.saveForm(state.gibsonsForm);
-  }
-
   void _onCollectionFinished(
       CollectionFinished event, Emitter<CollectionState> emit) async {
     GibsonsForm changedGibsonsForm = state.gibsonsForm.copyWith(finished: true);
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
     // TODO: Move saving of collections to HomeBloc to avoid race conditions
-    await _gibsonifyRepository.saveForm(state.gibsonsForm);
+    //await _gibsonifyRepository.saveForm(state.gibsonsForm);
   }
 }
