@@ -3,8 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
-
-import '../bloc/household_bloc.dart';
+import 'package:gibsonify/household/household.dart';
 
 class CreateAnthropometricsPage extends StatelessWidget {
   const CreateAnthropometricsPage({Key? key}) : super(key: key);
