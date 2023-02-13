@@ -12,19 +12,23 @@ class SyncScreen extends StatelessWidget {
     return BlocConsumer<SyncBloc, SyncState>(
       listener: (context, state) {
         if (state.error != null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              backgroundColor: Colors.red,
-              content: Text('${state.error}', style: const TextStyle(color: Colors.white)),
-            )
-          );
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Colors.red,
+            content: Text('${state.error}',
+                style: const TextStyle(color: Colors.white)),
+          ));
         }
       },
       builder: (context, state) {
         return Column(
           children: [
-            const SizedBox(height: 50,),
-            const Text('Devices', style: TextStyle(fontSize: 16),),
+            const SizedBox(
+              height: 50,
+            ),
+            const Text(
+              'Devices',
+              style: TextStyle(fontSize: 16),
+            ),
             SizedBox(
               height: 300,
               width: MediaQuery.of(context).size.width,
@@ -32,7 +36,8 @@ class SyncScreen extends StatelessWidget {
                 scrollDirection: Axis.vertical,
                 itemCount: state.peers.length,
                 itemBuilder: (context, index) => Padding(
-                  padding: const EdgeInsets.only(left: 16.0, right: 16, bottom: 8),
+                  padding:
+                      const EdgeInsets.only(left: 16.0, right: 16, bottom: 8),
                   child: Row(
                     children: [
                       Text(
@@ -44,14 +49,15 @@ class SyncScreen extends StatelessWidget {
                       const Spacer(),
                       TextButton(
                         onPressed: () {
-                          context.read<SyncBloc>().add(Connect(deviceAddress: state.peers[index].deviceAddress));
+                          context.read<SyncBloc>().add(Connect(
+                              deviceAddress: state.peers[index].deviceAddress));
                         },
                         child: const Text('Connect'),
                       )
                     ],
                   ),
                 ),
-                ),
+              ),
             ),
             TextButton(
               onPressed: () {
@@ -71,7 +77,8 @@ class SyncScreen extends StatelessWidget {
                 final wifiP2pInfo = state.wifiP2pInfo;
                 print(wifiP2pInfo);
                 if (wifiP2pInfo != null) {
-                  context.read<SyncBloc>().add(StartSocket(groupOwnerAddress: wifiP2pInfo.groupOwnerAddress));
+                  context.read<SyncBloc>().add(StartSocket(
+                      groupOwnerAddress: wifiP2pInfo.groupOwnerAddress));
                 }
               },
               child: const Text('Start Socket'),
@@ -81,7 +88,8 @@ class SyncScreen extends StatelessWidget {
                 final wifiP2pInfo = state.wifiP2pInfo;
                 print(wifiP2pInfo);
                 if (wifiP2pInfo != null) {
-                  context.read<SyncBloc>().add(ConnectToSocket(groupOwnerAddress: wifiP2pInfo.groupOwnerAddress));
+                  context.read<SyncBloc>().add(ConnectToSocket(
+                      groupOwnerAddress: wifiP2pInfo.groupOwnerAddress));
                 }
               },
               child: const Text('Connect to Socket'),
@@ -92,7 +100,9 @@ class SyncScreen extends StatelessWidget {
             TextButton(
               onPressed: () {
                 if (messageController.text != '') {
-                  context.read<SyncBloc>().add(SendStringToSocket(message: messageController.text));
+                  context
+                      .read<SyncBloc>()
+                      .add(SendStringToSocket(message: messageController.text));
                 }
               },
               child: const Text('Send message'),
