@@ -7,11 +7,11 @@ import 'package:gibsonify/navigation/navigation.dart';
 import 'package:gibsonify/collection/collection.dart';
 import 'package:gibsonify/recipe/recipe.dart';
 import 'package:gibsonify/login/login.dart';
+import 'package:gibsonify/surveys/surveys.dart';
 import 'package:gibsonify/import_export/import_export.dart';
+import 'package:gibsonify/sync/bloc/sync_bloc.dart';
 
-import 'surveys/surveys.dart';
-
-class App extends StatelessWidget {
+class App extends StatelessWidget with WidgetsBindingObserver {
   final GibsonifyRepository gibsonifyRepository;
   final IsarRepository isarRepository;
 
@@ -50,6 +50,7 @@ class App extends StatelessWidget {
               create: (context) => ImportExportBloc(
                   gibsonifyRepository: gibsonifyRepository,
                   isarRepository: isarRepository)),
+          BlocProvider(create: (context) => SyncBloc()),
         ],
         child: MaterialApp(
           title: 'Gibsonify',
