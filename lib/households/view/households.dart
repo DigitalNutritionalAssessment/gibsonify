@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gibsonify/households/households.dart';
 
 import 'package:gibsonify/navigation/navigation.dart';
+import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:gibsonify_repository/gibsonify_repository.dart';
 import 'package:intl/intl.dart';
 
@@ -10,7 +11,7 @@ class HouseholdsScreen extends StatelessWidget {
   const HouseholdsScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, [bool mounted = true]) {
     DateFormat formatter = DateFormat('yyyy-MM-dd');
 
     return BlocProvider(
@@ -68,9 +69,19 @@ class HouseholdsScreen extends StatelessWidget {
                           heroTag: null,
                           label: const Text("New household"),
                           icon: const Icon(Icons.add),
-                          onPressed: () {
-                            Navigator.pushNamed(
+                          onPressed: () async {
+                            final newHousehold = await Navigator.pushNamed(
                                 context, PageRouter.createHousehold);
+
+                            if (!mounted) {
+                              return;
+                            }
+
+                            if (newHousehold != null) {
+                              context.read<HouseholdsBloc>().add(
+                                  NewHouseholdSaveRequested(
+                                      household: newHousehold as Household));
+                            }
                           }),
                     ]));
           },

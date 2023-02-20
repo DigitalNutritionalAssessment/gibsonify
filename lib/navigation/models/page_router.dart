@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:gibsonify/home/home.dart';
 import 'package:gibsonify/collection/collection.dart';
+import 'package:gibsonify/households/households.dart';
 import 'package:gibsonify/recipe/recipe.dart';
 import 'package:gibsonify/settings/settings.dart';
 import 'package:gibsonify/login/login.dart';
-import 'package:gibsonify/create_household/view/create_household.dart';
 import 'package:gibsonify/household/household.dart';
 
 class PageRouter {
@@ -24,7 +24,7 @@ class PageRouter {
   static const collectionsHelp = '/collectionshelp';
   static const recipesHelp = '/recipeshelp';
   static const settingsHelp = '/settingshelp';
-  static const createHousehold = 'createhousehold';
+  static const createHousehold = '/createhousehold';
 
   static const householdPrefix = '/household';
   static const householdInitialRoute = '/household/$viewHousehold';

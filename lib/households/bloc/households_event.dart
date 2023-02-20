@@ -28,3 +28,12 @@ class HouseholdsUpdateRequested extends HouseholdsEvent {
   @override
   List<Object> get props => [];
 }
+
+class NewHouseholdSaveRequested extends HouseholdsEvent {
+  final Household household;
+
+  const NewHouseholdSaveRequested({required this.household});
+
+  @override
+  List<Object> get props => [household];
+}
