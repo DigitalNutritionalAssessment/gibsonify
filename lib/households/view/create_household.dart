@@ -52,8 +52,9 @@ class CreateHouseholdPage extends StatelessWidget {
                           Navigator.pop(
                               context,
                               Household(
-                                  householdId: formKey
-                                      .currentState!.value['householdId'],
+                                  householdId: (formKey.currentState!
+                                          .value['householdId'] as String)
+                                      .toUpperCase(),
                                   sensitizationDate: formKey
                                       .currentState!.value['sensitizationDate'],
                                   geoLocation: formKey
@@ -86,6 +87,7 @@ class CreateHouseholdPage extends StatelessWidget {
                       ? 'Household ID already exists'
                       : null,
                 ]),
+                textCapitalization: TextCapitalization.characters,
               ),
               FormBuilderDateTimePicker(
                 name: 'sensitizationDate',
