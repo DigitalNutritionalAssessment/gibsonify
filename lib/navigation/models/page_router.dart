@@ -24,7 +24,6 @@ class PageRouter {
   static const collectionsHelp = '/collectionshelp';
   static const recipesHelp = '/recipeshelp';
   static const settingsHelp = '/settingshelp';
-  static const createHousehold = '/createhousehold';
 
   static const householdPrefix = '/household';
   static const householdInitialRoute = '/household/$viewHousehold';
@@ -85,8 +84,6 @@ class PageRouter {
         return _buildRoute(const RecipesHelpPage());
       case settingsHelp:
         return _buildRoute(const SettingsHelpPage());
-      case createHousehold:
-        return _buildRoute(const CreateHouseholdPage());
       default:
         final route = routeSettings.name!;
         if (route.startsWith(householdPrefix)) {

@@ -70,8 +70,13 @@ class HouseholdsScreen extends StatelessWidget {
                           label: const Text("New household"),
                           icon: const Icon(Icons.add),
                           onPressed: () async {
-                            final newHousehold = await Navigator.pushNamed(
-                                context, PageRouter.createHousehold);
+                            final newHousehold = await Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return CreateHouseholdPage(
+                                  existingHouseholdIds: state.households
+                                      .map((household) => household.householdId)
+                                      .toSet());
+                            }));
 
                             if (!mounted) {
                               return;

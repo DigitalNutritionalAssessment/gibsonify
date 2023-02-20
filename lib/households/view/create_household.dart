@@ -5,7 +5,10 @@ import 'package:geolocator/geolocator.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
 
 class CreateHouseholdPage extends StatelessWidget {
-  const CreateHouseholdPage({Key? key}) : super(key: key);
+  const CreateHouseholdPage({Key? key, required this.existingHouseholdIds})
+      : super(key: key);
+
+  final Set<String> existingHouseholdIds;
 
   @override
   Widget build(BuildContext context, [bool mounted = true]) {
@@ -79,9 +82,9 @@ class CreateHouseholdPage extends StatelessWidget {
                   FormBuilderValidators.required(),
                   FormBuilderValidators.minLength(10,
                       errorText: 'Must be at least 10 characters'),
-                  // (value) => existingHouseholdIds.contains(value)
-                  //     ? 'Household ID already exists'
-                  //     : null,
+                  (value) => existingHouseholdIds.contains(value)
+                      ? 'Household ID already exists'
+                      : null,
                 ]),
               ),
               FormBuilderDateTimePicker(
