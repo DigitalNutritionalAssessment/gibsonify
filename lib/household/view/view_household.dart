@@ -18,6 +18,7 @@ class ViewHouseholdPage extends StatelessWidget {
             DateFormat formatter = DateFormat('yyyy-MM-dd');
 
             return Column(
+              key: UniqueKey(),
               children: [
                 TextFormField(
                   readOnly: true,

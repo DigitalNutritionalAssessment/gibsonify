@@ -19,6 +19,7 @@ class ViewRespondentPage extends StatelessWidget {
 
         Widget respondentView() {
           return Column(
+            key: UniqueKey(),
             children: [
               TextFormField(
                 readOnly: true,
