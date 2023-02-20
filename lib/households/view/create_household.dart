@@ -3,6 +3,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
+import 'package:intl/intl.dart';
 
 class CreateHouseholdPage extends StatelessWidget {
   const CreateHouseholdPage({Key? key, required this.existingHouseholdIds})
@@ -95,6 +96,7 @@ class CreateHouseholdPage extends StatelessWidget {
                   label: Text('Sensitization Date'),
                   icon: Icon(Icons.calendar_today),
                 ),
+                format: DateFormat('yyyy-MM-dd'),
                 onChanged: (value) => changed = true,
                 inputType: InputType.date,
                 lastDate: DateTime.now(),
