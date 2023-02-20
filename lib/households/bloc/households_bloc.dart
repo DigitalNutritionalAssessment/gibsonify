@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -23,9 +25,10 @@ class HouseholdsBloc extends Bloc<HouseholdsEvent, HouseholdsState> {
       HouseholdsPageOpened event, Emitter<HouseholdsState> emit) async {
     Stream<void> householdsWatch = _isarRepository.watchHouseholds();
     // Callback fires immediately so no need to manually request an update on initialisation
-    householdsWatch.listen((event) {
+    final subscription = householdsWatch.listen((event) {
       add(const HouseholdsUpdateRequested());
     });
+    emit(state.copyWith(subscription: subscription));
   }
 
   void _onHouseholdDeleteRequested(
@@ -38,5 +41,11 @@ class HouseholdsBloc extends Bloc<HouseholdsEvent, HouseholdsState> {
     // TODO: implement a subscription to a stream of households
     final households = await _isarRepository.readHouseholds();
     emit(state.copyWith(households: households));
+  }
+
+  @override
+  Future<void> close() async {
+    await state.subscription?.cancel();
+    return super.close();
   }
 }
