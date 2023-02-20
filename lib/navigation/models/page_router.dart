@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:gibsonify/home/home.dart';
 import 'package:gibsonify/collection/collection.dart';
-import 'package:gibsonify/households/households.dart';
 import 'package:gibsonify/recipe/recipe.dart';
 import 'package:gibsonify/settings/settings.dart';
 import 'package:gibsonify/login/login.dart';
