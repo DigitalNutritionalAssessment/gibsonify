@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gibsonify/home/home.dart';
 import 'package:gibsonify/households/households.dart';
 import 'package:gibsonify/surveys/surveys.dart';
-
-import 'package:gibsonify/sync/sync_screen.dart';
+import 'package:gibsonify/home/widgets/widgets.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -20,7 +19,7 @@ class HomePageState extends State<HomePage> {
     const SurveysScreen(),
     const HouseholdsScreen(),
     const RecipesScreen(viewedFromCollection: false),
-    SyncScreen(),
+    const SyncScreen(),
     const SettingsScreen(),
   ];
 
