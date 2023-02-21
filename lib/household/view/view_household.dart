@@ -39,7 +39,7 @@ class _ViewHouseholdPageState extends State<ViewHouseholdPage>
     return BlocBuilder<HouseholdBloc, HouseholdState>(
       builder: (context, state) {
         Widget householdInfo() {
-          return Column(children: [
+          return Column(key: UniqueKey(), children: [
             TextFormField(
               readOnly: true,
               decoration: const InputDecoration(

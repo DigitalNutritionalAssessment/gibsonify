@@ -45,6 +45,7 @@ class _ViewRespondentPageState extends State<ViewRespondentPage>
 
         Widget respondentInfo() {
           return Column(
+            key: UniqueKey(),
             children: [
               TextFormField(
                 readOnly: true,
