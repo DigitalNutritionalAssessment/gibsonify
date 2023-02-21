@@ -46,9 +46,9 @@ class HouseholdsBloc extends Bloc<HouseholdsEvent, HouseholdsState> {
 
   void _onNewHouseholdSaveRequested(
       NewHouseholdSaveRequested event, Emitter<HouseholdsState> emit) async {
-    await _isarRepository.saveNewHousehold(event.household);    
+    await _isarRepository.saveNewHousehold(event.household);
   }
-  
+
   @override
   Future<void> close() async {
     await state.subscription?.cancel();
