@@ -8,3 +8,4 @@ export 'login_info.dart';
 export 'household.dart';
 export 'respondent.dart';
 export 'survey.dart';
+export 'anthropometrics.dart';

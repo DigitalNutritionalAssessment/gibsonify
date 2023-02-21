@@ -1,7 +1,25 @@
-## Unreleased
+## 1.3.0 (2023-02-07)
 
 ### Feat
 
+- **respondent**: anthropometric data collection (#58)
+- **anthropometrics**: non zero positive value validation
+- **respondent**: view anthropometrics
+- **respondent**: delete anthropometrics
+- **respondent**: create anthropometrics
+- **models**: add Anthropometrics
+- new data structure and database storage (#57)
+- add recipes help page
+- add collections help page
+- standardize collection duplication and deletion
+- **recipe**: add dynamic measurements to ingredient form
+- **recipe**: add dynamic measurements to details screen
+- **collection**: clear measurement unit and value after method change
+- add preliminary dynamic measurements
+- **collection**: combine fourth pass preparation method fields
+- standardize ingredient and cooking state icons
+- add custom preparation method of food items
+- add dynamic dropdown search sizing
 - **recipe**: add dynamic dropdown sizing
 - **collection**: add dynamic dropdown sizing
 - implement recipe and collection feedback
@@ -21,8 +39,31 @@
 - **recipe**: add recipe duplication
 - **recipe**: add ingredients as identifier for recipes
 
+### Fix
+
+- **anthropometrics**: record date only, no time
+- **collection**: change to id based food item indexing
+- **recipe**: custom cooking state error text condition
+- **recipe**: fix render overflow error for ingredient page
+- **recipe**: update modified recipe listtile
+- **recipe**: update food description field view
+- **recipe**: dropdownsearch api change after version bump
+- **collection**: dropdownsearch api change after version bump
+- remove error text for comments field
+- **recipe**: restrict item deletion for standard recipes
+- **recipe**: remove old modified recipe logic and fix saved recipe/ingredient logic
+
 ### Refactor
 
+- **recipe**: disuse deprecated shareFiles
+- **gibsonify_api**: remove old list of measurement units
+- make measurement attributes identifiers shorter
+- **collection**: pass only food item ids in events
+- **collection**: use build context synchronously
+- **settings**: remove deprecated launch in favor of launchurl
+- **home**: change homepagestate to public
+- **collection**: use const for constant constructor
+- **collection**: change print call to exception raise
 - add new viewedFromCollection parameter for code readability
 - remove unnecessary argument for context popping
 - rename edit probe page
@@ -36,17 +77,6 @@
 - **recipe**: refactor error conditions using utils function
 - **recipe**: set probe screen as default page for standard recipes
 - change name of food item description field to comments
-
-### Fix
-
-- **recipe**: fix render overflow error for ingredient page
-- **recipe**: update modified recipe listtile
-- **recipe**: update food description field view
-- **recipe**: dropdownsearch api change after version bump
-- **collection**: dropdownsearch api change after version bump
-- remove error text for comments field
-- **recipe**: restrict item deletion for standard recipes
-- **recipe**: remove old modified recipe logic and fix saved recipe/ingredient logic
 
 ## 1.2.0 (2022-04-18)
 
