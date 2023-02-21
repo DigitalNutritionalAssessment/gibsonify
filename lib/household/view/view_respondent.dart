@@ -65,6 +65,12 @@ class _ViewRespondentPageState extends State<ViewRespondentPage>
         }
 
         Widget respondentAnthropometrics() {
+          if (respondent.anthropometrics.isEmpty) {
+            return const Center(
+              child: Text('No anthropometric data'),
+            );
+          }
+
           return ListView.builder(
               itemCount: respondent.anthropometrics.length,
               itemBuilder: (context, index) {
@@ -93,6 +99,12 @@ class _ViewRespondentPageState extends State<ViewRespondentPage>
         }
 
         Widget respondentNutrition() {
+          if (respondent.collections.isEmpty) {
+            return const Center(
+              child: Text('No collections'),
+            );
+          }
+
           return ListView.builder(
               itemCount: respondent.collections.length,
               itemBuilder: (context, index) {
