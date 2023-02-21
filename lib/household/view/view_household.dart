@@ -67,6 +67,10 @@ class _ViewHouseholdPageState extends State<ViewHouseholdPage>
         }
 
         Widget householdRespondents() {
+          if (state.household!.respondents.isEmpty) {
+            return const Center(child: Text('No respondents'));
+          }
+
           return ListView.builder(
             itemCount: state.household!.respondents.length,
             itemBuilder: (context, index) {
