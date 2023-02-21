@@ -11,14 +11,10 @@ class MockGibsonifyRepository extends Mock implements GibsonifyRepository {}
 
 void main() {
   group('CollectionBloc', () {
-    late GibsonifyRepository gibsonifyRepository;
-
     late CollectionBloc collectionBloc;
 
     setUp(() {
-      gibsonifyRepository = MockGibsonifyRepository();
-
-      collectionBloc = CollectionBloc(gibsonifyRepository: gibsonifyRepository);
+      collectionBloc = CollectionBloc();
     });
 
     test('initial selected screen is sensitization screen', () {
