@@ -1,3 +1,32 @@
+## 1.4.0 (2023-02-21)
+
+### Feat
+
+- **households**: handle ID clash on create (#72)
+- add basic Survey structure and linking (#62)
+- **household**: tabbed UI for household and respondent (#75)
+- **collection**: require survey ID
+- **collection**: add survey input to sensitisation screen
+- **gibsonify_api**: add survey ID to Gibson Form model
+- **surveys**: handle clash on create
+- **survey**: handle import clash
+- **models**: make surveyId unique
+- **survey**: add import instructions
+- **survey**: import survey from QR
+- **survey**: export as QR
+- **surveys**: view survey screen
+- **surveys**: create functionality
+- **app**: add Surveys screen to main tabs
+- view and delete survey functionality
+- **repository**: surveys CRUD
+- **models**: new Survey model
+
+### Fix
+
+- **household**: rebuild view fields on edit (#74)
+- **households**: cancel subscription on bloc close (#73)
+- **households**: cancel subscription on bloc close
+
 ## 1.3.0 (2023-02-07)
 
 ### Feat

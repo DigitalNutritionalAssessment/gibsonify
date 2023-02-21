@@ -1,7 +1,7 @@
 name: gibsonify
 description: Collect nutritional data using Gibson's method.
 publish_to: 'none'
-version: 1.3.0
+version: 1.4.0
 
 environment:
   sdk: ">=2.15.0 <3.0.0"
