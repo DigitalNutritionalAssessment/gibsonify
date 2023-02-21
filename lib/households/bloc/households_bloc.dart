@@ -19,6 +19,7 @@ class HouseholdsBloc extends Bloc<HouseholdsEvent, HouseholdsState> {
     on<HouseholdsPageOpened>(_onHouseholdsPageOpened);
     on<HouseholdsUpdateRequested>(_onHouseholdsUpdateRequested);
     on<HouseholdDeleteRequested>(_onHouseholdDeleteRequested);
+    on<NewHouseholdSaveRequested>(_onNewHouseholdSaveRequested);
   }
 
   void _onHouseholdsPageOpened(
@@ -41,6 +42,11 @@ class HouseholdsBloc extends Bloc<HouseholdsEvent, HouseholdsState> {
     // TODO: implement a subscription to a stream of households
     final households = await _isarRepository.readHouseholds();
     emit(state.copyWith(households: households));
+  }
+
+  void _onNewHouseholdSaveRequested(
+      NewHouseholdSaveRequested event, Emitter<HouseholdsState> emit) async {
+    await _isarRepository.saveNewHousehold(event.household);
   }
 
   @override
