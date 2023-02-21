@@ -4,127 +4,137 @@ import 'package:gibsonify/household/household.dart';
 import 'package:gibsonify/navigation/navigation.dart';
 import 'package:intl/intl.dart';
 
-class ViewHouseholdPage extends StatelessWidget {
+class ViewHouseholdPage extends StatefulWidget {
   const ViewHouseholdPage({Key? key}) : super(key: key);
 
   @override
+  State<ViewHouseholdPage> createState() => _ViewHouseholdPageState();
+}
+
+class _ViewHouseholdPageState extends State<ViewHouseholdPage>
+    with TickerProviderStateMixin {
+  late TabController _tabController;
+  int activeIndex = 0;
+
+  final tabs = const [
+    Tab(icon: Icon(Icons.info), text: 'Info'),
+    Tab(icon: Icon(Icons.people), text: 'Respondents')
+  ];
+
+  @override
+  void initState() {
+    _tabController = TabController(length: tabs.length, vsync: this);
+    _tabController.addListener(() {
+      setState(() {
+        activeIndex = _tabController.index;
+      });
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    DateFormat formatter = DateFormat('yyyy-MM-dd');
+
     return BlocBuilder<HouseholdBloc, HouseholdState>(
       builder: (context, state) {
-        Widget householdView() {
-          if (state is HouseholdInitial) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is HouseholdLoaded) {
-            DateFormat formatter = DateFormat('yyyy-MM-dd');
-
-            return Column(
-              children: [
-                TextFormField(
-                  readOnly: true,
-                  decoration: const InputDecoration(
-                      labelText: 'Location',
-                      icon: Icon(Icons.location_on_outlined)),
-                  initialValue: state.household!.geoLocation,
-                ),
-                TextFormField(
-                  readOnly: true,
-                  decoration: const InputDecoration(
-                      labelText: 'Sensitization Date',
-                      icon: Icon(Icons.calendar_today)),
-                  initialValue:
-                      formatter.format(state.household!.sensitizationDate),
-                ),
-                TextFormField(
-                  readOnly: true,
-                  decoration: const InputDecoration(
-                      labelText: 'Comments', icon: Icon(Icons.comment)),
-                  initialValue: state.household!.comments,
-                  minLines: 1,
-                  maxLines: null,
-                ),
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Divider(),
-                ),
-                Row(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Icon(Icons.people),
-                    ),
-                    Text('Respondents',
-                        style: Theme.of(context).textTheme.headline6),
-                    const Spacer(),
-                    IconButton(
-                        onPressed: () => Navigator.pushNamed(
-                            context, PageRouter.createRespondent),
-                        icon: const Icon(Icons.add))
-                  ],
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    padding: const EdgeInsets.all(2.0),
-                    itemCount: state.household!.respondents.length,
-                    itemBuilder: (context, index) {
-                      return Card(
-                          child: ListTile(
-                        title: Text(state.household!.respondents[index].name),
-                        subtitle: Text("ID: ${index + 1}"),
-                        onTap: () => {
-                          context
-                              .read<HouseholdBloc>()
-                              .add(RespondentOpened(index: index)),
-                          Navigator.pushNamed(
-                              context, PageRouter.viewRespondent,
-                              arguments: {'index': index})
-                        },
-                        onLongPress: () => showModalBottomSheet(
-                            context: context,
-                            builder: (context) {
-                              return RespondentOptions(
-                                  index: index,
-                                  name:
-                                      state.household!.respondents[index].name);
-                            }),
-                      ));
-                    },
-                  ),
-                )
-              ],
-            );
-          } else {
-            return const Center(child: Text('Error'));
-          }
+        Widget householdInfo() {
+          return Column(children: [
+            TextFormField(
+              readOnly: true,
+              decoration: const InputDecoration(
+                  labelText: 'Location',
+                  icon: Icon(Icons.location_on_outlined)),
+              initialValue: state.household!.geoLocation,
+            ),
+            TextFormField(
+              readOnly: true,
+              decoration: const InputDecoration(
+                  labelText: 'Sensitization Date',
+                  icon: Icon(Icons.calendar_today)),
+              initialValue:
+                  formatter.format(state.household!.sensitizationDate),
+            ),
+            TextFormField(
+              readOnly: true,
+              decoration: const InputDecoration(
+                  labelText: 'Comments', icon: Icon(Icons.comment)),
+              initialValue: state.household!.comments,
+              minLines: 1,
+              maxLines: null,
+            ),
+          ]);
         }
 
-        return Scaffold(
-          appBar: AppBar(
-            leading: IconButton(
-                onPressed: () {
-                  Navigator.of(context, rootNavigator: true).pop();
+        Widget householdRespondents() {
+          return ListView.builder(
+            itemCount: state.household!.respondents.length,
+            itemBuilder: (context, index) {
+              return Card(
+                  child: ListTile(
+                title: Text(state.household!.respondents[index].name),
+                subtitle: Text("ID: ${index + 1}"),
+                onTap: () => {
+                  context
+                      .read<HouseholdBloc>()
+                      .add(RespondentOpened(index: index)),
+                  Navigator.pushNamed(context, PageRouter.viewRespondent,
+                      arguments: {'index': index})
                 },
-                icon: const Icon(Icons.arrow_back)),
-            title: state is HouseholdLoaded
-                ? Text(state.household!.householdId)
-                : const Text('Household'),
-            actions: state is HouseholdLoaded
-                ? [
-                    IconButton(
-                        onPressed: () => {
-                              Navigator.pushNamed(
-                                context,
-                                PageRouter.editHousehold,
-                              )
-                            },
-                        icon: const Icon(Icons.edit))
-                  ]
-                : [],
-          ),
-          body: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: householdView(),
-          ),
-        );
+                onLongPress: () => showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return RespondentOptions(
+                          index: index,
+                          name: state.household!.respondents[index].name);
+                    }),
+              ));
+            },
+          );
+        }
+
+        if (state is HouseholdInitial) {
+          return const Scaffold(
+              body: Center(child: CircularProgressIndicator()));
+        } else if (state is HouseholdLoaded) {
+          return Scaffold(
+            appBar: AppBar(
+                leading: IconButton(
+                    onPressed: () {
+                      Navigator.of(context, rootNavigator: true).pop();
+                    },
+                    icon: const Icon(Icons.arrow_back)),
+                title: Text(state.household!.householdId),
+                bottom: TabBar(
+                  controller: _tabController,
+                  tabs: tabs,
+                )),
+            body: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TabBarView(
+                controller: _tabController,
+                children: [householdInfo(), householdRespondents()],
+              ),
+            ),
+            floatingActionButton: activeIndex == 0
+                ? FloatingActionButton(
+                    onPressed: () => Navigator.pushNamed(
+                      context,
+                      PageRouter.editHousehold,
+                    ),
+                    child: const Icon(Icons.edit),
+                  )
+                : FloatingActionButton(
+                    onPressed: () => Navigator.pushNamed(
+                      context,
+                      PageRouter.createRespondent,
+                    ),
+                    child: const Icon(Icons.add),
+                  ),
+          );
+        } else {
+          return const Scaffold(body: Text('Error'));
+        }
       },
     );
   }
