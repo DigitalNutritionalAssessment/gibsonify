@@ -10,6 +10,7 @@ part 'collection_state.dart';
 class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
   CollectionBloc() : super(CollectionState()) {
     on<SelectedScreenChanged>(_onSelectedScreenChanged);
+    on<SurveyChanged>(_onSurveyChanged);
     on<RecallDayChanged>(_onRecallDayChanged);
     on<InterviewDateChanged>(_onInterviewDateChanged);
     on<InterviewStartTimeChanged>(_onInterviewStartTimeChanged);
@@ -79,6 +80,13 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
   void _onSelectedScreenChanged(
       SelectedScreenChanged event, Emitter<CollectionState> emit) {
     emit(state.copyWith(selectedScreen: event.changedSelectedScreen));
+  }
+
+  void _onSurveyChanged(SurveyChanged event, Emitter<CollectionState> emit) {
+    GibsonsForm changedGibsonsForm =
+        state.gibsonsForm.copyWith(surveyId: event.surveyId);
+
+    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }
 
   void _onRecallDayChanged(

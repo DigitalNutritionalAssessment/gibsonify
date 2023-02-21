@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:gibsonify/home/widgets/widgets.dart';
+import 'package:gibsonify/home/home.dart';
 import 'package:gibsonify/households/households.dart';
+import 'package:gibsonify/surveys/surveys.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -14,6 +15,7 @@ class HomePageState extends State<HomePage> {
   int _selectedScreenIndex = 0;
 
   final List<Widget> _screens = [
+    const SurveysScreen(),
     const HouseholdsScreen(),
     const RecipesScreen(viewedFromCollection: false),
     const SyncScreen(),
@@ -29,6 +31,10 @@ class HomePageState extends State<HomePage> {
         currentIndex: _selectedScreenIndex,
         onTap: _onScreenSelected,
         items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.assignment),
+            label: 'Surveys',
+          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.cottage),
             label: 'Households',

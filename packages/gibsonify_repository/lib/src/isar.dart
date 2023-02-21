@@ -7,7 +7,7 @@ class IsarRepository {
   IsarRepository({required this.isar});
 
   static Future<IsarRepository> create() async {
-    final isar = await Isar.open([HouseholdSchema]);
+    final isar = await Isar.open([HouseholdSchema, SurveySchema]);
     return IsarRepository(isar: isar);
   }
 
@@ -40,6 +40,26 @@ class IsarRepository {
       final household = await isar.households.get(id);
       household!.respondents.add(respondent);
       isar.households.put(household);
+    });
+  }
+
+  Future<List<Survey>> readSurveys() async {
+    return await isar.surveys.where().findAll();
+  }
+
+  Future<Survey?> readSurvey(int id) async {
+    return await isar.surveys.get(id);
+  }
+
+  Future<void> saveSurvey(Survey survey) async {
+    await isar.writeTxn(() async {
+      isar.surveys.put(survey);
+    });
+  }
+
+  Future<void> deleteSurvey(int id) async {
+    await isar.writeTxn(() async {
+      isar.surveys.delete(id);
     });
   }
 }

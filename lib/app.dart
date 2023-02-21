@@ -9,6 +9,8 @@ import 'package:gibsonify/recipe/recipe.dart';
 import 'package:gibsonify/login/login.dart';
 import 'package:gibsonify/import_export/import_export.dart';
 
+import 'surveys/surveys.dart';
+
 class App extends StatelessWidget {
   final GibsonifyRepository gibsonifyRepository;
   final IsarRepository isarRepository;
@@ -33,6 +35,9 @@ class App extends StatelessWidget {
               create: (context) =>
                   LoginBloc(gibsonifyRepository: gibsonifyRepository)
                     ..add(const LoginInfoLoaded())),
+          BlocProvider(
+              create: (context) => SurveysBloc(isarRepository: isarRepository)
+                ..add(const SurveysPageOpened())),
           // TODO: Refactor and move Collection and Recipe BlocProviders further
           // down the widget tree
           BlocProvider(create: (context) => CollectionBloc()),
