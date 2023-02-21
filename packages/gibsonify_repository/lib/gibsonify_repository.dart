@@ -1,4 +1,4 @@
-/// Repository that handles requests for Gibson's form Collections and Recipes
+/// Repository that handles requests for recipes and login info
 library gibsonify_repository;
 
 export 'src/gibsonify_repository.dart';
