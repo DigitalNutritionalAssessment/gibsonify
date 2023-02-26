@@ -45,7 +45,7 @@ Instructions for developing Gibsonify are in [docs/development.md](docs/developm
 
 ## Authors and Acknowledgements
 
-Gibsonify is being developed by [Faizaan Pervaiz](https://github.com/fpervaiz), [Archie Carpenter](https://github.com/Archie-C) and [Charlotte Rowe](https://github.com/Charlotte-Rowe), who have taken on the previous work of [Shazril Suhail](https://github.com/sshazril), [Adam Sroka](https://adamsroka.io), [Greg Chu](https://github.com/gregchu6), [Juan Rodgers](https://github.com/rodgersjuan), and [Choon Kiat Lee](https://github.com/choonkiatlee).
+Gibsonify is being developed by [Faizaan Pervaiz](https://github.com/fpervaiz), [Archie Carpenter](https://github.com/Archie-C) and [Charlotte Rowe](https://github.com/Charlotte-Rowe), who have taken on the previous work of [Shazril Suhail](https://github.com/sshazril), [Adam Sroka](https://adam.sr), [Greg Chu](https://github.com/gregchu6), [Juan Rodgers](https://github.com/rodgersjuan), and [Choon Kiat Lee](https://github.com/choonkiatlee).
 
 The development of the project is supervised by Alexandre Kabla ([University of Cambridge](https://www.cam.ac.uk), [Engineering Department](http://www.eng.cam.ac.uk/)) and Lara Allen ([Centre for Global Equality](https://centreforglobalequality.org)), in collaboration with Padmaja Ravula and Kavitha Kasala ([ICRISAT](https://www.icrisat.org/)). The project received support from [TIGR2ESS](https://www.globalfood.cam.ac.uk/keyprogs/TIGR2ESS).
 
