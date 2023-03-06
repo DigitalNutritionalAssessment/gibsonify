@@ -15,7 +15,7 @@ class SyncScreen extends StatelessWidget {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               backgroundColor: Colors.red,
-              content: Text('${state.error}', style: TextStyle(color: Colors.white)),
+              content: Text('${state.error}', style: const TextStyle(color: Colors.white)),
             )
           );
         }
