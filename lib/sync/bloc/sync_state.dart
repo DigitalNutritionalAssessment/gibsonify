@@ -1,13 +1,8 @@
 part of 'sync_bloc.dart';
 
-enum FoundDevices {
-  found,
-  loading,
-  notFound
-}
+enum FoundDevices { found, loading, notFound }
 
 class SyncState extends Equatable {
-
   const SyncState({
     this.locationPermissionsGranted = false,
     this.locationEnabled = false,
@@ -48,7 +43,8 @@ class SyncState extends Equatable {
     String? status,
   }) {
     return SyncState(
-      locationPermissionsGranted: locationPermissionsGranted ?? this.locationPermissionsGranted,
+      locationPermissionsGranted:
+          locationPermissionsGranted ?? this.locationPermissionsGranted,
       locationEnabled: locationEnabled ?? this.locationEnabled,
       wifiEnabled: wifiEnabled ?? this.wifiEnabled,
       error: error ?? this.error,
@@ -61,19 +57,17 @@ class SyncState extends Equatable {
     );
   }
 
-
   @override
   List<Object?> get props => [
-    locationPermissionsGranted,
-    locationEnabled,
-    wifiEnabled,
-    error,
-    initialised,
-    registered,
-    wifiP2pInfo,
-    streamPeers,
-    peers,
-    status
-  ];
-
+        locationPermissionsGranted,
+        locationEnabled,
+        wifiEnabled,
+        error,
+        initialised,
+        registered,
+        wifiP2pInfo,
+        streamPeers,
+        peers,
+        status
+      ];
 }

@@ -1,6 +1,6 @@
 part of 'sync_bloc.dart';
 
-abstract class SyncEvent extends Equatable{
+abstract class SyncEvent extends Equatable {
   const SyncEvent();
 
   @override

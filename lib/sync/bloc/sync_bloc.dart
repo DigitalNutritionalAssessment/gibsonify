@@ -11,7 +11,6 @@ part 'sync_state.dart';
 // This class extends the Bloc class and manages the state and events for synchronizing devices over a peer-to-peer connection
 
 class SyncBloc extends Bloc<SyncEvent, SyncState> {
-
   // constructor initializes the state and sets up event handlers
   SyncBloc() : super(const SyncState()) {
     on<CheckLocationPermissions>(_checkLocationPermissions);
@@ -48,7 +47,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   }
 
   // event handler for checking location permissions
-  void _checkLocationPermissions(CheckLocationPermissions event, Emitter<SyncState> emit) async {
+  void _checkLocationPermissions(
+      CheckLocationPermissions event, Emitter<SyncState> emit) async {
     var result = await _flutterP2pConnectionPlugin.checkLocationPermission();
     if (result) {
       emit(state.copyWith(locationPermissionsGranted: true));
@@ -58,30 +58,33 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   }
 
   // event handler for checking if location services are enabled
-  void _checkLocationEnabled(CheckLocationEnabled event, Emitter<SyncState> emit) async {
+  void _checkLocationEnabled(
+      CheckLocationEnabled event, Emitter<SyncState> emit) async {
     var result = await _flutterP2pConnectionPlugin.checkLocationEnabled();
     if (result) {
       emit(state.copyWith(locationEnabled: true));
     } else {
       emit(state.copyWith(locationEnabled: false));
-      }
+    }
   }
 
   // event handler for checking if wifi is enabled
-  void _checkWifiEnabled(CheckWifiEnabled event, Emitter<SyncState> emit) async {
+  void _checkWifiEnabled(
+      CheckWifiEnabled event, Emitter<SyncState> emit) async {
     var result = await _flutterP2pConnectionPlugin.checkWifiEnabled();
     if (result) {
       emit(state.copyWith(wifiEnabled: true));
     } else {
       emit(state.copyWith(wifiEnabled: false));
-      }
+    }
   }
 
   // event handler for asking for location permissions
-  void _askLocationPermissions(AskLocationPermissions event, Emitter<SyncState> emit) async {
+  void _askLocationPermissions(
+      AskLocationPermissions event, Emitter<SyncState> emit) async {
     try {
       await _flutterP2pConnectionPlugin.askLocationPermission();
-      bool? enabled =  await _flutterP2pConnectionPlugin.checkLocationEnabled();
+      bool? enabled = await _flutterP2pConnectionPlugin.checkLocationEnabled();
       print('location enabled: $enabled');
     } catch (e) {
       print('ask location perms: $e');
@@ -90,7 +93,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   }
 
   // event handler for enabling location services
-  void _enableLocationServices(EnableLocationServices event, Emitter<SyncState> emit) async {
+  void _enableLocationServices(
+      EnableLocationServices event, Emitter<SyncState> emit) async {
     try {
       await _flutterP2pConnectionPlugin.enableLocationServices();
     } catch (e) {
@@ -100,7 +104,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   }
 
   // event handler for enabling wifi services
-  void _enableWifiServices(EnableWifiServices event, Emitter<SyncState> emit) async {
+  void _enableWifiServices(
+      EnableWifiServices event, Emitter<SyncState> emit) async {
     try {
       await _flutterP2pConnectionPlugin.enableWifiServices();
     } catch (e) {
@@ -165,11 +170,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       groupOwnerAddress: event.groupOwnerAddress,
       downloadPath: "/storage/emulated/0/Download/",
       onConnect: (String name, String address) {
-          print("$name connected to socket with address: $address");
+        print("$name connected to socket with address: $address");
       },
-      transferUpdate: (TransferUpdate transfer) {
-
-      },
+      transferUpdate: (TransferUpdate transfer) {},
       receiveString: (req) async {
         if (kDebugMode) {
           print(req);
@@ -178,16 +181,15 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     );
   }
 
-  Future _connectToSocket(ConnectToSocket event, Emitter<SyncState> emit) async {
+  Future _connectToSocket(
+      ConnectToSocket event, Emitter<SyncState> emit) async {
     await _flutterP2pConnectionPlugin.connectToSocket(
       groupOwnerAddress: event.groupOwnerAddress,
       downloadPath: "/storage/emulated/0/Download/",
       onConnect: (String address) {
         print("connected to socket with address: $address");
       },
-      transferUpdate: (TransferUpdate transfer) {
-
-      },
+      transferUpdate: (TransferUpdate transfer) {},
       receiveString: (req) async {
         if (kDebugMode) {
           print(req);
@@ -196,7 +198,8 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     );
   }
 
-  void _sendStringToSocket(SendStringToSocket event, Emitter<SyncState> emit) async {
+  void _sendStringToSocket(
+      SendStringToSocket event, Emitter<SyncState> emit) async {
     _flutterP2pConnectionPlugin.sendStringToSocket(event.message);
   }
 
@@ -210,10 +213,10 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     } catch (e) {
       print(e);
     }
-
   }
 
-  void _updateWiFiP2pInfo(UpdateWiFiP2pInfo event, Emitter<SyncState> emit) async {
+  void _updateWiFiP2pInfo(
+      UpdateWiFiP2pInfo event, Emitter<SyncState> emit) async {
     emit(state.copyWith(wifiP2PInfo: event.wifiP2PInfo));
   }
 
@@ -228,12 +231,12 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   }
 
   void _closeP2p(Close event, Emitter<SyncState> emit) async {
-      bool? stopped = await _flutterP2pConnectionPlugin.stopDiscovery();
-      print('stopped discovery: $stopped');
-      bool closed = _flutterP2pConnectionPlugin.closeSocket();
-      print('stopped socket: $closed');
-      bool? removed = await _flutterP2pConnectionPlugin.removeGroup();
-      print("removed group: $removed");
-      _flutterP2pConnectionPlugin.unregister();
+    bool? stopped = await _flutterP2pConnectionPlugin.stopDiscovery();
+    print('stopped discovery: $stopped');
+    bool closed = _flutterP2pConnectionPlugin.closeSocket();
+    print('stopped socket: $closed');
+    bool? removed = await _flutterP2pConnectionPlugin.removeGroup();
+    print("removed group: $removed");
+    _flutterP2pConnectionPlugin.unregister();
   }
 }
