@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gibsonify/household/household.dart';
 import 'package:gibsonify/navigation/models/page_router.dart';
+import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:intl/intl.dart';
 
 class ViewRespondentPage extends StatefulWidget {
@@ -52,6 +53,30 @@ class _ViewRespondentPageState extends State<ViewRespondentPage>
                 decoration: const InputDecoration(
                     labelText: 'Phone Number', icon: Icon(Icons.phone)),
                 initialValue: respondent.phoneNumber,
+              ),
+              TextFormField(
+                readOnly: true,
+                decoration: const InputDecoration(
+                    labelText: 'Date of Birth', icon: Icon(Icons.cake)),
+                initialValue: formatter.format(respondent.dateOfBirth!),
+              ),
+              TextFormField(
+                readOnly: true,
+                decoration: const InputDecoration(
+                    labelText: 'Sex', icon: Icon(Icons.wc)),
+                initialValue: toBeginningOfSentenceCase(respondent.sex!.name),
+              ),
+              TextFormField(
+                readOnly: true,
+                decoration: const InputDecoration(
+                    labelText: 'Literacy Level', icon: Icon(Icons.translate)),
+                initialValue: literacyLevelToString(respondent.literacyLevel!),
+              ),
+              TextFormField(
+                readOnly: true,
+                decoration: const InputDecoration(
+                    labelText: 'Occupation', icon: Icon(Icons.work)),
+                initialValue: occupationToString(respondent.occupation!),
               ),
               TextFormField(
                 readOnly: true,
