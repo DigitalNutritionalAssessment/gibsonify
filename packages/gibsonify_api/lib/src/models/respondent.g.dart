@@ -30,15 +30,38 @@ const RespondentSchema = Schema(
       name: r'comments',
       type: IsarType.string,
     ),
-    r'name': PropertySchema(
+    r'dateOfBirth': PropertySchema(
       id: 3,
+      name: r'dateOfBirth',
+      type: IsarType.dateTime,
+    ),
+    r'literacyLevel': PropertySchema(
+      id: 4,
+      name: r'literacyLevel',
+      type: IsarType.int,
+      enumMap: _RespondentliteracyLevelEnumValueMap,
+    ),
+    r'name': PropertySchema(
+      id: 5,
       name: r'name',
       type: IsarType.string,
     ),
+    r'occupation': PropertySchema(
+      id: 6,
+      name: r'occupation',
+      type: IsarType.int,
+      enumMap: _RespondentoccupationEnumValueMap,
+    ),
     r'phoneNumber': PropertySchema(
-      id: 4,
+      id: 7,
       name: r'phoneNumber',
       type: IsarType.string,
+    ),
+    r'sex': PropertySchema(
+      id: 8,
+      name: r'sex',
+      type: IsarType.int,
+      enumMap: _RespondentsexEnumValueMap,
     )
   },
   estimateSize: _respondentEstimateSize,
@@ -95,8 +118,12 @@ void _respondentSerialize(
     object.collections,
   );
   writer.writeString(offsets[2], object.comments);
-  writer.writeString(offsets[3], object.name);
-  writer.writeString(offsets[4], object.phoneNumber);
+  writer.writeDateTime(offsets[3], object.dateOfBirth);
+  writer.writeInt(offsets[4], object.literacyLevel?.index);
+  writer.writeString(offsets[5], object.name);
+  writer.writeInt(offsets[6], object.occupation?.index);
+  writer.writeString(offsets[7], object.phoneNumber);
+  writer.writeInt(offsets[8], object.sex?.index);
 }
 
 Respondent _respondentDeserialize(
@@ -121,8 +148,14 @@ Respondent _respondentDeserialize(
         ) ??
         const [],
     comments: reader.readStringOrNull(offsets[2]) ?? "",
-    name: reader.readStringOrNull(offsets[3]) ?? "",
-    phoneNumber: reader.readStringOrNull(offsets[4]) ?? "",
+    dateOfBirth: reader.readDateTimeOrNull(offsets[3]),
+    literacyLevel:
+        _RespondentliteracyLevelValueEnumMap[reader.readIntOrNull(offsets[4])],
+    name: reader.readStringOrNull(offsets[5]) ?? "",
+    occupation:
+        _RespondentoccupationValueEnumMap[reader.readIntOrNull(offsets[6])],
+    phoneNumber: reader.readStringOrNull(offsets[7]) ?? "",
+    sex: _RespondentsexValueEnumMap[reader.readIntOrNull(offsets[8])],
   );
   return object;
 }
@@ -153,13 +186,72 @@ P _respondentDeserializeProp<P>(
     case 2:
       return (reader.readStringOrNull(offset) ?? "") as P;
     case 3:
-      return (reader.readStringOrNull(offset) ?? "") as P;
+      return (reader.readDateTimeOrNull(offset)) as P;
     case 4:
+      return (_RespondentliteracyLevelValueEnumMap[
+          reader.readIntOrNull(offset)]) as P;
+    case 5:
       return (reader.readStringOrNull(offset) ?? "") as P;
+    case 6:
+      return (_RespondentoccupationValueEnumMap[reader.readIntOrNull(offset)])
+          as P;
+    case 7:
+      return (reader.readStringOrNull(offset) ?? "") as P;
+    case 8:
+      return (_RespondentsexValueEnumMap[reader.readIntOrNull(offset)]) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
 }
+
+const _RespondentliteracyLevelEnumValueMap = {
+  'illiterate': 0,
+  'readWrite': 1,
+  'readOnly': 2,
+  'signatureOnly': 3,
+};
+const _RespondentliteracyLevelValueEnumMap = {
+  0: LiteracyLevel.illiterate,
+  1: LiteracyLevel.readWrite,
+  2: LiteracyLevel.readOnly,
+  3: LiteracyLevel.signatureOnly,
+};
+const _RespondentoccupationEnumValueMap = {
+  'domestic': 0,
+  'farmer': 1,
+  'agriculturalLabour': 2,
+  'casualLabour': 3,
+  'mgnrega': 4,
+  'salariedNonAgricultural': 5,
+  'ownAccountEmployment': 6,
+  'collectiveNonAgricultural': 7,
+  'unableToWork': 8,
+  'student': 9,
+  'salariedGovernment': 10,
+  'other': 11,
+};
+const _RespondentoccupationValueEnumMap = {
+  0: Occupation.domestic,
+  1: Occupation.farmer,
+  2: Occupation.agriculturalLabour,
+  3: Occupation.casualLabour,
+  4: Occupation.mgnrega,
+  5: Occupation.salariedNonAgricultural,
+  6: Occupation.ownAccountEmployment,
+  7: Occupation.collectiveNonAgricultural,
+  8: Occupation.unableToWork,
+  9: Occupation.student,
+  10: Occupation.salariedGovernment,
+  11: Occupation.other,
+};
+const _RespondentsexEnumValueMap = {
+  'male': 0,
+  'female': 1,
+};
+const _RespondentsexValueEnumMap = {
+  0: Sex.male,
+  1: Sex.female,
+};
 
 extension RespondentQueryFilter
     on QueryBuilder<Respondent, Respondent, QFilterCondition> {
@@ -475,6 +567,154 @@ extension RespondentQueryFilter
     });
   }
 
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
+      dateOfBirthIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'dateOfBirth',
+      ));
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
+      dateOfBirthIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'dateOfBirth',
+      ));
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
+      dateOfBirthEqualTo(DateTime? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'dateOfBirth',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
+      dateOfBirthGreaterThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'dateOfBirth',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
+      dateOfBirthLessThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'dateOfBirth',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
+      dateOfBirthBetween(
+    DateTime? lower,
+    DateTime? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'dateOfBirth',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
+      literacyLevelIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'literacyLevel',
+      ));
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
+      literacyLevelIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'literacyLevel',
+      ));
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
+      literacyLevelEqualTo(LiteracyLevel? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'literacyLevel',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
+      literacyLevelGreaterThan(
+    LiteracyLevel? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'literacyLevel',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
+      literacyLevelLessThan(
+    LiteracyLevel? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'literacyLevel',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
+      literacyLevelBetween(
+    LiteracyLevel? lower,
+    LiteracyLevel? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'literacyLevel',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<Respondent, Respondent, QAfterFilterCondition> nameEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -601,6 +841,79 @@ extension RespondentQueryFilter
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'name',
         value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
+      occupationIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'occupation',
+      ));
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
+      occupationIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'occupation',
+      ));
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition> occupationEqualTo(
+      Occupation? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'occupation',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
+      occupationGreaterThan(
+    Occupation? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'occupation',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition>
+      occupationLessThan(
+    Occupation? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'occupation',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition> occupationBetween(
+    Occupation? lower,
+    Occupation? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'occupation',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
       ));
     });
   }
@@ -737,6 +1050,75 @@ extension RespondentQueryFilter
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'phoneNumber',
         value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition> sexIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'sex',
+      ));
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition> sexIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'sex',
+      ));
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition> sexEqualTo(
+      Sex? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'sex',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition> sexGreaterThan(
+    Sex? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'sex',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition> sexLessThan(
+    Sex? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'sex',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Respondent, Respondent, QAfterFilterCondition> sexBetween(
+    Sex? lower,
+    Sex? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'sex',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
       ));
     });
   }

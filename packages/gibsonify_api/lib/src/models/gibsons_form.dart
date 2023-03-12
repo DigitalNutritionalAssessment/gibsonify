@@ -7,6 +7,19 @@ import 'package:gibsonify_api/gibsonify_api.dart';
 
 part 'gibsons_form.g.dart';
 
+enum PhysioStatus { pregnant, lactatingH1, lactatingH2 }
+
+String physioStatusToString(PhysioStatus physioStatus) {
+  switch (physioStatus) {
+    case PhysioStatus.pregnant:
+      return "Pregnant";
+    case PhysioStatus.lactatingH1:
+      return "Lactating - 0 to 5 months";
+    case PhysioStatus.lactatingH2:
+      return "Lactating - 6 to 12 months";
+  }
+}
+
 @Embedded(inheritance: false)
 class GibsonsForm extends Equatable {
   GibsonsForm(
@@ -16,6 +29,7 @@ class GibsonsForm extends Equatable {
       this.recallDay, // TODO: rename to recallDayType
       this.interviewDate,
       this.interviewStartTime,
+      this.physioStatus,
       this.pictureChartCollected,
       this.pictureChartNotCollectedReason,
       this.interviewEndTime,
@@ -35,6 +49,8 @@ class GibsonsForm extends Equatable {
   final String? recallDay; // TODO: change to an enum
   final String? interviewDate;
   final String? interviewStartTime;
+  @Enumerated(EnumType.ordinal32)
+  final PhysioStatus? physioStatus;
   final String? pictureChartCollected; // TODO: change to a bool
   final String? pictureChartNotCollectedReason;
   final String? interviewEndTime;
@@ -57,6 +73,7 @@ class GibsonsForm extends Equatable {
         recallDay = json['recallDay'],
         interviewDate = json['interviewDate'],
         interviewStartTime = json['interviewStartTime'],
+        physioStatus = json['physioStatus'],
         pictureChartCollected = json['pictureChartCollected'],
         pictureChartNotCollectedReason = json['pictureChartNotCollectedReason'],
         interviewEndTime = json['interviewEndTime'],
@@ -78,6 +95,7 @@ class GibsonsForm extends Equatable {
     data['recallDay'] = recallDay;
     data['interviewDate'] = interviewDate;
     data['interviewStartTime'] = interviewStartTime;
+    data['physioStatus'] = physioStatus;
     data['pictureChartCollected'] = pictureChartCollected;
     data['pictureChartNotCollectedReason'] = pictureChartNotCollectedReason;
     data['interviewEndTime'] = interviewEndTime;
@@ -105,7 +123,7 @@ class GibsonsForm extends Equatable {
     String gibsonsFormInfo =
         '"$id","$employeeNumber","$householdId","$respondentName",'
         '"$respondentCountryCode","$respondentTelNumberPrefix","$respondentTelNumber",'
-        '"$sensitizationDate","$recallDay","$interviewDate","$interviewStartTime",'
+        '"$sensitizationDate","$recallDay","$interviewDate","$interviewStartTime","$physioStatus"'
         '"$geoLocation","$pictureChartCollected","$pictureChartNotCollectedReason",'
         '"$interviewEndTime","$interviewFinishedInOneVisit","$secondInterviewVisitDate",'
         '"$secondVisitReason","$interviewOutcome","$interviewOutcomeNotCompletedReason",'
@@ -125,6 +143,7 @@ class GibsonsForm extends Equatable {
       String? recallDay,
       String? interviewDate,
       String? interviewStartTime,
+      PhysioStatus? physioStatus,
       String? pictureChartCollected,
       String? pictureChartNotCollectedReason,
       String? interviewEndTime,
@@ -143,6 +162,7 @@ class GibsonsForm extends Equatable {
         recallDay: recallDay ?? this.recallDay,
         interviewDate: interviewDate ?? this.interviewDate,
         interviewStartTime: interviewStartTime ?? this.interviewStartTime,
+        physioStatus: physioStatus ?? this.physioStatus,
         pictureChartCollected:
             pictureChartCollected ?? this.pictureChartCollected,
         pictureChartNotCollectedReason: pictureChartNotCollectedReason ??
@@ -171,6 +191,7 @@ class GibsonsForm extends Equatable {
         'Recall Day: $recallDay\n'
         'Interview Date: $interviewDate\n'
         'Interview Start Time: $interviewStartTime\n'
+        'Physio Status: $physioStatus\n'
         'Picture Chart Collected: $pictureChartCollected\n'
         'Picture Chart Not Collected Reason: $pictureChartNotCollectedReason\n'
         'Interview End Time: $interviewEndTime\n'
@@ -195,6 +216,7 @@ class GibsonsForm extends Equatable {
         recallDay,
         interviewDate,
         interviewStartTime,
+        physioStatus,
         pictureChartCollected,
         pictureChartNotCollectedReason,
         interviewEndTime,
