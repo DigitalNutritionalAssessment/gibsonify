@@ -9,7 +9,7 @@ import 'package:gibsonify/recipe/recipe.dart';
 import 'package:gibsonify/surveys/surveys.dart';
 import 'package:gibsonify/login/login.dart';
 import 'package:gibsonify/import_export/import_export.dart';
-import 'package:gibsonify/sync/bloc/sync_bloc.dart';
+import 'package:gibsonify/sync/sync.dart';
 
 class App extends StatelessWidget with WidgetsBindingObserver {
   final GibsonifyRepository gibsonifyRepository;
