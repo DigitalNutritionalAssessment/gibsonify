@@ -134,6 +134,7 @@ class CreateRespondentPage extends StatelessWidget {
                               child:
                                   Text(toBeginningOfSentenceCase(sex.name)!)))
                           .toList(),
+                      validator: FormBuilderValidators.required(),
                     ),
                     FormBuilderDropdown(
                       name: 'literacyLevel',
@@ -148,6 +149,7 @@ class CreateRespondentPage extends StatelessWidget {
                               child:
                                   Text(literacyLevelToString(literacyLevel))))
                           .toList(),
+                      validator: FormBuilderValidators.required(),
                     ),
                     FormBuilderDropdown(
                       name: 'occupation',
@@ -161,6 +163,7 @@ class CreateRespondentPage extends StatelessWidget {
                               value: occupation,
                               child: Text(occupationToString(occupation))))
                           .toList(),
+                      validator: FormBuilderValidators.required(),
                     ),
                     FormBuilderTextField(
                       name: 'comments',
