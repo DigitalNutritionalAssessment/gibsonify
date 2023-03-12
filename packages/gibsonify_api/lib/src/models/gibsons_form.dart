@@ -125,7 +125,7 @@ class GibsonsForm extends Equatable {
     String gibsonsFormInfo =
         '"$id","$employeeNumber","$householdId","$respondentName",'
         '"$respondentCountryCode","$respondentTelNumberPrefix","$respondentTelNumber",'
-        '"$sensitizationDate","$recallDay","$interviewDate","$interviewStartTime","$physioStatus"'
+        '"$sensitizationDate","$recallDay","$interviewDate","$interviewStartTime","$physioStatus",'
         '"$geoLocation","$pictureChartCollected","$pictureChartNotCollectedReason",'
         '"$interviewEndTime","$interviewFinishedInOneVisit","$secondInterviewVisitDate",'
         '"$secondVisitReason","$interviewOutcome","$interviewOutcomeNotCompletedReason",'
