@@ -50,7 +50,7 @@ class SyncState extends Equatable {
       error: error ?? this.error,
       initialised: initialised ?? this.initialised,
       registered: registered ?? this.registered,
-      wifiP2pInfo: wifiP2PInfo ?? this.wifiP2pInfo,
+      wifiP2pInfo: wifiP2PInfo ?? wifiP2pInfo,
       streamPeers: streamPeers ?? this.streamPeers,
       peers: peers ?? this.peers,
       status: status ?? this.status,

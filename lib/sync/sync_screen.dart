@@ -61,7 +61,7 @@ class SyncScreen extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {
-                print('requested location permissions');
+                debugPrint('requested location permissions');
                 context.read<SyncBloc>().add(AskLocationPermissions());
               },
               child: const Text('Request location Permissions'),
@@ -75,7 +75,7 @@ class SyncScreen extends StatelessWidget {
             TextButton(
               onPressed: () {
                 final wifiP2pInfo = state.wifiP2pInfo;
-                print(wifiP2pInfo);
+                debugPrint(wifiP2pInfo.toString());
                 if (wifiP2pInfo != null) {
                   context.read<SyncBloc>().add(StartSocket(
                       groupOwnerAddress: wifiP2pInfo.groupOwnerAddress));
@@ -86,7 +86,7 @@ class SyncScreen extends StatelessWidget {
             TextButton(
               onPressed: () {
                 final wifiP2pInfo = state.wifiP2pInfo;
-                print(wifiP2pInfo);
+                debugPrint(wifiP2pInfo.toString());
                 if (wifiP2pInfo != null) {
                   context.read<SyncBloc>().add(ConnectToSocket(
                       groupOwnerAddress: wifiP2pInfo.groupOwnerAddress));

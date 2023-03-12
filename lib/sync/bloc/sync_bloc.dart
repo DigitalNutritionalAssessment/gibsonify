@@ -39,7 +39,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 
   @override
   Future<void> close() async {
-    print('closed');
+    debugPrint('closed');
     await _flutterP2pConnectionPlugin.removeGroup();
     await _flutterP2pConnectionPlugin.stopDiscovery();
     await _flutterP2pConnectionPlugin.unregister();
@@ -85,9 +85,9 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     try {
       await _flutterP2pConnectionPlugin.askLocationPermission();
       bool? enabled = await _flutterP2pConnectionPlugin.checkLocationEnabled();
-      print('location enabled: $enabled');
+      debugPrint('location enabled: $enabled');
     } catch (e) {
-      print('ask location perms: $e');
+      debugPrint('ask location perms: $e');
       emit(state.copyWith(error: '$e'));
     }
   }
@@ -98,7 +98,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     try {
       await _flutterP2pConnectionPlugin.enableLocationServices();
     } catch (e) {
-      print('enable location: $e');
+      debugPrint('enable location: $e');
       emit(state.copyWith(error: '$e'));
     }
   }
@@ -109,7 +109,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
     try {
       await _flutterP2pConnectionPlugin.enableWifiServices();
     } catch (e) {
-      print('enable wifi: $e');
+      debugPrint('enable wifi: $e');
       emit(state.copyWith(error: '$e'));
     }
   }
@@ -118,11 +118,11 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   void _discoverDevices(DiscoverDevices event, Emitter<SyncState> emit) async {
     try {
       bool? initialised = await _flutterP2pConnectionPlugin.initialize();
-      print('init: $initialised');
+      debugPrint('init: $initialised');
       bool? registered = await _flutterP2pConnectionPlugin.register();
-      print('registered: $registered');
+      debugPrint('registered: $registered');
     } catch (e) {
-      print('init: $e');
+      debugPrint('init: $e');
       emit(state.copyWith(error: '$e'));
     }
     add(GetWiFiP2pInfo());
@@ -133,17 +133,17 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       });
     } catch (e) {
       //emit an error state if there is an exception
-      print('peers listener: $e');
+      debugPrint('peers listener: $e');
       emit(state.copyWith(error: '$e'));
       //return from the method to stop further execution
       return;
     }
     try {
       bool? discovering = await _flutterP2pConnectionPlugin.discover();
-      print('discovering: $discovering');
+      debugPrint('discovering: $discovering');
     } catch (e) {
       //emit an error state if there is an exception
-      print('discover: $e');
+      debugPrint('discover: $e');
       emit(state.copyWith(error: '$e'));
     }
   }
@@ -157,10 +157,10 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       await _flutterP2pConnectionPlugin.connect(event.deviceAddress);
       emit(state.copyWith(status: 'Connected to ${event.deviceAddress}'));
       var groupInfo = await _flutterP2pConnectionPlugin.groupInfo();
-      print(groupInfo?.clients);
+      debugPrint(groupInfo?.clients.toString());
     } catch (e) {
       //emit an error state if there is an exception
-      print('connect: $e');
+      debugPrint('connect: $e');
       emit(state.copyWith(error: '$e'));
     }
   }
@@ -170,12 +170,12 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       groupOwnerAddress: event.groupOwnerAddress,
       downloadPath: "/storage/emulated/0/Download/",
       onConnect: (String name, String address) {
-        print("$name connected to socket with address: $address");
+        debugPrint("$name connected to socket with address: $address");
       },
       transferUpdate: (TransferUpdate transfer) {},
       receiveString: (req) async {
         if (kDebugMode) {
-          print(req);
+          debugPrint(req);
         }
       },
     );
@@ -187,12 +187,12 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       groupOwnerAddress: event.groupOwnerAddress,
       downloadPath: "/storage/emulated/0/Download/",
       onConnect: (String address) {
-        print("connected to socket with address: $address");
+        debugPrint("connected to socket with address: $address");
       },
       transferUpdate: (TransferUpdate transfer) {},
       receiveString: (req) async {
         if (kDebugMode) {
-          print(req);
+          debugPrint(req);
         }
       },
     );
@@ -204,14 +204,14 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
   }
 
   void _getWifiP2pInfo(GetWiFiP2pInfo event, Emitter<SyncState> emit) async {
-    print('started listening');
+    debugPrint('started listening');
     try {
       _streamWiFiP2pInfo.listen((e) {
-        print('e');
+        debugPrint('e');
         add(UpdateWiFiP2pInfo(wifiP2PInfo: e));
       });
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
   }
 
@@ -225,18 +225,18 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
       await _flutterP2pConnectionPlugin.initialize();
       await _flutterP2pConnectionPlugin.register();
     } catch (e) {
-      print('init: $e');
+      debugPrint('init: $e');
       emit(state.copyWith(error: '$e'));
     }
   }
 
   void _closeP2p(Close event, Emitter<SyncState> emit) async {
     bool? stopped = await _flutterP2pConnectionPlugin.stopDiscovery();
-    print('stopped discovery: $stopped');
+    debugPrint('stopped discovery: $stopped');
     bool closed = _flutterP2pConnectionPlugin.closeSocket();
-    print('stopped socket: $closed');
+    debugPrint('stopped socket: $closed');
     bool? removed = await _flutterP2pConnectionPlugin.removeGroup();
-    print("removed group: $removed");
+    debugPrint("removed group: $removed");
     _flutterP2pConnectionPlugin.unregister();
   }
 }
