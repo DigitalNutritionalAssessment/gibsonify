@@ -14,6 +14,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     on<RecallDayChanged>(_onRecallDayChanged);
     on<InterviewDateChanged>(_onInterviewDateChanged);
     on<InterviewStartTimeChanged>(_onInterviewStartTimeChanged);
+    on<PhysioStatusChanged>(_onPhysioStatusChanged);
     on<PictureChartCollectedChanged>(_onPictureChartCollectedChanged);
     on<PictureChartNotCollectedReasonChanged>(
         _onPictureChartNotCollectedReasonChanged);
@@ -109,6 +110,14 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
       InterviewStartTimeChanged event, Emitter<CollectionState> emit) {
     GibsonsForm changedGibsonsForm = state.gibsonsForm
         .copyWith(interviewStartTime: event.interviewStartTime);
+
+    emit(state.copyWith(gibsonsForm: changedGibsonsForm));
+  }
+
+  void _onPhysioStatusChanged(
+      PhysioStatusChanged event, Emitter<CollectionState> emit) {
+    GibsonsForm changedGibsonsForm =
+        state.gibsonsForm.copyWith(physioStatus: event.physioStatus);
 
     emit(state.copyWith(gibsonsForm: changedGibsonsForm));
   }

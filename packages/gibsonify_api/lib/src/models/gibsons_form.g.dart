@@ -236,7 +236,7 @@ void _gibsonsFormSerialize(
   writer.writeString(offsets[8], object.interviewOutcome);
   writer.writeString(offsets[9], object.interviewOutcomeNotCompletedReason);
   writer.writeString(offsets[10], object.interviewStartTime);
-  writer.writeInt(offsets[11], object.physioStatus?.index);
+  writer.writeInt(offsets[11], object.physioStatus.index);
   writer.writeString(offsets[12], object.pictureChartCollected);
   writer.writeString(offsets[13], object.pictureChartNotCollectedReason);
   writer.writeString(offsets[14], object.recallDay);
@@ -268,8 +268,9 @@ GibsonsForm _gibsonsFormDeserialize(
     interviewOutcome: reader.readStringOrNull(offsets[8]),
     interviewOutcomeNotCompletedReason: reader.readStringOrNull(offsets[9]),
     interviewStartTime: reader.readStringOrNull(offsets[10]),
-    physioStatus:
-        _GibsonsFormphysioStatusValueEnumMap[reader.readIntOrNull(offsets[11])],
+    physioStatus: _GibsonsFormphysioStatusValueEnumMap[
+            reader.readIntOrNull(offsets[11])] ??
+        PhysioStatus.notApplicable,
     pictureChartCollected: reader.readStringOrNull(offsets[12]),
     pictureChartNotCollectedReason: reader.readStringOrNull(offsets[13]),
     recallDay: reader.readStringOrNull(offsets[14]),
@@ -317,7 +318,8 @@ P _gibsonsFormDeserializeProp<P>(
       return (reader.readStringOrNull(offset)) as P;
     case 11:
       return (_GibsonsFormphysioStatusValueEnumMap[
-          reader.readIntOrNull(offset)]) as P;
+              reader.readIntOrNull(offset)] ??
+          PhysioStatus.notApplicable) as P;
     case 12:
       return (reader.readStringOrNull(offset)) as P;
     case 13:
@@ -336,14 +338,16 @@ P _gibsonsFormDeserializeProp<P>(
 }
 
 const _GibsonsFormphysioStatusEnumValueMap = {
-  'pregnant': 0,
-  'lactatingH1': 1,
-  'lactatingH2': 2,
+  'notApplicable': 0,
+  'pregnant': 1,
+  'lactatingH1': 2,
+  'lactatingH2': 3,
 };
 const _GibsonsFormphysioStatusValueEnumMap = {
-  0: PhysioStatus.pregnant,
-  1: PhysioStatus.lactatingH1,
-  2: PhysioStatus.lactatingH2,
+  0: PhysioStatus.notApplicable,
+  1: PhysioStatus.pregnant,
+  2: PhysioStatus.lactatingH1,
+  3: PhysioStatus.lactatingH2,
 };
 
 extension GibsonsFormQueryFilter
@@ -1813,25 +1817,7 @@ extension GibsonsFormQueryFilter
   }
 
   QueryBuilder<GibsonsForm, GibsonsForm, QAfterFilterCondition>
-      physioStatusIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'physioStatus',
-      ));
-    });
-  }
-
-  QueryBuilder<GibsonsForm, GibsonsForm, QAfterFilterCondition>
-      physioStatusIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'physioStatus',
-      ));
-    });
-  }
-
-  QueryBuilder<GibsonsForm, GibsonsForm, QAfterFilterCondition>
-      physioStatusEqualTo(PhysioStatus? value) {
+      physioStatusEqualTo(PhysioStatus value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'physioStatus',
@@ -1842,7 +1828,7 @@ extension GibsonsFormQueryFilter
 
   QueryBuilder<GibsonsForm, GibsonsForm, QAfterFilterCondition>
       physioStatusGreaterThan(
-    PhysioStatus? value, {
+    PhysioStatus value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -1856,7 +1842,7 @@ extension GibsonsFormQueryFilter
 
   QueryBuilder<GibsonsForm, GibsonsForm, QAfterFilterCondition>
       physioStatusLessThan(
-    PhysioStatus? value, {
+    PhysioStatus value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -1870,8 +1856,8 @@ extension GibsonsFormQueryFilter
 
   QueryBuilder<GibsonsForm, GibsonsForm, QAfterFilterCondition>
       physioStatusBetween(
-    PhysioStatus? lower,
-    PhysioStatus? upper, {
+    PhysioStatus lower,
+    PhysioStatus upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {

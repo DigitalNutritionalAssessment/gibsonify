@@ -7,10 +7,12 @@ import 'package:gibsonify_api/gibsonify_api.dart';
 
 part 'gibsons_form.g.dart';
 
-enum PhysioStatus { pregnant, lactatingH1, lactatingH2 }
+enum PhysioStatus { notApplicable, pregnant, lactatingH1, lactatingH2 }
 
 String physioStatusToString(PhysioStatus physioStatus) {
   switch (physioStatus) {
+    case PhysioStatus.notApplicable:
+      return "N/A";
     case PhysioStatus.pregnant:
       return "Pregnant";
     case PhysioStatus.lactatingH1:
@@ -29,7 +31,7 @@ class GibsonsForm extends Equatable {
       this.recallDay, // TODO: rename to recallDayType
       this.interviewDate,
       this.interviewStartTime,
-      this.physioStatus,
+      this.physioStatus = PhysioStatus.notApplicable,
       this.pictureChartCollected,
       this.pictureChartNotCollectedReason,
       this.interviewEndTime,
@@ -50,7 +52,7 @@ class GibsonsForm extends Equatable {
   final String? interviewDate;
   final String? interviewStartTime;
   @Enumerated(EnumType.ordinal32)
-  final PhysioStatus? physioStatus;
+  final PhysioStatus physioStatus;
   final String? pictureChartCollected; // TODO: change to a bool
   final String? pictureChartNotCollectedReason;
   final String? interviewEndTime;

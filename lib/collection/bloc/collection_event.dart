@@ -84,6 +84,12 @@ class InterviewStartTimeChanged extends CollectionEvent {
   List<Object> get props => [interviewStartTime];
 }
 
+class PhysioStatusChanged extends CollectionEvent {
+  final PhysioStatus physioStatus;
+
+  const PhysioStatusChanged({required this.physioStatus});
+}
+
 class GeoLocationRequested extends CollectionEvent {
   const GeoLocationRequested();
 
