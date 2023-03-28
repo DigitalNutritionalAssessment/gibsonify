@@ -96,4 +96,26 @@ class Survey extends Equatable {
         maxAge,
         requiredSex
       ];
+
+  List<String> checkParameters({required Respondent respondent}) {
+    // TODO: add household location check
+
+    final errors = <String>[];
+    final respondentAge =
+        DateTime.now().difference(respondent.dateOfBirth!).inDays / 365;
+
+    if (respondentAge < minAge) {
+      errors.add('Respondent is too young.');
+    }
+
+    if (maxAge != 100 && respondentAge > maxAge) {
+      errors.add('Respondent is too old.');
+    }
+
+    if (requiredSex != null && respondent.sex != requiredSex) {
+      errors.add('Respondent must be ${requiredSex!.name}.');
+    }
+
+    return errors;
+  }
 }
