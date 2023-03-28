@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:gibsonify/household/household.dart';
 import 'package:gibsonify/surveys/surveys.dart';
 import 'package:intl/intl.dart';
@@ -310,11 +311,18 @@ List<String> checkSurveyParameters(
     {required Survey survey,
     required Household household,
     required Respondent respondent}) {
-  // TODO: add household location check
-
   final errors = <String>[];
   final respondentAge =
       DateTime.now().difference(respondent.dateOfBirth!).inDays / 365;
+  final householdLatLon =
+      household.geoLocation.split(',').map(double.parse).toList();
+  final surveyArea = survey.getArea();
+
+  if (Geolocator.distanceBetween(surveyArea.center.latitude,
+          surveyArea.center.longitude, householdLatLon[0], householdLatLon[1]) >
+      surveyArea.radius) {
+    errors.add('Household is outside survey area.');
+  }
 
   if (respondentAge < survey.minAge) {
     errors.add('Respondent is too young.');
