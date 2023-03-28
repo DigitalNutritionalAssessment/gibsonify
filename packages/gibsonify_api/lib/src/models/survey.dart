@@ -1,8 +1,17 @@
 import 'package:equatable/equatable.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:isar/isar.dart';
+import 'package:latlong2/latlong.dart';
 
 part 'survey.g.dart';
+
+class Area {
+  final LatLng center;
+  final int radius;
+  final double zoom;
+
+  Area(this.center, this.radius, this.zoom);
+}
 
 @Collection(inheritance: false)
 class Survey extends Equatable {
@@ -103,4 +112,13 @@ class Survey extends Equatable {
         requiredSex,
         geoArea
       ];
+
+  Area getArea() {
+    final parts = geoArea!.split(',');
+    final center = LatLng(double.parse(parts[0]), double.parse(parts[1]));
+    final radius = int.parse(parts[2]);
+    final zoom = double.parse(parts[3]);
+
+    return Area(center, radius, zoom);
+  }
 }
