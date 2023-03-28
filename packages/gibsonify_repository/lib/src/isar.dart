@@ -11,8 +11,12 @@ class IsarRepository {
     return IsarRepository(isar: isar);
   }
 
-  Future<List<Household>> readHouseholds() async {
-    return await isar.households.where().findAll();
+  Future<List<Household>> readHouseholdsOrderById() async {
+    return await isar.households.where().sortByHouseholdId().findAll();
+  }
+
+  Future<List<Household>> readHouseholdsOrderBySensitizationDate() async {
+    return await isar.households.where().sortBySensitizationDate().findAll();
   }
 
   Stream<void> watchHouseholds() {

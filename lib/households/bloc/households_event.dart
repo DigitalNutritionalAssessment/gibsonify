@@ -37,3 +37,9 @@ class NewHouseholdSaveRequested extends HouseholdsEvent {
   @override
   List<Object> get props => [household];
 }
+
+class HouseholdsSortOrderUpdated extends HouseholdsEvent {
+  final HouseholdsSortBy sortBy;
+
+  const HouseholdsSortOrderUpdated({required this.sortBy});
+}

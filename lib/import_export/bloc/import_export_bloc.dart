@@ -28,7 +28,8 @@ class ImportExportBloc extends Bloc<ImportExportEvent, ImportExportState> {
 
   void _onDataSavedToDevice(
       DataSavedToDevice event, Emitter<ImportExportState> emit) async {
-    List<Household> households = await _isarRepository.readHouseholds();
+    List<Household> households =
+        await _isarRepository.readHouseholdsOrderById();
     List<Recipe> recipes = _gibsonifyRepository.loadRecipes();
 
     int finishedGibsonsFormsNumber = households
@@ -90,7 +91,8 @@ class ImportExportBloc extends Bloc<ImportExportEvent, ImportExportState> {
   }
 
   void _onDataShared(DataShared event, Emitter<ImportExportState> emit) async {
-    List<Household> households = await _isarRepository.readHouseholds();
+    List<Household> households =
+        await _isarRepository.readHouseholdsOrderById();
     List<Recipe> recipes = _gibsonifyRepository.loadRecipes();
 
     int finishedGibsonsFormsNumber = households

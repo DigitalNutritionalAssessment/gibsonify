@@ -7,6 +7,8 @@ import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:gibsonify_repository/gibsonify_repository.dart';
 import 'package:intl/intl.dart';
 
+enum HouseholdsSortBy { householdId, sensitizationDate, distance }
+
 class HouseholdsScreen extends StatelessWidget {
   const HouseholdsScreen({Key? key}) : super(key: key);
 
@@ -24,6 +26,40 @@ class HouseholdsScreen extends StatelessWidget {
                 appBar: AppBar(
                   title: const Text('Households'),
                   actions: [
+                    IconButton(
+                        onPressed: () async {
+                          final sortBy = await showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return SimpleDialog(
+                                    title: const Text('Sort by'),
+                                    children: [
+                                      SimpleDialogOption(
+                                          onPressed: () => Navigator.pop(
+                                              context,
+                                              HouseholdsSortBy.householdId),
+                                          child: const Text('Household ID')),
+                                      SimpleDialogOption(
+                                          onPressed: () => Navigator.pop(
+                                              context,
+                                              HouseholdsSortBy
+                                                  .sensitizationDate),
+                                          child:
+                                              const Text('Sensitization Date')),
+                                      SimpleDialogOption(
+                                          onPressed: () => Navigator.pop(
+                                              context,
+                                              HouseholdsSortBy.distance),
+                                          child: const Text('Distance')),
+                                    ]);
+                              });
+
+                          if (mounted && sortBy != null) {
+                            context.read<HouseholdsBloc>().add(
+                                HouseholdsSortOrderUpdated(sortBy: sortBy));
+                          }
+                        },
+                        icon: const Icon(Icons.sort)),
                     IconButton(
                         onPressed: () => Navigator.pushNamed(
                             context, PageRouter.collectionsHelp),
