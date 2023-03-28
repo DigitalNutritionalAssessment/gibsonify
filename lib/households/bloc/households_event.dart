@@ -43,3 +43,9 @@ class HouseholdsSortOrderUpdated extends HouseholdsEvent {
 
   const HouseholdsSortOrderUpdated({required this.sortBy});
 }
+
+class LocationUpdated extends HouseholdsEvent {
+  final Position position;
+
+  const LocationUpdated({required this.position});
+}
