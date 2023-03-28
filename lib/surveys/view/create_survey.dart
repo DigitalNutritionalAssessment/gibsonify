@@ -1,3 +1,4 @@
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -94,6 +95,14 @@ class CreateSurveyScreen extends StatelessWidget {
                         validator: FormBuilderValidators.required()),
                     FormBuilderTextField(
                         name: 'country',
+                        readOnly: true,
+                        onTap: () => showCountryPicker(
+                            context: context,
+                            favorite: ['IN', 'GB'],
+                            onSelect: (Country country) {
+                              formKey.currentState!.fields['country']!
+                                  .didChange(country.name);
+                            }),
                         textCapitalization: TextCapitalization.sentences,
                         decoration: const InputDecoration(
                             label: Text('Country'), icon: Icon(Icons.flag)),

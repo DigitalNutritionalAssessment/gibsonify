@@ -41,6 +41,7 @@ dependencies:
     git:
       url: https://github.com/Archie-C/gibsonify_data_transfer.git
       ref: main
+  country_picker: ^2.0.19
 
 
 dev_dependencies:
