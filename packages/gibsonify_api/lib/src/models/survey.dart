@@ -17,6 +17,7 @@ class Survey extends Equatable {
   final int maxAge;
   @Enumerated(EnumType.ordinal32)
   final Sex? requiredSex;
+  final String? geoArea;
 
   Survey(
       {this.id = Isar.autoIncrement,
@@ -27,7 +28,8 @@ class Survey extends Equatable {
       this.comments,
       required this.minAge,
       required this.maxAge,
-      this.requiredSex});
+      this.requiredSex,
+      this.geoArea});
 
   Survey copyWith(
       {Id? id,
@@ -38,7 +40,8 @@ class Survey extends Equatable {
       String? comments,
       int? minAge,
       int? maxAge,
-      Sex? requiredSex}) {
+      Sex? requiredSex,
+      String? geoArea}) {
     return Survey(
         id: id ?? this.id,
         surveyId: surveyId ?? this.surveyId,
@@ -48,7 +51,8 @@ class Survey extends Equatable {
         comments: comments ?? this.comments,
         minAge: minAge ?? this.minAge,
         maxAge: maxAge ?? this.maxAge,
-        requiredSex: requiredSex ?? this.requiredSex);
+        requiredSex: requiredSex ?? this.requiredSex,
+        geoArea: geoArea ?? this.geoArea);
   }
 
   Map<String, dynamic> toJson() {
@@ -60,7 +64,8 @@ class Survey extends Equatable {
       'comments': comments,
       'minAge': minAge,
       'maxAge': maxAge,
-      'requiredSex': requiredSex?.name
+      'requiredSex': requiredSex?.name,
+      'geoArea': geoArea
     };
   }
 
@@ -80,7 +85,8 @@ class Survey extends Equatable {
         comments: json['comments'],
         minAge: json['minAge'],
         maxAge: json['maxAge'],
-        requiredSex: requiredSex);
+        requiredSex: requiredSex,
+        geoArea: json['geoArea']);
   }
 
   @override
@@ -94,7 +100,8 @@ class Survey extends Equatable {
         comments,
         minAge,
         maxAge,
-        requiredSex
+        requiredSex,
+        geoArea
       ];
 
   List<String> checkParameters({required Respondent respondent}) {

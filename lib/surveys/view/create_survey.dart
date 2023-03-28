@@ -2,6 +2,7 @@ import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:gibsonify/surveys/surveys.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:intl/intl.dart';
 
@@ -72,6 +73,8 @@ class CreateSurveyScreen extends StatelessWidget {
                                           .value['minMaxAge'] as RangeValues)
                                       .end
                                       .toInt(),
+                                  geoArea:
+                                      formKey.currentState!.value['geoArea'],
                                 ))
                           }
                       },
@@ -138,6 +141,25 @@ class CreateSurveyScreen extends StatelessWidget {
                         onChanged: (value) => changed = true,
                       ),
                       const Divider(),
+                      FormBuilderTextField(
+                          name: 'geoArea',
+                          readOnly: true,
+                          onTap: () async {
+                            Area? area = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SelectAreaScreen()));
+
+                            if (area != null) {
+                              formKey.currentState!.fields['geoArea']!.didChange(
+                                  "${area.center.latitude},${area.center.longitude},${area.radius},${area.zoom}");
+                            }
+                          },
+                          decoration: const InputDecoration(
+                              label: Text('Geographical Area'),
+                              icon: Icon(Icons.place)),
+                          onChanged: (value) => changed = true,
+                          validator: FormBuilderValidators.required()),
                       FormBuilderDropdown(
                         name: 'requiredSex',
                         decoration: const InputDecoration(
