@@ -81,16 +81,17 @@ class HouseholdsScreen extends StatelessWidget {
                           final household = state.households[index];
                           var subtitle =
                               "Sensitization Date: ${formatter.format(household.sensitizationDate)}";
-
-                          if (state.distances.isNotEmpty) {
-                            subtitle += "\n${state.distances[index]}m away";
-                          }
+                          subtitle +=
+                              "\n${household.respondents.length} respondents";
 
                           return Card(
                               child: ListTile(
                             isThreeLine: true,
                             title: Text(household.householdId),
                             subtitle: Text(subtitle),
+                            trailing: state.distances.isNotEmpty
+                                ? Text("${state.distances[index]}m away")
+                                : null,
                             onTap: () => Navigator.pushNamed(
                                 context,
                                 PageRouter.householdPrefix +
