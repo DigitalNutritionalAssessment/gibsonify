@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:gibsonify/household/household.dart';
 import 'package:gibsonify/surveys/surveys.dart';
 import 'package:intl/intl.dart';
@@ -52,6 +53,7 @@ class SensitizationForm extends StatelessWidget {
                 RecallDayInput(),
                 InterviewDateInput(),
                 InterviewStartTimeInput(),
+                PhysioStatusInput()
               ],
             ),
           );
@@ -246,6 +248,47 @@ class _InterviewStartTimeInputState extends State<InterviewStartTimeInput> {
                 interviewStartTime: formattedTime ?? ''));
           },
         );
+      },
+    );
+  }
+}
+
+class PhysioStatusInput extends StatelessWidget {
+  const PhysioStatusInput({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<HouseholdBloc, HouseholdState>(
+      builder: (context, householdState) {
+        return BlocBuilder<CollectionBloc, CollectionState>(
+            builder: (context, collectionState) {
+          return FormBuilderDropdown(
+              name: 'physioStatus',
+              key: UniqueKey(),
+              decoration: const InputDecoration(
+                label: Text('Physiological Status'),
+                icon: Icon(Icons.health_and_safety),
+                helperText: 'Whether the respondent is pregnant or lactating',
+              ),
+              enabled: householdState
+                      .household!
+                      .respondents[householdState.selectedRespondentIndex!]
+                      .sex ==
+                  Sex.female,
+              initialValue: collectionState.gibsonsForm.physioStatus,
+              onChanged: (PhysioStatus? physioStatus) {
+                if (physioStatus != null) {
+                  context
+                      .read<CollectionBloc>()
+                      .add(PhysioStatusChanged(physioStatus: physioStatus));
+                }
+              },
+              items: PhysioStatus.values
+                  .map((physioStatus) => DropdownMenuItem(
+                      value: physioStatus,
+                      child: Text(physioStatusToString(physioStatus))))
+                  .toList());
+        });
       },
     );
   }

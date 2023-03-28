@@ -69,33 +69,39 @@ const GibsonsFormSchema = Schema(
       name: r'interviewStartTime',
       type: IsarType.string,
     ),
-    r'pictureChartCollected': PropertySchema(
+    r'physioStatus': PropertySchema(
       id: 11,
+      name: r'physioStatus',
+      type: IsarType.int,
+      enumMap: _GibsonsFormphysioStatusEnumValueMap,
+    ),
+    r'pictureChartCollected': PropertySchema(
+      id: 12,
       name: r'pictureChartCollected',
       type: IsarType.string,
     ),
     r'pictureChartNotCollectedReason': PropertySchema(
-      id: 12,
+      id: 13,
       name: r'pictureChartNotCollectedReason',
       type: IsarType.string,
     ),
     r'recallDay': PropertySchema(
-      id: 13,
+      id: 14,
       name: r'recallDay',
       type: IsarType.string,
     ),
     r'secondInterviewVisitDate': PropertySchema(
-      id: 14,
+      id: 15,
       name: r'secondInterviewVisitDate',
       type: IsarType.string,
     ),
     r'secondVisitReason': PropertySchema(
-      id: 15,
+      id: 16,
       name: r'secondVisitReason',
       type: IsarType.string,
     ),
     r'surveyId': PropertySchema(
-      id: 16,
+      id: 17,
       name: r'surveyId',
       type: IsarType.string,
     )
@@ -230,12 +236,13 @@ void _gibsonsFormSerialize(
   writer.writeString(offsets[8], object.interviewOutcome);
   writer.writeString(offsets[9], object.interviewOutcomeNotCompletedReason);
   writer.writeString(offsets[10], object.interviewStartTime);
-  writer.writeString(offsets[11], object.pictureChartCollected);
-  writer.writeString(offsets[12], object.pictureChartNotCollectedReason);
-  writer.writeString(offsets[13], object.recallDay);
-  writer.writeString(offsets[14], object.secondInterviewVisitDate);
-  writer.writeString(offsets[15], object.secondVisitReason);
-  writer.writeString(offsets[16], object.surveyId);
+  writer.writeInt(offsets[11], object.physioStatus.index);
+  writer.writeString(offsets[12], object.pictureChartCollected);
+  writer.writeString(offsets[13], object.pictureChartNotCollectedReason);
+  writer.writeString(offsets[14], object.recallDay);
+  writer.writeString(offsets[15], object.secondInterviewVisitDate);
+  writer.writeString(offsets[16], object.secondVisitReason);
+  writer.writeString(offsets[17], object.surveyId);
 }
 
 GibsonsForm _gibsonsFormDeserialize(
@@ -261,12 +268,15 @@ GibsonsForm _gibsonsFormDeserialize(
     interviewOutcome: reader.readStringOrNull(offsets[8]),
     interviewOutcomeNotCompletedReason: reader.readStringOrNull(offsets[9]),
     interviewStartTime: reader.readStringOrNull(offsets[10]),
-    pictureChartCollected: reader.readStringOrNull(offsets[11]),
-    pictureChartNotCollectedReason: reader.readStringOrNull(offsets[12]),
-    recallDay: reader.readStringOrNull(offsets[13]),
-    secondInterviewVisitDate: reader.readStringOrNull(offsets[14]),
-    secondVisitReason: reader.readStringOrNull(offsets[15]),
-    surveyId: reader.readStringOrNull(offsets[16]),
+    physioStatus: _GibsonsFormphysioStatusValueEnumMap[
+            reader.readIntOrNull(offsets[11])] ??
+        PhysioStatus.notApplicable,
+    pictureChartCollected: reader.readStringOrNull(offsets[12]),
+    pictureChartNotCollectedReason: reader.readStringOrNull(offsets[13]),
+    recallDay: reader.readStringOrNull(offsets[14]),
+    secondInterviewVisitDate: reader.readStringOrNull(offsets[15]),
+    secondVisitReason: reader.readStringOrNull(offsets[16]),
+    surveyId: reader.readStringOrNull(offsets[17]),
   );
   return object;
 }
@@ -307,7 +317,9 @@ P _gibsonsFormDeserializeProp<P>(
     case 10:
       return (reader.readStringOrNull(offset)) as P;
     case 11:
-      return (reader.readStringOrNull(offset)) as P;
+      return (_GibsonsFormphysioStatusValueEnumMap[
+              reader.readIntOrNull(offset)] ??
+          PhysioStatus.notApplicable) as P;
     case 12:
       return (reader.readStringOrNull(offset)) as P;
     case 13:
@@ -318,10 +330,25 @@ P _gibsonsFormDeserializeProp<P>(
       return (reader.readStringOrNull(offset)) as P;
     case 16:
       return (reader.readStringOrNull(offset)) as P;
+    case 17:
+      return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
 }
+
+const _GibsonsFormphysioStatusEnumValueMap = {
+  'notApplicable': 0,
+  'pregnant': 1,
+  'lactatingH1': 2,
+  'lactatingH2': 3,
+};
+const _GibsonsFormphysioStatusValueEnumMap = {
+  0: PhysioStatus.notApplicable,
+  1: PhysioStatus.pregnant,
+  2: PhysioStatus.lactatingH1,
+  3: PhysioStatus.lactatingH2,
+};
 
 extension GibsonsFormQueryFilter
     on QueryBuilder<GibsonsForm, GibsonsForm, QFilterCondition> {
@@ -1785,6 +1812,62 @@ extension GibsonsFormQueryFilter
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'interviewStartTime',
         value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<GibsonsForm, GibsonsForm, QAfterFilterCondition>
+      physioStatusEqualTo(PhysioStatus value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'physioStatus',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<GibsonsForm, GibsonsForm, QAfterFilterCondition>
+      physioStatusGreaterThan(
+    PhysioStatus value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'physioStatus',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<GibsonsForm, GibsonsForm, QAfterFilterCondition>
+      physioStatusLessThan(
+    PhysioStatus value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'physioStatus',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<GibsonsForm, GibsonsForm, QAfterFilterCondition>
+      physioStatusBetween(
+    PhysioStatus lower,
+    PhysioStatus upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'physioStatus',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
       ));
     });
   }

@@ -5,6 +5,7 @@ import 'package:form_builder_phone_field/form_builder_phone_field.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:gibsonify/household/household.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
+import 'package:intl/intl.dart';
 
 class EditRespondentPage extends StatelessWidget {
   const EditRespondentPage({Key? key}) : super(key: key);
@@ -61,6 +62,14 @@ class EditRespondentPage extends StatelessWidget {
                                               .currentState!.value['name'],
                                           phoneNumber: formKey.currentState!
                                               .value['phoneNumber'],
+                                          dateOfBirth: formKey.currentState!
+                                              .value['dateOfBirth'],
+                                          sex: formKey
+                                              .currentState!.value['sex'],
+                                          literacyLevel: formKey.currentState!
+                                              .value['literacyLevel'],
+                                          occupation: formKey.currentState!
+                                              .value['occupation'],
                                           comments: formKey.currentState!
                                                   .value['comments'] ??
                                               ""))),
@@ -102,6 +111,65 @@ class EditRespondentPage extends StatelessWidget {
                       FormBuilderValidators.required(),
                     ]),
                     initialValue: respondent.phoneNumber,
+                  ),
+                  FormBuilderDateTimePicker(
+                    name: 'dateOfBirth',
+                    decoration: const InputDecoration(
+                      label: Text('Date of Birth'),
+                      icon: Icon(Icons.cake),
+                    ),
+                    format: DateFormat('yyyy-MM-dd'),
+                    onChanged: (value) => changed = true,
+                    inputType: InputType.date,
+                    lastDate: state.household!.sensitizationDate,
+                    initialDate: DateTime(2000, 1, 1),
+                    validator: FormBuilderValidators.required(),
+                    initialValue: respondent.dateOfBirth,
+                  ),
+                  FormBuilderDropdown(
+                    name: 'sex',
+                    decoration: const InputDecoration(
+                      label: Text('Sex'),
+                      icon: Icon(Icons.wc),
+                    ),
+                    onChanged: (value) => changed = true,
+                    items: Sex.values
+                        .map((sex) => DropdownMenuItem(
+                            value: sex,
+                            child: Text(toBeginningOfSentenceCase(sex.name)!)))
+                        .toList(),
+                    validator: FormBuilderValidators.required(),
+                    initialValue: respondent.sex,
+                  ),
+                  FormBuilderDropdown(
+                    name: 'literacyLevel',
+                    decoration: const InputDecoration(
+                      label: Text('Literacy Level'),
+                      icon: Icon(Icons.translate),
+                    ),
+                    onChanged: (value) => changed = true,
+                    items: LiteracyLevel.values
+                        .map((literacyLevel) => DropdownMenuItem(
+                            value: literacyLevel,
+                            child: Text(literacyLevelToString(literacyLevel))))
+                        .toList(),
+                    validator: FormBuilderValidators.required(),
+                    initialValue: respondent.literacyLevel,
+                  ),
+                  FormBuilderDropdown(
+                    name: 'occupation',
+                    decoration: const InputDecoration(
+                      label: Text('Occupation'),
+                      icon: Icon(Icons.work),
+                    ),
+                    onChanged: (value) => changed = true,
+                    items: Occupation.values
+                        .map((occupation) => DropdownMenuItem(
+                            value: occupation,
+                            child: Text(occupationToString(occupation))))
+                        .toList(),
+                    validator: FormBuilderValidators.required(),
+                    initialValue: respondent.occupation,
                   ),
                   FormBuilderTextField(
                     name: 'comments',

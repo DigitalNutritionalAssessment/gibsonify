@@ -5,6 +5,7 @@ import 'package:form_builder_phone_field/form_builder_phone_field.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:gibsonify/household/household.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
+import 'package:intl/intl.dart';
 
 class CreateRespondentPage extends StatelessWidget {
   const CreateRespondentPage({Key? key}) : super(key: key);
@@ -58,6 +59,14 @@ class CreateRespondentPage extends StatelessWidget {
                                               .currentState!.value['name'],
                                           phoneNumber: formKey.currentState!
                                               .value['phoneNumber'],
+                                          dateOfBirth: formKey.currentState!
+                                              .value['dateOfBirth'],
+                                          sex: formKey
+                                              .currentState!.value['sex'],
+                                          literacyLevel: formKey.currentState!
+                                              .value['literacyLevel'],
+                                          occupation: formKey.currentState!
+                                              .value['occupation'],
                                           comments: formKey.currentState!
                                                   .value['comments'] ??
                                               ""))),
@@ -71,42 +80,101 @@ class CreateRespondentPage extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: FormBuilder(
                 key: formKey,
-                child: Column(children: [
-                  FormBuilderTextField(
-                    name: 'name',
-                    decoration: const InputDecoration(
-                      label: Text('Respondent Name'),
-                      icon: Icon(Icons.person),
+                child: SingleChildScrollView(
+                  child: Column(children: [
+                    FormBuilderTextField(
+                      name: 'name',
+                      decoration: const InputDecoration(
+                        label: Text('Respondent Name'),
+                        icon: Icon(Icons.person),
+                      ),
+                      onChanged: (value) => changed = true,
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(),
+                        FormBuilderValidators.minLength(4,
+                            errorText: 'Must be at least 4 characters'),
+                      ]),
                     ),
-                    onChanged: (value) => changed = true,
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(),
-                      FormBuilderValidators.minLength(4,
-                          errorText: 'Must be at least 4 characters'),
-                    ]),
-                  ),
-                  FormBuilderPhoneField(
-                    name: 'phoneNumber',
-                    decoration: const InputDecoration(
-                      label: Text('Phone Number'),
-                      icon: Icon(Icons.phone),
+                    FormBuilderPhoneField(
+                      name: 'phoneNumber',
+                      decoration: const InputDecoration(
+                        label: Text('Phone Number'),
+                        icon: Icon(Icons.phone),
+                      ),
+                      priorityListByIsoCode: const ['GB', 'IN'],
+                      defaultSelectedCountryIsoCode: 'IN',
+                      onChanged: (value) => changed = true,
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(),
+                      ]),
                     ),
-                    priorityListByIsoCode: const ['GB', 'IN'],
-                    defaultSelectedCountryIsoCode: 'IN',
-                    onChanged: (value) => changed = true,
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(),
-                    ]),
-                  ),
-                  FormBuilderTextField(
-                    name: 'comments',
-                    decoration: const InputDecoration(
-                        label: Text('Comments'), icon: Icon(Icons.message)),
-                    onChanged: (value) => changed = true,
-                    minLines: 1,
-                    maxLines: null,
-                  ),
-                ]),
+                    FormBuilderDateTimePicker(
+                      name: 'dateOfBirth',
+                      decoration: const InputDecoration(
+                        label: Text('Date of Birth'),
+                        icon: Icon(Icons.cake),
+                      ),
+                      format: DateFormat('yyyy-MM-dd'),
+                      onChanged: (value) => changed = true,
+                      inputType: InputType.date,
+                      lastDate: state.household!.sensitizationDate,
+                      initialDate: DateTime(2000, 1, 1),
+                      validator: FormBuilderValidators.required(),
+                    ),
+                    FormBuilderDropdown(
+                      name: 'sex',
+                      decoration: const InputDecoration(
+                        label: Text('Sex'),
+                        icon: Icon(Icons.wc),
+                      ),
+                      onChanged: (value) => changed = true,
+                      items: Sex.values
+                          .map((sex) => DropdownMenuItem(
+                              value: sex,
+                              child:
+                                  Text(toBeginningOfSentenceCase(sex.name)!)))
+                          .toList(),
+                      validator: FormBuilderValidators.required(),
+                    ),
+                    FormBuilderDropdown(
+                      name: 'literacyLevel',
+                      decoration: const InputDecoration(
+                        label: Text('Literacy Level'),
+                        icon: Icon(Icons.translate),
+                      ),
+                      onChanged: (value) => changed = true,
+                      items: LiteracyLevel.values
+                          .map((literacyLevel) => DropdownMenuItem(
+                              value: literacyLevel,
+                              child:
+                                  Text(literacyLevelToString(literacyLevel))))
+                          .toList(),
+                      validator: FormBuilderValidators.required(),
+                    ),
+                    FormBuilderDropdown(
+                      name: 'occupation',
+                      decoration: const InputDecoration(
+                        label: Text('Occupation'),
+                        icon: Icon(Icons.work),
+                      ),
+                      onChanged: (value) => changed = true,
+                      items: Occupation.values
+                          .map((occupation) => DropdownMenuItem(
+                              value: occupation,
+                              child: Text(occupationToString(occupation))))
+                          .toList(),
+                      validator: FormBuilderValidators.required(),
+                    ),
+                    FormBuilderTextField(
+                      name: 'comments',
+                      decoration: const InputDecoration(
+                          label: Text('Comments'), icon: Icon(Icons.message)),
+                      onChanged: (value) => changed = true,
+                      minLines: 1,
+                      maxLines: null,
+                    ),
+                  ]),
+                ),
               ),
             ),
           ),
