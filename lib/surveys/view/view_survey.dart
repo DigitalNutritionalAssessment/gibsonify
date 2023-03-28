@@ -120,6 +120,7 @@ class ShareSurvey extends StatelessWidget {
     return AlertDialog(
       title: const Text('Share survey'),
       content: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           const Text(
               'Import this survey on another device by scanning the QR code below from the Gibsonify app.'),
