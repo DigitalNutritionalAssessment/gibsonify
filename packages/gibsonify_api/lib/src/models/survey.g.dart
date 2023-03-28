@@ -32,13 +32,29 @@ const SurveySchema = CollectionSchema(
       name: r'description',
       type: IsarType.string,
     ),
-    r'name': PropertySchema(
+    r'maxAge': PropertySchema(
       id: 3,
+      name: r'maxAge',
+      type: IsarType.long,
+    ),
+    r'minAge': PropertySchema(
+      id: 4,
+      name: r'minAge',
+      type: IsarType.long,
+    ),
+    r'name': PropertySchema(
+      id: 5,
       name: r'name',
       type: IsarType.string,
     ),
+    r'requiredSex': PropertySchema(
+      id: 6,
+      name: r'requiredSex',
+      type: IsarType.int,
+      enumMap: _SurveyrequiredSexEnumValueMap,
+    ),
     r'surveyId': PropertySchema(
-      id: 4,
+      id: 7,
       name: r'surveyId',
       type: IsarType.string,
     )
@@ -104,8 +120,11 @@ void _surveySerialize(
   writer.writeString(offsets[0], object.comments);
   writer.writeString(offsets[1], object.country);
   writer.writeString(offsets[2], object.description);
-  writer.writeString(offsets[3], object.name);
-  writer.writeString(offsets[4], object.surveyId);
+  writer.writeLong(offsets[3], object.maxAge);
+  writer.writeLong(offsets[4], object.minAge);
+  writer.writeString(offsets[5], object.name);
+  writer.writeInt(offsets[6], object.requiredSex?.index);
+  writer.writeString(offsets[7], object.surveyId);
 }
 
 Survey _surveyDeserialize(
@@ -119,8 +138,12 @@ Survey _surveyDeserialize(
     country: reader.readString(offsets[1]),
     description: reader.readStringOrNull(offsets[2]),
     id: id,
-    name: reader.readString(offsets[3]),
-    surveyId: reader.readString(offsets[4]),
+    maxAge: reader.readLongOrNull(offsets[3]),
+    minAge: reader.readLongOrNull(offsets[4]),
+    name: reader.readString(offsets[5]),
+    requiredSex:
+        _SurveyrequiredSexValueEnumMap[reader.readIntOrNull(offsets[6])],
+    surveyId: reader.readString(offsets[7]),
   );
   return object;
 }
@@ -139,13 +162,29 @@ P _surveyDeserializeProp<P>(
     case 2:
       return (reader.readStringOrNull(offset)) as P;
     case 3:
-      return (reader.readString(offset)) as P;
+      return (reader.readLongOrNull(offset)) as P;
     case 4:
+      return (reader.readLongOrNull(offset)) as P;
+    case 5:
+      return (reader.readString(offset)) as P;
+    case 6:
+      return (_SurveyrequiredSexValueEnumMap[reader.readIntOrNull(offset)])
+          as P;
+    case 7:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
 }
+
+const _SurveyrequiredSexEnumValueMap = {
+  'male': 0,
+  'female': 1,
+};
+const _SurveyrequiredSexValueEnumMap = {
+  0: Sex.male,
+  1: Sex.female,
+};
 
 Id _surveyGetId(Survey object) {
   return object.id;
@@ -806,6 +845,144 @@ extension SurveyQueryFilter on QueryBuilder<Survey, Survey, QFilterCondition> {
     });
   }
 
+  QueryBuilder<Survey, Survey, QAfterFilterCondition> maxAgeIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'maxAge',
+      ));
+    });
+  }
+
+  QueryBuilder<Survey, Survey, QAfterFilterCondition> maxAgeIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'maxAge',
+      ));
+    });
+  }
+
+  QueryBuilder<Survey, Survey, QAfterFilterCondition> maxAgeEqualTo(
+      int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'maxAge',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Survey, Survey, QAfterFilterCondition> maxAgeGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'maxAge',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Survey, Survey, QAfterFilterCondition> maxAgeLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'maxAge',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Survey, Survey, QAfterFilterCondition> maxAgeBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'maxAge',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<Survey, Survey, QAfterFilterCondition> minAgeIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'minAge',
+      ));
+    });
+  }
+
+  QueryBuilder<Survey, Survey, QAfterFilterCondition> minAgeIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'minAge',
+      ));
+    });
+  }
+
+  QueryBuilder<Survey, Survey, QAfterFilterCondition> minAgeEqualTo(
+      int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'minAge',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Survey, Survey, QAfterFilterCondition> minAgeGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'minAge',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Survey, Survey, QAfterFilterCondition> minAgeLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'minAge',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Survey, Survey, QAfterFilterCondition> minAgeBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'minAge',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<Survey, Survey, QAfterFilterCondition> nameEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -931,6 +1108,75 @@ extension SurveyQueryFilter on QueryBuilder<Survey, Survey, QFilterCondition> {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'name',
         value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Survey, Survey, QAfterFilterCondition> requiredSexIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'requiredSex',
+      ));
+    });
+  }
+
+  QueryBuilder<Survey, Survey, QAfterFilterCondition> requiredSexIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'requiredSex',
+      ));
+    });
+  }
+
+  QueryBuilder<Survey, Survey, QAfterFilterCondition> requiredSexEqualTo(
+      Sex? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'requiredSex',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Survey, Survey, QAfterFilterCondition> requiredSexGreaterThan(
+    Sex? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'requiredSex',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Survey, Survey, QAfterFilterCondition> requiredSexLessThan(
+    Sex? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'requiredSex',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Survey, Survey, QAfterFilterCondition> requiredSexBetween(
+    Sex? lower,
+    Sex? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'requiredSex',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
       ));
     });
   }
@@ -1107,6 +1353,30 @@ extension SurveyQuerySortBy on QueryBuilder<Survey, Survey, QSortBy> {
     });
   }
 
+  QueryBuilder<Survey, Survey, QAfterSortBy> sortByMaxAge() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'maxAge', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Survey, Survey, QAfterSortBy> sortByMaxAgeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'maxAge', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Survey, Survey, QAfterSortBy> sortByMinAge() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'minAge', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Survey, Survey, QAfterSortBy> sortByMinAgeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'minAge', Sort.desc);
+    });
+  }
+
   QueryBuilder<Survey, Survey, QAfterSortBy> sortByName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.asc);
@@ -1116,6 +1386,18 @@ extension SurveyQuerySortBy on QueryBuilder<Survey, Survey, QSortBy> {
   QueryBuilder<Survey, Survey, QAfterSortBy> sortByNameDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Survey, Survey, QAfterSortBy> sortByRequiredSex() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'requiredSex', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Survey, Survey, QAfterSortBy> sortByRequiredSexDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'requiredSex', Sort.desc);
     });
   }
 
@@ -1181,6 +1463,30 @@ extension SurveyQuerySortThenBy on QueryBuilder<Survey, Survey, QSortThenBy> {
     });
   }
 
+  QueryBuilder<Survey, Survey, QAfterSortBy> thenByMaxAge() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'maxAge', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Survey, Survey, QAfterSortBy> thenByMaxAgeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'maxAge', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Survey, Survey, QAfterSortBy> thenByMinAge() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'minAge', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Survey, Survey, QAfterSortBy> thenByMinAgeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'minAge', Sort.desc);
+    });
+  }
+
   QueryBuilder<Survey, Survey, QAfterSortBy> thenByName() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.asc);
@@ -1190,6 +1496,18 @@ extension SurveyQuerySortThenBy on QueryBuilder<Survey, Survey, QSortThenBy> {
   QueryBuilder<Survey, Survey, QAfterSortBy> thenByNameDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'name', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Survey, Survey, QAfterSortBy> thenByRequiredSex() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'requiredSex', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Survey, Survey, QAfterSortBy> thenByRequiredSexDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'requiredSex', Sort.desc);
     });
   }
 
@@ -1228,10 +1546,28 @@ extension SurveyQueryWhereDistinct on QueryBuilder<Survey, Survey, QDistinct> {
     });
   }
 
+  QueryBuilder<Survey, Survey, QDistinct> distinctByMaxAge() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'maxAge');
+    });
+  }
+
+  QueryBuilder<Survey, Survey, QDistinct> distinctByMinAge() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'minAge');
+    });
+  }
+
   QueryBuilder<Survey, Survey, QDistinct> distinctByName(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'name', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<Survey, Survey, QDistinct> distinctByRequiredSex() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'requiredSex');
     });
   }
 
@@ -1268,9 +1604,27 @@ extension SurveyQueryProperty on QueryBuilder<Survey, Survey, QQueryProperty> {
     });
   }
 
+  QueryBuilder<Survey, int?, QQueryOperations> maxAgeProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'maxAge');
+    });
+  }
+
+  QueryBuilder<Survey, int?, QQueryOperations> minAgeProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'minAge');
+    });
+  }
+
   QueryBuilder<Survey, String, QQueryOperations> nameProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'name');
+    });
+  }
+
+  QueryBuilder<Survey, Sex?, QQueryOperations> requiredSexProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'requiredSex');
     });
   }
 
