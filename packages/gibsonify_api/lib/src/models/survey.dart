@@ -60,11 +60,18 @@ class Survey extends Equatable {
       'comments': comments,
       'minAge': minAge,
       'maxAge': maxAge,
-      'requiredSex': requiredSex
+      'requiredSex': requiredSex?.name
     };
   }
 
   factory Survey.fromJson(Map<String, dynamic> json) {
+    Sex? requiredSex;
+
+    if (json['requiredSex'] != null) {
+      requiredSex = Sex.values
+          .singleWhere((element) => element.name == json['requiredSex']);
+    }
+
     return Survey(
         surveyId: json['surveyId'],
         name: json['name'],
@@ -73,7 +80,7 @@ class Survey extends Equatable {
         comments: json['comments'],
         minAge: json['minAge'],
         maxAge: json['maxAge'],
-        requiredSex: json['requiredSex']);
+        requiredSex: requiredSex);
   }
 
   @override
