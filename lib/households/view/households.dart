@@ -27,6 +27,11 @@ class HouseholdsScreen extends StatelessWidget {
                   title: const Text('Households'),
                   actions: [
                     IconButton(
+                        onPressed: () => context
+                            .read<HouseholdsBloc>()
+                            .add(const LocationUpdateRequested()),
+                        icon: const Icon(Icons.refresh)),
+                    IconButton(
                         onPressed: () async {
                           final sortBy = await showDialog(
                               context: context,

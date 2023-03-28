@@ -24,6 +24,7 @@ class HouseholdsBloc extends Bloc<HouseholdsEvent, HouseholdsState> {
     on<HouseholdDeleteRequested>(_onHouseholdDeleteRequested);
     on<NewHouseholdSaveRequested>(_onNewHouseholdSaveRequested);
     on<HouseholdsSortOrderUpdated>(_onHouseholdsSortOrderUpdated);
+    on<LocationUpdateRequested>(_onLocationUpdateRequested);
     on<LocationUpdated>(_onLocationUpdated);
   }
 
@@ -36,13 +37,17 @@ class HouseholdsBloc extends Bloc<HouseholdsEvent, HouseholdsState> {
     });
     emit(state.copyWith(subscription: subscription));
 
-    _locationSubscription = Geolocator.getPositionStream(
-        locationSettings: const LocationSettings(
-      accuracy: LocationAccuracy.high,
-      distanceFilter: 10,
-    )).listen((Position position) {
-      add(LocationUpdated(position: position));
-    });
+    // Manual refresh is currently preferred over live location
+    // streaming due to battery drain concerns. Uncommenting the
+    // location subscription will re-enable live location updates.
+    add(const LocationUpdateRequested());
+    // _locationSubscription = Geolocator.getPositionStream(
+    //     locationSettings: const LocationSettings(
+    //   accuracy: LocationAccuracy.high,
+    //   distanceFilter: 10,
+    // )).listen((Position position) {
+    //   add(LocationUpdated(position: position));
+    // });
   }
 
   void _onHouseholdDeleteRequested(
@@ -101,6 +106,12 @@ class HouseholdsBloc extends Bloc<HouseholdsEvent, HouseholdsState> {
       HouseholdsSortOrderUpdated event, Emitter<HouseholdsState> emit) async {
     emit(state.copyWith(sortBy: event.sortBy));
     add(const HouseholdsUpdateRequested());
+  }
+
+  void _onLocationUpdateRequested(
+      LocationUpdateRequested event, Emitter<HouseholdsState> emit) async {
+    final position = await getPosition();
+    add(LocationUpdated(position: position));
   }
 
   void _onLocationUpdated(
