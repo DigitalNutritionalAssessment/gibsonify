@@ -100,8 +100,9 @@ class SurveyInput extends StatelessWidget {
                   items: surveysState.surveys
                       // The below filter hides any surveys with parameters that make
                       // the respondent/household ineligible. Maybe this should be more explicit?
-                      .where((survey) => survey
-                          .checkParameters(
+                      .where((survey) => checkSurveyParameters(
+                              survey: survey,
+                              household: householdState.household!,
                               respondent: householdState.household!.respondents[
                                   householdState.selectedRespondentIndex!])
                           .isEmpty)
@@ -303,4 +304,29 @@ class PhysioStatusInput extends StatelessWidget {
       },
     );
   }
+}
+
+List<String> checkSurveyParameters(
+    {required Survey survey,
+    required Household household,
+    required Respondent respondent}) {
+  // TODO: add household location check
+
+  final errors = <String>[];
+  final respondentAge =
+      DateTime.now().difference(respondent.dateOfBirth!).inDays / 365;
+
+  if (respondentAge < survey.minAge) {
+    errors.add('Respondent is too young.');
+  }
+
+  if (survey.maxAge != 100 && respondentAge > survey.maxAge) {
+    errors.add('Respondent is too old.');
+  }
+
+  if (survey.requiredSex != null && respondent.sex != survey.requiredSex) {
+    errors.add('Respondent must be ${survey.requiredSex!.name}.');
+  }
+
+  return errors;
 }
