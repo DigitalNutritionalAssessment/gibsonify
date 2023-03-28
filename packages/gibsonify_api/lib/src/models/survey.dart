@@ -13,8 +13,8 @@ class Survey extends Equatable {
   final String country;
   final String? description;
   final String? comments;
-  final int? minAge;
-  final int? maxAge;
+  final int minAge;
+  final int maxAge;
   @Enumerated(EnumType.ordinal32)
   final Sex? requiredSex;
 
@@ -25,8 +25,8 @@ class Survey extends Equatable {
       required this.country,
       this.description,
       this.comments,
-      this.minAge,
-      this.maxAge,
+      required this.minAge,
+      required this.maxAge,
       this.requiredSex});
 
   Survey copyWith(

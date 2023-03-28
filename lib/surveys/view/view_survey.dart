@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:gibsonify/surveys/surveys.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
+import 'package:intl/intl.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class ViewSurveyScreen extends StatelessWidget {
@@ -72,6 +73,33 @@ class ViewSurveyScreen extends StatelessWidget {
                         decoration: const InputDecoration(
                             label: Text('Comments'), icon: Icon(Icons.message)),
                         initialValue: survey.comments,
+                        enabled: false,
+                      ),
+                      const Divider(),
+                      FormBuilderTextField(
+                        name: 'requiredSex',
+                        decoration: const InputDecoration(
+                            label: Text('Respondent Sex'),
+                            icon: Icon(Icons.message)),
+                        initialValue: toBeginningOfSentenceCase(
+                                survey.requiredSex?.name) ??
+                            'Any',
+                        enabled: false,
+                      ),
+                      FormBuilderTextField(
+                        name: 'minAge',
+                        decoration: const InputDecoration(
+                            label: Text('Respondent Minimum Age'),
+                            icon: Icon(Icons.vertical_align_bottom)),
+                        initialValue: survey.minAge.toString(),
+                        enabled: false,
+                      ),
+                      FormBuilderTextField(
+                        name: 'maxAge',
+                        decoration: const InputDecoration(
+                            label: Text('Respondent Maximum Age'),
+                            icon: Icon(Icons.vertical_align_top)),
+                        initialValue: survey.maxAge.toString(),
                         enabled: false,
                       ),
                     ],

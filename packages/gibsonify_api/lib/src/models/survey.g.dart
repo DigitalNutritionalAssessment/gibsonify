@@ -138,8 +138,8 @@ Survey _surveyDeserialize(
     country: reader.readString(offsets[1]),
     description: reader.readStringOrNull(offsets[2]),
     id: id,
-    maxAge: reader.readLongOrNull(offsets[3]),
-    minAge: reader.readLongOrNull(offsets[4]),
+    maxAge: reader.readLong(offsets[3]),
+    minAge: reader.readLong(offsets[4]),
     name: reader.readString(offsets[5]),
     requiredSex:
         _SurveyrequiredSexValueEnumMap[reader.readIntOrNull(offsets[6])],
@@ -162,9 +162,9 @@ P _surveyDeserializeProp<P>(
     case 2:
       return (reader.readStringOrNull(offset)) as P;
     case 3:
-      return (reader.readLongOrNull(offset)) as P;
+      return (reader.readLong(offset)) as P;
     case 4:
-      return (reader.readLongOrNull(offset)) as P;
+      return (reader.readLong(offset)) as P;
     case 5:
       return (reader.readString(offset)) as P;
     case 6:
@@ -845,24 +845,7 @@ extension SurveyQueryFilter on QueryBuilder<Survey, Survey, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Survey, Survey, QAfterFilterCondition> maxAgeIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'maxAge',
-      ));
-    });
-  }
-
-  QueryBuilder<Survey, Survey, QAfterFilterCondition> maxAgeIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'maxAge',
-      ));
-    });
-  }
-
-  QueryBuilder<Survey, Survey, QAfterFilterCondition> maxAgeEqualTo(
-      int? value) {
+  QueryBuilder<Survey, Survey, QAfterFilterCondition> maxAgeEqualTo(int value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'maxAge',
@@ -872,7 +855,7 @@ extension SurveyQueryFilter on QueryBuilder<Survey, Survey, QFilterCondition> {
   }
 
   QueryBuilder<Survey, Survey, QAfterFilterCondition> maxAgeGreaterThan(
-    int? value, {
+    int value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -885,7 +868,7 @@ extension SurveyQueryFilter on QueryBuilder<Survey, Survey, QFilterCondition> {
   }
 
   QueryBuilder<Survey, Survey, QAfterFilterCondition> maxAgeLessThan(
-    int? value, {
+    int value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -898,8 +881,8 @@ extension SurveyQueryFilter on QueryBuilder<Survey, Survey, QFilterCondition> {
   }
 
   QueryBuilder<Survey, Survey, QAfterFilterCondition> maxAgeBetween(
-    int? lower,
-    int? upper, {
+    int lower,
+    int upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
@@ -914,24 +897,7 @@ extension SurveyQueryFilter on QueryBuilder<Survey, Survey, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Survey, Survey, QAfterFilterCondition> minAgeIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'minAge',
-      ));
-    });
-  }
-
-  QueryBuilder<Survey, Survey, QAfterFilterCondition> minAgeIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'minAge',
-      ));
-    });
-  }
-
-  QueryBuilder<Survey, Survey, QAfterFilterCondition> minAgeEqualTo(
-      int? value) {
+  QueryBuilder<Survey, Survey, QAfterFilterCondition> minAgeEqualTo(int value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'minAge',
@@ -941,7 +907,7 @@ extension SurveyQueryFilter on QueryBuilder<Survey, Survey, QFilterCondition> {
   }
 
   QueryBuilder<Survey, Survey, QAfterFilterCondition> minAgeGreaterThan(
-    int? value, {
+    int value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -954,7 +920,7 @@ extension SurveyQueryFilter on QueryBuilder<Survey, Survey, QFilterCondition> {
   }
 
   QueryBuilder<Survey, Survey, QAfterFilterCondition> minAgeLessThan(
-    int? value, {
+    int value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -967,8 +933,8 @@ extension SurveyQueryFilter on QueryBuilder<Survey, Survey, QFilterCondition> {
   }
 
   QueryBuilder<Survey, Survey, QAfterFilterCondition> minAgeBetween(
-    int? lower,
-    int? upper, {
+    int lower,
+    int upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
@@ -1604,13 +1570,13 @@ extension SurveyQueryProperty on QueryBuilder<Survey, Survey, QQueryProperty> {
     });
   }
 
-  QueryBuilder<Survey, int?, QQueryOperations> maxAgeProperty() {
+  QueryBuilder<Survey, int, QQueryOperations> maxAgeProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'maxAge');
     });
   }
 
-  QueryBuilder<Survey, int?, QQueryOperations> minAgeProperty() {
+  QueryBuilder<Survey, int, QQueryOperations> minAgeProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'minAge');
     });
