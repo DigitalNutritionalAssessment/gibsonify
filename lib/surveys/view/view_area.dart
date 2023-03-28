@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_tile_caching/flutter_map_tile_caching.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -40,6 +41,7 @@ class ViewAreaScreen extends StatelessWidget {
             ],
             children: [
               TileLayer(
+                tileProvider: FMTC.instance('default').getTileProvider(),
                 urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                 userAgentPackageName: 'org.gibsonify.gibsonify',
               ),
