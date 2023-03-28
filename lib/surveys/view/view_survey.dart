@@ -77,6 +77,23 @@ class ViewSurveyScreen extends StatelessWidget {
                       ),
                       const Divider(),
                       FormBuilderTextField(
+                        name: 'geoArea',
+                        decoration: InputDecoration(
+                          label: const Text('Geographical Area'),
+                          icon: const Icon(Icons.place),
+                          suffixIcon: IconButton(
+                            icon: const Icon(Icons.map),
+                            onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ViewAreaScreen(
+                                        geoArea: survey.geoArea!))),
+                          ),
+                        ),
+                        initialValue: survey.geoArea!,
+                        readOnly: true,
+                      ),
+                      FormBuilderTextField(
                         name: 'requiredSex',
                         decoration: const InputDecoration(
                             label: Text('Respondent Sex'),
