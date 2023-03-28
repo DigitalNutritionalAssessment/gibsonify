@@ -57,7 +57,7 @@ class EditRespondentPage extends StatelessWidget {
                             {
                               context.read<HouseholdBloc>().add(
                                   EditRespondentSaveRequested(
-                                      respondent: Respondent(
+                                      respondent: respondent.copyWith(
                                           name: formKey
                                               .currentState!.value['name'],
                                           phoneNumber: formKey.currentState!
