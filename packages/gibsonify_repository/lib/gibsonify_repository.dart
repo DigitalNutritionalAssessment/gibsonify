@@ -2,5 +2,4 @@
 library gibsonify_repository;
 
 export 'src/gibsonify_repository.dart';
-export 'src/isar.dart';
 export 'src/hive.dart';

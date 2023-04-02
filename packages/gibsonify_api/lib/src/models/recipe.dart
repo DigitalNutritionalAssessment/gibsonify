@@ -1,14 +1,10 @@
 import 'package:equatable/equatable.dart';
 import 'package:uuid/uuid.dart';
-import 'package:isar/isar.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
 
-part 'recipe.g.dart';
-
-@Embedded(inheritance: false)
 class Recipe extends Equatable {
   Recipe({
     this.name,
@@ -96,7 +92,6 @@ class Recipe extends Equatable {
   }
 
   @override
-  @ignore
   List<Object?> get props => [
         name,
         employeeNumber,

@@ -1,8 +1,5 @@
 import 'package:gibsonify_api/src/models/anthropometrics.dart';
 import 'package:gibsonify_api/src/models/gibsons_form.dart';
-import 'package:isar/isar.dart';
-
-part 'respondent.g.dart';
 
 enum Sex { male, female }
 
@@ -65,16 +62,12 @@ String occupationToString(Occupation occupation) {
   }
 }
 
-@Embedded()
 class Respondent {
   final String name;
   final String phoneNumber;
   final DateTime? dateOfBirth;
-  @Enumerated(EnumType.ordinal32)
   final Sex? sex;
-  @Enumerated(EnumType.ordinal32)
   final LiteracyLevel? literacyLevel;
-  @Enumerated(EnumType.ordinal32)
   final Occupation? occupation;
   final String comments;
   final List<GibsonsForm> collections;

@@ -1,13 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:gibsonify_api/src/models/models.dart';
-import 'package:isar/isar.dart';
 
-part 'household.g.dart';
-
-@Collection(inheritance: false)
 class Household extends Equatable {
-  final Id id;
-  @Index(unique: true)
   final String householdId;
   final DateTime sensitizationDate;
   final String geoLocation;
@@ -15,7 +9,6 @@ class Household extends Equatable {
   final List<Respondent> respondents;
 
   @override
-  @ignore
   List<Object> get props => [
         householdId,
         sensitizationDate,
@@ -25,7 +18,6 @@ class Household extends Equatable {
       ];
 
   Household({
-    this.id = Isar.autoIncrement,
     required this.householdId,
     required this.sensitizationDate,
     required this.geoLocation,
@@ -34,7 +26,6 @@ class Household extends Equatable {
   });
 
   copyWith({
-    int? id,
     String? householdId,
     DateTime? sensitizationDate,
     String? geoLocation,
@@ -42,7 +33,6 @@ class Household extends Equatable {
     List<Respondent>? respondents,
   }) {
     return Household(
-      id: id ?? this.id,
       householdId: householdId ?? this.householdId,
       sensitizationDate: sensitizationDate ?? this.sensitizationDate,
       geoLocation: geoLocation ?? this.geoLocation,

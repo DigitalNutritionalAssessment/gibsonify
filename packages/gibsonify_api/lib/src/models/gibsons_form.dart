@@ -1,11 +1,8 @@
 import 'dart:convert';
 import 'package:equatable/equatable.dart';
-import 'package:isar/isar.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
-
-part 'gibsons_form.g.dart';
 
 enum PhysioStatus { notApplicable, pregnant, lactatingH1, lactatingH2 }
 
@@ -22,7 +19,6 @@ String physioStatusToString(PhysioStatus physioStatus) {
   }
 }
 
-@Embedded(inheritance: false)
 class GibsonsForm extends Equatable {
   GibsonsForm(
       {String? formId,
@@ -51,7 +47,6 @@ class GibsonsForm extends Equatable {
   final String? recallDay; // TODO: change to an enum
   final String? interviewDate;
   final String? interviewStartTime;
-  @Enumerated(EnumType.ordinal32)
   final PhysioStatus physioStatus;
   final String? pictureChartCollected; // TODO: change to a bool
   final String? pictureChartNotCollectedReason;
@@ -210,7 +205,6 @@ class GibsonsForm extends Equatable {
   }
 
   @override
-  @ignore
   List<Object?> get props => [
         id,
         surveyId,

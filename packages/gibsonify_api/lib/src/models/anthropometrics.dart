@@ -1,9 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:isar/isar.dart';
 
-part 'anthropometrics.g.dart';
-
-@Embedded(inheritance: false)
 class Anthropometrics extends Equatable {
   Anthropometrics({
     this.date,
@@ -22,7 +18,6 @@ class Anthropometrics extends Equatable {
   final double? handSpan;
 
   @override
-  @ignore
   List<Object?> get props => [
         date,
         height,

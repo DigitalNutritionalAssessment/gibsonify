@@ -1,13 +1,9 @@
 import 'package:equatable/equatable.dart';
-import 'package:isar/isar.dart';
 import 'dart:convert';
 import 'package:uuid/uuid.dart';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
 
-part 'recipe_probe.g.dart';
-
-@Embedded(inheritance: false)
 class ProbeOption extends Equatable {
   ProbeOption({this.option, this.id = ''});
 
@@ -37,11 +33,9 @@ class ProbeOption extends Equatable {
   }
 
   @override
-  @ignore
   List<Object?> get props => [option, id];
 }
 
-@Embedded(inheritance: false)
 class Probe extends Equatable {
   Probe(
       {this.name,
@@ -117,7 +111,6 @@ class Probe extends Equatable {
   }
 
   @override
-  @ignore
   List<Object?> get props => [name, checked, answer, probeOptions];
 }
 

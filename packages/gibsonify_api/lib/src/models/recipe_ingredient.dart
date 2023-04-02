@@ -1,14 +1,9 @@
 import 'package:equatable/equatable.dart';
-import 'package:isar/isar.dart';
-import 'package:uuid/uuid.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:convert';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
 
-part 'recipe_ingredient.g.dart';
-
-@Embedded(inheritance: false)
 class Ingredient extends Equatable {
   Ingredient(
       {this.name,
@@ -86,7 +81,6 @@ class Ingredient extends Equatable {
   }
 
   @override
-  @ignore
   List<Object?> get props => [
         name,
         customName,

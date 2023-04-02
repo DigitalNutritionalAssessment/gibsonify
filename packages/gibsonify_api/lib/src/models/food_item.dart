@@ -1,13 +1,9 @@
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
-import 'package:isar/isar.dart';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
 
-part 'food_item.g.dart';
-
-@Embedded(inheritance: false)
 class FoodItem extends Equatable {
   FoodItem(
       // TODO: temp hack to make id field Isar compatible. Id field will eventually be removed
@@ -127,7 +123,6 @@ class FoodItem extends Equatable {
   }
 
   @override
-  @ignore
   List<Object?> get props => [
         name,
         id,

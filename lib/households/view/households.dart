@@ -96,7 +96,7 @@ class HouseholdsScreen extends StatelessWidget {
                                 context,
                                 PageRouter.householdPrefix +
                                     PageRouter.viewHousehold,
-                                arguments: {'id': household.id}),
+                                arguments: {'id': household.householdId}),
                             onLongPress: () => showModalBottomSheet(
                                 context: context,
                                 builder: (context) {
