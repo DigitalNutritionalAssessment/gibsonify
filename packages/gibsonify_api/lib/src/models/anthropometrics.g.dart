@@ -17,7 +17,7 @@ class AnthropometricsAdapter extends TypeAdapter<Anthropometrics> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Anthropometrics(
-      date: fields[0] as DateTime?,
+      date: fields[0] as DateTime,
       weight: fields[2] as double?,
       height: fields[1] as double?,
       waist: fields[3] as double?,

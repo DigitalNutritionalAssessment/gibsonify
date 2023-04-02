@@ -21,7 +21,7 @@ class ViewAnthropometricsPage extends StatelessWidget {
 
         return Scaffold(
           appBar: AppBar(
-            title: Text(formatter.format(record.date!)),
+            title: Text(formatter.format(record.date)),
           ),
           body: Padding(
             padding: const EdgeInsets.all(8.0),

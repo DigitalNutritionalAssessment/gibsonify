@@ -102,9 +102,7 @@ class _ViewRespondentPageState extends State<ViewRespondentPage>
               itemCount: respondent.anthropometrics.length,
               itemBuilder: (context, index) {
                 final anthropometrics = respondent.anthropometrics[index];
-                final date = anthropometrics.date != null
-                    ? formatter.format(anthropometrics.date!)
-                    : 'No date';
+                final date = formatter.format(anthropometrics.date);
 
                 return Card(
                   child: ListTile(

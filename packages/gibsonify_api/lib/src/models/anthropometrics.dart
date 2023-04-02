@@ -6,7 +6,7 @@ part 'anthropometrics.g.dart';
 @HiveType(typeId: 13)
 class Anthropometrics extends Equatable {
   Anthropometrics({
-    this.date,
+    required this.date,
     this.weight,
     this.height,
     this.waist,
@@ -15,7 +15,7 @@ class Anthropometrics extends Equatable {
   });
 
   @HiveField(0)
-  final DateTime? date;
+  final DateTime date;
   @HiveField(1)
   final double? height;
   @HiveField(2)
