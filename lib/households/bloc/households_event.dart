@@ -15,7 +15,7 @@ class HouseholdsPageOpened extends HouseholdsEvent {
 }
 
 class HouseholdDeleteRequested extends HouseholdsEvent {
-  final int id;
+  final String id;
   const HouseholdDeleteRequested({required this.id});
 
   @override

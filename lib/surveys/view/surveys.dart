@@ -114,7 +114,6 @@ class SurveysView extends StatelessWidget {
                             context: context,
                             builder: (context) {
                               return SurveyOptions(
-                                  id: state.surveys[index].id,
                                   surveyId: state.surveys[index].surveyId);
                             }),
                       ));
@@ -152,17 +151,15 @@ class SurveysView extends StatelessWidget {
 }
 
 class SurveyOptions extends StatelessWidget {
-  const SurveyOptions({Key? key, required this.id, required this.surveyId})
-      : super(key: key);
+  const SurveyOptions({Key? key, required this.surveyId}) : super(key: key);
 
-  final int id;
   final String surveyId;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) =>
-          SurveysBloc(isarRepository: context.read<IsarRepository>()),
+          SurveysBloc(hiveRepository: context.read<HiveRepository>()),
       child: BlocBuilder<SurveysBloc, SurveysState>(
         builder: (context, state) {
           final List<Widget> options = [
@@ -172,7 +169,9 @@ class SurveyOptions extends StatelessWidget {
               leading: const Icon(Icons.delete),
               title: const Text('Delete'),
               onTap: () {
-                context.read<SurveysBloc>().add(SurveyDeleteRequested(id: id));
+                context
+                    .read<SurveysBloc>()
+                    .add(SurveyDeleteRequested(id: surveyId));
                 Navigator.pop(context);
               },
             )

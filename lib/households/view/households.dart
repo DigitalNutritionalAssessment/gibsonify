@@ -18,7 +18,7 @@ class HouseholdsScreen extends StatelessWidget {
 
     return BlocProvider(
         create: (context) =>
-            HouseholdsBloc(isarRepository: context.read<IsarRepository>())
+            HouseholdsBloc(hiveRepository: context.read<HiveRepository>())
               ..add(const HouseholdsPageOpened()),
         child: BlocBuilder<HouseholdsBloc, HouseholdsState>(
           builder: (context, state) {
@@ -101,7 +101,6 @@ class HouseholdsScreen extends StatelessWidget {
                                 context: context,
                                 builder: (context) {
                                   return HouseholdOptions(
-                                      id: household.id,
                                       householdId: household.householdId);
                                 }),
                           ));
@@ -144,18 +143,16 @@ class HouseholdsScreen extends StatelessWidget {
 }
 
 class HouseholdOptions extends StatelessWidget {
-  const HouseholdOptions(
-      {Key? key, required this.id, required this.householdId})
+  const HouseholdOptions({Key? key, required this.householdId})
       : super(key: key);
 
-  final int id;
   final String householdId;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) =>
-          HouseholdsBloc(isarRepository: context.read<IsarRepository>()),
+          HouseholdsBloc(hiveRepository: context.read<HiveRepository>()),
       child: BlocBuilder<HouseholdsBloc, HouseholdsState>(
         builder: (context, state) {
           final List<Widget> options = [
@@ -167,7 +164,7 @@ class HouseholdOptions extends StatelessWidget {
               onTap: () {
                 context
                     .read<HouseholdsBloc>()
-                    .add(HouseholdDeleteRequested(id: id));
+                    .add(HouseholdDeleteRequested(id: householdId));
                 Navigator.pop(context);
               },
             )

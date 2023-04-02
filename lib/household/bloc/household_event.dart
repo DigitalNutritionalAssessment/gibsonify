@@ -8,7 +8,7 @@ abstract class HouseholdEvent extends Equatable {
 }
 
 class HouseholdOpened extends HouseholdEvent {
-  final int id;
+  final String id;
   const HouseholdOpened({required this.id});
 }
 

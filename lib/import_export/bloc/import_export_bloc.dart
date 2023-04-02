@@ -14,13 +14,13 @@ part 'import_export_state.dart';
 
 class ImportExportBloc extends Bloc<ImportExportEvent, ImportExportState> {
   final GibsonifyRepository _gibsonifyRepository;
-  final IsarRepository _isarRepository;
+  final HiveRepository _hiveRepository;
 
   ImportExportBloc(
       {required GibsonifyRepository gibsonifyRepository,
-      required IsarRepository isarRepository})
+      required HiveRepository hiveRepository})
       : _gibsonifyRepository = gibsonifyRepository,
-        _isarRepository = isarRepository,
+        _hiveRepository = hiveRepository,
         super(const ImportExportState()) {
     on<DataSavedToDevice>(_onDataSavedToDevice);
     on<DataShared>(_onDataShared);
@@ -28,8 +28,7 @@ class ImportExportBloc extends Bloc<ImportExportEvent, ImportExportState> {
 
   void _onDataSavedToDevice(
       DataSavedToDevice event, Emitter<ImportExportState> emit) async {
-    List<Household> households =
-        await _isarRepository.readHouseholdsOrderById();
+    List<Household> households = _hiveRepository.readHouseholds().toList();
     List<Recipe> recipes = _gibsonifyRepository.loadRecipes();
 
     int finishedGibsonsFormsNumber = households
@@ -91,8 +90,7 @@ class ImportExportBloc extends Bloc<ImportExportEvent, ImportExportState> {
   }
 
   void _onDataShared(DataShared event, Emitter<ImportExportState> emit) async {
-    List<Household> households =
-        await _isarRepository.readHouseholdsOrderById();
+    List<Household> households = _hiveRepository.readHouseholds().toList();
     List<Recipe> recipes = _gibsonifyRepository.loadRecipes();
 
     int finishedGibsonsFormsNumber = households

@@ -7,10 +7,10 @@ part 'household_event.dart';
 part 'household_state.dart';
 
 class HouseholdBloc extends Bloc<HouseholdEvent, HouseholdState> {
-  final IsarRepository _isarRepository;
+  final HiveRepository _hiveRepository;
   HouseholdBloc({
-    required IsarRepository isarRepository,
-  })  : _isarRepository = isarRepository,
+    required HiveRepository hiveRepository,
+  })  : _hiveRepository = hiveRepository,
         super(const HouseholdInitial()) {
     on<HouseholdOpened>(_onHouseholdOpened);
     on<EditHouseholdSaveRequested>(_onEditHouseholdSaveRequested);
@@ -25,9 +25,8 @@ class HouseholdBloc extends Bloc<HouseholdEvent, HouseholdState> {
     on<DeleteAnthropometricsRequested>(_onDeleteAnthropometricsRequested);
   }
 
-  void _onHouseholdOpened(
-      HouseholdOpened event, Emitter<HouseholdState> emit) async {
-    final household = await _isarRepository.readHousehold(event.id);
+  void _onHouseholdOpened(HouseholdOpened event, Emitter<HouseholdState> emit) {
+    final household = _hiveRepository.readHousehold(event.id);
     if (household != null) {
       emit(HouseholdLoaded(household: household));
     } else {
@@ -36,44 +35,44 @@ class HouseholdBloc extends Bloc<HouseholdEvent, HouseholdState> {
   }
 
   void _onEditHouseholdSaveRequested(
-      EditHouseholdSaveRequested event, Emitter<HouseholdState> emit) async {
+      EditHouseholdSaveRequested event, Emitter<HouseholdState> emit) {
     Household household = state.household!.copyWith(
         geoLocation: event.geoLocation,
         sensitizationDate: event.sensitizationDate,
         comments: event.comments);
-    await _isarRepository.saveNewHousehold(household);
+    _hiveRepository.saveNewHousehold(household);
     emit(HouseholdLoaded(household: household));
   }
 
   void _onNewRespondentSaveRequested(
-      NewRespondentSaveRequested event, Emitter<HouseholdState> emit) async {
+      NewRespondentSaveRequested event, Emitter<HouseholdState> emit) {
     final household = state.household!.copyWith(
         respondents: [...state.household!.respondents, event.respondent]);
-    await _isarRepository.saveNewHousehold(household);
+    _hiveRepository.saveNewHousehold(household);
     emit(HouseholdLoaded(household: household));
   }
 
   void _onDeleteRespondentRequested(
-      DeleteRespondentRequested event, Emitter<HouseholdState> emit) async {
+      DeleteRespondentRequested event, Emitter<HouseholdState> emit) {
     var respondents = state.household!.respondents.toList();
     final household = state.household!
         .copyWith(respondents: respondents..removeAt(event.index));
-    await _isarRepository.saveNewHousehold(household);
+    _hiveRepository.saveNewHousehold(household);
     emit(HouseholdLoaded(household: household));
   }
 
   void _onRespondentOpened(
-      RespondentOpened event, Emitter<HouseholdState> emit) async {
+      RespondentOpened event, Emitter<HouseholdState> emit) {
     emit(HouseholdLoaded(
         household: state.household!, selectedRespondentIndex: event.index));
   }
 
   void _onEditRespondentSaveRequested(
-      EditRespondentSaveRequested event, Emitter<HouseholdState> emit) async {
+      EditRespondentSaveRequested event, Emitter<HouseholdState> emit) {
     var respondents = state.household!.respondents.toList();
     respondents[state.selectedRespondentIndex!] = event.respondent;
     final household = state.household!.copyWith(respondents: respondents);
-    await _isarRepository.saveNewHousehold(household);
+    _hiveRepository.saveNewHousehold(household);
     emit(HouseholdLoaded(
         household: household,
         selectedRespondentIndex: state.selectedRespondentIndex!));
@@ -107,14 +106,14 @@ class HouseholdBloc extends Bloc<HouseholdEvent, HouseholdState> {
     var respondents = state.household!.respondents.toList();
     respondents[state.selectedRespondentIndex!] = updatedRespondent;
     final household = state.household!.copyWith(respondents: respondents);
-    _isarRepository.saveNewHousehold(household);
+    _hiveRepository.saveNewHousehold(household);
     emit(HouseholdLoaded(
         household: household,
         selectedRespondentIndex: state.selectedRespondentIndex!));
   }
 
   void _onDeleteCollectionRequested(
-      DeleteCollectionRequested event, Emitter<HouseholdState> emit) async {
+      DeleteCollectionRequested event, Emitter<HouseholdState> emit) {
     final respondent =
         state.household!.respondents[state.selectedRespondentIndex!];
     final collections = respondent.collections.toList();
@@ -123,14 +122,14 @@ class HouseholdBloc extends Bloc<HouseholdEvent, HouseholdState> {
     var respondents = state.household!.respondents.toList();
     respondents[state.selectedRespondentIndex!] = updatedRespondent;
     final household = state.household!.copyWith(respondents: respondents);
-    await _isarRepository.saveNewHousehold(household);
+    _hiveRepository.saveNewHousehold(household);
     emit(HouseholdLoaded(
         household: household,
         selectedRespondentIndex: state.selectedRespondentIndex!));
   }
 
-  void _onNewAnthropometricsSaveRequested(NewAnthropometricsSaveRequested event,
-      Emitter<HouseholdState> emit) async {
+  void _onNewAnthropometricsSaveRequested(
+      NewAnthropometricsSaveRequested event, Emitter<HouseholdState> emit) {
     final respondent =
         state.household!.respondents[state.selectedRespondentIndex!];
     final updatedRespondent = respondent.copyWith(anthropometrics: [
@@ -140,14 +139,14 @@ class HouseholdBloc extends Bloc<HouseholdEvent, HouseholdState> {
     var respondents = state.household!.respondents.toList();
     respondents[state.selectedRespondentIndex!] = updatedRespondent;
     final household = state.household!.copyWith(respondents: respondents);
-    await _isarRepository.saveNewHousehold(household);
+    _hiveRepository.saveNewHousehold(household);
     emit(HouseholdLoaded(
         household: household,
         selectedRespondentIndex: state.selectedRespondentIndex!));
   }
 
-  void _onDeleteAnthropometricsRequested(DeleteAnthropometricsRequested event,
-      Emitter<HouseholdState> emit) async {
+  void _onDeleteAnthropometricsRequested(
+      DeleteAnthropometricsRequested event, Emitter<HouseholdState> emit) {
     final respondent =
         state.household!.respondents[state.selectedRespondentIndex!];
     final anthropometrics = respondent.anthropometrics.toList();
@@ -157,7 +156,7 @@ class HouseholdBloc extends Bloc<HouseholdEvent, HouseholdState> {
     var respondents = state.household!.respondents.toList();
     respondents[state.selectedRespondentIndex!] = updatedRespondent;
     final household = state.household!.copyWith(respondents: respondents);
-    await _isarRepository.saveNewHousehold(household);
+    _hiveRepository.saveNewHousehold(household);
     emit(HouseholdLoaded(
         household: household,
         selectedRespondentIndex: state.selectedRespondentIndex!));
