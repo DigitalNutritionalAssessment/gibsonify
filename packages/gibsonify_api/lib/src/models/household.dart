@@ -15,7 +15,7 @@ class Household extends Equatable {
   @HiveField(3)
   final String comments;
   @HiveField(4)
-  final List<Respondent> respondents;
+  final Map<String, Respondent> respondents;
 
   @override
   List<Object> get props => [
@@ -31,15 +31,15 @@ class Household extends Equatable {
     required this.sensitizationDate,
     required this.geoLocation,
     required this.comments,
-    this.respondents = const [],
+    this.respondents = const {},
   });
 
-  copyWith({
+  Household copyWith({
     String? householdId,
     DateTime? sensitizationDate,
     String? geoLocation,
     String? comments,
-    List<Respondent>? respondents,
+    Map<String, Respondent>? respondents,
   }) {
     return Household(
       householdId: householdId ?? this.householdId,

@@ -46,17 +46,18 @@ class HouseholdBloc extends Bloc<HouseholdEvent, HouseholdState> {
 
   void _onNewRespondentSaveRequested(
       NewRespondentSaveRequested event, Emitter<HouseholdState> emit) {
-    final household = state.household!.copyWith(
-        respondents: [...state.household!.respondents, event.respondent]);
+    var respondents = {...state.household!.respondents};
+    respondents[event.respondent.id] = event.respondent;
+    final household = state.household!.copyWith(respondents: respondents);
     _hiveRepository.saveNewHousehold(household);
     emit(HouseholdLoaded(household: household));
   }
 
   void _onDeleteRespondentRequested(
       DeleteRespondentRequested event, Emitter<HouseholdState> emit) {
-    var respondents = state.household!.respondents.toList();
-    final household = state.household!
-        .copyWith(respondents: respondents..removeAt(event.index));
+    var respondents = {...state.household!.respondents};
+    respondents.remove(event.id);
+    final household = state.household!.copyWith(respondents: respondents);
     _hiveRepository.saveNewHousehold(household);
     emit(HouseholdLoaded(household: household));
   }
@@ -64,32 +65,32 @@ class HouseholdBloc extends Bloc<HouseholdEvent, HouseholdState> {
   void _onRespondentOpened(
       RespondentOpened event, Emitter<HouseholdState> emit) {
     emit(HouseholdLoaded(
-        household: state.household!, selectedRespondentIndex: event.index));
+        household: state.household!, selectedRespondentId: event.id));
   }
 
   void _onEditRespondentSaveRequested(
       EditRespondentSaveRequested event, Emitter<HouseholdState> emit) {
-    var respondents = state.household!.respondents.toList();
-    respondents[state.selectedRespondentIndex!] = event.respondent;
+    var respondents = {...state.household!.respondents};
+    respondents[state.selectedRespondentId!] = event.respondent;
     final household = state.household!.copyWith(respondents: respondents);
     _hiveRepository.saveNewHousehold(household);
     emit(HouseholdLoaded(
         household: household,
-        selectedRespondentIndex: state.selectedRespondentIndex!));
+        selectedRespondentId: state.selectedRespondentId!));
   }
 
   void _onCollectionOpened(
       CollectionOpened event, Emitter<HouseholdState> emit) async {
     emit(HouseholdLoaded(
         household: state.household!,
-        selectedRespondentIndex: state.selectedRespondentIndex!,
+        selectedRespondentId: state.selectedRespondentId!,
         selectedCollectionIndex: event.index));
   }
 
   void _onSaveCollectionRequested(
       SaveCollectionRequested event, Emitter<HouseholdState> emit) {
     final respondent =
-        state.household!.respondents[state.selectedRespondentIndex!];
+        state.household!.respondents[state.selectedRespondentId!]!;
     late Respondent updatedRespondent;
 
     if (state.selectedCollectionIndex == null) {
@@ -103,62 +104,62 @@ class HouseholdBloc extends Bloc<HouseholdEvent, HouseholdState> {
       updatedRespondent = respondent.copyWith(collections: collections);
     }
 
-    var respondents = state.household!.respondents.toList();
-    respondents[state.selectedRespondentIndex!] = updatedRespondent;
+    var respondents = {...state.household!.respondents};
+    respondents[state.selectedRespondentId!] = updatedRespondent;
     final household = state.household!.copyWith(respondents: respondents);
     _hiveRepository.saveNewHousehold(household);
     emit(HouseholdLoaded(
         household: household,
-        selectedRespondentIndex: state.selectedRespondentIndex!));
+        selectedRespondentId: state.selectedRespondentId!));
   }
 
   void _onDeleteCollectionRequested(
       DeleteCollectionRequested event, Emitter<HouseholdState> emit) {
     final respondent =
-        state.household!.respondents[state.selectedRespondentIndex!];
+        state.household!.respondents[state.selectedRespondentId!]!;
     final collections = respondent.collections.toList();
     collections.removeAt(event.index);
     final updatedRespondent = respondent.copyWith(collections: collections);
-    var respondents = state.household!.respondents.toList();
-    respondents[state.selectedRespondentIndex!] = updatedRespondent;
+    var respondents = {...state.household!.respondents};
+    respondents[state.selectedRespondentId!] = updatedRespondent;
     final household = state.household!.copyWith(respondents: respondents);
     _hiveRepository.saveNewHousehold(household);
     emit(HouseholdLoaded(
         household: household,
-        selectedRespondentIndex: state.selectedRespondentIndex!));
+        selectedRespondentId: state.selectedRespondentId!));
   }
 
   void _onNewAnthropometricsSaveRequested(
       NewAnthropometricsSaveRequested event, Emitter<HouseholdState> emit) {
     final respondent =
-        state.household!.respondents[state.selectedRespondentIndex!];
+        state.household!.respondents[state.selectedRespondentId!]!;
     final updatedRespondent = respondent.copyWith(anthropometrics: [
       ...respondent.anthropometrics,
       event.anthropometrics
     ]);
-    var respondents = state.household!.respondents.toList();
-    respondents[state.selectedRespondentIndex!] = updatedRespondent;
+    var respondents = {...state.household!.respondents};
+    respondents[state.selectedRespondentId!] = updatedRespondent;
     final household = state.household!.copyWith(respondents: respondents);
     _hiveRepository.saveNewHousehold(household);
     emit(HouseholdLoaded(
         household: household,
-        selectedRespondentIndex: state.selectedRespondentIndex!));
+        selectedRespondentId: state.selectedRespondentId!));
   }
 
   void _onDeleteAnthropometricsRequested(
       DeleteAnthropometricsRequested event, Emitter<HouseholdState> emit) {
     final respondent =
-        state.household!.respondents[state.selectedRespondentIndex!];
+        state.household!.respondents[state.selectedRespondentId!]!;
     final anthropometrics = respondent.anthropometrics.toList();
     anthropometrics.removeAt(event.index);
     final updatedRespondent =
         respondent.copyWith(anthropometrics: anthropometrics);
-    var respondents = state.household!.respondents.toList();
-    respondents[state.selectedRespondentIndex!] = updatedRespondent;
+    var respondents = {...state.household!.respondents};
+    respondents[state.selectedRespondentId!] = updatedRespondent;
     final household = state.household!.copyWith(respondents: respondents);
     _hiveRepository.saveNewHousehold(household);
     emit(HouseholdLoaded(
         household: household,
-        selectedRespondentIndex: state.selectedRespondentIndex!));
+        selectedRespondentId: state.selectedRespondentId!));
   }
 }

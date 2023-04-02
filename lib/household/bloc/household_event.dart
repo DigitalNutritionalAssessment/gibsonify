@@ -36,21 +36,21 @@ class NewRespondentSaveRequested extends HouseholdEvent {
 }
 
 class DeleteRespondentRequested extends HouseholdEvent {
-  final int index;
+  final String id;
 
-  const DeleteRespondentRequested({required this.index});
+  const DeleteRespondentRequested({required this.id});
 
   @override
-  List<Object> get props => [index];
+  List<Object> get props => [id];
 }
 
 class RespondentOpened extends HouseholdEvent {
-  final int index;
+  final String id;
 
-  const RespondentOpened({required this.index});
+  const RespondentOpened({required this.id});
 
   @override
-  List<Object> get props => [index];
+  List<Object> get props => [id];
 }
 
 class EditRespondentSaveRequested extends HouseholdEvent {

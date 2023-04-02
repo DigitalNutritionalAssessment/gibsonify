@@ -28,7 +28,7 @@ class CollectionPage extends StatelessWidget {
                 ? GibsonsFormProvided(
                     gibsonsForm: householdState
                         .household!
-                        .respondents[householdState.selectedRespondentIndex!]
+                        .respondents[householdState.selectedRespondentId!]!
                         .collections[householdState.selectedCollectionIndex!])
                 : GibsonsFormCreated(
                     employeeNumber: loginState.loginInfo.employeeId!));

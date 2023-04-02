@@ -2,17 +2,17 @@ part of 'household_bloc.dart';
 
 class HouseholdState extends Equatable {
   final Household? household;
-  final int? selectedRespondentIndex;
+  final String? selectedRespondentId;
   final int? selectedCollectionIndex;
 
   const HouseholdState(
       {this.household,
-      this.selectedRespondentIndex,
+      this.selectedRespondentId,
       this.selectedCollectionIndex});
 
   @override
   List<Object?> get props =>
-      [household, selectedRespondentIndex, selectedCollectionIndex];
+      [household, selectedRespondentId, selectedCollectionIndex];
 }
 
 class HouseholdInitial extends HouseholdState {
@@ -22,11 +22,11 @@ class HouseholdInitial extends HouseholdState {
 class HouseholdLoaded extends HouseholdState {
   const HouseholdLoaded(
       {required Household household,
-      int? selectedRespondentIndex,
+      String? selectedRespondentId,
       int? selectedCollectionIndex})
       : super(
             household: household,
-            selectedRespondentIndex: selectedRespondentIndex,
+            selectedRespondentId: selectedRespondentId,
             selectedCollectionIndex: selectedCollectionIndex);
 }
 

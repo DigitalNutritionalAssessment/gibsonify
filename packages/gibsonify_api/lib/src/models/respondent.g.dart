@@ -17,39 +17,42 @@ class RespondentAdapter extends TypeAdapter<Respondent> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Respondent(
-      name: fields[0] as String,
-      phoneNumber: fields[1] as String,
-      dateOfBirth: fields[2] as DateTime?,
-      sex: fields[3] as Sex?,
-      literacyLevel: fields[4] as LiteracyLevel?,
-      occupation: fields[5] as Occupation?,
-      comments: fields[6] as String,
-      collections: (fields[7] as List).cast<GibsonsForm>(),
-      anthropometrics: (fields[8] as List).cast<Anthropometrics>(),
+      id: fields[0] as String,
+      name: fields[1] as String,
+      phoneNumber: fields[2] as String,
+      dateOfBirth: fields[3] as DateTime,
+      sex: fields[4] as Sex,
+      literacyLevel: fields[5] as LiteracyLevel,
+      occupation: fields[6] as Occupation,
+      comments: fields[7] as String,
+      collections: (fields[8] as List).cast<GibsonsForm>(),
+      anthropometrics: (fields[9] as List).cast<Anthropometrics>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, Respondent obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(10)
       ..writeByte(0)
-      ..write(obj.name)
+      ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.phoneNumber)
+      ..write(obj.name)
       ..writeByte(2)
-      ..write(obj.dateOfBirth)
+      ..write(obj.phoneNumber)
       ..writeByte(3)
-      ..write(obj.sex)
+      ..write(obj.dateOfBirth)
       ..writeByte(4)
-      ..write(obj.literacyLevel)
+      ..write(obj.sex)
       ..writeByte(5)
-      ..write(obj.occupation)
+      ..write(obj.literacyLevel)
       ..writeByte(6)
-      ..write(obj.comments)
+      ..write(obj.occupation)
       ..writeByte(7)
-      ..write(obj.collections)
+      ..write(obj.comments)
       ..writeByte(8)
+      ..write(obj.collections)
+      ..writeByte(9)
       ..write(obj.anthropometrics);
   }
 

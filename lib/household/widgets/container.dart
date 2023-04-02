@@ -54,7 +54,7 @@ Route _onGenerateRoute(RouteSettings settings) {
       break;
     case PageRouter.viewRespondent:
       final args = settings.arguments as Map<String, dynamic>;
-      page = ViewRespondentPage(index: args['index']);
+      page = ViewRespondentPage(id: args['id']);
       break;
     case PageRouter.editRespondent:
       page = const EditRespondentPage();

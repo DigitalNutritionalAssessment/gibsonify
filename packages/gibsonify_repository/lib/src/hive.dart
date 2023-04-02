@@ -33,12 +33,6 @@ class HiveRepository {
     householdBox.delete(householdId);
   }
 
-  void saveNewRespondent(String householdId, Respondent respondent) {
-    final household = householdBox.get(householdId);
-    household!.respondents.add(respondent);
-    householdBox.put(householdId, household);
-  }
-
   Iterable<Survey> readSurveys() {
     return surveyBox.values;
   }

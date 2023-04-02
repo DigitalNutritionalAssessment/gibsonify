@@ -21,7 +21,7 @@ class HouseholdAdapter extends TypeAdapter<Household> {
       sensitizationDate: fields[1] as DateTime,
       geoLocation: fields[2] as String,
       comments: fields[3] as String,
-      respondents: (fields[4] as List).cast<Respondent>(),
+      respondents: (fields[4] as Map).cast<String, Respondent>(),
     );
   }
 

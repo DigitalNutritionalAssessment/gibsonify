@@ -32,7 +32,7 @@ class ImportExportBloc extends Bloc<ImportExportEvent, ImportExportState> {
     List<Recipe> recipes = _gibsonifyRepository.loadRecipes();
 
     int finishedGibsonsFormsNumber = households
-        .expand((household) => household.respondents
+        .expand((household) => household.respondents.values
             .expand((respondent) => respondent.collections))
         .where((gibsonsForm) => gibsonsForm.finished)
         .length;
@@ -94,7 +94,7 @@ class ImportExportBloc extends Bloc<ImportExportEvent, ImportExportState> {
     List<Recipe> recipes = _gibsonifyRepository.loadRecipes();
 
     int finishedGibsonsFormsNumber = households
-        .expand((household) => household.respondents
+        .expand((household) => household.respondents.values
             .expand((respondent) => respondent.collections))
         .where((gibsonsForm) => gibsonsForm.finished)
         .length;

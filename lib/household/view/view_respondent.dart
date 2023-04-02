@@ -6,9 +6,9 @@ import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:intl/intl.dart';
 
 class ViewRespondentPage extends StatefulWidget {
-  final int index;
+  final String id;
 
-  const ViewRespondentPage({Key? key, required this.index}) : super(key: key);
+  const ViewRespondentPage({Key? key, required this.id}) : super(key: key);
 
   @override
   State<ViewRespondentPage> createState() => _ViewRespondentPageState();
@@ -42,7 +42,7 @@ class _ViewRespondentPageState extends State<ViewRespondentPage>
 
     return BlocBuilder<HouseholdBloc, HouseholdState>(
       builder: (context, state) {
-        final respondent = state.household!.respondents[widget.index];
+        final respondent = state.household!.respondents[widget.id]!;
 
         Widget respondentInfo() {
           return Column(
@@ -58,25 +58,25 @@ class _ViewRespondentPageState extends State<ViewRespondentPage>
                 readOnly: true,
                 decoration: const InputDecoration(
                     labelText: 'Date of Birth', icon: Icon(Icons.cake)),
-                initialValue: formatter.format(respondent.dateOfBirth!),
+                initialValue: formatter.format(respondent.dateOfBirth),
               ),
               TextFormField(
                 readOnly: true,
                 decoration: const InputDecoration(
                     labelText: 'Sex', icon: Icon(Icons.wc)),
-                initialValue: toBeginningOfSentenceCase(respondent.sex!.name),
+                initialValue: toBeginningOfSentenceCase(respondent.sex.name),
               ),
               TextFormField(
                 readOnly: true,
                 decoration: const InputDecoration(
                     labelText: 'Literacy Level', icon: Icon(Icons.translate)),
-                initialValue: literacyLevelToString(respondent.literacyLevel!),
+                initialValue: literacyLevelToString(respondent.literacyLevel),
               ),
               TextFormField(
                 readOnly: true,
                 decoration: const InputDecoration(
                     labelText: 'Occupation', icon: Icon(Icons.work)),
-                initialValue: occupationToString(respondent.occupation!),
+                initialValue: occupationToString(respondent.occupation),
               ),
               TextFormField(
                 readOnly: true,

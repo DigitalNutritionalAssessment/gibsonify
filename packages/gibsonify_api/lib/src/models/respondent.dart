@@ -1,6 +1,7 @@
 import 'package:gibsonify_api/src/models/anthropometrics.dart';
 import 'package:gibsonify_api/src/models/gibsons_form.dart';
 import 'package:hive/hive.dart';
+import 'package:uuid/uuid.dart';
 
 part 'respondent.g.dart';
 
@@ -97,37 +98,53 @@ String occupationToString(Occupation occupation) {
 @HiveType(typeId: 1)
 class Respondent {
   @HiveField(0)
-  final String name;
+  final String id;
   @HiveField(1)
-  final String phoneNumber;
+  final String name;
   @HiveField(2)
-  final DateTime? dateOfBirth;
+  final String phoneNumber;
   @HiveField(3)
-  final Sex? sex;
+  final DateTime dateOfBirth;
   @HiveField(4)
-  final LiteracyLevel? literacyLevel;
+  final Sex sex;
   @HiveField(5)
-  final Occupation? occupation;
+  final LiteracyLevel literacyLevel;
   @HiveField(6)
-  final String comments;
+  final Occupation occupation;
   @HiveField(7)
-  final List<GibsonsForm> collections;
+  final String comments;
   @HiveField(8)
+  final List<GibsonsForm> collections;
+  @HiveField(9)
   final List<Anthropometrics> anthropometrics;
 
   Respondent({
-    this.name = "",
-    this.phoneNumber = "",
-    this.dateOfBirth,
-    this.sex,
-    this.literacyLevel,
-    this.occupation,
-    this.comments = "",
-    this.collections = const [],
-    this.anthropometrics = const [],
+    required this.id,
+    required this.name,
+    required this.phoneNumber,
+    required this.dateOfBirth,
+    required this.sex,
+    required this.literacyLevel,
+    required this.occupation,
+    required this.comments,
+    required this.collections,
+    required this.anthropometrics,
   });
 
+  Respondent.create(
+      {required this.name,
+      required this.phoneNumber,
+      required this.dateOfBirth,
+      required this.sex,
+      required this.literacyLevel,
+      required this.occupation,
+      required this.comments,
+      this.collections = const [],
+      this.anthropometrics = const []})
+      : id = Uuid().v4();
+
   Respondent copyWith({
+    String? id,
     String? name,
     String? phoneNumber,
     DateTime? dateOfBirth,
@@ -139,6 +156,7 @@ class Respondent {
     List<Anthropometrics>? anthropometrics,
   }) {
     return Respondent(
+      id: id ?? this.id,
       name: name ?? this.name,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       dateOfBirth: dateOfBirth ?? this.dateOfBirth,

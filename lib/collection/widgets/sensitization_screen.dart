@@ -270,10 +270,8 @@ class PhysioStatusInput extends StatelessWidget {
                 icon: Icon(Icons.health_and_safety),
                 helperText: 'Whether the respondent is pregnant or lactating',
               ),
-              enabled: householdState
-                      .household!
-                      .respondents[householdState.selectedRespondentIndex!]
-                      .sex ==
+              enabled: householdState.household!
+                      .respondents[householdState.selectedRespondentId!]!.sex ==
                   Sex.female,
               initialValue: collectionState.gibsonsForm.physioStatus,
               onChanged: (PhysioStatus? physioStatus) {
