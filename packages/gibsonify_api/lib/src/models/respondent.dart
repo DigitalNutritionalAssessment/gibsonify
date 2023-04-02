@@ -114,7 +114,7 @@ class Respondent {
   @HiveField(7)
   final String comments;
   @HiveField(8)
-  final List<GibsonsForm> collections;
+  final Map<String, GibsonsForm> collections;
   @HiveField(9)
   final List<Anthropometrics> anthropometrics;
 
@@ -139,7 +139,7 @@ class Respondent {
       required this.literacyLevel,
       required this.occupation,
       required this.comments,
-      this.collections = const [],
+      this.collections = const {},
       this.anthropometrics = const []})
       : id = Uuid().v4();
 
@@ -152,7 +152,7 @@ class Respondent {
     LiteracyLevel? literacyLevel,
     Occupation? occupation,
     String? comments,
-    List<GibsonsForm>? collections,
+    Map<String, GibsonsForm>? collections,
     List<Anthropometrics>? anthropometrics,
   }) {
     return Respondent(

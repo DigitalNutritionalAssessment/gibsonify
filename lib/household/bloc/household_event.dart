@@ -63,12 +63,12 @@ class EditRespondentSaveRequested extends HouseholdEvent {
 }
 
 class CollectionOpened extends HouseholdEvent {
-  final int index;
+  final String id;
 
-  const CollectionOpened({required this.index});
+  const CollectionOpened({required this.id});
 
   @override
-  List<Object> get props => [index];
+  List<Object> get props => [id];
 }
 
 class SaveCollectionRequested extends HouseholdEvent {
@@ -81,12 +81,12 @@ class SaveCollectionRequested extends HouseholdEvent {
 }
 
 class DeleteCollectionRequested extends HouseholdEvent {
-  final int index;
+  final String id;
 
-  const DeleteCollectionRequested({required this.index});
+  const DeleteCollectionRequested({required this.id});
 
   @override
-  List<Object> get props => [index];
+  List<Object> get props => [id];
 }
 
 class NewAnthropometricsSaveRequested extends HouseholdEvent {

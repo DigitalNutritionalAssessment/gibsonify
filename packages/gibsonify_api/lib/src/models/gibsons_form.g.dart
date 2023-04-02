@@ -17,6 +17,7 @@ class GibsonsFormAdapter extends TypeAdapter<GibsonsForm> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return GibsonsForm(
+      id: fields[0] as String?,
       employeeNumber: fields[1] as String?,
       surveyId: fields[2] as String?,
       recallDay: fields[3] as String?,

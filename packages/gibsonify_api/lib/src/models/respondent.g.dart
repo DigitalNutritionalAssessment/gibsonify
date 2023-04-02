@@ -25,7 +25,7 @@ class RespondentAdapter extends TypeAdapter<Respondent> {
       literacyLevel: fields[5] as LiteracyLevel,
       occupation: fields[6] as Occupation,
       comments: fields[7] as String,
-      collections: (fields[8] as List).cast<GibsonsForm>(),
+      collections: (fields[8] as Map).cast<String, GibsonsForm>(),
       anthropometrics: (fields[9] as List).cast<Anthropometrics>(),
     );
   }

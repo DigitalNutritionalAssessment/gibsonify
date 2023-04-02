@@ -35,7 +35,7 @@ String physioStatusToString(PhysioStatus physioStatus) {
 @HiveType(typeId: 5)
 class GibsonsForm extends Equatable {
   GibsonsForm(
-      {String? formId,
+      {String? id,
       this.employeeNumber,
       this.surveyId,
       this.recallDay, // TODO: rename to recallDayType
@@ -53,7 +53,7 @@ class GibsonsForm extends Equatable {
       this.comments,
       this.finished = false,
       this.foodItems = const <FoodItem>[]})
-      : id = formId ?? const Uuid().v4();
+      : id = id ?? const Uuid().v4();
 
   @HiveField(0)
   final String id;
@@ -185,7 +185,7 @@ class GibsonsForm extends Equatable {
       bool? finished,
       List<FoodItem>? foodItems}) {
     return GibsonsForm(
-        formId: id ?? this.id,
+        id: id ?? this.id,
         employeeNumber: employeeNumber ?? this.employeeNumber,
         surveyId: surveyId ?? this.surveyId,
         recallDay: recallDay ?? this.recallDay,

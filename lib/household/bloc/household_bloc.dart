@@ -84,28 +84,17 @@ class HouseholdBloc extends Bloc<HouseholdEvent, HouseholdState> {
     emit(HouseholdLoaded(
         household: state.household!,
         selectedRespondentId: state.selectedRespondentId!,
-        selectedCollectionIndex: event.index));
+        selectedCollectionId: event.id));
   }
 
   void _onSaveCollectionRequested(
       SaveCollectionRequested event, Emitter<HouseholdState> emit) {
-    final respondent =
-        state.household!.respondents[state.selectedRespondentId!]!;
-    late Respondent updatedRespondent;
-
-    if (state.selectedCollectionIndex == null) {
-      // New collection
-      updatedRespondent = respondent.copyWith(
-          collections: [...respondent.collections, event.gibsonsForm]);
-    } else {
-      // Modified collection
-      final collections = respondent.collections.toList();
-      collections[state.selectedCollectionIndex!] = event.gibsonsForm;
-      updatedRespondent = respondent.copyWith(collections: collections);
-    }
-
     var respondents = {...state.household!.respondents};
-    respondents[state.selectedRespondentId!] = updatedRespondent;
+    var respondent = respondents[state.selectedRespondentId!]!;
+    final collections = {...respondent.collections};
+    collections[event.gibsonsForm.id] = event.gibsonsForm;
+    respondents[state.selectedRespondentId!] =
+        respondent.copyWith(collections: collections);
     final household = state.household!.copyWith(respondents: respondents);
     _hiveRepository.saveNewHousehold(household);
     emit(HouseholdLoaded(
@@ -117,8 +106,8 @@ class HouseholdBloc extends Bloc<HouseholdEvent, HouseholdState> {
       DeleteCollectionRequested event, Emitter<HouseholdState> emit) {
     final respondent =
         state.household!.respondents[state.selectedRespondentId!]!;
-    final collections = respondent.collections.toList();
-    collections.removeAt(event.index);
+    final collections = {...respondent.collections};
+    collections.remove(event.id);
     final updatedRespondent = respondent.copyWith(collections: collections);
     var respondents = {...state.household!.respondents};
     respondents[state.selectedRespondentId!] = updatedRespondent;

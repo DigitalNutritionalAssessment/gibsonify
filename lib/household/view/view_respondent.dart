@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gibsonify/collection/collection.dart';
 import 'package:gibsonify/household/household.dart';
 import 'package:gibsonify/navigation/models/page_router.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
@@ -131,10 +132,12 @@ class _ViewRespondentPageState extends State<ViewRespondentPage>
             );
           }
 
+          final collections = respondent.collections.values.toList();
+
           return ListView.builder(
-              itemCount: respondent.collections.length,
+              itemCount: collections.length,
               itemBuilder: (context, index) {
-                final collection = respondent.collections[index];
+                final collection = collections[index];
                 return Card(
                   child: ListTile(
                       title: Text(collection.interviewDate ?? 'No date'),
@@ -157,14 +160,18 @@ class _ViewRespondentPageState extends State<ViewRespondentPage>
                       onTap: () => {
                             context
                                 .read<HouseholdBloc>()
-                                .add(CollectionOpened(index: index)),
-                            Navigator.pushNamed(context, PageRouter.collection)
+                                .add(CollectionOpened(id: collection.id)),
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => CollectionPage(
+                                        gibsonsForm: collection)))
                           },
                       onLongPress: () => showModalBottomSheet(
                           context: context,
                           builder: (context) {
                             return CollectionOptions(
-                                index: index,
+                                id: collection.id,
                                 date: collection.interviewDate ?? 'No date');
                           })),
                 );
@@ -186,8 +193,10 @@ class _ViewRespondentPageState extends State<ViewRespondentPage>
             );
           } else if (activeIndex == 1) {
             return FloatingActionButton(
-              onPressed: () =>
-                  Navigator.pushNamed(context, PageRouter.collection),
+              onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const CollectionPage())),
               child: const Icon(Icons.add),
             );
           } else {
@@ -250,10 +259,10 @@ class AnthropometricsOptions extends StatelessWidget {
 }
 
 class CollectionOptions extends StatelessWidget {
-  final int index;
+  final String id;
   final String date;
 
-  const CollectionOptions({Key? key, required this.index, required this.date})
+  const CollectionOptions({Key? key, required this.id, required this.date})
       : super(key: key);
 
   @override
@@ -269,7 +278,7 @@ class CollectionOptions extends StatelessWidget {
           onTap: () {
             context
                 .read<HouseholdBloc>()
-                .add(DeleteCollectionRequested(index: index));
+                .add(DeleteCollectionRequested(id: id));
             Navigator.pop(context);
           },
         )

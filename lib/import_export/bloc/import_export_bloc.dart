@@ -33,7 +33,7 @@ class ImportExportBloc extends Bloc<ImportExportEvent, ImportExportState> {
 
     int finishedGibsonsFormsNumber = households
         .expand((household) => household.respondents.values
-            .expand((respondent) => respondent.collections))
+            .expand((respondent) => respondent.collections.values))
         .where((gibsonsForm) => gibsonsForm.finished)
         .length;
     int recipesNumber = recipes.length;
@@ -95,7 +95,7 @@ class ImportExportBloc extends Bloc<ImportExportEvent, ImportExportState> {
 
     int finishedGibsonsFormsNumber = households
         .expand((household) => household.respondents.values
-            .expand((respondent) => respondent.collections))
+            .expand((respondent) => respondent.collections.values))
         .where((gibsonsForm) => gibsonsForm.finished)
         .length;
     int recipesNumber = recipes.length;

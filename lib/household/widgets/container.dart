@@ -59,9 +59,6 @@ Route _onGenerateRoute(RouteSettings settings) {
     case PageRouter.editRespondent:
       page = const EditRespondentPage();
       break;
-    case PageRouter.collection:
-      page = const CollectionPage();
-      break;
     case PageRouter.chooseRecipe:
       final args = settings.arguments as Map<String, dynamic>;
       page = ChooseRecipePage(
