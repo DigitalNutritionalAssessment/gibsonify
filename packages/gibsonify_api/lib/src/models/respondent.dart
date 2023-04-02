@@ -1,22 +1,54 @@
 import 'package:gibsonify_api/src/models/anthropometrics.dart';
 import 'package:gibsonify_api/src/models/gibsons_form.dart';
+import 'package:hive/hive.dart';
 
-enum Sex { male, female }
+part 'respondent.g.dart';
 
-enum LiteracyLevel { illiterate, readWrite, readOnly, signatureOnly }
+@HiveType(typeId: 2)
+enum Sex {
+  @HiveField(0)
+  male,
+  @HiveField(1)
+  female
+}
 
+@HiveType(typeId: 3)
+enum LiteracyLevel {
+  @HiveField(0)
+  illiterate,
+  @HiveField(1)
+  readWrite,
+  @HiveField(2)
+  readOnly,
+  @HiveField(3)
+  signatureOnly
+}
+
+@HiveType(typeId: 4)
 enum Occupation {
+  @HiveField(0)
   domestic,
+  @HiveField(1)
   farmer,
+  @HiveField(2)
   agriculturalLabour,
+  @HiveField(3)
   casualLabour,
+  @HiveField(4)
   mgnrega,
+  @HiveField(5)
   salariedNonAgricultural,
+  @HiveField(6)
   ownAccountEmployment,
+  @HiveField(7)
   collectiveNonAgricultural,
+  @HiveField(8)
   unableToWork,
+  @HiveField(9)
   student,
+  @HiveField(10)
   salariedGovernment,
+  @HiveField(11)
   other
 }
 
@@ -62,15 +94,25 @@ String occupationToString(Occupation occupation) {
   }
 }
 
+@HiveType(typeId: 1)
 class Respondent {
+  @HiveField(0)
   final String name;
+  @HiveField(1)
   final String phoneNumber;
+  @HiveField(2)
   final DateTime? dateOfBirth;
+  @HiveField(3)
   final Sex? sex;
+  @HiveField(4)
   final LiteracyLevel? literacyLevel;
+  @HiveField(5)
   final Occupation? occupation;
+  @HiveField(6)
   final String comments;
+  @HiveField(7)
   final List<GibsonsForm> collections;
+  @HiveField(8)
   final List<Anthropometrics> anthropometrics;
 
   Respondent({

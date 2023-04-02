@@ -1,11 +1,20 @@
 import 'package:equatable/equatable.dart';
 import 'package:gibsonify_api/src/models/models.dart';
+import 'package:hive/hive.dart';
 
+part 'household.g.dart';
+
+@HiveType(typeId: 0)
 class Household extends Equatable {
+  @HiveField(0)
   final String householdId;
+  @HiveField(1)
   final DateTime sensitizationDate;
+  @HiveField(2)
   final String geoLocation;
+  @HiveField(3)
   final String comments;
+  @HiveField(4)
   final List<Respondent> respondents;
 
   @override

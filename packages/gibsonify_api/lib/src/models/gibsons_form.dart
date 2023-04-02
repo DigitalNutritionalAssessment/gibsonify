@@ -1,10 +1,23 @@
 import 'dart:convert';
 import 'package:equatable/equatable.dart';
+import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
 
-enum PhysioStatus { notApplicable, pregnant, lactatingH1, lactatingH2 }
+part 'gibsons_form.g.dart';
+
+@HiveType(typeId: 6)
+enum PhysioStatus {
+  @HiveField(0)
+  notApplicable,
+  @HiveField(1)
+  pregnant,
+  @HiveField(2)
+  lactatingH1,
+  @HiveField(3)
+  lactatingH2
+}
 
 String physioStatusToString(PhysioStatus physioStatus) {
   switch (physioStatus) {
@@ -19,6 +32,7 @@ String physioStatusToString(PhysioStatus physioStatus) {
   }
 }
 
+@HiveType(typeId: 5)
 class GibsonsForm extends Equatable {
   GibsonsForm(
       {String? formId,
@@ -41,23 +55,41 @@ class GibsonsForm extends Equatable {
       this.foodItems = const <FoodItem>[]})
       : id = formId ?? const Uuid().v4();
 
+  @HiveField(0)
   final String id;
+  @HiveField(1)
   final String? employeeNumber;
+  @HiveField(2)
   final String? surveyId;
+  @HiveField(3)
   final String? recallDay; // TODO: change to an enum
+  @HiveField(4)
   final String? interviewDate;
+  @HiveField(5)
   final String? interviewStartTime;
+  @HiveField(6)
   final PhysioStatus physioStatus;
+  @HiveField(7)
   final String? pictureChartCollected; // TODO: change to a bool
+  @HiveField(8)
   final String? pictureChartNotCollectedReason;
+  @HiveField(9)
   final String? interviewEndTime;
+  @HiveField(10)
   final String? interviewFinishedInOneVisit; // TODO: change to a bool
+  @HiveField(11)
   final String? secondInterviewVisitDate;
+  @HiveField(12)
   final String? secondVisitReason;
+  @HiveField(13)
   final String? interviewOutcome; // TODO: change to an enum
+  @HiveField(14)
   final String? interviewOutcomeNotCompletedReason;
+  @HiveField(15)
   final String? comments;
+  @HiveField(16)
   final bool finished;
+  @HiveField(17)
   final List<FoodItem> foodItems;
 
   // TODO: implement code generation JSON serialization using json_serializable

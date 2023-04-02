@@ -11,6 +11,7 @@ void main() async {
   // Initializing shared preferences before calling runApp needs the following:
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
+  registerAdapters();
 
   final gibsonifyApi =
       GibsonifyApi(sharedPreferences: await SharedPreferences.getInstance());

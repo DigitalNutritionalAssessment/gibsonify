@@ -1,13 +1,19 @@
 import 'package:equatable/equatable.dart';
+import 'package:hive/hive.dart';
 import 'dart:convert';
 import 'package:uuid/uuid.dart';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
 
+part 'recipe_probe.g.dart';
+
+@HiveType(typeId: 12)
 class ProbeOption extends Equatable {
   ProbeOption({this.option, this.id = ''});
 
+  @HiveField(0)
   final String? option;
+  @HiveField(1)
   final String id;
 
   ProbeOption.fromJson(Map<String, dynamic> json)
@@ -36,6 +42,7 @@ class ProbeOption extends Equatable {
   List<Object?> get props => [option, id];
 }
 
+@HiveType(typeId: 11)
 class Probe extends Equatable {
   Probe(
       {this.name,
@@ -43,9 +50,13 @@ class Probe extends Equatable {
       this.answer,
       this.probeOptions = const []});
 
+  @HiveField(0)
   final String? name;
+  @HiveField(1)
   final bool checked;
+  @HiveField(2)
   final String? answer;
+  @HiveField(3)
   final List<ProbeOption> probeOptions;
 
   String probeNameDisplay() {

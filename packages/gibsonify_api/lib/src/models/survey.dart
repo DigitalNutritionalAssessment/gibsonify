@@ -1,10 +1,19 @@
 import 'package:equatable/equatable.dart';
+import 'package:hive/hive.dart';
 
+part 'survey.g.dart';
+
+@HiveType(typeId: 14)
 class Survey extends Equatable {
+  @HiveField(0)
   final String surveyId;
+  @HiveField(1)
   final String name;
+  @HiveField(2)
   final String country;
+  @HiveField(3)
   final String? description;
+  @HiveField(4)
   final String? comments;
 
   Survey(
