@@ -157,28 +157,18 @@ class SurveyOptions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) =>
-          SurveysBloc(hiveRepository: context.read<HiveRepository>()),
-      child: BlocBuilder<SurveysBloc, SurveysState>(
-        builder: (context, state) {
-          final List<Widget> options = [
-            ListTile(title: Text(surveyId)),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.delete),
-              title: const Text('Delete'),
-              onTap: () {
-                context
-                    .read<SurveysBloc>()
-                    .add(SurveyDeleteRequested(id: surveyId));
-                Navigator.pop(context);
-              },
-            )
-          ];
-          return Wrap(children: options);
+    final List<Widget> options = [
+      ListTile(title: Text(surveyId)),
+      const Divider(),
+      ListTile(
+        leading: const Icon(Icons.delete),
+        title: const Text('Delete'),
+        onTap: () {
+          context.read<SurveysBloc>().add(SurveyDeleteRequested(id: surveyId));
+          Navigator.pop(context);
         },
-      ),
-    );
+      )
+    ];
+    return Wrap(children: options);
   }
 }
