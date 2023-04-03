@@ -30,7 +30,6 @@ class HouseholdsBloc extends Bloc<HouseholdsEvent, HouseholdsState> {
 
   void _onHouseholdsPageOpened(
       HouseholdsPageOpened event, Emitter<HouseholdsState> emit) {
-    // Callback fires immediately so no need to manually request an update on initialisation
     final households = _hiveRepository.readHouseholds().toList();
     emit(state.copyWith(households: households));
 
@@ -50,6 +49,7 @@ class HouseholdsBloc extends Bloc<HouseholdsEvent, HouseholdsState> {
   void _onHouseholdDeleteRequested(
       HouseholdDeleteRequested event, Emitter<HouseholdsState> emit) {
     _hiveRepository.deleteHousehold(event.id);
+    add(const HouseholdsUpdateRequested());
   }
 
   void _onHouseholdsUpdateRequested(
@@ -69,7 +69,7 @@ class HouseholdsBloc extends Bloc<HouseholdsEvent, HouseholdsState> {
 
     List<int> distances = [];
     if (state.location != null) {
-      for (var household in households) {
+      for (Household household in households) {
         final distance = Geolocator.distanceBetween(state.location!.latitude,
             state.location!.longitude, household.getLat(), household.getLng());
         distances.add(distance.toInt());
@@ -96,6 +96,7 @@ class HouseholdsBloc extends Bloc<HouseholdsEvent, HouseholdsState> {
   void _onNewHouseholdSaveRequested(
       NewHouseholdSaveRequested event, Emitter<HouseholdsState> emit) {
     _hiveRepository.saveNewHousehold(event.household);
+    add(const HouseholdsUpdateRequested());
   }
 
   void _onHouseholdsSortOrderUpdated(

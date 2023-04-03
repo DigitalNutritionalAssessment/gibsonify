@@ -22,6 +22,7 @@ class HouseholdsScreen extends StatelessWidget {
               ..add(const HouseholdsPageOpened()),
         child: BlocBuilder<HouseholdsBloc, HouseholdsState>(
           builder: (context, state) {
+            final bloc = context.read<HouseholdsBloc>();
             return Scaffold(
                 appBar: AppBar(
                   title: const Text('Households'),
@@ -101,6 +102,7 @@ class HouseholdsScreen extends StatelessWidget {
                                 context: context,
                                 builder: (context) {
                                   return HouseholdOptions(
+                                      bloc: bloc,
                                       householdId: household.householdId);
                                 }),
                           ));
@@ -143,35 +145,27 @@ class HouseholdsScreen extends StatelessWidget {
 }
 
 class HouseholdOptions extends StatelessWidget {
-  const HouseholdOptions({Key? key, required this.householdId})
+  const HouseholdOptions(
+      {Key? key, required this.householdId, required this.bloc})
       : super(key: key);
 
   final String householdId;
+  final HouseholdsBloc bloc;
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) =>
-          HouseholdsBloc(hiveRepository: context.read<HiveRepository>()),
-      child: BlocBuilder<HouseholdsBloc, HouseholdsState>(
-        builder: (context, state) {
-          final List<Widget> options = [
-            ListTile(title: Text(householdId)),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.delete),
-              title: const Text('Delete'),
-              onTap: () {
-                context
-                    .read<HouseholdsBloc>()
-                    .add(HouseholdDeleteRequested(id: householdId));
-                Navigator.pop(context);
-              },
-            )
-          ];
-          return Wrap(children: options);
+    final List<Widget> options = [
+      ListTile(title: Text(householdId)),
+      const Divider(),
+      ListTile(
+        leading: const Icon(Icons.delete),
+        title: const Text('Delete'),
+        onTap: () {
+          bloc.add(HouseholdDeleteRequested(id: householdId));
+          Navigator.pop(context);
         },
-      ),
-    );
+      )
+    ];
+    return Wrap(children: options);
   }
 }
