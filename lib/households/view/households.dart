@@ -7,6 +7,8 @@ import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:gibsonify_repository/gibsonify_repository.dart';
 import 'package:intl/intl.dart';
 
+enum HouseholdsSortBy { householdId, sensitizationDate, distance }
+
 class HouseholdsScreen extends StatelessWidget {
   const HouseholdsScreen({Key? key}) : super(key: key);
 
@@ -25,6 +27,45 @@ class HouseholdsScreen extends StatelessWidget {
                   title: const Text('Households'),
                   actions: [
                     IconButton(
+                        onPressed: () => context
+                            .read<HouseholdsBloc>()
+                            .add(const LocationUpdateRequested()),
+                        icon: const Icon(Icons.refresh)),
+                    IconButton(
+                        onPressed: () async {
+                          final sortBy = await showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return SimpleDialog(
+                                    title: const Text('Sort by'),
+                                    children: [
+                                      SimpleDialogOption(
+                                          onPressed: () => Navigator.pop(
+                                              context,
+                                              HouseholdsSortBy.householdId),
+                                          child: const Text('Household ID')),
+                                      SimpleDialogOption(
+                                          onPressed: () => Navigator.pop(
+                                              context,
+                                              HouseholdsSortBy
+                                                  .sensitizationDate),
+                                          child:
+                                              const Text('Sensitization Date')),
+                                      SimpleDialogOption(
+                                          onPressed: () => Navigator.pop(
+                                              context,
+                                              HouseholdsSortBy.distance),
+                                          child: const Text('Distance')),
+                                    ]);
+                              });
+
+                          if (mounted && sortBy != null) {
+                            context.read<HouseholdsBloc>().add(
+                                HouseholdsSortOrderUpdated(sortBy: sortBy));
+                          }
+                        },
+                        icon: const Icon(Icons.sort)),
+                    IconButton(
                         onPressed: () => Navigator.pushNamed(
                             context, PageRouter.collectionsHelp),
                         icon: const Icon(Icons.help))
@@ -37,23 +78,31 @@ class HouseholdsScreen extends StatelessWidget {
                         padding: const EdgeInsets.all(2.0),
                         itemCount: state.households.length,
                         itemBuilder: (context, index) {
+                          final household = state.households[index];
+                          var subtitle =
+                              "Sensitization Date: ${formatter.format(household.sensitizationDate)}";
+                          subtitle +=
+                              "\n${household.respondents.length} respondents";
+
                           return Card(
                               child: ListTile(
-                            title: Text(state.households[index].householdId),
-                            subtitle: Text(formatter.format(
-                                state.households[index].sensitizationDate)),
+                            isThreeLine: true,
+                            title: Text(household.householdId),
+                            subtitle: Text(subtitle),
+                            trailing: state.distances.isNotEmpty
+                                ? Text("${state.distances[index]}m away")
+                                : null,
                             onTap: () => Navigator.pushNamed(
                                 context,
                                 PageRouter.householdPrefix +
                                     PageRouter.viewHousehold,
-                                arguments: {'id': state.households[index].id}),
+                                arguments: {'id': household.id}),
                             onLongPress: () => showModalBottomSheet(
                                 context: context,
                                 builder: (context) {
                                   return HouseholdOptions(
-                                      id: state.households[index].id,
-                                      householdId:
-                                          state.households[index].householdId);
+                                      id: household.id,
+                                      householdId: household.householdId);
                                 }),
                           ));
                         },

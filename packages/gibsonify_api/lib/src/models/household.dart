@@ -50,4 +50,12 @@ class Household extends Equatable {
       respondents: respondents ?? this.respondents,
     );
   }
+
+  double getLat() {
+    return double.parse(geoLocation.split(',')[0]);
+  }
+
+  double getLng() {
+    return double.parse(geoLocation.split(',')[1]);
+  }
 }
