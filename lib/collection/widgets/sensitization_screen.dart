@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:gibsonify/household/household.dart';
 import 'package:gibsonify/surveys/surveys.dart';
 import 'package:intl/intl.dart';
@@ -73,39 +74,51 @@ class SurveyInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<SurveysBloc, SurveysState>(
       builder: (context, surveysState) {
-        return BlocBuilder<CollectionBloc, CollectionState>(
-          builder: (context, collectionState) {
-            return DropdownSearch<String>(
-              popupProps: const PopupProps.menu(
-                  showSelectedItems: true,
-                  fit: FlexFit.loose,
-                  constraints: BoxConstraints.tightFor()),
-              dropdownDecoratorProps: DropDownDecoratorProps(
-                dropdownSearchDecoration: InputDecoration(
-                    icon: const Icon(Icons.assignment),
-                    labelText: "Survey ID",
-                    helperText:
-                        'The survey under which this interview is being performed',
-                    // TODO: the errorText should be displayed if nothing is chosen
-                    // so investigate how this can be achieved with focusnodes or
-                    // maybe send an empty string (although that would not work all
-                    // the time), currently the errorText is never shown
-                    errorText: isFieldModifiedAndEmpty(
-                            collectionState.gibsonsForm.surveyId)
-                        ? 'Select survey'
-                        : null),
-              ),
-              items: surveysState.surveys
-                  .map((survey) => survey.surveyId)
-                  .toList(),
-              onChanged: (surveyId) {
-                if (surveyId != null) {
-                  context
-                      .read<CollectionBloc>()
-                      .add(SurveyChanged(surveyId: surveyId));
-                }
+        return BlocBuilder<HouseholdBloc, HouseholdState>(
+          builder: (context, householdState) {
+            return BlocBuilder<CollectionBloc, CollectionState>(
+              builder: (context, collectionState) {
+                return DropdownSearch<String>(
+                  popupProps: const PopupProps.menu(
+                      showSelectedItems: true,
+                      fit: FlexFit.loose,
+                      constraints: BoxConstraints.tightFor()),
+                  dropdownDecoratorProps: DropDownDecoratorProps(
+                    dropdownSearchDecoration: InputDecoration(
+                        icon: const Icon(Icons.assignment),
+                        labelText: "Survey ID",
+                        helperText:
+                            'The survey under which this interview is being performed',
+                        // TODO: the errorText should be displayed if nothing is chosen
+                        // so investigate how this can be achieved with focusnodes or
+                        // maybe send an empty string (although that would not work all
+                        // the time), currently the errorText is never shown
+                        errorText: isFieldModifiedAndEmpty(
+                                collectionState.gibsonsForm.surveyId)
+                            ? 'Select survey'
+                            : null),
+                  ),
+                  items: surveysState.surveys
+                      // The below filter hides any surveys with parameters that make
+                      // the respondent/household ineligible. Maybe this should be more explicit?
+                      .where((survey) => checkSurveyParameters(
+                              survey: survey,
+                              household: householdState.household!,
+                              respondent: householdState.household!.respondents[
+                                  householdState.selectedRespondentIndex!])
+                          .isEmpty)
+                      .map((survey) => survey.surveyId)
+                      .toList(),
+                  onChanged: (surveyId) {
+                    if (surveyId != null) {
+                      context
+                          .read<CollectionBloc>()
+                          .add(SurveyChanged(surveyId: surveyId));
+                    }
+                  },
+                  selectedItem: collectionState.gibsonsForm.surveyId,
+                );
               },
-              selectedItem: collectionState.gibsonsForm.surveyId,
             );
           },
         );
@@ -292,4 +305,36 @@ class PhysioStatusInput extends StatelessWidget {
       },
     );
   }
+}
+
+List<String> checkSurveyParameters(
+    {required Survey survey,
+    required Household household,
+    required Respondent respondent}) {
+  final errors = <String>[];
+  final respondentAge =
+      DateTime.now().difference(respondent.dateOfBirth!).inDays / 365;
+  final householdLatLon =
+      household.geoLocation.split(',').map(double.parse).toList();
+  final surveyArea = survey.getArea();
+
+  if (Geolocator.distanceBetween(surveyArea.center.latitude,
+          surveyArea.center.longitude, householdLatLon[0], householdLatLon[1]) >
+      surveyArea.radius) {
+    errors.add('Household is outside survey area.');
+  }
+
+  if (respondentAge < survey.minAge) {
+    errors.add('Respondent is too young.');
+  }
+
+  if (survey.maxAge != 100 && respondentAge > survey.maxAge) {
+    errors.add('Respondent is too old.');
+  }
+
+  if (survey.requiredSex != null && respondent.sex != survey.requiredSex) {
+    errors.add('Respondent must be ${survey.requiredSex!.name}.');
+  }
+
+  return errors;
 }

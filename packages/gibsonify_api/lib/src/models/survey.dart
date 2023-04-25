@@ -1,7 +1,17 @@
 import 'package:equatable/equatable.dart';
+import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:isar/isar.dart';
+import 'package:latlong2/latlong.dart';
 
 part 'survey.g.dart';
+
+class Area {
+  final LatLng center;
+  final int radius;
+  final double zoom;
+
+  Area(this.center, this.radius, this.zoom);
+}
 
 @Collection(inheritance: false)
 class Survey extends Equatable {
@@ -12,6 +22,11 @@ class Survey extends Equatable {
   final String country;
   final String? description;
   final String? comments;
+  final int minAge;
+  final int maxAge;
+  @Enumerated(EnumType.ordinal32)
+  final Sex? requiredSex;
+  final String? geoArea;
 
   Survey(
       {this.id = Isar.autoIncrement,
@@ -19,7 +34,11 @@ class Survey extends Equatable {
       required this.name,
       required this.country,
       this.description,
-      this.comments});
+      this.comments,
+      required this.minAge,
+      required this.maxAge,
+      this.requiredSex,
+      this.geoArea});
 
   Survey copyWith(
       {Id? id,
@@ -27,14 +46,22 @@ class Survey extends Equatable {
       String? name,
       String? country,
       String? description,
-      String? comments}) {
+      String? comments,
+      int? minAge,
+      int? maxAge,
+      Sex? requiredSex,
+      String? geoArea}) {
     return Survey(
         id: id ?? this.id,
         surveyId: surveyId ?? this.surveyId,
         name: name ?? this.name,
         country: country ?? this.country,
         description: description ?? this.description,
-        comments: comments ?? this.comments);
+        comments: comments ?? this.comments,
+        minAge: minAge ?? this.minAge,
+        maxAge: maxAge ?? this.maxAge,
+        requiredSex: requiredSex ?? this.requiredSex,
+        geoArea: geoArea ?? this.geoArea);
   }
 
   Map<String, dynamic> toJson() {
@@ -43,21 +70,55 @@ class Survey extends Equatable {
       'name': name,
       'country': country,
       'description': description,
-      'comments': comments
+      'comments': comments,
+      'minAge': minAge,
+      'maxAge': maxAge,
+      'requiredSex': requiredSex?.name,
+      'geoArea': geoArea
     };
   }
 
   factory Survey.fromJson(Map<String, dynamic> json) {
+    Sex? requiredSex;
+
+    if (json['requiredSex'] != null) {
+      requiredSex = Sex.values
+          .singleWhere((element) => element.name == json['requiredSex']);
+    }
+
     return Survey(
         surveyId: json['surveyId'],
         name: json['name'],
         country: json['country'],
         description: json['description'],
-        comments: json['comments']);
+        comments: json['comments'],
+        minAge: json['minAge'],
+        maxAge: json['maxAge'],
+        requiredSex: requiredSex,
+        geoArea: json['geoArea']);
   }
 
   @override
   @ignore
-  List<Object?> get props =>
-      [id, surveyId, name, country, description, comments];
+  List<Object?> get props => [
+        id,
+        surveyId,
+        name,
+        country,
+        description,
+        comments,
+        minAge,
+        maxAge,
+        requiredSex,
+        geoArea
+      ];
+
+  Area getArea() {
+    final parts = geoArea!.split(',');
+    final center = LatLng(double.parse(parts[0]), double.parse(parts[1]));
+    final radius = int.parse(parts[2]);
+    final zoom = double.parse(parts[3]);
+
+    return Area(center, radius, zoom);
+  }
 }
