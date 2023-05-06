@@ -15,6 +15,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         super(LoginState()) {
     on<EmployeeNameChanged>(_onEmployeeNameChanged);
     on<EmployeeIdChanged>(_onEmployeeIdChanged);
+    on<EmployeeIsSupervisorChanged>(_onEmployeeIsSupervisorChanged);
     on<LoginInfoSaved>(_onLoginInfoSaved);
     on<LoginInfoLoaded>(_onLoginInfoLoaded);
   }
@@ -30,6 +31,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   void _onEmployeeIdChanged(EmployeeIdChanged event, Emitter<LoginState> emit) {
     LoginInfo loginInfo =
         state.loginInfo.copyWith(employeeId: event.employeeId);
+
+    emit(state.copyWith(loginInfo: loginInfo));
+  }
+
+  void _onEmployeeIsSupervisorChanged(
+      EmployeeIsSupervisorChanged event, Emitter<LoginState> emit) {
+    LoginInfo loginInfo = state.loginInfo
+        .copyWith(employeeIsSupervisor: event.employeeIsSupervisor);
 
     emit(state.copyWith(loginInfo: loginInfo));
   }

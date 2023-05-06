@@ -66,6 +66,17 @@ class LoginForm extends StatelessWidget {
                   const SizedBox(
                     height: 20,
                   ),
+                  CheckboxListTile(
+                    title: const Text('Supervisor?'),
+                    value: state.loginInfo.employeeIsSupervisor ?? false,
+                    onChanged: (value) {
+                      context.read<LoginBloc>().add(EmployeeIsSupervisorChanged(
+                          employeeIsSupervisor: value ?? false));
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   ElevatedButton(
                       child: const Text('Submit'),
                       onPressed: () => {
