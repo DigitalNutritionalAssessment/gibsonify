@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gibsonify/household/household.dart';
 import 'package:gibsonify/navigation/navigation.dart';
+import 'package:gibsonify/shared/shared.dart';
 import 'package:intl/intl.dart';
 
 class ViewHouseholdPage extends StatefulWidget {
@@ -63,6 +64,14 @@ class _ViewHouseholdPageState extends State<ViewHouseholdPage>
               minLines: 1,
               maxLines: null,
             ),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 10),
+              child: Divider(
+                height: 20,
+                thickness: 5,
+              ),
+            ),
+            ...viewMetadataFields(metadata: state.household!.metadata)
           ]);
         }
 

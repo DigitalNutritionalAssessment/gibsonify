@@ -1,4 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:gibsonify_api/gibsonify_api.dart';
+import 'package:intl/intl.dart';
 
 Future<Position> getPosition() async {
   bool serviceEnabled;
@@ -35,4 +38,34 @@ Future<Position> getPosition() async {
   // When we reach here, permissions are granted and we can
   // continue accessing the position of the device.
   return await Geolocator.getCurrentPosition();
+}
+
+List<Widget> viewMetadataFields({required Metadata metadata}) {
+  DateFormat formatter = DateFormat.yMd().add_Hms();
+  return [
+    TextFormField(
+      readOnly: true,
+      decoration: const InputDecoration(
+          labelText: 'Created at', icon: Icon(Icons.more_time)),
+      initialValue: formatter.format(metadata.createdAt),
+    ),
+    TextFormField(
+      readOnly: true,
+      decoration: const InputDecoration(
+          labelText: 'Created by (ID)', icon: Icon(Icons.person)),
+      initialValue: metadata.createdBy,
+    ),
+    TextFormField(
+      readOnly: true,
+      decoration: const InputDecoration(
+          labelText: 'Last modified at', icon: Icon(Icons.update)),
+      initialValue: formatter.format(metadata.lastModifiedAt),
+    ),
+    TextFormField(
+      readOnly: true,
+      decoration: const InputDecoration(
+          labelText: 'Last modified by (ID)', icon: Icon(Icons.person)),
+      initialValue: metadata.lastModifiedBy,
+    ),
+  ];
 }
