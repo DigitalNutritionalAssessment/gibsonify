@@ -22,13 +22,14 @@ class HouseholdAdapter extends TypeAdapter<Household> {
       geoLocation: fields[2] as String,
       comments: fields[3] as String,
       respondents: (fields[4] as Map).cast<String, Respondent>(),
+      metadata: fields[5] as Metadata,
     );
   }
 
   @override
   void write(BinaryWriter writer, Household obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.householdId)
       ..writeByte(1)
@@ -38,7 +39,9 @@ class HouseholdAdapter extends TypeAdapter<Household> {
       ..writeByte(3)
       ..write(obj.comments)
       ..writeByte(4)
-      ..write(obj.respondents);
+      ..write(obj.respondents)
+      ..writeByte(5)
+      ..write(obj.metadata);
   }
 
   @override

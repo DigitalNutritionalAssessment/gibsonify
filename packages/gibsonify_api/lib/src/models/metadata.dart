@@ -21,6 +21,15 @@ class Metadata extends Equatable {
     required this.lastModifiedBy,
   });
 
+  Metadata.create({
+    required String createdBy,
+  }) : this(
+          createdAt: DateTime.now(),
+          createdBy: createdBy,
+          lastModifiedAt: DateTime.now(),
+          lastModifiedBy: createdBy,
+        );
+
   Metadata copyWith(
       {DateTime? createdAt,
       String? createdBy,
