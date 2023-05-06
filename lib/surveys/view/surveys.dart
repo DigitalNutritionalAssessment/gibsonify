@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gibsonify/surveys/surveys.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
-import 'package:gibsonify_repository/gibsonify_repository.dart';
 
 class SurveysScreen extends StatelessWidget {
   const SurveysScreen({Key? key}) : super(key: key);
