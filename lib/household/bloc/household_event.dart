@@ -13,12 +13,14 @@ class HouseholdOpened extends HouseholdEvent {
 }
 
 class EditHouseholdSaveRequested extends HouseholdEvent {
+  final String employeeId;
   final DateTime sensitizationDate;
   final String geoLocation;
   final String comments;
 
   const EditHouseholdSaveRequested(
-      {required this.sensitizationDate,
+      {required this.employeeId,
+      required this.sensitizationDate,
       required this.geoLocation,
       required this.comments});
 

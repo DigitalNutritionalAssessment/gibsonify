@@ -39,7 +39,9 @@ class HouseholdBloc extends Bloc<HouseholdEvent, HouseholdState> {
     Household household = state.household!.copyWith(
         geoLocation: event.geoLocation,
         sensitizationDate: event.sensitizationDate,
-        comments: event.comments);
+        comments: event.comments,
+        metadata: state.household!.metadata.copyWith(
+            lastModifiedAt: DateTime.now(), lastModifiedBy: event.employeeId));
     _hiveRepository.saveNewHousehold(household);
     emit(HouseholdLoaded(household: household));
   }

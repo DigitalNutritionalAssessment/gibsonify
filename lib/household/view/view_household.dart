@@ -40,39 +40,41 @@ class _ViewHouseholdPageState extends State<ViewHouseholdPage>
     return BlocBuilder<HouseholdBloc, HouseholdState>(
       builder: (context, state) {
         Widget householdInfo() {
-          return Column(key: UniqueKey(), children: [
-            TextFormField(
-              readOnly: true,
-              decoration: const InputDecoration(
-                  labelText: 'Location',
-                  icon: Icon(Icons.location_on_outlined)),
-              initialValue: state.household!.geoLocation,
-            ),
-            TextFormField(
-              readOnly: true,
-              decoration: const InputDecoration(
-                  labelText: 'Sensitization Date',
-                  icon: Icon(Icons.calendar_today)),
-              initialValue:
-                  formatter.format(state.household!.sensitizationDate),
-            ),
-            TextFormField(
-              readOnly: true,
-              decoration: const InputDecoration(
-                  labelText: 'Comments', icon: Icon(Icons.comment)),
-              initialValue: state.household!.comments,
-              minLines: 1,
-              maxLines: null,
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              child: Divider(
-                height: 20,
-                thickness: 5,
+          return SingleChildScrollView(
+            child: Column(key: UniqueKey(), children: [
+              TextFormField(
+                readOnly: true,
+                decoration: const InputDecoration(
+                    labelText: 'Location',
+                    icon: Icon(Icons.location_on_outlined)),
+                initialValue: state.household!.geoLocation,
               ),
-            ),
-            ...viewMetadataFields(metadata: state.household!.metadata)
-          ]);
+              TextFormField(
+                readOnly: true,
+                decoration: const InputDecoration(
+                    labelText: 'Sensitization Date',
+                    icon: Icon(Icons.calendar_today)),
+                initialValue:
+                    formatter.format(state.household!.sensitizationDate),
+              ),
+              TextFormField(
+                readOnly: true,
+                decoration: const InputDecoration(
+                    labelText: 'Comments', icon: Icon(Icons.comment)),
+                initialValue: state.household!.comments,
+                minLines: 1,
+                maxLines: null,
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: Divider(
+                  height: 20,
+                  thickness: 5,
+                ),
+              ),
+              ...viewMetadataFields(metadata: state.household!.metadata)
+            ]),
+          );
         }
 
         Widget householdRespondents() {
