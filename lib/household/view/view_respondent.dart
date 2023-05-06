@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gibsonify/collection/collection.dart';
 import 'package:gibsonify/household/household.dart';
 import 'package:gibsonify/navigation/models/page_router.dart';
+import 'package:gibsonify/shared/shared.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:intl/intl.dart';
 
@@ -46,48 +47,58 @@ class _ViewRespondentPageState extends State<ViewRespondentPage>
         final respondent = state.household!.respondents[widget.id]!;
 
         Widget respondentInfo() {
-          return Column(
-            key: UniqueKey(),
-            children: [
-              TextFormField(
-                readOnly: true,
-                decoration: const InputDecoration(
-                    labelText: 'Phone Number', icon: Icon(Icons.phone)),
-                initialValue: respondent.phoneNumber,
-              ),
-              TextFormField(
-                readOnly: true,
-                decoration: const InputDecoration(
-                    labelText: 'Date of Birth', icon: Icon(Icons.cake)),
-                initialValue: formatter.format(respondent.dateOfBirth),
-              ),
-              TextFormField(
-                readOnly: true,
-                decoration: const InputDecoration(
-                    labelText: 'Sex', icon: Icon(Icons.wc)),
-                initialValue: toBeginningOfSentenceCase(respondent.sex.name),
-              ),
-              TextFormField(
-                readOnly: true,
-                decoration: const InputDecoration(
-                    labelText: 'Literacy Level', icon: Icon(Icons.translate)),
-                initialValue: literacyLevelToString(respondent.literacyLevel),
-              ),
-              TextFormField(
-                readOnly: true,
-                decoration: const InputDecoration(
-                    labelText: 'Occupation', icon: Icon(Icons.work)),
-                initialValue: occupationToString(respondent.occupation),
-              ),
-              TextFormField(
-                readOnly: true,
-                decoration: const InputDecoration(
-                    labelText: 'Comments', icon: Icon(Icons.comment)),
-                initialValue: respondent.comments,
-                minLines: 1,
-                maxLines: null,
-              ),
-            ],
+          return SingleChildScrollView(
+            child: Column(
+              key: UniqueKey(),
+              children: [
+                TextFormField(
+                  readOnly: true,
+                  decoration: const InputDecoration(
+                      labelText: 'Phone Number', icon: Icon(Icons.phone)),
+                  initialValue: respondent.phoneNumber,
+                ),
+                TextFormField(
+                  readOnly: true,
+                  decoration: const InputDecoration(
+                      labelText: 'Date of Birth', icon: Icon(Icons.cake)),
+                  initialValue: formatter.format(respondent.dateOfBirth),
+                ),
+                TextFormField(
+                  readOnly: true,
+                  decoration: const InputDecoration(
+                      labelText: 'Sex', icon: Icon(Icons.wc)),
+                  initialValue: toBeginningOfSentenceCase(respondent.sex.name),
+                ),
+                TextFormField(
+                  readOnly: true,
+                  decoration: const InputDecoration(
+                      labelText: 'Literacy Level', icon: Icon(Icons.translate)),
+                  initialValue: literacyLevelToString(respondent.literacyLevel),
+                ),
+                TextFormField(
+                  readOnly: true,
+                  decoration: const InputDecoration(
+                      labelText: 'Occupation', icon: Icon(Icons.work)),
+                  initialValue: occupationToString(respondent.occupation),
+                ),
+                TextFormField(
+                  readOnly: true,
+                  decoration: const InputDecoration(
+                      labelText: 'Comments', icon: Icon(Icons.comment)),
+                  initialValue: respondent.comments,
+                  minLines: 1,
+                  maxLines: null,
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  child: Divider(
+                    height: 20,
+                    thickness: 5,
+                  ),
+                ),
+                ...viewMetadataFields(metadata: respondent.metadata)
+              ],
+            ),
           );
         }
 

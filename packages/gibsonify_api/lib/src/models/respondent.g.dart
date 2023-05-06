@@ -27,13 +27,14 @@ class RespondentAdapter extends TypeAdapter<Respondent> {
       comments: fields[7] as String,
       collections: (fields[8] as Map).cast<String, GibsonsForm>(),
       anthropometrics: (fields[9] as List).cast<Anthropometrics>(),
+      metadata: fields[10] as Metadata,
     );
   }
 
   @override
   void write(BinaryWriter writer, Respondent obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(11)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -53,7 +54,9 @@ class RespondentAdapter extends TypeAdapter<Respondent> {
       ..writeByte(8)
       ..write(obj.collections)
       ..writeByte(9)
-      ..write(obj.anthropometrics);
+      ..write(obj.anthropometrics)
+      ..writeByte(10)
+      ..write(obj.metadata);
   }
 
   @override
