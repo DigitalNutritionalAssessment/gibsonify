@@ -30,6 +30,14 @@ class Metadata extends Equatable {
           lastModifiedBy: createdBy,
         );
 
+  Metadata modify({
+    required String lastModifiedBy,
+  }) =>
+      copyWith(
+        lastModifiedBy: lastModifiedBy,
+        lastModifiedAt: DateTime.now(),
+      );
+
   Metadata copyWith(
       {DateTime? createdAt,
       String? createdBy,

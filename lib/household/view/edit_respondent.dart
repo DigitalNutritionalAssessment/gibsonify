@@ -76,7 +76,7 @@ class EditRespondentPage extends StatelessWidget {
                                           comments: formKey.currentState!.value['comments'] ??
                                               "",
                                           metadata: respondent.metadata
-                                              .copyWith(lastModifiedBy: loginState.loginInfo.employeeId!, lastModifiedAt: DateTime.now())))),
+                                              .modify(lastModifiedBy: loginState.loginInfo.employeeId!)))),
                                   Navigator.pop(context),
                                 }
                             },
