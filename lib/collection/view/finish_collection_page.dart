@@ -14,43 +14,35 @@ class FinishCollectionPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CollectionBloc, CollectionState>(
       builder: (context, state) {
-        return Scaffold(
-            appBar: AppBar(
-              title: const Text('Finish Collection'),
-            ),
-            body: Column(
-              children: const [
-                CollectionFinishedTile(),
-                Expanded(
-                    child:
-                        SingleChildScrollView(child: FinishCollectionForm())),
-              ],
-            ),
-            floatingActionButton: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  FloatingActionButton.extended(
-                      heroTag: null,
-                      label: state.gibsonsForm.finished
-                          ? const Text("Back to Collections")
-                          : const Text("Finish Collection"),
-                      icon: const Icon(Icons.check),
-                      onPressed: () {
-                        if (state.gibsonsForm.finished) {
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                        } else {
+        return Column(
+          children: [
+            const CollectionFinishedTile(),
+            const Expanded(
+                child: SingleChildScrollView(child: FinishCollectionForm())),
+            Visibility(
+              visible: !state.gibsonsForm.finished,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton.icon(
+                        icon: const Icon(Icons.check),
+                        label: const Text("Finish Collection"),
+                        onPressed: () {
                           showDialog<String>(
                               context: context,
                               useRootNavigator: false,
                               builder: (BuildContext context) =>
                                   FinishCollectionDialog(
                                       gibsonsForm: state.gibsonsForm));
-                        }
-                        // TODO: only allow to finish if all required fields are filled
-                      })
-                ]));
+
+                          // TODO: only allow to finish if all required fields are filled
+                        }),
+                  ),
+                ],
+              ),
+            )
+          ],
+        );
       },
     );
   }

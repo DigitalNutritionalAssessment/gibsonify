@@ -21,27 +21,31 @@ enum SelectedScreen {
 class CollectionState extends Equatable {
   final GibsonsForm gibsonsForm;
   final SelectedScreen selectedScreen;
+  final int activeStep;
   // TODO: Investigate how to make this nullable without linter warnings
   final GeoLocationStatus geoLocationStatus;
 
   CollectionState(
-      {GibsonsForm? gibsonsForm,
+      {required this.gibsonsForm,
       this.selectedScreen = SelectedScreen.sensitization,
-      this.geoLocationStatus = GeoLocationStatus.none})
-      : gibsonsForm = gibsonsForm ?? GibsonsForm();
+      this.geoLocationStatus = GeoLocationStatus.none,
+      this.activeStep = 0});
 
   CollectionState copyWith(
       {GibsonsForm? gibsonsForm,
       SelectedScreen? selectedScreen,
+      int? activeStep,
       GeoLocationStatus? geoLocationStatus}) {
     return CollectionState(
         gibsonsForm: gibsonsForm ?? this.gibsonsForm,
         selectedScreen: selectedScreen ?? this.selectedScreen,
+        activeStep: activeStep ?? this.activeStep,
         geoLocationStatus: geoLocationStatus ?? this.geoLocationStatus);
   }
 
   @override
-  List<Object> get props => [gibsonsForm, selectedScreen, geoLocationStatus];
+  List<Object> get props =>
+      [gibsonsForm, selectedScreen, activeStep, geoLocationStatus];
 
   final Map<SelectedScreen, int> _selectedScreenIndices = {
     SelectedScreen.sensitization: 0,

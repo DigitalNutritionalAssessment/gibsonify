@@ -16,22 +16,12 @@ class SensitizationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('Information'),
-          actions: [
-            IconButton(
-                onPressed: () =>
-                    Navigator.pushNamed(context, PageRouter.sensitizationHelp),
-                icon: const Icon(Icons.help))
-          ],
-        ),
-        body: Column(
-          children: const [
-            CollectionFinishedTile(),
-            Expanded(child: SingleChildScrollView(child: SensitizationForm())),
-          ],
-        ));
+    return Column(
+      children: const [
+        CollectionFinishedTile(),
+        Expanded(child: SingleChildScrollView(child: SensitizationForm())),
+      ],
+    );
   }
 }
 

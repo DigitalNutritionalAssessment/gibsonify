@@ -15,6 +15,14 @@ class SelectedScreenChanged extends CollectionEvent {
   List<Object> get props => [changedSelectedScreen];
 }
 
+class ActiveStepChanged extends CollectionEvent {
+  final int changedActiveStep;
+  const ActiveStepChanged({required this.changedActiveStep});
+
+  @override
+  List<Object> get props => [changedActiveStep];
+}
+
 class RespondentNameChanged extends CollectionEvent {
   final String respondentName;
 

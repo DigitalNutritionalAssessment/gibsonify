@@ -162,8 +162,8 @@ class _ViewRespondentPageState extends State<ViewRespondentPage>
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => CollectionPage(
-                                        gibsonsForm: collection)))
+                                    builder: (context) =>
+                                        CollectionPage(collection: collection)))
                           },
                       onLongPress: () => showModalBottomSheet(
                           context: context,
