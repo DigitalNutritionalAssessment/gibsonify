@@ -9,3 +9,4 @@ export 'household.dart';
 export 'respondent.dart';
 export 'survey.dart';
 export 'anthropometrics.dart';
+export 'metadata.dart';
