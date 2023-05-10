@@ -25,6 +25,15 @@ class EmployeeIdChanged extends LoginEvent {
   List<Object> get props => [employeeId];
 }
 
+class EmployeeIsSupervisorChanged extends LoginEvent {
+  final bool employeeIsSupervisor;
+
+  const EmployeeIsSupervisorChanged({required this.employeeIsSupervisor});
+
+  @override
+  List<Object> get props => [employeeIsSupervisor];
+}
+
 class LoginInfoSaved extends LoginEvent {
   const LoginInfoSaved();
 

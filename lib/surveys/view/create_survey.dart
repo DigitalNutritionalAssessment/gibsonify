@@ -140,7 +140,13 @@ class CreateSurveyScreen extends StatelessWidget {
                             label: Text('Comments'), icon: Icon(Icons.message)),
                         onChanged: (value) => changed = true,
                       ),
-                      const Divider(),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 10),
+                        child: Divider(
+                          height: 20,
+                          thickness: 5,
+                        ),
+                      ),
                       FormBuilderTextField(
                           name: 'geoArea',
                           readOnly: true,

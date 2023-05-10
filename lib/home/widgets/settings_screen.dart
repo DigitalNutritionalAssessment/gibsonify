@@ -35,7 +35,7 @@ class LoginTile extends StatelessWidget {
           leading: const Icon(Icons.account_circle),
           title: const Text('Edit user information'),
           subtitle: Text(
-              'Employee Name: ${state.loginInfo.employeeName} \nEmployee ID: ${state.loginInfo.employeeId}'),
+              'Employee Name: ${state.loginInfo.employeeName} \nEmployee ID: ${state.loginInfo.employeeId} \nSupervisor: ${state.loginInfo.employeeIsSupervisor ?? false ? "Yes" : "No"}'),
           onTap: () =>
               {Navigator.pushReplacementNamed(context, PageRouter.login)},
         ),

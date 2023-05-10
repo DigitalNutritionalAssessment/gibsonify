@@ -75,7 +75,13 @@ class ViewSurveyScreen extends StatelessWidget {
                         initialValue: survey.comments,
                         enabled: false,
                       ),
-                      const Divider(),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 10),
+                        child: Divider(
+                          height: 20,
+                          thickness: 5,
+                        ),
+                      ),
                       FormBuilderTextField(
                         name: 'geoArea',
                         decoration: InputDecoration(
