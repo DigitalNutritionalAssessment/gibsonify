@@ -191,9 +191,7 @@ class _ViewRespondentPageState extends State<ViewRespondentPage>
                       onLongPress: () => showModalBottomSheet(
                           context: context,
                           builder: (context) {
-                            return CollectionOptions(
-                                id: collection.id,
-                                date: collection.interviewDate ?? 'No date');
+                            return CollectionOptions(collection: collection);
                           })),
                 );
               });
@@ -290,18 +288,26 @@ class AnthropometricsOptions extends StatelessWidget {
 }
 
 class CollectionOptions extends StatelessWidget {
-  final String id;
-  final String date;
+  final GibsonsForm collection;
 
-  const CollectionOptions({Key? key, required this.id, required this.date})
+  const CollectionOptions({Key? key, required this.collection})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final formatter = DateFormat.yMd().add_jms();
     return BlocBuilder<HouseholdBloc, HouseholdState>(
         builder: (context, state) {
       final List<Widget> options = [
-        ListTile(title: Text(date)),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: ListTile(
+            isThreeLine: true,
+            title: Text(collection.interviewDate ?? 'No date'),
+            subtitle: Text(
+                'ID: ${collection.id}\n\nCreated by ${collection.metadata.createdBy} at ${formatter.format(collection.metadata.createdAt)}\nLast modified by ${collection.metadata.lastModifiedBy} at ${formatter.format(collection.metadata.lastModifiedAt)}'),
+          ),
+        ),
         const Divider(),
         ListTile(
           leading: const Icon(Icons.delete),
@@ -309,7 +315,7 @@ class CollectionOptions extends StatelessWidget {
           onTap: () {
             context
                 .read<HouseholdBloc>()
-                .add(DeleteCollectionRequested(id: id));
+                .add(DeleteCollectionRequested(id: collection.id));
             Navigator.pop(context);
           },
         )
