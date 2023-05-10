@@ -63,6 +63,7 @@ class CollectionPage extends StatelessWidget {
       child: BlocBuilder<CollectionBloc, CollectionState>(
         builder: (context, state) {
           final step = screens[state.activeStep];
+          final stepMessage = allowStepMessage(state: state);
           return WillPopScope(
             onWillPop: () async {
               Navigator.of(context).pop(state.gibsonsForm);
@@ -89,12 +90,18 @@ class CollectionPage extends StatelessWidget {
                       activeStepBorderColor: Colors.teal,
                       lineColor: Colors.teal,
                       icons: screens.map((screen) => screen.icon).toList(),
+                      steppingEnabled: stepMessage == null,
                       onStepReached: (int index) => context
                           .read<CollectionBloc>()
                           .add(ActiveStepChanged(changedActiveStep: index)),
                       stepReachedAnimationDuration:
                           const Duration(milliseconds: 500),
                     ),
+                    if (stepMessage != null) const SizedBox(height: 20),
+                    if (stepMessage != null)
+                      Text(stepMessage,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(color: Colors.red)),
                     const SizedBox(height: 10),
                     Expanded(child: step.screen),
                   ]),
@@ -104,4 +111,20 @@ class CollectionPage extends StatelessWidget {
       ),
     );
   }
+}
+
+String? allowStepMessage({required CollectionState state}) {
+  if (state.gibsonsForm.finished) {
+    return null;
+  }
+
+  if (state.activeStep == 0 && !state.gibsonsForm.isSensitizationValid()) {
+    return 'Complete all sensitization fields with valid values to continue';
+  }
+
+  if (state.activeStep == 1 && state.gibsonsForm.foodItems.isEmpty) {
+    return 'Add at least one food item to continue';
+  }
+
+  return null;
 }
