@@ -105,7 +105,7 @@ class SurveyInput extends StatelessWidget {
                               survey: survey,
                               household: householdState.household!,
                               respondent: householdState.household!.respondents[
-                                  householdState.selectedRespondentIndex!])
+                                  householdState.selectedRespondentId!]!)
                           .isEmpty)
                       .map((survey) => survey.surveyId)
                       .toList(),
@@ -283,10 +283,8 @@ class PhysioStatusInput extends StatelessWidget {
                 icon: Icon(Icons.health_and_safety),
                 helperText: 'Whether the respondent is pregnant or lactating',
               ),
-              enabled: householdState
-                      .household!
-                      .respondents[householdState.selectedRespondentIndex!]
-                      .sex ==
+              enabled: householdState.household!
+                      .respondents[householdState.selectedRespondentId!]!.sex ==
                   Sex.female,
               initialValue: collectionState.gibsonsForm.physioStatus,
               onChanged: (PhysioStatus? physioStatus) {
@@ -313,7 +311,7 @@ List<String> checkSurveyParameters(
     required Respondent respondent}) {
   final errors = <String>[];
   final respondentAge =
-      DateTime.now().difference(respondent.dateOfBirth!).inDays / 365;
+      DateTime.now().difference(respondent.dateOfBirth).inDays / 365;
   final householdLatLon =
       household.geoLocation.split(',').map(double.parse).toList();
   final surveyArea = survey.getArea();

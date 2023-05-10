@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:uuid/uuid.dart';
-import 'package:isar/isar.dart';
+import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'dart:convert';
 
@@ -8,7 +7,7 @@ import 'package:gibsonify_api/gibsonify_api.dart';
 
 part 'recipe.g.dart';
 
-@Embedded(inheritance: false)
+@HiveType(typeId: 9)
 class Recipe extends Equatable {
   Recipe({
     this.name,
@@ -25,16 +24,27 @@ class Recipe extends Equatable {
     this.saved = false,
   }) : date = date ?? DateFormat('yyyy-MM-dd').format(DateTime.now());
 
+  @HiveField(0)
   final String? name;
+  @HiveField(1)
   final String? employeeNumber;
+  @HiveField(2)
   final String number;
+  @HiveField(3)
   final String? date;
+  @HiveField(4)
   final String type;
+  @HiveField(5)
   final List<Measurement> measurements;
+  @HiveField(6)
   final List<Ingredient> ingredients;
+  @HiveField(7)
   final List<Probe> probes;
+  @HiveField(8)
   final bool allProbesChecked;
+  @HiveField(9)
   final bool allProbeAnswersStandard;
+  @HiveField(10)
   final bool saved;
 
   String recipeNameDisplay() {
@@ -96,7 +106,6 @@ class Recipe extends Equatable {
   }
 
   @override
-  @ignore
   List<Object?> get props => [
         name,
         employeeNumber,

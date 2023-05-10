@@ -1,21 +1,23 @@
 import 'package:equatable/equatable.dart';
 import 'package:gibsonify_api/src/models/models.dart';
-import 'package:isar/isar.dart';
+import 'package:hive/hive.dart';
 
 part 'household.g.dart';
 
-@Collection(inheritance: false)
+@HiveType(typeId: 0)
 class Household extends Equatable {
-  final Id id;
-  @Index(unique: true)
+  @HiveField(0)
   final String householdId;
+  @HiveField(1)
   final DateTime sensitizationDate;
+  @HiveField(2)
   final String geoLocation;
+  @HiveField(3)
   final String comments;
-  final List<Respondent> respondents;
+  @HiveField(4)
+  final Map<String, Respondent> respondents;
 
   @override
-  @ignore
   List<Object> get props => [
         householdId,
         sensitizationDate,
@@ -25,24 +27,21 @@ class Household extends Equatable {
       ];
 
   Household({
-    this.id = Isar.autoIncrement,
     required this.householdId,
     required this.sensitizationDate,
     required this.geoLocation,
     required this.comments,
-    this.respondents = const [],
+    this.respondents = const {},
   });
 
-  copyWith({
-    int? id,
+  Household copyWith({
     String? householdId,
     DateTime? sensitizationDate,
     String? geoLocation,
     String? comments,
-    List<Respondent>? respondents,
+    Map<String, Respondent>? respondents,
   }) {
     return Household(
-      id: id ?? this.id,
       householdId: householdId ?? this.householdId,
       sensitizationDate: sensitizationDate ?? this.sensitizationDate,
       geoLocation: geoLocation ?? this.geoLocation,

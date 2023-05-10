@@ -1,13 +1,23 @@
 import 'dart:convert';
 import 'package:equatable/equatable.dart';
-import 'package:isar/isar.dart';
+import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
 
 part 'gibsons_form.g.dart';
 
-enum PhysioStatus { notApplicable, pregnant, lactatingH1, lactatingH2 }
+@HiveType(typeId: 6)
+enum PhysioStatus {
+  @HiveField(0)
+  notApplicable,
+  @HiveField(1)
+  pregnant,
+  @HiveField(2)
+  lactatingH1,
+  @HiveField(3)
+  lactatingH2
+}
 
 String physioStatusToString(PhysioStatus physioStatus) {
   switch (physioStatus) {
@@ -22,10 +32,10 @@ String physioStatusToString(PhysioStatus physioStatus) {
   }
 }
 
-@Embedded(inheritance: false)
+@HiveType(typeId: 5)
 class GibsonsForm extends Equatable {
   GibsonsForm(
-      {String? formId,
+      {String? id,
       this.employeeNumber,
       this.surveyId,
       this.recallDay, // TODO: rename to recallDayType
@@ -43,26 +53,43 @@ class GibsonsForm extends Equatable {
       this.comments,
       this.finished = false,
       this.foodItems = const <FoodItem>[]})
-      : id = formId ?? const Uuid().v4();
+      : id = id ?? const Uuid().v4();
 
+  @HiveField(0)
   final String id;
+  @HiveField(1)
   final String? employeeNumber;
+  @HiveField(2)
   final String? surveyId;
+  @HiveField(3)
   final String? recallDay; // TODO: change to an enum
+  @HiveField(4)
   final String? interviewDate;
+  @HiveField(5)
   final String? interviewStartTime;
-  @Enumerated(EnumType.ordinal32)
+  @HiveField(6)
   final PhysioStatus physioStatus;
+  @HiveField(7)
   final String? pictureChartCollected; // TODO: change to a bool
+  @HiveField(8)
   final String? pictureChartNotCollectedReason;
+  @HiveField(9)
   final String? interviewEndTime;
+  @HiveField(10)
   final String? interviewFinishedInOneVisit; // TODO: change to a bool
+  @HiveField(11)
   final String? secondInterviewVisitDate;
+  @HiveField(12)
   final String? secondVisitReason;
+  @HiveField(13)
   final String? interviewOutcome; // TODO: change to an enum
+  @HiveField(14)
   final String? interviewOutcomeNotCompletedReason;
+  @HiveField(15)
   final String? comments;
+  @HiveField(16)
   final bool finished;
+  @HiveField(17)
   final List<FoodItem> foodItems;
 
   // TODO: implement code generation JSON serialization using json_serializable
@@ -158,7 +185,7 @@ class GibsonsForm extends Equatable {
       bool? finished,
       List<FoodItem>? foodItems}) {
     return GibsonsForm(
-        formId: id ?? this.id,
+        id: id ?? this.id,
         employeeNumber: employeeNumber ?? this.employeeNumber,
         surveyId: surveyId ?? this.surveyId,
         recallDay: recallDay ?? this.recallDay,
@@ -210,7 +237,6 @@ class GibsonsForm extends Equatable {
   }
 
   @override
-  @ignore
   List<Object?> get props => [
         id,
         surveyId,

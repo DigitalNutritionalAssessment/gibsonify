@@ -9,7 +9,7 @@ import 'package:gibsonify/household/household.dart';
 
 class HouseholdContainer extends StatelessWidget {
   final _navigatorKey = GlobalKey<NavigatorState>();
-  final int id;
+  final String id;
   final String subRoute;
 
   HouseholdContainer({required this.id, required this.subRoute, Key? key})
@@ -19,7 +19,7 @@ class HouseholdContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
         create: (BuildContext context) =>
-            HouseholdBloc(isarRepository: context.read<IsarRepository>())
+            HouseholdBloc(hiveRepository: context.read<HiveRepository>())
               ..add(HouseholdOpened(id: id)),
         child: WillPopScope(
           onWillPop: () async {
@@ -54,13 +54,10 @@ Route _onGenerateRoute(RouteSettings settings) {
       break;
     case PageRouter.viewRespondent:
       final args = settings.arguments as Map<String, dynamic>;
-      page = ViewRespondentPage(index: args['index']);
+      page = ViewRespondentPage(id: args['id']);
       break;
     case PageRouter.editRespondent:
       page = const EditRespondentPage();
-      break;
-    case PageRouter.collection:
-      page = const CollectionPage();
       break;
     case PageRouter.chooseRecipe:
       final args = settings.arguments as Map<String, dynamic>;

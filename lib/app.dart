@@ -13,12 +13,12 @@ import 'package:gibsonify/sync/sync.dart';
 
 class App extends StatelessWidget with WidgetsBindingObserver {
   final GibsonifyRepository gibsonifyRepository;
-  final IsarRepository isarRepository;
+  final HiveRepository hiveRepository;
 
   const App(
       {Key? key,
       required this.gibsonifyRepository,
-      required this.isarRepository})
+      required this.hiveRepository})
       : super(key: key);
 
   @override
@@ -27,7 +27,7 @@ class App extends StatelessWidget with WidgetsBindingObserver {
       providers: [
         RepositoryProvider<GibsonifyRepository>(
             create: (context) => gibsonifyRepository),
-        RepositoryProvider<IsarRepository>(create: (context) => isarRepository)
+        RepositoryProvider<HiveRepository>(create: (context) => hiveRepository)
       ],
       child: MultiBlocProvider(
         providers: [
@@ -36,7 +36,7 @@ class App extends StatelessWidget with WidgetsBindingObserver {
                   LoginBloc(gibsonifyRepository: gibsonifyRepository)
                     ..add(const LoginInfoLoaded())),
           BlocProvider(
-              create: (context) => SurveysBloc(isarRepository: isarRepository)
+              create: (context) => SurveysBloc(hiveRepository: hiveRepository)
                 ..add(const SurveysPageOpened())),
           // TODO: Refactor and move Collection and Recipe BlocProviders further
           // down the widget tree
@@ -49,7 +49,7 @@ class App extends StatelessWidget with WidgetsBindingObserver {
           BlocProvider(
               create: (context) => ImportExportBloc(
                   gibsonifyRepository: gibsonifyRepository,
-                  isarRepository: isarRepository)),
+                  hiveRepository: hiveRepository)),
           BlocProvider(create: (context) => SyncBloc()),
         ],
         child: MaterialApp(

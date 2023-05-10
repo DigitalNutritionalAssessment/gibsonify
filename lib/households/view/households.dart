@@ -18,10 +18,11 @@ class HouseholdsScreen extends StatelessWidget {
 
     return BlocProvider(
         create: (context) =>
-            HouseholdsBloc(isarRepository: context.read<IsarRepository>())
+            HouseholdsBloc(hiveRepository: context.read<HiveRepository>())
               ..add(const HouseholdsPageOpened()),
         child: BlocBuilder<HouseholdsBloc, HouseholdsState>(
           builder: (context, state) {
+            final bloc = context.read<HouseholdsBloc>();
             return Scaffold(
                 appBar: AppBar(
                   title: const Text('Households'),
@@ -96,12 +97,12 @@ class HouseholdsScreen extends StatelessWidget {
                                 context,
                                 PageRouter.householdPrefix +
                                     PageRouter.viewHousehold,
-                                arguments: {'id': household.id}),
+                                arguments: {'id': household.householdId}),
                             onLongPress: () => showModalBottomSheet(
                                 context: context,
                                 builder: (context) {
                                   return HouseholdOptions(
-                                      id: household.id,
+                                      bloc: bloc,
                                       householdId: household.householdId);
                                 }),
                           ));
@@ -145,36 +146,26 @@ class HouseholdsScreen extends StatelessWidget {
 
 class HouseholdOptions extends StatelessWidget {
   const HouseholdOptions(
-      {Key? key, required this.id, required this.householdId})
+      {Key? key, required this.householdId, required this.bloc})
       : super(key: key);
 
-  final int id;
   final String householdId;
+  final HouseholdsBloc bloc;
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) =>
-          HouseholdsBloc(isarRepository: context.read<IsarRepository>()),
-      child: BlocBuilder<HouseholdsBloc, HouseholdsState>(
-        builder: (context, state) {
-          final List<Widget> options = [
-            ListTile(title: Text(householdId)),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.delete),
-              title: const Text('Delete'),
-              onTap: () {
-                context
-                    .read<HouseholdsBloc>()
-                    .add(HouseholdDeleteRequested(id: id));
-                Navigator.pop(context);
-              },
-            )
-          ];
-          return Wrap(children: options);
+    final List<Widget> options = [
+      ListTile(title: Text(householdId)),
+      const Divider(),
+      ListTile(
+        leading: const Icon(Icons.delete),
+        title: const Text('Delete'),
+        onTap: () {
+          bloc.add(HouseholdDeleteRequested(id: householdId));
+          Navigator.pop(context);
         },
-      ),
-    );
+      )
+    ];
+    return Wrap(children: options);
   }
 }

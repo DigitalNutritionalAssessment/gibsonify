@@ -17,11 +17,11 @@ class ViewAnthropometricsPage extends StatelessWidget {
     return BlocBuilder<HouseholdBloc, HouseholdState>(
       builder: (context, state) {
         final record = state.household!
-            .respondents[state.selectedRespondentIndex!].anthropometrics[index];
+            .respondents[state.selectedRespondentId!]!.anthropometrics[index];
 
         return Scaffold(
           appBar: AppBar(
-            title: Text(formatter.format(record.date!)),
+            title: Text(formatter.format(record.date)),
           ),
           body: Padding(
             padding: const EdgeInsets.all(8.0),

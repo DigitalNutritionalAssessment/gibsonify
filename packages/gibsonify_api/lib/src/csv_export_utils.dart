@@ -28,8 +28,8 @@ String householdsToLegacyCsvExport(List<Household> households) {
       'Recipe Number,Recipe Date,Recipe Name,Measurements\n';
 
   for (Household household in households) {
-    for (Respondent respondent in household.respondents) {
-      for (GibsonsForm gibsonsForm in respondent.collections) {
+    for (Respondent respondent in household.respondents.values) {
+      for (GibsonsForm gibsonsForm in respondent.collections.values) {
         if (gibsonsForm.finished) {
           csv += gibsonsForm.toCsv(
               household.householdId,

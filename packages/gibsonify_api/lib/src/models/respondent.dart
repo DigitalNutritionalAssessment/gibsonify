@@ -1,25 +1,55 @@
 import 'package:gibsonify_api/src/models/anthropometrics.dart';
 import 'package:gibsonify_api/src/models/gibsons_form.dart';
-import 'package:isar/isar.dart';
+import 'package:hive/hive.dart';
+import 'package:uuid/uuid.dart';
 
 part 'respondent.g.dart';
 
-enum Sex { male, female }
+@HiveType(typeId: 2)
+enum Sex {
+  @HiveField(0)
+  male,
+  @HiveField(1)
+  female
+}
 
-enum LiteracyLevel { illiterate, readWrite, readOnly, signatureOnly }
+@HiveType(typeId: 3)
+enum LiteracyLevel {
+  @HiveField(0)
+  illiterate,
+  @HiveField(1)
+  readWrite,
+  @HiveField(2)
+  readOnly,
+  @HiveField(3)
+  signatureOnly
+}
 
+@HiveType(typeId: 4)
 enum Occupation {
+  @HiveField(0)
   domestic,
+  @HiveField(1)
   farmer,
+  @HiveField(2)
   agriculturalLabour,
+  @HiveField(3)
   casualLabour,
+  @HiveField(4)
   mgnrega,
+  @HiveField(5)
   salariedNonAgricultural,
+  @HiveField(6)
   ownAccountEmployment,
+  @HiveField(7)
   collectiveNonAgricultural,
+  @HiveField(8)
   unableToWork,
+  @HiveField(9)
   student,
+  @HiveField(10)
   salariedGovernment,
+  @HiveField(11)
   other
 }
 
@@ -65,34 +95,56 @@ String occupationToString(Occupation occupation) {
   }
 }
 
-@Embedded()
+@HiveType(typeId: 1)
 class Respondent {
+  @HiveField(0)
+  final String id;
+  @HiveField(1)
   final String name;
+  @HiveField(2)
   final String phoneNumber;
-  final DateTime? dateOfBirth;
-  @Enumerated(EnumType.ordinal32)
-  final Sex? sex;
-  @Enumerated(EnumType.ordinal32)
-  final LiteracyLevel? literacyLevel;
-  @Enumerated(EnumType.ordinal32)
-  final Occupation? occupation;
+  @HiveField(3)
+  final DateTime dateOfBirth;
+  @HiveField(4)
+  final Sex sex;
+  @HiveField(5)
+  final LiteracyLevel literacyLevel;
+  @HiveField(6)
+  final Occupation occupation;
+  @HiveField(7)
   final String comments;
-  final List<GibsonsForm> collections;
+  @HiveField(8)
+  final Map<String, GibsonsForm> collections;
+  @HiveField(9)
   final List<Anthropometrics> anthropometrics;
 
   Respondent({
-    this.name = "",
-    this.phoneNumber = "",
-    this.dateOfBirth,
-    this.sex,
-    this.literacyLevel,
-    this.occupation,
-    this.comments = "",
-    this.collections = const [],
-    this.anthropometrics = const [],
+    required this.id,
+    required this.name,
+    required this.phoneNumber,
+    required this.dateOfBirth,
+    required this.sex,
+    required this.literacyLevel,
+    required this.occupation,
+    required this.comments,
+    required this.collections,
+    required this.anthropometrics,
   });
 
+  Respondent.create(
+      {required this.name,
+      required this.phoneNumber,
+      required this.dateOfBirth,
+      required this.sex,
+      required this.literacyLevel,
+      required this.occupation,
+      required this.comments,
+      this.collections = const {},
+      this.anthropometrics = const []})
+      : id = Uuid().v4();
+
   Respondent copyWith({
+    String? id,
     String? name,
     String? phoneNumber,
     DateTime? dateOfBirth,
@@ -100,10 +152,11 @@ class Respondent {
     LiteracyLevel? literacyLevel,
     Occupation? occupation,
     String? comments,
-    List<GibsonsForm>? collections,
+    Map<String, GibsonsForm>? collections,
     List<Anthropometrics>? anthropometrics,
   }) {
     return Respondent(
+      id: id ?? this.id,
       name: name ?? this.name,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       dateOfBirth: dateOfBirth ?? this.dateOfBirth,

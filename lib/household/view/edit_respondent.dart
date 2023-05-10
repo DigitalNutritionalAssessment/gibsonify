@@ -18,7 +18,7 @@ class EditRespondentPage extends StatelessWidget {
     return BlocBuilder<HouseholdBloc, HouseholdState>(
       builder: (context, state) {
         final respondent =
-            state.household!.respondents[state.selectedRespondentIndex!];
+            state.household!.respondents[state.selectedRespondentId!]!;
 
         return WillPopScope(
           onWillPop: () async {

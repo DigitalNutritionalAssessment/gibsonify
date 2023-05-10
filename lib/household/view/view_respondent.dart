@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gibsonify/collection/collection.dart';
 import 'package:gibsonify/household/household.dart';
 import 'package:gibsonify/navigation/models/page_router.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:intl/intl.dart';
 
 class ViewRespondentPage extends StatefulWidget {
-  final int index;
+  final String id;
 
-  const ViewRespondentPage({Key? key, required this.index}) : super(key: key);
+  const ViewRespondentPage({Key? key, required this.id}) : super(key: key);
 
   @override
   State<ViewRespondentPage> createState() => _ViewRespondentPageState();
@@ -42,7 +43,7 @@ class _ViewRespondentPageState extends State<ViewRespondentPage>
 
     return BlocBuilder<HouseholdBloc, HouseholdState>(
       builder: (context, state) {
-        final respondent = state.household!.respondents[widget.index];
+        final respondent = state.household!.respondents[widget.id]!;
 
         Widget respondentInfo() {
           return Column(
@@ -58,25 +59,25 @@ class _ViewRespondentPageState extends State<ViewRespondentPage>
                 readOnly: true,
                 decoration: const InputDecoration(
                     labelText: 'Date of Birth', icon: Icon(Icons.cake)),
-                initialValue: formatter.format(respondent.dateOfBirth!),
+                initialValue: formatter.format(respondent.dateOfBirth),
               ),
               TextFormField(
                 readOnly: true,
                 decoration: const InputDecoration(
                     labelText: 'Sex', icon: Icon(Icons.wc)),
-                initialValue: toBeginningOfSentenceCase(respondent.sex!.name),
+                initialValue: toBeginningOfSentenceCase(respondent.sex.name),
               ),
               TextFormField(
                 readOnly: true,
                 decoration: const InputDecoration(
                     labelText: 'Literacy Level', icon: Icon(Icons.translate)),
-                initialValue: literacyLevelToString(respondent.literacyLevel!),
+                initialValue: literacyLevelToString(respondent.literacyLevel),
               ),
               TextFormField(
                 readOnly: true,
                 decoration: const InputDecoration(
                     labelText: 'Occupation', icon: Icon(Icons.work)),
-                initialValue: occupationToString(respondent.occupation!),
+                initialValue: occupationToString(respondent.occupation),
               ),
               TextFormField(
                 readOnly: true,
@@ -101,9 +102,7 @@ class _ViewRespondentPageState extends State<ViewRespondentPage>
               itemCount: respondent.anthropometrics.length,
               itemBuilder: (context, index) {
                 final anthropometrics = respondent.anthropometrics[index];
-                final date = anthropometrics.date != null
-                    ? formatter.format(anthropometrics.date!)
-                    : 'No date';
+                final date = formatter.format(anthropometrics.date);
 
                 return Card(
                   child: ListTile(
@@ -131,10 +130,12 @@ class _ViewRespondentPageState extends State<ViewRespondentPage>
             );
           }
 
+          final collections = respondent.collections.values.toList();
+
           return ListView.builder(
-              itemCount: respondent.collections.length,
+              itemCount: collections.length,
               itemBuilder: (context, index) {
-                final collection = respondent.collections[index];
+                final collection = collections[index];
                 return Card(
                   child: ListTile(
                       title: Text(collection.interviewDate ?? 'No date'),
@@ -157,14 +158,18 @@ class _ViewRespondentPageState extends State<ViewRespondentPage>
                       onTap: () => {
                             context
                                 .read<HouseholdBloc>()
-                                .add(CollectionOpened(index: index)),
-                            Navigator.pushNamed(context, PageRouter.collection)
+                                .add(CollectionOpened(id: collection.id)),
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => CollectionPage(
+                                        gibsonsForm: collection)))
                           },
                       onLongPress: () => showModalBottomSheet(
                           context: context,
                           builder: (context) {
                             return CollectionOptions(
-                                index: index,
+                                id: collection.id,
                                 date: collection.interviewDate ?? 'No date');
                           })),
                 );
@@ -186,8 +191,10 @@ class _ViewRespondentPageState extends State<ViewRespondentPage>
             );
           } else if (activeIndex == 1) {
             return FloatingActionButton(
-              onPressed: () =>
-                  Navigator.pushNamed(context, PageRouter.collection),
+              onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const CollectionPage())),
               child: const Icon(Icons.add),
             );
           } else {
@@ -250,10 +257,10 @@ class AnthropometricsOptions extends StatelessWidget {
 }
 
 class CollectionOptions extends StatelessWidget {
-  final int index;
+  final String id;
   final String date;
 
-  const CollectionOptions({Key? key, required this.index, required this.date})
+  const CollectionOptions({Key? key, required this.id, required this.date})
       : super(key: key);
 
   @override
@@ -269,7 +276,7 @@ class CollectionOptions extends StatelessWidget {
           onTap: () {
             context
                 .read<HouseholdBloc>()
-                .add(DeleteCollectionRequested(index: index));
+                .add(DeleteCollectionRequested(id: id));
             Navigator.pop(context);
           },
         )

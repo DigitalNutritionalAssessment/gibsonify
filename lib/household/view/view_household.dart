@@ -71,26 +71,28 @@ class _ViewHouseholdPageState extends State<ViewHouseholdPage>
             return const Center(child: Text('No respondents'));
           }
 
+          final respondents = state.household!.respondents.values.toList();
+
           return ListView.builder(
             itemCount: state.household!.respondents.length,
             itemBuilder: (context, index) {
+              final respondent = respondents[index];
               return Card(
                   child: ListTile(
-                title: Text(state.household!.respondents[index].name),
+                title: Text(respondent.name),
                 subtitle: Text("ID: ${index + 1}"),
                 onTap: () => {
                   context
                       .read<HouseholdBloc>()
-                      .add(RespondentOpened(index: index)),
+                      .add(RespondentOpened(id: respondent.id)),
                   Navigator.pushNamed(context, PageRouter.viewRespondent,
-                      arguments: {'index': index})
+                      arguments: {'id': respondent.id})
                 },
                 onLongPress: () => showModalBottomSheet(
                     context: context,
                     builder: (context) {
                       return RespondentOptions(
-                          index: index,
-                          name: state.household!.respondents[index].name);
+                          id: respondent.id, name: respondent.name);
                     }),
               ));
             },
@@ -145,10 +147,10 @@ class _ViewHouseholdPageState extends State<ViewHouseholdPage>
 }
 
 class RespondentOptions extends StatelessWidget {
-  final int index;
+  final String id;
   final String name;
 
-  const RespondentOptions({Key? key, required this.index, required this.name})
+  const RespondentOptions({Key? key, required this.id, required this.name})
       : super(key: key);
 
   @override
@@ -164,7 +166,7 @@ class RespondentOptions extends StatelessWidget {
           onTap: () {
             context
                 .read<HouseholdBloc>()
-                .add(DeleteRespondentRequested(index: index));
+                .add(DeleteRespondentRequested(id: id));
             Navigator.pop(context);
           },
         )

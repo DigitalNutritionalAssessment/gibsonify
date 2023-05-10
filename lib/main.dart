@@ -4,18 +4,21 @@ import 'package:flutter_map_tile_caching/flutter_map_tile_caching.dart';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:gibsonify_repository/gibsonify_repository.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import 'app.dart';
 
 void main() async {
   // Initializing shared preferences before calling runApp needs the following:
   WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  registerAdapters();
 
   final gibsonifyApi =
       GibsonifyApi(sharedPreferences: await SharedPreferences.getInstance());
 
   final gibsonifyRepository = GibsonifyRepository(gibsonifyApi: gibsonifyApi);
-  final isarRepository = await IsarRepository.create();
+  final hiveRepository = await HiveRepository.create();
 
   FlutterMapTileCaching.initialise(await RootDirectory.normalCache,
       settings: FMTCSettings(
@@ -26,5 +29,5 @@ void main() async {
 
   runApp(App(
       gibsonifyRepository: gibsonifyRepository,
-      isarRepository: isarRepository));
+      hiveRepository: hiveRepository));
 }

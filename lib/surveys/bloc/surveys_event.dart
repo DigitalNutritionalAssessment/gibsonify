@@ -15,7 +15,7 @@ class SurveysPageOpened extends SurveysEvent {
 }
 
 class SurveyDeleteRequested extends SurveysEvent {
-  final int id;
+  final String id;
   const SurveyDeleteRequested({required this.id});
 
   @override

@@ -4,9 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gibsonify/collection/collection.dart';
 import 'package:gibsonify/household/household.dart';
 import 'package:gibsonify/login/login.dart';
+import 'package:gibsonify_api/gibsonify_api.dart';
 
 class CollectionPage extends StatelessWidget {
-  const CollectionPage({Key? key}) : super(key: key);
+  const CollectionPage({Key? key, this.gibsonsForm}) : super(key: key);
+
+  final GibsonsForm? gibsonsForm;
 
   @override
   Widget build(BuildContext context) {
@@ -22,16 +25,10 @@ class CollectionPage extends StatelessWidget {
       builder: (context, loginState) {
         return BlocBuilder<HouseholdBloc, HouseholdState>(
           builder: (context, householdState) {
-            context.read<CollectionBloc>().add(householdState
-                        .selectedCollectionIndex !=
-                    null
-                ? GibsonsFormProvided(
-                    gibsonsForm: householdState
-                        .household!
-                        .respondents[householdState.selectedRespondentIndex!]
-                        .collections[householdState.selectedCollectionIndex!])
-                : GibsonsFormCreated(
-                    employeeNumber: loginState.loginInfo.employeeId!));
+            context.read<CollectionBloc>().add(GibsonsFormProvided(
+                gibsonsForm: gibsonsForm ??
+                    GibsonsForm(
+                        employeeNumber: loginState.loginInfo.employeeId)));
             return BlocBuilder<CollectionBloc, CollectionState>(
               builder: (context, collectionState) {
                 return WillPopScope(

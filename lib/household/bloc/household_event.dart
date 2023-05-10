@@ -8,7 +8,7 @@ abstract class HouseholdEvent extends Equatable {
 }
 
 class HouseholdOpened extends HouseholdEvent {
-  final int id;
+  final String id;
   const HouseholdOpened({required this.id});
 }
 
@@ -36,21 +36,21 @@ class NewRespondentSaveRequested extends HouseholdEvent {
 }
 
 class DeleteRespondentRequested extends HouseholdEvent {
-  final int index;
+  final String id;
 
-  const DeleteRespondentRequested({required this.index});
+  const DeleteRespondentRequested({required this.id});
 
   @override
-  List<Object> get props => [index];
+  List<Object> get props => [id];
 }
 
 class RespondentOpened extends HouseholdEvent {
-  final int index;
+  final String id;
 
-  const RespondentOpened({required this.index});
+  const RespondentOpened({required this.id});
 
   @override
-  List<Object> get props => [index];
+  List<Object> get props => [id];
 }
 
 class EditRespondentSaveRequested extends HouseholdEvent {
@@ -63,12 +63,12 @@ class EditRespondentSaveRequested extends HouseholdEvent {
 }
 
 class CollectionOpened extends HouseholdEvent {
-  final int index;
+  final String id;
 
-  const CollectionOpened({required this.index});
+  const CollectionOpened({required this.id});
 
   @override
-  List<Object> get props => [index];
+  List<Object> get props => [id];
 }
 
 class SaveCollectionRequested extends HouseholdEvent {
@@ -81,12 +81,12 @@ class SaveCollectionRequested extends HouseholdEvent {
 }
 
 class DeleteCollectionRequested extends HouseholdEvent {
-  final int index;
+  final String id;
 
-  const DeleteCollectionRequested({required this.index});
+  const DeleteCollectionRequested({required this.id});
 
   @override
-  List<Object> get props => [index];
+  List<Object> get props => [id];
 }
 
 class NewAnthropometricsSaveRequested extends HouseholdEvent {

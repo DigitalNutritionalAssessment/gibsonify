@@ -1,20 +1,24 @@
 import 'package:equatable/equatable.dart';
-import 'package:isar/isar.dart';
-import 'package:uuid/uuid.dart';
 import 'dart:convert';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
+import 'package:hive/hive.dart';
 
 part 'measurement.g.dart';
 
-@Embedded(inheritance: false)
+@HiveType(typeId: 8)
 class Measurement extends Equatable {
   Measurement({this.method, this.unit, this.value, this.id = ""});
 
+  @HiveField(0)
   final String? method;
+  @HiveField(1)
   final String? unit;
+  @HiveField(2)
   final String? value;
+  @HiveField(3)
   final String id; // TODO: investigate whether the id is needed
+
   static final List<String> measurementMethods = [
     'Direct weight',
     'Volume of water',
@@ -84,7 +88,6 @@ class Measurement extends Equatable {
   }
 
   @override
-  @ignore
   List<Object?> get props => [method, unit, value];
 
   Measurement.fromJson(Map<String, dynamic> json)

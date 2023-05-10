@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
+import 'package:hive/hive.dart';
+
 import 'package:gibsonify_api/gibsonify_api.dart';
-import 'package:isar/isar.dart';
 import 'package:latlong2/latlong.dart';
 
 part 'survey.g.dart';
@@ -13,24 +14,29 @@ class Area {
   Area(this.center, this.radius, this.zoom);
 }
 
-@Collection(inheritance: false)
+@HiveType(typeId: 14)
 class Survey extends Equatable {
-  final Id id;
-  @Index(unique: true, replace: true)
+  @HiveField(0)
   final String surveyId;
+  @HiveField(1)
   final String name;
+  @HiveField(2)
   final String country;
+  @HiveField(3)
   final String? description;
+  @HiveField(4)
   final String? comments;
+  @HiveField(5)
   final int minAge;
+  @HiveField(6)
   final int maxAge;
-  @Enumerated(EnumType.ordinal32)
+  @HiveField(7)
   final Sex? requiredSex;
+  @HiveField(8)
   final String? geoArea;
 
   Survey(
-      {this.id = Isar.autoIncrement,
-      required this.surveyId,
+      {required this.surveyId,
       required this.name,
       required this.country,
       this.description,
@@ -41,8 +47,7 @@ class Survey extends Equatable {
       this.geoArea});
 
   Survey copyWith(
-      {Id? id,
-      String? surveyId,
+      {String? surveyId,
       String? name,
       String? country,
       String? description,
@@ -52,7 +57,6 @@ class Survey extends Equatable {
       Sex? requiredSex,
       String? geoArea}) {
     return Survey(
-        id: id ?? this.id,
         surveyId: surveyId ?? this.surveyId,
         name: name ?? this.name,
         country: country ?? this.country,
@@ -99,9 +103,7 @@ class Survey extends Equatable {
   }
 
   @override
-  @ignore
   List<Object?> get props => [
-        id,
         surveyId,
         name,
         country,

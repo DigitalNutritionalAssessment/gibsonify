@@ -1,14 +1,13 @@
 import 'package:equatable/equatable.dart';
-import 'package:isar/isar.dart';
-import 'package:uuid/uuid.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:convert';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
+import 'package:hive/hive.dart';
 
 part 'recipe_ingredient.g.dart';
 
-@Embedded(inheritance: false)
+@HiveType(typeId: 10)
 class Ingredient extends Equatable {
   Ingredient(
       {this.name,
@@ -23,14 +22,22 @@ class Ingredient extends Equatable {
       this.saved = false,
       this.id = ""});
 
+  @HiveField(0)
   final String? name;
+  @HiveField(1)
   final String? customName;
+  @HiveField(2)
   final String? description;
+  @HiveField(3)
   final String? cookingState;
+  @HiveField(4)
   final String? customCookingState;
+  @HiveField(5)
   final List<Measurement> measurements;
   //final Map<String, dynamic>? foodComposition;
+  @HiveField(6)
   final bool saved;
+  @HiveField(7)
   final String id;
 
   String ingredientNameDisplay() {
@@ -86,7 +93,6 @@ class Ingredient extends Equatable {
   }
 
   @override
-  @ignore
   List<Object?> get props => [
         name,
         customName,

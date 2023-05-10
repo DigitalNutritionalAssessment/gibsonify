@@ -1,13 +1,13 @@
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
-import 'package:isar/isar.dart';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
+import 'package:hive/hive.dart';
 
 part 'food_item.g.dart';
 
-@Embedded(inheritance: false)
+@HiveType(typeId: 7)
 class FoodItem extends Equatable {
   FoodItem(
       // TODO: temp hack to make id field Isar compatible. Id field will eventually be removed
@@ -22,18 +22,28 @@ class FoodItem extends Equatable {
       this.recipe,
       this.confirmed = false});
 
+  @HiveField(0)
   final String id;
+  @HiveField(1)
   final String? name;
   // TODO: change to timePeriod, source and preparationMethod to enums with maps
   // to Strings and back to enums for serialization (toJson and fromJson)
+  @HiveField(2)
   final String? timePeriod;
+  @HiveField(3)
   final String? source;
+  @HiveField(4)
   final String? description;
+  @HiveField(5)
   final String? preparationMethod;
+  @HiveField(6)
   final String? customPreparationMethod;
+  @HiveField(7)
   final List<Measurement> measurements;
+  @HiveField(8)
   final Recipe? recipe;
   // TODO: Add Form validation bool field to check if all fields are valid
+  @HiveField(9)
   final bool confirmed;
 
   // TODO: implement code generation JSON serialization using json_serializable
@@ -127,7 +137,6 @@ class FoodItem extends Equatable {
   }
 
   @override
-  @ignore
   List<Object?> get props => [
         name,
         id,

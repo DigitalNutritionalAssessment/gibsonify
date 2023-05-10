@@ -54,7 +54,7 @@ class CreateRespondentPage extends StatelessWidget {
                             {
                               context.read<HouseholdBloc>().add(
                                   NewRespondentSaveRequested(
-                                      respondent: Respondent(
+                                      respondent: Respondent.create(
                                           name: formKey
                                               .currentState!.value['name'],
                                           phoneNumber: formKey.currentState!
