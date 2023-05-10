@@ -433,16 +433,16 @@ class FinishCollectionDialog extends StatelessWidget {
           'Would you like to finish this collection?\n\nOnce finished, the collection will '
           'no longer be editable, even if it is not fully completed.'),
       actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('No'),
-        ),
-        TextButton(
+        ElevatedButton(
           onPressed: () async {
             bloc.add(const CollectionFinished());
             Navigator.pop(context);
           },
           child: const Text('Yes'),
+        ),
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('No'),
         ),
       ],
     );
