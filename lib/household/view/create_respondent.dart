@@ -32,7 +32,8 @@ class CreateRespondentPage extends StatelessWidget {
                     barrierDismissible: false,
                     builder: (_) => AlertDialog(
                           title: const Text('Are you sure?'),
-                          content: const Text('Any unsaved changes will be lost.'),
+                          content:
+                              const Text('Any unsaved changes will be lost.'),
                           actions: [
                             ElevatedButton(
                                 onPressed: () {
@@ -58,7 +59,8 @@ class CreateRespondentPage extends StatelessWidget {
                                   context.read<HouseholdBloc>().add(
                                       NewRespondentSaveRequested(
                                           respondent: Respondent.create(
-                                            employeeId: loginState.loginInfo.employeeId!,
+                                              employeeId: loginState
+                                                  .loginInfo.employeeId!,
                                               name: formKey
                                                   .currentState!.value['name'],
                                               phoneNumber: formKey.currentState!
@@ -67,13 +69,13 @@ class CreateRespondentPage extends StatelessWidget {
                                                   .value['dateOfBirth'],
                                               sex: formKey
                                                   .currentState!.value['sex'],
-                                              literacyLevel: formKey.currentState!
+                                              literacyLevel: formKey
+                                                  .currentState!
                                                   .value['literacyLevel'],
                                               occupation: formKey.currentState!
                                                   .value['occupation'],
-                                              comments: formKey.currentState!
-                                                      .value['comments'] ??
-                                                  ""))),
+                                              comments:
+                                                  formKey.currentState!.value['comments'] ?? ""))),
                                   Navigator.pop(context),
                                 }
                             },
@@ -135,8 +137,8 @@ class CreateRespondentPage extends StatelessWidget {
                           items: Sex.values
                               .map((sex) => DropdownMenuItem(
                                   value: sex,
-                                  child:
-                                      Text(toBeginningOfSentenceCase(sex.name)!)))
+                                  child: Text(
+                                      toBeginningOfSentenceCase(sex.name)!)))
                               .toList(),
                           validator: FormBuilderValidators.required(),
                         ),
@@ -150,8 +152,8 @@ class CreateRespondentPage extends StatelessWidget {
                           items: LiteracyLevel.values
                               .map((literacyLevel) => DropdownMenuItem(
                                   value: literacyLevel,
-                                  child:
-                                      Text(literacyLevelToString(literacyLevel))))
+                                  child: Text(
+                                      literacyLevelToString(literacyLevel))))
                               .toList(),
                           validator: FormBuilderValidators.required(),
                         ),
@@ -172,7 +174,8 @@ class CreateRespondentPage extends StatelessWidget {
                         FormBuilderTextField(
                           name: 'comments',
                           decoration: const InputDecoration(
-                              label: Text('Comments'), icon: Icon(Icons.message)),
+                              label: Text('Comments'),
+                              icon: Icon(Icons.message)),
                           onChanged: (value) => changed = true,
                           minLines: 1,
                           maxLines: null,
