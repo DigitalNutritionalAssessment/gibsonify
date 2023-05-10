@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:gibsonify/collection/collection.dart';
-import 'package:gibsonify/navigation/navigation.dart';
 
 class FourthPassScreen extends StatelessWidget {
   const FourthPassScreen({Key? key}) : super(key: key);

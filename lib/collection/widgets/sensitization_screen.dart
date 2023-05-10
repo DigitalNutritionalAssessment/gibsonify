@@ -8,7 +8,6 @@ import 'package:intl/intl.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 
 import 'package:gibsonify/collection/collection.dart';
-import 'package:gibsonify/navigation/navigation.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
 
 class SensitizationScreen extends StatelessWidget {
