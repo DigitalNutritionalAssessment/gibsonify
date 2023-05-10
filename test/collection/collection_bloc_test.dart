@@ -15,7 +15,8 @@ void main() {
     });
 
     test('initial selected screen is sensitization screen', () {
-      expect(collectionBloc.state.activeStep, SelectedScreen.sensitization);
+      expect(
+          collectionBloc.state.activeStep, SelectedScreen.sensitization.index);
     });
   });
 }
