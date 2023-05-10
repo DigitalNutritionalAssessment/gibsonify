@@ -155,16 +155,21 @@ class _ViewRespondentPageState extends State<ViewRespondentPage>
                               : const Text('Paused'),
                         ],
                       ),
-                      onTap: () => {
-                            context
-                                .read<HouseholdBloc>()
-                                .add(CollectionOpened(id: collection.id)),
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        CollectionPage(collection: collection)))
-                          },
+                      onTap: () async {
+                        context
+                            .read<HouseholdBloc>()
+                            .add(CollectionOpened(id: collection.id));
+                        final GibsonsForm updated = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    CollectionPage(collection: collection)));
+
+                        if (mounted) {
+                          context.read<HouseholdBloc>().add(
+                              SaveCollectionRequested(gibsonsForm: updated));
+                        }
+                      },
                       onLongPress: () => showModalBottomSheet(
                           context: context,
                           builder: (context) {
@@ -191,10 +196,19 @@ class _ViewRespondentPageState extends State<ViewRespondentPage>
             );
           } else if (activeIndex == 1) {
             return FloatingActionButton(
-              onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const CollectionPage())),
+              onPressed: () async {
+                final GibsonsForm created = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const CollectionPage()))
+                    as GibsonsForm;
+
+                if (mounted) {
+                  context
+                      .read<HouseholdBloc>()
+                      .add(SaveCollectionRequested(gibsonsForm: created));
+                }
+              },
               child: const Icon(Icons.add),
             );
           } else {
