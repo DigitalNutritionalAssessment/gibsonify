@@ -7,7 +7,7 @@ class FirstPassScreen extends StatelessWidget {
   const FirstPassScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, [bool mounted = true]) {
     return BlocBuilder<CollectionBloc, CollectionState>(
       builder: (context, state) {
         return Column(
@@ -54,12 +54,22 @@ class FirstPassScreen extends StatelessWidget {
                                   foodItemId:
                                       state.gibsonsForm.foodItems[index].id,
                                   foodItemTimePeriod: changedTimePeriod)),
-                          onDeleted: () => showDialog<String>(
-                              context: context,
-                              builder: (BuildContext context) =>
-                                  DeleteFoodItemDialog(
-                                      foodItem:
-                                          state.gibsonsForm.foodItems[index]))),
+                          onDeleted: () async {
+                            final confirmed = (await showDialog<bool>(
+                                useRootNavigator: false,
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    DeleteFoodItemDialog(
+                                        foodItem: state
+                                            .gibsonsForm.foodItems[index])));
+
+                            if (mounted && (confirmed ?? false)) {
+                              context.read<CollectionBloc>().add(
+                                  FoodItemDeleted(
+                                      foodItemId: state
+                                          .gibsonsForm.foodItems[index].id));
+                            }
+                          }),
                     );
                   }),
             ),
