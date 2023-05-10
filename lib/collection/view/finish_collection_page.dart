@@ -14,6 +14,7 @@ class FinishCollectionPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CollectionBloc, CollectionState>(
       builder: (context, state) {
+        final bloc = context.read<CollectionBloc>();
         return Column(
           children: [
             const CollectionFinishedTile(),
@@ -32,8 +33,7 @@ class FinishCollectionPage extends StatelessWidget {
                               context: context,
                               useRootNavigator: false,
                               builder: (BuildContext context) =>
-                                  FinishCollectionDialog(
-                                      gibsonsForm: state.gibsonsForm));
+                                  FinishCollectionDialog(bloc: bloc));
 
                           // TODO: only allow to finish if all required fields are filled
                         }),
@@ -424,49 +424,30 @@ class CommentsInput extends StatelessWidget {
 }
 
 class FinishCollectionDialog extends StatelessWidget {
-  final GibsonsForm gibsonsForm;
-  const FinishCollectionDialog({Key? key, required this.gibsonsForm})
+  final CollectionBloc bloc;
+  const FinishCollectionDialog({Key? key, required this.bloc})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CollectionBloc, CollectionState>(
-      builder: (context, state) {
-        return AlertDialog(
-          title: const Text('Finish collection'),
-          content: const Text(
-              'Would you like to finish this collection?\n\nOnce finished, the collection will '
-              'no longer be editable, even if it is not fully completed. As an '
-              'alternative, you can pause the collection.'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                context.read<HouseholdBloc>().add(
-                    SaveCollectionRequested(gibsonsForm: state.gibsonsForm));
-                Navigator.pop(context);
-                Navigator.pop(context);
-                Navigator.pop(context);
-              },
-              child: const Text('Pause'),
-            ),
-            TextButton(
-              onPressed: () async {
-                context.read<CollectionBloc>().add(const CollectionFinished());
-                context.read<HouseholdBloc>().add(SaveCollectionRequested(
-                    gibsonsForm: state.gibsonsForm.copyWith(finished: true)));
-                Navigator.pop(context);
-                Navigator.pop(context);
-                Navigator.pop(context);
-              },
-              child: const Text('Finish'),
-            ),
-          ],
-        );
-      },
+    return AlertDialog(
+      title: const Text('Finish collection?'),
+      content: const Text(
+          'Would you like to finish this collection?\n\nOnce finished, the collection will '
+          'no longer be editable, even if it is not fully completed.'),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('No'),
+        ),
+        TextButton(
+          onPressed: () async {
+            bloc.add(const CollectionFinished());
+            Navigator.pop(context);
+          },
+          child: const Text('Yes'),
+        ),
+      ],
     );
   }
 }
