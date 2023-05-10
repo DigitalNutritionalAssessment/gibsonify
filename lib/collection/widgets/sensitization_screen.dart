@@ -31,8 +31,6 @@ class SensitizationForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      // TODO: investigate BlocBuilder nesting, probably not best practice, so
-      // maybe rewrite children widgets without BlocBuilders
       child: BlocBuilder<CollectionBloc, CollectionState>(
         builder: (context, state) {
           return AbsorbPointer(
