@@ -141,8 +141,8 @@ class _ViewRespondentPageState extends State<ViewRespondentPage>
                       title: Text(collection.interviewDate ?? 'No date'),
                       subtitle: Row(
                         children: [
-                          Text(collection.interviewOutcome ??
-                              'Unspecified outcome')
+                          Text(
+                              'Outcome: ${collection.interviewOutcome ?? 'Unspecified'}')
                         ],
                       ),
                       trailing: Column(
