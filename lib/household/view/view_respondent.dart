@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gibsonify/collection/collection.dart';
 import 'package:gibsonify/household/household.dart';
+import 'package:gibsonify/login/login.dart';
 import 'package:gibsonify/navigation/models/page_router.dart';
 import 'package:gibsonify/shared/shared.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
@@ -176,9 +177,15 @@ class _ViewRespondentPageState extends State<ViewRespondentPage>
                                 builder: (context) =>
                                     CollectionPage(collection: collection)));
 
-                        if (mounted) {
+                        if (mounted && updated != collection) {
                           context.read<HouseholdBloc>().add(
-                              SaveCollectionRequested(gibsonsForm: updated));
+                              SaveCollectionRequested(
+                                  employeeId: context
+                                      .read<LoginBloc>()
+                                      .state
+                                      .loginInfo
+                                      .employeeId!,
+                                  gibsonsForm: updated));
                         }
                       },
                       onLongPress: () => showModalBottomSheet(
@@ -215,9 +222,10 @@ class _ViewRespondentPageState extends State<ViewRespondentPage>
                     as GibsonsForm;
 
                 if (mounted) {
-                  context
-                      .read<HouseholdBloc>()
-                      .add(SaveCollectionRequested(gibsonsForm: created));
+                  context.read<HouseholdBloc>().add(SaveCollectionRequested(
+                      employeeId:
+                          context.read<LoginBloc>().state.loginInfo.employeeId!,
+                      gibsonsForm: created));
                 }
               },
               child: const Icon(Icons.add),

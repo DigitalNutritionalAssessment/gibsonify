@@ -17,24 +17,24 @@ class GibsonsFormAdapter extends TypeAdapter<GibsonsForm> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return GibsonsForm(
-      id: fields[0] as String?,
-      employeeNumber: fields[1] as String?,
-      surveyId: fields[2] as String?,
-      recallDay: fields[3] as String?,
-      interviewDate: fields[4] as String?,
-      interviewStartTime: fields[5] as String?,
-      physioStatus: fields[6] as PhysioStatus,
-      pictureChartCollected: fields[7] as String?,
-      pictureChartNotCollectedReason: fields[8] as String?,
-      interviewEndTime: fields[9] as String?,
-      interviewFinishedInOneVisit: fields[10] as String?,
-      secondInterviewVisitDate: fields[11] as String?,
-      secondVisitReason: fields[12] as String?,
-      interviewOutcome: fields[13] as String?,
-      interviewOutcomeNotCompletedReason: fields[14] as String?,
-      comments: fields[15] as String?,
-      finished: fields[16] as bool,
-      foodItems: (fields[17] as List).cast<FoodItem>(),
+      id: fields[0] as String,
+      surveyId: fields[1] as String?,
+      recallDay: fields[2] as String?,
+      interviewDate: fields[3] as String?,
+      interviewStartTime: fields[4] as String?,
+      physioStatus: fields[5] as PhysioStatus,
+      pictureChartCollected: fields[6] as String?,
+      pictureChartNotCollectedReason: fields[7] as String?,
+      interviewEndTime: fields[8] as String?,
+      interviewFinishedInOneVisit: fields[9] as String?,
+      secondInterviewVisitDate: fields[10] as String?,
+      secondVisitReason: fields[11] as String?,
+      interviewOutcome: fields[12] as String?,
+      interviewOutcomeNotCompletedReason: fields[13] as String?,
+      comments: fields[14] as String?,
+      finished: fields[15] as bool,
+      foodItems: (fields[16] as List).cast<FoodItem>(),
+      metadata: fields[17] as Metadata,
     );
   }
 
@@ -45,39 +45,39 @@ class GibsonsFormAdapter extends TypeAdapter<GibsonsForm> {
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.employeeNumber)
-      ..writeByte(2)
       ..write(obj.surveyId)
-      ..writeByte(3)
+      ..writeByte(2)
       ..write(obj.recallDay)
-      ..writeByte(4)
+      ..writeByte(3)
       ..write(obj.interviewDate)
-      ..writeByte(5)
+      ..writeByte(4)
       ..write(obj.interviewStartTime)
-      ..writeByte(6)
+      ..writeByte(5)
       ..write(obj.physioStatus)
-      ..writeByte(7)
+      ..writeByte(6)
       ..write(obj.pictureChartCollected)
-      ..writeByte(8)
+      ..writeByte(7)
       ..write(obj.pictureChartNotCollectedReason)
-      ..writeByte(9)
+      ..writeByte(8)
       ..write(obj.interviewEndTime)
-      ..writeByte(10)
+      ..writeByte(9)
       ..write(obj.interviewFinishedInOneVisit)
-      ..writeByte(11)
+      ..writeByte(10)
       ..write(obj.secondInterviewVisitDate)
-      ..writeByte(12)
+      ..writeByte(11)
       ..write(obj.secondVisitReason)
-      ..writeByte(13)
+      ..writeByte(12)
       ..write(obj.interviewOutcome)
-      ..writeByte(14)
+      ..writeByte(13)
       ..write(obj.interviewOutcomeNotCompletedReason)
-      ..writeByte(15)
+      ..writeByte(14)
       ..write(obj.comments)
-      ..writeByte(16)
+      ..writeByte(15)
       ..write(obj.finished)
+      ..writeByte(16)
+      ..write(obj.foodItems)
       ..writeByte(17)
-      ..write(obj.foodItems);
+      ..write(obj.metadata);
   }
 
   @override

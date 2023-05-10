@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gibsonify/login/login.dart';
 import 'package:im_stepper/stepper.dart';
 
 import 'package:gibsonify/navigation/navigation.dart';
@@ -58,8 +59,11 @@ class CollectionPage extends StatelessWidget {
     ];
 
     return BlocProvider(
-      create: (context) =>
-          CollectionBloc(collection: collection ?? GibsonsForm()),
+      create: (context) => CollectionBloc(
+          collection: collection ??
+              GibsonsForm.create(
+                  employeeId:
+                      context.read<LoginBloc>().state.loginInfo.employeeId!)),
       child: BlocBuilder<CollectionBloc, CollectionState>(
         builder: (context, state) {
           final step = screens[state.activeStep];

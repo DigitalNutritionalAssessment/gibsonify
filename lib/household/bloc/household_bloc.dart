@@ -94,7 +94,9 @@ class HouseholdBloc extends Bloc<HouseholdEvent, HouseholdState> {
     var respondents = {...state.household!.respondents};
     var respondent = respondents[state.selectedRespondentId!]!;
     final collections = {...respondent.collections};
-    collections[event.gibsonsForm.id] = event.gibsonsForm;
+    collections[event.gibsonsForm.id] = event.gibsonsForm.copyWith(
+        metadata: event.gibsonsForm.metadata
+            .modify(lastModifiedBy: event.employeeId));
     respondents[state.selectedRespondentId!] =
         respondent.copyWith(collections: collections);
     final household = state.household!.copyWith(respondents: respondents);

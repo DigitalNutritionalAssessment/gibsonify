@@ -74,9 +74,11 @@ class CollectionOpened extends HouseholdEvent {
 }
 
 class SaveCollectionRequested extends HouseholdEvent {
+  final String employeeId;
   final GibsonsForm gibsonsForm;
 
-  const SaveCollectionRequested({required this.gibsonsForm});
+  const SaveCollectionRequested(
+      {required this.employeeId, required this.gibsonsForm});
 
   @override
   List<Object> get props => [gibsonsForm];
