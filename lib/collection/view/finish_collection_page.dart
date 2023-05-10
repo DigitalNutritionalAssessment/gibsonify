@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dropdown_search/dropdown_search.dart';
-import 'package:gibsonify/household/household.dart';
 import 'package:intl/intl.dart';
 
 import 'package:gibsonify/collection/collection.dart';
@@ -28,15 +27,15 @@ class FinishCollectionPage extends StatelessWidget {
                     child: ElevatedButton.icon(
                         icon: const Icon(Icons.check),
                         label: const Text("Finish Collection"),
-                        onPressed: () {
-                          showDialog<String>(
-                              context: context,
-                              useRootNavigator: false,
-                              builder: (BuildContext context) =>
-                                  FinishCollectionDialog(bloc: bloc));
-
-                          // TODO: only allow to finish if all required fields are filled
-                        }),
+                        onPressed: state.gibsonsForm.isFinishCollectionValid()
+                            ? () {
+                                showDialog<String>(
+                                    context: context,
+                                    useRootNavigator: false,
+                                    builder: (BuildContext context) =>
+                                        FinishCollectionDialog(bloc: bloc));
+                              }
+                            : null),
                   ),
                 ],
               ),
@@ -55,8 +54,6 @@ class FinishCollectionForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      // TODO: investigate BlocBuilder nesting, probably not best practice, so
-      // maybe rewrite children widgets without BlocBuilders
       child: BlocBuilder<CollectionBloc, CollectionState>(
         builder: (context, state) {
           return AbsorbPointer(
@@ -270,7 +267,7 @@ class _SecondInterviewVisitDateInputState
               var date = await showDatePicker(
                   context: context,
                   initialDate: DateTime.now(),
-                  firstDate: DateTime(1900),
+                  firstDate: DateTime.parse(state.gibsonsForm.interviewDate!),
                   lastDate: DateTime.now());
               if (!mounted) return;
               var formattedDate =

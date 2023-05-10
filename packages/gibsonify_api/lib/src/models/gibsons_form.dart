@@ -280,6 +280,20 @@ class GibsonsForm extends Equatable {
     return foodItems.every((foodItem) => foodItem.confirmed);
   }
 
+  bool isFinishCollectionValid() {
+    return isPictureChartCollectedValid() &&
+        (isPictureChartCollected() ||
+            isPictureChartNotCollectedReasonValid()) &&
+        isInterviewEndTimeValid() &&
+        isInterviewFinishedInOneVisitValid() &&
+        (isInterviewFinishedInOneVisit() ||
+            (isSecondInterviewVisitDateValid() &&
+                isSecondVisitReasonValid())) &&
+        isInterviewOutcomeValid() &&
+        (isInterviewOutcomeCompleted() ||
+            isInterviewOutcomeNotCompletedReasonValid());
+  }
+
   bool isPictureChartCollectedValid() {
     return isFieldNotNullAndNotEmpty(pictureChartCollected);
   }
