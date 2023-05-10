@@ -48,3 +48,22 @@ class MeasurementAdapter extends TypeAdapter<Measurement> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+Measurement _$MeasurementFromJson(Map<String, dynamic> json) => Measurement(
+      method: json['method'] as String?,
+      unit: json['unit'] as String?,
+      value: json['value'] as String?,
+      id: json['id'] as String? ?? "",
+    );
+
+Map<String, dynamic> _$MeasurementToJson(Measurement instance) =>
+    <String, dynamic>{
+      'method': instance.method,
+      'unit': instance.unit,
+      'value': instance.value,
+      'id': instance.id,
+    };

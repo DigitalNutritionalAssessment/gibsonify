@@ -1,8 +1,10 @@
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'metadata.g.dart';
 
+@JsonSerializable()
 @HiveType(typeId: 15)
 class Metadata extends Equatable {
   @HiveField(0)
@@ -50,6 +52,11 @@ class Metadata extends Equatable {
       lastModifiedBy: lastModifiedBy ?? this.lastModifiedBy,
     );
   }
+
+  factory Metadata.fromJson(Map<String, dynamic> json) =>
+      _$MetadataFromJson(json);
+
+  Map<String, dynamic> toJson() => _$MetadataToJson(this);
 
   @override
   List<Object> get props => [

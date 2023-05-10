@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:latlong2/latlong.dart';
 
 part 'survey.g.dart';
@@ -14,6 +15,7 @@ class Area {
   Area(this.center, this.radius, this.zoom);
 }
 
+@JsonSerializable()
 @HiveType(typeId: 14)
 class Survey extends Equatable {
   @HiveField(0)
@@ -68,39 +70,9 @@ class Survey extends Equatable {
         geoArea: geoArea ?? this.geoArea);
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'surveyId': surveyId,
-      'name': name,
-      'country': country,
-      'description': description,
-      'comments': comments,
-      'minAge': minAge,
-      'maxAge': maxAge,
-      'requiredSex': requiredSex?.name,
-      'geoArea': geoArea
-    };
-  }
+  factory Survey.fromJson(Map<String, dynamic> json) => _$SurveyFromJson(json);
 
-  factory Survey.fromJson(Map<String, dynamic> json) {
-    Sex? requiredSex;
-
-    if (json['requiredSex'] != null) {
-      requiredSex = Sex.values
-          .singleWhere((element) => element.name == json['requiredSex']);
-    }
-
-    return Survey(
-        surveyId: json['surveyId'],
-        name: json['name'],
-        country: json['country'],
-        description: json['description'],
-        comments: json['comments'],
-        minAge: json['minAge'],
-        maxAge: json['maxAge'],
-        requiredSex: requiredSex,
-        geoArea: json['geoArea']);
-  }
+  Map<String, dynamic> toJson() => _$SurveyToJson(this);
 
   @override
   List<Object?> get props => [

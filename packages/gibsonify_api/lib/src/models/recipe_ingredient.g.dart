@@ -60,3 +60,33 @@ class IngredientAdapter extends TypeAdapter<Ingredient> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+Ingredient _$IngredientFromJson(Map<String, dynamic> json) => Ingredient(
+      name: json['name'] as String?,
+      customName: json['customName'] as String?,
+      description: json['description'] as String?,
+      cookingState: json['cookingState'] as String?,
+      customCookingState: json['customCookingState'] as String?,
+      measurements: (json['measurements'] as List<dynamic>?)
+              ?.map((e) => Measurement.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
+      saved: json['saved'] as bool? ?? false,
+      id: json['id'] as String? ?? "",
+    );
+
+Map<String, dynamic> _$IngredientToJson(Ingredient instance) =>
+    <String, dynamic>{
+      'name': instance.name,
+      'customName': instance.customName,
+      'description': instance.description,
+      'cookingState': instance.cookingState,
+      'customCookingState': instance.customCookingState,
+      'measurements': instance.measurements.map((e) => e.toJson()).toList(),
+      'saved': instance.saved,
+      'id': instance.id,
+    };

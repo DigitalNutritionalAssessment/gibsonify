@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'dart:convert';
 import 'package:uuid/uuid.dart';
 
@@ -7,6 +8,7 @@ import 'package:gibsonify_api/gibsonify_api.dart';
 
 part 'recipe_probe.g.dart';
 
+@JsonSerializable()
 @HiveType(typeId: 12)
 class ProbeOption extends Equatable {
   ProbeOption({this.option, this.id = ''});
@@ -16,10 +18,6 @@ class ProbeOption extends Equatable {
   @HiveField(1)
   final String id;
 
-  ProbeOption.fromJson(Map<String, dynamic> json)
-      : option = json['option'],
-        id = json['id'];
-
   static List<ProbeOption> defaults() {
     final List<ProbeOption> options = [];
     options.add(ProbeOption(option: 'Yes', id: Uuid().v4()));
@@ -27,12 +25,10 @@ class ProbeOption extends Equatable {
     return options;
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['option'] = option;
-    data['id'] = id;
-    return data;
-  }
+  factory ProbeOption.fromJson(Map<String, dynamic> json) =>
+      _$ProbeOptionFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ProbeOptionToJson(this);
 
   ProbeOption copyWith({String? option, String? id}) {
     return ProbeOption(option: option ?? this.option, id: id ?? this.id);
@@ -42,6 +38,7 @@ class ProbeOption extends Equatable {
   List<Object?> get props => [option, id];
 }
 
+@JsonSerializable(explicitToJson: true)
 @HiveType(typeId: 11)
 class Probe extends Equatable {
   Probe(
@@ -81,20 +78,24 @@ class Probe extends Equatable {
     return false;
   }
 
-  Probe.fromJson(Map<String, dynamic> json)
-      : name = json['name'],
-        checked = json['checked'] == 'true' ? true : false,
-        answer = json['answer'],
-        probeOptions = _jsonDecodeProbeOptions(json['probeOptions']);
+  factory Probe.fromJson(Map<String, dynamic> json) => _$ProbeFromJson(json);
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['name'] = name;
-    data['checked'] = checked.toString();
-    data['answer'] = answer;
-    data['probeOptions'] = jsonEncode(probeOptions);
-    return data;
-  }
+  Map<String, dynamic> toJson() => _$ProbeToJson(this);
+
+  // Probe.fromJson(Map<String, dynamic> json)
+  //     : name = json['name'],
+  //       checked = json['checked'] == 'true' ? true : false,
+  //       answer = json['answer'],
+  //       probeOptions = _jsonDecodeProbeOptions(json['probeOptions']);
+
+  // Map<String, dynamic> toJson() {
+  //   final Map<String, dynamic> data = <String, dynamic>{};
+  //   data['name'] = name;
+  //   data['checked'] = checked.toString();
+  //   data['answer'] = answer;
+  //   data['probeOptions'] = jsonEncode(probeOptions);
+  //   return data;
+  // }
 
   String toCsv() {
     // TODO: these are actually probe options, the import/export format is wrong

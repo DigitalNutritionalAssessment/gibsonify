@@ -246,3 +246,69 @@ class OccupationAdapter extends TypeAdapter<Occupation> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+Respondent _$RespondentFromJson(Map<String, dynamic> json) => Respondent(
+      id: json['id'] as String,
+      name: json['name'] as String,
+      phoneNumber: json['phoneNumber'] as String,
+      dateOfBirth: DateTime.parse(json['dateOfBirth'] as String),
+      sex: $enumDecode(_$SexEnumMap, json['sex']),
+      literacyLevel: $enumDecode(_$LiteracyLevelEnumMap, json['literacyLevel']),
+      occupation: $enumDecode(_$OccupationEnumMap, json['occupation']),
+      comments: json['comments'] as String,
+      collections: (json['collections'] as Map<String, dynamic>).map(
+        (k, e) => MapEntry(k, GibsonsForm.fromJson(e as Map<String, dynamic>)),
+      ),
+      anthropometrics: (json['anthropometrics'] as List<dynamic>)
+          .map((e) => Anthropometrics.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      metadata: Metadata.fromJson(json['metadata'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$RespondentToJson(Respondent instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+      'phoneNumber': instance.phoneNumber,
+      'dateOfBirth': instance.dateOfBirth.toIso8601String(),
+      'sex': _$SexEnumMap[instance.sex]!,
+      'literacyLevel': _$LiteracyLevelEnumMap[instance.literacyLevel]!,
+      'occupation': _$OccupationEnumMap[instance.occupation]!,
+      'comments': instance.comments,
+      'collections':
+          instance.collections.map((k, e) => MapEntry(k, e.toJson())),
+      'anthropometrics':
+          instance.anthropometrics.map((e) => e.toJson()).toList(),
+      'metadata': instance.metadata.toJson(),
+    };
+
+const _$SexEnumMap = {
+  Sex.male: 'male',
+  Sex.female: 'female',
+};
+
+const _$LiteracyLevelEnumMap = {
+  LiteracyLevel.illiterate: 'illiterate',
+  LiteracyLevel.readWrite: 'readWrite',
+  LiteracyLevel.readOnly: 'readOnly',
+  LiteracyLevel.signatureOnly: 'signatureOnly',
+};
+
+const _$OccupationEnumMap = {
+  Occupation.domestic: 'domestic',
+  Occupation.farmer: 'farmer',
+  Occupation.agriculturalLabour: 'agriculturalLabour',
+  Occupation.casualLabour: 'casualLabour',
+  Occupation.mgnrega: 'mgnrega',
+  Occupation.salariedNonAgricultural: 'salariedNonAgricultural',
+  Occupation.ownAccountEmployment: 'ownAccountEmployment',
+  Occupation.collectiveNonAgricultural: 'collectiveNonAgricultural',
+  Occupation.unableToWork: 'unableToWork',
+  Occupation.student: 'student',
+  Occupation.salariedGovernment: 'salariedGovernment',
+  Occupation.other: 'other',
+};

@@ -4,9 +4,11 @@ import 'package:equatable/equatable.dart';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:hive/hive.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'food_item.g.dart';
 
+@JsonSerializable(explicitToJson: true)
 @HiveType(typeId: 7)
 class FoodItem extends Equatable {
   FoodItem(
@@ -46,35 +48,10 @@ class FoodItem extends Equatable {
   @HiveField(9)
   final bool confirmed;
 
-  // TODO: implement code generation JSON serialization using json_serializable
-  // and/or json_annotation
+  factory FoodItem.fromJson(Map<String, dynamic> json) =>
+      _$FoodItemFromJson(json);
 
-  FoodItem.fromJson(Map<String, dynamic> json)
-      : id = json['id'],
-        name = json['name'],
-        timePeriod = json['timePeriod'],
-        source = json['source'],
-        description = json['description'],
-        preparationMethod = json['preparationMethod'],
-        customPreparationMethod = json['customPreparationMethod'],
-        measurements = Measurement.jsonDecodeMeasurements(json['measurements']),
-        recipe = json['recipe'] == '' ? null : Recipe.fromJson(json['recipe']),
-        confirmed = json['confirmed'] == 'true' ? true : false;
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['name'] = name;
-    data['timePeriod'] = timePeriod;
-    data['source'] = source;
-    data['description'] = description;
-    data['preparationMethod'] = preparationMethod;
-    data['customPreparationMethod'] = customPreparationMethod;
-    data['measurements'] = jsonEncode(measurements);
-    data['recipe'] = recipe?.toJson() ?? '';
-    data['confirmed'] = confirmed.toString();
-    return data;
-  }
+  Map<String, dynamic> toJson() => _$FoodItemToJson(this);
 
   // TODO: add a fromCsv constructor
 

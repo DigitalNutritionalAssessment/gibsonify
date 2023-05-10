@@ -63,3 +63,36 @@ class SurveyAdapter extends TypeAdapter<Survey> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+Survey _$SurveyFromJson(Map<String, dynamic> json) => Survey(
+      surveyId: json['surveyId'] as String,
+      name: json['name'] as String,
+      country: json['country'] as String,
+      description: json['description'] as String?,
+      comments: json['comments'] as String?,
+      minAge: json['minAge'] as int,
+      maxAge: json['maxAge'] as int,
+      requiredSex: $enumDecodeNullable(_$SexEnumMap, json['requiredSex']),
+      geoArea: json['geoArea'] as String?,
+    );
+
+Map<String, dynamic> _$SurveyToJson(Survey instance) => <String, dynamic>{
+      'surveyId': instance.surveyId,
+      'name': instance.name,
+      'country': instance.country,
+      'description': instance.description,
+      'comments': instance.comments,
+      'minAge': instance.minAge,
+      'maxAge': instance.maxAge,
+      'requiredSex': _$SexEnumMap[instance.requiredSex],
+      'geoArea': instance.geoArea,
+    };
+
+const _$SexEnumMap = {
+  Sex.male: 'male',
+  Sex.female: 'female',
+};

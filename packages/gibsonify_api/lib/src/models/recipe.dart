@@ -4,9 +4,11 @@ import 'package:intl/intl.dart';
 import 'dart:convert';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'recipe.g.dart';
 
+@JsonSerializable(explicitToJson: true)
 @HiveType(typeId: 9)
 class Recipe extends Equatable {
   Recipe({
@@ -120,35 +122,9 @@ class Recipe extends Equatable {
         saved,
       ];
 
-  Recipe.fromJson(Map<String, dynamic> json)
-      : name = json['name'],
-        employeeNumber = json['employeeNumber'],
-        number = json['number'],
-        date = json['date'],
-        type = json['type'],
-        measurements = Measurement.jsonDecodeMeasurements(json['measurements']),
-        ingredients = _jsonDecodeIngredients(json['ingredients']),
-        probes = _jsonDecodeProbes(json['probes']),
-        allProbesChecked = json['allProbesChecked'] == 'true' ? true : false,
-        allProbeAnswersStandard =
-            json['allProbeAnswersStandard'] == 'true' ? true : false,
-        saved = json['saved'] == 'true' ? true : false;
+  factory Recipe.fromJson(Map<String, dynamic> json) => _$RecipeFromJson(json);
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['name'] = name;
-    data['employeeNumber'] = employeeNumber;
-    data['number'] = number;
-    data['date'] = date;
-    data['type'] = type;
-    data['measurements'] = jsonEncode(measurements);
-    data['ingredients'] = jsonEncode(ingredients);
-    data['probes'] = jsonEncode(probes);
-    data['allProbesChecked'] = allProbesChecked.toString();
-    data['allProbeAnswersStandard'] = allProbeAnswersStandard.toString();
-    data['saved'] = saved.toString();
-    return data;
-  }
+  Map<String, dynamic> toJson() => _$RecipeToJson(this);
 
   String toCsv() {
     // TODO: think if we shouldn't change the type to enum or strings that

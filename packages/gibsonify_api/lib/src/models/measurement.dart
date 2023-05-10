@@ -3,9 +3,11 @@ import 'dart:convert';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:hive/hive.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'measurement.g.dart';
 
+@JsonSerializable()
 @HiveType(typeId: 8)
 class Measurement extends Equatable {
   Measurement({this.method, this.unit, this.value, this.id = ""});
@@ -90,20 +92,10 @@ class Measurement extends Equatable {
   @override
   List<Object?> get props => [method, unit, value];
 
-  Measurement.fromJson(Map<String, dynamic> json)
-      : method = json['measurementMethod'],
-        unit = json['measurementUnit'],
-        value = json['measurementValue'],
-        id = json['id'];
+  factory Measurement.fromJson(Map<String, dynamic> json) =>
+      _$MeasurementFromJson(json);
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['measurementMethod'] = method;
-    data['measurementUnit'] = unit;
-    data['measurementValue'] = value;
-    data['id'] = id;
-    return data;
-  }
+  Map<String, dynamic> toJson() => _$MeasurementToJson(this);
 
   static List<Measurement> jsonDecodeMeasurements(jsonEncodedMeasurements) {
     List<dynamic> partiallyDecodedMeasurements =

@@ -4,9 +4,11 @@ import 'dart:convert';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:hive/hive.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'recipe_ingredient.g.dart';
 
+@JsonSerializable(explicitToJson: true)
 @HiveType(typeId: 10)
 class Ingredient extends Equatable {
   Ingredient(
@@ -110,31 +112,10 @@ class Ingredient extends Equatable {
     return rootBundle.loadString('assets/ingredients/ingredients.json');
   }
 
-  Ingredient.fromJson(Map<String, dynamic> json)
-      : name = json['name'],
-        customName = json['customName'],
-        description = json['description'],
-        cookingState = json['cookingState'],
-        customCookingState = json['customCookingState'],
-        measurements = Measurement.jsonDecodeMeasurements(json['measurements']),
-        //foodComposition = jsonDecode(json['foodComposition']),
-        saved = json['saved'] == 'true' ? true : false,
-        id = json['id'];
+  factory Ingredient.fromJson(Map<String, dynamic> json) =>
+      _$IngredientFromJson(json);
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-
-    data['name'] = name;
-    data['customName'] = customName;
-    data['description'] = description;
-    data['cookingState'] = cookingState;
-    data['customCookingState'] = customCookingState;
-    data['measurements'] = jsonEncode(measurements);
-    //data['foodComposition'] = jsonEncode(foodComposition);
-    data['saved'] = saved.toString();
-    data['id'] = id;
-    return data;
-  }
+  Map<String, dynamic> toJson() => _$IngredientToJson(this);
 
   String toCsv() {
     String measurementsCombined = combineMeasurements(measurements);

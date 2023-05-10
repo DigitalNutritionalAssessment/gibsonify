@@ -139,3 +139,63 @@ class PhysioStatusAdapter extends TypeAdapter<PhysioStatus> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+GibsonsForm _$GibsonsFormFromJson(Map<String, dynamic> json) => GibsonsForm(
+      id: json['id'] as String,
+      surveyId: json['surveyId'] as String?,
+      recallDay: json['recallDay'] as String?,
+      interviewDate: json['interviewDate'] as String?,
+      interviewStartTime: json['interviewStartTime'] as String?,
+      physioStatus: $enumDecode(_$PhysioStatusEnumMap, json['physioStatus']),
+      pictureChartCollected: json['pictureChartCollected'] as String?,
+      pictureChartNotCollectedReason:
+          json['pictureChartNotCollectedReason'] as String?,
+      interviewEndTime: json['interviewEndTime'] as String?,
+      interviewFinishedInOneVisit:
+          json['interviewFinishedInOneVisit'] as String?,
+      secondInterviewVisitDate: json['secondInterviewVisitDate'] as String?,
+      secondVisitReason: json['secondVisitReason'] as String?,
+      interviewOutcome: json['interviewOutcome'] as String?,
+      interviewOutcomeNotCompletedReason:
+          json['interviewOutcomeNotCompletedReason'] as String?,
+      comments: json['comments'] as String?,
+      finished: json['finished'] as bool,
+      foodItems: (json['foodItems'] as List<dynamic>)
+          .map((e) => FoodItem.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      metadata: Metadata.fromJson(json['metadata'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$GibsonsFormToJson(GibsonsForm instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'surveyId': instance.surveyId,
+      'recallDay': instance.recallDay,
+      'interviewDate': instance.interviewDate,
+      'interviewStartTime': instance.interviewStartTime,
+      'physioStatus': _$PhysioStatusEnumMap[instance.physioStatus]!,
+      'pictureChartCollected': instance.pictureChartCollected,
+      'pictureChartNotCollectedReason': instance.pictureChartNotCollectedReason,
+      'interviewEndTime': instance.interviewEndTime,
+      'interviewFinishedInOneVisit': instance.interviewFinishedInOneVisit,
+      'secondInterviewVisitDate': instance.secondInterviewVisitDate,
+      'secondVisitReason': instance.secondVisitReason,
+      'interviewOutcome': instance.interviewOutcome,
+      'interviewOutcomeNotCompletedReason':
+          instance.interviewOutcomeNotCompletedReason,
+      'comments': instance.comments,
+      'finished': instance.finished,
+      'foodItems': instance.foodItems.map((e) => e.toJson()).toList(),
+      'metadata': instance.metadata.toJson(),
+    };
+
+const _$PhysioStatusEnumMap = {
+  PhysioStatus.notApplicable: 'notApplicable',
+  PhysioStatus.pregnant: 'pregnant',
+  PhysioStatus.lactatingH1: 'lactatingH1',
+  PhysioStatus.lactatingH2: 'lactatingH2',
+};

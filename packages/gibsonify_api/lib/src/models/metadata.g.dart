@@ -48,3 +48,21 @@ class MetadataAdapter extends TypeAdapter<Metadata> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+Metadata _$MetadataFromJson(Map<String, dynamic> json) => Metadata(
+      createdAt: DateTime.parse(json['createdAt'] as String),
+      createdBy: json['createdBy'] as String,
+      lastModifiedAt: DateTime.parse(json['lastModifiedAt'] as String),
+      lastModifiedBy: json['lastModifiedBy'] as String,
+    );
+
+Map<String, dynamic> _$MetadataToJson(Metadata instance) => <String, dynamic>{
+      'createdAt': instance.createdAt.toIso8601String(),
+      'createdBy': instance.createdBy,
+      'lastModifiedAt': instance.lastModifiedAt.toIso8601String(),
+      'lastModifiedBy': instance.lastModifiedBy,
+    };

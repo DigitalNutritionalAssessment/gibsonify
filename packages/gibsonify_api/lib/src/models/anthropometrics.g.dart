@@ -54,3 +54,27 @@ class AnthropometricsAdapter extends TypeAdapter<Anthropometrics> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+Anthropometrics _$AnthropometricsFromJson(Map<String, dynamic> json) =>
+    Anthropometrics(
+      date: DateTime.parse(json['date'] as String),
+      weight: (json['weight'] as num?)?.toDouble(),
+      height: (json['height'] as num?)?.toDouble(),
+      waist: (json['waist'] as num?)?.toDouble(),
+      armLength: (json['armLength'] as num?)?.toDouble(),
+      handSpan: (json['handSpan'] as num?)?.toDouble(),
+    );
+
+Map<String, dynamic> _$AnthropometricsToJson(Anthropometrics instance) =>
+    <String, dynamic>{
+      'date': instance.date.toIso8601String(),
+      'height': instance.height,
+      'weight': instance.weight,
+      'waist': instance.waist,
+      'armLength': instance.armLength,
+      'handSpan': instance.handSpan,
+    };
