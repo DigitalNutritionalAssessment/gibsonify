@@ -39,12 +39,13 @@ class RecipeDetailsScreen extends StatelessWidget {
                     context.read<RecipeBloc>().add(const RecipesSaved());
                     Navigator.pop(context);
                   } else {
-                    context.read<CollectionBloc>().add(FoodItemRecipeChanged(
-                        foodItemId: assignedFoodItemId!,
-                        foodItemRecipe: state.recipes[recipeIndex]));
                     context.read<RecipeBloc>().add(const RecipesSaved());
                     Navigator.pop(context);
-                    Navigator.pop(context);
+                    Navigator.pop(
+                        context,
+                        FoodItemRecipeChanged(
+                            foodItemId: assignedFoodItemId!,
+                            foodItemRecipe: state.recipes[recipeIndex]));
                   }
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

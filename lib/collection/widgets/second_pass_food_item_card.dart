@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gibsonify/collection/collection.dart';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:gibsonify/navigation/navigation.dart';
@@ -21,7 +23,7 @@ class SecondPassFoodItemCard extends StatelessWidget {
   final ValueChanged<String>? onCustomPreparationMethodChanged;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, [bool mounted = true]) {
     String foodItemDisplayName = isFieldUnmodifiedOrEmpty(foodItem.name)
         ? 'Unnamed food'
         : foodItem.name!;
@@ -153,12 +155,17 @@ class SecondPassFoodItemCard extends StatelessWidget {
                 //     ? 'Select the food recipe'
                 //     : null,
               ),
-              onTap: () {
-                Navigator.pushNamed(context, PageRouter.chooseRecipe,
+              onTap: () async {
+                final FoodItemRecipeChanged? event = (await Navigator.pushNamed(
+                    context, PageRouter.chooseRecipe,
                     arguments: {
                       'assignedFoodItemId': foodItem.id,
                       'foodItemDescription': foodItem.description,
-                    });
+                    })) as FoodItemRecipeChanged?;
+
+                if (mounted && event != null) {
+                  context.read<CollectionBloc>().add(event);
+                }
               },
               textInputAction: TextInputAction.next,
             ),
