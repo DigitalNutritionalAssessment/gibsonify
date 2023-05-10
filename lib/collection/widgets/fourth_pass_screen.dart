@@ -7,7 +7,7 @@ class FourthPassScreen extends StatelessWidget {
   const FourthPassScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, [bool mounted = true]) {
     return BlocBuilder<CollectionBloc, CollectionState>(
       builder: (context, state) {
         return Column(children: [
@@ -26,12 +26,19 @@ class FourthPassScreen extends StatelessWidget {
                           .add(FoodItemConfirmationChanged(
                               foodItemId: state.gibsonsForm.foodItems[index].id,
                               foodItemConfirmed: negatedConfirmation)),
-                      onDeleted: () => showDialog<String>(
-                          context: context,
-                          builder: (BuildContext context) =>
-                              DeleteFoodItemDialog(
-                                  foodItem:
-                                      state.gibsonsForm.foodItems[index])),
+                      onDeleted: () async {
+                        final confirmed = await showDialog<bool>(
+                            context: context,
+                            builder: (BuildContext context) =>
+                                DeleteFoodItemDialog(
+                                    foodItem:
+                                        state.gibsonsForm.foodItems[index]));
+                        if (mounted && (confirmed ?? false)) {
+                          context.read<CollectionBloc>().add(FoodItemDeleted(
+                              foodItemId:
+                                  state.gibsonsForm.foodItems[index].id));
+                        }
+                      },
                       onSelectedScreenChanged: (screen) => context
                           .read<CollectionBloc>()
                           .add(ActiveStepChanged(

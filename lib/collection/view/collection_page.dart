@@ -126,5 +126,21 @@ String? allowStepMessage({required CollectionState state}) {
     return 'Add at least one food item to continue';
   }
 
+  if (state.activeStep == 1 && !state.gibsonsForm.isFirstPassValid()) {
+    return 'Provide a name and time period for each food item to continue';
+  }
+
+  if (state.activeStep == 2 && !state.gibsonsForm.isSecondPassValid()) {
+    return 'Complete all fields for each food item to continue';
+  }
+
+  if (state.activeStep == 3 && !state.gibsonsForm.isThirdPassValid()) {
+    return 'Complete all measurements for each food item to continue';
+  }
+
+  if (state.activeStep == 4 && !state.gibsonsForm.allFoodItemsConfirmed()) {
+    return 'Confirm all food items to continue';
+  }
+
   return null;
 }

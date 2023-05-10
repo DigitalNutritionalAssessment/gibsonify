@@ -124,71 +124,77 @@ class FourthPassFoodItemCard extends StatelessWidget {
                           color: foodItem.confirmed
                               ? Theme.of(context).colorScheme.background
                               : null,
-                          child: Column(
-                            children: [
-                              TextFormField(
-                                readOnly: true,
-                                onTap: () => onSelectedScreenChanged!(
-                                    SelectedScreen.thirdPass),
-                                initialValue:
-                                    foodItem.measurements[index].method,
-                                decoration: InputDecoration(
-                                  icon:
-                                      const Icon(Icons.monitor_weight_outlined),
-                                  labelText: 'Measurement method',
-                                  helperText:
-                                      'The method used to estimate food quantity',
-                                  // TODO: refactor to something nicer
-                                  errorText: !foodItem.measurements[index]
-                                              .isMethodValid() ||
-                                          foodItem.measurements[index].method ==
-                                              null
-                                      ? 'Select the measurement method'
-                                      : null,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                TextFormField(
+                                  readOnly: true,
+                                  onTap: () => onSelectedScreenChanged!(
+                                      SelectedScreen.thirdPass),
+                                  initialValue:
+                                      foodItem.measurements[index].method,
+                                  decoration: InputDecoration(
+                                    icon: const Icon(
+                                        Icons.monitor_weight_outlined),
+                                    labelText: 'Measurement method',
+                                    helperText:
+                                        'The method used to estimate food quantity',
+                                    // TODO: refactor to something nicer
+                                    errorText: !foodItem.measurements[index]
+                                                .isMethodValid() ||
+                                            foodItem.measurements[index]
+                                                    .method ==
+                                                null
+                                        ? 'Select the measurement method'
+                                        : null,
+                                  ),
                                 ),
-                              ),
-                              TextFormField(
-                                readOnly: true,
-                                onTap: () => onSelectedScreenChanged!(
-                                    SelectedScreen.thirdPass),
-                                initialValue: foodItem.measurements[index].unit,
-                                decoration: InputDecoration(
-                                  icon: const Icon(
-                                      Icons.radio_button_unchecked_outlined),
-                                  labelText: 'Measurement unit',
-                                  helperText:
-                                      'The size of each measurement value',
-                                  // TODO: refactor to something nicer
-                                  errorText: !foodItem.measurements[index]
-                                              .isUnitValid() ||
-                                          foodItem.measurements[index].unit ==
-                                              null
-                                      ? 'Select the measurement unit'
-                                      : null,
+                                TextFormField(
+                                  readOnly: true,
+                                  onTap: () => onSelectedScreenChanged!(
+                                      SelectedScreen.thirdPass),
+                                  initialValue:
+                                      foodItem.measurements[index].unit,
+                                  decoration: InputDecoration(
+                                    icon: const Icon(
+                                        Icons.radio_button_unchecked_outlined),
+                                    labelText: 'Measurement unit',
+                                    helperText:
+                                        'The size of each measurement value',
+                                    // TODO: refactor to something nicer
+                                    errorText: !foodItem.measurements[index]
+                                                .isUnitValid() ||
+                                            foodItem.measurements[index].unit ==
+                                                null
+                                        ? 'Select the measurement unit'
+                                        : null,
+                                  ),
                                 ),
-                              ),
-                              TextFormField(
-                                readOnly: true,
-                                onTap: () => onSelectedScreenChanged!(
-                                    SelectedScreen.thirdPass),
-                                initialValue:
-                                    foodItem.measurements[index].value,
-                                decoration: InputDecoration(
-                                  icon: const Icon(
-                                      Icons.drive_file_rename_outline_rounded),
-                                  labelText: 'Measurement value',
-                                  helperText:
-                                      'The amount or number you measured',
-                                  // TODO: refactor to something nicer
-                                  errorText: !foodItem.measurements[index]
-                                              .isValueValid() ||
-                                          foodItem.measurements[index].value ==
-                                              null
-                                      ? 'Enter the measured value in 1 to 4 digits'
-                                      : null,
+                                TextFormField(
+                                  readOnly: true,
+                                  onTap: () => onSelectedScreenChanged!(
+                                      SelectedScreen.thirdPass),
+                                  initialValue:
+                                      foodItem.measurements[index].value,
+                                  decoration: InputDecoration(
+                                    icon: const Icon(Icons
+                                        .drive_file_rename_outline_rounded),
+                                    labelText: 'Measurement value',
+                                    helperText:
+                                        'The amount or number you measured',
+                                    // TODO: refactor to something nicer
+                                    errorText: !foodItem.measurements[index]
+                                                .isValueValid() ||
+                                            foodItem.measurements[index]
+                                                    .value ==
+                                                null
+                                        ? 'Enter the measured value in 1 to 4 digits'
+                                        : null,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         );
                       })
