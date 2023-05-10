@@ -8,7 +8,7 @@ class ThirdPassScreen extends StatelessWidget {
   const ThirdPassScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, [bool mounted = true]) {
     return BlocBuilder<CollectionBloc, CollectionState>(
       builder: (context, state) {
         return Column(
@@ -64,15 +64,25 @@ class ThirdPassScreen extends StatelessWidget {
                             .add(FoodItemMeasurementAdded(
                                 foodItemId:
                                     state.gibsonsForm.foodItems[index].id)),
-                        onMeasurementDeleted: (deletedMeasurementIndex) =>
-                            showDialog<String>(
-                                context: context,
-                                builder: (BuildContext context) =>
-                                    DeleteFoodItemMeasurementDialog(
-                                      foodItem:
-                                          state.gibsonsForm.foodItems[index],
-                                      measurementIndex: deletedMeasurementIndex,
-                                    )),
+                        onMeasurementDeleted: (deletedMeasurementIndex) async {
+                          final confirmed = await showDialog<bool>(
+                              useRootNavigator: false,
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  DeleteFoodItemMeasurementDialog(
+                                    foodItem:
+                                        state.gibsonsForm.foodItems[index],
+                                    measurementIndex: deletedMeasurementIndex,
+                                  ));
+
+                          if (mounted && (confirmed ?? false)) {
+                            context.read<CollectionBloc>().add(
+                                FoodItemMeasurementDeleted(
+                                    measurementIndex: deletedMeasurementIndex,
+                                    foodItemId:
+                                        state.gibsonsForm.foodItems[index].id));
+                          }
+                        },
                       ),
                     );
                   }),
@@ -93,28 +103,19 @@ class DeleteFoodItemMeasurementDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CollectionBloc, CollectionState>(
-      builder: (context, state) {
-        return AlertDialog(
-          title: const Text('Delete measurement'),
-          content: const Text('Would you like to delete the measurement?'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                context.read<CollectionBloc>().add(FoodItemMeasurementDeleted(
-                    measurementIndex: measurementIndex,
-                    foodItemId: foodItem.id));
-                Navigator.pop(context);
-              },
-              child: const Text('Delete'),
-            ),
-          ],
-        );
-      },
+    return AlertDialog(
+      title: const Text('Delete measurement'),
+      content: const Text('Would you like to delete this measurement?'),
+      actions: [
+        ElevatedButton(
+          onPressed: () => Navigator.pop(context, true),
+          child: const Text('Yes'),
+        ),
+        TextButton(
+          onPressed: () => Navigator.pop(context, false),
+          child: const Text('No'),
+        ),
+      ],
     );
   }
 }
