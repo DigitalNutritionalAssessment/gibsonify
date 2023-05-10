@@ -35,8 +35,8 @@ class FourthPassScreen extends StatelessWidget {
                                       state.gibsonsForm.foodItems[index])),
                       onSelectedScreenChanged: (screen) => context
                           .read<CollectionBloc>()
-                          .add(SelectedScreenChanged(
-                              changedSelectedScreen: screen)),
+                          .add(ActiveStepChanged(
+                              changedActiveStep: screen.index)),
                     ),
                   );
                 }),
@@ -56,9 +56,6 @@ class FourthPassScreen extends StatelessWidget {
           //                   const SelectedScreenChanged(
           //                       changedSelectedScreen:
           //                           SelectedScreen.firstPass));
-          //               // TODO: Add a ScrollController to BLoC state,
-          //               // pass it to first pass screen ListView and
-          //               // scroll down in this onPressed call
           //             }),
           //       ),
           //     ],

@@ -10,7 +10,6 @@ part 'collection_state.dart';
 class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
   CollectionBloc({required GibsonsForm collection})
       : super(CollectionState(gibsonsForm: collection)) {
-    on<SelectedScreenChanged>(_onSelectedScreenChanged);
     on<ActiveStepChanged>(_onActiveStepChanged);
     on<SurveyChanged>(_onSurveyChanged);
     on<RecallDayChanged>(_onRecallDayChanged);
@@ -76,11 +75,6 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     foodItems.insert(changedFoodItemIndex, changedFoodItem);
 
     return state.gibsonsForm.copyWith(foodItems: foodItems);
-  }
-
-  void _onSelectedScreenChanged(
-      SelectedScreenChanged event, Emitter<CollectionState> emit) {
-    emit(state.copyWith(selectedScreen: event.changedSelectedScreen));
   }
 
   void _onActiveStepChanged(
