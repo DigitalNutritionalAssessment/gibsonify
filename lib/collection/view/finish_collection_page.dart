@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dropdown_search/dropdown_search.dart';
-import 'package:gibsonify/household/household.dart';
 import 'package:intl/intl.dart';
 
 import 'package:gibsonify/collection/collection.dart';
@@ -14,43 +13,35 @@ class FinishCollectionPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CollectionBloc, CollectionState>(
       builder: (context, state) {
-        return Scaffold(
-            appBar: AppBar(
-              title: const Text('Finish Collection'),
-            ),
-            body: Column(
-              children: const [
-                CollectionFinishedTile(),
-                Expanded(
-                    child:
-                        SingleChildScrollView(child: FinishCollectionForm())),
-              ],
-            ),
-            floatingActionButton: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  FloatingActionButton.extended(
-                      heroTag: null,
-                      label: state.gibsonsForm.finished
-                          ? const Text("Back to Collections")
-                          : const Text("Finish Collection"),
-                      icon: const Icon(Icons.check),
-                      onPressed: () {
-                        if (state.gibsonsForm.finished) {
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                        } else {
-                          showDialog<String>(
-                              context: context,
-                              useRootNavigator: false,
-                              builder: (BuildContext context) =>
-                                  FinishCollectionDialog(
-                                      gibsonsForm: state.gibsonsForm));
-                        }
-                        // TODO: only allow to finish if all required fields are filled
-                      })
-                ]));
+        final bloc = context.read<CollectionBloc>();
+        return Column(
+          children: [
+            const CollectionFinishedTile(),
+            const Expanded(
+                child: SingleChildScrollView(child: FinishCollectionForm())),
+            Visibility(
+              visible: !state.gibsonsForm.finished,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton.icon(
+                        icon: const Icon(Icons.check),
+                        label: const Text("Finish Collection"),
+                        onPressed: state.gibsonsForm.isFinishCollectionValid()
+                            ? () {
+                                showDialog<String>(
+                                    context: context,
+                                    useRootNavigator: false,
+                                    builder: (BuildContext context) =>
+                                        FinishCollectionDialog(bloc: bloc));
+                              }
+                            : null),
+                  ),
+                ],
+              ),
+            )
+          ],
+        );
       },
     );
   }
@@ -63,8 +54,6 @@ class FinishCollectionForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      // TODO: investigate BlocBuilder nesting, probably not best practice, so
-      // maybe rewrite children widgets without BlocBuilders
       child: BlocBuilder<CollectionBloc, CollectionState>(
         builder: (context, state) {
           return AbsorbPointer(
@@ -278,7 +267,7 @@ class _SecondInterviewVisitDateInputState
               var date = await showDatePicker(
                   context: context,
                   initialDate: DateTime.now(),
-                  firstDate: DateTime(1900),
+                  firstDate: DateTime.parse(state.gibsonsForm.interviewDate!),
                   lastDate: DateTime.now());
               if (!mounted) return;
               var formattedDate =
@@ -432,49 +421,30 @@ class CommentsInput extends StatelessWidget {
 }
 
 class FinishCollectionDialog extends StatelessWidget {
-  final GibsonsForm gibsonsForm;
-  const FinishCollectionDialog({Key? key, required this.gibsonsForm})
+  final CollectionBloc bloc;
+  const FinishCollectionDialog({Key? key, required this.bloc})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CollectionBloc, CollectionState>(
-      builder: (context, state) {
-        return AlertDialog(
-          title: const Text('Finish collection'),
-          content: const Text(
-              'Would you like to finish this collection?\n\nOnce finished, the collection will '
-              'no longer be editable, even if it is not fully completed. As an '
-              'alternative, you can pause the collection.'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                context.read<HouseholdBloc>().add(
-                    SaveCollectionRequested(gibsonsForm: state.gibsonsForm));
-                Navigator.pop(context);
-                Navigator.pop(context);
-                Navigator.pop(context);
-              },
-              child: const Text('Pause'),
-            ),
-            TextButton(
-              onPressed: () async {
-                context.read<CollectionBloc>().add(const CollectionFinished());
-                context.read<HouseholdBloc>().add(SaveCollectionRequested(
-                    gibsonsForm: state.gibsonsForm.copyWith(finished: true)));
-                Navigator.pop(context);
-                Navigator.pop(context);
-                Navigator.pop(context);
-              },
-              child: const Text('Finish'),
-            ),
-          ],
-        );
-      },
+    return AlertDialog(
+      title: const Text('Finish collection?'),
+      content: const Text(
+          'Would you like to finish this collection?\n\nOnce finished, the collection will '
+          'no longer be editable, even if it is not fully completed.'),
+      actions: [
+        ElevatedButton(
+          onPressed: () async {
+            bloc.add(const CollectionFinished());
+            Navigator.pop(context);
+          },
+          child: const Text('Yes'),
+        ),
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('No'),
+        ),
+      ],
     );
   }
 }

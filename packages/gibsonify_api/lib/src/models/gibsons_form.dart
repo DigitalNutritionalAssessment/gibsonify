@@ -276,8 +276,42 @@ class GibsonsForm extends Equatable {
     return sensitizationValid;
   }
 
+  bool isFirstPassValid() {
+    return foodItems.every((foodItem) =>
+        isFieldNotNullAndNotEmpty(foodItem.name) &&
+        isFieldNotNullAndNotEmpty(foodItem.timePeriod));
+  }
+
+  bool isSecondPassValid() {
+    return foodItems.every((foodItem) =>
+        isFieldNotNullAndNotEmpty(foodItem.source) &&
+        isFieldNotNullAndNotEmpty(foodItem.preparationMethod) &&
+        (!foodItem.preparationMethod!.contains('Other') ||
+            isFieldNotNullAndNotEmpty(foodItem.customPreparationMethod)) &&
+        foodItem.recipe != null);
+  }
+
+  bool isThirdPassValid() {
+    return foodItems.every((foodItem) => foodItem.measurements
+        .every((measurement) => measurement.isMeasurementFilled()));
+  }
+
   bool allFoodItemsConfirmed() {
     return foodItems.every((foodItem) => foodItem.confirmed);
+  }
+
+  bool isFinishCollectionValid() {
+    return isPictureChartCollectedValid() &&
+        (isPictureChartCollected() ||
+            isPictureChartNotCollectedReasonValid()) &&
+        isInterviewEndTimeValid() &&
+        isInterviewFinishedInOneVisitValid() &&
+        (isInterviewFinishedInOneVisit() ||
+            (isSecondInterviewVisitDateValid() &&
+                isSecondVisitReasonValid())) &&
+        isInterviewOutcomeValid() &&
+        (isInterviewOutcomeCompleted() ||
+            isInterviewOutcomeNotCompletedReasonValid());
   }
 
   bool isPictureChartCollectedValid() {

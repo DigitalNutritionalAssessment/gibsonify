@@ -8,8 +8,9 @@ part 'collection_event.dart';
 part 'collection_state.dart';
 
 class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
-  CollectionBloc() : super(CollectionState()) {
-    on<SelectedScreenChanged>(_onSelectedScreenChanged);
+  CollectionBloc({required GibsonsForm collection})
+      : super(CollectionState(gibsonsForm: collection)) {
+    on<ActiveStepChanged>(_onActiveStepChanged);
     on<SurveyChanged>(_onSurveyChanged);
     on<RecallDayChanged>(_onRecallDayChanged);
     on<InterviewDateChanged>(_onInterviewDateChanged);
@@ -44,8 +45,6 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     on<FoodItemMeasurementUnitChanged>(_onFoodItemMeasurementUnitChanged);
     on<FoodItemMeasurementValueChanged>(_onFoodItemMeasurementValueChanged);
     on<FoodItemConfirmationChanged>(_onFoodItemConfirmationChanged);
-    on<GibsonsFormProvided>(_onGibsonsFormProvided);
-    on<GibsonsFormCreated>(_onGibsonsFormCreated);
     on<CollectionFinished>(_onCollectionFinished);
   }
 
@@ -78,9 +77,9 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     return state.gibsonsForm.copyWith(foodItems: foodItems);
   }
 
-  void _onSelectedScreenChanged(
-      SelectedScreenChanged event, Emitter<CollectionState> emit) {
-    emit(state.copyWith(selectedScreen: event.changedSelectedScreen));
+  void _onActiveStepChanged(
+      ActiveStepChanged event, Emitter<CollectionState> emit) {
+    emit(state.copyWith(activeStep: event.changedActiveStep));
   }
 
   void _onSurveyChanged(SurveyChanged event, Emitter<CollectionState> emit) {
@@ -413,25 +412,6 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
     emit(state.copyWith(
         gibsonsForm: _replaceFoodItemInGibsonsForm(changedFoodItem)));
-  }
-
-  // TODO: Delete the async?
-  void _onGibsonsFormProvided(
-      GibsonsFormProvided event, Emitter<CollectionState> emit) async {
-    emit(state.copyWith(
-        gibsonsForm: event.gibsonsForm,
-        selectedScreen: SelectedScreen.sensitization,
-        geoLocationStatus: GeoLocationStatus.none));
-  }
-
-  void _onGibsonsFormCreated(
-      GibsonsFormCreated event, Emitter<CollectionState> emit) {
-    GibsonsForm gibsonsFormCreated =
-        GibsonsForm(employeeNumber: event.employeeNumber);
-    emit(state.copyWith(
-        gibsonsForm: gibsonsFormCreated,
-        selectedScreen: SelectedScreen.sensitization,
-        geoLocationStatus: GeoLocationStatus.none));
   }
 
   void _onCollectionFinished(

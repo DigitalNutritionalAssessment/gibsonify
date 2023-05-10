@@ -33,7 +33,6 @@ class ThirdPassHelpPage extends StatelessWidget {
                 ' procedure if necessary.\n\n'
                 'Clarify to the respondent that you are referring to the'
                 ' servings during the same sitting or eating episode.'),
-            // TODO:
           ),
         ]));
   }

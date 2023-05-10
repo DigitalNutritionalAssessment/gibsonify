@@ -7,12 +7,12 @@ abstract class CollectionEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class SelectedScreenChanged extends CollectionEvent {
-  final SelectedScreen changedSelectedScreen;
-  const SelectedScreenChanged({required this.changedSelectedScreen});
+class ActiveStepChanged extends CollectionEvent {
+  final int changedActiveStep;
+  const ActiveStepChanged({required this.changedActiveStep});
 
   @override
-  List<Object> get props => [changedSelectedScreen];
+  List<Object> get props => [changedActiveStep];
 }
 
 class RespondentNameChanged extends CollectionEvent {
@@ -343,36 +343,6 @@ class FoodItemConfirmationChanged extends CollectionEvent {
 
   @override
   List<Object> get props => [foodItemConfirmed, foodItemId];
-}
-
-class GibsonsFormProvided extends CollectionEvent {
-  final GibsonsForm gibsonsForm;
-  const GibsonsFormProvided({required this.gibsonsForm});
-
-  @override
-  List<Object> get props => [gibsonsForm];
-}
-
-// TODO: This event is temporary until it is implemented that CollectionBloc
-// takes a GibsonsForm when instantiated — if none is passed, it creates a new
-// one
-class GibsonsFormCreated extends CollectionEvent {
-  final String employeeNumber;
-
-  const GibsonsFormCreated({required this.employeeNumber});
-
-  @override
-  List<Object> get props => [employeeNumber];
-}
-
-class GibsonsFormDuplicated extends CollectionEvent {
-  final String employeeNumber;
-  final GibsonsForm gibsonsForm;
-  const GibsonsFormDuplicated(
-      {required this.employeeNumber, required this.gibsonsForm});
-
-  @override
-  List<Object> get props => [employeeNumber, gibsonsForm];
 }
 
 class CollectionFinished extends CollectionEvent {

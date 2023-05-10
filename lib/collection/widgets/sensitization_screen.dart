@@ -8,7 +8,6 @@ import 'package:intl/intl.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 
 import 'package:gibsonify/collection/collection.dart';
-import 'package:gibsonify/navigation/navigation.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
 
 class SensitizationScreen extends StatelessWidget {
@@ -16,22 +15,12 @@ class SensitizationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('Information'),
-          actions: [
-            IconButton(
-                onPressed: () =>
-                    Navigator.pushNamed(context, PageRouter.sensitizationHelp),
-                icon: const Icon(Icons.help))
-          ],
-        ),
-        body: Column(
-          children: const [
-            CollectionFinishedTile(),
-            Expanded(child: SingleChildScrollView(child: SensitizationForm())),
-          ],
-        ));
+    return Column(
+      children: const [
+        CollectionFinishedTile(),
+        Expanded(child: SingleChildScrollView(child: SensitizationForm())),
+      ],
+    );
   }
 }
 
@@ -42,8 +31,6 @@ class SensitizationForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      // TODO: investigate BlocBuilder nesting, probably not best practice, so
-      // maybe rewrite children widgets without BlocBuilders
       child: BlocBuilder<CollectionBloc, CollectionState>(
         builder: (context, state) {
           return AbsorbPointer(
