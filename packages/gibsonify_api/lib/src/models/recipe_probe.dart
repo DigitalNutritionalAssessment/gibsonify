@@ -82,21 +82,6 @@ class Probe extends Equatable {
 
   Map<String, dynamic> toJson() => _$ProbeToJson(this);
 
-  // Probe.fromJson(Map<String, dynamic> json)
-  //     : name = json['name'],
-  //       checked = json['checked'] == 'true' ? true : false,
-  //       answer = json['answer'],
-  //       probeOptions = _jsonDecodeProbeOptions(json['probeOptions']);
-
-  // Map<String, dynamic> toJson() {
-  //   final Map<String, dynamic> data = <String, dynamic>{};
-  //   data['name'] = name;
-  //   data['checked'] = checked.toString();
-  //   data['answer'] = answer;
-  //   data['probeOptions'] = jsonEncode(probeOptions);
-  //   return data;
-  // }
-
   String toCsv() {
     // TODO: these are actually probe options, the import/export format is wrong
     String probeAnswers = '';
