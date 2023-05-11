@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gibsonify/login/login.dart';
 import 'package:gibsonify/surveys/surveys.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
+import 'package:gibsonify_repository/gibsonify_repository.dart';
 
 class SurveysScreen extends StatelessWidget {
   const SurveysScreen({Key? key}) : super(key: key);
@@ -175,11 +176,30 @@ class SurveyOptions extends StatelessWidget {
         leading: const Icon(Icons.delete),
         title: const Text('Delete'),
         onTap: () {
-          context.read<SurveysBloc>().add(SurveyDeleteRequested(id: surveyId));
+          final households = context.read<HiveRepository>().readHouseholds();
+          if (allowSurveyDelete(surveyId: surveyId, households: households)) {
+            context
+                .read<SurveysBloc>()
+                .add(SurveyDeleteRequested(id: surveyId));
+          } else {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(SnackBar(
+                  content: Text(
+                      'Survey $surveyId cannot be deleted because there are collections associated with it.')));
+          }
           Navigator.pop(context);
         },
       )
     ];
     return Wrap(children: options);
   }
+}
+
+bool allowSurveyDelete(
+    {required String surveyId, required Iterable<Household> households}) {
+  return !households
+      .expand((household) => household.respondents.values)
+      .expand((respondent) => respondent.collections.values)
+      .any((collection) => collection.surveyId == surveyId);
 }
