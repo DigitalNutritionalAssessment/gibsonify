@@ -81,10 +81,14 @@ class _ViewHouseholdPageState extends State<ViewHouseholdPage>
             itemCount: state.household!.respondents.length,
             itemBuilder: (context, index) {
               final respondent = respondents[index];
+              final finishedCollections = respondent.collections.values
+                  .where((collection) => collection.finished)
+                  .length;
               return Card(
                   child: ListTile(
                 title: Text(respondent.name),
-                subtitle: Text("ID: ${index + 1}"),
+                subtitle: Text(
+                    'Collections: $finishedCollections finished, ${respondent.collections.length - finishedCollections} unfinished'),
                 onTap: () => {
                   context
                       .read<HouseholdBloc>()
