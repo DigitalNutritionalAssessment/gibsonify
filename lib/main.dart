@@ -5,6 +5,9 @@ import 'package:flutter_map_tile_caching/flutter_map_tile_caching.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:gibsonify_repository/gibsonify_repository.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/intl_standalone.dart';
 
 import 'app.dart';
 
@@ -13,6 +16,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   registerAdapters();
+
+  Intl.systemLocale = await findSystemLocale();
+  initializeDateFormatting(Intl.systemLocale, null);
 
   final gibsonifyApi =
       GibsonifyApi(sharedPreferences: await SharedPreferences.getInstance());

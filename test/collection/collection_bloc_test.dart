@@ -11,7 +11,8 @@ void main() {
     late CollectionBloc collectionBloc;
 
     setUp(() {
-      collectionBloc = CollectionBloc(collection: GibsonsForm());
+      collectionBloc =
+          CollectionBloc(collection: GibsonsForm.create(employeeId: 'TEST'));
     });
 
     test('initial selected screen is sensitization screen', () {

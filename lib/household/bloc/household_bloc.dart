@@ -39,7 +39,9 @@ class HouseholdBloc extends Bloc<HouseholdEvent, HouseholdState> {
     Household household = state.household!.copyWith(
         geoLocation: event.geoLocation,
         sensitizationDate: event.sensitizationDate,
-        comments: event.comments);
+        comments: event.comments,
+        metadata:
+            state.household!.metadata.modify(lastModifiedBy: event.employeeId));
     _hiveRepository.saveNewHousehold(household);
     emit(HouseholdLoaded(household: household));
   }
@@ -92,7 +94,9 @@ class HouseholdBloc extends Bloc<HouseholdEvent, HouseholdState> {
     var respondents = {...state.household!.respondents};
     var respondent = respondents[state.selectedRespondentId!]!;
     final collections = {...respondent.collections};
-    collections[event.gibsonsForm.id] = event.gibsonsForm;
+    collections[event.gibsonsForm.id] = event.gibsonsForm.copyWith(
+        metadata: event.gibsonsForm.metadata
+            .modify(lastModifiedBy: event.employeeId));
     respondents[state.selectedRespondentId!] =
         respondent.copyWith(collections: collections);
     final household = state.household!.copyWith(respondents: respondents);

@@ -34,70 +34,89 @@ String physioStatusToString(PhysioStatus physioStatus) {
 
 @HiveType(typeId: 5)
 class GibsonsForm extends Equatable {
-  GibsonsForm(
-      {String? id,
-      this.employeeNumber,
-      this.surveyId,
-      this.recallDay, // TODO: rename to recallDayType
-      this.interviewDate,
-      this.interviewStartTime,
-      this.physioStatus = PhysioStatus.notApplicable,
-      this.pictureChartCollected,
-      this.pictureChartNotCollectedReason,
-      this.interviewEndTime,
-      this.interviewFinishedInOneVisit,
-      this.secondInterviewVisitDate,
-      this.secondVisitReason,
-      this.interviewOutcome,
-      this.interviewOutcomeNotCompletedReason,
-      this.comments,
-      this.finished = false,
-      this.foodItems = const <FoodItem>[]})
-      : id = id ?? const Uuid().v4();
+  GibsonsForm({
+    required this.id,
+    this.surveyId,
+    this.recallDay, // TODO: rename to recallDayType
+    this.interviewDate,
+    this.interviewStartTime,
+    required this.physioStatus,
+    this.pictureChartCollected,
+    this.pictureChartNotCollectedReason,
+    this.interviewEndTime,
+    this.interviewFinishedInOneVisit,
+    this.secondInterviewVisitDate,
+    this.secondVisitReason,
+    this.interviewOutcome,
+    this.interviewOutcomeNotCompletedReason,
+    this.comments,
+    required this.finished,
+    required this.foodItems,
+    required this.metadata,
+  });
+
+  GibsonsForm.create({required String employeeId})
+      : id = Uuid().v4(),
+        surveyId = null,
+        recallDay = null,
+        interviewDate = null,
+        interviewStartTime = null,
+        physioStatus = PhysioStatus.notApplicable,
+        pictureChartCollected = null,
+        pictureChartNotCollectedReason = null,
+        interviewEndTime = null,
+        interviewFinishedInOneVisit = null,
+        secondInterviewVisitDate = null,
+        secondVisitReason = null,
+        interviewOutcome = null,
+        interviewOutcomeNotCompletedReason = null,
+        comments = null,
+        finished = false,
+        foodItems = [],
+        metadata = Metadata.create(createdBy: employeeId);
 
   @HiveField(0)
   final String id;
   @HiveField(1)
-  final String? employeeNumber;
-  @HiveField(2)
   final String? surveyId;
-  @HiveField(3)
+  @HiveField(2)
   final String? recallDay; // TODO: change to an enum
-  @HiveField(4)
+  @HiveField(3)
   final String? interviewDate;
-  @HiveField(5)
+  @HiveField(4)
   final String? interviewStartTime;
-  @HiveField(6)
+  @HiveField(5)
   final PhysioStatus physioStatus;
-  @HiveField(7)
+  @HiveField(6)
   final String? pictureChartCollected; // TODO: change to a bool
-  @HiveField(8)
+  @HiveField(7)
   final String? pictureChartNotCollectedReason;
-  @HiveField(9)
+  @HiveField(8)
   final String? interviewEndTime;
-  @HiveField(10)
+  @HiveField(9)
   final String? interviewFinishedInOneVisit; // TODO: change to a bool
-  @HiveField(11)
+  @HiveField(10)
   final String? secondInterviewVisitDate;
-  @HiveField(12)
+  @HiveField(11)
   final String? secondVisitReason;
-  @HiveField(13)
+  @HiveField(12)
   final String? interviewOutcome; // TODO: change to an enum
-  @HiveField(14)
+  @HiveField(13)
   final String? interviewOutcomeNotCompletedReason;
-  @HiveField(15)
+  @HiveField(14)
   final String? comments;
-  @HiveField(16)
+  @HiveField(15)
   final bool finished;
-  @HiveField(17)
+  @HiveField(16)
   final List<FoodItem> foodItems;
+  @HiveField(17)
+  final Metadata metadata;
 
   // TODO: implement code generation JSON serialization using json_serializable
   // and/or json_annotation
 
   GibsonsForm.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        employeeNumber = json['employeeNumber'],
         surveyId = json['surveyId'],
         recallDay = json['recallDay'],
         interviewDate = json['interviewDate'],
@@ -114,12 +133,12 @@ class GibsonsForm extends Equatable {
             json['interviewOutcomeNotCompletedReason'],
         comments = json['comments'],
         finished = json['finished'] == 'true' ? true : false,
-        foodItems = _jsonDecodeFoodItems(json['foodItems']);
+        foodItems = _jsonDecodeFoodItems(json['foodItems']),
+        metadata = json['metadata'];
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
-    data['employeeNumber'] = employeeNumber;
     data['surveyId'] = surveyId;
     data['recallDay'] = recallDay;
     data['interviewDate'] = interviewDate;
@@ -137,6 +156,7 @@ class GibsonsForm extends Equatable {
     data['comments'] = comments;
     data['finished'] = finished.toString();
     data['foodItems'] = jsonEncode(foodItems); // This calls toJson on each one
+    data['metadata'] = jsonEncode(metadata);
     return data;
   }
   // TODO: add a fromCsv constructor
@@ -149,8 +169,7 @@ class GibsonsForm extends Equatable {
       String respondentTelNumber,
       String sensitizationDate,
       String geoLocation) {
-    String gibsonsFormInfo =
-        '"$id","$employeeNumber","$householdId","$respondentName",'
+    String gibsonsFormInfo = '"$id","$householdId","$respondentName",'
         '"$respondentCountryCode","$respondentTelNumberPrefix","$respondentTelNumber",'
         '"$sensitizationDate","$recallDay","$interviewDate","$interviewStartTime","$physioStatus",'
         '"$geoLocation","$pictureChartCollected","$pictureChartNotCollectedReason",'
@@ -166,7 +185,6 @@ class GibsonsForm extends Equatable {
 
   GibsonsForm copyWith(
       {String? id,
-      String? employeeNumber,
       String? householdId,
       String? surveyId,
       String? recallDay,
@@ -183,10 +201,10 @@ class GibsonsForm extends Equatable {
       String? interviewOutcomeNotCompletedReason,
       String? comments,
       bool? finished,
-      List<FoodItem>? foodItems}) {
+      List<FoodItem>? foodItems,
+      Metadata? metadata}) {
     return GibsonsForm(
         id: id ?? this.id,
-        employeeNumber: employeeNumber ?? this.employeeNumber,
         surveyId: surveyId ?? this.surveyId,
         recallDay: recallDay ?? this.recallDay,
         interviewDate: interviewDate ?? this.interviewDate,
@@ -208,7 +226,8 @@ class GibsonsForm extends Equatable {
                 this.interviewOutcomeNotCompletedReason,
         comments: comments ?? this.comments,
         finished: finished ?? this.finished,
-        foodItems: foodItems ?? this.foodItems);
+        foodItems: foodItems ?? this.foodItems,
+        metadata: metadata ?? this.metadata);
   }
 
   @override
@@ -216,7 +235,6 @@ class GibsonsForm extends Equatable {
     return '\n *** \nGibson\'s Form:\n'
         'UUID: $id\n'
         'Survey ID: $surveyId\n'
-        'Employee Number: $employeeNumber\n'
         'Recall Day: $recallDay\n'
         'Interview Date: $interviewDate\n'
         'Interview Start Time: $interviewStartTime\n'
@@ -232,7 +250,8 @@ class GibsonsForm extends Equatable {
         '$interviewOutcomeNotCompletedReason\n'
         'Comments: $comments\n'
         'Finished: $finished\n'
-        'Food Items: $foodItems'
+        'Food Items: $foodItems\n'
+        'Metadata: $metadata\n'
         '\n *** \n';
   }
 
@@ -240,7 +259,6 @@ class GibsonsForm extends Equatable {
   List<Object?> get props => [
         id,
         surveyId,
-        employeeNumber,
         recallDay,
         interviewDate,
         interviewStartTime,
@@ -255,7 +273,8 @@ class GibsonsForm extends Equatable {
         interviewOutcomeNotCompletedReason,
         comments,
         finished,
-        foodItems
+        foodItems,
+        metadata
       ];
 
   bool isSurveyIdValid() {

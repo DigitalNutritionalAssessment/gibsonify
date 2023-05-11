@@ -29,4 +29,5 @@ void registerAdapters() {
   Hive.registerAdapter(ProbeOptionAdapter());
   Hive.registerAdapter(AnthropometricsAdapter());
   Hive.registerAdapter(SurveyAdapter());
+  Hive.registerAdapter(MetadataAdapter());
 }

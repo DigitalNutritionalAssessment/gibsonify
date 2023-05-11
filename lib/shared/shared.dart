@@ -1,4 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:gibsonify_api/gibsonify_api.dart';
+import 'package:intl/intl.dart';
 
 Future<Position> getPosition() async {
   bool serviceEnabled;
@@ -35,4 +38,23 @@ Future<Position> getPosition() async {
   // When we reach here, permissions are granted and we can
   // continue accessing the position of the device.
   return await Geolocator.getCurrentPosition();
+}
+
+class MetadataSubtitle extends StatelessWidget {
+  const MetadataSubtitle({
+    Key? key,
+    required this.id,
+    required this.metadata,
+  }) : super(key: key);
+
+  final String id;
+  final Metadata metadata;
+
+  @override
+  Widget build(BuildContext context) {
+    final formatter = DateFormat.yMd().add_jms();
+
+    return Text(
+        'ID: $id\n\nCreated by ${metadata.createdBy} at ${formatter.format(metadata.createdAt)}\nLast modified by ${metadata.lastModifiedBy} at ${formatter.format(metadata.lastModifiedAt)}');
+  }
 }

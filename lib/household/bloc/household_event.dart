@@ -13,12 +13,14 @@ class HouseholdOpened extends HouseholdEvent {
 }
 
 class EditHouseholdSaveRequested extends HouseholdEvent {
+  final String employeeId;
   final DateTime sensitizationDate;
   final String geoLocation;
   final String comments;
 
   const EditHouseholdSaveRequested(
-      {required this.sensitizationDate,
+      {required this.employeeId,
+      required this.sensitizationDate,
       required this.geoLocation,
       required this.comments});
 
@@ -72,9 +74,11 @@ class CollectionOpened extends HouseholdEvent {
 }
 
 class SaveCollectionRequested extends HouseholdEvent {
+  final String employeeId;
   final GibsonsForm gibsonsForm;
 
-  const SaveCollectionRequested({required this.gibsonsForm});
+  const SaveCollectionRequested(
+      {required this.employeeId, required this.gibsonsForm});
 
   @override
   List<Object> get props => [gibsonsForm];

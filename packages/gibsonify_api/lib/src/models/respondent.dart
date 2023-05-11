@@ -1,5 +1,4 @@
-import 'package:gibsonify_api/src/models/anthropometrics.dart';
-import 'package:gibsonify_api/src/models/gibsons_form.dart';
+import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:hive/hive.dart';
 import 'package:uuid/uuid.dart';
 
@@ -117,6 +116,8 @@ class Respondent {
   final Map<String, GibsonsForm> collections;
   @HiveField(9)
   final List<Anthropometrics> anthropometrics;
+  @HiveField(10)
+  final Metadata metadata;
 
   Respondent({
     required this.id,
@@ -129,10 +130,12 @@ class Respondent {
     required this.comments,
     required this.collections,
     required this.anthropometrics,
+    required this.metadata,
   });
 
   Respondent.create(
-      {required this.name,
+      {required String employeeId,
+      required this.name,
       required this.phoneNumber,
       required this.dateOfBirth,
       required this.sex,
@@ -141,7 +144,8 @@ class Respondent {
       required this.comments,
       this.collections = const {},
       this.anthropometrics = const []})
-      : id = Uuid().v4();
+      : id = Uuid().v4(),
+        metadata = Metadata.create(createdBy: employeeId);
 
   Respondent copyWith({
     String? id,
@@ -154,6 +158,7 @@ class Respondent {
     String? comments,
     Map<String, GibsonsForm>? collections,
     List<Anthropometrics>? anthropometrics,
+    Metadata? metadata,
   }) {
     return Respondent(
       id: id ?? this.id,
@@ -166,6 +171,7 @@ class Respondent {
       comments: comments ?? this.comments,
       collections: collections ?? this.collections,
       anthropometrics: anthropometrics ?? this.anthropometrics,
+      metadata: metadata ?? this.metadata,
     );
   }
 }

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gibsonify/collection/collection.dart';
 import 'package:gibsonify/household/household.dart';
+import 'package:gibsonify/login/login.dart';
 import 'package:gibsonify/navigation/models/page_router.dart';
+import 'package:gibsonify/shared/shared.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:intl/intl.dart';
 
@@ -46,48 +48,50 @@ class _ViewRespondentPageState extends State<ViewRespondentPage>
         final respondent = state.household!.respondents[widget.id]!;
 
         Widget respondentInfo() {
-          return Column(
-            key: UniqueKey(),
-            children: [
-              TextFormField(
-                readOnly: true,
-                decoration: const InputDecoration(
-                    labelText: 'Phone Number', icon: Icon(Icons.phone)),
-                initialValue: respondent.phoneNumber,
-              ),
-              TextFormField(
-                readOnly: true,
-                decoration: const InputDecoration(
-                    labelText: 'Date of Birth', icon: Icon(Icons.cake)),
-                initialValue: formatter.format(respondent.dateOfBirth),
-              ),
-              TextFormField(
-                readOnly: true,
-                decoration: const InputDecoration(
-                    labelText: 'Sex', icon: Icon(Icons.wc)),
-                initialValue: toBeginningOfSentenceCase(respondent.sex.name),
-              ),
-              TextFormField(
-                readOnly: true,
-                decoration: const InputDecoration(
-                    labelText: 'Literacy Level', icon: Icon(Icons.translate)),
-                initialValue: literacyLevelToString(respondent.literacyLevel),
-              ),
-              TextFormField(
-                readOnly: true,
-                decoration: const InputDecoration(
-                    labelText: 'Occupation', icon: Icon(Icons.work)),
-                initialValue: occupationToString(respondent.occupation),
-              ),
-              TextFormField(
-                readOnly: true,
-                decoration: const InputDecoration(
-                    labelText: 'Comments', icon: Icon(Icons.comment)),
-                initialValue: respondent.comments,
-                minLines: 1,
-                maxLines: null,
-              ),
-            ],
+          return SingleChildScrollView(
+            child: Column(
+              key: UniqueKey(),
+              children: [
+                TextFormField(
+                  readOnly: true,
+                  decoration: const InputDecoration(
+                      labelText: 'Phone Number', icon: Icon(Icons.phone)),
+                  initialValue: respondent.phoneNumber,
+                ),
+                TextFormField(
+                  readOnly: true,
+                  decoration: const InputDecoration(
+                      labelText: 'Date of Birth', icon: Icon(Icons.cake)),
+                  initialValue: formatter.format(respondent.dateOfBirth),
+                ),
+                TextFormField(
+                  readOnly: true,
+                  decoration: const InputDecoration(
+                      labelText: 'Sex', icon: Icon(Icons.wc)),
+                  initialValue: toBeginningOfSentenceCase(respondent.sex.name),
+                ),
+                TextFormField(
+                  readOnly: true,
+                  decoration: const InputDecoration(
+                      labelText: 'Literacy Level', icon: Icon(Icons.translate)),
+                  initialValue: literacyLevelToString(respondent.literacyLevel),
+                ),
+                TextFormField(
+                  readOnly: true,
+                  decoration: const InputDecoration(
+                      labelText: 'Occupation', icon: Icon(Icons.work)),
+                  initialValue: occupationToString(respondent.occupation),
+                ),
+                TextFormField(
+                  readOnly: true,
+                  decoration: const InputDecoration(
+                      labelText: 'Comments', icon: Icon(Icons.comment)),
+                  initialValue: respondent.comments,
+                  minLines: 1,
+                  maxLines: null,
+                ),
+              ],
+            ),
           );
         }
 
@@ -165,17 +169,21 @@ class _ViewRespondentPageState extends State<ViewRespondentPage>
                                 builder: (context) =>
                                     CollectionPage(collection: collection)));
 
-                        if (mounted) {
+                        if (mounted && updated != collection) {
                           context.read<HouseholdBloc>().add(
-                              SaveCollectionRequested(gibsonsForm: updated));
+                              SaveCollectionRequested(
+                                  employeeId: context
+                                      .read<LoginBloc>()
+                                      .state
+                                      .loginInfo
+                                      .employeeId!,
+                                  gibsonsForm: updated));
                         }
                       },
                       onLongPress: () => showModalBottomSheet(
                           context: context,
                           builder: (context) {
-                            return CollectionOptions(
-                                id: collection.id,
-                                date: collection.interviewDate ?? 'No date');
+                            return CollectionOptions(collection: collection);
                           })),
                 );
               });
@@ -204,9 +212,10 @@ class _ViewRespondentPageState extends State<ViewRespondentPage>
                     as GibsonsForm;
 
                 if (mounted) {
-                  context
-                      .read<HouseholdBloc>()
-                      .add(SaveCollectionRequested(gibsonsForm: created));
+                  context.read<HouseholdBloc>().add(SaveCollectionRequested(
+                      employeeId:
+                          context.read<LoginBloc>().state.loginInfo.employeeId!,
+                      gibsonsForm: created));
                 }
               },
               child: const Icon(Icons.add),
@@ -271,10 +280,9 @@ class AnthropometricsOptions extends StatelessWidget {
 }
 
 class CollectionOptions extends StatelessWidget {
-  final String id;
-  final String date;
+  final GibsonsForm collection;
 
-  const CollectionOptions({Key? key, required this.id, required this.date})
+  const CollectionOptions({Key? key, required this.collection})
       : super(key: key);
 
   @override
@@ -282,7 +290,15 @@ class CollectionOptions extends StatelessWidget {
     return BlocBuilder<HouseholdBloc, HouseholdState>(
         builder: (context, state) {
       final List<Widget> options = [
-        ListTile(title: Text(date)),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: ListTile(
+            isThreeLine: true,
+            title: Text(collection.interviewDate ?? 'No date'),
+            subtitle: MetadataSubtitle(
+                id: collection.id, metadata: collection.metadata),
+          ),
+        ),
         const Divider(),
         ListTile(
           leading: const Icon(Icons.delete),
@@ -290,7 +306,7 @@ class CollectionOptions extends StatelessWidget {
           onTap: () {
             context
                 .read<HouseholdBloc>()
-                .add(DeleteCollectionRequested(id: id));
+                .add(DeleteCollectionRequested(id: collection.id));
             Navigator.pop(context);
           },
         )
