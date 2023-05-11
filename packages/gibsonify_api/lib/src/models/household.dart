@@ -1,9 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:gibsonify_api/src/models/models.dart';
 import 'package:hive/hive.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'household.g.dart';
 
+@JsonSerializable(explicitToJson: true)
 @HiveType(typeId: 0)
 class Household extends Equatable {
   @HiveField(0)
@@ -62,6 +64,11 @@ class Household extends Equatable {
       metadata: metadata ?? this.metadata,
     );
   }
+
+  factory Household.fromJson(Map<String, dynamic> json) =>
+      _$HouseholdFromJson(json);
+
+  Map<String, dynamic> toJson() => _$HouseholdToJson(this);
 
   double getLat() {
     return double.parse(geoLocation.split(',')[0]);

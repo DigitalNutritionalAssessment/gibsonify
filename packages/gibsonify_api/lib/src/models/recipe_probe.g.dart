@@ -85,3 +85,35 @@ class ProbeAdapter extends TypeAdapter<Probe> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+ProbeOption _$ProbeOptionFromJson(Map<String, dynamic> json) => ProbeOption(
+      option: json['option'] as String?,
+      id: json['id'] as String? ?? '',
+    );
+
+Map<String, dynamic> _$ProbeOptionToJson(ProbeOption instance) =>
+    <String, dynamic>{
+      'option': instance.option,
+      'id': instance.id,
+    };
+
+Probe _$ProbeFromJson(Map<String, dynamic> json) => Probe(
+      name: json['name'] as String?,
+      checked: json['checked'] as bool? ?? false,
+      answer: json['answer'] as String?,
+      probeOptions: (json['probeOptions'] as List<dynamic>?)
+              ?.map((e) => ProbeOption.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
+    );
+
+Map<String, dynamic> _$ProbeToJson(Probe instance) => <String, dynamic>{
+      'name': instance.name,
+      'checked': instance.checked,
+      'answer': instance.answer,
+      'probeOptions': instance.probeOptions.map((e) => e.toJson()).toList(),
+    };

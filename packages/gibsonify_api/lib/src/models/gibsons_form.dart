@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
@@ -32,6 +33,7 @@ String physioStatusToString(PhysioStatus physioStatus) {
   }
 }
 
+@JsonSerializable(explicitToJson: true)
 @HiveType(typeId: 5)
 class GibsonsForm extends Equatable {
   GibsonsForm({
@@ -112,53 +114,11 @@ class GibsonsForm extends Equatable {
   @HiveField(17)
   final Metadata metadata;
 
-  // TODO: implement code generation JSON serialization using json_serializable
-  // and/or json_annotation
+  factory GibsonsForm.fromJson(Map<String, dynamic> json) =>
+      _$GibsonsFormFromJson(json);
 
-  GibsonsForm.fromJson(Map<String, dynamic> json)
-      : id = json['id'],
-        surveyId = json['surveyId'],
-        recallDay = json['recallDay'],
-        interviewDate = json['interviewDate'],
-        interviewStartTime = json['interviewStartTime'],
-        physioStatus = json['physioStatus'],
-        pictureChartCollected = json['pictureChartCollected'],
-        pictureChartNotCollectedReason = json['pictureChartNotCollectedReason'],
-        interviewEndTime = json['interviewEndTime'],
-        interviewFinishedInOneVisit = json['interviewFinishedInOneVisit'],
-        secondInterviewVisitDate = json['secondInterviewVisitDate'],
-        secondVisitReason = json['secondVisitReason'],
-        interviewOutcome = json['interviewOutcome'],
-        interviewOutcomeNotCompletedReason =
-            json['interviewOutcomeNotCompletedReason'],
-        comments = json['comments'],
-        finished = json['finished'] == 'true' ? true : false,
-        foodItems = _jsonDecodeFoodItems(json['foodItems']),
-        metadata = json['metadata'];
+  Map<String, dynamic> toJson() => _$GibsonsFormToJson(this);
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['surveyId'] = surveyId;
-    data['recallDay'] = recallDay;
-    data['interviewDate'] = interviewDate;
-    data['interviewStartTime'] = interviewStartTime;
-    data['physioStatus'] = physioStatus;
-    data['pictureChartCollected'] = pictureChartCollected;
-    data['pictureChartNotCollectedReason'] = pictureChartNotCollectedReason;
-    data['interviewEndTime'] = interviewEndTime;
-    data['interviewFinishedInOneVisit'] = interviewFinishedInOneVisit;
-    data['secondInterviewVisitDate'] = secondInterviewVisitDate;
-    data['secondVisitReason'] = secondVisitReason;
-    data['interviewOutcome'] = interviewOutcome;
-    data['interviewOutcomeNotCompletedReason'] =
-        interviewOutcomeNotCompletedReason;
-    data['comments'] = comments;
-    data['finished'] = finished.toString();
-    data['foodItems'] = jsonEncode(foodItems); // This calls toJson on each one
-    data['metadata'] = jsonEncode(metadata);
-    return data;
-  }
   // TODO: add a fromCsv constructor
 
   String toCsv(

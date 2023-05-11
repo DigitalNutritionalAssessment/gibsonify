@@ -1,8 +1,10 @@
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'anthropometrics.g.dart';
 
+@JsonSerializable()
 @HiveType(typeId: 13)
 class Anthropometrics extends Equatable {
   Anthropometrics({
@@ -36,4 +38,9 @@ class Anthropometrics extends Equatable {
         armLength,
         handSpan,
       ];
+
+  factory Anthropometrics.fromJson(Map<String, dynamic> json) =>
+      _$AnthropometricsFromJson(json);
+
+  Map<String, dynamic> toJson() => _$AnthropometricsToJson(this);
 }

@@ -54,3 +54,28 @@ class HouseholdAdapter extends TypeAdapter<Household> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+Household _$HouseholdFromJson(Map<String, dynamic> json) => Household(
+      householdId: json['householdId'] as String,
+      sensitizationDate: DateTime.parse(json['sensitizationDate'] as String),
+      geoLocation: json['geoLocation'] as String,
+      comments: json['comments'] as String,
+      respondents: (json['respondents'] as Map<String, dynamic>).map(
+        (k, e) => MapEntry(k, Respondent.fromJson(e as Map<String, dynamic>)),
+      ),
+      metadata: Metadata.fromJson(json['metadata'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$HouseholdToJson(Household instance) => <String, dynamic>{
+      'householdId': instance.householdId,
+      'sensitizationDate': instance.sensitizationDate.toIso8601String(),
+      'geoLocation': instance.geoLocation,
+      'comments': instance.comments,
+      'respondents':
+          instance.respondents.map((k, e) => MapEntry(k, e.toJson())),
+      'metadata': instance.metadata.toJson(),
+    };

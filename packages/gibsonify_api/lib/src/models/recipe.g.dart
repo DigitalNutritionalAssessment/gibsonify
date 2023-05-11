@@ -69,3 +69,44 @@ class RecipeAdapter extends TypeAdapter<Recipe> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+Recipe _$RecipeFromJson(Map<String, dynamic> json) => Recipe(
+      name: json['name'] as String?,
+      employeeNumber: json['employeeNumber'] as String?,
+      number: json['number'] as String? ?? "",
+      date: json['date'] as String?,
+      type: json['type'] as String? ?? "",
+      measurements: (json['measurements'] as List<dynamic>?)
+              ?.map((e) => Measurement.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
+      ingredients: (json['ingredients'] as List<dynamic>?)
+              ?.map((e) => Ingredient.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const <Ingredient>[],
+      probes: (json['probes'] as List<dynamic>?)
+              ?.map((e) => Probe.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const <Probe>[],
+      allProbeAnswersStandard: json['allProbeAnswersStandard'] as bool? ?? true,
+      allProbesChecked: json['allProbesChecked'] as bool? ?? false,
+      saved: json['saved'] as bool? ?? false,
+    );
+
+Map<String, dynamic> _$RecipeToJson(Recipe instance) => <String, dynamic>{
+      'name': instance.name,
+      'employeeNumber': instance.employeeNumber,
+      'number': instance.number,
+      'date': instance.date,
+      'type': instance.type,
+      'measurements': instance.measurements.map((e) => e.toJson()).toList(),
+      'ingredients': instance.ingredients.map((e) => e.toJson()).toList(),
+      'probes': instance.probes.map((e) => e.toJson()).toList(),
+      'allProbesChecked': instance.allProbesChecked,
+      'allProbeAnswersStandard': instance.allProbeAnswersStandard,
+      'saved': instance.saved,
+    };

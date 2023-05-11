@@ -1,5 +1,6 @@
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:hive/hive.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:uuid/uuid.dart';
 
 part 'respondent.g.dart';
@@ -94,6 +95,7 @@ String occupationToString(Occupation occupation) {
   }
 }
 
+@JsonSerializable(explicitToJson: true)
 @HiveType(typeId: 1)
 class Respondent {
   @HiveField(0)
@@ -174,4 +176,9 @@ class Respondent {
       metadata: metadata ?? this.metadata,
     );
   }
+
+  factory Respondent.fromJson(Map<String, dynamic> json) =>
+      _$RespondentFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RespondentToJson(this);
 }

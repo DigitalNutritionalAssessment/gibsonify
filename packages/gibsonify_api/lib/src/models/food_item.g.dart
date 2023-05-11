@@ -66,3 +66,38 @@ class FoodItemAdapter extends TypeAdapter<FoodItem> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+FoodItem _$FoodItemFromJson(Map<String, dynamic> json) => FoodItem(
+      id: json['id'] as String? ?? "",
+      name: json['name'] as String?,
+      timePeriod: json['timePeriod'] as String?,
+      source: json['source'] as String?,
+      description: json['description'] as String?,
+      preparationMethod: json['preparationMethod'] as String?,
+      customPreparationMethod: json['customPreparationMethod'] as String?,
+      measurements: (json['measurements'] as List<dynamic>?)
+              ?.map((e) => Measurement.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
+      recipe: json['recipe'] == null
+          ? null
+          : Recipe.fromJson(json['recipe'] as Map<String, dynamic>),
+      confirmed: json['confirmed'] as bool? ?? false,
+    );
+
+Map<String, dynamic> _$FoodItemToJson(FoodItem instance) => <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+      'timePeriod': instance.timePeriod,
+      'source': instance.source,
+      'description': instance.description,
+      'preparationMethod': instance.preparationMethod,
+      'customPreparationMethod': instance.customPreparationMethod,
+      'measurements': instance.measurements.map((e) => e.toJson()).toList(),
+      'recipe': instance.recipe?.toJson(),
+      'confirmed': instance.confirmed,
+    };
