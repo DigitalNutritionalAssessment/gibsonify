@@ -6,7 +6,6 @@ import 'package:gibsonify/shared/shared.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:intl/intl.dart';
 import 'package:maps_launcher/maps_launcher.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class ViewHouseholdPage extends StatefulWidget {
   const ViewHouseholdPage({Key? key}) : super(key: key);
