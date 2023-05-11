@@ -90,14 +90,6 @@ class _ViewRespondentPageState extends State<ViewRespondentPage>
                   minLines: 1,
                   maxLines: null,
                 ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  child: Divider(
-                    height: 20,
-                    thickness: 5,
-                  ),
-                ),
-                ...viewMetadataFields(metadata: respondent.metadata)
               ],
             ),
           );
@@ -295,7 +287,6 @@ class CollectionOptions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formatter = DateFormat.yMd().add_jms();
     return BlocBuilder<HouseholdBloc, HouseholdState>(
         builder: (context, state) {
       final List<Widget> options = [
@@ -304,8 +295,8 @@ class CollectionOptions extends StatelessWidget {
           child: ListTile(
             isThreeLine: true,
             title: Text(collection.interviewDate ?? 'No date'),
-            subtitle: Text(
-                'ID: ${collection.id}\n\nCreated by ${collection.metadata.createdBy} at ${formatter.format(collection.metadata.createdAt)}\nLast modified by ${collection.metadata.lastModifiedBy} at ${formatter.format(collection.metadata.lastModifiedAt)}'),
+            subtitle: MetadataSubtitle(
+                id: collection.id, metadata: collection.metadata),
           ),
         ),
         const Divider(),

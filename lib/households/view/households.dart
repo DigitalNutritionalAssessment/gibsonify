@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gibsonify/households/households.dart';
 
 import 'package:gibsonify/navigation/navigation.dart';
+import 'package:gibsonify/shared/shared.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:gibsonify_repository/gibsonify_repository.dart';
 import 'package:intl/intl.dart';
@@ -102,8 +103,7 @@ class HouseholdsScreen extends StatelessWidget {
                                 context: context,
                                 builder: (context) {
                                   return HouseholdOptions(
-                                      bloc: bloc,
-                                      householdId: household.householdId);
+                                      bloc: bloc, household: household);
                                 }),
                           ));
                         },
@@ -146,22 +146,30 @@ class HouseholdsScreen extends StatelessWidget {
 
 class HouseholdOptions extends StatelessWidget {
   const HouseholdOptions(
-      {Key? key, required this.householdId, required this.bloc})
+      {Key? key, required this.household, required this.bloc})
       : super(key: key);
 
-  final String householdId;
+  final Household household;
   final HouseholdsBloc bloc;
 
   @override
   Widget build(BuildContext context) {
     final List<Widget> options = [
-      ListTile(title: Text(householdId)),
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: ListTile(
+          isThreeLine: true,
+          title: Text(household.householdId),
+          subtitle: MetadataSubtitle(
+              id: household.householdId, metadata: household.metadata),
+        ),
+      ),
       const Divider(),
       ListTile(
         leading: const Icon(Icons.delete),
         title: const Text('Delete'),
         onTap: () {
-          bloc.add(HouseholdDeleteRequested(id: householdId));
+          bloc.add(HouseholdDeleteRequested(id: household.householdId));
           Navigator.pop(context);
         },
       )

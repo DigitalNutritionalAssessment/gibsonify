@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gibsonify/household/household.dart';
 import 'package:gibsonify/navigation/navigation.dart';
 import 'package:gibsonify/shared/shared.dart';
+import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:intl/intl.dart';
 
 class ViewHouseholdPage extends StatefulWidget {
@@ -65,14 +66,6 @@ class _ViewHouseholdPageState extends State<ViewHouseholdPage>
                 minLines: 1,
                 maxLines: null,
               ),
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 10),
-                child: Divider(
-                  height: 20,
-                  thickness: 5,
-                ),
-              ),
-              ...viewMetadataFields(metadata: state.household!.metadata)
             ]),
           );
         }
@@ -102,8 +95,7 @@ class _ViewHouseholdPageState extends State<ViewHouseholdPage>
                 onLongPress: () => showModalBottomSheet(
                     context: context,
                     builder: (context) {
-                      return RespondentOptions(
-                          id: respondent.id, name: respondent.name);
+                      return RespondentOptions(respondent: respondent);
                     }),
               ));
             },
@@ -158,10 +150,9 @@ class _ViewHouseholdPageState extends State<ViewHouseholdPage>
 }
 
 class RespondentOptions extends StatelessWidget {
-  final String id;
-  final String name;
+  final Respondent respondent;
 
-  const RespondentOptions({Key? key, required this.id, required this.name})
+  const RespondentOptions({Key? key, required this.respondent})
       : super(key: key);
 
   @override
@@ -169,7 +160,17 @@ class RespondentOptions extends StatelessWidget {
     return BlocBuilder<HouseholdBloc, HouseholdState>(
         builder: (context, state) {
       final List<Widget> options = [
-        ListTile(title: Text(name)),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: ListTile(
+            isThreeLine: true,
+            title: Text(respondent.name),
+            subtitle: MetadataSubtitle(
+              id: respondent.id,
+              metadata: respondent.metadata,
+            ),
+          ),
+        ),
         const Divider(),
         ListTile(
           leading: const Icon(Icons.delete),
@@ -177,7 +178,7 @@ class RespondentOptions extends StatelessWidget {
           onTap: () {
             context
                 .read<HouseholdBloc>()
-                .add(DeleteRespondentRequested(id: id));
+                .add(DeleteRespondentRequested(id: respondent.id));
             Navigator.pop(context);
           },
         )
