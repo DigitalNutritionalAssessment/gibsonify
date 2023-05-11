@@ -5,6 +5,8 @@ import 'package:gibsonify/navigation/navigation.dart';
 import 'package:gibsonify/shared/shared.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:intl/intl.dart';
+import 'package:maps_launcher/maps_launcher.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ViewHouseholdPage extends StatefulWidget {
   const ViewHouseholdPage({Key? key}) : super(key: key);
@@ -45,9 +47,18 @@ class _ViewHouseholdPageState extends State<ViewHouseholdPage>
             child: Column(key: UniqueKey(), children: [
               TextFormField(
                 readOnly: true,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                     labelText: 'Location',
-                    icon: Icon(Icons.location_on_outlined)),
+                    icon: const Icon(Icons.location_on_outlined),
+                    suffixIcon: IconButton(
+                        onPressed: () {
+                          final coords = state.household!.geoLocation
+                              .replaceAll(' ', '')
+                              .split(',');
+                          MapsLauncher.launchCoordinates(
+                              double.parse(coords[0]), double.parse(coords[1]));
+                        },
+                        icon: const Icon(Icons.map))),
                 initialValue: state.household!.geoLocation,
               ),
               TextFormField(
