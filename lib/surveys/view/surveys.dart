@@ -169,30 +169,37 @@ class SurveyOptions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> options = [
-      ListTile(title: Text(surveyId)),
-      const Divider(),
-      ListTile(
-        leading: const Icon(Icons.delete),
-        title: const Text('Delete'),
-        onTap: () {
-          final households = context.read<HiveRepository>().readHouseholds();
-          if (allowSurveyDelete(surveyId: surveyId, households: households)) {
-            context
-                .read<SurveysBloc>()
-                .add(SurveyDeleteRequested(id: surveyId));
-          } else {
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(SnackBar(
-                  content: Text(
-                      'Survey $surveyId cannot be deleted because there are collections associated with it.')));
-          }
-          Navigator.pop(context);
-        },
-      )
-    ];
-    return Wrap(children: options);
+    return BlocBuilder<LoginBloc, LoginState>(
+      builder: (context, loginState) {
+        final List<Widget> options = [
+          ListTile(title: Text(surveyId)),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.delete),
+            title: const Text('Delete'),
+            enabled: loginState.loginInfo.employeeIsSupervisor ?? false,
+            onTap: () {
+              final households =
+                  context.read<HiveRepository>().readHouseholds();
+              if (allowSurveyDelete(
+                  surveyId: surveyId, households: households)) {
+                context
+                    .read<SurveysBloc>()
+                    .add(SurveyDeleteRequested(id: surveyId));
+              } else {
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(SnackBar(
+                      content: Text(
+                          'Survey $surveyId cannot be deleted because there are collections associated with it.')));
+              }
+              Navigator.pop(context);
+            },
+          )
+        ];
+        return Wrap(children: options);
+      },
+    );
   }
 }
 
