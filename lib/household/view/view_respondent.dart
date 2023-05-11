@@ -7,6 +7,7 @@ import 'package:gibsonify/navigation/models/page_router.dart';
 import 'package:gibsonify/shared/shared.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ViewRespondentPage extends StatefulWidget {
   final String id;
@@ -54,8 +55,13 @@ class _ViewRespondentPageState extends State<ViewRespondentPage>
               children: [
                 TextFormField(
                   readOnly: true,
-                  decoration: const InputDecoration(
-                      labelText: 'Phone Number', icon: Icon(Icons.phone)),
+                  decoration: InputDecoration(
+                      labelText: 'Phone Number',
+                      icon: const Icon(Icons.phone),
+                      suffixIcon: IconButton(
+                          icon: const Icon(Icons.dialpad),
+                          onPressed: () => launchUrl(
+                              Uri.parse('tel:${respondent.phoneNumber}')))),
                   initialValue: respondent.phoneNumber,
                 ),
                 TextFormField(
