@@ -24,6 +24,7 @@ class Recipe extends Equatable {
     this.allProbeAnswersStandard = true,
     this.allProbesChecked = false,
     this.saved = false,
+    this.surveyId,
   }) : date = date ?? DateFormat('yyyy-MM-dd').format(DateTime.now());
 
   @HiveField(0)
@@ -48,6 +49,8 @@ class Recipe extends Equatable {
   final bool allProbeAnswersStandard;
   @HiveField(10)
   final bool saved;
+  @HiveField(11, defaultValue: null)
+  final String? surveyId;
 
   String recipeNameDisplay() {
     if (isFieldNotNullAndNotEmpty(name)) {
@@ -90,6 +93,7 @@ class Recipe extends Equatable {
     bool? allProbesChecked,
     bool? allProbeAnswersStandard,
     bool? saved,
+    String? surveyId,
   }) {
     return Recipe(
       name: name ?? this.name,
@@ -104,6 +108,7 @@ class Recipe extends Equatable {
       allProbeAnswersStandard:
           allProbeAnswersStandard ?? this.allProbeAnswersStandard,
       saved: saved ?? this.saved,
+      surveyId: surveyId ?? this.surveyId,
     );
   }
 
@@ -120,6 +125,7 @@ class Recipe extends Equatable {
         allProbesChecked,
         allProbeAnswersStandard,
         saved,
+        surveyId,
       ];
 
   factory Recipe.fromJson(Map<String, dynamic> json) => _$RecipeFromJson(json);
@@ -163,19 +169,4 @@ class Recipe extends Equatable {
     }
     return csv;
   }
-}
-
-List<Ingredient> _jsonDecodeIngredients(jsonEncodedIngredients) {
-  List<dynamic> partiallyDecodedIngredients =
-      jsonDecode(jsonEncodedIngredients);
-  List<Ingredient> fullyDecodedIngredients = List<Ingredient>.from(
-      partiallyDecodedIngredients.map((x) => Ingredient.fromJson(x)));
-  return fullyDecodedIngredients;
-}
-
-List<Probe> _jsonDecodeProbes(jsonEncodedProbes) {
-  List<dynamic> partiallyDecodedProbes = jsonDecode(jsonEncodedProbes);
-  List<Probe> fullyDecodedProbes =
-      List<Probe>.from(partiallyDecodedProbes.map((x) => Probe.fromJson(x)));
-  return fullyDecodedProbes;
 }
