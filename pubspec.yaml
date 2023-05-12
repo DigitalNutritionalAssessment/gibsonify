@@ -60,6 +60,9 @@ flutter:
   assets:
     - assets/ingredients/ingredients.json
     - assets/images/gibsonify_name_styled.png
+    # FCT: IFCT2017
+    - assets/fct/ifct2017/fct.json
+    - assets/fct/ifct2017/photos/
   uses-material-design: true
 
 flutter_icons:

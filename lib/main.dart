@@ -33,6 +33,10 @@ void main() async {
   final store = FMTC.instance('default');
   await store.manage.createAsync();
 
+  final ifct2017 = IFCT2017();
+  ifct2017.init();
+  final fctRepository = FCTRepository([ifct2017]);
+
   runApp(App(
       gibsonifyRepository: gibsonifyRepository,
       hiveRepository: hiveRepository));

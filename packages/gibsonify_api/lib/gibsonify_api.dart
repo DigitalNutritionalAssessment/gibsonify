@@ -12,6 +12,7 @@ export 'src/gibsonify_api.dart';
 export 'src/utils.dart';
 export 'src/csv_export_utils.dart';
 export 'src/models/models.dart';
+export 'src/fct/fct.dart';
 
 void registerAdapters() {
   Hive.registerAdapter(HouseholdAdapter());
