@@ -1,0 +1,15 @@
+{
+  "name": "ifct2017-process",
+  "version": "1.0.0",
+  "description": "Convert IFCT2017 data into a format suitable for Gibsonify",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "DigitalNutritionalAssessment",
+  "license": "ISC",
+  "dependencies": {
+    "@ifct2017/pictures": "^2.0.6",
+    "ifct2017": "^2.0.15"
+  }
+}
