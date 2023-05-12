@@ -25,6 +25,7 @@ class Recipe extends Equatable {
     this.allProbesChecked = false,
     this.saved = false,
     this.surveyId,
+    this.fctId,
   }) : date = date ?? DateFormat('yyyy-MM-dd').format(DateTime.now());
 
   @HiveField(0)
@@ -51,6 +52,8 @@ class Recipe extends Equatable {
   final bool saved;
   @HiveField(11, defaultValue: null)
   final String? surveyId;
+  @HiveField(12, defaultValue: null)
+  final String? fctId;
 
   String recipeNameDisplay() {
     if (isFieldNotNullAndNotEmpty(name)) {
@@ -94,6 +97,7 @@ class Recipe extends Equatable {
     bool? allProbeAnswersStandard,
     bool? saved,
     String? surveyId,
+    String? fctId,
   }) {
     return Recipe(
       name: name ?? this.name,
@@ -109,6 +113,7 @@ class Recipe extends Equatable {
           allProbeAnswersStandard ?? this.allProbeAnswersStandard,
       saved: saved ?? this.saved,
       surveyId: surveyId ?? this.surveyId,
+      fctId: fctId ?? this.fctId,
     );
   }
 
@@ -126,6 +131,7 @@ class Recipe extends Equatable {
         allProbeAnswersStandard,
         saved,
         surveyId,
+        fctId,
       ];
 
   factory Recipe.fromJson(Map<String, dynamic> json) => _$RecipeFromJson(json);

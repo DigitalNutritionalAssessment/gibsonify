@@ -29,13 +29,14 @@ class RecipeAdapter extends TypeAdapter<Recipe> {
       allProbesChecked: fields[8] as bool,
       saved: fields[10] as bool,
       surveyId: fields[11] as String?,
+      fctId: fields[12] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, Recipe obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(13)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -59,7 +60,9 @@ class RecipeAdapter extends TypeAdapter<Recipe> {
       ..writeByte(10)
       ..write(obj.saved)
       ..writeByte(11)
-      ..write(obj.surveyId);
+      ..write(obj.surveyId)
+      ..writeByte(12)
+      ..write(obj.fctId);
   }
 
   @override
@@ -99,6 +102,7 @@ Recipe _$RecipeFromJson(Map<String, dynamic> json) => Recipe(
       allProbesChecked: json['allProbesChecked'] as bool? ?? false,
       saved: json['saved'] as bool? ?? false,
       surveyId: json['surveyId'] as String?,
+      fctId: json['fctId'] as String?,
     );
 
 Map<String, dynamic> _$RecipeToJson(Recipe instance) => <String, dynamic>{
@@ -114,4 +118,5 @@ Map<String, dynamic> _$RecipeToJson(Recipe instance) => <String, dynamic>{
       'allProbeAnswersStandard': instance.allProbeAnswersStandard,
       'saved': instance.saved,
       'surveyId': instance.surveyId,
+      'fctId': instance.fctId,
     };
