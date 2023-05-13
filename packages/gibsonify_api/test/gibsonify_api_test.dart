@@ -60,9 +60,7 @@ void main() {
                                 Ingredient(
                                     cookingState: "A",
                                     id: "B",
-                                    name: "C",
                                     customCookingState: "D",
-                                    customName: "E",
                                     description: "F",
                                     measurements: [
                                       Measurement(
@@ -70,7 +68,9 @@ void main() {
                                           unit: "Litre",
                                           value: "1.0")
                                     ],
-                                    saved: true)
+                                    saved: true,
+                                    fctFoodItemId: "G",
+                                    fctFoodItemName: "H")
                               ],
                               measurements: [
                                 Measurement(

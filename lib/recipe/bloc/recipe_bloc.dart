@@ -53,9 +53,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     on<IngredientDuplicated>(_onIngredientDuplicated);
     on<IngredientDeleted>(_onIngredientDeleted);
     on<IngredientStatusChanged>(_onIngredientStatusChanged);
-    on<IngredientNameChanged>(_onIngredientNameChanged);
     on<IngredientFCTFoodItemChanged>(_onIngredientFCTFoodItemChanged);
-    on<IngredientCustomNameChanged>(_onIngredientCustomNameChanged);
     on<IngredientDescriptionChanged>(_onIngredientDescriptionChanged);
     on<IngredientCookingStateChanged>(_onIngredientCookingStateChanged);
     on<IngredientCustomCookingStateChanged>(
@@ -662,35 +660,6 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     emit(state.copyWith(recipes: recipes));
   }
 
-  void _onIngredientNameChanged(
-      IngredientNameChanged event, Emitter<RecipeState> emit) {
-    List<Recipe> recipes = List.from(state.recipes);
-
-    int changedRecipeIndex = recipes.indexOf(event.recipe);
-    List<Ingredient> ingredients =
-        List.from(recipes[changedRecipeIndex].ingredients);
-    int changedIngredientIndex = ingredients.indexOf(event.ingredient);
-
-    String ingredientName = event.ingredientName;
-    Map<String, dynamic> ingredientMap = json.decode(state.ingredientsJson!);
-
-    Ingredient ingredient = ingredients[changedIngredientIndex].copyWith(
-        name: ingredientName,
-        foodComposition: ingredientMap[ingredientName],
-        saved: false);
-
-    ingredients.removeAt(changedIngredientIndex);
-    ingredients.insert(changedIngredientIndex, ingredient);
-
-    Recipe recipe = recipes[changedRecipeIndex]
-        .copyWith(ingredients: ingredients, date: _getCurrentDate());
-
-    recipes.removeAt(changedRecipeIndex);
-    recipes.insert(changedRecipeIndex, recipe);
-
-    emit(state.copyWith(recipes: recipes));
-  }
-
   void _onIngredientFCTFoodItemChanged(
       IngredientFCTFoodItemChanged event, Emitter<RecipeState> emit) {
     List<Recipe> recipes = List.from(state.recipes);
@@ -705,30 +674,6 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
         fctFoodItemName: event.ingredientFCTFoodItem.name,
         saved: false,
         foodComposition: null);
-
-    ingredients.removeAt(changedIngredientIndex);
-    ingredients.insert(changedIngredientIndex, ingredient);
-
-    Recipe recipe = recipes[changedRecipeIndex]
-        .copyWith(ingredients: ingredients, date: _getCurrentDate());
-
-    recipes.removeAt(changedRecipeIndex);
-    recipes.insert(changedRecipeIndex, recipe);
-
-    emit(state.copyWith(recipes: recipes));
-  }
-
-  void _onIngredientCustomNameChanged(
-      IngredientCustomNameChanged event, Emitter<RecipeState> emit) {
-    List<Recipe> recipes = List.from(state.recipes);
-
-    int changedRecipeIndex = recipes.indexOf(event.recipe);
-    List<Ingredient> ingredients =
-        List.from(recipes[changedRecipeIndex].ingredients);
-    int changedIngredientIndex = ingredients.indexOf(event.ingredient);
-
-    Ingredient ingredient = ingredients[changedIngredientIndex]
-        .copyWith(customName: event.ingredientCustomName, saved: false);
 
     ingredients.removeAt(changedIngredientIndex);
     ingredients.insert(changedIngredientIndex, ingredient);
@@ -1137,11 +1082,10 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
         }
         final ingredient = Ingredient(
             id: const Uuid().v4(),
-            name: ingredientName,
             description: ingredientDescription,
             cookingState: ingredientCookingState,
             measurements: measurements,
-            saved: true); // TODO: Figure out food composition implementation
+            saved: true);
         ingredients.add(ingredient);
 
         recipe = recipe.copyWith(ingredients: ingredients);

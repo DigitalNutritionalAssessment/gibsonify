@@ -11,9 +11,7 @@ part 'recipe_ingredient.g.dart';
 @HiveType(typeId: 10)
 class Ingredient extends Equatable {
   Ingredient(
-      {this.name,
-      this.customName,
-      this.description,
+      {this.description,
       this.cookingState,
       this.customCookingState,
       this.measurements = const [],
@@ -22,10 +20,6 @@ class Ingredient extends Equatable {
       this.fctFoodItemId,
       this.fctFoodItemName});
 
-  @HiveField(0)
-  final String? name;
-  @HiveField(1)
-  final String? customName;
   @HiveField(2)
   final String? description;
   @HiveField(3)
@@ -48,13 +42,7 @@ class Ingredient extends Equatable {
       return '$fctFoodItemName ($fctFoodItemId)';
     }
 
-    if (isFieldNotNullAndNotEmpty(name)) {
-      if (name == 'Other (please specify)') {
-        return customName ?? 'Unspecified Ingredient';
-      }
-      return name!;
-    }
-    return 'Unnamed ingredient';
+    return '(No name)';
   }
 
   String cookingStateDisplay() {
@@ -78,9 +66,7 @@ class Ingredient extends Equatable {
   }
 
   Ingredient copyWith(
-      {String? name,
-      String? customName,
-      String? description,
+      {String? description,
       String? cookingState,
       String? customCookingState,
       List<Measurement>? measurements,
@@ -90,8 +76,6 @@ class Ingredient extends Equatable {
       String? fctFoodItemId,
       String? fctFoodItemName}) {
     return Ingredient(
-        name: name ?? this.name,
-        customName: customName ?? this.customName,
         description: description ?? this.description,
         cookingState: cookingState ?? this.cookingState,
         customCookingState: customCookingState ?? this.customCookingState,
@@ -104,8 +88,6 @@ class Ingredient extends Equatable {
 
   @override
   List<Object?> get props => [
-        name,
-        customName,
         description,
         cookingState,
         customCookingState,

@@ -17,8 +17,6 @@ class IngredientAdapter extends TypeAdapter<Ingredient> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Ingredient(
-      name: fields[0] as String?,
-      customName: fields[1] as String?,
       description: fields[2] as String?,
       cookingState: fields[3] as String?,
       customCookingState: fields[4] as String?,
@@ -33,11 +31,7 @@ class IngredientAdapter extends TypeAdapter<Ingredient> {
   @override
   void write(BinaryWriter writer, Ingredient obj) {
     writer
-      ..writeByte(10)
-      ..writeByte(0)
-      ..write(obj.name)
-      ..writeByte(1)
-      ..write(obj.customName)
+      ..writeByte(8)
       ..writeByte(2)
       ..write(obj.description)
       ..writeByte(3)
@@ -72,8 +66,6 @@ class IngredientAdapter extends TypeAdapter<Ingredient> {
 // **************************************************************************
 
 Ingredient _$IngredientFromJson(Map<String, dynamic> json) => Ingredient(
-      name: json['name'] as String?,
-      customName: json['customName'] as String?,
       description: json['description'] as String?,
       cookingState: json['cookingState'] as String?,
       customCookingState: json['customCookingState'] as String?,
@@ -89,8 +81,6 @@ Ingredient _$IngredientFromJson(Map<String, dynamic> json) => Ingredient(
 
 Map<String, dynamic> _$IngredientToJson(Ingredient instance) =>
     <String, dynamic>{
-      'name': instance.name,
-      'customName': instance.customName,
       'description': instance.description,
       'cookingState': instance.cookingState,
       'customCookingState': instance.customCookingState,

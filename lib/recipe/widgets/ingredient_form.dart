@@ -86,35 +86,6 @@ class IngredientForm extends StatelessWidget {
                       }
                     },
                   ),
-                  Visibility(
-                    visible: (state.recipes[recipeIndex]
-                            .ingredients[ingredientIndex].name ==
-                        "Other (please specify)"),
-                    child: TextFormField(
-                      initialValue: state.recipes[recipeIndex]
-                          .ingredients[ingredientIndex].customName,
-                      decoration: InputDecoration(
-                        icon: const Icon(Icons.set_meal_rounded),
-                        labelText: 'Specify ingredient',
-                        helperText: 'Ingredient name e.g. Black rice',
-                        errorText: (state.recipes[recipeIndex]
-                                    .ingredients[ingredientIndex].customName ==
-                                null)
-                            ? 'Enter an ingredient name e.g. Black rice'
-                            : null,
-                      ),
-                      onChanged: (value) {
-                        context.read<RecipeBloc>().add(
-                            IngredientCustomNameChanged(
-                                ingredient: state.recipes[recipeIndex]
-                                    .ingredients[ingredientIndex],
-                                ingredientCustomName: value,
-                                recipe: state.recipes[recipeIndex]));
-                      },
-                      textInputAction: TextInputAction.next,
-                      textCapitalization: TextCapitalization.sentences,
-                    ),
-                  ),
                   TextFormField(
                     initialValue: state.recipes[recipeIndex]
                         .ingredients[ingredientIndex].description,
@@ -122,7 +93,7 @@ class IngredientForm extends StatelessWidget {
                       icon: const Icon(Icons.description_rounded),
                       labelText: 'Ingredient description',
                       helperText:
-                          'Ingredient description e.g. Big, dry, ripe etc.',
+                          'e.g. big, dry, ripe etc, and comments on FCT item suitability',
                       errorText: (isFieldModifiedAndEmpty(state
                               .recipes[recipeIndex]
                               .ingredients[ingredientIndex]
