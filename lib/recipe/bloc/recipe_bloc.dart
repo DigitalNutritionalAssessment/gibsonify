@@ -1002,10 +1002,9 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
       String recipeMeasurement = row[6];
       String recipeProbeName = row[7];
       String recipeProbeAnswers = row[8];
-      String ingredientName = row[9];
-      String ingredientDescription = row[10];
-      String ingredientCookingState = row[11];
-      String ingredientMeasurement = row[12];
+      String ingredientDescription = row[9];
+      String ingredientCookingState = row[10];
+      String ingredientMeasurement = row[11];
 
       Recipe? recipeOnDevice = _getRecipeIfAlreadyExists(recipeNumber);
 
