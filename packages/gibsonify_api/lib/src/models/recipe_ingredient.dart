@@ -18,11 +18,10 @@ class Ingredient extends Equatable {
       this.cookingState,
       this.customCookingState,
       this.measurements = const [],
-      // Food composition will be undergoing major changes so
-      // it can be left out until those are implemented
-      //this.foodComposition,
       this.saved = false,
-      this.id = ""});
+      this.id = "",
+      this.fctFoodItemId,
+      this.fctFoodItemName});
 
   @HiveField(0)
   final String? name;
@@ -36,13 +35,20 @@ class Ingredient extends Equatable {
   final String? customCookingState;
   @HiveField(5)
   final List<Measurement> measurements;
-  //final Map<String, dynamic>? foodComposition;
   @HiveField(6)
   final bool saved;
   @HiveField(7)
   final String id;
+  @HiveField(8, defaultValue: null)
+  final String? fctFoodItemId;
+  @HiveField(9, defaultValue: null)
+  final String? fctFoodItemName;
 
   String ingredientNameDisplay() {
+    if (fctFoodItemId != null) {
+      return '$fctFoodItemName ($fctFoodItemId)';
+    }
+
     if (isFieldNotNullAndNotEmpty(name)) {
       if (name == 'Other (please specify)') {
         return customName ?? 'Unspecified Ingredient';
@@ -81,7 +87,9 @@ class Ingredient extends Equatable {
       List<Measurement>? measurements,
       Map<String, dynamic>? foodComposition,
       bool? saved,
-      String? id}) {
+      String? id,
+      String? fctFoodItemId,
+      String? fctFoodItemName}) {
     return Ingredient(
         name: name ?? this.name,
         customName: customName ?? this.customName,
@@ -89,9 +97,10 @@ class Ingredient extends Equatable {
         cookingState: cookingState ?? this.cookingState,
         customCookingState: customCookingState ?? this.customCookingState,
         measurements: measurements ?? this.measurements,
-        //foodComposition: foodComposition ?? this.foodComposition,
         saved: saved ?? this.saved,
-        id: id ?? this.id);
+        id: id ?? this.id,
+        fctFoodItemId: fctFoodItemId ?? this.fctFoodItemId,
+        fctFoodItemName: fctFoodItemName ?? this.fctFoodItemName);
   }
 
   @override
@@ -102,9 +111,10 @@ class Ingredient extends Equatable {
         cookingState,
         customCookingState,
         measurements,
-        //foodComposition,
         saved,
-        id
+        id,
+        fctFoodItemId,
+        fctFoodItemName
       ];
 
   // TODO: move this to the main app, this shouldn't be a method of this class

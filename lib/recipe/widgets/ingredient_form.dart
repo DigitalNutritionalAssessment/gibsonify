@@ -33,7 +33,7 @@ class IngredientForm extends StatelessWidget {
   ];
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, [bool mounted = true]) {
     return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
       context.read<RecipeBloc>().add(const IngredientsLoaded());
       return Padding(
@@ -45,49 +45,46 @@ class IngredientForm extends StatelessWidget {
               child: Column(
                 children: [
                   TextFormField(
-                    initialValue: state
-                        .recipes[recipeIndex].ingredients[ingredientIndex].name,
+                    key: UniqueKey(),
+                    initialValue: state.recipes[recipeIndex]
+                                .ingredients[ingredientIndex].fctFoodItemName !=
+                            null
+                        ? '${state.recipes[recipeIndex].ingredients[ingredientIndex].fctFoodItemName} (${state.recipes[recipeIndex].ingredients[ingredientIndex].fctFoodItemId})'
+                        : null,
                     decoration: const InputDecoration(
                       icon: Icon(Icons.set_meal_rounded),
                       labelText: 'Ingredient name',
                       helperText: 'Tap to select a food item from the FCT',
                     ),
                     readOnly: true,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SelectItemScreen(
-                              fctId: state.recipes[recipeIndex].fctId!),
-                        ),
-                      );
+                    onTap: () async {
+                      if (state.recipes[recipeIndex].fctId != null) {
+                        final FCTFoodItem? item = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SelectItemScreen(
+                                fctId: state.recipes[recipeIndex].fctId!),
+                          ),
+                        );
+
+                        if (mounted && item != null) {
+                          context.read<RecipeBloc>().add(
+                              IngredientFCTFoodItemChanged(
+                                  ingredientFCTFoodItem: item,
+                                  ingredient: state.recipes[recipeIndex]
+                                      .ingredients[ingredientIndex],
+                                  recipe: state.recipes[recipeIndex]));
+                        }
+                      } else {
+                        ScaffoldMessenger.of(context)..hideCurrentSnackBar..showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                                'Please select a survey for this recipe first'),
+                          ),
+                        );
+                      }
                     },
                   ),
-                  // DropdownSearch<String>(
-                  //     popupProps: const PopupProps.menu(
-                  //       showSelectedItems: true,
-                  //       showSearchBox: true,
-                  //     ),
-                  //     dropdownDecoratorProps: const DropDownDecoratorProps(
-                  //       dropdownSearchDecoration: InputDecoration(
-                  //         icon: Icon(Icons.set_meal_rounded),
-                  //         labelText: 'Ingredient name',
-                  //         helperText: 'Ingredient name e.g. Potato',
-                  //       ),
-                  //     ),
-                  //     enabled: (state.ingredientsJson != null),
-                  //     items: (state.ingredientsJson != null)
-                  //         ? json.decode(state.ingredientsJson!).keys.toList()
-                  //         : [],
-                  //     onChanged: (String? answer) => context
-                  //         .read<RecipeBloc>()
-                  //         .add(IngredientNameChanged(
-                  //             ingredient: state.recipes[recipeIndex]
-                  //                 .ingredients[ingredientIndex],
-                  //             ingredientName: answer!,
-                  //             recipe: state.recipes[recipeIndex])),
-                  //     selectedItem: state.recipes[recipeIndex]
-                  //         .ingredients[ingredientIndex].name),
                   Visibility(
                     visible: (state.recipes[recipeIndex]
                             .ingredients[ingredientIndex].name ==

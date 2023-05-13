@@ -25,13 +25,15 @@ class IngredientAdapter extends TypeAdapter<Ingredient> {
       measurements: (fields[5] as List).cast<Measurement>(),
       saved: fields[6] as bool,
       id: fields[7] as String,
+      fctFoodItemId: fields[8] as String?,
+      fctFoodItemName: fields[9] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, Ingredient obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(10)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -47,7 +49,11 @@ class IngredientAdapter extends TypeAdapter<Ingredient> {
       ..writeByte(6)
       ..write(obj.saved)
       ..writeByte(7)
-      ..write(obj.id);
+      ..write(obj.id)
+      ..writeByte(8)
+      ..write(obj.fctFoodItemId)
+      ..writeByte(9)
+      ..write(obj.fctFoodItemName);
   }
 
   @override
@@ -77,6 +83,8 @@ Ingredient _$IngredientFromJson(Map<String, dynamic> json) => Ingredient(
           const [],
       saved: json['saved'] as bool? ?? false,
       id: json['id'] as String? ?? "",
+      fctFoodItemId: json['fctFoodItemId'] as String?,
+      fctFoodItemName: json['fctFoodItemName'] as String?,
     );
 
 Map<String, dynamic> _$IngredientToJson(Ingredient instance) =>
@@ -89,4 +97,6 @@ Map<String, dynamic> _$IngredientToJson(Ingredient instance) =>
       'measurements': instance.measurements.map((e) => e.toJson()).toList(),
       'saved': instance.saved,
       'id': instance.id,
+      'fctFoodItemId': instance.fctFoodItemId,
+      'fctFoodItemName': instance.fctFoodItemName,
     };

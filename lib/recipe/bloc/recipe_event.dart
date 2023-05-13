@@ -334,6 +334,20 @@ class IngredientNameChanged extends RecipeEvent {
   List<Object> get props => [ingredientName, ingredient, recipe];
 }
 
+class IngredientFCTFoodItemChanged extends RecipeEvent {
+  final FCTFoodItem ingredientFCTFoodItem;
+  final Ingredient ingredient;
+  final Recipe recipe;
+
+  const IngredientFCTFoodItemChanged(
+      {required this.ingredientFCTFoodItem,
+      required this.ingredient,
+      required this.recipe});
+
+  @override
+  List<Object> get props => [ingredientFCTFoodItem, ingredient, recipe];
+}
+
 class IngredientCustomNameChanged extends RecipeEvent {
   final String ingredientCustomName;
   final Ingredient ingredient;
