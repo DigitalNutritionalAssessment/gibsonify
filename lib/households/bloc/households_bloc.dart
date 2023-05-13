@@ -108,7 +108,11 @@ class HouseholdsBloc extends Bloc<HouseholdsEvent, HouseholdsState> {
   void _onLocationUpdateRequested(
       LocationUpdateRequested event, Emitter<HouseholdsState> emit) async {
     final position = await getPosition();
-    add(LocationUpdated(position: position));
+    try {
+      add(LocationUpdated(position: position));
+    } on StateError {
+      // Do nothing
+    }
   }
 
   void _onLocationUpdated(
