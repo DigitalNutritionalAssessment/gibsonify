@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'dart:convert';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:hive/hive.dart';
@@ -39,9 +38,9 @@ class Ingredient extends Equatable {
   final bool saved;
   @HiveField(7)
   final String id;
-  @HiveField(8, defaultValue: null)
+  @HiveField(8)
   final String? fctFoodItemId;
-  @HiveField(9, defaultValue: null)
+  @HiveField(9)
   final String? fctFoodItemName;
 
   String ingredientNameDisplay() {
@@ -116,11 +115,6 @@ class Ingredient extends Equatable {
         fctFoodItemId,
         fctFoodItemName
       ];
-
-  // TODO: move this to the main app, this shouldn't be a method of this class
-  static Future<String> getIngredients() {
-    return rootBundle.loadString('assets/ingredients/ingredients.json');
-  }
 
   factory Ingredient.fromJson(Map<String, dynamic> json) =>
       _$IngredientFromJson(json);

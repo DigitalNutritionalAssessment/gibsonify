@@ -35,7 +35,6 @@ class IngredientForm extends StatelessWidget {
   @override
   Widget build(BuildContext context, [bool mounted = true]) {
     return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
-      context.read<RecipeBloc>().add(const IngredientsLoaded());
       return Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView(
@@ -76,12 +75,14 @@ class IngredientForm extends StatelessWidget {
                                   recipe: state.recipes[recipeIndex]));
                         }
                       } else {
-                        ScaffoldMessenger.of(context)..hideCurrentSnackBar..showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                                'Please select a survey for this recipe first'),
-                          ),
-                        );
+                        ScaffoldMessenger.of(context)
+                          ..hideCurrentSnackBar
+                          ..showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                  'Please select a survey for this recipe first'),
+                            ),
+                          );
                       }
                     },
                   ),
