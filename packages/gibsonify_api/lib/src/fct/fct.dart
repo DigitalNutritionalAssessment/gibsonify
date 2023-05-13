@@ -76,6 +76,13 @@ class FCTFoodItem {
     required this.nutrition,
   });
 
+  // List<String> matchingAlternateNames(String query) {
+  //   final queryLower = query.toLowerCase();
+  //   return alternateNames
+  //       .where((name) => name.toLowerCase().contains(queryLower))
+  //       .toList();
+  // }
+
   factory FCTFoodItem.fromJson(Map<String, dynamic> json) =>
       _$FCTFoodItemFromJson(json);
 
@@ -105,6 +112,6 @@ abstract class FoodCompositionTable {
 
   Future<void> init();
   Future<FCTFoodItem?> getFoodItem(String id);
-  Future<FCTFoodGroup?> getFoodGroup(String id);
-  Future<FCTFoodItem?> search(String query);
+  Future<Map<String, FCTFoodGroup>> getFoodGroups();
+  Future<Iterable<FCTFoodItem>> search(String query);
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'dart:convert';
+import 'package:gibsonify/fct/fct.dart';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:gibsonify/collection/collection.dart';
@@ -44,31 +44,50 @@ class IngredientForm extends StatelessWidget {
               absorbing: state.recipes[recipeIndex].saved,
               child: Column(
                 children: [
-                  DropdownSearch<String>(
-                      popupProps: const PopupProps.menu(
-                        showSelectedItems: true,
-                        showSearchBox: true,
-                      ),
-                      dropdownDecoratorProps: const DropDownDecoratorProps(
-                        dropdownSearchDecoration: InputDecoration(
-                          icon: Icon(Icons.set_meal_rounded),
-                          labelText: 'Ingredient name',
-                          helperText: 'Ingredient name e.g. Potato',
+                  TextFormField(
+                    initialValue: state
+                        .recipes[recipeIndex].ingredients[ingredientIndex].name,
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.set_meal_rounded),
+                      labelText: 'Ingredient name',
+                      helperText: 'Tap to select a food item from the FCT',
+                    ),
+                    readOnly: true,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SelectItemScreen(
+                              fctId: state.recipes[recipeIndex].fctId!),
                         ),
-                      ),
-                      enabled: (state.ingredientsJson != null),
-                      items: (state.ingredientsJson != null)
-                          ? json.decode(state.ingredientsJson!).keys.toList()
-                          : [],
-                      onChanged: (String? answer) => context
-                          .read<RecipeBloc>()
-                          .add(IngredientNameChanged(
-                              ingredient: state.recipes[recipeIndex]
-                                  .ingredients[ingredientIndex],
-                              ingredientName: answer!,
-                              recipe: state.recipes[recipeIndex])),
-                      selectedItem: state.recipes[recipeIndex]
-                          .ingredients[ingredientIndex].name),
+                      );
+                    },
+                  ),
+                  // DropdownSearch<String>(
+                  //     popupProps: const PopupProps.menu(
+                  //       showSelectedItems: true,
+                  //       showSearchBox: true,
+                  //     ),
+                  //     dropdownDecoratorProps: const DropDownDecoratorProps(
+                  //       dropdownSearchDecoration: InputDecoration(
+                  //         icon: Icon(Icons.set_meal_rounded),
+                  //         labelText: 'Ingredient name',
+                  //         helperText: 'Ingredient name e.g. Potato',
+                  //       ),
+                  //     ),
+                  //     enabled: (state.ingredientsJson != null),
+                  //     items: (state.ingredientsJson != null)
+                  //         ? json.decode(state.ingredientsJson!).keys.toList()
+                  //         : [],
+                  //     onChanged: (String? answer) => context
+                  //         .read<RecipeBloc>()
+                  //         .add(IngredientNameChanged(
+                  //             ingredient: state.recipes[recipeIndex]
+                  //                 .ingredients[ingredientIndex],
+                  //             ingredientName: answer!,
+                  //             recipe: state.recipes[recipeIndex])),
+                  //     selectedItem: state.recipes[recipeIndex]
+                  //         .ingredients[ingredientIndex].name),
                   Visibility(
                     visible: (state.recipes[recipeIndex]
                             .ingredients[ingredientIndex].name ==

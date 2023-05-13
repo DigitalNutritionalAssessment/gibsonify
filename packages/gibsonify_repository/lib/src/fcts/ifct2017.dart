@@ -39,9 +39,8 @@ class IFCT2017 implements FoodCompositionTable {
   }
 
   @override
-  Future<FCTFoodGroup?> getFoodGroup(String id) {
-    // TODO: implement getFoodGroup
-    throw UnimplementedError();
+  Future<Map<String, FCTFoodGroup>> getFoodGroups() async {
+    return foodGroups;
   }
 
   @override
@@ -51,8 +50,11 @@ class IFCT2017 implements FoodCompositionTable {
   }
 
   @override
-  Future<FCTFoodItem?> search(String query) {
-    // TODO: implement search
-    throw UnimplementedError();
+  Future<Iterable<FCTFoodItem>> search(String query) async {
+    final sanitised = query.toLowerCase();
+    return foodItems.values.where((foodItem) =>
+        foodItem.name.toLowerCase().contains(sanitised) ||
+        foodItem.alternateNames
+            .any((name) => name.toLowerCase().contains(query)));
   }
 }
