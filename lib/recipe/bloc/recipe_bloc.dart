@@ -16,15 +16,20 @@ part 'recipe_state.dart';
 
 class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
   final GibsonifyRepository _gibsonifyRepository;
+  final HiveRepository _hiveRepository;
 
-  RecipeBloc({required GibsonifyRepository gibsonifyRepository})
+  RecipeBloc(
+      {required GibsonifyRepository gibsonifyRepository,
+      required HiveRepository hiveRepository})
       : _gibsonifyRepository = gibsonifyRepository,
+        _hiveRepository = hiveRepository,
         super(const RecipeState()) {
     on<RecipeAdded>(_onRecipeAdded);
     on<RecipeDuplicated>(_onRecipeDuplicated);
     on<ModifiedRecipeCreated>(_onModifiedRecipeCreated);
     on<RecipeDeleted>(_onRecipeDeleted);
     on<RecipeNameChanged>(_recipeNameChanged);
+    on<RecipeSurveyIdChanged>(_recipeSurveyIdChanged);
     on<RecipeMeasurementAdded>(_onRecipeMeasurementAdded);
     on<RecipeMeasurementDeleted>(_onRecipeMeasurementDeleted);
     on<RecipeMeasurementMethodChangedOthersNulled>(
@@ -134,6 +139,24 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
 
     Recipe recipe = recipes[changedRecipeIndex]
         .copyWith(name: event.name, date: _getCurrentDate(), saved: false);
+
+    recipes.removeAt(changedRecipeIndex);
+    recipes.insert(changedRecipeIndex, recipe);
+
+    emit(state.copyWith(recipes: recipes));
+  }
+
+  void _recipeSurveyIdChanged(
+      RecipeSurveyIdChanged event, Emitter<RecipeState> emit) async {
+    List<Recipe> recipes = List.from(state.recipes);
+
+    int changedRecipeIndex = recipes.indexOf(event.recipe);
+
+    Recipe recipe = recipes[changedRecipeIndex].copyWith(
+        surveyId: event.surveyId,
+        date: _getCurrentDate(),
+        saved: false,
+        fctId: _hiveRepository.readSurvey(event.surveyId)!.fctId);
 
     recipes.removeAt(changedRecipeIndex);
     recipes.insert(changedRecipeIndex, recipe);

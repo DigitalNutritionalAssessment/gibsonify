@@ -36,6 +36,8 @@ class Survey extends Equatable {
   final Sex? requiredSex;
   @HiveField(8)
   final String? geoArea;
+  @HiveField(9, defaultValue: 'ifct2017')
+  final String fctId;
 
   Survey(
       {required this.surveyId,
@@ -46,7 +48,8 @@ class Survey extends Equatable {
       required this.minAge,
       required this.maxAge,
       this.requiredSex,
-      this.geoArea});
+      this.geoArea,
+      required this.fctId});
 
   Survey copyWith(
       {String? surveyId,
@@ -57,7 +60,8 @@ class Survey extends Equatable {
       int? minAge,
       int? maxAge,
       Sex? requiredSex,
-      String? geoArea}) {
+      String? geoArea,
+      String? fctId}) {
     return Survey(
         surveyId: surveyId ?? this.surveyId,
         name: name ?? this.name,
@@ -67,7 +71,8 @@ class Survey extends Equatable {
         minAge: minAge ?? this.minAge,
         maxAge: maxAge ?? this.maxAge,
         requiredSex: requiredSex ?? this.requiredSex,
-        geoArea: geoArea ?? this.geoArea);
+        geoArea: geoArea ?? this.geoArea,
+        fctId: fctId ?? this.fctId);
   }
 
   factory Survey.fromJson(Map<String, dynamic> json) => _$SurveyFromJson(json);
@@ -84,7 +89,8 @@ class Survey extends Equatable {
         minAge,
         maxAge,
         requiredSex,
-        geoArea
+        geoArea,
+        fctId
       ];
 
   Area getArea() {

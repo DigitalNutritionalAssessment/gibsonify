@@ -57,6 +57,16 @@ class RecipeNameChanged extends RecipeEvent {
   List<Object> get props => [name, recipe];
 }
 
+class RecipeSurveyIdChanged extends RecipeEvent {
+  final String surveyId;
+  final Recipe recipe;
+
+  const RecipeSurveyIdChanged({required this.surveyId, required this.recipe});
+
+  @override
+  List<Object> get props => [surveyId, recipe];
+}
+
 class RecipeMeasurementAdded extends RecipeEvent {
   final Recipe recipe;
 

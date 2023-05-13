@@ -145,7 +145,8 @@ class SurveysView extends StatelessWidget {
                                               CreateSurveyScreen(
                                                   surveyIds: state.surveys
                                                       .map((s) => s.surveyId)
-                                                      .toList())));
+                                                      .toList(),
+                                                  fctIds: state.fctIds)));
 
                                   if (survey != null) {
                                     bloc.add(

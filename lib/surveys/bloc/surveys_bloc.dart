@@ -9,10 +9,13 @@ part 'surveys_state.dart';
 
 class SurveysBloc extends Bloc<SurveysEvent, SurveysState> {
   final HiveRepository _hiveRepository;
+  final FCTRepository _fctRepository;
 
-  SurveysBloc({
-    required HiveRepository hiveRepository,
-  })  : _hiveRepository = hiveRepository,
+  SurveysBloc(
+      {required HiveRepository hiveRepository,
+      required FCTRepository fctRepository})
+      : _hiveRepository = hiveRepository,
+        _fctRepository = fctRepository,
         super(const SurveysState()) {
     on<SurveysPageOpened>(_onSurveysPageOpened);
     on<SurveySaveRequested>(_onSurveySaveRequested);
@@ -22,7 +25,8 @@ class SurveysBloc extends Bloc<SurveysEvent, SurveysState> {
   void _onSurveysPageOpened(
       SurveysPageOpened event, Emitter<SurveysState> emit) {
     final surveys = _hiveRepository.readSurveys();
-    emit(state.copyWith(surveys: surveys.toList()));
+    final fctIds = _fctRepository.getFCTIds();
+    emit(state.copyWith(surveys: surveys.toList(), fctIds: fctIds.toList()));
   }
 
   void _onSurveySaveRequested(

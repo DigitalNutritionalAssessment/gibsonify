@@ -38,6 +38,8 @@ void main() async {
   final fctRepository = FCTRepository([ifct2017]);
 
   runApp(App(
-      gibsonifyRepository: gibsonifyRepository,
-      hiveRepository: hiveRepository));
+    gibsonifyRepository: gibsonifyRepository,
+    hiveRepository: hiveRepository,
+    fctRepository: fctRepository,
+  ));
 }

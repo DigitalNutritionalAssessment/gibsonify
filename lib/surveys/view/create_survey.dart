@@ -8,8 +8,10 @@ import 'package:intl/intl.dart';
 
 class CreateSurveyScreen extends StatelessWidget {
   final List<String> surveyIds;
+  final List<String> fctIds;
 
-  const CreateSurveyScreen({Key? key, required this.surveyIds})
+  const CreateSurveyScreen(
+      {Key? key, required this.surveyIds, required this.fctIds})
       : super(key: key);
 
   @override
@@ -63,6 +65,7 @@ class CreateSurveyScreen extends StatelessWidget {
                                       .currentState!.value['description'],
                                   comments:
                                       formKey.currentState!.value['comments'],
+                                  fctId: formKey.currentState!.value['fctId'],
                                   requiredSex: formKey
                                       .currentState!.value['requiredSex'],
                                   minAge: (formKey.currentState!
@@ -140,6 +143,18 @@ class CreateSurveyScreen extends StatelessWidget {
                             label: Text('Comments'), icon: Icon(Icons.message)),
                         onChanged: (value) => changed = true,
                       ),
+                      FormBuilderDropdown(
+                          name: 'fctId',
+                          decoration: const InputDecoration(
+                            label: Text('Food Composition Table ID'),
+                            icon: Icon(Icons.analytics),
+                          ),
+                          onChanged: (value) => changed = true,
+                          validator: FormBuilderValidators.required(),
+                          items: fctIds
+                              .map((fctId) => DropdownMenuItem(
+                                  value: fctId, child: Text(fctId)))
+                              .toList()),
                       const Padding(
                         padding: EdgeInsets.symmetric(vertical: 10),
                         child: Divider(

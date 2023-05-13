@@ -8,4 +8,8 @@ class FCTRepository {
       _fcts[fct.id] = fct;
     }
   }
+
+  Iterable<String> getFCTIds() {
+    return _fcts.keys;
+  }
 }

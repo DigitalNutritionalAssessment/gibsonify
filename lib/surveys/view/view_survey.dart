@@ -75,6 +75,16 @@ class ViewSurveyScreen extends StatelessWidget {
                         initialValue: survey.comments,
                         enabled: false,
                       ),
+                      FormBuilderTextField(
+                        name: 'fctId',
+                        minLines: 1,
+                        maxLines: null,
+                        decoration: const InputDecoration(
+                            label: Text('Food Composition Table ID'),
+                            icon: Icon(Icons.analytics)),
+                        initialValue: survey.fctId,
+                        enabled: false,
+                      ),
                       const Padding(
                         padding: EdgeInsets.symmetric(vertical: 10),
                         child: Divider(

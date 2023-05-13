@@ -26,13 +26,14 @@ class SurveyAdapter extends TypeAdapter<Survey> {
       maxAge: fields[6] as int,
       requiredSex: fields[7] as Sex?,
       geoArea: fields[8] as String?,
+      fctId: fields[9] == null ? 'ifct2017' : fields[9] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, Survey obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(10)
       ..writeByte(0)
       ..write(obj.surveyId)
       ..writeByte(1)
@@ -50,7 +51,9 @@ class SurveyAdapter extends TypeAdapter<Survey> {
       ..writeByte(7)
       ..write(obj.requiredSex)
       ..writeByte(8)
-      ..write(obj.geoArea);
+      ..write(obj.geoArea)
+      ..writeByte(9)
+      ..write(obj.fctId);
   }
 
   @override
@@ -78,6 +81,7 @@ Survey _$SurveyFromJson(Map<String, dynamic> json) => Survey(
       maxAge: json['maxAge'] as int,
       requiredSex: $enumDecodeNullable(_$SexEnumMap, json['requiredSex']),
       geoArea: json['geoArea'] as String?,
+      fctId: json['fctId'] as String,
     );
 
 Map<String, dynamic> _$SurveyToJson(Survey instance) => <String, dynamic>{
@@ -90,6 +94,7 @@ Map<String, dynamic> _$SurveyToJson(Survey instance) => <String, dynamic>{
       'maxAge': instance.maxAge,
       'requiredSex': _$SexEnumMap[instance.requiredSex],
       'geoArea': instance.geoArea,
+      'fctId': instance.fctId,
     };
 
 const _$SexEnumMap = {
