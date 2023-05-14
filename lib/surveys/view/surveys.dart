@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gibsonify/analysis/analysis.dart';
 import 'package:gibsonify/login/login.dart';
 import 'package:gibsonify/surveys/surveys.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
@@ -107,11 +109,23 @@ class SurveysView extends StatelessWidget {
                             title: Text(state.surveys[index].name),
                             subtitle: Text(state.surveys[index].surveyId),
                             onTap: () => {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          ViewSurveyScreen(index: index)))
+                              if (kIsWeb)
+                                {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => AnalysisScreen(
+                                              surveyId: state
+                                                  .surveys[index].surveyId)))
+                                }
+                              else
+                                {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              ViewSurveyScreen(index: index)))
+                                }
                             },
                             onLongPress: () => showModalBottomSheet(
                                 context: context,
