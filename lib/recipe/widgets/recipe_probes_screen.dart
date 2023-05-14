@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:gibsonify/recipe/recipe.dart';
 import 'package:gibsonify/login/login.dart';
-import 'package:gibsonify/surveys/surveys.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:gibsonify/navigation/navigation.dart';
 import 'package:dropdown_search/dropdown_search.dart';
@@ -70,178 +68,132 @@ class ProbeList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SurveysBloc, SurveysState>(
-      builder: (context, surveysState) {
-        return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                Visibility(
-                    visible: state.recipes[recipeIndex].saved,
-                    child: const SavedRecipeListTile()),
-                ProbesPrompt(
-                  recipeIndex: recipeIndex,
-                  viewedFromCollection: viewedFromCollection,
-                  assignedFoodItemId: assignedFoodItemId,
-                  foodItemDescription: foodItemDescription,
-                ),
-                Visibility(
-                    visible:
-                        (state.recipes[recipeIndex].type == 'Standard Recipe'),
-                    child: Expanded(
-                      child: Column(children: [
-                        AbsorbPointer(
-                            absorbing: state.recipes[recipeIndex].saved,
-                            child: RecipeNameInput(recipeIndex)),
-                        AbsorbPointer(
-                            absorbing: state.recipes[recipeIndex].saved,
-                            child: FormBuilderDropdown(
-                              key: UniqueKey(),
-                              name: 'surveyId',
-                              decoration: const InputDecoration(
-                                  labelText: 'Survey ID',
-                                  icon: Icon(Icons.checklist),
-                                  helperText:
-                                      'The survey that this recipe should be associated with'),
-                              initialValue: state.recipes[recipeIndex].surveyId,
-                              onChanged: (String? value) =>
-                                  context.read<RecipeBloc>()
-                                    ..add(RecipeSurveyIdChanged(
-                                        recipe: state.recipes[recipeIndex],
-                                        surveyId: value.toString())),
-                              items: surveysState.surveys
-                                  .map((survey) => DropdownMenuItem(
-                                      value: survey.surveyId,
-                                      child: Text(
-                                          '${survey.surveyId} (${survey.name})')))
-                                  .toList(),
-                            )),
-                        AbsorbPointer(
-                            absorbing: state.recipes[recipeIndex].saved,
-                            child: TextFormField(
-                              key: UniqueKey(),
-                              decoration: const InputDecoration(
-                                  icon: Icon(Icons.analytics),
-                                  labelText: 'Food Composition Table ID',
-                                  helperText:
-                                      'The FCT that will be used for nutritional analysis for this recipe'),
-                              readOnly: true,
-                              initialValue: state.recipes[recipeIndex].fctId,
-                            )),
-                        Visibility(
-                            visible: (viewedFromCollection &&
-                                isFieldNotNullAndNotEmpty(foodItemDescription)),
-                            child: TextFormField(
-                              initialValue: foodItemDescription,
-                              decoration: const InputDecoration(
-                                icon: Icon(Icons.info),
-                                labelText: 'Food item comments',
-                              ),
-                              enabled: false,
-                            )),
-                        const SizedBox(height: 10),
-                        ListTile(
-                            title: (state
-                                    .recipes[recipeIndex].probes.isNotEmpty)
-                                ? const Text('Probes:')
-                                : const Text('Recipe has no probes currently')),
-                        Expanded(
-                          child: ListView.builder(
-                              padding: const EdgeInsets.all(2.0),
-                              itemCount:
-                                  state.recipes[recipeIndex].probes.length,
-                              itemBuilder: (context, index) {
-                                return Card(
-                                    child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    children: [
-                                      ListTile(
-                                          title: Text(state.recipes[recipeIndex]
-                                              .probes[index]
-                                              .probeNameDisplay()),
-                                          leading: const Icon(Icons.live_help),
-                                          trailing: Visibility(
-                                            visible: viewedFromCollection,
-                                            child: Checkbox(
-                                              value: state.recipes[recipeIndex]
-                                                  .probes[index].checked,
-                                              onChanged: (bool? value) {
-                                                context.read<RecipeBloc>().add(
-                                                    ProbeChecked(
-                                                        recipe: state.recipes[
-                                                            recipeIndex],
-                                                        probeCheck: value!,
-                                                        probeIndex: index));
-                                              },
-                                            ),
-                                          ),
-                                          onTap: () => {
-                                                if (!viewedFromCollection)
-                                                  {
-                                                    Navigator.pushNamed(context,
-                                                        PageRouter.editProbe,
-                                                        arguments: {
-                                                          'recipeIndex':
-                                                              recipeIndex,
-                                                          'probeIndex': index,
-                                                        })
-                                                  }
-                                              },
-                                          onLongPress: (state
-                                                      .recipes[recipeIndex]
-                                                      .saved ||
-                                                  viewedFromCollection)
-                                              ? null
-                                              : () => showModalBottomSheet(
-                                                  context: context,
-                                                  builder: (context) {
-                                                    return ProbeOptions(
-                                                        recipe: state.recipes[
-                                                            recipeIndex],
-                                                        probe: state
-                                                            .recipes[
-                                                                recipeIndex]
-                                                            .probes[index]);
-                                                  })),
-                                      Visibility(
-                                        visible: (viewedFromCollection),
-                                        child: DropdownSearch<String>(
-                                            popupProps: const PopupProps.menu(
-                                              showSelectedItems: true,
-                                              fit: FlexFit.loose,
-                                              constraints:
-                                                  BoxConstraints.tightFor(),
-                                            ),
-                                            items: state.recipes[recipeIndex]
-                                                .probes[index]
-                                                .optionsList(),
-                                            onChanged: (String? answer) =>
-                                                context.read<RecipeBloc>().add(
-                                                    ProbeOptionSelected(
-                                                        recipe: state.recipes[
-                                                            recipeIndex],
-                                                        probeIndex: index,
-                                                        answer: answer!)),
-                                            selectedItem: state
-                                                .recipes[recipeIndex]
-                                                .probes[index]
-                                                .answer),
-                                      )
-                                    ],
-                                  ),
-                                ));
-                              }),
-                        ),
-                      ]),
-                    )),
-              ],
+    return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Visibility(
+                visible: state.recipes[recipeIndex].saved,
+                child: const SavedRecipeListTile()),
+            ProbesPrompt(
+              recipeIndex: recipeIndex,
+              viewedFromCollection: viewedFromCollection,
+              assignedFoodItemId: assignedFoodItemId,
+              foodItemDescription: foodItemDescription,
             ),
-          );
-        });
-      },
-    );
+            Visibility(
+                visible: (state.recipes[recipeIndex].type == 'Standard Recipe'),
+                child: Expanded(
+                  child: Column(children: [
+                    AbsorbPointer(
+                        absorbing: state.recipes[recipeIndex].saved,
+                        child: RecipeNameInput(recipeIndex)),
+                    Visibility(
+                        visible: (viewedFromCollection &&
+                            isFieldNotNullAndNotEmpty(foodItemDescription)),
+                        child: TextFormField(
+                          initialValue: foodItemDescription,
+                          decoration: const InputDecoration(
+                            icon: Icon(Icons.info),
+                            labelText: 'Food item comments',
+                          ),
+                          enabled: false,
+                        )),
+                    const SizedBox(height: 10),
+                    ListTile(
+                        title: (state.recipes[recipeIndex].probes.isNotEmpty)
+                            ? const Text('Probes:')
+                            : const Text('Recipe has no probes currently')),
+                    Expanded(
+                      child: ListView.builder(
+                          padding: const EdgeInsets.all(2.0),
+                          itemCount: state.recipes[recipeIndex].probes.length,
+                          itemBuilder: (context, index) {
+                            return Card(
+                                child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  ListTile(
+                                      title: Text(state
+                                          .recipes[recipeIndex].probes[index]
+                                          .probeNameDisplay()),
+                                      leading: const Icon(Icons.live_help),
+                                      trailing: Visibility(
+                                        visible: viewedFromCollection,
+                                        child: Checkbox(
+                                          value: state.recipes[recipeIndex]
+                                              .probes[index].checked,
+                                          onChanged: (bool? value) {
+                                            context.read<RecipeBloc>().add(
+                                                ProbeChecked(
+                                                    recipe: state
+                                                        .recipes[recipeIndex],
+                                                    probeCheck: value!,
+                                                    probeIndex: index));
+                                          },
+                                        ),
+                                      ),
+                                      onTap: () => {
+                                            if (!viewedFromCollection)
+                                              {
+                                                Navigator.pushNamed(context,
+                                                    PageRouter.editProbe,
+                                                    arguments: {
+                                                      'recipeIndex':
+                                                          recipeIndex,
+                                                      'probeIndex': index,
+                                                    })
+                                              }
+                                          },
+                                      onLongPress: (state
+                                                  .recipes[recipeIndex].saved ||
+                                              viewedFromCollection)
+                                          ? null
+                                          : () => showModalBottomSheet(
+                                              context: context,
+                                              builder: (context) {
+                                                return ProbeOptions(
+                                                    recipe: state
+                                                        .recipes[recipeIndex],
+                                                    probe: state
+                                                        .recipes[recipeIndex]
+                                                        .probes[index]);
+                                              })),
+                                  Visibility(
+                                    visible: (viewedFromCollection),
+                                    child: DropdownSearch<String>(
+                                        popupProps: const PopupProps.menu(
+                                          showSelectedItems: true,
+                                          fit: FlexFit.loose,
+                                          constraints:
+                                              BoxConstraints.tightFor(),
+                                        ),
+                                        items: state
+                                            .recipes[recipeIndex].probes[index]
+                                            .optionsList(),
+                                        onChanged: (String? answer) => context
+                                            .read<RecipeBloc>()
+                                            .add(ProbeOptionSelected(
+                                                recipe:
+                                                    state.recipes[recipeIndex],
+                                                probeIndex: index,
+                                                answer: answer!)),
+                                        selectedItem: state.recipes[recipeIndex]
+                                            .probes[index].answer),
+                                  )
+                                ],
+                              ),
+                            ));
+                          }),
+                    ),
+                  ]),
+                )),
+          ],
+        ),
+      );
+    });
   }
 }
 
