@@ -5,7 +5,7 @@ class LoginInfo extends Equatable {
   LoginInfo(
       {this.employeeName,
       this.employeeId,
-      this.employeeIsSupervisor,
+      this.employeeIsSupervisor = false,
       String? id})
       : id = id ?? const Uuid().v4();
 
@@ -52,8 +52,7 @@ class LoginInfo extends Equatable {
     if (employeeName == null ||
         employeeName!.isEmpty ||
         employeeId == null ||
-        employeeId!.isEmpty ||
-        employeeIsSupervisor == null) {
+        employeeId!.isEmpty) {
       return false;
     }
     return true;
