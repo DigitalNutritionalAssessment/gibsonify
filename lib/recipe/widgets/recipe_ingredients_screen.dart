@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:gibsonify/recipe/recipe.dart';
+import 'package:gibsonify/surveys/surveys.dart';
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:gibsonify/navigation/navigation.dart';
 
@@ -41,37 +43,75 @@ class RecipeForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: <Widget>[
-            Visibility(
-                visible: state.recipes[recipeIndex].saved,
-                child: const SavedRecipeListTile()),
-            AbsorbPointer(
-                absorbing: state.recipes[recipeIndex].saved,
-                child: RecipeNameInput(recipeIndex)),
-            const SizedBox(height: 10),
-            Visibility(
-              visible: state.recipes[recipeIndex].ingredients.isNotEmpty,
-              child: ListTile(
-                  onTap: () => {
-                        context.read<RecipeBloc>().add(
-                            RecipeShowIngredientsChanged(
-                                showIngredients: !state.showIngredients)),
-                      },
-                  title: (state.showIngredients)
-                      ? const Text('Hide ingredients')
-                      : const Text('Show ingredients')),
+    return BlocBuilder<SurveysBloc, SurveysState>(
+      builder: (context, surveysState) {
+        return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: <Widget>[
+                Visibility(
+                    visible: state.recipes[recipeIndex].saved,
+                    child: const SavedRecipeListTile()),
+                AbsorbPointer(
+                    absorbing: state.recipes[recipeIndex].saved,
+                    child: RecipeNameInput(recipeIndex)),
+                AbsorbPointer(
+                    absorbing: state.recipes[recipeIndex].saved,
+                    child: FormBuilderDropdown(
+                      key: UniqueKey(),
+                      name: 'surveyId',
+                      decoration: const InputDecoration(
+                          labelText: 'Survey ID',
+                          icon: Icon(Icons.checklist),
+                          helperText:
+                              'The survey that this recipe should be associated with'),
+                      initialValue: state.recipes[recipeIndex].surveyId,
+                      onChanged: (String? value) => context.read<RecipeBloc>()
+                        ..add(RecipeSurveyIdChanged(
+                            recipe: state.recipes[recipeIndex],
+                            surveyId: value.toString())),
+                      items: surveysState.surveys
+                          .map((survey) => DropdownMenuItem(
+                              value: survey.surveyId,
+                              child:
+                                  Text('${survey.surveyId} (${survey.name})')))
+                          .toList(),
+                    )),
+                AbsorbPointer(
+                    absorbing: state.recipes[recipeIndex].saved,
+                    child: TextFormField(
+                      key: UniqueKey(),
+                      decoration: const InputDecoration(
+                          icon: Icon(Icons.analytics),
+                          labelText: 'Food Composition Table ID',
+                          helperText:
+                              'The FCT that will be used for nutritional analysis for this recipe'),
+                      readOnly: true,
+                      initialValue: state.recipes[recipeIndex].fctId,
+                    )),
+                const SizedBox(height: 10),
+                Visibility(
+                  visible: state.recipes[recipeIndex].ingredients.isNotEmpty,
+                  child: ListTile(
+                      onTap: () => {
+                            context.read<RecipeBloc>().add(
+                                RecipeShowIngredientsChanged(
+                                    showIngredients: !state.showIngredients)),
+                          },
+                      title: (state.showIngredients)
+                          ? const Text('Hide ingredients')
+                          : const Text('Show ingredients')),
+                ),
+                Visibility(
+                    visible: state.showIngredients,
+                    child: Ingredients(recipeIndex)),
+              ],
             ),
-            Visibility(
-                visible: state.showIngredients,
-                child: Ingredients(recipeIndex)),
-          ],
-        ),
-      );
-    });
+          );
+        });
+      },
+    );
   }
 }
 

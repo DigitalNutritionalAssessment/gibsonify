@@ -1,7 +1,12 @@
 import 'package:gibsonify_api/gibsonify_api.dart';
 
-Survey Function() mockSurvey = () =>
-    Survey(surveyId: "S1", name: "Test", country: "GB", minAge: 0, maxAge: 100);
+Survey Function() mockSurvey = () => Survey(
+    surveyId: "S1",
+    fctId: "F1",
+    name: "Test",
+    country: "GB",
+    minAge: 0,
+    maxAge: 100);
 
 Household Function() mockHousehold = () => Household(
     householdId: "HH00A00000A",
@@ -58,9 +63,7 @@ Household Function() mockHousehold = () => Household(
                             Ingredient(
                                 cookingState: "A",
                                 id: "B",
-                                name: "C",
                                 customCookingState: "D",
-                                customName: "E",
                                 description: "F",
                                 measurements: [
                                   Measurement(

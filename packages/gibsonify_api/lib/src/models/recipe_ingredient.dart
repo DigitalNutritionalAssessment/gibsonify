@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'dart:convert';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:hive/hive.dart';
@@ -12,22 +11,15 @@ part 'recipe_ingredient.g.dart';
 @HiveType(typeId: 10)
 class Ingredient extends Equatable {
   Ingredient(
-      {this.name,
-      this.customName,
-      this.description,
+      {this.description,
       this.cookingState,
       this.customCookingState,
       this.measurements = const [],
-      // Food composition will be undergoing major changes so
-      // it can be left out until those are implemented
-      //this.foodComposition,
       this.saved = false,
-      this.id = ""});
+      this.id = "",
+      this.fctFoodItemId,
+      this.fctFoodItemName});
 
-  @HiveField(0)
-  final String? name;
-  @HiveField(1)
-  final String? customName;
   @HiveField(2)
   final String? description;
   @HiveField(3)
@@ -36,20 +28,21 @@ class Ingredient extends Equatable {
   final String? customCookingState;
   @HiveField(5)
   final List<Measurement> measurements;
-  //final Map<String, dynamic>? foodComposition;
   @HiveField(6)
   final bool saved;
   @HiveField(7)
   final String id;
+  @HiveField(8)
+  final String? fctFoodItemId;
+  @HiveField(9)
+  final String? fctFoodItemName;
 
   String ingredientNameDisplay() {
-    if (isFieldNotNullAndNotEmpty(name)) {
-      if (name == 'Other (please specify)') {
-        return customName ?? 'Unspecified Ingredient';
-      }
-      return name!;
+    if (fctFoodItemId != null) {
+      return '$fctFoodItemName ($fctFoodItemId)';
     }
-    return 'Unnamed ingredient';
+
+    return '(No name)';
   }
 
   String cookingStateDisplay() {
@@ -73,44 +66,37 @@ class Ingredient extends Equatable {
   }
 
   Ingredient copyWith(
-      {String? name,
-      String? customName,
-      String? description,
+      {String? description,
       String? cookingState,
       String? customCookingState,
       List<Measurement>? measurements,
       Map<String, dynamic>? foodComposition,
       bool? saved,
-      String? id}) {
+      String? id,
+      String? fctFoodItemId,
+      String? fctFoodItemName}) {
     return Ingredient(
-        name: name ?? this.name,
-        customName: customName ?? this.customName,
         description: description ?? this.description,
         cookingState: cookingState ?? this.cookingState,
         customCookingState: customCookingState ?? this.customCookingState,
         measurements: measurements ?? this.measurements,
-        //foodComposition: foodComposition ?? this.foodComposition,
         saved: saved ?? this.saved,
-        id: id ?? this.id);
+        id: id ?? this.id,
+        fctFoodItemId: fctFoodItemId ?? this.fctFoodItemId,
+        fctFoodItemName: fctFoodItemName ?? this.fctFoodItemName);
   }
 
   @override
   List<Object?> get props => [
-        name,
-        customName,
         description,
         cookingState,
         customCookingState,
         measurements,
-        //foodComposition,
         saved,
-        id
+        id,
+        fctFoodItemId,
+        fctFoodItemName
       ];
-
-  // TODO: move this to the main app, this shouldn't be a method of this class
-  static Future<String> getIngredients() {
-    return rootBundle.loadString('assets/ingredients/ingredients.json');
-  }
 
   factory Ingredient.fromJson(Map<String, dynamic> json) =>
       _$IngredientFromJson(json);

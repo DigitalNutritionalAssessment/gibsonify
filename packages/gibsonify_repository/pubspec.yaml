@@ -8,6 +8,9 @@ environment:
 
 
 dependencies:
+  collection: ^1.17.0
+  flutter:
+    sdk: flutter
   gibsonify_api:
     path: ../gibsonify_api
   hive: ^2.2.3

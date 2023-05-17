@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'dart:convert';
+import 'package:gibsonify/fct/fct.dart';
 
 import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:gibsonify/collection/collection.dart';
@@ -33,9 +33,8 @@ class IngredientForm extends StatelessWidget {
   ];
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, [bool mounted = true]) {
     return BlocBuilder<RecipeBloc, RecipeState>(builder: (context, state) {
-      context.read<RecipeBloc>().add(const IngredientsLoaded());
       return Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView(
@@ -44,59 +43,48 @@ class IngredientForm extends StatelessWidget {
               absorbing: state.recipes[recipeIndex].saved,
               child: Column(
                 children: [
-                  DropdownSearch<String>(
-                      popupProps: const PopupProps.menu(
-                        showSelectedItems: true,
-                        showSearchBox: true,
-                      ),
-                      dropdownDecoratorProps: const DropDownDecoratorProps(
-                        dropdownSearchDecoration: InputDecoration(
-                          icon: Icon(Icons.set_meal_rounded),
-                          labelText: 'Ingredient name',
-                          helperText: 'Ingredient name e.g. Potato',
-                        ),
-                      ),
-                      enabled: (state.ingredientsJson != null),
-                      items: (state.ingredientsJson != null)
-                          ? json.decode(state.ingredientsJson!).keys.toList()
-                          : [],
-                      onChanged: (String? answer) => context
-                          .read<RecipeBloc>()
-                          .add(IngredientNameChanged(
-                              ingredient: state.recipes[recipeIndex]
-                                  .ingredients[ingredientIndex],
-                              ingredientName: answer!,
-                              recipe: state.recipes[recipeIndex])),
-                      selectedItem: state.recipes[recipeIndex]
-                          .ingredients[ingredientIndex].name),
-                  Visibility(
-                    visible: (state.recipes[recipeIndex]
-                            .ingredients[ingredientIndex].name ==
-                        "Other (please specify)"),
-                    child: TextFormField(
-                      initialValue: state.recipes[recipeIndex]
-                          .ingredients[ingredientIndex].customName,
-                      decoration: InputDecoration(
-                        icon: const Icon(Icons.set_meal_rounded),
-                        labelText: 'Specify ingredient',
-                        helperText: 'Ingredient name e.g. Black rice',
-                        errorText: (state.recipes[recipeIndex]
-                                    .ingredients[ingredientIndex].customName ==
-                                null)
-                            ? 'Enter an ingredient name e.g. Black rice'
-                            : null,
-                      ),
-                      onChanged: (value) {
-                        context.read<RecipeBloc>().add(
-                            IngredientCustomNameChanged(
-                                ingredient: state.recipes[recipeIndex]
-                                    .ingredients[ingredientIndex],
-                                ingredientCustomName: value,
-                                recipe: state.recipes[recipeIndex]));
-                      },
-                      textInputAction: TextInputAction.next,
-                      textCapitalization: TextCapitalization.sentences,
+                  TextFormField(
+                    key: UniqueKey(),
+                    initialValue: state.recipes[recipeIndex]
+                                .ingredients[ingredientIndex].fctFoodItemName !=
+                            null
+                        ? '${state.recipes[recipeIndex].ingredients[ingredientIndex].fctFoodItemName} (${state.recipes[recipeIndex].ingredients[ingredientIndex].fctFoodItemId})'
+                        : null,
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.set_meal_rounded),
+                      labelText: 'Ingredient name',
+                      helperText: 'Tap to select a food item from the FCT',
                     ),
+                    readOnly: true,
+                    onTap: () async {
+                      if (state.recipes[recipeIndex].fctId != null) {
+                        final FCTFoodItem? item = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SelectItemScreen(
+                                fctId: state.recipes[recipeIndex].fctId!),
+                          ),
+                        );
+
+                        if (mounted && item != null) {
+                          context.read<RecipeBloc>().add(
+                              IngredientFCTFoodItemChanged(
+                                  ingredientFCTFoodItem: item,
+                                  ingredient: state.recipes[recipeIndex]
+                                      .ingredients[ingredientIndex],
+                                  recipe: state.recipes[recipeIndex]));
+                        }
+                      } else {
+                        ScaffoldMessenger.of(context)
+                          ..hideCurrentSnackBar
+                          ..showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                  'Please select a survey for this recipe first'),
+                            ),
+                          );
+                      }
+                    },
                   ),
                   TextFormField(
                     initialValue: state.recipes[recipeIndex]
@@ -105,7 +93,7 @@ class IngredientForm extends StatelessWidget {
                       icon: const Icon(Icons.description_rounded),
                       labelText: 'Ingredient description',
                       helperText:
-                          'Ingredient description e.g. Big, dry, ripe etc.',
+                          'e.g. big, dry, ripe etc, and comments on FCT item suitability',
                       errorText: (isFieldModifiedAndEmpty(state
                               .recipes[recipeIndex]
                               .ingredients[ingredientIndex]

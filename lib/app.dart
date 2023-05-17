@@ -13,11 +13,13 @@ import 'package:gibsonify/sync/sync.dart';
 class App extends StatelessWidget with WidgetsBindingObserver {
   final GibsonifyRepository gibsonifyRepository;
   final HiveRepository hiveRepository;
+  final FCTRepository fctRepository;
 
   const App(
       {Key? key,
       required this.gibsonifyRepository,
-      required this.hiveRepository})
+      required this.hiveRepository,
+      required this.fctRepository})
       : super(key: key);
 
   @override
@@ -26,7 +28,8 @@ class App extends StatelessWidget with WidgetsBindingObserver {
       providers: [
         RepositoryProvider<GibsonifyRepository>(
             create: (context) => gibsonifyRepository),
-        RepositoryProvider<HiveRepository>(create: (context) => hiveRepository)
+        RepositoryProvider<HiveRepository>(create: (context) => hiveRepository),
+        RepositoryProvider<FCTRepository>(create: (context) => fctRepository),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -35,13 +38,15 @@ class App extends StatelessWidget with WidgetsBindingObserver {
                   LoginBloc(gibsonifyRepository: gibsonifyRepository)
                     ..add(const LoginInfoLoaded())),
           BlocProvider(
-              create: (context) => SurveysBloc(hiveRepository: hiveRepository)
+              create: (context) => SurveysBloc(
+                  hiveRepository: hiveRepository, fctRepository: fctRepository)
                 ..add(const SurveysPageOpened())),
           BlocProvider(
               lazy: false,
-              create: (context) =>
-                  RecipeBloc(gibsonifyRepository: gibsonifyRepository)
-                    ..add(const RecipesLoaded())),
+              create: (context) => RecipeBloc(
+                  gibsonifyRepository: gibsonifyRepository,
+                  hiveRepository: hiveRepository)
+                ..add(const RecipesLoaded())),
           BlocProvider(
               create: (context) => ImportExportBloc(
                   gibsonifyRepository: gibsonifyRepository,

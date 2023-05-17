@@ -16,15 +16,20 @@ part 'recipe_state.dart';
 
 class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
   final GibsonifyRepository _gibsonifyRepository;
+  final HiveRepository _hiveRepository;
 
-  RecipeBloc({required GibsonifyRepository gibsonifyRepository})
+  RecipeBloc(
+      {required GibsonifyRepository gibsonifyRepository,
+      required HiveRepository hiveRepository})
       : _gibsonifyRepository = gibsonifyRepository,
+        _hiveRepository = hiveRepository,
         super(const RecipeState()) {
     on<RecipeAdded>(_onRecipeAdded);
     on<RecipeDuplicated>(_onRecipeDuplicated);
     on<ModifiedRecipeCreated>(_onModifiedRecipeCreated);
     on<RecipeDeleted>(_onRecipeDeleted);
     on<RecipeNameChanged>(_recipeNameChanged);
+    on<RecipeSurveyIdChanged>(_recipeSurveyIdChanged);
     on<RecipeMeasurementAdded>(_onRecipeMeasurementAdded);
     on<RecipeMeasurementDeleted>(_onRecipeMeasurementDeleted);
     on<RecipeMeasurementMethodChangedOthersNulled>(
@@ -48,8 +53,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     on<IngredientDuplicated>(_onIngredientDuplicated);
     on<IngredientDeleted>(_onIngredientDeleted);
     on<IngredientStatusChanged>(_onIngredientStatusChanged);
-    on<IngredientNameChanged>(_onIngredientNameChanged);
-    on<IngredientCustomNameChanged>(_onIngredientCustomNameChanged);
+    on<IngredientFCTFoodItemChanged>(_onIngredientFCTFoodItemChanged);
     on<IngredientDescriptionChanged>(_onIngredientDescriptionChanged);
     on<IngredientCookingStateChanged>(_onIngredientCookingStateChanged);
     on<IngredientCustomCookingStateChanged>(
@@ -62,7 +66,6 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     on<IngredientMeasurementValueChanged>(_onIngredientMeasurementValueChanged);
     on<RecipesSaved>(_onRecipesSaved);
     on<RecipesLoaded>(_onRecipesLoaded);
-    on<IngredientsLoaded>(_onIngredientsLoaded);
     on<RecipesImported>(_onRecipesImported);
   }
 
@@ -134,6 +137,24 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
 
     Recipe recipe = recipes[changedRecipeIndex]
         .copyWith(name: event.name, date: _getCurrentDate(), saved: false);
+
+    recipes.removeAt(changedRecipeIndex);
+    recipes.insert(changedRecipeIndex, recipe);
+
+    emit(state.copyWith(recipes: recipes));
+  }
+
+  void _recipeSurveyIdChanged(
+      RecipeSurveyIdChanged event, Emitter<RecipeState> emit) async {
+    List<Recipe> recipes = List.from(state.recipes);
+
+    int changedRecipeIndex = recipes.indexOf(event.recipe);
+
+    Recipe recipe = recipes[changedRecipeIndex].copyWith(
+        surveyId: event.surveyId,
+        date: _getCurrentDate(),
+        saved: false,
+        fctId: _hiveRepository.readSurvey(event.surveyId)!.fctId);
 
     recipes.removeAt(changedRecipeIndex);
     recipes.insert(changedRecipeIndex, recipe);
@@ -639,46 +660,20 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     emit(state.copyWith(recipes: recipes));
   }
 
-  void _onIngredientNameChanged(
-      IngredientNameChanged event, Emitter<RecipeState> emit) {
+  void _onIngredientFCTFoodItemChanged(
+      IngredientFCTFoodItemChanged event, Emitter<RecipeState> emit) {
     List<Recipe> recipes = List.from(state.recipes);
 
     int changedRecipeIndex = recipes.indexOf(event.recipe);
     List<Ingredient> ingredients =
         List.from(recipes[changedRecipeIndex].ingredients);
     int changedIngredientIndex = ingredients.indexOf(event.ingredient);
-
-    String ingredientName = event.ingredientName;
-    Map<String, dynamic> ingredientMap = json.decode(state.ingredientsJson!);
 
     Ingredient ingredient = ingredients[changedIngredientIndex].copyWith(
-        name: ingredientName,
-        foodComposition: ingredientMap[ingredientName],
-        saved: false);
-
-    ingredients.removeAt(changedIngredientIndex);
-    ingredients.insert(changedIngredientIndex, ingredient);
-
-    Recipe recipe = recipes[changedRecipeIndex]
-        .copyWith(ingredients: ingredients, date: _getCurrentDate());
-
-    recipes.removeAt(changedRecipeIndex);
-    recipes.insert(changedRecipeIndex, recipe);
-
-    emit(state.copyWith(recipes: recipes));
-  }
-
-  void _onIngredientCustomNameChanged(
-      IngredientCustomNameChanged event, Emitter<RecipeState> emit) {
-    List<Recipe> recipes = List.from(state.recipes);
-
-    int changedRecipeIndex = recipes.indexOf(event.recipe);
-    List<Ingredient> ingredients =
-        List.from(recipes[changedRecipeIndex].ingredients);
-    int changedIngredientIndex = ingredients.indexOf(event.ingredient);
-
-    Ingredient ingredient = ingredients[changedIngredientIndex]
-        .copyWith(customName: event.ingredientCustomName, saved: false);
+        fctFoodItemId: event.ingredientFCTFoodItem.id,
+        fctFoodItemName: event.ingredientFCTFoodItem.name,
+        saved: false,
+        foodComposition: null);
 
     ingredients.removeAt(changedIngredientIndex);
     ingredients.insert(changedIngredientIndex, ingredient);
@@ -951,18 +946,6 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
     emit(state.copyWith(recipes: recipes));
   }
 
-  Future<void> _onIngredientsLoaded(
-      IngredientsLoaded event, Emitter<RecipeState> emit) async {
-    if (state.ingredientsJson == null) {
-      try {
-        String ingredientsJson = await Ingredient.getIngredients();
-        emit(state.copyWith(ingredientsJson: ingredientsJson));
-      } catch (e) {
-        return;
-      }
-    }
-  }
-
   Recipe? _getRecipeIfAlreadyExists(recipeNumber) {
     List<Recipe> deviceRecipes = List<Recipe>.from(state.recipes);
     for (Recipe recipe in deviceRecipes) {
@@ -1019,10 +1002,9 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
       String recipeMeasurement = row[6];
       String recipeProbeName = row[7];
       String recipeProbeAnswers = row[8];
-      String ingredientName = row[9];
-      String ingredientDescription = row[10];
-      String ingredientCookingState = row[11];
-      String ingredientMeasurement = row[12];
+      String ingredientDescription = row[9];
+      String ingredientCookingState = row[10];
+      String ingredientMeasurement = row[11];
 
       Recipe? recipeOnDevice = _getRecipeIfAlreadyExists(recipeNumber);
 
@@ -1099,11 +1081,10 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
         }
         final ingredient = Ingredient(
             id: const Uuid().v4(),
-            name: ingredientName,
             description: ingredientDescription,
             cookingState: ingredientCookingState,
             measurements: measurements,
-            saved: true); // TODO: Figure out food composition implementation
+            saved: true);
         ingredients.add(ingredient);
 
         recipe = recipe.copyWith(ingredients: ingredients);
