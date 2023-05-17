@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_map_tile_caching/flutter_map_tile_caching.dart';
@@ -17,8 +18,10 @@ void main() async {
   await Hive.initFlutter();
   registerAdapters();
 
-  Intl.systemLocale = await findSystemLocale();
-  initializeDateFormatting(Intl.systemLocale, null);
+  if (!kIsWeb) {
+    Intl.systemLocale = await findSystemLocale();
+    initializeDateFormatting(Intl.systemLocale, null);
+  }
 
   final gibsonifyApi =
       GibsonifyApi(sharedPreferences: await SharedPreferences.getInstance());
@@ -26,12 +29,14 @@ void main() async {
   final gibsonifyRepository = GibsonifyRepository(gibsonifyApi: gibsonifyApi);
   final hiveRepository = await HiveRepository.create();
 
-  FlutterMapTileCaching.initialise(await RootDirectory.normalCache,
-      settings: FMTCSettings(
-          defaultTileProviderSettings: FMTCTileProviderSettings(
-              cachedValidDuration: const Duration(days: 365))));
-  final store = FMTC.instance('default');
-  await store.manage.createAsync();
+  if (!kIsWeb) {
+    FlutterMapTileCaching.initialise(await RootDirectory.normalCache,
+        settings: FMTCSettings(
+            defaultTileProviderSettings: FMTCTileProviderSettings(
+                cachedValidDuration: const Duration(days: 365))));
+    final store = FMTC.instance('default');
+    await store.manage.createAsync();
+  }
 
   final ifct2017 = IFCT2017();
   ifct2017.init();

@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
@@ -28,6 +29,10 @@ class ImportExportBloc extends Bloc<ImportExportEvent, ImportExportState> {
 
   void _onDataSavedToDevice(
       DataSavedToDevice event, Emitter<ImportExportState> emit) async {
+    if (kIsWeb) {
+      return;
+    }
+
     List<Household> households = _hiveRepository.readHouseholds().toList();
     List<Recipe> recipes = _gibsonifyRepository.loadRecipes();
 

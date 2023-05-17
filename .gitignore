@@ -34,9 +34,6 @@
 # pubspec.lock should be checked into version control
 # See: https://stackoverflow.com/questions/16136739/in-dart-and-pub-should-i-add-pubspec-lock-to-my-gitignore
 
-# Web related
-lib/generated_plugin_registrant.dart
-
 # Symbolication related
 app.*.symbols
 
@@ -89,9 +86,6 @@ ios/
 
 # Ignore the whole macos folder as macOS is currently not a supported platform of Gibsonify
 macos/
-
-# Ignore the whole web folder as the web is currently not a supported platform of Gibsonify
-web/
 
 # iOS/XCode related
 **/ios/**/*.mode1v3
