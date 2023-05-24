@@ -7,6 +7,119 @@ const fs = require('fs');
 const FCT_OUTPUT_PATH = '../../../assets/fct/ifct2017/'
 const FCT_ITEM_PHOTO_PATH = 'assets/fct/ifct2017/photos/';
 
+// Maps FCT2017 group IDs to DDS group IDs as defined in 
+// FAO: Guidelines for measuring household and individual#
+// dietary diversity
+function ddsGroupId(composition, groupId) {
+    if (groupId == 'A') {
+        // Cereals and Millets -> CEREALS
+        return 1;
+    }
+
+    if (groupId == 'B') {
+        // Grain Legumes -> LEGUMES, NUTS, SEEDS
+        return 12;
+    }
+
+    if (groupId == 'C') {
+        // Green Leafy Vegetables -> DARK GREEN LEAFY VEGETABLES
+        return 4;
+    }
+
+    if (groupId == 'D') {
+        // Other Vegetables -> OTHER VEGETABLES
+        return 5;
+    }
+
+    if (groupId == 'E') {
+        // Fruits
+        const vitARichFruits = ['mango', 'cantaloupe', 'apricot', 'papaya', 'peach'];
+        if (vitARichFruits.some((name) => composition.name.toLowerCase().includes(name))) {
+            // -> VITAMIN A-RICH FRUITS
+            return 6;
+        }
+
+        // -> OTHER FRUITS
+        return 7;
+    }
+
+    if (groupId == 'F') {
+        // Roots and Tubers
+        if (composition.name.toLowerCase().includes('white')) {
+            // -> WHITE ROOTS AND TUBERS
+            return 2;
+        }
+
+        const vitARichRots = ['carrot', 'sweet potato', 'pumpkin', 'squash'];
+        if (vitARichRots.some((name) => composition.name.toLowerCase().includes(name))) {
+            // -> VITAMIN A-RICH VEGETABLES AND TUBERS
+            return 3;
+        }
+
+        // -> OTHER VEGETABLES
+        return 5;
+    }
+
+    if (groupId == 'G') {
+        // Condiments and Spices -> SPICES, CONDIMENTS, BEVERAGES
+        return 16;
+    }
+
+    if (groupId == 'H') {
+        // Nuts and Oil Seeds -> LEGUMES, NUTS, SEEDS
+        return 12;
+    }
+
+    if (groupId == 'I') {
+        // Sugars -> SWEETS
+        return 15;
+    }
+
+    if (groupId == 'J') {
+        // Mushrooms -> OTHER VEGETABLES
+        return 5;
+    }
+
+    if (groupId == 'K') {
+        // Miscellaneous Foods -> SPICES, CONDIMENTS, BEVERAGES
+        // (K contains only toddy and coconut water)
+        return 16;
+    }
+
+    if (groupId == 'L') {
+        // Milk and Milk Products -> MILK AND MILK PRODUCTS
+        return 13;
+    }
+
+    if (groupId == 'M') {
+        // Egg and Egg Products -> EGGS
+        return 10;
+    }
+
+    if (groupId == 'N' || groupId == 'O') {
+        // Poultry, Animal Meat
+        const organMeats = ['liver', 'kidney', 'heart', 'brain', 'intestine', 'stomach', 'lung', 'spleen'];
+        if (organMeats.some((name) => composition.name.toLowerCase().includes(name))) {
+            // -> ORGAN MEATS
+            return 8;
+        }
+
+        // -> FLESH MEATS
+        return 9;
+    }
+
+    if (groupId == 'P' || groupId == 'Q' || groupId == 'R' || groupId == 'S') {
+        // Marine Fish, Marine Shellfish, Marine Mollusks, Fresh Water Fish and Shellfish 
+        // -> FISH AND SEAFOOD
+        return 11;
+    }
+
+    if (groupId == 'T') {
+        // Edible Oils and Fats -> OILS AND FATS
+        return 14;
+    }
+}
+
 async function main() {
     ifct2017.groups.load()
     await ifct2017.compositions.load()
@@ -67,6 +180,7 @@ async function main() {
             scientificName: composition.scie,
             alternateNames: alternateNames,
             foodGroupId: groupId,
+            ddsGroupId: ddsGroupId(composition, groupId),
             photoUrl: photoUrl,
             nutrition: {
                 energy_kj: composition.enerc,
