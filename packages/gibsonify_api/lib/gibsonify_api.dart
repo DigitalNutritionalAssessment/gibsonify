@@ -13,6 +13,7 @@ export 'src/utils.dart';
 export 'src/csv_export_utils.dart';
 export 'src/models/models.dart';
 export 'src/fct/fct.dart';
+export 'src/export/export.dart';
 
 void registerAdapters() {
   Hive.registerAdapter(HouseholdAdapter());

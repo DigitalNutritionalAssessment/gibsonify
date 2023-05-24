@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
@@ -25,6 +27,8 @@ class ImportExportBloc extends Bloc<ImportExportEvent, ImportExportState> {
         super(const ImportExportState()) {
     on<DataSavedToDevice>(_onDataSavedToDevice);
     on<DataShared>(_onDataShared);
+    on<DataFileExported>(_onDataFileExported);
+    on<DataFileShared>(_onDataFileShared);
   }
 
   void _onDataSavedToDevice(
@@ -155,5 +159,67 @@ class ImportExportBloc extends Bloc<ImportExportEvent, ImportExportState> {
     }
 
     emit(state.copyWith(dataShareStatus: DataShareStatus.notRequested));
+  }
+
+  String _generateDataFile({required String employeeId}) {
+    final surveys = _hiveRepository.readSurveys().toList();
+    final households = _hiveRepository.readHouseholds().toList();
+    final recipes = _gibsonifyRepository.loadRecipes();
+    final file = jsonEncode(GibsonifyExportFile(
+        surveys: surveys,
+        households: households,
+        recipes: recipes,
+        metadata: Metadata.create(createdBy: employeeId)));
+
+    return file;
+  }
+
+  void _onDataFileExported(
+      DataFileExported event, Emitter<ImportExportState> emit) {
+    if (!kIsWeb) {
+      final fileContents = _generateDataFile(employeeId: event.employeeId);
+      final fileName =
+          GibsonifyExportFile.fileName(employeeId: event.employeeId);
+      final filePath = '/storage/emulated/0/Download/$fileName';
+
+      try {
+        final file = File(filePath);
+        file.writeAsString(fileContents);
+        emit(state.copyWith(
+            dataSaveStatus: DataSaveStatus.success,
+            exportedGibsonsFormsNumber: -1,
+            exportedRecipesNumber: -1));
+      } catch (e) {
+        emit(state.copyWith(
+            dataSaveStatus: DataSaveStatus.error,
+            exportedGibsonsFormsNumber: 0,
+            exportedRecipesNumber: 0));
+      }
+    }
+  }
+
+  void _onDataFileShared(
+      DataFileShared event, Emitter<ImportExportState> emit) async {
+    if (!kIsWeb) {
+      final fileContents = _generateDataFile(employeeId: event.employeeId);
+      final fileName =
+          GibsonifyExportFile.fileName(employeeId: event.employeeId);
+      final filePath = '/storage/emulated/0/Download/$fileName';
+
+      try {
+        final file = File(filePath);
+        await file.writeAsString(fileContents);
+        await Share.shareXFiles([XFile(filePath)]);
+        emit(state.copyWith(
+            dataShareStatus: DataShareStatus.success,
+            exportedGibsonsFormsNumber: -1,
+            exportedRecipesNumber: -1));
+      } catch (e) {
+        emit(state.copyWith(
+            dataShareStatus: DataShareStatus.error,
+            exportedGibsonsFormsNumber: 0,
+            exportedRecipesNumber: 0));
+      }
+    }
   }
 }

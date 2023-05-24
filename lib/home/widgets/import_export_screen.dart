@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gibsonify/login/login.dart';
 import 'package:gibsonify/recipe/recipe.dart';
 import 'package:gibsonify/import_export/import_export.dart';
 
@@ -84,32 +85,8 @@ class SyncScreen extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(title: const Text('Import & Export Data')),
-        floatingActionButton: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: <Widget>[
-              FloatingActionButton.extended(
-                  heroTag: null,
-                  label: const Text("Save data to device"),
-                  icon: const Icon(Icons.save),
-                  onPressed: () {
-                    context
-                        .read<ImportExportBloc>()
-                        .add(const DataSavedToDevice());
-                  }),
-              const SizedBox(
-                height: 10,
-              ),
-              FloatingActionButton.extended(
-                heroTag: null,
-                label: const Text("Share data as csv files"),
-                icon: const Icon(Icons.share),
-                onPressed: () {
-                  context.read<ImportExportBloc>().add(const DataShared());
-                },
-              )
-            ]),
-        body: const RecipeImport(),
+        body:
+            Column(children: const [RecipeImport(), DataExport(), DataShare()]),
       ),
     );
   }
@@ -133,11 +110,41 @@ class RecipeImport extends StatelessWidget {
           }
         },
         child: ListTile(
-          leading: const Icon(Icons.download_for_offline),
+          leading: const Icon(Icons.download),
           title: const Text('Import recipe(s) from file'),
           onTap: () {
             context.read<RecipeBloc>().add(const RecipesImported());
           },
         ));
+  }
+}
+
+class DataExport extends StatelessWidget {
+  const DataExport({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: const Icon(Icons.upload),
+      title: const Text('Export all data to Gibsonify data file'),
+      onTap: () => context.read<ImportExportBloc>().add(DataFileExported(
+            employeeId: context.read<LoginBloc>().state.loginInfo.employeeId!,
+          )),
+    );
+  }
+}
+
+class DataShare extends StatelessWidget {
+  const DataShare({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: const Icon(Icons.share),
+      title: const Text('Export and share Gibsonify data file'),
+      onTap: () => context.read<ImportExportBloc>().add(DataFileShared(
+            employeeId: context.read<LoginBloc>().state.loginInfo.employeeId!,
+          )),
+    );
   }
 }

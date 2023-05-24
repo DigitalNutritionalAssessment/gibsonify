@@ -20,3 +20,21 @@ class DataShared extends ImportExportEvent {
   @override
   List<Object> get props => [];
 }
+
+class DataFileExported extends ImportExportEvent {
+  final String employeeId;
+
+  const DataFileExported({required this.employeeId});
+
+  @override
+  List<Object> get props => [];
+}
+
+class DataFileShared extends ImportExportEvent {
+  final String employeeId;
+
+  const DataFileShared({required this.employeeId});
+
+  @override
+  List<Object> get props => [];
+}
