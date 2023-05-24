@@ -61,6 +61,7 @@ FCTFoodItem _$FCTFoodItemFromJson(Map<String, dynamic> json) => FCTFoodItem(
           .map((e) => e as String)
           .toList(),
       foodGroupId: json['foodGroupId'] as String,
+      ddsGroupId: json['ddsGroupId'] as int,
       photoUrl: json['photoUrl'] as String?,
       nutrition:
           FCTNutrition.fromJson(json['nutrition'] as Map<String, dynamic>),
@@ -73,6 +74,7 @@ Map<String, dynamic> _$FCTFoodItemToJson(FCTFoodItem instance) =>
       'scientificName': instance.scientificName,
       'alternateNames': instance.alternateNames,
       'foodGroupId': instance.foodGroupId,
+      'ddsGroupId': instance.ddsGroupId,
       'photoUrl': instance.photoUrl,
       'nutrition': instance.nutrition,
     };

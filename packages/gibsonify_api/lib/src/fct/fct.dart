@@ -63,6 +63,7 @@ class FCTFoodItem {
   final String scientificName;
   final List<String> alternateNames;
   final String foodGroupId;
+  final int ddsGroupId;
   final String? photoUrl;
   final FCTNutrition nutrition;
 
@@ -72,6 +73,7 @@ class FCTFoodItem {
     required this.scientificName,
     required this.alternateNames,
     required this.foodGroupId,
+    required this.ddsGroupId,
     this.photoUrl,
     required this.nutrition,
   });
