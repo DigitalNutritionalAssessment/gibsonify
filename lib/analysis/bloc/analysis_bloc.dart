@@ -45,11 +45,13 @@ class AnalysisBloc extends Bloc<AnalysisEvent, AnalysisState> {
     for (final household in households) {
       for (final respondent in household.respondents.values) {
         for (final collection in respondent.collections.values) {
-          collections.add(FlatCollection(
-              householdId: household.householdId,
-              respondentId: respondent.id,
-              respondentName: respondent.name,
-              collection: collection));
+          if (collection.surveyId == state.surveyId) {
+            collections.add(FlatCollection(
+                householdId: household.householdId,
+                respondentId: respondent.id,
+                respondentName: respondent.name,
+                collection: collection));
+          }
         }
       }
     }

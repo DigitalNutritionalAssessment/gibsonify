@@ -44,9 +44,8 @@ class IFCT2017 implements FoodCompositionTable {
   }
 
   @override
-  Future<FCTFoodItem?> getFoodItem(String id) {
-    // TODO: implement getFoodItem
-    throw UnimplementedError();
+  Future<FCTFoodItem?> getFoodItem(String id) async {
+    return foodItems[id];
   }
 
   @override

@@ -61,7 +61,7 @@ FCTFoodItem _$FCTFoodItemFromJson(Map<String, dynamic> json) => FCTFoodItem(
           .map((e) => e as String)
           .toList(),
       foodGroupId: json['foodGroupId'] as String,
-      ddsGroupId: json['ddsGroupId'] as int,
+      ddsGroupId: $enumDecode(_$DDSFoodGroupEnumMap, json['ddsGroupId']),
       photoUrl: json['photoUrl'] as String?,
       nutrition:
           FCTNutrition.fromJson(json['nutrition'] as Map<String, dynamic>),
@@ -74,10 +74,29 @@ Map<String, dynamic> _$FCTFoodItemToJson(FCTFoodItem instance) =>
       'scientificName': instance.scientificName,
       'alternateNames': instance.alternateNames,
       'foodGroupId': instance.foodGroupId,
-      'ddsGroupId': instance.ddsGroupId,
+      'ddsGroupId': _$DDSFoodGroupEnumMap[instance.ddsGroupId]!,
       'photoUrl': instance.photoUrl,
       'nutrition': instance.nutrition,
     };
+
+const _$DDSFoodGroupEnumMap = {
+  DDSFoodGroup.cereals: 1,
+  DDSFoodGroup.whiteRootsAndTubers: 2,
+  DDSFoodGroup.vitARichVegetablesAndTubers: 3,
+  DDSFoodGroup.darkGreenLeafyVegetables: 4,
+  DDSFoodGroup.otherVegetables: 5,
+  DDSFoodGroup.vitARichFruits: 6,
+  DDSFoodGroup.otherFruits: 7,
+  DDSFoodGroup.organMeats: 8,
+  DDSFoodGroup.fleshMeats: 9,
+  DDSFoodGroup.eggs: 10,
+  DDSFoodGroup.fishAndSeafood: 11,
+  DDSFoodGroup.legumesNutsSeeds: 12,
+  DDSFoodGroup.milkAndMilkProducts: 13,
+  DDSFoodGroup.oilsAndFats: 14,
+  DDSFoodGroup.sweets: 15,
+  DDSFoodGroup.spicesCondimentsBeverages: 16,
+};
 
 FCTFoodGroup _$FCTFoodGroupFromJson(Map<String, dynamic> json) => FCTFoodGroup(
       id: json['id'] as String,

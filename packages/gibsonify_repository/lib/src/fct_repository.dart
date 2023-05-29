@@ -28,6 +28,12 @@ class FCTRepository {
     return await fct.getFoodGroups();
   }
 
+  Future<FCTFoodItem?> getFoodItemById(
+      {required String fctId, required String id}) async {
+    final fct = _getFCT(fctId);
+    return await fct.getFoodItem(id);
+  }
+
   Future<Map<FCTFoodGroup, List<FCTFoodItem>>> search(
       {required String fctId, String? query}) async {
     final fct = _getFCT(fctId);

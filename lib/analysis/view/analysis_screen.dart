@@ -6,6 +6,7 @@ import 'package:gibsonify/collection/collection.dart';
 import 'package:gibsonify/fct/fct.dart';
 import 'package:gibsonify/household/household.dart';
 import 'package:gibsonify/surveys/surveys.dart';
+import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:gibsonify_repository/gibsonify_repository.dart';
 import 'package:intl/intl.dart';
 
@@ -44,8 +45,8 @@ class AnalysisScreen extends StatelessWidget {
                 CollectionListCard(),
                 RecipeListCard(),
                 StatisticsCard(),
+                NutritionDietaryDiversityCard(),
                 NutritionRDACard(),
-                NutritionDietaryDiversityCard()
               ],
             );
           },
@@ -155,37 +156,39 @@ class CollectionListCard extends StatelessWidget {
                       icon: const Icon(Icons.download), onPressed: () {})),
             ),
             Expanded(
-              child: ListView.builder(
-                  itemCount: collections.length,
-                  itemBuilder: (context, index) {
-                    final collection = collections[index];
-                    return Card(
-                      child: ListTile(
-                        title: Text(
-                            '${collection.householdId}: ${collection.respondentName}: ${collection.collection.interviewDate ?? 'No date'}'),
-                        subtitle: Row(
-                          children: [
-                            Text(
-                                'Outcome: ${collection.collection.interviewOutcome ?? 'Unspecified'}')
-                          ],
+              child: Scrollbar(
+                child: ListView.builder(
+                    itemCount: collections.length,
+                    itemBuilder: (context, index) {
+                      final collection = collections[index];
+                      return Card(
+                        child: ListTile(
+                          title: Text(
+                              '${collection.householdId}: ${collection.respondentName}: ${collection.collection.interviewDate ?? 'No date'}'),
+                          subtitle: Row(
+                            children: [
+                              Text(
+                                  'Outcome: ${collection.collection.interviewOutcome ?? 'Unspecified'}')
+                            ],
+                          ),
+                          trailing: Column(
+                            children: [
+                              collection.collection.finished
+                                  ? const Icon(Icons.done)
+                                  : const Icon(Icons.pause),
+                              collection.collection.finished
+                                  ? const Text('Finished')
+                                  : const Text('Paused'),
+                            ],
+                          ),
+                          onTap: () => {
+                            Navigator.push(
+                                context, collectionPageLoader(collection))
+                          },
                         ),
-                        trailing: Column(
-                          children: [
-                            collection.collection.finished
-                                ? const Icon(Icons.done)
-                                : const Icon(Icons.pause),
-                            collection.collection.finished
-                                ? const Text('Finished')
-                                : const Text('Paused'),
-                          ],
-                        ),
-                        onTap: () => {
-                          Navigator.push(
-                              context, collectionPageLoader(collection))
-                        },
-                      ),
-                    );
-                  }),
+                      );
+                    }),
+              ),
             ),
           ]),
         ));
@@ -219,47 +222,75 @@ class StatisticsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-        child: Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(children: [
-        ListTile(
-          leading: const Icon(Icons.bar_chart),
-          title: const Text('Statistics'),
-          subtitle: const Text('Survey statistics'),
-        ),
-        Expanded(
-          child: ListView(
-            children: [
-              Card(
-                  child: ListTile(
-                title: const Text('Total households'),
-                subtitle: const Text('Total number of households'),
-                trailing: const Text('0'),
-              )),
-              Card(
-                  child: ListTile(
-                title: const Text('Total respondents'),
-                subtitle: const Text('Total number of respondents'),
-                trailing: const Text('0'),
-              )),
-              Card(
-                  child: ListTile(
-                title: const Text('Total collections'),
-                subtitle: const Text('Total number of collections'),
-                trailing: const Text('0'),
-              )),
-              Card(
-                  child: ListTile(
-                title: const Text('Total food items'),
-                subtitle: const Text('Total number of food items'),
-                trailing: const Text('0'),
-              )),
-            ],
-          ),
-        ),
-      ]),
-    ));
+    return BlocBuilder<AnalysisBloc, AnalysisState>(
+      builder: (context, state) {
+        return Card(
+            child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(children: [
+            const ListTile(
+              leading: Icon(Icons.bar_chart),
+              title: Text('Statistics'),
+              subtitle: Text('Aggregate survey statistics'),
+            ),
+            Expanded(
+              child: ListView(
+                children: [
+                  Card(
+                      child: ListTile(
+                    title: const Text('Number of participating households'),
+                    trailing: Text(state.collections!
+                        .map((collection) => collection.householdId)
+                        .toSet()
+                        .length
+                        .toString()),
+                    visualDensity: VisualDensity.compact,
+                  )),
+                  Card(
+                      child: ListTile(
+                    title: const Text('Number of participating respondents'),
+                    trailing: Text(state.collections!
+                        .map((collection) => collection.respondentId)
+                        .toSet()
+                        .length
+                        .toString()),
+                    visualDensity: VisualDensity.compact,
+                  )),
+                  Card(
+                      child: ListTile(
+                    title: const Text('Number of finished collections'),
+                    trailing: Text(state.collections!
+                        .where((collection) => collection.collection.finished)
+                        .length
+                        .toString()),
+                    visualDensity: VisualDensity.compact,
+                  )),
+                  Card(
+                      child: ListTile(
+                    title: const Text('Number of unfinished collections'),
+                    trailing: Text(state.collections!
+                        .where((collection) => !collection.collection.finished)
+                        .length
+                        .toString()),
+                    visualDensity: VisualDensity.compact,
+                  )),
+                  Card(
+                      child: ListTile(
+                    title: const Text('Number of completed collections'),
+                    trailing: Text(state.collections!
+                        .where((collection) =>
+                            collection.collection.isInterviewOutcomeCompleted())
+                        .length
+                        .toString()),
+                    visualDensity: VisualDensity.compact,
+                  )),
+                ],
+              ),
+            ),
+          ]),
+        ));
+      },
+    );
   }
 }
 
@@ -289,23 +320,25 @@ class RecipeListCard extends StatelessWidget {
                       icon: const Icon(Icons.download), onPressed: () {})),
             ),
             Expanded(
-              child: ListView.builder(
-                  itemCount: recipes.length,
-                  itemBuilder: (context, index) {
-                    final recipe = recipes[index];
-                    return Card(
-                        child: ListTile(
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 8.0, horizontal: 10.0),
-                      title: Text(recipe.recipeNameDisplay()),
-                      subtitle:
-                          Text(recipe.type + recipe.ingredientNamesDisplay()),
-                      trailing: recipe.saved
-                          ? const Icon(Icons.done)
-                          : const Icon(Icons.new_releases),
-                      onTap: () {},
-                    ));
-                  }),
+              child: Scrollbar(
+                child: ListView.builder(
+                    itemCount: recipes.length,
+                    itemBuilder: (context, index) {
+                      final recipe = recipes[index];
+                      return Card(
+                          child: ListTile(
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 8.0, horizontal: 10.0),
+                        title: Text(recipe.recipeNameDisplay()),
+                        subtitle:
+                            Text(recipe.type + recipe.ingredientNamesDisplay()),
+                        trailing: recipe.saved
+                            ? const Icon(Icons.done)
+                            : const Icon(Icons.new_releases),
+                        onTap: () {},
+                      ));
+                    }),
+              ),
             ),
           ]),
         ));
@@ -322,26 +355,16 @@ class NutritionRDACard extends StatelessWidget {
     return Card(
         child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Column(children: [
+            child: Column(children: const [
               ListTile(
-                leading: const Icon(Icons.food_bank),
-                title: const Text('Nutritional Analysis: RDA Deficiencies'),
-                subtitle: const Text(
-                    'Overall utrient deficiency statistics for this survey'),
-                trailing: Tooltip(
-                    message: 'Export as CSV',
-                    child: IconButton(
-                        icon: const Icon(Icons.download), onPressed: () {})),
+                leading: Icon(Icons.food_bank),
+                title: Text('Nutritional Analysis: RDA Deficiencies'),
+                subtitle: Text('Coming soon!'),
+                // trailing: Tooltip(
+                //     message: 'Export as CSV',
+                //     child: IconButton(
+                //         icon: const Icon(Icons.download), onPressed: () {})),
               ),
-              Expanded(
-                  child: ListView(children: [
-                Card(
-                    child: ListTile(
-                  title: const Text('Energy'),
-                  subtitle: const Text('kcal'),
-                  trailing: const Text('0'),
-                )),
-              ])),
             ])));
   }
 }
@@ -351,29 +374,54 @@ class NutritionDietaryDiversityCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-        child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(children: [
-              ListTile(
-                leading: const Icon(Icons.food_bank),
-                title: const Text('Nutritional Analysis: Dietary Diversity'),
-                subtitle: const Text(
-                    'Overall dietary diversity statistics for this survey'),
-                trailing: Tooltip(
-                    message: 'Export as CSV',
-                    child: IconButton(
-                        icon: const Icon(Icons.download), onPressed: () {})),
-              ),
-              Expanded(
-                  child: ListView(children: [
-                Card(
-                    child: ListTile(
-                  title: const Text('Energy'),
-                  subtitle: const Text('kcal'),
-                  trailing: const Text('0'),
-                )),
-              ])),
-            ])));
+    return BlocBuilder<AnalysisBloc, AnalysisState>(
+      builder: (context, state) {
+        final bloc = context.read<AnalysisBloc>();
+        return Card(
+            child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(children: [
+                  const ListTile(
+                    leading: Icon(Icons.food_bank),
+                    title: Text('Nutritional Analysis: Dietary Diversity'),
+                    subtitle: Text(
+                        'Perform dietary diversity analysis on this survey'),
+                  ),
+                  Expanded(
+                      child: ListView(children: [
+                    Card(
+                        child: ListTile(
+                      title: const Text('Household dietary diversity scoring'),
+                      trailing: IconButton(
+                          onPressed: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HDDSScreen(
+                                        survey: state.survey!,
+                                        collections: state.collections!
+                                            .where((collection) =>
+                                                collection.collection
+                                                    .isInterviewOutcomeCompleted() &&
+                                                collection.collection.finished)
+                                            .toList(),
+                                      ))),
+                          icon: const Icon(Icons.open_in_new)),
+                    )),
+                    Card(
+                        child: ListTile(
+                      title: const Text('Women\'s dietary diversity scoring'),
+                      subtitle: const Text(
+                          'Note: only available for female-only surveys'),
+                      trailing: IconButton(
+                        onPressed: state.survey!.requiredSex == Sex.female
+                            ? () => {}
+                            : null,
+                        icon: const Icon(Icons.open_in_new),
+                      ),
+                    )),
+                  ])),
+                ])));
+      },
+    );
   }
 }

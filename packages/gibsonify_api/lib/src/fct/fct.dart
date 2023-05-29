@@ -56,6 +56,41 @@ class FCTNutrition {
   Map<String, dynamic> toJson() => _$FCTNutritionToJson(this);
 }
 
+enum DDSFoodGroup {
+  @JsonValue(1)
+  cereals,
+  @JsonValue(2)
+  whiteRootsAndTubers,
+  @JsonValue(3)
+  vitARichVegetablesAndTubers,
+  @JsonValue(4)
+  darkGreenLeafyVegetables,
+  @JsonValue(5)
+  otherVegetables,
+  @JsonValue(6)
+  vitARichFruits,
+  @JsonValue(7)
+  otherFruits,
+  @JsonValue(8)
+  organMeats,
+  @JsonValue(9)
+  fleshMeats,
+  @JsonValue(10)
+  eggs,
+  @JsonValue(11)
+  fishAndSeafood,
+  @JsonValue(12)
+  legumesNutsSeeds,
+  @JsonValue(13)
+  milkAndMilkProducts,
+  @JsonValue(14)
+  oilsAndFats,
+  @JsonValue(15)
+  sweets,
+  @JsonValue(16)
+  spicesCondimentsBeverages
+}
+
 @JsonSerializable()
 class FCTFoodItem {
   final String id;
@@ -63,7 +98,7 @@ class FCTFoodItem {
   final String scientificName;
   final List<String> alternateNames;
   final String foodGroupId;
-  final int ddsGroupId;
+  final DDSFoodGroup ddsGroupId;
   final String? photoUrl;
   final FCTNutrition nutrition;
 
