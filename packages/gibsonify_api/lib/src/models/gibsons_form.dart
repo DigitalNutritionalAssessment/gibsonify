@@ -36,7 +36,7 @@ String physioStatusToString(PhysioStatus physioStatus) {
 @JsonSerializable(explicitToJson: true)
 @HiveType(typeId: 5)
 class GibsonsForm extends Equatable {
-  GibsonsForm({
+  const GibsonsForm({
     required this.id,
     this.surveyId,
     this.recallDay, // TODO: rename to recallDayType

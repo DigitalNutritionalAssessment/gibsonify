@@ -58,6 +58,7 @@ class App extends StatelessWidget with WidgetsBindingObserver {
           theme: ThemeData(primarySwatch: Colors.teal),
           darkTheme: ThemeData.dark(), // TODO: add teal accents
           onGenerateRoute: PageRouter.route,
+          debugShowCheckedModeBanner: false,
         ),
       ),
     );

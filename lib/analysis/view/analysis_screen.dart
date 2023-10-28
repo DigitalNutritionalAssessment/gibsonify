@@ -376,7 +376,6 @@ class NutritionDietaryDiversityCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AnalysisBloc, AnalysisState>(
       builder: (context, state) {
-        final bloc = context.read<AnalysisBloc>();
         return Card(
             child: Padding(
                 padding: const EdgeInsets.all(8.0),

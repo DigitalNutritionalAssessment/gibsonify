@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gibsonify/analysis/analysis.dart';
@@ -5,6 +7,64 @@ import 'package:gibsonify_api/gibsonify_api.dart';
 import 'package:collection/collection.dart';
 import 'package:gibsonify_repository/gibsonify_repository.dart';
 import 'package:graphic/graphic.dart';
+
+String mean(List<int> vals) {
+  return (vals.sum / vals.length).toStringAsFixed(2);
+}
+
+double median(List<int> vals) {
+  final sorted = vals.sorted((a, b) => a.compareTo(b));
+  final mid = sorted.length ~/ 2;
+  if (sorted.length.isOdd) {
+    return sorted[mid].toDouble();
+  } else {
+    return (sorted[mid] + sorted[mid - 1]) / 2;
+  }
+}
+
+double mode(List<int> vals) {
+  final counts = <int, int>{};
+  for (final val in vals) {
+    counts[val] = (counts[val] ?? 0) + 1;
+  }
+  final maxCount = counts.values.max;
+  return counts.entries
+      .firstWhere((entry) => entry.value == maxCount)
+      .key
+      .toDouble();
+}
+
+List<DiversityScoredHousehold> generateSampleScoredHouseholds() {
+  final random = Random();
+  return List.generate(24, (index) {
+    final ddsGroups = {
+      for (final group in HDDSGroup.values) group: random.nextInt(2)
+    };
+    final hdds = ddsGroups.values.sum;
+    final householdId =
+        'GB${10 + random.nextInt(90)}${String.fromCharCode(65 + random.nextInt(26))}${1000 + random.nextInt(9000)}${String.fromCharCode(65 + random.nextInt(26))}';
+
+    return DiversityScoredHousehold(
+      householdId: householdId,
+      ddsGroups: ddsGroups,
+      hdds: hdds,
+      collections: [
+        FlatCollection(
+            householdId: householdId,
+            respondentId: 'A',
+            respondentName: 'Faizaan Pervaiz',
+            collection: GibsonsForm(
+                finished: true,
+                interviewDate: '2023-05-01',
+                interviewOutcome: 'completed',
+                id: 'd',
+                physioStatus: PhysioStatus.notApplicable,
+                foodItems: const [],
+                metadata: Metadata.create(createdBy: 'FP361')))
+      ],
+    );
+  }).sortedBy((household) => household.householdId);
+}
 
 class HDDSScreen extends StatefulWidget {
   const HDDSScreen({
@@ -35,7 +95,11 @@ class _HDDSScreenState extends State<HDDSScreen> {
         fctId: widget.survey.fctId,
         collections: widget.collections);
     setState(() {
-      this.scoredHouseholds = scoredHouseholds;
+      //this.scoredHouseholds = scoredHouseholds;
+      this.scoredHouseholds = {
+        for (final household in generateSampleScoredHouseholds())
+          household.householdId: household
+      };
     });
   }
 
@@ -90,46 +154,43 @@ class SpecificCollections extends StatelessWidget {
         ),
         const SizedBox(height: 32),
         Expanded(
-          child: Scrollbar(
-            child: ListView.builder(
-                itemCount: scoredHouseholds.length,
-                itemBuilder: (context, index) {
-                  final householdId = scoredHouseholds.keys.elementAt(index);
-                  final collections =
-                      scoredHouseholds[householdId]!.collections;
-                  return ExpansionTile(
-                    title: Text(householdId),
-                    children: collections
-                        .map((collection) => Card(
-                              child: ListTile(
-                                title: Text(
-                                    '${collection.respondentName}: ${collection.collection.interviewDate ?? 'No date'}'),
-                                subtitle: Row(
-                                  children: [
-                                    Text(
-                                        'Outcome: ${collection.collection.interviewOutcome ?? 'Unspecified'}')
-                                  ],
-                                ),
-                                trailing: Column(
-                                  children: [
-                                    collection.collection.finished
-                                        ? const Icon(Icons.done)
-                                        : const Icon(Icons.pause),
-                                    collection.collection.finished
-                                        ? const Text('Finished')
-                                        : const Text('Paused'),
-                                  ],
-                                ),
-                                onTap: () => {
-                                  Navigator.push(
-                                      context, collectionPageLoader(collection))
-                                },
+          child: ListView.builder(
+              itemCount: scoredHouseholds.length,
+              itemBuilder: (context, index) {
+                final householdId = scoredHouseholds.keys.elementAt(index);
+                final collections = scoredHouseholds[householdId]!.collections;
+                return ExpansionTile(
+                  title: Text(householdId),
+                  children: collections
+                      .map((collection) => Card(
+                            child: ListTile(
+                              title: Text(
+                                  '${collection.respondentName}: ${collection.collection.interviewDate ?? 'No date'}'),
+                              subtitle: Row(
+                                children: [
+                                  Text(
+                                      'Outcome: ${collection.collection.interviewOutcome ?? 'Unspecified'}')
+                                ],
                               ),
-                            ))
-                        .toList(),
-                  );
-                }),
-          ),
+                              trailing: Column(
+                                children: [
+                                  collection.collection.finished
+                                      ? const Icon(Icons.done)
+                                      : const Icon(Icons.pause),
+                                  collection.collection.finished
+                                      ? const Text('Finished')
+                                      : const Text('Paused'),
+                                ],
+                              ),
+                              onTap: () => {
+                                Navigator.push(
+                                    context, collectionPageLoader(collection))
+                              },
+                            ),
+                          ))
+                      .toList(),
+                );
+              }),
         ),
       ]),
     ));
@@ -138,8 +199,7 @@ class SpecificCollections extends StatelessWidget {
 
 enum HDDSChart {
   scoresByHousehold('Scores by Household'),
-  foodGroupMatrix('Food Group Matrix'),
-  scoresByHouseholdOverTime('Scores over time');
+  foodGroupMatrix('Food Group Matrix');
 
   final String name;
   const HDDSChart(this.name);
@@ -162,9 +222,10 @@ class _ChartViewState extends State<ChartView> {
     Widget chart() {
       switch (_selectedChart) {
         case HDDSChart.scoresByHousehold:
-          return ConstrainedBox(
-            constraints: const BoxConstraints(maxHeight: 500),
+          return Container(
+            margin: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 64.0),
             child: Chart(
+              // random sample data
               data: widget.scoredHouseholds.values.toList(),
               variables: {
                 'Household ID': Variable(
@@ -176,15 +237,21 @@ class _ChartViewState extends State<ChartView> {
               },
               marks: [IntervalMark()],
               axes: [
-                Defaults.horizontalAxis,
+                AxisGuide(
+                  line: Defaults.strokeStyle,
+                  label: LabelStyle(
+                      align: Alignment.centerLeft,
+                      textStyle: Defaults.textStyle,
+                      offset: const Offset(0, 7.5),
+                      rotation: -1.57),
+                ),
                 Defaults.verticalAxis,
               ],
             ),
           );
         case HDDSChart.foodGroupMatrix:
           return Container(
-            margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 64.0),
-            constraints: const BoxConstraints(maxHeight: 500),
+            margin: const EdgeInsets.fromLTRB(64.0, 8.0, 8.0, 64.0),
             child: Chart(
               data: [
                 for (final household in widget.scoredHouseholds.values)
@@ -221,9 +288,10 @@ class _ChartViewState extends State<ChartView> {
                 AxisGuide(
                   line: Defaults.strokeStyle,
                   label: LabelStyle(
+                      maxWidth: 64.0,
                       align: Alignment.centerLeft,
                       textStyle: Defaults.textStyle,
-                      offset: const Offset(0, 7.5),
+                      offset: const Offset(0, 16.0),
                       rotation: -1.57),
                 ),
                 Defaults.verticalAxis,
@@ -232,10 +300,11 @@ class _ChartViewState extends State<ChartView> {
               tooltip: TooltipGuide(),
             ),
           );
-        case HDDSChart.scoresByHouseholdOverTime:
-          return Text('Chart 3');
       }
     }
+
+    final hddss =
+        widget.scoredHouseholds.values.map((dsh) => dsh.hdds).toList();
 
     return Card(
         child: Padding(
@@ -243,10 +312,11 @@ class _ChartViewState extends State<ChartView> {
             child: Column(
               children: [
                 ListTile(
+                  isThreeLine: true,
                   leading: const Icon(Icons.analytics),
                   title: const Text('Charts'),
-                  subtitle: const Text(
-                      'Graphical analysis of household dietary diversity scores'),
+                  subtitle: Text(
+                      'Graphical analysis of household dietary diversity scores\nHDDS mean: ${mean(hddss)}, median: ${median(hddss)}, mode: ${mode(hddss)}'),
                   trailing: DropdownButton(
                       value: _selectedChart,
                       onChanged: (HDDSChart? chart) => setState(() {
@@ -257,7 +327,7 @@ class _ChartViewState extends State<ChartView> {
                               value: hddsChart, child: Text(hddsChart.name)))
                           .toList()),
                 ),
-                chart(),
+                Expanded(child: chart()),
               ],
             )));
   }

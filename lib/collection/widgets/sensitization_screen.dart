@@ -37,7 +37,7 @@ class SensitizationForm extends StatelessWidget {
             absorbing: state.gibsonsForm.finished,
             child: Column(
               children: const <Widget>[
-                SurveyInput(),
+                //SurveyInput(),
                 RecallDayInput(),
                 InterviewDateInput(),
                 InterviewStartTimeInput(),
